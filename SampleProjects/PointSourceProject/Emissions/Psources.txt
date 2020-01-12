@@ -1,0 +1,3 @@
+List of all point sources within the model domain
+Name, x, y, z, exit-velocity [m/s], exit-temp[K], stack-diameter[m], source-group, pollutants, deposition parameters
+Stack_Nr1,49445.3,241517.8,9,6,358,0.7,1,0,1.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,Dep@_,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
