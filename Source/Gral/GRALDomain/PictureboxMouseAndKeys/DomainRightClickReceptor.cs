@@ -92,7 +92,7 @@ namespace GralDomain
 			}
 			if (mi.Index == 2) // Delete Receptor
 			{
-				EditR.RemoveOne();
+				EditR.RemoveOne(true);
 				EditAndSaveReceptorData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditR.ItemData.Count > 0)
