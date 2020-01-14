@@ -289,7 +289,7 @@ namespace Gral
         	int distance =  (int) (g.MeasureString("J", titlefont, 200).Height);
         	int distance2 =  (int) (g.MeasureString("J", subtitlefont, 200).Height);
         	
-        	g.DrawString("GRAL GUI V20.01 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+        	g.DrawString("GRAL GUI V21.01Alpha - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
         	g.DrawString("Development Team: Dietmar Oettl and Markus Kuntner", subtitlefont, Solid_black, x, 25 + distance, format1);
         	g.DrawString("Support and Training: Christian Kurz (kurz@ivt.tugraz.at)", subtitlefont, Solid_black, x, 25 + distance + distance2, format1);
         	
