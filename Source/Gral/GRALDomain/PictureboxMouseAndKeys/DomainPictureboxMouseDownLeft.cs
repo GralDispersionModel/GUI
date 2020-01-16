@@ -383,15 +383,15 @@ namespace GralDomain
                                 double height = _psdata.Height;
 
                                 // show info in a Tooltip
-                                string infotext = "Name: " + _psdata.Name + "\n";
+                                string infotext = "'" + _psdata.Name + "'\n";
                                 if (height >= 0)
-                                    infotext += "Stack height [m]: " + height.ToString() + "\n";
+                                    infotext += "Height (rel) [m]: " + Math.Round(height, 1).ToString() + "\n";
                                 else
-                                    infotext += "Stack height (abs) [m]: " + Math.Abs(height).ToString() + "\n";
+                                    infotext += "Height (abs) [m]: " + Math.Abs(Math.Round(height,1)).ToString() + "\n";
 
-                                infotext += "Exit velocity [m/s]: " + _psdata.Velocity.ToString() + "\n";
-                                infotext += "Exit temperature [K]: " + _psdata.Temperature.ToString() + "\n";
-                                infotext += "Diameter [m]: " + _psdata.Diameter.ToString() + "\n";
+                                infotext += "Exit velocity [m/s]:  " + Math.Round(_psdata.Velocity, 1).ToString() + "\n";
+                                infotext += "Exit temperature [K]: " + Math.Round(_psdata.Temperature, 1).ToString() + "\n";
+                                infotext += "Diameter [m]: " + Math.Round(_psdata.Diameter, 2).ToString() + "\n";
                                 infotext += "Source group: " + Convert.ToString(_psdata.Poll.SourceGroup) + "\n";
                                 for (int r = 0; r < 10; r++)
                                 {
@@ -405,7 +405,16 @@ namespace GralDomain
                                 for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
                                 {
                                     if (emission[r] > 0)
-                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h or MOU/h]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    {
+                                        if (Gral.Main.PollutantList[r] != "Odour")
+                                        {
+                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                        }
+                                        else
+                                        {
+                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                        }
+                                    }
                                 }
 
                                 AddItemInfoToDrawingObject(infotext, _psdata.Pt.X, _psdata.Pt.Y);
@@ -442,8 +451,8 @@ namespace GralDomain
                                 EditR.FillValues();
 
                                 //Ausgabe der Info in Infobox
-                                string infotext = "Name: " + _rd.Name + "\n";
-                                infotext += "Receptor height [m]: " + Math.Round(_rd.Height, 1).ToString();
+                                string infotext = "'" + _rd.Name + "'\n";
+                                infotext += "Height [m]: " + Math.Round(_rd.Height, 1).ToString();
 
                                 AddItemInfoToDrawingObject(infotext, _rd.Pt.X, _rd.Pt.Y);
 
@@ -506,13 +515,13 @@ namespace GralDomain
 
                                             //Ausgabe der Info in Infobox
 
-                                            string infotext = "Name: " + _as.Name + "\n";
+                                            string infotext = "'" + _as.Name + "'\n";
                                             if (height >= 0)
-                                                infotext += "Mean height [m]: " + height.ToString() + "\n";
+                                                infotext += "Mean height (rel) [m]:  " + Math.Round(height, 1).ToString() + "\n";
                                             else
-                                                infotext += "Mean height (abs) [m]: " + Math.Abs(height).ToString() + "\n";
+                                                infotext += "Mean height (abs) [m]:  " + Math.Abs(Math.Round(height, 1)).ToString() + "\n";
 
-                                            infotext += "Vertical extension [m]: " + _as.VerticalExt.ToString() + "\n";
+                                            infotext +=     "Vertical extension [m]: " + Math.Round(_as.VerticalExt, 1).ToString() + "\n";
                                             infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_as.Area, 1).ToString() + "\n";
                                             infotext += "Source group: " + _as.Poll.SourceGroup + "\n";
                                             for (int r = 0; r < 10; r++)
@@ -527,7 +536,16 @@ namespace GralDomain
                                             for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
                                             {
                                                 if (emission[r] > 0)
-                                                    infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h or OU/h]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                {
+                                                    if (Gral.Main.PollutantList[r] != "Odour")
+                                                    {
+                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                    }
+                                                    else
+                                                    {
+                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                    }
+                                                }
                                             }
 
                                             AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
@@ -573,9 +591,9 @@ namespace GralDomain
                                 double height = _vdata.VerticalExt;
 
                                 //Ausgabe der Info in Infobox
-                                string infotext = "Name: " + _vdata.Name + "\n";
-                                infotext += "Height [m]: " + Math.Abs(height) + "\n";
-                                infotext += @"Area [m" + Gral.Main.SquareString + "]: " + _vdata.Area + "\n";
+                                string infotext = "'" + _vdata.Name + "'\n";
+                                infotext += "Height (rel) [m]: " + Math.Abs(Math.Round(height, 1)) + "\n";
+                                infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_vdata.Area) + "\n";
                                 AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
                                 break;
@@ -615,11 +633,11 @@ namespace GralDomain
                                 double height = _bd.Height;
 
                                 //Ausgabe der Info in Infobox
-                                string infotext = "Name: " + _bd.Name + "\n";
+                                string infotext = "'" + _bd.Name + "'\n";
                                 if (height >= 0)
-                                    infotext += "Height [m]: " + _bd.Height.ToString() + "\n";
+                                    infotext += "Height (rel) [m]: " + Math.Round(_bd.Height, 1).ToString() + "\n";
                                 else
-                                    infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(height)) + "\n";
+                                    infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(Math.Round(height, 1))) + "\n";
 
                                 infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
                                 infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_bd.Area, 1).ToString() + "\n";
@@ -676,28 +694,30 @@ namespace GralDomain
                                     stop = true;
 
                                     //Ausgabe der Info in Infobox
-                                    string infotext = "Name: " + _ls.Name + "\n";
+                                    string infotext = "'" + _ls.Name + "'\n";
                                     if (_ls.Height >= 0)
                                     {
-                                        infotext += "Height (rel): " + Math.Abs(_ls.Height).ToString() + "\n";
+                                        infotext += "Height (rel) [m]: \t" + Math.Abs(Math.Round(_ls.Height, 1)).ToString() + "\n";
                                     }
                                     else
                                     {
-                                        infotext += "Height (abs): " + Math.Abs(_ls.Height).ToString() + "\n";
+                                        infotext += "Height (abs) [m]: \t" + Math.Abs(Math.Round(_ls.Height, 1)).ToString() + "\n";
                                     }
-                                    infotext += "Vert. extension: " + _ls.VerticalExt.ToString() + "\n";
-                                    infotext += "Width: " + _ls.Width.ToString() + "\n";
+                                    infotext += "Vert. extension [m]: \t" + Math.Round(_ls.VerticalExt, 1).ToString() + "\n";
+                                    infotext += "Width [m]: \t" + Math.Round(_ls.Width, 1).ToString() + "\n";
 
-                                    infotext += "Veh/Day: " + _ls.Nemo.AvDailyTraffic.ToString() + "\n";
-                                    infotext += "Heavy Duty Veh [%]: " + _ls.Nemo.ShareHDV.ToString() + "\n";
-                                    infotext += "Slope [%]: " + _ls.Nemo.Slope.ToString() + "\n";
-                                    infotext += "Reference Year: " + _ls.Nemo.BaseYear.ToString() + "\n";
+                                    if (_ls.Nemo.AvDailyTraffic > 0)
+                                    {
+                                        infotext += "Veh/Day:            " + _ls.Nemo.AvDailyTraffic.ToString() + "\n";
+                                        infotext += "Heavy Duty Veh [%]: " + _ls.Nemo.ShareHDV.ToString() + "\n";
+                                        infotext += "Slope [%]:          " + _ls.Nemo.Slope.ToString() + "\n";
+                                        infotext += "Reference Year:     " + _ls.Nemo.BaseYear.ToString() + "\n";
+                                        infotext += "Traffic Situation:  " + EditLS.GetSelectedListBox1Item() + "\n";
+                                    }
 
                                     length = St_F.CalcLenght(_ls.Pt);
-
-                                    infotext += "Length [km]: " + Convert.ToString(Math.Round(length, 1)) + "\n";
-                                    infotext += "Traffic Situation: " + EditLS.GetSelectedListBox1Item() + "\n";
-
+                                    infotext += "Length [km]: \t" + Convert.ToString(Math.Round(length / 1000, 3)) + "\n";
+                                    
                                     foreach (PollutantsData _poll in _ls.Poll)
                                     {
                                         for (int r = 0; r < 10; r++)
@@ -713,7 +733,16 @@ namespace GralDomain
                                     for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
                                     {
                                         if (emission[r] > 0)
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h/km]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                        {
+                                            if (Gral.Main.PollutantList[r] != "Odour")
+                                            {
+                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                            }
+                                            else
+                                            {
+                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                            }
+                                        }       
                                     }
                                     AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                     
@@ -753,17 +782,18 @@ namespace GralDomain
                                 EditPortals.FillValues();
 
                                 //Ausgabe der Info in Infobox
-                                string infotext = "Name: " + _po.Name + "\n";
+                                string infotext = "'" + _po.Name + "'\n";
                                 if (_po.BaseHeight >= 0)
                                 {
-                                    infotext += "Base height (rel): " + Math.Abs(_po.BaseHeight).ToString() + "\n";
+                                    infotext += "Base height (rel)[m]: " + Math.Abs(Math.Round(_po.BaseHeight, 1)).ToString() + "\n";
                                 }
                                 else
                                 {
-                                    infotext += "Base height (abs): " + Math.Abs(_po.BaseHeight).ToString() + "\n";
+                                    infotext += "Base height (abs)[m]: " + Math.Abs(Math.Round(_po.BaseHeight, 1)).ToString() + "\n";
                                 }
-                                infotext += "Height [m]: " + _po.Height.ToString() + "\n";
-                                infotext += "Section [m²]: " + _po.Crosssection.ToString() + "\n";
+                                infotext += "Height [m]: " + Math.Round(_po.Height, 1).ToString() + "\n";
+                                int crosssection = Convert.ToInt32(_po.Height * Math.Sqrt(Math.Pow(_po.Pt1.X - _po.Pt2.X, 2) + Math.Pow(_po.Pt1.Y - _po.Pt2.Y, 2)));
+                                infotext += "Section [m²]: " + crosssection.ToString() + "\n";
                                 if (_po.Direction.Contains("1"))
                                 {
                                     infotext += "Bidirectional \n";
@@ -788,7 +818,16 @@ namespace GralDomain
                                 for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
                                 {
                                     if (emission[r] > 0)
-                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    {
+                                        if (Gral.Main.PollutantList[r] != "Odour")
+                                        {
+                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                        }
+                                        else
+                                        {
+                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                        }
+                                    }               
                                 }
                                 AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
@@ -840,7 +879,7 @@ namespace GralDomain
                                     EditWall.FillValues();
                                     stop = true;
                                   
-                                    AddItemInfoToDrawingObject("Name: " + _wd.Name, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
+                                    AddItemInfoToDrawingObject("'" + _wd.Name + "'", (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
 
                                     break;
                                 }

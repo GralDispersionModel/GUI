@@ -457,6 +457,7 @@ namespace GralDomain
                 FillYesNo = true;
                 ShpPoints = new List<PointF>();
                 ItemInfo = new List<string>();
+                ContourLabelDist = 0;
             }
             else
             {
