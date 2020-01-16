@@ -230,6 +230,10 @@ namespace GralDomain
         /// </summary>
         private bool[] SearchDatagridviewVisible = new bool[100];
         /// <summary>
+        /// Size of the search form
+        /// </summary>
+        private Size SearchFormSize = new Size(760, 450);
+        /// <summary>
         /// Show the lenght label?
         /// </summary>
         private bool ShowLenghtLabel = true;
@@ -3626,7 +3630,54 @@ namespace GralDomain
             
             Picturebox1_Paint();
         }
-        
+
+        void WriteAllItemsToDisk(object sender, EventArgs e)
+        {
+            if (EditAS.ItemData.Count > 0)
+            {
+                EditAndSaveAreaSourceData(sender, e);
+                EditAS.FillValues();
+            }
+
+            if (EditLS.ItemData.Count > 0)
+            {
+                EditAndSaveLineSourceData(sender, e);
+                EditLS.FillValues();
+            }
+            if (EditPS.ItemData.Count > 0)
+            {
+                EditAndSavePointSourceData(sender, e);
+                EditPS.FillValues();
+            }
+            if (EditPortals.ItemData.Count > 0)
+            {
+                EditAndSavePortalSourceData(sender, e);
+                EditPortals.FillValues();
+            }
+            if (EditB.ItemData.Count > 0)
+            {
+                EditAndSaveBuildingsData(sender, e);
+                EditB.FillValues();
+            }
+            if (EditR.ItemData.Count > 0)
+            {
+                EditAndSaveReceptorData(sender, e);
+                EditR.FillValues();
+            }
+            if (EditWall.ItemData.Count > 0)
+            {
+                EditAndSaveWallData(sender, e);
+                EditWall.FillValues();
+            }
+            if (EditVegetation.ItemData.Count > 0)
+            {
+                EditAndSaveVegetationData(sender, e);
+                EditVegetation.FillValues();
+            }
+            
+            Picturebox1_Paint();
+        }
+
         void CrossCursorToolStripMenuItemClick(object sender, EventArgs e)
         {
             Cursor = Cursors.Cross;

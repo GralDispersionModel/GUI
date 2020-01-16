@@ -199,16 +199,24 @@ namespace GralItemForms
         //remove actual receptor
         private void button2_Click(object sender, EventArgs e)
         {
-            RemoveOne();
+            RemoveOne(true);
             RedrawDomain(this, null);
         }
 
         /// <summary>
     	/// Remove the recent item object from the item list
     	/// </summary>
-        public void RemoveOne()
+        public void RemoveOne(bool ask)
         {
-           if (St_F.InputBox("Attention", "Do you really want to delete this receptor?", this) == DialogResult.OK)
+            if (ask == true)
+            {
+                if (St_F.InputBox("Attention", "Do you really want to delete this receptor?", this) == DialogResult.OK)
+                    ask = false;
+                else
+                    ask = true; // Cancel -> do not delete!
+            }
+
+            if (ask == false)
             {
                 textBox1.Text = "";
                 textBox2.Text = "";

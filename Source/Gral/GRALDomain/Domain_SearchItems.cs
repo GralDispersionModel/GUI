@@ -43,12 +43,13 @@ namespace GralDomain
 				data.Columns.Add("Type", typeof(string));
 				data.Columns.Add("Height", typeof(double));
 				data.Columns.Add("Vert. ext.", typeof(double));
-				data.Columns.Add("Source_group", typeof(string));
+				data.Columns.Add("Source_group", typeof(int));
 				data.Columns.Add("Exit_velocity", typeof(double));
 				data.Columns.Add("Temperature", typeof(double));
 				data.Columns.Add("Diameter", typeof(double));
-				
-				int emission_index = 9;
+                data.Columns.Add("ER_SG", typeof(int));
+
+                int emission_index = 10;
 				
 				for (int j = 1; j < 11; j++)
 				{
@@ -59,8 +60,18 @@ namespace GralDomain
 
 				int i = 0;
 				string[] text1 = new string[1000];
-				
-				foreach (PointSourceData _psdata in EditPS.ItemData)
+
+                search.EditPSSearch = EditPS;
+                search.EditASSearch = EditAS;
+                search.EditLSSearch = EditLS;
+                search.EditPortalsSearch = EditPortals;
+                search.EditBSearch = EditB;
+                search.EditRSearch = EditR;
+                search.EditWallSearch = EditWall;
+                search.EditVegetationSearch = EditVegetation;
+                search.Locked = Gral.Main.Project_Locked;
+
+                foreach (PointSourceData _psdata in EditPS.ItemData)
 				{
 					try
 					{
@@ -78,15 +89,16 @@ namespace GralDomain
 							workrow[6] =  Math.Round(_psdata.Velocity, 1); // exit velocity
 							workrow[7] =  Math.Round(_psdata.Temperature - 273, 1); // Temperature
 							workrow[8] =  Math.Round(_psdata.Diameter, 1); // Diameter
-							
+                            
 							for (int j = 0; j < 10; j++)
 							{
-								if (_psdata.Poll.EmissionRate[j] > 0)
+								//if (_psdata.Poll.EmissionRate[j] > 0)
 								{
 									workrow[emission_index + j * 2] = _psdata.Poll.EmissionRate[j];
 									workrow[emission_index + 1 + j * 2] = Gral.Main.PollutantList[_psdata.Poll.Pollutant[j]];
 								}
 							}
+
 							data.Rows.Add(workrow);
 						}
 					}
@@ -100,6 +112,7 @@ namespace GralDomain
 					try
 					{
 						i++;
+                        int k = 0;
 						foreach (PollutantsData _poll in _ls.Poll)
 						{
 							DataRow workrow;
@@ -110,15 +123,16 @@ namespace GralDomain
 							workrow[3] =  Math.Round(_ls.Height, 1);
 							workrow[4] =  Math.Round(_ls.VerticalExt, 1); // vert extension
 							workrow[5] = _poll.SourceGroup;
-							
-							for (int j = 0; j < 10; j++)
+                            workrow[9] = k; // Emission Rate index for multiple SG per source
+
+                            for (int j = 0; j < 10; j++)
 							{
 								workrow[emission_index + j * 2] = _poll.EmissionRate[j];
 								workrow[emission_index + 1 + j * 2] = Gral.Main.PollutantList[_poll.Pollutant[j]];
 							}
 							
 							data.Rows.Add(workrow);
-							
+                            k++;
 						}
 					}
 					catch
@@ -147,7 +161,7 @@ namespace GralDomain
 						
 						for (int j = 0; j < 10; j++)
 						{
-							if (_as.Poll.EmissionRate[j] > 0)
+							//if (_as.Poll.EmissionRate[j] > 0)
 							{
 								workrow[emission_index + j * 2] = _as.Poll.EmissionRate[j];
 								workrow[emission_index + 1 + j * 2] = Gral.Main.PollutantList[_as.Poll.Pollutant[j]];
@@ -167,7 +181,8 @@ namespace GralDomain
 					try
 					{
 						i++;
-						
+
+                        int k = 0;
 						foreach (PollutantsData _poll in _po.Poll)
 						{
 							DataRow workrow;
@@ -180,16 +195,18 @@ namespace GralDomain
 							workrow[5] =  _poll.SourceGroup;
 							workrow[6] =  Math.Round(_po.ExitVel, 1); // exit velocity
 							workrow[7] =  Math.Round(_po.DeltaT, 1); // Temperature
-							
-							for (int j = 0; j < 10; j++)
+                            workrow[9] = k; // Emission Rate index for multiple SG per source
+
+                            for (int j = 0; j < 10; j++)
 							{
-								if (_poll.EmissionRate[j] > 0)
+								//if (_poll.EmissionRate[j] > 0)
 								{
 									workrow[emission_index + j] = _poll.EmissionRate[j];
 									workrow[emission_index + j + 1] = Gral.Main.PollutantList[_poll.Pollutant[j]];
 								}
 							}
 							data.Rows.Add(workrow);
+                            k++;
 						}
 						
 					}
@@ -257,211 +274,222 @@ namespace GralDomain
                 search.StartPosition = FormStartPosition.Manual;
                 search.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
                 search.Top = 80;
-               
+                search.Size = SearchFormSize;
+                search.FormSize = SearchFormSize;
+                
                 search.ShowDialog();
 				SearchDatagridviewVisible = search.Items_visible; // get visible items
-				
+                SearchFormSize = search.FormSize;
+
 				// search selected item
 				i = search.Selected_item;
 				string type = search.Selected_Type;
-				if (type == "Point source")
-				{
-					if (EditPS.SetTrackBar(i))
-					{
-						EditPS.ItemDisplayNr = i - 1;
-						EditPS.FillValues();
-						
-						if (checkBox4.Checked == false)
-							PointSourcesToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						if ((i - 1) >= 0 && (i - 1) < EditPS.ItemData.Count)
-						{
-							double x0 = Convert.ToDouble(EditPS.ItemData[i - 1].Pt.X) - 150;
-							double y0 = Convert.ToDouble(EditPS.ItemData[i - 1].Pt.Y) + 100;
-							double xmax = x0 + 300;
-							
-							ZoomSection(x0, xmax, y0);
-						}
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Line source")
-				{
-					if (EditLS.SetTrackBar(i))
-					{
-						EditLS.ItemDisplayNr = i-1;
-						EditLS.FillValues();
-						
-						if (checkBox8.Checked == false)
-							LineSourcesToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						if (text1.Length > 32)
-						{
-							double x0 = Convert.ToDouble(EditLS.ItemData[i - 1].Pt[0].X) - 150;
-							double y0 = Convert.ToDouble(EditLS.ItemData[i - 1].Pt[0].Y) + 100;
-							double xmax = x0 + 300;
-							
-							ZoomSection(x0, xmax, y0);
-						}
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Area source")
-				{
-					if (EditAS.SetTrackBar(i))
-					{
-						EditAS.ItemDisplayNr = i - 1;
-						EditAS.FillValues();
-						
-						if (checkBox5.Checked == false)
-							AreaSourcesToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						if ((i - 1) >= 0 && (i - 1) < EditAS.ItemData.Count)
-						{
-							double x0 = Convert.ToDouble(EditAS.ItemData[i - 1].Pt[0].X) - 150;
-							double y0 = Convert.ToDouble(EditAS.ItemData[i - 1].Pt[0].Y) + 100;
-							double xmax = x0 + 300;
-							
-							ZoomSection(x0, xmax, y0);
-						}
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Portal source")
-				{
-					if (EditPortals.SetTrackBar(i))
-					{
-						EditPortals.ItemDisplayNr = i - 1;
-						EditPortals.FillValues();
-						
-						if (checkBox12.Checked == false)
-							TunnelPortalsToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						if ((i - 1) >= 0 && (i - 1) < EditPortals.ItemData.Count)
-						{
-							double x0 = Convert.ToDouble(EditPortals.ItemData[i - 1].Pt1.X) - 150;
-							double y0 = Convert.ToDouble(EditPortals.ItemData[i - 1].Pt1.Y) + 100;
-							double xmax = x0 + 300;
-							
-							ZoomSection(x0, xmax, y0);
-						}
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Building")
-				{
-					if (EditB.SetTrackBar(i))
-					{
-						EditB.ItemDisplayNr = i - 1;
-						EditB.FillValues();
-						
-						if (checkBox15.Checked == false)
-							BuildingsToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						if ((i - 1) >= 0 && (i - 1) < EditB.ItemData.Count)
-						{
-							double x0 = Convert.ToDouble(EditB.ItemData[i - 1].Pt[0].X) - 150;
-							double y0 = Convert.ToDouble(EditB.ItemData[i - 1].Pt[0].Y) + 100;
-							double xmax = x0 + 300;
-							
-							ZoomSection(x0, xmax, y0);
-						}
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Receptor point")
-				{
-					if (EditR.SetTrackBar(i))
-					{
-						EditR.ItemDisplayNr = i - 1;
-						EditR.FillValues();
-						
-						// move map to the item
-						if (checkBox20.Checked == false)
-							ReceptorPointsToolStripMenuItemClick(null, null);
-						
-						double x0 = EditR.ItemData[i - 1].Pt.X - 150;
-						double y0 = EditR.ItemData[i - 1].Pt.Y + 100;
-						double xmax = x0 + 300;
-						
-						ZoomSection(x0, xmax, y0);
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Wall")
-				{
-					if (EditWall.SetTrackBar(i))
-					{
-						EditWall.ItemDisplayNr = i - 1;
-						EditWall.FillValues();
-						
-						if (checkBox25.Checked == false)
-							WallsToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						WallData _wd = EditWall.ItemData[i-1];
-						double x0 = _wd.Pt[0].X - 150;
-						double y0 = _wd.Pt[0].Y + 100;
-						double xmax = x0 + 300;
-						ZoomSection(x0, xmax, y0);
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
-				
-				if (type == "Vegetation")
-				{
-					if (EditVegetation.SetTrackBar(i))
-					{
-						EditVegetation.ItemDisplayNr = i -1;
-						EditVegetation.FillValues();
-						
-						if (checkBox26.Checked == false)
-							VegetationToolStripMenuItemClick(null, null);
-						
-						// move map to the item
-						VegetationData _vdata = EditVegetation.ItemData[i - 1];
-						double x0 = _vdata.Pt[0].X - 150;
-						double y0 = _vdata.Pt[0].Y + 100;
-						double xmax = x0 + 300;
-						ZoomSection(x0, xmax, y0);
-					}
-					else
-					{
-						MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-				}
+
+                if (i == -1)
+                {
+                    WriteAllItemsToDisk(null, null);
+                }
+                else
+                {
+                    if (type == "Point source")
+                    {
+                        if (EditPS.SetTrackBar(i))
+                        {
+                            EditPS.ItemDisplayNr = i - 1;
+                            EditPS.FillValues();
+
+                            if (checkBox4.Checked == false)
+                                PointSourcesToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            if ((i - 1) >= 0 && (i - 1) < EditPS.ItemData.Count)
+                            {
+                                double x0 = Convert.ToDouble(EditPS.ItemData[i - 1].Pt.X) - 150;
+                                double y0 = Convert.ToDouble(EditPS.ItemData[i - 1].Pt.Y) + 100;
+                                double xmax = x0 + 300;
+
+                                ZoomSection(x0, xmax, y0);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Line source")
+                    {
+                        if (EditLS.SetTrackBar(i))
+                        {
+                            EditLS.ItemDisplayNr = i - 1;
+                            EditLS.FillValues();
+
+                            if (checkBox8.Checked == false)
+                                LineSourcesToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            if (text1.Length > 32)
+                            {
+                                double x0 = Convert.ToDouble(EditLS.ItemData[i - 1].Pt[0].X) - 150;
+                                double y0 = Convert.ToDouble(EditLS.ItemData[i - 1].Pt[0].Y) + 100;
+                                double xmax = x0 + 300;
+
+                                ZoomSection(x0, xmax, y0);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Area source")
+                    {
+                        if (EditAS.SetTrackBar(i))
+                        {
+                            EditAS.ItemDisplayNr = i - 1;
+                            EditAS.FillValues();
+
+                            if (checkBox5.Checked == false)
+                                AreaSourcesToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            if ((i - 1) >= 0 && (i - 1) < EditAS.ItemData.Count)
+                            {
+                                double x0 = Convert.ToDouble(EditAS.ItemData[i - 1].Pt[0].X) - 150;
+                                double y0 = Convert.ToDouble(EditAS.ItemData[i - 1].Pt[0].Y) + 100;
+                                double xmax = x0 + 300;
+
+                                ZoomSection(x0, xmax, y0);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Portal source")
+                    {
+                        if (EditPortals.SetTrackBar(i))
+                        {
+                            EditPortals.ItemDisplayNr = i - 1;
+                            EditPortals.FillValues();
+
+                            if (checkBox12.Checked == false)
+                                TunnelPortalsToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            if ((i - 1) >= 0 && (i - 1) < EditPortals.ItemData.Count)
+                            {
+                                double x0 = Convert.ToDouble(EditPortals.ItemData[i - 1].Pt1.X) - 150;
+                                double y0 = Convert.ToDouble(EditPortals.ItemData[i - 1].Pt1.Y) + 100;
+                                double xmax = x0 + 300;
+
+                                ZoomSection(x0, xmax, y0);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Building")
+                    {
+                        if (EditB.SetTrackBar(i))
+                        {
+                            EditB.ItemDisplayNr = i - 1;
+                            EditB.FillValues();
+
+                            if (checkBox15.Checked == false)
+                                BuildingsToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            if ((i - 1) >= 0 && (i - 1) < EditB.ItemData.Count)
+                            {
+                                double x0 = Convert.ToDouble(EditB.ItemData[i - 1].Pt[0].X) - 150;
+                                double y0 = Convert.ToDouble(EditB.ItemData[i - 1].Pt[0].Y) + 100;
+                                double xmax = x0 + 300;
+
+                                ZoomSection(x0, xmax, y0);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Receptor point")
+                    {
+                        if (EditR.SetTrackBar(i))
+                        {
+                            EditR.ItemDisplayNr = i - 1;
+                            EditR.FillValues();
+
+                            // move map to the item
+                            if (checkBox20.Checked == false)
+                                ReceptorPointsToolStripMenuItemClick(null, null);
+
+                            double x0 = EditR.ItemData[i - 1].Pt.X - 150;
+                            double y0 = EditR.ItemData[i - 1].Pt.Y + 100;
+                            double xmax = x0 + 300;
+
+                            ZoomSection(x0, xmax, y0);
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Wall")
+                    {
+                        if (EditWall.SetTrackBar(i))
+                        {
+                            EditWall.ItemDisplayNr = i - 1;
+                            EditWall.FillValues();
+
+                            if (checkBox25.Checked == false)
+                                WallsToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            WallData _wd = EditWall.ItemData[i - 1];
+                            double x0 = _wd.Pt[0].X - 150;
+                            double y0 = _wd.Pt[0].Y + 100;
+                            double xmax = x0 + 300;
+                            ZoomSection(x0, xmax, y0);
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    if (type == "Vegetation")
+                    {
+                        if (EditVegetation.SetTrackBar(i))
+                        {
+                            EditVegetation.ItemDisplayNr = i - 1;
+                            EditVegetation.FillValues();
+
+                            if (checkBox26.Checked == false)
+                                VegetationToolStripMenuItemClick(null, null);
+
+                            // move map to the item
+                            VegetationData _vdata = EditVegetation.ItemData[i - 1];
+                            double x0 = _vdata.Pt[0].X - 150;
+                            double y0 = _vdata.Pt[0].Y + 100;
+                            double xmax = x0 + 300;
+                            ZoomSection(x0, xmax, y0);
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "This element is not available - check the 'Control files' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
 				data = null;
 			}
 		}
