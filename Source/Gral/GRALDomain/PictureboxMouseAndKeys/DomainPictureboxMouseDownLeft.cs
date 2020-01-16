@@ -408,15 +408,13 @@ namespace GralDomain
                                         infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h or MOU/h]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                 }
 
-                                InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
-
+                                AddItemInfoToDrawingObject(infotext, _psdata.Pt.X, _psdata.Pt.Y);
+                                
                                 stop = true;
                                 break;
                             }
                             i = i + 1;
                         }
-
-                        Picturebox1_Paint(); // 
                         Focus();
                     }
                     break;
@@ -446,14 +444,14 @@ namespace GralDomain
                                 //Ausgabe der Info in Infobox
                                 string infotext = "Name: " + _rd.Name + "\n";
                                 infotext += "Receptor height [m]: " + Math.Round(_rd.Height, 1).ToString();
-                                InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
+
+                                AddItemInfoToDrawingObject(infotext, _rd.Pt.X, _rd.Pt.Y);
 
                                 stop = true;
                                 break;
                             }
                             i++;
                         }
-                        Picturebox1_Paint(); // 
                         Focus();
                     }
                     break;
@@ -531,15 +529,16 @@ namespace GralDomain
                                                 if (emission[r] > 0)
                                                     infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h or OU/h]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                             }
-                                            InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
 
+                                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
+                                            
                                         }
                                     }
                                     i = i + 1;
                                 }
                             }
                         }
-                        Picturebox1_Paint(); // 
+                        
                         Focus();
                     }
                     break;
@@ -577,13 +576,12 @@ namespace GralDomain
                                 string infotext = "Name: " + _vdata.Name + "\n";
                                 infotext += "Height [m]: " + Math.Abs(height) + "\n";
                                 infotext += @"Area [m" + Gral.Main.SquareString + "]: " + _vdata.Area + "\n";
-                                InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
+                                AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
                                 break;
                             }
                             i = i + 1;
                         }
-                        Picturebox1_Paint(); // 
                         Focus();
                     }
                     break;
@@ -625,13 +623,12 @@ namespace GralDomain
 
                                 infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
                                 infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_bd.Area, 1).ToString() + "\n";
-                                InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
+                                AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
                                 break;
                             }
                             i = i + 1;
                         }
-                        Picturebox1_Paint(); // 
                         Focus();
                     }
                     break;
@@ -718,14 +715,13 @@ namespace GralDomain
                                         if (emission[r] > 0)
                                             infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h/km]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                     }
-                                    InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
-
+                                    AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
+                                    
                                     break;
                                 }
                             }
                             i = i + 1;
                         }
-                        Picturebox1_Paint(); // 
                         Focus();
                     }
                     break;
@@ -794,14 +790,12 @@ namespace GralDomain
                                     if (emission[r] > 0)
                                         infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: " + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                 }
-                                InfoBoxTip.Show(infotext, this, e.X, e.Y, 8000);
-
+                                AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
                                 break;
                             }
                             i = i + 1;
                         }
-                        Picturebox1_Paint(); // 
                         Focus();
                     }
                     break;
@@ -845,9 +839,8 @@ namespace GralDomain
                                     SelectedItems.Add(i);
                                     EditWall.FillValues();
                                     stop = true;
-
-                                    //Ausgabe der Info in Infobox
-                                    InfoBoxTip.Show("Name: " + _wd.Name, this, e.X, e.Y, 8000);
+                                  
+                                    AddItemInfoToDrawingObject("Name: " + _wd.Name, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
 
                                     break;
                                 }
@@ -1252,6 +1245,28 @@ namespace GralDomain
                     SetNewEdgepointVegetation();
                     break;
             }
+        }
+
+
+        /// <summary>
+        /// Add the string a to ItemOptions 
+        /// </summary>
+        /// <param name="info"></param>
+        private void AddItemInfoToDrawingObject(string info, double x1, double y1)
+        {
+            int index = CheckForExistingDrawingObject("ITEM INFO");
+            DrawingObjects _drobj = ItemOptions[index];
+            if (_drobj.ShpPoints == null)
+            {
+                _drobj.ShpPoints = new List<PointF>();
+            }
+            if (_drobj.ItemInfo == null)
+            {
+                _drobj.ItemInfo = new List<string>();
+            }
+            _drobj.ShpPoints.Add(new PointF((float) x1, (float) y1));
+            _drobj.ItemInfo.Add(info);
+            Picturebox1_Paint();
         }
     }
 }

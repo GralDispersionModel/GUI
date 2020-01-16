@@ -219,7 +219,13 @@ namespace GralDomain
                 {
                     DrawConcentrationValues(g, _drobj, form1_west, form1_north, factor_x, factor_y, LabelFont, LabelBrush);
                 }
-                
+
+                // draw info boxes
+                if ((obname == "ITEM INFO" && (_drobj.Show == true)))
+                {
+                    DrawItemInfo(g, _drobj, form1_west, form1_north, factor_x, factor_y, LabelFont, LabelBrush);
+                }
+
                 // draw Bitmap - Coordinate Raster
                 if ((obname.Substring(0, 3) == "BM:") && (_drobj.Show == true))
                 {

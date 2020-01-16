@@ -213,6 +213,10 @@ namespace GralDomain
         /// list of polygons when importing shape files
         /// </summary>
         public List<GralShape.SHPPolygon> ShpPolygons { get; set; }
+        /// <summary>
+        /// list of strings for item infos
+        /// </summary>
+        public List<string> ItemInfo { get; set; }
 
         private bool disposed = false;
 
@@ -437,7 +441,7 @@ namespace GralDomain
                 ItemValues.Add(0);
                 LineColors.Add(Color.Black);
             }
-            else if (_name.StartsWith("CONCENTRATION VALUES"))
+            else if (_name.StartsWith("CONCENTRATION VALUES") || _name.StartsWith("ITEM INFO"))
             {
                 FillColors.Add(Color.Transparent);
                 ItemValues.Add(0);
@@ -451,6 +455,8 @@ namespace GralDomain
                 LineWidth = 4;
                 Fill = true;
                 FillYesNo = true;
+                ShpPoints = new List<PointF>();
+                ItemInfo = new List<string>();
             }
             else
             {
@@ -559,7 +565,6 @@ namespace GralDomain
             }
             disposed = true;
         }
-
 
         /// <summary>
         /// Class for the DrawObject countour geometry
