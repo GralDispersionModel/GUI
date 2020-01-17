@@ -458,6 +458,8 @@ namespace GralItemForms
                 	button4.Visible = true;
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.StartsWith("CONCENTRATION VALUES"))
                 	button4.Visible = true;
+                if (domain.ItemOptions[listBox1.SelectedIndex].Name.StartsWith("ITEM INFO"))
+                    button4.Visible = true;
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.StartsWith("WINDROSE"))
                     button4.Visible = true;
             }
@@ -613,6 +615,7 @@ namespace GralItemForms
         			    domain.ItemOptions[index].Name.Equals("NORTH ARROW")    ||
         			    domain.ItemOptions[index].Name.Equals("SCALE BAR")      ||
         			    domain.ItemOptions[index].Name.StartsWith("CONCENTRATION VALUES") ||
+                        domain.ItemOptions[index].Name.StartsWith("ITEM INFO") ||
                         domain.ItemOptions[index].Name.Equals("WINDROSE"))
         			{
         				

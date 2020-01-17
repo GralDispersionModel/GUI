@@ -406,7 +406,7 @@ namespace GralItemForms
                     button12.Visible = true;
                 }
                 
-                if (DrawObject.Name.StartsWith("CONCENTRATION VALUES"))
+                if (DrawObject.Name.StartsWith("CONCENTRATION VALUES") || DrawObject.Name.StartsWith("ITEM INFO"))
                 {
                     // decimal places
                     groupBox3.Visible = true;
@@ -444,7 +444,7 @@ namespace GralItemForms
             //enable low pass filtering of raster data (contour maps)
             if (DrawObject.ContourFilename != string.Empty && DrawObject.ContourFilename != "x")
             {
-                if (!DrawObject.Name.StartsWith("CONCENTRATION VALUES"))
+                if (!DrawObject.Name.StartsWith("CONCENTRATION VALUES") && !DrawObject.Name.StartsWith("ITEM INFO"))
                 {
                     checkBox4.Visible = true;
                 }

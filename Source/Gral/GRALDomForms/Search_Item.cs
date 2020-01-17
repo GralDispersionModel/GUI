@@ -179,7 +179,7 @@ namespace GralDomForms
                                     }
                                     if (string.IsNullOrEmpty(_dta.TemperatureTimeSeries))
                                     {
-                                        _dta.Temperature = Convert.ToSingle(dataGridView1[7, index].Value);
+                                        _dta.Temperature = Convert.ToSingle(dataGridView1[7, index].Value) + 273F;
                                     }
                                     _dta.Diameter = Convert.ToSingle(dataGridView1[8, index].Value);
                                     for (int j = 0; j < 10; j++)
