@@ -81,10 +81,10 @@ namespace Gral
 						List<string> data_mettimeseries = new List<string>();
 						ReadMetTimeSeries(mettimeseries, ref data_mettimeseries);
 						weathersit_count = Math.Max(data_mettimeseries.Count, 1);
-						if (data_mettimeseries.Count == 0) // no data available
-						{
-							MessageBox.Show("mettimeseries.dat not available -> correct visualization of the simulation progress not possible");
-						}
+						//if (data_mettimeseries.Count == 0) // no data available
+						//{
+						//	MessageBox.Show("mettimeseries.dat not available -> correct visualization of the simulation progress not possible");
+						//}
 					}
 				}
 			}
