@@ -31,57 +31,57 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
+    {
         /// <summary>
         /// routine computes mettimeseries.dat and meteopgt.all
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void GRALGenerateMeteoFiles(object sender, EventArgs e)
-		{
-			string filename = Path.Combine("Computation", "meteopgt.all");
-			string newPath = Path.Combine(ProjectName, filename);
-			if (listBox2.Items.Count != 0 && File.Exists(newPath))
-			{
-				DialogResult result = MessageBox.Show("You are using a GRAMM wind field and met-files exist. Would you delete the existing and create new met.files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-				if (result == DialogResult.No)
-					return;
-			}
+        {
+            string filename = Path.Combine("Computation", "meteopgt.all");
+            string newPath = Path.Combine(ProjectName, filename);
+            if (listBox2.Items.Count != 0 && File.Exists(newPath))
+            {
+                DialogResult result = MessageBox.Show("You are using a GRAMM wind field and met-files exist. Would you delete the existing and create new met.files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No)
+                    return;
+            }
 
-			//this.Cursor = Cursors.WaitCursor;
-			//check if all input values and user defined classes are O.K.
-			int ok = 0;
-			for (int nr = 0; nr < WindSpeedClasses - 1; nr++)
-			{
-				try
-				{
-					if (NumUpDown[nr].Value < decimal.Parse(TBox[nr].Text))
-					{
-						MessageBox.Show("Wind speed needs to be larger", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-						NumUpDown[nr].Value = 0M;
-						TBox[nr + 1].Text = NumUpDown[nr].Text;
-						ok = 0;
-						break;
-					}
-					else
-					{
-						ok = 1;
-					}
-				}
-				catch
-				{
-					MessageBox.Show("Wind classes input needs to be a valid number", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					break;
-				}
-			}
+            //this.Cursor = Cursors.WaitCursor;
+            //check if all input values and user defined classes are O.K.
+            int ok = 0;
+            for (int nr = 0; nr < WindSpeedClasses - 1; nr++)
+            {
+                try
+                {
+                    if (NumUpDown[nr].Value < decimal.Parse(TBox[nr].Text))
+                    {
+                        MessageBox.Show("Wind speed needs to be larger", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        NumUpDown[nr].Value = 0M;
+                        TBox[nr + 1].Text = NumUpDown[nr].Text;
+                        ok = 0;
+                        break;
+                    }
+                    else
+                    {
+                        ok = 1;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Wind classes input needs to be a valid number", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                }
+            }
 
-			//generate the gral input files mettimeseries.dat and meteopgt.all
-			if (ok > 0)
-			{
-				try
-				{
-					filename = Path.Combine("Computation", "mettimeseries.dat");
-					newPath = Path.Combine(ProjectName, filename);
+            //generate the gral input files mettimeseries.dat and meteopgt.all
+            if (ok > 0)
+            {
+                try
+                {
+                    filename = Path.Combine("Computation", "mettimeseries.dat");
+                    newPath = Path.Combine(ProjectName, filename);
                     string[] daymonthyear = new string[3];
                     double windclasse = 0;
                     double[] avwclass = new double[WindSpeedClasses];
@@ -162,11 +162,11 @@ namespace Gral
                             frequmet[iwg, iwr, data.StabClass - 1] = frequmet[iwg, iwr, data.StabClass - 1] + 1;
                         }
                     }
-					
-					//save met data to file meteopgt.all
-					Textbox16_Set(MetfileName);
-					filename = Path.Combine("Computation", "meteopgt.all");
-					newPath = Path.Combine(ProjectName, filename);
+
+                    //save met data to file meteopgt.all
+                    Textbox16_Set(MetfileName);
+                    filename = Path.Combine("Computation", "meteopgt.all");
+                    newPath = Path.Combine(ProjectName, filename);
                     using (StreamWriter myWriter = new StreamWriter(newPath))
                     {
                         int filelength = MeteoTimeSeries.Count;
@@ -244,15 +244,15 @@ namespace Gral
                             }
                         }
                     }
-					
-					//save met input data
-					try
-					{
-						filename = Path.GetFileNameWithoutExtension(MetfileName);
-						newPath = Path.Combine(ProjectName, @"Metfiles" + Path.DirectorySeparatorChar);
-						foreach (string path in Directory.GetFiles(newPath, "*.*", SearchOption.AllDirectories))
-							File.Delete(path);
-						newPath = Path.Combine(ProjectName, @"Metfiles", filename + ".met");
+
+                    //save met input data
+                    try
+                    {
+                        filename = Path.GetFileNameWithoutExtension(MetfileName);
+                        newPath = Path.Combine(ProjectName, @"Metfiles" + Path.DirectorySeparatorChar);
+                        foreach (string path in Directory.GetFiles(newPath, "*.*", SearchOption.AllDirectories))
+                            File.Delete(path);
+                        newPath = Path.Combine(ProjectName, @"Metfiles", filename + ".met");
                         using (StreamWriter myWriter = new StreamWriter(newPath))
                         {
                             foreach (GralData.WindData data in MeteoTimeSeries)
@@ -261,172 +261,6 @@ namespace Gral
                                                    "," + Convert.ToString(data.Vel, ic) +
                                                    "," + Convert.ToString(data.Dir, ic) +
                                                    "," + Convert.ToString(data.StabClass));
-                            }
-                        }
-						
-						SaveMeteoDataFile();
-						Change_Label(1, 2); // meteo button green
-						ChangedWindData = false;
-					}
-					catch
-					{
-						MessageBox.Show("Could not copy meteorological input file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					}
-
-					//delete existing windfield and concentration fields
-					newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
-					DirectoryInfo di = new DirectoryInfo(newPath);
-					FileInfo[] files_conc = di.GetFiles("*.con");
-					if (files_conc.Length > 0)
-					{
-                        using (FileDeleteMessage fdm = new FileDeleteMessage())
-                        {
-                            if (files_conc.Length > 0)
-                                fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
-                            
-                            if (fdm.ShowDialog() == DialogResult.OK)
-                            {
-                                for (int i = 0; i < files_conc.Length; i++)
-                                    files_conc[i].Delete();
-                            }
-                        }
-					}
-					files_conc = di.GetFiles("*.grz");
-					if (files_conc.Length > 0)
-					{
-                        using (FileDeleteMessage fdm = new FileDeleteMessage())
-                        {
-                            if (files_conc.Length > 0)
-                                fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
-
-                            if (fdm.ShowDialog() == DialogResult.OK)
-                            {
-                                for (int i = 0; i < files_conc.Length; i++)
-                                    files_conc[i].Delete();
-                            }
-                        }
-					}
-                }
-				catch
-				{
-					MessageBox.Show("Please define Project Folder first. Change to the menu 'Project'.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-            }
-
-			//modify control file for GRAL simulations in.dat
-			GenerateInDat();
-
-			//enable/disable GRAL simulations
-			Enable_GRAL();
-			//enable/disable GRAMM simulations
-			Enable_GRAMM();
-
-			// Delete GRAMIn.dat
-			try
-			{
-				File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat"));
-			}
-			catch
-			{ }
-			// write new GRAMMin, because of sunrise option
-			GRAMMin(true);
-
-			Cursor = Cursors.Default;
-		}
-
-        /// <summary>
-        /// Create meteopgt.all and mettimeseries.dat for the usage of ERA5 meteo data
-        /// </summary>
-        private void GRALGenerateMeteoFilesForERA5()
-        {
-            if (EmifileReset == true)
-            {
-                string filename = Path.Combine("Computation", "meteopgt.all");
-                string newPath = Path.Combine(ProjectName, filename);
-                if (listBox2.Items.Count != 0 && File.Exists(newPath))
-                {
-                    DialogResult result = MessageBox.Show("You are using a GRAMM wind field and met-files exist. Would you delete the existing and create new met.files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (result == DialogResult.No)
-                        return;
-                }
-
-                //generate the gral input files mettimeseries.dat and meteopgt.all
-                try
-                {
-                    filename = Path.Combine("Computation", "mettimeseries.dat");
-                    newPath = Path.Combine(ProjectName, filename);
-                    int hour = 0;
-                    float vel = 0.0f;
-                    float dir = 1.0f;
-
-                    using (StreamWriter myWriter = File.CreateText(newPath))
-                    {
-                        for (int i = 1; i < 18000; i++)
-                        {
-                            if (hour == 25)
-                                hour = 0;
-                            if (dir == 361)
-                            {
-                                dir = 1.0f;
-                                vel += 0.1f;
-                            }
-                            myWriter.WriteLine("01.01" + "," + Convert.ToString(hour++, ic) + ","
-                                                       + Convert.ToString(vel, ic) + "," + Convert.ToString(dir++ / 10, ic) + ",4");
-                        }
-                    }
-
-                    //save met data to file meteopgt.all
-                    Textbox16_Set("Artificial Metfile for ERA5 usage.met");
-                    filename = Path.Combine("Computation", "meteopgt.all");
-                    newPath = Path.Combine(ProjectName, filename);
-                    hour = 0;
-                    vel = 0.0f;
-                    dir = 1.0f;
-                    using (StreamWriter myWriter = new StreamWriter(newPath))
-                    {
-                        //write anemometer height, flag indicating whether dispersion situations are classified or not, sector width for wind direction in the classification
-                        myWriter.WriteLine("10,1,0,    !Are dispersion situations classified =0 or not =1");
-                        myWriter.WriteLine("Wind direction sector,Wind speed class,stability class, frequency");
-                        for (int i = 1; i < 18000; i++)
-                        {
-                            if (hour == 25)
-                                hour = 0;
-                            if (dir == 361)
-                            {
-                                dir = 1.0f;
-                                vel += 0.1f;
-                            }
-                            myWriter.WriteLine(Convert.ToString(dir++ / 10, ic) + "," + Convert.ToString(vel, ic) + ",4" + ",0.05556");
-                        }
-                    }
-
-                    //save met input data
-                    try
-                    {
-                        MetfileName = "Artificial Metfile for ERA5 usage.met";
-                        MetoColumnSeperator = ',';
-                        MeteoDecSeperator = ".";
-                        Anemometerheight = 10;
-                        filename = Path.GetFileNameWithoutExtension("Artificial Metfile for ERA5 usage.met");
-                        newPath = Path.Combine(ProjectName, @"Metfiles" + Path.DirectorySeparatorChar);
-                        foreach (string path in Directory.GetFiles(newPath, "*.*", SearchOption.AllDirectories))
-                            File.Delete(path);
-                        newPath = Path.Combine(ProjectName, @"Metfiles", filename + ".met");
-                        hour = 0;
-                        vel = 0.0f;
-                        dir = 1.0f;
-                        using (StreamWriter myWriter = new StreamWriter(newPath))
-                        {
-                            for (int i = 1; i < 18000; i++)
-                            {
-                                if (hour == 25)
-                                    hour = 0;
-                                if (dir == 361)
-                                {
-                                    dir = 1.0f;
-                                    vel += 0.1f;
-                                }
-                                myWriter.WriteLine("01.01," + Convert.ToString(hour++, ic) + "," + Convert.ToString(vel, ic) + "," + Convert.ToString(dir++, ic) + ",4");
                             }
                         }
 
@@ -438,10 +272,139 @@ namespace Gral
                     {
                         MessageBox.Show("Could not copy meteorological input file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+
+                    //delete existing windfield and concentration fields
+                    newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
+                    DirectoryInfo di = new DirectoryInfo(newPath);
+                    FileInfo[] files_conc = di.GetFiles("*.con");
+                    if (files_conc.Length > 0)
+                    {
+                        using (FileDeleteMessage fdm = new FileDeleteMessage())
+                        {
+                            if (files_conc.Length > 0)
+                                fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
+
+                            if (fdm.ShowDialog() == DialogResult.OK)
+                            {
+                                for (int i = 0; i < files_conc.Length; i++)
+                                    files_conc[i].Delete();
+                            }
+                        }
+                    }
+                    files_conc = di.GetFiles("*.grz");
+                    if (files_conc.Length > 0)
+                    {
+                        using (FileDeleteMessage fdm = new FileDeleteMessage())
+                        {
+                            if (files_conc.Length > 0)
+                                fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
+
+                            if (fdm.ShowDialog() == DialogResult.OK)
+                            {
+                                for (int i = 0; i < files_conc.Length; i++)
+                                    files_conc[i].Delete();
+                            }
+                        }
+                    }
                 }
                 catch
                 {
                     MessageBox.Show("Please define Project Folder first. Change to the menu 'Project'.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+
+            //modify control file for GRAL simulations in.dat
+            GenerateInDat();
+
+            //enable/disable GRAL simulations
+            Enable_GRAL();
+            //enable/disable GRAMM simulations
+            Enable_GRAMM();
+
+            // Delete GRAMIn.dat
+            try
+            {
+                File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat"));
+            }
+            catch
+            { }
+            // write new GRAMMin, because of sunrise option
+            GRAMMin(true);
+
+            Cursor = Cursors.Default;
+        }
+
+        /// <summary>
+        /// Create meteopgt.all and mettimeseries.dat for the usage of ERA5 meteo data
+        /// </summary>
+        private void GRALGenerateMeteoFilesForERA5()
+        {
+            if (EmifileReset == true)
+            {
+                if (listBox2.Items.Count != 0 && File.Exists(Path.Combine(ProjectName, "Computation", "meteopgt.all")))
+                {
+                    DialogResult result = MessageBox.Show(this, "You are using a GRAMM wind field and met-files exist. Would you delete the existing and create new met.files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.No)
+                        return;
+                }
+
+                DateTime _date = dateTimePicker1.Value; // get start date and time
+
+                //generate the gral input files mettimeseries.dat and meteopgt.all
+                try
+                {
+                    string filenameMet = Path.Combine("Computation", "mettimeseries.dat");
+                    string newPathMet = Path.Combine(ProjectName, filenameMet);
+                    string filenameAll = Path.Combine("Computation", "meteopgt.all");
+                    string newPathAll = Path.Combine(ProjectName, filenameAll);
+                    string filenameERA = "Artificial Metfile for ERA5 usage.met";
+                    string newPathERA = Path.Combine(ProjectName, @"Metfiles" + Path.DirectorySeparatorChar);
+                    //foreach (string path in Directory.GetFiles(newPathERA, "*.*", SearchOption.AllDirectories))
+                    //{
+                    //    File.Delete(path);
+                    //}
+                    newPathERA = Path.Combine(ProjectName, @"Metfiles", filenameERA);
+
+                    using (StreamWriter myWriterMet = File.CreateText(newPathMet))
+                    {
+                        using (StreamWriter myWriterAll = new StreamWriter(newPathAll))
+                        {
+                            using (StreamWriter myWriterERA = new StreamWriter(newPathERA))
+                            {
+                                for (int i = 1; i < 18000; i++)
+                                {
+                                    string vel = Math.Round(((int)(i / 360) * 0.1) + 0.1, 2).ToString(ic);
+                                    int dirDeg = (i % 360);
+                                    string dirDecDeg = (dirDeg * 0.1).ToString(ic);
+                                    string _dateTime = _date.Day.ToString(ic) + "." + _date.Month.ToString(ic) + "," + _date.Hour.ToString(ic) + ",";
+
+                                    myWriterMet.WriteLine(_dateTime + vel + "," + dirDecDeg + ",4");
+
+                                    myWriterAll.WriteLine(dirDecDeg + "," + vel + ",4" + ",0.05556");
+
+                                    _dateTime = _date.Day.ToString(ic) + "." + _date.Month.ToString(ic) + "." + _date.Year.ToString(ic) + "," + _date.Hour.ToString(ic) + ":00,";
+                                    myWriterERA.WriteLine(_dateTime + vel + "," + dirDeg.ToString(ic) + ",4");
+                                    
+                                    _date = _date.AddHours(1);
+                                }
+                            }
+                        }
+                    }
+
+                    //save met data to file meteopgt.all
+                    Textbox16_Set("Artificial Metfile for ERA5 usage.met");
+
+                    MetoColumnSeperator = ',';
+                    MeteoDecSeperator = ".";
+                    Anemometerheight = 10;
+
+                    SaveMeteoDataFile();
+                    Change_Label(1, 2); // meteo button green
+                    ChangedWindData = false;
+                }
+                catch
+                {
+                    MessageBox.Show("Could not write meteorological input file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 //modify control file for GRAL simulations in.dat
