@@ -2945,6 +2945,7 @@
             this.groupBox25.TabIndex = 60;
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "ECMWF coupling";
+            this.groupBox25.Visible = false;
             // 
             // numericUpDown44
             // 
