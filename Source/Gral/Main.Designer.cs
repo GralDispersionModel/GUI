@@ -2945,7 +2945,6 @@
             this.groupBox25.TabIndex = 60;
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "ECMWF coupling";
-            this.groupBox25.Visible = false;
             // 
             // numericUpDown44
             // 
@@ -3040,7 +3039,7 @@
             // 
             // numericUpDown40
             // 
-            this.numericUpDown40.Location = new System.Drawing.Point(99, 65);
+            this.numericUpDown40.Location = new System.Drawing.Point(141, 65);
             this.numericUpDown40.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -5488,10 +5487,7 @@
         private System.Windows.Forms.GroupBox groupBox25;
         private System.Windows.Forms.Label label62;
         private System.Windows.Forms.Label label35;
-        public System.Windows.Forms.CheckBox checkBox35;
-        public System.Windows.Forms.NumericUpDown numericUpDown40;
         private System.Windows.Forms.Label label63;
-        public System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.ListView listView2;
         private System.Windows.Forms.ColumnHeader SG_Number_List;
         private System.Windows.Forms.ColumnHeader SG_Name_List;
@@ -5514,10 +5510,13 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.CheckBox checkBox29;
         private System.Windows.Forms.Button button55;
-        public System.Windows.Forms.NumericUpDown numericUpDown37;
         private System.Windows.Forms.Label label5;
-        public System.Windows.Forms.NumericUpDown numericUpDown44;
         private System.Windows.Forms.Label label99;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.CheckBox checkBox35;
+        private System.Windows.Forms.NumericUpDown numericUpDown40;
+        private System.Windows.Forms.NumericUpDown numericUpDown37;
+        private System.Windows.Forms.NumericUpDown numericUpDown44;
     }
 }
 
