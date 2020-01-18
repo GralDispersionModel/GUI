@@ -761,7 +761,7 @@ namespace Gral
 				
 				if (File.Exists(emission_ts))
 				{
-					dr = MessageBox.Show(this, "Overwrite emission modulation file" + Environment.NewLine +"emissions_timeseries.txt", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+					dr = MessageBox.Show(this, "Overwrite emission modulation file" + Environment.NewLine +"emissions_timeseries.txt", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 				}
 				else
 				{
