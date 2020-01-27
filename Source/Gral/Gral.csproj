@@ -821,6 +821,12 @@
     <Compile Include="GRALMainSubForms\Windclasses.Designer.cs">
       <DependentUpon>Windclasses.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALMainSubForms\WindDistribution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALMainSubForms\WindDistribution.Designer.cs">
+      <DependentUpon>WindDistribution.cs</DependentUpon>
+    </Compile>
     <Compile Include="GRALMainSubForms\Windrose.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1149,6 +1155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GRALMainSubForms\VerticalLayerHeights.resx">
       <DependentUpon>VerticalLayerHeights.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GRALMainSubForms\WindDistribution.resx">
+      <DependentUpon>WindDistribution.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALMainSubForms\Windrose.resx">
       <SubType>Designer</SubType>

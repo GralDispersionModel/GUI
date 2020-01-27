@@ -50,7 +50,7 @@
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(0, -1);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(762, 508);
             this.panel1.TabIndex = 1;
@@ -69,6 +69,7 @@
             this.ResizeEnd += new System.EventHandler(this.WindclassesResizeEnd);
             this.Resize += new System.EventHandler(this.WindclassesResize);
             this.ResumeLayout(false);
+
         }
         private System.Windows.Forms.ToolTip toolTip1;
 

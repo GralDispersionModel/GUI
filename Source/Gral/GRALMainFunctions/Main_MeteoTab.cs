@@ -517,6 +517,88 @@ namespace Gral
         }
 
         /// <summary>
+        /// wind veolcity distribution view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowWindVelocityDistribution(object sender, EventArgs e)
+        {
+            int count = 0;
+            int startstunde = 0;
+            int endstunden = 23;
+            int maxwind = 10;
+            List<WindData> wind = new List<WindData>();
+            bool showBias = WindroseSetting.ShowBias;
+            WindroseSetting.ShowBias = false;
+
+            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            {
+                WindRoseSet = WindroseSetting,
+                StartPosition = FormStartPosition.Manual,
+                Left = this.Left + 20,
+                Top = this.Top + 150,
+
+            })
+            {
+                if (mts.ShowDialog() == DialogResult.OK)
+                {
+                    startstunde = mts.WindRoseSet.StartStunde;
+                    endstunden = mts.WindRoseSet.EndStunde;
+                    maxwind = mts.WindRoseSet.MaxVelocity;
+
+                    maxwind++;
+                    double[] wclassFrequency = new double[(maxwind + 1) * 4];
+
+                    if (startstunde == endstunden)
+                    {
+                        MessageBox.Show("Start- and endtime must be different values");
+                    }
+                    else
+                    {
+                        foreach (WindData data in MeteoTimeSeries)
+                        {
+                            //wind rose for a certain time interval within a day
+                            if (((startstunde < endstunden) && (data.Hour >= startstunde) && (data.Hour <= endstunden)) ||
+                                ((startstunde > endstunden) && ((data.Hour >= startstunde) || (data.Hour <= endstunden))))
+                            {
+                                //compute wind classes
+                                int j = 0;
+
+                                for (double i = 0; i < maxwind; i += 0.25)
+                                {
+                                    if (data.Vel > i)
+                                    {
+                                        wclassFrequency[j]++;
+                                    }
+                                    j++;
+                                }
+                                count = count + 1;
+                            }
+                        }
+
+                        //compute percent values
+                        for (int i = 0; i < (maxwind + 1) * 4; i++)
+                        {
+                            wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
+                        }
+
+                        GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
+                        {
+                            StartPosition = FormStartPosition.Manual,
+                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            WClassFrequency = wclassFrequency,
+                            MetFile = Path.GetFileName(MetfileName),
+                            MaxWind = maxwind,
+                            StartHour = startstunde,
+                            FinalHour = endstunden
+                        };
+                        wDistr.Show();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// show stability classes
         /// </summary>
         /// <param name="sender"></param>
