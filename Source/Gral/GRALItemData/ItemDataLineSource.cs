@@ -37,7 +37,8 @@ namespace GralItemData
 		public float Height		{ get; set;}
 		public float VerticalExt{ get; set;}
 		public float Width   	{ get; set;}
-		public List<GralDomain.PointD> Pt  { get; set;}
+		public bool  Lines3D    { get; set;}
+		public List<GralData.PointD_3d> Pt  { get; set;}
 		public List <PollutantsData> Poll	{ get; set;}
 		public NemoData Nemo		{ get; set;}
 		public Deposition[] Dep	{ get; set;}
@@ -53,10 +54,11 @@ namespace GralItemData
 			Section = "1";
 			VerticalExt = 3;
 			Width = 7;
+			Lines3D = false;
 			Poll = new List<PollutantsData>();
 			Nemo = new NemoData();
 			Dep = new Deposition[10];
-			Pt = new List<PointD>();
+			Pt = new List<GralData.PointD_3d>();
 			
 			for (int i = 0; i < 10; i++)
 			{
@@ -76,7 +78,7 @@ namespace GralItemData
 			text = sourcedata.Split(new char[] { ',' });
 			Dep = new Deposition[10];
 			Nemo = new NemoData();
-			Pt = new List<PointD>();
+			Pt = new List<GralData.PointD_3d> ();
 			
 			try
 			{
@@ -113,6 +115,15 @@ namespace GralItemData
 							Poll.Add(_poll);
 						}
 					}
+
+					if (version > 1)
+					{
+						int _3dLines = Convert.ToInt32(text[index++]);
+						if (_3dLines == 1)
+						{
+							Lines3D = true;
+						}
+					}
 					
 					int vertices_number = Convert.ToInt32(text[index++]); // number of vertices
 					
@@ -120,7 +131,12 @@ namespace GralItemData
 					{
 						double x = St_F.TxtToDbl(text[index++], false);
 						double y = St_F.TxtToDbl(text[index++], false);
-						Pt.Add(new PointD(x, y));
+						double z = Height;
+						if (version > 1)
+						{
+							z = St_F.TxtToDbl(text[index++], false);
+						}
+						Pt.Add(new GralData.PointD_3d(x, y, z));
 					}
 					
 					int depostart = text.Length;
@@ -185,7 +201,8 @@ namespace GralItemData
 				Poll = new List<PollutantsData>();
 				Nemo = new NemoData();
 				Dep = new Deposition[10];
-				Pt = new List<PointD>();
+				Lines3D = false;
+				Pt = new List<GralData.PointD_3d>();
 				
 				for (int i = 0; i < 10; i++)
 				{
@@ -205,8 +222,8 @@ namespace GralItemData
 			Height = other.Height;
 			Section = other.Section;
 			Width = other.Width;
-			Pt = new List<PointD>();
-			foreach (PointD _pt in other.Pt)
+			Pt = new List<GralData.PointD_3d>();
+			foreach (GralData.PointD_3d _pt in other.Pt)
 			{
 				Pt.Add(_pt);
 			}
@@ -235,7 +252,8 @@ namespace GralItemData
 		/// <summary>
 		/// Convert object data to a string as used in the item file
 		/// </summary>
-		public override string ToString()
+		/// <param name="version">0 and 1: return 2D line format, 2: write 3D format</param>
+		public string ToString(int version)
 		{
 			if (Name == null || Name == String.Empty)
 			{
@@ -258,12 +276,33 @@ namespace GralItemData
 						St_F.DblToIvarTxt(_poll.EmissionRate[i]) + ",";
 				}
 			}
-			
-			
-			dummy += Pt.Count.ToString();
-			foreach(PointD _pt in Pt)
+
+			if (version > 1)
 			{
-				dummy += "," + Math.Round(_pt.X, 1).ToString(ic) + "," + Math.Round(_pt.Y, 1).ToString(ic);
+				if (Lines3D)
+				{
+					dummy += "1,";
+				}
+				else
+				{
+					dummy += "0,";
+				}
+			}
+
+			dummy += Pt.Count.ToString();
+			if (version > 1)
+			{
+				foreach (GralData.PointD_3d _pt in Pt)
+				{
+					dummy += "," + Math.Round(_pt.X, 1).ToString(ic) + "," + Math.Round(_pt.Y, 1).ToString(ic) + "," + Math.Round(_pt.Z, 1).ToString(ic);
+				}
+			}
+			else
+			{
+				foreach (GralData.PointD_3d _pt in Pt)
+				{
+					dummy += "," + Math.Round(_pt.X, 1).ToString(ic) + "," + Math.Round(_pt.Y, 1).ToString(ic);
+				}
 			}
 			
 			dummy += ",Dep@_,";

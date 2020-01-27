@@ -261,6 +261,10 @@ namespace Gral
 							}
 
 							pathy = Path.Combine(ProjectName, @"Emissions","Lsources.txt");
+							if (!File.Exists(pathy))
+							{
+								pathy = Path.Combine(ProjectName, @"Emissions", "LineSourceData.txt");
+							}
 							if (File.Exists(pathy))
 							{
 								try

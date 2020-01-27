@@ -74,6 +74,8 @@
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button9 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -86,6 +88,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -134,6 +137,7 @@
             this.numericUpDown1.TabIndex = 4;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Lowest height above ground level");
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // trackBar1
             // 
@@ -250,7 +254,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(114, 228);
+            this.textBox2.Location = new System.Drawing.Point(115, 256);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(84, 20);
@@ -259,6 +263,7 @@
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.textBox2, "Click to edit edge point table");
             this.textBox2.Click += new System.EventHandler(this.TextBox2Click);
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // button5
             // 
@@ -281,7 +286,7 @@
             0,
             0,
             65536});
-            this.numericUpDown3.Location = new System.Drawing.Point(84, 160);
+            this.numericUpDown3.Location = new System.Drawing.Point(85, 188);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -300,7 +305,7 @@
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(12, 136);
+            this.checkBox1.Location = new System.Drawing.Point(10, 140);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(104, 21);
             this.checkBox1.TabIndex = 5;
@@ -317,7 +322,7 @@
             0,
             0,
             65536});
-            this.numericUpDown2.Location = new System.Drawing.Point(84, 182);
+            this.numericUpDown2.Location = new System.Drawing.Point(85, 210);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -363,7 +368,7 @@
             // 
             this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
             this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button8.Location = new System.Drawing.Point(84, 226);
+            this.button8.Location = new System.Drawing.Point(85, 254);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(24, 24);
             this.button8.TabIndex = 8;
@@ -374,7 +379,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(2, 185);
+            this.label1.Location = new System.Drawing.Point(3, 213);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 42;
@@ -383,7 +388,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(2, 164);
+            this.label9.Location = new System.Drawing.Point(3, 192);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(67, 13);
             this.label9.TabIndex = 59;
@@ -392,7 +397,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(2, 232);
+            this.label3.Location = new System.Drawing.Point(3, 260);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
             this.label3.TabIndex = 44;
@@ -564,7 +569,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(2, 208);
+            this.label13.Location = new System.Drawing.Point(3, 236);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(57, 13);
             this.label13.TabIndex = 42;
@@ -574,7 +579,7 @@
             // label15
             // 
             this.label15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label15.Location = new System.Drawing.Point(84, 205);
+            this.label15.Location = new System.Drawing.Point(85, 233);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(113, 20);
             this.label15.TabIndex = 42;
@@ -585,7 +590,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(2, 407);
+            this.tabControl1.Location = new System.Drawing.Point(3, 435);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(200, 308);
@@ -628,7 +633,7 @@
             this.groupBox2.Controls.Add(this.listBox2);
             this.groupBox2.Controls.Add(this.button7);
             this.groupBox2.Controls.Add(this.button5);
-            this.groupBox2.Location = new System.Drawing.Point(5, 254);
+            this.groupBox2.Location = new System.Drawing.Point(6, 282);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(192, 115);
             this.groupBox2.TabIndex = 65;
@@ -637,7 +642,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(51, 375);
+            this.button9.Location = new System.Drawing.Point(52, 403);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(85, 24);
             this.button9.TabIndex = 77;
@@ -645,17 +650,43 @@
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
+            // checkBox2
+            // 
+            this.checkBox2.Location = new System.Drawing.Point(134, 140);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(88, 21);
+            this.checkBox2.TabIndex = 5;
+            this.checkBox2.Text = "3D Line";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // trackBar2
+            // 
+            this.trackBar2.AutoSize = false;
+            this.trackBar2.Enabled = false;
+            this.trackBar2.Location = new System.Drawing.Point(9, 163);
+            this.trackBar2.Maximum = 1;
+            this.trackBar2.Minimum = 1;
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(190, 19);
+            this.trackBar2.TabIndex = 78;
+            this.toolTip1.SetToolTip(this.trackBar2, "Select edge points");
+            this.trackBar2.Value = 1;
+            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            // 
             // EditLinesources
             // 
             this.AcceptButton = this.button9;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(206, 718);
+            this.ClientSize = new System.Drawing.Size(206, 761);
+            this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.numericUpDown3);
             this.Controls.Add(this.label9);
@@ -700,6 +731,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -751,5 +783,7 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.TrackBar trackBar2;
     }
 }

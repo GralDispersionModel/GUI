@@ -250,13 +250,12 @@ namespace GralShape
 				
 				wait.Close();
 				wait.Dispose();
-				
+				Close();
 			}
 			else
 			{
 				MessageBox.Show("No heights defined - data is not imported", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			}
-			Close();
+			}	
 		}
 
 		//read attribute table from dbf file
@@ -428,10 +427,39 @@ namespace GralShape
 				areapolygon = Math.Abs(areapolygon);
 			}
 		}
-		
-		void Shape_Building_DialogFormClosed(object sender, FormClosedEventArgs e)
+
+        void Shape_Building_DialogFormClosed(object sender, FormClosedEventArgs e)
+        {
+#if __MonoCS__
+#else
+            if (dataGridView1 != null)
+            {
+                dataGridView1.DataSource = null;
+                dataGridView1.Rows.Clear();
+            }
+
+			if (dt != null)
+			{
+				DataRowCollection itemColumns = dt.Rows; // mark elements as deleted
+				for (int i = itemColumns.Count - 1; i >= 0; i--)
+				{
+					itemColumns[i].Delete();
+				}
+				dt.AcceptChanges(); // accept deletion
+				dt.Clear(); // clear data table
+			}
+#endif
+
+            if (dt != null)
+                dt.Dispose();
+
+            if (dataGridView1 != null) dataGridView1.Dispose(); // Kuntner
+            dataGridView1 = null;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
 		{
-			
+			Close();
 		}
 	}
 }

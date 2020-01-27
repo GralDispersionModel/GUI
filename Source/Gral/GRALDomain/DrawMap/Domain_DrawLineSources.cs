@@ -170,7 +170,7 @@ namespace GralDomain
                     width = Math.Max(width, _drobj.LineWidth);
                     Pen mypen = new Pen(Color2Transparent(200, Color.Green), width);
                     
-                    List <PointD> _pts = _ls.Pt;
+                    List <GralData.PointD_3d> _pts = _ls.Pt;
                     
                     x1 = (_pts[0].X - form1_west) * factor_x + TransformX;
                     y1 = (_pts[0].Y - form1_north) * factor_y + TransformY;

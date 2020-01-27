@@ -171,18 +171,69 @@ namespace GralShape
                 			if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
                 				inside = true;
                 		}
+
                 		if (inside == true && numbpt > 1)
                 		{
                 			LineSourceData _ls = new LineSourceData();
-                			
-                			douglas.DouglasPeuckerRun(pt, (double) numericUpDown1.Value);
-                			
-                			foreach(PointD _pt in pt)
-                			{
-                			    _ls.Pt.Add(new PointD(_pt.X, _pt.Y));
-                			}
-                			
-                			numbpt = pt.Count;
+
+                            //check for height
+                            double height = 0;
+                            if (comboBox2.SelectedIndex != 0)
+                            {
+                                try
+                                {
+                                    if (checkBox1.Checked == true) // absolute heights
+                                        height = (-1) * Math.Abs(Convert.ToDouble(dataGridView1[Convert.ToString(comboBox2.SelectedItem), SHP_Line].Value, ic));
+                                    else
+                                        height = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox2.SelectedItem), SHP_Line].Value, ic);
+
+                                    height = Math.Round(height, 1);
+                                }
+                                catch
+                                {
+                                    height = 0;
+                                }
+                            }
+                            else
+                                height = 0;
+
+                            _ls.Height = (float)height;
+
+                            // Copy Line Points
+                            if (checkBox3.Checked && lines.PointsZ != null && lines.PointsZ.Length == pt.Count) // 3D Lines
+                            {
+                                // 3D Lines
+                                douglas.DouglasPeuckerRun(pt, (double)numericUpDown1.Value);
+                                _ls.Lines3D = true;
+                                
+                                int abs = 1;
+                                if (checkBox1.Checked == true) // absolute heights
+                                {
+                                    abs = -1;
+                                }
+
+                                // select unfiltered points 
+                                int index = 0;
+                                for (int j = 0; j < numbpt; j++)
+                                {
+                                    if (index < pt.Count && Math.Abs(lines.Points[j].X - pt[index].X) < 0.1 && Math.Abs(lines.Points[j].Y - pt[index].Y) < 0.1)
+                                    {
+                                        _ls.Pt.Add(new GralData.PointD_3d(pt[index].X, pt[index].Y, lines.PointsZ[j] * abs));
+                                        index++;
+                                    }
+                                }
+                            }
+                            else // 2D Lines
+                            {
+                                douglas.DouglasPeuckerRun(pt, (double)numericUpDown1.Value);
+                                _ls.Lines3D = false;
+                                foreach (PointD _pt in pt)
+                                {
+                                    _ls.Pt.Add(new GralData.PointD_3d(_pt.X, _pt.Y, height));
+                                }
+                            }
+
+                			numbpt = _ls.Pt.Count;
                 			
                 			//check for names
                 			if (comboBox3.SelectedIndex != 0)
@@ -214,30 +265,7 @@ namespace GralShape
                 				section = "1";
                 			
                 			_ls.Section = section;
-                			
-                			//check for height
-                			double height = 0;
-                			if (comboBox2.SelectedIndex != 0)
-                			{
-                				try
-                				{
-                					if (checkBox1.Checked == true) // absolute heights
-                						height = (-1) * Math.Abs(Convert.ToDouble(dataGridView1[Convert.ToString(comboBox2.SelectedItem), SHP_Line].Value, ic));
-                					else
-                						height = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox2.SelectedItem), SHP_Line].Value, ic);
-                					
-                					height = Math.Round(height, 1);
-                				}
-                				catch
-                				{
-                					height = 0;
-                				}
-                			}
-                			else
-                				height = 0;
-                			
-                			_ls.Height = (float) height;
-                			
+                			             			
                 			// check for vertical extension
                 			double vertical_extension = 0;
                 			if (comboBox31.SelectedIndex != 0)
@@ -567,12 +595,12 @@ namespace GralShape
                 
                 wait.Close();
                 wait.Dispose();
+                Close();
             }
             else
             {
             	MessageBox.Show(this, "No source group, width or base year defined - data not imported", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            Close();
         }
 
         //read attribute table from dbf file
@@ -988,6 +1016,11 @@ namespace GralShape
 			}
 		    
 		    sg.Clear();
-		 }	
+		 }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

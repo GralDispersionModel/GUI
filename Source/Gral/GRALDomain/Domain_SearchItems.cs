@@ -35,6 +35,7 @@ namespace GralDomain
 		/// </summary>
 		void SearchItemToolStripMenuItemClick(object sender, EventArgs e)
 		{
+			HideWindows(0); // hide all edit forms
 			using (Search_Item search = new Search_Item())
 			{
 				DataTable data = new DataTable();

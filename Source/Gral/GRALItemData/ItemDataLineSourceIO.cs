@@ -34,7 +34,16 @@ namespace GralItemData
 				
 		public bool LoadLineSources(List<LineSourceData> _data, string _filename) // overload with 2 parameters only
 		{
-			return LoadLineSources(_data, _filename, false, new RectangleF());
+			string Linesources = Path.Combine(Path.GetDirectoryName(_filename), "LineSourceData.txt");
+			// Load 3D LineSource if available
+			if (File.Exists(Linesources))
+			{
+				return LoadLineSources(_data, Linesources, false, new RectangleF());
+			}
+			else
+			{
+				return LoadLineSources(_data, _filename, false, new RectangleF());
+			}
 		}
 		
 		public bool LoadLineSources(List<LineSourceData> _data, string _filename, bool _filterData, RectangleF _domainRect)
@@ -54,6 +63,11 @@ namespace GralItemData
 						{
 							version = 1;
 						}
+						else if (text.EndsWith("Version_20"))
+						{
+							version = 2; 
+						}
+
 						text = myReader.ReadLine(); // header 2nd line
 						
 						while (myReader.EndOfStream == false) // read until EOF
@@ -68,7 +82,7 @@ namespace GralItemData
 							{
 								LineSourceData _dta = new LineSourceData(text);
 								bool inside = false;
-								foreach(PointD _pti in _dta.Pt)
+								foreach(GralData.PointD_3d _pti in _dta.Pt)
 								{
 									if (_domainRect.Contains(_pti.ToPointF()))
 									{
@@ -96,25 +110,52 @@ namespace GralItemData
 		
 		public bool SaveLineSources(List<LineSourceData> _data, string _projectPath)
 		{
-			string newPath = Path.Combine(_projectPath, @"Emissions", "Lsources.txt");
 			bool writing_ok = false;
+			//write compatible Line Source Data
+			string newPath = string.Empty;
+
+			if (Gral.Main.CompatibilityToVersion1901)
+			{
+				newPath = Path.Combine(_projectPath, @"Emissions", "Lsources.txt");		
+				try
+				{
+					using (StreamWriter myWriter = File.CreateText(newPath))
+					{
+						myWriter.WriteLine("List of all line sources within the model domain Version_19");
+						myWriter.Write("Name, section, height[m], width[m], AADT, HDV[%], slope[%], traffic-situation, baseyear,#of source groups, source-group-pollutants(10),....., #of corner-points, corner points (x[m],y[m])...., deposition data, Vertical Extension[m]");
+						myWriter.WriteLine();
+						foreach (LineSourceData _dta in _data)
+						{
+							myWriter.WriteLine(_dta.ToString(1));
+						}
+					}
+					writing_ok = true;
+				}
+				catch
+				{
+				}
+			}
+
+			// write new 3D line format
+			newPath = Path.Combine(_projectPath, @"Emissions", "LineSourceData.txt");
 			try
 			{
 				using (StreamWriter myWriter = File.CreateText(newPath))
 				{
-					myWriter.WriteLine("List of all line sources within the model domain Version_19");
-					myWriter.Write("Name, section, height[m], width[m], AADT, HDV[%], slope[%], traffic-situation, baseyear,#of source groups, source-group-pollutants(10),.....,#of corner-points, corner points (x[m],y[m]),...., deposition data, Vertical Extension[m]");
+					myWriter.WriteLine("List of all line sources within the model domain Version_20");
+					myWriter.Write("Name, section, height[m], width[m], AADT, HDV[%], slope[%], traffic-situation, baseyear,#of source groups, source-group-pollutants(10),....., Line3D, #of corner-points, corner points (x[m],y[m]),z[m]...., deposition data, Vertical Extension[m]");
 					myWriter.WriteLine();
 					foreach (LineSourceData _dta in _data)
 					{
-						myWriter.WriteLine(_dta.ToString());
+						myWriter.WriteLine(_dta.ToString(2));
 					}
 				}
 				writing_ok = true;
 			}
 			catch
-			{	
+			{
 			}
+
 			return writing_ok;
 		}
 	}

@@ -342,7 +342,7 @@ namespace Gral
 						double ymin = double.MaxValue;
 						double ymax = double.MinValue;
 						
-						foreach (PointD _pt in _lsdata.Pt)
+						foreach (GralData.PointD_3d _pt in _lsdata.Pt)
 						{
 							xmin = Math.Min(xmin, _pt.X);
 							xmax = Math.Max(xmax, _pt.X);
@@ -373,19 +373,21 @@ namespace Gral
 											{
 												double x1 = _lsdata.Pt[i].X;
 												double x2 = _lsdata.Pt[i + 1].X;
-												double y1 = _lsdata.Pt[i].Y;
-												double y2 = _lsdata.Pt[i + 1].Y;
-												
-												string line =
+                                                double y1 = _lsdata.Pt[i].Y;
+                                                double y2 = _lsdata.Pt[i + 1].Y;
+                                                double h1 = Math.Round(_lsdata.Pt[i].Z, 1);
+                                                double h2 = Math.Round(_lsdata.Pt[i + 1].Z, 1);
+
+                                                string line =
 													_lsdata.Name + "," +
 													_lsdata.Section + "," +
 													_poll.SourceGroup.ToString(ic) + "," +
 													Math.Round(x1, 1).ToString(ic) + "," +
 													Math.Round(y1, 1).ToString(ic) + "," +
-													_lsdata.Height.ToString(ic) + "," +
+													h1.ToString(ic) + "," +
 													Math.Round(x2, 1).ToString(ic) + "," +
 													Math.Round(y2, 1).ToString(ic) + "," +
-													_lsdata.Height.ToString(ic) + "," +
+													h2.ToString(ic) + "," +
 													_lsdata.Width.ToString(ic) + "," +
 													vert_extension.ToString(ic) + "," +
 													"0," + //Alternative: Math.Round(Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)), 1).ToString(ic) + "," +

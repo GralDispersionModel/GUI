@@ -48,6 +48,10 @@ namespace GralData
 		{
 			return new GralDomain.PointD(X, Y);
 		}
+		public System.Drawing.PointF ToPointF()
+		{
+			return new System.Drawing.PointF((float)X, (float)Y);
+		}
 		public override bool Equals(object obj)
 		{
 			return obj is PointD_3d && this == (PointD_3d)obj;

@@ -15,7 +15,7 @@ using System.Drawing;
 namespace GralShape
 {
     /// <summary>
-    /// Shapefile Line class
+    /// Shapefile line class
     /// </summary>
     public class SHPLine
     {
@@ -24,5 +24,9 @@ namespace GralShape
         public int NumPoints;
         public int[] Parts;
         public GralDomain.PointD[] Points;
+        /// <summary>
+        /// Z value of a Point
+        /// </summary>
+        public double[] PointsZ;
     }
 }

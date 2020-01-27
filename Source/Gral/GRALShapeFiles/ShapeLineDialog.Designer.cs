@@ -85,6 +85,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox31 = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -92,7 +94,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1, 1);
+            this.button1.Location = new System.Drawing.Point(11, 268);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 24);
@@ -107,17 +109,17 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(1, 256);
+            this.dataGridView1.Location = new System.Drawing.Point(7, 300);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(645, 292);
+            this.dataGridView1.Size = new System.Drawing.Size(760, 325);
             this.dataGridView1.TabIndex = 1;
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(98, 43);
+            this.comboBox1.Location = new System.Drawing.Point(104, 47);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(92, 21);
@@ -127,7 +129,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(96, 27);
+            this.label1.Location = new System.Drawing.Point(102, 31);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
@@ -136,7 +138,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(458, 1);
+            this.button2.Location = new System.Drawing.Point(194, 268);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(79, 24);
@@ -147,7 +149,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(541, 1);
+            this.button3.Location = new System.Drawing.Point(332, 268);
             this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(93, 24);
@@ -160,7 +162,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Blue;
-            this.label2.Location = new System.Drawing.Point(190, 27);
+            this.label2.Location = new System.Drawing.Point(196, 31);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 13);
@@ -170,7 +172,7 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(193, 43);
+            this.comboBox2.Location = new System.Drawing.Point(199, 47);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(92, 21);
@@ -180,7 +182,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.Blue;
-            this.label3.Location = new System.Drawing.Point(2, 27);
+            this.label3.Location = new System.Drawing.Point(8, 31);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
@@ -190,7 +192,7 @@
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(4, 43);
+            this.comboBox3.Location = new System.Drawing.Point(10, 47);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(92, 21);
@@ -200,7 +202,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(286, 27);
+            this.label4.Location = new System.Drawing.Point(292, 31);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 13);
@@ -210,7 +212,7 @@
             // comboBox4
             // 
             this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(288, 43);
+            this.comboBox4.Location = new System.Drawing.Point(294, 47);
             this.comboBox4.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(92, 21);
@@ -220,7 +222,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(381, 27);
+            this.label5.Location = new System.Drawing.Point(387, 31);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(38, 13);
@@ -230,7 +232,7 @@
             // comboBox6
             // 
             this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(3, 139);
+            this.comboBox6.Location = new System.Drawing.Point(9, 143);
             this.comboBox6.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(92, 21);
@@ -239,7 +241,7 @@
             // comboBox5
             // 
             this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(98, 139);
+            this.comboBox5.Location = new System.Drawing.Point(104, 143);
             this.comboBox5.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(92, 21);
@@ -248,7 +250,7 @@
             // comboBox7
             // 
             this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Location = new System.Drawing.Point(192, 139);
+            this.comboBox7.Location = new System.Drawing.Point(198, 143);
             this.comboBox7.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox7.Name = "comboBox7";
             this.comboBox7.Size = new System.Drawing.Size(92, 21);
@@ -257,7 +259,7 @@
             // comboBox8
             // 
             this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Location = new System.Drawing.Point(286, 139);
+            this.comboBox8.Location = new System.Drawing.Point(292, 143);
             this.comboBox8.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(92, 21);
@@ -266,7 +268,7 @@
             // comboBox9
             // 
             this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Location = new System.Drawing.Point(381, 139);
+            this.comboBox9.Location = new System.Drawing.Point(387, 143);
             this.comboBox9.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox9.Name = "comboBox9";
             this.comboBox9.Size = new System.Drawing.Size(92, 21);
@@ -275,7 +277,7 @@
             // comboBox10
             // 
             this.comboBox10.FormattingEnabled = true;
-            this.comboBox10.Location = new System.Drawing.Point(381, 207);
+            this.comboBox10.Location = new System.Drawing.Point(387, 211);
             this.comboBox10.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox10.Name = "comboBox10";
             this.comboBox10.Size = new System.Drawing.Size(92, 21);
@@ -284,7 +286,7 @@
             // comboBox11
             // 
             this.comboBox11.FormattingEnabled = true;
-            this.comboBox11.Location = new System.Drawing.Point(286, 207);
+            this.comboBox11.Location = new System.Drawing.Point(292, 211);
             this.comboBox11.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox11.Name = "comboBox11";
             this.comboBox11.Size = new System.Drawing.Size(92, 21);
@@ -293,7 +295,7 @@
             // comboBox12
             // 
             this.comboBox12.FormattingEnabled = true;
-            this.comboBox12.Location = new System.Drawing.Point(192, 207);
+            this.comboBox12.Location = new System.Drawing.Point(198, 211);
             this.comboBox12.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox12.Name = "comboBox12";
             this.comboBox12.Size = new System.Drawing.Size(92, 21);
@@ -302,7 +304,7 @@
             // comboBox13
             // 
             this.comboBox13.FormattingEnabled = true;
-            this.comboBox13.Location = new System.Drawing.Point(98, 207);
+            this.comboBox13.Location = new System.Drawing.Point(104, 211);
             this.comboBox13.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox13.Name = "comboBox13";
             this.comboBox13.Size = new System.Drawing.Size(92, 21);
@@ -311,7 +313,7 @@
             // comboBox14
             // 
             this.comboBox14.FormattingEnabled = true;
-            this.comboBox14.Location = new System.Drawing.Point(3, 207);
+            this.comboBox14.Location = new System.Drawing.Point(9, 211);
             this.comboBox14.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox14.Name = "comboBox14";
             this.comboBox14.Size = new System.Drawing.Size(92, 21);
@@ -320,29 +322,31 @@
             // label16
             // 
             this.label16.AutoSize = true;
+            this.label16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label16.ForeColor = System.Drawing.Color.Red;
-            this.label16.Location = new System.Drawing.Point(160, 6);
+            this.label16.Location = new System.Drawing.Point(66, 6);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(29, 13);
+            this.label16.Size = new System.Drawing.Size(31, 15);
             this.label16.TabIndex = 38;
             this.label16.Text = "must";
             // 
             // label17
             // 
             this.label17.AutoSize = true;
+            this.label17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label17.ForeColor = System.Drawing.Color.Blue;
-            this.label17.Location = new System.Drawing.Point(112, 6);
+            this.label17.Location = new System.Drawing.Point(11, 6);
             this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(44, 13);
+            this.label17.Size = new System.Drawing.Size(46, 15);
             this.label17.TabIndex = 39;
             this.label17.Text = "optional";
             // 
             // comboBox15
             // 
             this.comboBox15.FormattingEnabled = true;
-            this.comboBox15.Location = new System.Drawing.Point(381, 160);
+            this.comboBox15.Location = new System.Drawing.Point(387, 164);
             this.comboBox15.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox15.Name = "comboBox15";
             this.comboBox15.Size = new System.Drawing.Size(92, 21);
@@ -351,7 +355,7 @@
             // comboBox16
             // 
             this.comboBox16.FormattingEnabled = true;
-            this.comboBox16.Location = new System.Drawing.Point(286, 160);
+            this.comboBox16.Location = new System.Drawing.Point(292, 164);
             this.comboBox16.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox16.Name = "comboBox16";
             this.comboBox16.Size = new System.Drawing.Size(92, 21);
@@ -360,7 +364,7 @@
             // comboBox17
             // 
             this.comboBox17.FormattingEnabled = true;
-            this.comboBox17.Location = new System.Drawing.Point(192, 160);
+            this.comboBox17.Location = new System.Drawing.Point(198, 164);
             this.comboBox17.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox17.Name = "comboBox17";
             this.comboBox17.Size = new System.Drawing.Size(92, 21);
@@ -369,7 +373,7 @@
             // comboBox18
             // 
             this.comboBox18.FormattingEnabled = true;
-            this.comboBox18.Location = new System.Drawing.Point(98, 160);
+            this.comboBox18.Location = new System.Drawing.Point(104, 164);
             this.comboBox18.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox18.Name = "comboBox18";
             this.comboBox18.Size = new System.Drawing.Size(92, 21);
@@ -378,7 +382,7 @@
             // comboBox19
             // 
             this.comboBox19.FormattingEnabled = true;
-            this.comboBox19.Location = new System.Drawing.Point(3, 160);
+            this.comboBox19.Location = new System.Drawing.Point(9, 164);
             this.comboBox19.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox19.Name = "comboBox19";
             this.comboBox19.Size = new System.Drawing.Size(92, 21);
@@ -387,7 +391,7 @@
             // comboBox20
             // 
             this.comboBox20.FormattingEnabled = true;
-            this.comboBox20.Location = new System.Drawing.Point(381, 229);
+            this.comboBox20.Location = new System.Drawing.Point(387, 233);
             this.comboBox20.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox20.Name = "comboBox20";
             this.comboBox20.Size = new System.Drawing.Size(92, 21);
@@ -396,7 +400,7 @@
             // comboBox21
             // 
             this.comboBox21.FormattingEnabled = true;
-            this.comboBox21.Location = new System.Drawing.Point(286, 229);
+            this.comboBox21.Location = new System.Drawing.Point(292, 233);
             this.comboBox21.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox21.Name = "comboBox21";
             this.comboBox21.Size = new System.Drawing.Size(92, 21);
@@ -405,7 +409,7 @@
             // comboBox22
             // 
             this.comboBox22.FormattingEnabled = true;
-            this.comboBox22.Location = new System.Drawing.Point(192, 229);
+            this.comboBox22.Location = new System.Drawing.Point(198, 233);
             this.comboBox22.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox22.Name = "comboBox22";
             this.comboBox22.Size = new System.Drawing.Size(92, 21);
@@ -414,7 +418,7 @@
             // comboBox23
             // 
             this.comboBox23.FormattingEnabled = true;
-            this.comboBox23.Location = new System.Drawing.Point(98, 229);
+            this.comboBox23.Location = new System.Drawing.Point(104, 233);
             this.comboBox23.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox23.Name = "comboBox23";
             this.comboBox23.Size = new System.Drawing.Size(92, 21);
@@ -423,7 +427,7 @@
             // comboBox24
             // 
             this.comboBox24.FormattingEnabled = true;
-            this.comboBox24.Location = new System.Drawing.Point(3, 229);
+            this.comboBox24.Location = new System.Drawing.Point(9, 233);
             this.comboBox24.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox24.Name = "comboBox24";
             this.comboBox24.Size = new System.Drawing.Size(92, 21);
@@ -433,7 +437,7 @@
             // 
             this.label18.AutoSize = true;
             this.label18.ForeColor = System.Drawing.Color.Blue;
-            this.label18.Location = new System.Drawing.Point(496, 115);
+            this.label18.Location = new System.Drawing.Point(502, 119);
             this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(118, 39);
@@ -443,7 +447,7 @@
             // comboBox25
             // 
             this.comboBox25.FormattingEnabled = true;
-            this.comboBox25.Location = new System.Drawing.Point(383, 43);
+            this.comboBox25.Location = new System.Drawing.Point(389, 47);
             this.comboBox25.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox25.Name = "comboBox25";
             this.comboBox25.Size = new System.Drawing.Size(92, 21);
@@ -453,7 +457,7 @@
             // 
             this.label19.AutoSize = true;
             this.label19.ForeColor = System.Drawing.Color.Blue;
-            this.label19.Location = new System.Drawing.Point(2, 71);
+            this.label19.Location = new System.Drawing.Point(8, 75);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(79, 13);
@@ -463,7 +467,7 @@
             // comboBox26
             // 
             this.comboBox26.FormattingEnabled = true;
-            this.comboBox26.Location = new System.Drawing.Point(4, 87);
+            this.comboBox26.Location = new System.Drawing.Point(10, 91);
             this.comboBox26.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox26.Name = "comboBox26";
             this.comboBox26.Size = new System.Drawing.Size(92, 21);
@@ -473,7 +477,7 @@
             // 
             this.label20.AutoSize = true;
             this.label20.ForeColor = System.Drawing.Color.Blue;
-            this.label20.Location = new System.Drawing.Point(96, 71);
+            this.label20.Location = new System.Drawing.Point(102, 75);
             this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(75, 13);
@@ -483,7 +487,7 @@
             // comboBox27
             // 
             this.comboBox27.FormattingEnabled = true;
-            this.comboBox27.Location = new System.Drawing.Point(98, 87);
+            this.comboBox27.Location = new System.Drawing.Point(104, 91);
             this.comboBox27.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox27.Name = "comboBox27";
             this.comboBox27.Size = new System.Drawing.Size(92, 21);
@@ -493,7 +497,7 @@
             // 
             this.label21.AutoSize = true;
             this.label21.ForeColor = System.Drawing.Color.Blue;
-            this.label21.Location = new System.Drawing.Point(191, 71);
+            this.label21.Location = new System.Drawing.Point(197, 75);
             this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(48, 13);
@@ -503,7 +507,7 @@
             // comboBox28
             // 
             this.comboBox28.FormattingEnabled = true;
-            this.comboBox28.Location = new System.Drawing.Point(194, 87);
+            this.comboBox28.Location = new System.Drawing.Point(200, 91);
             this.comboBox28.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox28.Name = "comboBox28";
             this.comboBox28.Size = new System.Drawing.Size(92, 21);
@@ -513,7 +517,7 @@
             // 
             this.label22.AutoSize = true;
             this.label22.ForeColor = System.Drawing.Color.Blue;
-            this.label22.Location = new System.Drawing.Point(286, 71);
+            this.label22.Location = new System.Drawing.Point(292, 75);
             this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(72, 13);
@@ -523,7 +527,7 @@
             // comboBox29
             // 
             this.comboBox29.FormattingEnabled = true;
-            this.comboBox29.Location = new System.Drawing.Point(288, 87);
+            this.comboBox29.Location = new System.Drawing.Point(294, 91);
             this.comboBox29.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox29.Name = "comboBox29";
             this.comboBox29.Size = new System.Drawing.Size(92, 21);
@@ -533,7 +537,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.ForeColor = System.Drawing.Color.Blue;
-            this.label23.Location = new System.Drawing.Point(381, 71);
+            this.label23.Location = new System.Drawing.Point(387, 75);
             this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(54, 13);
@@ -543,7 +547,7 @@
             // comboBox30
             // 
             this.comboBox30.FormattingEnabled = true;
-            this.comboBox30.Location = new System.Drawing.Point(383, 87);
+            this.comboBox30.Location = new System.Drawing.Point(389, 91);
             this.comboBox30.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox30.Name = "comboBox30";
             this.comboBox30.Size = new System.Drawing.Size(92, 21);
@@ -563,7 +567,7 @@
             // numericUpDown1
             // 
             this.numericUpDown1.DecimalPlaces = 1;
-            this.numericUpDown1.Location = new System.Drawing.Point(498, 229);
+            this.numericUpDown1.Location = new System.Drawing.Point(504, 233);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             20,
             0,
@@ -572,7 +576,7 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(76, 20);
             this.numericUpDown1.TabIndex = 64;
-            this.toolTip1.SetToolTip(this.numericUpDown1, "reduce number of edge points");
+            this.toolTip1.SetToolTip(this.numericUpDown1, "reduce number of edge points \r\nnot available, when using 3D Lines (PolylineZ)");
             // 
             // numericUpDown2
             // 
@@ -582,7 +586,7 @@
             0,
             0,
             65536});
-            this.numericUpDown2.Location = new System.Drawing.Point(498, 161);
+            this.numericUpDown2.Location = new System.Drawing.Point(504, 165);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -600,7 +604,7 @@
             // 
             // checkBox2
             // 
-            this.checkBox2.Location = new System.Drawing.Point(580, 161);
+            this.checkBox2.Location = new System.Drawing.Point(586, 165);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(64, 20);
@@ -613,7 +617,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.Blue;
-            this.label6.Location = new System.Drawing.Point(496, 194);
+            this.label6.Location = new System.Drawing.Point(502, 198);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(89, 26);
@@ -624,7 +628,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.Blue;
-            this.label7.Location = new System.Drawing.Point(579, 232);
+            this.label7.Location = new System.Drawing.Point(585, 236);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(21, 13);
@@ -634,7 +638,7 @@
             // comboBox31
             // 
             this.comboBox31.FormattingEnabled = true;
-            this.comboBox31.Location = new System.Drawing.Point(479, 43);
+            this.comboBox31.Location = new System.Drawing.Point(485, 47);
             this.comboBox31.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox31.Name = "comboBox31";
             this.comboBox31.Size = new System.Drawing.Size(92, 21);
@@ -644,19 +648,41 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.Blue;
-            this.label8.Location = new System.Drawing.Point(479, 27);
+            this.label8.Location = new System.Drawing.Point(485, 31);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(90, 13);
             this.label8.TabIndex = 68;
             this.label8.Text = "Vertical extension";
             // 
+            // checkBox3
+            // 
+            this.checkBox3.ForeColor = System.Drawing.Color.Blue;
+            this.checkBox3.Location = new System.Drawing.Point(384, 4);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(104, 21);
+            this.checkBox3.TabIndex = 63;
+            this.checkBox3.Text = "3D Line";
+            this.toolTip1.SetToolTip(this.checkBox3, "Use PolylineZ from the shape file");
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(505, 268);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(94, 24);
+            this.button4.TabIndex = 0;
+            this.button4.Text = "&Cancel";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // ShapeLineDialog
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(646, 549);
+            this.ClientSize = new System.Drawing.Size(761, 622);
             this.ControlBox = false;
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.numericUpDown2);
@@ -665,6 +691,7 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label23);
             this.Controls.Add(this.comboBox30);
@@ -712,6 +739,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ShapeLineDialog";
@@ -784,5 +812,7 @@
         private System.Windows.Forms.ComboBox comboBox29;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.ComboBox comboBox30;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.Button button4;
     }
 }

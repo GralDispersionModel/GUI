@@ -521,10 +521,10 @@ namespace GralDomain
                 {
                     return;
                 }
-                PointD pt0 = CopiedItem.LineSource.Pt[0];
+                GralData.PointD_3d pt0 = CopiedItem.LineSource.Pt[0];
                 for (int i = 1; i < CopiedItem.LineSource.Pt.Count; i++)
                 {
-                    PointD pt = CopiedItem.LineSource.Pt[i];
+                    GralData.PointD_3d pt = CopiedItem.LineSource.Pt[i];
                     CopiedItem.LineSource.Pt[i] = Rotate(dir, pt, pt0);
                 }
             }
@@ -547,6 +547,31 @@ namespace GralDomain
         private PointD Rotate(int Dir, PointD pt, PointD pt0)
         {
             PointD temp = new PointD();
+            double angleInRadians = 10 * (Math.PI / 180);
+            if (Dir == 1)
+            {
+                angleInRadians = -10 * (Math.PI / 180);
+            }
+
+            double cosTheta = Math.Cos(angleInRadians);
+            double sinTheta = Math.Sin(angleInRadians);
+
+            temp.X = cosTheta * (pt.X - pt0.X) -
+                   sinTheta * (pt.Y - pt0.Y) + pt0.X;
+            temp.Y = sinTheta * (pt.X - pt0.X) +
+                    cosTheta * (pt.Y - pt0.Y) + pt0.Y;
+            return temp;
+        }
+        /// <summary>
+        /// Rotate the PointD_3D pt around point pt0 in 10 degree steps
+        /// </summary>
+        /// <param name="Dir">0: counterclockwise, 1: clockwise</param>
+        /// <param name="pt"></param>
+        /// <param name="pt0"></param>
+        /// <returns>Rotated PointD struct</returns>
+        private GralData.PointD_3d Rotate(int Dir, GralData.PointD_3d pt, GralData.PointD_3d pt0)
+        {
+            GralData.PointD_3d temp = new GralData.PointD_3d();
             double angleInRadians = 10 * (Math.PI / 180);
             if (Dir == 1)
             {
