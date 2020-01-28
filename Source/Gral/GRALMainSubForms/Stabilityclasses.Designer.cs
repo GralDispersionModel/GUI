@@ -63,6 +63,7 @@
             this.ClientSize = new System.Drawing.Size(825, 476);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Stabilityclasses";
             this.Text = "Frequency distribution stability classes";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.StabilityclassesFormClosed);
@@ -70,6 +71,7 @@
             this.ResizeEnd += new System.EventHandler(this.StabilityclassesResizeEnd);
             this.Resize += new System.EventHandler(this.StabilityclassesResize);
             this.ResumeLayout(false);
+
         }
         private System.Windows.Forms.ToolTip toolTip1;
 

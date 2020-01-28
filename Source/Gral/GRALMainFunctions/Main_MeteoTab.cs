@@ -545,7 +545,7 @@ namespace Gral
                     startstunde = mts.WindRoseSet.StartStunde;
                     endstunden = mts.WindRoseSet.EndStunde;
                     maxwind = mts.WindRoseSet.MaxVelocity;
-
+                    double meanwind = 0;
                     maxwind++;
                     double[] wclassFrequency = new double[(maxwind + 1) * 4];
 
@@ -566,33 +566,41 @@ namespace Gral
 
                                 for (double i = 0; i < maxwind; i += 0.25)
                                 {
-                                    if (data.Vel > i)
+                                    if (data.Vel >= i)
                                     {
                                         wclassFrequency[j]++;
                                     }
                                     j++;
                                 }
+                                meanwind += data.Vel;
                                 count = count + 1;
                             }
                         }
 
-                        //compute percent values
-                        for (int i = 0; i < (maxwind + 1) * 4; i++)
+                        if (count > 0)
                         {
-                            wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
-                        }
+                            meanwind /= count;
+                            //compute percent values
+                            for (int i = 0; i < (maxwind + 1) * 4; i++)
+                            {
+                                wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
+                            }
 
-                        GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
-                        {
-                            StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
-                            WClassFrequency = wclassFrequency,
-                            MetFile = Path.GetFileName(MetfileName),
-                            MaxWind = maxwind,
-                            StartHour = startstunde,
-                            FinalHour = endstunden
-                        };
-                        wDistr.Show();
+                            GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
+                            {
+                                StartPosition = FormStartPosition.Manual,
+                                Location = new System.Drawing.Point(this.Left, this.Top),
+                                WClassFrequency = wclassFrequency,
+                                MetFile = Path.GetFileName(MetfileName),
+                                MaxWind = maxwind,
+                                StartHour = startstunde,
+                                FinalHour = endstunden,
+                                MeanWindSpeed = meanwind,
+                                StartDate = MeteoTimeSeries[0].Date,
+                                EndDate = MeteoTimeSeries[MeteoTimeSeries.Count - 1].Date
+                            };
+                            wDistr.Show();
+                        }
                     }
                 }
             }
