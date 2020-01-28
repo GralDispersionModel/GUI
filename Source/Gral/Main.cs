@@ -1188,6 +1188,10 @@ namespace Gral
         {
             ShowWindVelocityClasses(sender, e);
         }
+        private void ShowWindVelocityClassesDistr_Click(object sender, EventArgs e)
+        {
+            ShowWindVelocityDistribution(sender, e);
+        }
         private void ShowWindStabilityClasses_Click(object sender, EventArgs e)
         {
             ShowWindStabilityClasses(sender, e);

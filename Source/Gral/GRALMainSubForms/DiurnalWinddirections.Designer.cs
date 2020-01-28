@@ -45,22 +45,22 @@
             this.checkedListBox1.Font = new System.Drawing.Font("Arial", 8F);
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
-                                    "N",
-                                    "NNE",
-                                    "NE",
-                                    "ENE",
-                                    "E",
-                                    "ESE",
-                                    "SE",
-                                    "SSE",
-                                    "S",
-                                    "SSW",
-                                    "SW",
-                                    "WSW",
-                                    "W",
-                                    "WNW",
-                                    "NW",
-                                    "NNW"});
+            "N",
+            "NNE",
+            "NE",
+            "ENE",
+            "E",
+            "ESE",
+            "SE",
+            "SSE",
+            "S",
+            "SSW",
+            "SW",
+            "WSW",
+            "W",
+            "WNW",
+            "NW",
+            "NNW"});
             this.checkedListBox1.Location = new System.Drawing.Point(763, 94);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(78, 315);
@@ -84,8 +84,8 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                                    | System.Windows.Forms.AnchorStyles.Left) 
-                                    | System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.checkedListBox1);
             this.panel1.Location = new System.Drawing.Point(0, 1);
             this.panel1.Name = "panel1";
@@ -100,6 +100,7 @@
             this.ClientSize = new System.Drawing.Size(900, 496);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DiurnalWinddirections";
             this.Text = "Diurnal wind direction frequencies";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DiurnalWinddirectionsFormClosed);
@@ -108,6 +109,7 @@
             this.Resize += new System.EventHandler(this.DiurnalWinddirectionsResize);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
         private System.Windows.Forms.ToolTip toolTip1;
 
