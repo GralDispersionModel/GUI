@@ -108,7 +108,7 @@ namespace GralMainForms
             g.DrawLine(p2, x0, ymin, panel1.Width - 10, ymin);
             g.DrawLine(p2, xmax, ymin, xmax, y0);
 
-            for (int i = 0; i < (MaxWind - 1); i++)
+            for (int i = 0; i < (MaxWind); i++)
             {
                 string fs = Convert.ToString(i);
                 int xr = (int)(x0 + i * xfac);
