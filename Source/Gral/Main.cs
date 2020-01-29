@@ -279,7 +279,7 @@ namespace Gral
         private GralDomain.DomainformClosed DomainClosedHandle;
 
         /// <summary>
-        /// Start the Main Form of this application
+        /// Start the main form of this application
         /// </summary>
         public Main()
         {
@@ -447,7 +447,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Close the Application
+        /// Close the application
         /// </summary>
         void MainFormClosing(object sender, FormClosingEventArgs e)
         {
@@ -850,7 +850,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Save pollutant information in File Pollutant.txt including wet deposition and the decay rate to computation folder
+        /// Save pollutant information in the file Pollutant.txt including wet deposition and the decay rate to computation folder
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1006,7 +1006,7 @@ namespace Gral
             }
         }
 
-        //Wait for Keystroke when GRAL is finished
+        //Wait for a keystroke when GRAL has been finished?
         private void checkBox29_CheckedChanged(object sender, EventArgs e)
         {
             GRALSettings.WaitForKeyStroke = checkBox29.Checked;
@@ -1754,7 +1754,7 @@ namespace Gral
         }
         
         /// <summary>
-		/// Check if the most important files for a GRAL computation are available and enable/disable GRAL simulations
+		/// Check if the most important input files for a GRAL computation are available and enable/disable GRAL simulations
 		/// </summary>
 		public void Enable_GRAL()
         {
@@ -1838,7 +1838,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Save comments 
+        /// Save user comments 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1921,7 +1921,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Update file size information every 120 seconds for intermediate GRAL files (con and gff)
+        /// Update file size information every 120 seconds for intermediate GRAL files (*.con and *.gff)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1931,7 +1931,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Get *.con, *.gff and *.wnd file size and write it to the main form
+        /// Get *.con, *.gff and *.wnd file size and display it in the main form
         /// </summary>
         private void GralFileSizes()
         {
@@ -2435,7 +2435,7 @@ namespace Gral
                 }
                 if (checkBox32.Checked) // GRAL Transient mode
                 {
-                    groupBox27.Text = "Emission-time-series (mandatory)";
+                    groupBox27.Text = "Emission-time-series (mandatory - transient mode)";
                 }
                 else
                 {
@@ -2771,7 +2771,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Save comments
+        /// Save user comments
         /// </summary>
         private void Button38_Click_1(object sender, EventArgs e)
         {
@@ -2788,7 +2788,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Compression mode for GRAL result files
+        /// Set the compression mode for GRAL result files
         /// </summary>
         private void numericUpDown43_ValueChanged(object sender, EventArgs e)
         {
@@ -2929,7 +2929,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Enable transient GRAL simulations
+        /// Enable the Transient GRAL mode
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2970,7 +2970,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Set cut-off concentration in transient simulations
+        /// Set the cut-off concentration for transient simulations
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3071,7 +3071,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// OPen the GUI settings form
+        /// Open the GUI settings form
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3087,7 +3087,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Load and show Log File
+        /// Load and show log file
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3156,7 +3156,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Set the compression rate for *.gff files
+        /// Set the compression type for *.gff files
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3169,7 +3169,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Set a flexible vertical stretching factor
+        /// Set a flexible vertical stretching factor for the flow field grid
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3229,7 +3229,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// Show the vertical layer heights
+        /// Show the vertical flow field grid layer heights
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3249,6 +3249,11 @@ namespace Gral
             }
         }
 
+        /// <summary>
+        /// Show a simple App info form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button55_Click(object sender, EventArgs e)
         {
             bool open = false;
