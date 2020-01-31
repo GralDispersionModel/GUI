@@ -454,9 +454,10 @@
             this.tabControl1.Controls.Add(this.Topography);
             this.tabControl1.Controls.Add(this.Computation);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(822, 565);
+            this.tabControl1.Size = new System.Drawing.Size(1028, 706);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.TabControl1Deselected);
             this.tabControl1.Click += new System.EventHandler(this.TabControl1Click);
@@ -474,9 +475,10 @@
             this.Project.Controls.Add(this.button38);
             this.Project.Controls.Add(this.label87);
             this.Project.Controls.Add(this.button8);
-            this.Project.Location = new System.Drawing.Point(4, 22);
+            this.Project.Location = new System.Drawing.Point(4, 25);
+            this.Project.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Project.Name = "Project";
-            this.Project.Size = new System.Drawing.Size(814, 539);
+            this.Project.Size = new System.Drawing.Size(1020, 677);
             this.Project.TabIndex = 3;
             this.Project.Text = "   PROJECT   ";
             // 
@@ -486,9 +488,10 @@
             this.button55.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button55.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
             this.button55.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button55.Location = new System.Drawing.Point(755, 60);
+            this.button55.Location = new System.Drawing.Point(944, 75);
+            this.button55.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button55.Name = "button55";
-            this.button55.Size = new System.Drawing.Size(42, 42);
+            this.button55.Size = new System.Drawing.Size(52, 52);
             this.button55.TabIndex = 47;
             this.toolTip1.SetToolTip(this.button55, "Info");
             this.button55.UseVisualStyleBackColor = true;
@@ -498,9 +501,10 @@
             // 
             this.button52.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button52.BackgroundImage")));
             this.button52.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button52.Location = new System.Drawing.Point(760, 108);
+            this.button52.Location = new System.Drawing.Point(950, 135);
+            this.button52.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button52.Name = "button52";
-            this.button52.Size = new System.Drawing.Size(32, 32);
+            this.button52.Size = new System.Drawing.Size(40, 40);
             this.button52.TabIndex = 6;
             this.toolTip1.SetToolTip(this.button52, "Load and show log files");
             this.button52.UseVisualStyleBackColor = true;
@@ -511,9 +515,10 @@
             // 
             this.button50.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button50.BackgroundImage")));
             this.button50.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button50.Location = new System.Drawing.Point(760, 23);
+            this.button50.Location = new System.Drawing.Point(950, 29);
+            this.button50.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button50.Name = "button50";
-            this.button50.Size = new System.Drawing.Size(32, 32);
+            this.button50.Size = new System.Drawing.Size(40, 40);
             this.button50.TabIndex = 5;
             this.toolTip1.SetToolTip(this.button50, "GUI Settings");
             this.button50.UseVisualStyleBackColor = true;
@@ -521,12 +526,12 @@
             // 
             // textBox17
             // 
-            this.textBox17.Location = new System.Drawing.Point(112, 52);
+            this.textBox17.Location = new System.Drawing.Point(140, 65);
             this.textBox17.Margin = new System.Windows.Forms.Padding(2);
             this.textBox17.Multiline = true;
             this.textBox17.Name = "textBox17";
             this.textBox17.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox17.Size = new System.Drawing.Size(610, 425);
+            this.textBox17.Size = new System.Drawing.Size(762, 530);
             this.textBox17.TabIndex = 46;
             this.textBox17.Visible = false;
             this.textBox17.WordWrap = false;
@@ -535,9 +540,10 @@
             // 
             this.button46.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button46.BackgroundImage")));
             this.button46.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button46.Location = new System.Drawing.Point(14, 74);
+            this.button46.Location = new System.Drawing.Point(18, 92);
+            this.button46.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button46.Name = "button46";
-            this.button46.Size = new System.Drawing.Size(32, 32);
+            this.button46.Size = new System.Drawing.Size(40, 40);
             this.button46.TabIndex = 2;
             this.toolTip1.SetToolTip(this.button46, "Open most recent projects");
             this.button46.UseVisualStyleBackColor = true;
@@ -548,18 +554,19 @@
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel1.Location = new System.Drawing.Point(112, 52);
+            this.panel1.Location = new System.Drawing.Point(140, 65);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(610, 425);
+            this.panel1.Size = new System.Drawing.Size(762, 531);
             this.panel1.TabIndex = 1;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1Paint);
             // 
             // button44
             // 
-            this.button44.Location = new System.Drawing.Point(112, 19);
+            this.button44.Location = new System.Drawing.Point(140, 24);
+            this.button44.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button44.Name = "button44";
-            this.button44.Size = new System.Drawing.Size(116, 28);
+            this.button44.Size = new System.Drawing.Size(145, 35);
             this.button44.TabIndex = 3;
             this.button44.Text = "Show &Comments";
             this.button44.UseVisualStyleBackColor = true;
@@ -569,10 +576,10 @@
             // button38
             // 
             this.button38.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button38.Location = new System.Drawing.Point(266, 18);
+            this.button38.Location = new System.Drawing.Point(332, 22);
             this.button38.Margin = new System.Windows.Forms.Padding(2);
             this.button38.Name = "button38";
-            this.button38.Size = new System.Drawing.Size(116, 28);
+            this.button38.Size = new System.Drawing.Size(145, 35);
             this.button38.TabIndex = 4;
             this.button38.Text = "&Save Comments";
             this.toolTip1.SetToolTip(this.button38, "Save comments");
@@ -584,18 +591,20 @@
             // 
             this.label87.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label87.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label87.Location = new System.Drawing.Point(14, 514);
+            this.label87.Location = new System.Drawing.Point(18, 642);
+            this.label87.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(790, 20);
+            this.label87.Size = new System.Drawing.Size(988, 25);
             this.label87.TabIndex = 18;
             // 
             // button8
             // 
             this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
             this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button8.Location = new System.Drawing.Point(14, 23);
+            this.button8.Location = new System.Drawing.Point(18, 29);
+            this.button8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(32, 32);
+            this.button8.Size = new System.Drawing.Size(40, 40);
             this.button8.TabIndex = 1;
             this.toolTip1.SetToolTip(this.button8, "Create a new or \r\nopen an existing project folder.");
             this.button8.UseVisualStyleBackColor = true;
@@ -608,18 +617,19 @@
             this.Comments.Controls.Add(this.groupBox4);
             this.Comments.Controls.Add(this.groupBox5);
             this.Comments.Controls.Add(this.groupBox8);
-            this.Comments.Location = new System.Drawing.Point(4, 22);
+            this.Comments.Location = new System.Drawing.Point(4, 25);
             this.Comments.Margin = new System.Windows.Forms.Padding(2);
             this.Comments.Name = "Comments";
-            this.Comments.Size = new System.Drawing.Size(814, 539);
+            this.Comments.Size = new System.Drawing.Size(1020, 677);
             this.Comments.TabIndex = 6;
             this.Comments.Text = "GRAL Settings";
             // 
             // button101
             // 
-            this.button101.Location = new System.Drawing.Point(795, 0);
+            this.button101.Location = new System.Drawing.Point(994, 0);
+            this.button101.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button101.Name = "button101";
-            this.button101.Size = new System.Drawing.Size(20, 20);
+            this.button101.Size = new System.Drawing.Size(25, 25);
             this.button101.TabIndex = 8;
             this.button101.TabStop = false;
             this.button101.UseVisualStyleBackColor = true;
@@ -647,9 +657,11 @@
             this.groupBox4.Controls.Add(this.numericUpDown4);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox4.Location = new System.Drawing.Point(9, 15);
+            this.groupBox4.Location = new System.Drawing.Point(11, 19);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(250, 517);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Size = new System.Drawing.Size(312, 646);
             this.groupBox4.TabIndex = 7;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "GRAL - General";
@@ -661,9 +673,10 @@
             this.checkBox29.Checked = true;
             this.checkBox29.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.checkBox29.Location = new System.Drawing.Point(17, 235);
+            this.checkBox29.Location = new System.Drawing.Point(21, 294);
+            this.checkBox29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox29.Name = "checkBox29";
-            this.checkBox29.Size = new System.Drawing.Size(201, 20);
+            this.checkBox29.Size = new System.Drawing.Size(241, 24);
             this.checkBox29.TabIndex = 59;
             this.checkBox29.Text = "Keystroke when exiting GRAL";
             this.toolTip1.SetToolTip(this.checkBox29, "Wait for a keystroke if GRAL has been finished or if an error occurs");
@@ -673,14 +686,15 @@
             // numericUpDown43
             // 
             this.numericUpDown43.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown43.Location = new System.Drawing.Point(165, 206);
+            this.numericUpDown43.Location = new System.Drawing.Point(206, 258);
+            this.numericUpDown43.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown43.Maximum = new decimal(new int[] {
             3,
             0,
             0,
             0});
             this.numericUpDown43.Name = "numericUpDown43";
-            this.numericUpDown43.Size = new System.Drawing.Size(48, 21);
+            this.numericUpDown43.Size = new System.Drawing.Size(60, 24);
             this.numericUpDown43.TabIndex = 9;
             this.numericUpDown43.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown43, "0: no compression\r\n1: compression compatible up to version 19.01\r\n2: more fail-sa" +
@@ -697,9 +711,10 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(11, 208);
+            this.label15.Location = new System.Drawing.Point(14, 260);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(147, 16);
+            this.label15.Size = new System.Drawing.Size(173, 20);
             this.label15.TabIndex = 58;
             this.label15.Text = "Result file compression";
             // 
@@ -712,9 +727,11 @@
             this.groupBox29.Controls.Add(this.radioButton3);
             this.groupBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox29.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox29.Location = new System.Drawing.Point(5, 268);
+            this.groupBox29.Location = new System.Drawing.Point(6, 335);
+            this.groupBox29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(240, 120);
+            this.groupBox29.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox29.Size = new System.Drawing.Size(300, 150);
             this.groupBox29.TabIndex = 5;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "GRAL Buildings";
@@ -722,9 +739,10 @@
             // radioButton5
             // 
             this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(16, 60);
+            this.radioButton5.Location = new System.Drawing.Point(20, 75);
+            this.radioButton5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(151, 20);
+            this.radioButton5.Size = new System.Drawing.Size(184, 24);
             this.radioButton5.TabIndex = 7;
             this.radioButton5.TabStop = true;
             this.radioButton5.Text = "Prognostic approach";
@@ -736,16 +754,18 @@
             // 
             this.label65.AutoSize = true;
             this.label65.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label65.Location = new System.Drawing.Point(13, 90);
+            this.label65.Location = new System.Drawing.Point(16, 112);
+            this.label65.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label65.Name = "label65";
-            this.label65.Size = new System.Drawing.Size(116, 16);
+            this.label65.Size = new System.Drawing.Size(145, 20);
             this.label65.TabIndex = 55;
             this.label65.Text = "Sub domain factor";
             // 
             // numericUpDown42
             // 
             this.numericUpDown42.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown42.Location = new System.Drawing.Point(183, 85);
+            this.numericUpDown42.Location = new System.Drawing.Point(229, 106);
+            this.numericUpDown42.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown42.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -757,7 +777,7 @@
             0,
             0});
             this.numericUpDown42.Name = "numericUpDown42";
-            this.numericUpDown42.Size = new System.Drawing.Size(48, 21);
+            this.numericUpDown42.Size = new System.Drawing.Size(60, 24);
             this.numericUpDown42.TabIndex = 8;
             this.numericUpDown42.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown42, "This factor multiplied by the building height defines the dimension\r\nof the progn" +
@@ -772,9 +792,10 @@
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(16, 39);
+            this.radioButton4.Location = new System.Drawing.Point(20, 49);
+            this.radioButton4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(151, 20);
+            this.radioButton4.Size = new System.Drawing.Size(184, 24);
             this.radioButton4.TabIndex = 6;
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "Diagnostic approach";
@@ -785,9 +806,10 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(16, 18);
+            this.radioButton3.Location = new System.Drawing.Point(20, 22);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(59, 20);
+            this.radioButton3.Size = new System.Drawing.Size(69, 24);
             this.radioButton3.TabIndex = 5;
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "None";
@@ -799,7 +821,8 @@
             // 
             this.numericUpDown39.DecimalPlaces = 2;
             this.numericUpDown39.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown39.Location = new System.Drawing.Point(143, 135);
+            this.numericUpDown39.Location = new System.Drawing.Point(179, 169);
+            this.numericUpDown39.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown39.Maximum = new decimal(new int[] {
             90,
             0,
@@ -811,7 +834,7 @@
             0,
             -2147483648});
             this.numericUpDown39.Name = "numericUpDown39";
-            this.numericUpDown39.Size = new System.Drawing.Size(70, 22);
+            this.numericUpDown39.Size = new System.Drawing.Size(88, 26);
             this.numericUpDown39.TabIndex = 3;
             this.numericUpDown39.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown39, "Set the latitude of the domain area");
@@ -831,9 +854,10 @@
             0,
             0,
             65536});
-            this.numericUpDown38.Location = new System.Drawing.Point(142, 99);
+            this.numericUpDown38.Location = new System.Drawing.Point(178, 124);
+            this.numericUpDown38.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown38.Name = "numericUpDown38";
-            this.numericUpDown38.Size = new System.Drawing.Size(70, 22);
+            this.numericUpDown38.Size = new System.Drawing.Size(88, 26);
             this.numericUpDown38.TabIndex = 2;
             this.numericUpDown38.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown38, "Set the surface roughness\r\nWhen using GRAMM wind fields, the local GRAMM rougness" +
@@ -853,9 +877,11 @@
             this.groupBox22.Controls.Add(this.label13);
             this.groupBox22.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox22.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox22.Location = new System.Drawing.Point(5, 395);
+            this.groupBox22.Location = new System.Drawing.Point(6, 494);
+            this.groupBox22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(240, 112);
+            this.groupBox22.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox22.Size = new System.Drawing.Size(300, 140);
             this.groupBox22.TabIndex = 10;
             this.groupBox22.TabStop = false;
             this.groupBox22.Text = "GRAL transient mode";
@@ -864,10 +890,10 @@
             // 
             this.checkBox34.AutoSize = true;
             this.checkBox34.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.checkBox34.Location = new System.Drawing.Point(12, 82);
+            this.checkBox34.Location = new System.Drawing.Point(15, 102);
             this.checkBox34.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox34.Name = "checkBox34";
-            this.checkBox34.Size = new System.Drawing.Size(207, 20);
+            this.checkBox34.Size = new System.Drawing.Size(246, 24);
             this.checkBox34.TabIndex = 12;
             this.checkBox34.Text = "Write vertical concentration file";
             this.toolTip1.SetToolTip(this.checkBox34, "Writes a 3D concentration file when a transient calculation is finished");
@@ -878,10 +904,10 @@
             // 
             this.checkBox32.AutoSize = true;
             this.checkBox32.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.checkBox32.Location = new System.Drawing.Point(5, 23);
+            this.checkBox32.Location = new System.Drawing.Point(6, 29);
             this.checkBox32.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox32.Name = "checkBox32";
-            this.checkBox32.Size = new System.Drawing.Size(154, 20);
+            this.checkBox32.Size = new System.Drawing.Size(186, 24);
             this.checkBox32.TabIndex = 10;
             this.checkBox32.Text = "GRAL transient mode";
             this.toolTip1.SetToolTip(this.checkBox32, "Enable the transient GRAL mode");
@@ -899,9 +925,10 @@
             0,
             0,
             262144});
-            this.numericUpDown34.Location = new System.Drawing.Point(138, 48);
+            this.numericUpDown34.Location = new System.Drawing.Point(172, 60);
+            this.numericUpDown34.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown34.Name = "numericUpDown34";
-            this.numericUpDown34.Size = new System.Drawing.Size(92, 22);
+            this.numericUpDown34.Size = new System.Drawing.Size(120, 26);
             this.numericUpDown34.TabIndex = 11;
             this.numericUpDown34.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown34, "Set a threshold to speed up the transient computation");
@@ -918,16 +945,18 @@
             this.label13.Enabled = false;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
             this.label13.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label13.Location = new System.Drawing.Point(6, 50);
+            this.label13.Location = new System.Drawing.Point(8, 62);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(125, 16);
+            this.label13.Size = new System.Drawing.Size(151, 20);
             this.label13.TabIndex = 52;
             this.label13.Text = "Cut-off conc. [µg/m³]";
             // 
             // numericUpDown6
             // 
             this.numericUpDown6.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown6.Location = new System.Drawing.Point(142, 63);
+            this.numericUpDown6.Location = new System.Drawing.Point(178, 79);
+            this.numericUpDown6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -939,7 +968,7 @@
             0,
             0});
             this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(70, 22);
+            this.numericUpDown6.Size = new System.Drawing.Size(88, 26);
             this.numericUpDown6.TabIndex = 1;
             this.numericUpDown6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown6, "Set the released number of particles per second\r\nThe total amount of particles is" +
@@ -955,16 +984,18 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(11, 65);
+            this.label16.Location = new System.Drawing.Point(14, 81);
+            this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(111, 16);
+            this.label16.Size = new System.Drawing.Size(129, 20);
             this.label16.TabIndex = 15;
             this.label16.Text = "Particles per sec.";
             // 
             // numericUpDown5
             // 
             this.numericUpDown5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown5.Location = new System.Drawing.Point(143, 171);
+            this.numericUpDown5.Location = new System.Drawing.Point(179, 214);
+            this.numericUpDown5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -976,11 +1007,11 @@
             0,
             0});
             this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(70, 22);
+            this.numericUpDown5.Size = new System.Drawing.Size(88, 26);
             this.numericUpDown5.TabIndex = 4;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown5, "Start the calculation with that dispersion situation\r\nThis option is not availabl" +
-        "e  transient calculations");
+        "e for transient calculations");
             this.numericUpDown5.Value = new decimal(new int[] {
             1,
             0,
@@ -992,9 +1023,10 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(11, 163);
+            this.label14.Location = new System.Drawing.Point(14, 204);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(123, 32);
+            this.label14.Size = new System.Drawing.Size(145, 40);
             this.label14.TabIndex = 11;
             this.label14.Text = "Start with \r\ndispersion situation";
             // 
@@ -1002,9 +1034,10 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(216, 137);
+            this.label12.Location = new System.Drawing.Point(270, 171);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(32, 16);
+            this.label12.Size = new System.Drawing.Size(36, 20);
             this.label12.TabIndex = 8;
             this.label12.Text = "deg";
             // 
@@ -1012,9 +1045,10 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(11, 137);
+            this.label11.Location = new System.Drawing.Point(14, 171);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(55, 16);
+            this.label11.Size = new System.Drawing.Size(67, 20);
             this.label11.TabIndex = 6;
             this.label11.Text = "Latitude";
             // 
@@ -1022,9 +1056,10 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(218, 103);
+            this.label10.Location = new System.Drawing.Point(272, 129);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(19, 16);
+            this.label10.Size = new System.Drawing.Size(22, 20);
             this.label10.TabIndex = 5;
             this.label10.Text = "m";
             // 
@@ -1032,9 +1067,10 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(11, 101);
+            this.label9.Location = new System.Drawing.Point(14, 126);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(120, 16);
+            this.label9.Size = new System.Drawing.Size(144, 20);
             this.label9.TabIndex = 3;
             this.label9.Text = "Surface roughness";
             // 
@@ -1043,9 +1079,10 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label8.Location = new System.Drawing.Point(11, 29);
+            this.label8.Location = new System.Drawing.Point(14, 36);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(101, 16);
+            this.label8.Size = new System.Drawing.Size(118, 20);
             this.label8.TabIndex = 2;
             this.label8.Text = "Dispersion time";
             // 
@@ -1053,9 +1090,10 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(221, 29);
+            this.label7.Location = new System.Drawing.Point(276, 36);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(15, 16);
+            this.label7.Size = new System.Drawing.Size(17, 20);
             this.label7.TabIndex = 1;
             this.label7.Text = "s";
             // 
@@ -1068,7 +1106,8 @@
             0,
             0,
             0});
-            this.numericUpDown4.Location = new System.Drawing.Point(142, 27);
+            this.numericUpDown4.Location = new System.Drawing.Point(178, 34);
+            this.numericUpDown4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             3600,
             0,
@@ -1080,7 +1119,7 @@
             0,
             0});
             this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(70, 22);
+            this.numericUpDown4.Size = new System.Drawing.Size(88, 26);
             this.numericUpDown4.TabIndex = 0;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown4, "Set the dispersion time\r\nThe lowest value is 5 minutes \r\nIn the transient GRAL mo" +
@@ -1106,9 +1145,11 @@
             this.groupBox5.Controls.Add(this.numericUpDown3);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox5.ForeColor = System.Drawing.Color.Black;
-            this.groupBox5.Location = new System.Drawing.Point(266, 15);
+            this.groupBox5.Location = new System.Drawing.Point(332, 19);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(250, 517);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Size = new System.Drawing.Size(312, 646);
             this.groupBox5.TabIndex = 13;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "GRAL - Concentration grids";
@@ -1118,18 +1159,20 @@
             // 
             this.label90.AutoSize = true;
             this.label90.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label90.Location = new System.Drawing.Point(8, 44);
+            this.label90.Location = new System.Drawing.Point(10, 55);
+            this.label90.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label90.Name = "label90";
-            this.label90.Size = new System.Drawing.Size(155, 16);
+            this.label90.Size = new System.Drawing.Size(184, 20);
             this.label90.TabIndex = 17;
             this.label90.Text = "Horizontal grid resolution";
             // 
             // label19
             // 
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(224, 94);
+            this.label19.Location = new System.Drawing.Point(280, 118);
+            this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(19, 16);
+            this.label19.Size = new System.Drawing.Size(24, 20);
             this.label19.TabIndex = 16;
             this.label19.Text = "m";
             // 
@@ -1137,7 +1180,8 @@
             // 
             this.numericUpDown9.DecimalPlaces = 1;
             this.numericUpDown9.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown9.Location = new System.Drawing.Point(169, 42);
+            this.numericUpDown9.Location = new System.Drawing.Point(211, 52);
+            this.numericUpDown9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown9.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -1149,7 +1193,7 @@
             0,
             0});
             this.numericUpDown9.Name = "numericUpDown9";
-            this.numericUpDown9.Size = new System.Drawing.Size(49, 22);
+            this.numericUpDown9.Size = new System.Drawing.Size(61, 26);
             this.numericUpDown9.TabIndex = 13;
             this.numericUpDown9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown9, "Hoizontal resolution of the concentration grid");
@@ -1163,9 +1207,10 @@
             // label18
             // 
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(224, 44);
+            this.label18.Location = new System.Drawing.Point(280, 55);
+            this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(19, 16);
+            this.label18.Size = new System.Drawing.Size(24, 20);
             this.label18.TabIndex = 7;
             this.label18.Text = "m";
             // 
@@ -1173,9 +1218,10 @@
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(6, 85);
+            this.label17.Location = new System.Drawing.Point(8, 106);
+            this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(132, 32);
+            this.label17.Size = new System.Drawing.Size(156, 40);
             this.label17.TabIndex = 6;
             this.label17.Text = "Vertical dimension of\r\nconcentration layers";
             // 
@@ -1188,7 +1234,8 @@
             0,
             0,
             65536});
-            this.numericUpDown8.Location = new System.Drawing.Point(169, 87);
+            this.numericUpDown8.Location = new System.Drawing.Point(211, 109);
+            this.numericUpDown8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown8.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -1200,7 +1247,7 @@
             0,
             65536});
             this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(49, 22);
+            this.numericUpDown8.Size = new System.Drawing.Size(61, 26);
             this.numericUpDown8.TabIndex = 14;
             this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown8, "Vertical extension of concentration grids\r\nThe larger the value, the more accurat" +
@@ -1216,9 +1263,10 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(6, 181);
+            this.label6.Location = new System.Drawing.Point(8, 226);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(141, 16);
+            this.label6.Size = new System.Drawing.Size(165, 20);
             this.label6.TabIndex = 4;
             this.label6.Text = "Heights above ground";
             // 
@@ -1226,16 +1274,18 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 135);
+            this.label4.Location = new System.Drawing.Point(8, 169);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 32);
+            this.label4.Size = new System.Drawing.Size(121, 40);
             this.label4.TabIndex = 1;
             this.label4.Text = "Number of \r\nhorizontal slices";
             // 
             // numericUpDown3
             // 
             this.numericUpDown3.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown3.Location = new System.Drawing.Point(169, 132);
+            this.numericUpDown3.Location = new System.Drawing.Point(211, 165);
+            this.numericUpDown3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             9,
             0,
@@ -1247,7 +1297,7 @@
             0,
             0});
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(49, 22);
+            this.numericUpDown3.Size = new System.Drawing.Size(61, 26);
             this.numericUpDown3.TabIndex = 15;
             this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown3, "Number of horizontal slices of concentration grids");
@@ -1279,9 +1329,11 @@
             this.groupBox8.Controls.Add(this.numericUpDown10);
             this.groupBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox8.ForeColor = System.Drawing.Color.Black;
-            this.groupBox8.Location = new System.Drawing.Point(522, 15);
+            this.groupBox8.Location = new System.Drawing.Point(652, 19);
+            this.groupBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(282, 517);
+            this.groupBox8.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox8.Size = new System.Drawing.Size(352, 646);
             this.groupBox8.TabIndex = 5;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = " GRAL - Internal flow field grid";
@@ -1300,9 +1352,11 @@
             this.groupBox28.Controls.Add(this.numericUpDown11);
             this.groupBox28.Controls.Add(this.label27);
             this.groupBox28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox28.Location = new System.Drawing.Point(2, 70);
+            this.groupBox28.Location = new System.Drawing.Point(2, 88);
+            this.groupBox28.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Size = new System.Drawing.Size(276, 151);
+            this.groupBox28.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox28.Size = new System.Drawing.Size(345, 189);
             this.groupBox28.TabIndex = 20;
             this.groupBox28.TabStop = false;
             this.groupBox28.Text = "Vertical grid";
@@ -1311,9 +1365,10 @@
             // 
             this.button53.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button53.BackgroundImage")));
             this.button53.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button53.Location = new System.Drawing.Point(247, 120);
+            this.button53.Location = new System.Drawing.Point(309, 150);
+            this.button53.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button53.Name = "button53";
-            this.button53.Size = new System.Drawing.Size(24, 24);
+            this.button53.Size = new System.Drawing.Size(30, 30);
             this.button53.TabIndex = 26;
             this.toolTip1.SetToolTip(this.button53, "Show the vertical layer heights");
             this.button53.UseVisualStyleBackColor = true;
@@ -1323,9 +1378,10 @@
             // 
             this.button12.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button12.BackgroundImage")));
             this.button12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button12.Location = new System.Drawing.Point(247, 53);
+            this.button12.Location = new System.Drawing.Point(309, 66);
+            this.button12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(24, 24);
+            this.button12.Size = new System.Drawing.Size(30, 30);
             this.button12.TabIndex = 24;
             this.toolTip1.SetToolTip(this.button12, "Set height depending stretching factors");
             this.button12.UseVisualStyleBackColor = true;
@@ -1335,9 +1391,10 @@
             // 
             this.label75.AutoSize = true;
             this.label75.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label75.Location = new System.Drawing.Point(5, 124);
+            this.label75.Location = new System.Drawing.Point(6, 155);
+            this.label75.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label75.Name = "label75";
-            this.label75.Size = new System.Drawing.Size(123, 16);
+            this.label75.Size = new System.Drawing.Size(145, 20);
             this.label75.TabIndex = 30;
             this.label75.Text = "Vertical cell heights";
             // 
@@ -1345,16 +1402,18 @@
             // 
             this.label73.AutoSize = true;
             this.label73.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label73.Location = new System.Drawing.Point(5, 81);
+            this.label73.Location = new System.Drawing.Point(6, 101);
+            this.label73.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label73.Name = "label73";
-            this.label73.Size = new System.Drawing.Size(136, 32);
+            this.label73.Size = new System.Drawing.Size(161, 40);
             this.label73.TabIndex = 26;
             this.label73.Text = "Number of prognostic\r\ncells in z-direction";
             // 
             // numericUpDown26
             // 
             this.numericUpDown26.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown26.Location = new System.Drawing.Point(180, 87);
+            this.numericUpDown26.Location = new System.Drawing.Point(225, 109);
+            this.numericUpDown26.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown26.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1366,7 +1425,7 @@
             0,
             0});
             this.numericUpDown26.Name = "numericUpDown26";
-            this.numericUpDown26.Size = new System.Drawing.Size(61, 22);
+            this.numericUpDown26.Size = new System.Drawing.Size(76, 26);
             this.numericUpDown26.TabIndex = 25;
             this.numericUpDown26.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown26, "Number of vertical cells using the prognostic GRAL mode");
@@ -1381,9 +1440,10 @@
             // 
             this.label29.AutoSize = true;
             this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(5, 56);
+            this.label29.Location = new System.Drawing.Point(6, 70);
+            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(149, 16);
+            this.label29.Size = new System.Drawing.Size(181, 20);
             this.label29.TabIndex = 24;
             this.label29.Text = "Vertical stretching factor";
             // 
@@ -1396,7 +1456,8 @@
             0,
             0,
             131072});
-            this.numericUpDown12.Location = new System.Drawing.Point(180, 54);
+            this.numericUpDown12.Location = new System.Drawing.Point(225, 68);
+            this.numericUpDown12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown12.Maximum = new decimal(new int[] {
             12,
             0,
@@ -1408,7 +1469,7 @@
             0,
             65536});
             this.numericUpDown12.Name = "numericUpDown12";
-            this.numericUpDown12.Size = new System.Drawing.Size(61, 22);
+            this.numericUpDown12.Size = new System.Drawing.Size(76, 26);
             this.numericUpDown12.TabIndex = 23;
             this.numericUpDown12.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown12, "Stretches the vertical flow field grid");
@@ -1423,9 +1484,10 @@
             // 
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(4, 23);
+            this.label28.Location = new System.Drawing.Point(5, 29);
+            this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(140, 16);
+            this.label28.Size = new System.Drawing.Size(165, 20);
             this.label28.TabIndex = 21;
             this.label28.Text = "Thickness of first layer";
             // 
@@ -1438,7 +1500,8 @@
             0,
             0,
             65536});
-            this.numericUpDown11.Location = new System.Drawing.Point(180, 19);
+            this.numericUpDown11.Location = new System.Drawing.Point(225, 24);
+            this.numericUpDown11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown11.Maximum = new decimal(new int[] {
             5,
             0,
@@ -1450,7 +1513,7 @@
             0,
             65536});
             this.numericUpDown11.Name = "numericUpDown11";
-            this.numericUpDown11.Size = new System.Drawing.Size(61, 22);
+            this.numericUpDown11.Size = new System.Drawing.Size(76, 26);
             this.numericUpDown11.TabIndex = 20;
             this.numericUpDown11.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown11, "Vertical height of the lowest layer");
@@ -1464,9 +1527,10 @@
             // label27
             // 
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(247, 23);
+            this.label27.Location = new System.Drawing.Point(309, 29);
+            this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(19, 16);
+            this.label27.Size = new System.Drawing.Size(24, 20);
             this.label27.TabIndex = 22;
             this.label27.Text = "m";
             // 
@@ -1477,9 +1541,11 @@
             this.groupBox26.Controls.Add(this.numericUpDown41);
             this.groupBox26.Controls.Add(this.checkBox26);
             this.groupBox26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox26.Location = new System.Drawing.Point(2, 428);
+            this.groupBox26.Location = new System.Drawing.Point(2, 535);
+            this.groupBox26.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox26.Name = "groupBox26";
-            this.groupBox26.Size = new System.Drawing.Size(276, 77);
+            this.groupBox26.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox26.Size = new System.Drawing.Size(345, 96);
             this.groupBox26.TabIndex = 44;
             this.groupBox26.TabStop = false;
             this.groupBox26.Text = "Flow field files";
@@ -1488,9 +1554,10 @@
             // 
             this.label64.AutoSize = true;
             this.label64.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label64.Location = new System.Drawing.Point(26, 47);
+            this.label64.Location = new System.Drawing.Point(32, 59);
+            this.label64.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label64.Name = "label64";
-            this.label64.Size = new System.Drawing.Size(114, 16);
+            this.label64.Size = new System.Drawing.Size(134, 20);
             this.label64.TabIndex = 50;
             this.label64.Text = "Compression rate";
             // 
@@ -1499,9 +1566,10 @@
             this.button11.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button11.BackgroundImage")));
             this.button11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.Location = new System.Drawing.Point(238, 39);
+            this.button11.Location = new System.Drawing.Point(298, 49);
+            this.button11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(32, 32);
+            this.button11.Size = new System.Drawing.Size(40, 40);
             this.button11.TabIndex = 45;
             this.toolTip1.SetToolTip(this.button11, "Optional: set a directory for gff files\r\nDefault folder: /Computation/");
             this.button11.UseVisualStyleBackColor = true;
@@ -1510,14 +1578,15 @@
             // numericUpDown41
             // 
             this.numericUpDown41.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown41.Location = new System.Drawing.Point(146, 45);
+            this.numericUpDown41.Location = new System.Drawing.Point(182, 56);
+            this.numericUpDown41.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown41.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.numericUpDown41.Name = "numericUpDown41";
-            this.numericUpDown41.Size = new System.Drawing.Size(45, 21);
+            this.numericUpDown41.Size = new System.Drawing.Size(56, 24);
             this.numericUpDown41.TabIndex = 44;
             this.numericUpDown41.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown41, "0: lower compression rate 1: higher compression rate");
@@ -1527,9 +1596,10 @@
             // 
             this.checkBox26.AutoSize = true;
             this.checkBox26.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox26.Location = new System.Drawing.Point(8, 24);
+            this.checkBox26.Location = new System.Drawing.Point(10, 30);
+            this.checkBox26.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox26.Name = "checkBox26";
-            this.checkBox26.Size = new System.Drawing.Size(236, 20);
+            this.checkBox26.Size = new System.Drawing.Size(281, 24);
             this.checkBox26.TabIndex = 43;
             this.checkBox26.Text = "&Save intermediate GRAL flow fields";
             this.toolTip1.SetToolTip(this.checkBox26, resources.GetString("checkBox26.ToolTip"));
@@ -1544,11 +1614,11 @@
             this.groupBox19.Controls.Add(this.label79);
             this.groupBox19.Controls.Add(this.numericUpDown30);
             this.groupBox19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.groupBox19.Location = new System.Drawing.Point(2, 222);
+            this.groupBox19.Location = new System.Drawing.Point(2, 278);
             this.groupBox19.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox19.Name = "groupBox19";
             this.groupBox19.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox19.Size = new System.Drawing.Size(276, 104);
+            this.groupBox19.Size = new System.Drawing.Size(345, 130);
             this.groupBox19.TabIndex = 30;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "Solver";
@@ -1557,9 +1627,10 @@
             // 
             this.checkBox22.AutoSize = true;
             this.checkBox22.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox22.Location = new System.Drawing.Point(25, 76);
+            this.checkBox22.Location = new System.Drawing.Point(31, 95);
+            this.checkBox22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox22.Name = "checkBox22";
-            this.checkBox22.Size = new System.Drawing.Size(154, 20);
+            this.checkBox22.Size = new System.Drawing.Size(186, 24);
             this.checkBox22.TabIndex = 32;
             this.checkBox22.Text = "Run until steady-state";
             this.toolTip1.SetToolTip(this.checkBox22, "Force GRAL to perform iterations\r\nuntil the divergence becomes constant");
@@ -1571,16 +1642,18 @@
             // 
             this.label78.AutoSize = true;
             this.label78.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label78.Location = new System.Drawing.Point(16, 20);
+            this.label78.Location = new System.Drawing.Point(20, 25);
+            this.label78.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(118, 16);
+            this.label78.Size = new System.Drawing.Size(141, 20);
             this.label78.TabIndex = 37;
             this.label78.Text = "Minimum iterations";
             // 
             // numericUpDown29
             // 
             this.numericUpDown29.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown29.Location = new System.Drawing.Point(180, 20);
+            this.numericUpDown29.Location = new System.Drawing.Point(225, 25);
+            this.numericUpDown29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown29.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -1592,7 +1665,7 @@
             0,
             65536});
             this.numericUpDown29.Name = "numericUpDown29";
-            this.numericUpDown29.Size = new System.Drawing.Size(61, 22);
+            this.numericUpDown29.Size = new System.Drawing.Size(76, 26);
             this.numericUpDown29.TabIndex = 30;
             this.numericUpDown29.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown29, "Minimum number of iteration steps (default 100)");
@@ -1607,16 +1680,18 @@
             // 
             this.label79.AutoSize = true;
             this.label79.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label79.Location = new System.Drawing.Point(16, 50);
+            this.label79.Location = new System.Drawing.Point(20, 62);
+            this.label79.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label79.Name = "label79";
-            this.label79.Size = new System.Drawing.Size(122, 16);
+            this.label79.Size = new System.Drawing.Size(145, 20);
             this.label79.TabIndex = 39;
             this.label79.Text = "Maximum iterations";
             // 
             // numericUpDown30
             // 
             this.numericUpDown30.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown30.Location = new System.Drawing.Point(180, 48);
+            this.numericUpDown30.Location = new System.Drawing.Point(225, 60);
+            this.numericUpDown30.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown30.Maximum = new decimal(new int[] {
             10001,
             0,
@@ -1628,7 +1703,7 @@
             0,
             0});
             this.numericUpDown30.Name = "numericUpDown30";
-            this.numericUpDown30.Size = new System.Drawing.Size(61, 22);
+            this.numericUpDown30.Size = new System.Drawing.Size(76, 26);
             this.numericUpDown30.TabIndex = 31;
             this.numericUpDown30.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown30, "Maximum number of iteration steps (default 500)");
@@ -1643,9 +1718,10 @@
             // 
             this.checkBox24.AutoSize = true;
             this.checkBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox24.Location = new System.Drawing.Point(9, 394);
+            this.checkBox24.Location = new System.Drawing.Point(11, 492);
+            this.checkBox24.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox24.Name = "checkBox24";
-            this.checkBox24.Size = new System.Drawing.Size(224, 20);
+            this.checkBox24.Size = new System.Drawing.Size(267, 24);
             this.checkBox24.TabIndex = 42;
             this.checkBox24.Text = "Write file \"GRAL_Topography.txt\"";
             this.toolTip1.SetToolTip(this.checkBox24, "GRAL writes a topography file \r\n\"GRAL_topography.txt\", which can be found in\r\n th" +
@@ -1657,9 +1733,10 @@
             // 
             this.checkBox23.AutoSize = true;
             this.checkBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox23.Location = new System.Drawing.Point(9, 370);
+            this.checkBox23.Location = new System.Drawing.Point(11, 462);
+            this.checkBox23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox23.Name = "checkBox23";
-            this.checkBox23.Size = new System.Drawing.Size(203, 20);
+            this.checkBox23.Size = new System.Drawing.Size(244, 24);
             this.checkBox23.TabIndex = 41;
             this.checkBox23.Text = "&Write file \"building_heights.txt\"";
             this.toolTip1.SetToolTip(this.checkBox23, resources.GetString("checkBox23.ToolTip"));
@@ -1669,9 +1746,10 @@
             // label81
             // 
             this.label81.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label81.Location = new System.Drawing.Point(261, 341);
+            this.label81.Location = new System.Drawing.Point(326, 426);
+            this.label81.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(16, 16);
+            this.label81.Size = new System.Drawing.Size(20, 20);
             this.label81.TabIndex = 44;
             this.label81.Text = "m";
             // 
@@ -1684,7 +1762,8 @@
             0,
             0,
             196608});
-            this.numericUpDown31.Location = new System.Drawing.Point(188, 338);
+            this.numericUpDown31.Location = new System.Drawing.Point(235, 422);
+            this.numericUpDown31.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown31.Maximum = new decimal(new int[] {
             1,
             0,
@@ -1696,7 +1775,7 @@
             0,
             262144});
             this.numericUpDown31.Name = "numericUpDown31";
-            this.numericUpDown31.Size = new System.Drawing.Size(69, 22);
+            this.numericUpDown31.Size = new System.Drawing.Size(86, 26);
             this.numericUpDown31.TabIndex = 40;
             this.numericUpDown31.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown31, "The rougness of building walls and building roofs");
@@ -1711,18 +1790,20 @@
             // 
             this.label80.AutoSize = true;
             this.label80.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label80.Location = new System.Drawing.Point(9, 341);
+            this.label80.Location = new System.Drawing.Point(11, 426);
+            this.label80.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label80.Name = "label80";
-            this.label80.Size = new System.Drawing.Size(174, 16);
+            this.label80.Size = new System.Drawing.Size(205, 20);
             this.label80.TabIndex = 42;
             this.label80.Text = "Roughness of building walls";
             // 
             // label74
             // 
             this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label74.Location = new System.Drawing.Point(261, 203);
+            this.label74.Location = new System.Drawing.Point(326, 254);
+            this.label74.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(19, 16);
+            this.label74.Size = new System.Drawing.Size(24, 20);
             this.label74.TabIndex = 32;
             this.label74.Text = "m";
             // 
@@ -1730,9 +1811,10 @@
             // 
             this.label76.AutoSize = true;
             this.label76.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label76.Location = new System.Drawing.Point(9, 496);
+            this.label76.Location = new System.Drawing.Point(11, 620);
+            this.label76.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(175, 16);
+            this.label76.Size = new System.Drawing.Size(207, 20);
             this.label76.TabIndex = 35;
             this.label76.Text = "Relaxation pressure correct.";
             this.toolTip1.SetToolTip(this.label76, "Relaxation factor for temperature,\r\nhumidity, TKE, dissipation");
@@ -1742,9 +1824,10 @@
             // 
             this.label77.AutoSize = true;
             this.label77.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label77.Location = new System.Drawing.Point(9, 484);
+            this.label77.Location = new System.Drawing.Point(11, 605);
+            this.label77.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(121, 16);
+            this.label77.Size = new System.Drawing.Size(139, 20);
             this.label77.TabIndex = 33;
             this.label77.Text = "Relaxation velocity";
             this.toolTip1.SetToolTip(this.label77, "Relaxation factor for velocity");
@@ -1759,7 +1842,8 @@
             0,
             0,
             131072});
-            this.numericUpDown28.Location = new System.Drawing.Point(208, 482);
+            this.numericUpDown28.Location = new System.Drawing.Point(260, 602);
+            this.numericUpDown28.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown28.Maximum = new decimal(new int[] {
             1,
             0,
@@ -1771,7 +1855,7 @@
             0,
             131072});
             this.numericUpDown28.Name = "numericUpDown28";
-            this.numericUpDown28.Size = new System.Drawing.Size(68, 22);
+            this.numericUpDown28.Size = new System.Drawing.Size(85, 26);
             this.numericUpDown28.TabIndex = 34;
             this.numericUpDown28.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown28, "The lower the relaxation factor,\r\nthe higher the numerical stability");
@@ -1792,7 +1876,8 @@
             0,
             0,
             131072});
-            this.numericUpDown27.Location = new System.Drawing.Point(208, 495);
+            this.numericUpDown27.Location = new System.Drawing.Point(260, 619);
+            this.numericUpDown27.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown27.Maximum = new decimal(new int[] {
             1,
             0,
@@ -1804,7 +1889,7 @@
             0,
             131072});
             this.numericUpDown27.Name = "numericUpDown27";
-            this.numericUpDown27.Size = new System.Drawing.Size(68, 22);
+            this.numericUpDown27.Size = new System.Drawing.Size(85, 26);
             this.numericUpDown27.TabIndex = 36;
             this.numericUpDown27.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown27, "The lower the relaxation factor,\r\nthe higher the numerical stability");
@@ -1820,9 +1905,10 @@
             // 
             this.label25.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(249, 46);
+            this.label25.Location = new System.Drawing.Point(311, 58);
+            this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(19, 16);
+            this.label25.Size = new System.Drawing.Size(24, 20);
             this.label25.TabIndex = 19;
             this.label25.Text = "m";
             // 
@@ -1830,9 +1916,10 @@
             // 
             this.label26.AutoSize = true;
             this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label26.Location = new System.Drawing.Point(7, 44);
+            this.label26.Location = new System.Drawing.Point(9, 55);
+            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(155, 16);
+            this.label26.Size = new System.Drawing.Size(184, 20);
             this.label26.TabIndex = 18;
             this.label26.Text = "Horizontal grid resolution";
             // 
@@ -1841,7 +1928,8 @@
             this.numericUpDown10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.numericUpDown10.DecimalPlaces = 1;
             this.numericUpDown10.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown10.Location = new System.Drawing.Point(182, 42);
+            this.numericUpDown10.Location = new System.Drawing.Point(228, 52);
+            this.numericUpDown10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown10.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -1854,7 +1942,7 @@
             0});
             this.numericUpDown10.Name = "numericUpDown10";
             this.numericUpDown10.ReadOnly = true;
-            this.numericUpDown10.Size = new System.Drawing.Size(61, 22);
+            this.numericUpDown10.Size = new System.Drawing.Size(76, 26);
             this.numericUpDown10.TabIndex = 17;
             this.numericUpDown10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown10, "Horizontal grid resolution: needs to be smaller than the concentration grid resol" +
@@ -1874,9 +1962,10 @@
             this.Domain.Controls.Add(this.groupBox9);
             this.Domain.Controls.Add(this.button14);
             this.Domain.Controls.Add(this.groupBox7);
-            this.Domain.Location = new System.Drawing.Point(4, 22);
+            this.Domain.Location = new System.Drawing.Point(4, 25);
+            this.Domain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Domain.Name = "Domain";
-            this.Domain.Size = new System.Drawing.Size(814, 539);
+            this.Domain.Size = new System.Drawing.Size(1020, 677);
             this.Domain.TabIndex = 2;
             this.Domain.Text = "DOMAIN";
             // 
@@ -1887,9 +1976,10 @@
             this.SG_Number_List,
             this.SG_Name_List});
             this.listView2.HideSelection = false;
-            this.listView2.Location = new System.Drawing.Point(30, 245);
+            this.listView2.Location = new System.Drawing.Point(38, 306);
+            this.listView2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(324, 265);
+            this.listView2.Size = new System.Drawing.Size(404, 330);
             this.listView2.TabIndex = 9;
             this.toolTip1.SetToolTip(this.listView2, "Shows all defined source groups");
             this.listView2.UseCompatibleStateImageBehavior = false;
@@ -1910,9 +2000,10 @@
             this.button15.BackColor = System.Drawing.Color.Lavender;
             this.button15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.button15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button15.Location = new System.Drawing.Point(27, 127);
+            this.button15.Location = new System.Drawing.Point(34, 159);
+            this.button15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(124, 88);
+            this.button15.Size = new System.Drawing.Size(155, 110);
             this.button15.TabIndex = 8;
             this.button15.Text = "Define \r\n&Source-Groups";
             this.toolTip1.SetToolTip(this.button15, "Define source groups");
@@ -1933,9 +2024,11 @@
             this.groupBox9.Controls.Add(this.textBox15);
             this.groupBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox9.ForeColor = System.Drawing.Color.Black;
-            this.groupBox9.Location = new System.Drawing.Point(508, 295);
+            this.groupBox9.Location = new System.Drawing.Point(635, 369);
+            this.groupBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(275, 215);
+            this.groupBox9.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox9.Size = new System.Drawing.Size(344, 269);
             this.groupBox9.TabIndex = 6;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "GRAMM domain";
@@ -1944,9 +2037,10 @@
             // label92
             // 
             this.label92.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label92.Location = new System.Drawing.Point(6, 188);
+            this.label92.Location = new System.Drawing.Point(8, 235);
+            this.label92.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label92.Name = "label92";
-            this.label92.Size = new System.Drawing.Size(260, 24);
+            this.label92.Size = new System.Drawing.Size(325, 30);
             this.label92.TabIndex = 10;
             this.label92.Text = "0 x 0 cells";
             this.label92.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1955,9 +2049,10 @@
             // 
             this.label40.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(3, 89);
+            this.label40.Location = new System.Drawing.Point(4, 111);
+            this.label40.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(24, 20);
+            this.label40.Size = new System.Drawing.Size(28, 24);
             this.label40.TabIndex = 7;
             this.label40.Text = "W";
             // 
@@ -1965,9 +2060,10 @@
             // 
             this.label41.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(252, 90);
+            this.label41.Location = new System.Drawing.Point(315, 112);
+            this.label41.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(20, 20);
+            this.label41.Size = new System.Drawing.Size(23, 24);
             this.label41.TabIndex = 6;
             this.label41.Text = "E";
             // 
@@ -1975,9 +2071,10 @@
             // 
             this.label42.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(126, 153);
+            this.label42.Location = new System.Drawing.Point(158, 191);
+            this.label42.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(20, 20);
+            this.label42.Size = new System.Drawing.Size(22, 24);
             this.label42.TabIndex = 5;
             this.label42.Text = "S";
             // 
@@ -1985,9 +2082,10 @@
             // 
             this.label43.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(126, 21);
+            this.label43.Location = new System.Drawing.Point(158, 26);
+            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(20, 20);
+            this.label43.Size = new System.Drawing.Size(24, 24);
             this.label43.TabIndex = 4;
             this.label43.Text = "N";
             // 
@@ -1995,10 +2093,11 @@
             // 
             this.textBox12.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.textBox12.Enabled = false;
-            this.textBox12.Location = new System.Drawing.Point(148, 87);
+            this.textBox12.Location = new System.Drawing.Point(185, 109);
+            this.textBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox12.Name = "textBox12";
             this.textBox12.ReadOnly = true;
-            this.textBox12.Size = new System.Drawing.Size(100, 25);
+            this.textBox12.Size = new System.Drawing.Size(124, 29);
             this.textBox12.TabIndex = 3;
             this.textBox12.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2006,10 +2105,11 @@
             // 
             this.textBox13.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBox13.Enabled = false;
-            this.textBox13.Location = new System.Drawing.Point(26, 87);
+            this.textBox13.Location = new System.Drawing.Point(32, 109);
+            this.textBox13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox13.Name = "textBox13";
             this.textBox13.ReadOnly = true;
-            this.textBox13.Size = new System.Drawing.Size(100, 25);
+            this.textBox13.Size = new System.Drawing.Size(124, 29);
             this.textBox13.TabIndex = 2;
             this.textBox13.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2017,10 +2117,11 @@
             // 
             this.textBox14.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.textBox14.Enabled = false;
-            this.textBox14.Location = new System.Drawing.Point(85, 125);
+            this.textBox14.Location = new System.Drawing.Point(106, 156);
+            this.textBox14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox14.Name = "textBox14";
             this.textBox14.ReadOnly = true;
-            this.textBox14.Size = new System.Drawing.Size(100, 25);
+            this.textBox14.Size = new System.Drawing.Size(124, 29);
             this.textBox14.TabIndex = 1;
             this.textBox14.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2028,19 +2129,21 @@
             // 
             this.textBox15.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox15.Enabled = false;
-            this.textBox15.Location = new System.Drawing.Point(85, 51);
+            this.textBox15.Location = new System.Drawing.Point(106, 64);
+            this.textBox15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox15.Name = "textBox15";
             this.textBox15.ReadOnly = true;
-            this.textBox15.Size = new System.Drawing.Size(100, 25);
+            this.textBox15.Size = new System.Drawing.Size(124, 29);
             this.textBox15.TabIndex = 0;
             this.textBox15.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // button14
             // 
             this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button14.Location = new System.Drawing.Point(26, 19);
+            this.button14.Location = new System.Drawing.Point(32, 24);
+            this.button14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(125, 88);
+            this.button14.Size = new System.Drawing.Size(156, 110);
             this.button14.TabIndex = 5;
             this.button14.Tag = "";
             this.button14.Text = "&Open/Create map";
@@ -2063,9 +2166,11 @@
             this.groupBox7.Controls.Add(this.textBox2);
             this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox7.ForeColor = System.Drawing.Color.Black;
-            this.groupBox7.Location = new System.Drawing.Point(505, 8);
+            this.groupBox7.Location = new System.Drawing.Point(631, 10);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(275, 241);
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox7.Size = new System.Drawing.Size(344, 301);
             this.groupBox7.TabIndex = 3;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "GRAL domain";
@@ -2074,9 +2179,10 @@
             // label93
             // 
             this.label93.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label93.Location = new System.Drawing.Point(9, 218);
+            this.label93.Location = new System.Drawing.Point(11, 272);
+            this.label93.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label93.Name = "label93";
-            this.label93.Size = new System.Drawing.Size(260, 20);
+            this.label93.Size = new System.Drawing.Size(325, 25);
             this.label93.TabIndex = 10;
             this.label93.Text = " 0 x 0 cells";
             this.label93.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2085,18 +2191,20 @@
             // 
             this.label24.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(3, 90);
+            this.label24.Location = new System.Drawing.Point(4, 112);
+            this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(24, 20);
+            this.label24.Size = new System.Drawing.Size(28, 24);
             this.label24.TabIndex = 7;
             this.label24.Text = "W";
             // 
             // label91
             // 
             this.label91.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label91.Location = new System.Drawing.Point(9, 198);
+            this.label91.Location = new System.Drawing.Point(11, 248);
+            this.label91.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label91.Name = "label91";
-            this.label91.Size = new System.Drawing.Size(260, 20);
+            this.label91.Size = new System.Drawing.Size(325, 25);
             this.label91.TabIndex = 9;
             this.label91.Text = " 0 x 0 cells";
             this.label91.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2105,9 +2213,10 @@
             // 
             this.label23.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(252, 90);
+            this.label23.Location = new System.Drawing.Point(315, 112);
+            this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(20, 20);
+            this.label23.Size = new System.Drawing.Size(23, 24);
             this.label23.TabIndex = 6;
             this.label23.Text = "E";
             // 
@@ -2115,9 +2224,10 @@
             // 
             this.label22.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(129, 168);
+            this.label22.Location = new System.Drawing.Point(161, 210);
+            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(20, 20);
+            this.label22.Size = new System.Drawing.Size(22, 24);
             this.label22.TabIndex = 5;
             this.label22.Text = "S";
             // 
@@ -2125,9 +2235,10 @@
             // 
             this.label21.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(126, 21);
+            this.label21.Location = new System.Drawing.Point(158, 26);
+            this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(20, 20);
+            this.label21.Size = new System.Drawing.Size(24, 24);
             this.label21.TabIndex = 4;
             this.label21.Text = "N";
             // 
@@ -2135,10 +2246,11 @@
             // 
             this.textBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.textBox7.Enabled = false;
-            this.textBox7.Location = new System.Drawing.Point(151, 87);
+            this.textBox7.Location = new System.Drawing.Point(189, 109);
+            this.textBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox7.Name = "textBox7";
             this.textBox7.ReadOnly = true;
-            this.textBox7.Size = new System.Drawing.Size(100, 25);
+            this.textBox7.Size = new System.Drawing.Size(124, 29);
             this.textBox7.TabIndex = 3;
             this.textBox7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2146,10 +2258,11 @@
             // 
             this.textBox6.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBox6.Enabled = false;
-            this.textBox6.Location = new System.Drawing.Point(29, 87);
+            this.textBox6.Location = new System.Drawing.Point(36, 109);
+            this.textBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox6.Name = "textBox6";
             this.textBox6.ReadOnly = true;
-            this.textBox6.Size = new System.Drawing.Size(100, 25);
+            this.textBox6.Size = new System.Drawing.Size(124, 29);
             this.textBox6.TabIndex = 2;
             this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2157,10 +2270,11 @@
             // 
             this.textBox5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(88, 128);
+            this.textBox5.Location = new System.Drawing.Point(110, 160);
+            this.textBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox5.Name = "textBox5";
             this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(100, 25);
+            this.textBox5.Size = new System.Drawing.Size(124, 29);
             this.textBox5.TabIndex = 1;
             this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2168,10 +2282,11 @@
             // 
             this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(88, 44);
+            this.textBox2.Location = new System.Drawing.Point(110, 55);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(100, 25);
+            this.textBox2.Size = new System.Drawing.Size(124, 29);
             this.textBox2.TabIndex = 0;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -2194,10 +2309,11 @@
             this.Sources.Controls.Add(this.label30);
             this.Sources.Controls.Add(this.listBox4);
             this.Sources.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Sources.Location = new System.Drawing.Point(4, 22);
+            this.Sources.Location = new System.Drawing.Point(4, 25);
+            this.Sources.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Sources.Name = "Sources";
-            this.Sources.Padding = new System.Windows.Forms.Padding(3);
-            this.Sources.Size = new System.Drawing.Size(814, 539);
+            this.Sources.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Sources.Size = new System.Drawing.Size(1020, 677);
             this.Sources.TabIndex = 0;
             this.Sources.Text = "     SOURCES     ";
             // 
@@ -2207,9 +2323,11 @@
             this.groupBox27.Controls.Add(this.button49);
             this.groupBox27.Controls.Add(this.button48);
             this.groupBox27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox27.Location = new System.Drawing.Point(460, 218);
+            this.groupBox27.Location = new System.Drawing.Point(575, 272);
+            this.groupBox27.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(251, 45);
+            this.groupBox27.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox27.Size = new System.Drawing.Size(314, 56);
             this.groupBox27.TabIndex = 24;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "Emission-time-series";
@@ -2217,9 +2335,10 @@
             // button51
             // 
             this.button51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button51.Location = new System.Drawing.Point(168, 16);
+            this.button51.Location = new System.Drawing.Point(210, 20);
+            this.button51.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button51.Name = "button51";
-            this.button51.Size = new System.Drawing.Size(75, 25);
+            this.button51.Size = new System.Drawing.Size(94, 31);
             this.button51.TabIndex = 14;
             this.button51.Text = "&Delete";
             this.toolTip1.SetToolTip(this.button51, "Delete emission time series file");
@@ -2230,9 +2349,10 @@
             // button49
             // 
             this.button49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button49.Location = new System.Drawing.Point(87, 16);
+            this.button49.Location = new System.Drawing.Point(109, 20);
+            this.button49.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button49.Name = "button49";
-            this.button49.Size = new System.Drawing.Size(75, 25);
+            this.button49.Size = new System.Drawing.Size(94, 31);
             this.button49.TabIndex = 13;
             this.button49.Text = "&Show";
             this.toolTip1.SetToolTip(this.button49, "Show emission time series");
@@ -2243,9 +2363,10 @@
             // button48
             // 
             this.button48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button48.Location = new System.Drawing.Point(6, 16);
+            this.button48.Location = new System.Drawing.Point(8, 20);
+            this.button48.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button48.Name = "button48";
-            this.button48.Size = new System.Drawing.Size(75, 25);
+            this.button48.Size = new System.Drawing.Size(94, 31);
             this.button48.TabIndex = 12;
             this.button48.Text = "&Create";
             this.toolTip1.SetToolTip(this.button48, "Create a time series based on the modulation settings");
@@ -2258,9 +2379,11 @@
             this.groupBox24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.groupBox24.Controls.Add(this.button54);
             this.groupBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox24.Location = new System.Drawing.Point(724, 212);
+            this.groupBox24.Location = new System.Drawing.Point(905, 265);
+            this.groupBox24.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(80, 51);
+            this.groupBox24.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox24.Size = new System.Drawing.Size(100, 64);
             this.groupBox24.TabIndex = 11;
             this.groupBox24.TabStop = false;
             this.groupBox24.Text = "Decay rate";
@@ -2268,9 +2391,10 @@
             // 
             // button54
             // 
-            this.button54.Location = new System.Drawing.Point(5, 22);
+            this.button54.Location = new System.Drawing.Point(6, 28);
+            this.button54.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button54.Name = "button54";
-            this.button54.Size = new System.Drawing.Size(66, 23);
+            this.button54.Size = new System.Drawing.Size(82, 29);
             this.button54.TabIndex = 11;
             this.button54.Text = "Edit";
             this.toolTip1.SetToolTip(this.button54, "Set decay rates for each source group");
@@ -2287,11 +2411,11 @@
             this.groupBox21.Controls.Add(this.label32);
             this.groupBox21.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.groupBox21.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox21.Location = new System.Drawing.Point(724, 35);
+            this.groupBox21.Location = new System.Drawing.Point(905, 44);
             this.groupBox21.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox21.Name = "groupBox21";
             this.groupBox21.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox21.Size = new System.Drawing.Size(82, 160);
+            this.groupBox21.Size = new System.Drawing.Size(102, 200);
             this.groupBox21.TabIndex = 8;
             this.groupBox21.TabStop = false;
             this.groupBox21.Text = "Wet Deposition";
@@ -2299,10 +2423,10 @@
             // 
             // checkBox33
             // 
-            this.checkBox33.Location = new System.Drawing.Point(5, 25);
+            this.checkBox33.Location = new System.Drawing.Point(6, 31);
             this.checkBox33.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox33.Name = "checkBox33";
-            this.checkBox33.Size = new System.Drawing.Size(70, 19);
+            this.checkBox33.Size = new System.Drawing.Size(88, 24);
             this.checkBox33.TabIndex = 8;
             this.checkBox33.Text = "Enabled";
             this.toolTip1.SetToolTip(this.checkBox33, "Enable wet deposition settings");
@@ -2312,7 +2436,7 @@
             // numericUpDown36
             // 
             this.numericUpDown36.DecimalPlaces = 1;
-            this.numericUpDown36.Location = new System.Drawing.Point(4, 128);
+            this.numericUpDown36.Location = new System.Drawing.Point(5, 160);
             this.numericUpDown36.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown36.Maximum = new decimal(new int[] {
             500,
@@ -2320,7 +2444,7 @@
             0,
             0});
             this.numericUpDown36.Name = "numericUpDown36";
-            this.numericUpDown36.Size = new System.Drawing.Size(71, 19);
+            this.numericUpDown36.Size = new System.Drawing.Size(89, 22);
             this.numericUpDown36.TabIndex = 10;
             this.toolTip1.SetToolTip(this.numericUpDown36, "Wet deposition\r\nCW value for this pollutant");
             this.numericUpDown36.ValueChanged += new System.EventHandler(this.NumericUpDown35ValueChanged);
@@ -2333,7 +2457,7 @@
             0,
             0,
             65536});
-            this.numericUpDown35.Location = new System.Drawing.Point(5, 69);
+            this.numericUpDown35.Location = new System.Drawing.Point(6, 86);
             this.numericUpDown35.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown35.Maximum = new decimal(new int[] {
             1,
@@ -2341,42 +2465,44 @@
             0,
             0});
             this.numericUpDown35.Name = "numericUpDown35";
-            this.numericUpDown35.Size = new System.Drawing.Size(71, 19);
+            this.numericUpDown35.Size = new System.Drawing.Size(89, 22);
             this.numericUpDown35.TabIndex = 9;
             this.toolTip1.SetToolTip(this.numericUpDown35, "Wet deposition\r\nAlhaW value for this pollutant");
             this.numericUpDown35.ValueChanged += new System.EventHandler(this.NumericUpDown35ValueChanged);
             // 
             // label33
             // 
-            this.label33.Location = new System.Drawing.Point(4, 98);
+            this.label33.Location = new System.Drawing.Point(5, 122);
             this.label33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(71, 38);
+            this.label33.Size = new System.Drawing.Size(89, 48);
             this.label33.TabIndex = 1;
             this.label33.Text = "Cw * 1E-6 \r\n[1/s]";
             // 
             // label32
             // 
-            this.label32.Location = new System.Drawing.Point(5, 47);
+            this.label32.Location = new System.Drawing.Point(6, 59);
             this.label32.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(70, 18);
+            this.label32.Size = new System.Drawing.Size(88, 22);
             this.label32.TabIndex = 0;
             this.label32.Text = "Alphaw";
             // 
             // pictureBox5
             // 
-            this.pictureBox5.Location = new System.Drawing.Point(460, 269);
+            this.pictureBox5.Location = new System.Drawing.Point(575, 336);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(346, 254);
+            this.pictureBox5.Size = new System.Drawing.Size(432, 318);
             this.pictureBox5.TabIndex = 20;
             this.pictureBox5.TabStop = false;
             // 
             // button104
             // 
-            this.button104.Location = new System.Drawing.Point(794, 0);
+            this.button104.Location = new System.Drawing.Point(992, 0);
+            this.button104.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button104.Name = "button104";
-            this.button104.Size = new System.Drawing.Size(20, 20);
+            this.button104.Size = new System.Drawing.Size(25, 25);
             this.button104.TabIndex = 19;
             this.button104.TabStop = false;
             this.button104.UseVisualStyleBackColor = true;
@@ -2388,9 +2514,10 @@
             this.button13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button13.Cursor = System.Windows.Forms.Cursors.Default;
             this.button13.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button13.Location = new System.Drawing.Point(647, 144);
+            this.button13.Location = new System.Drawing.Point(809, 180);
+            this.button13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(64, 51);
+            this.button13.Size = new System.Drawing.Size(80, 64);
             this.button13.TabIndex = 7;
             this.toolTip1.SetToolTip(this.button13, "Compute road emissions\r\nwith the Network Emissions\r\nModel NEMO (available only \r\n" +
         "on request from Graz \r\nUniversity of Technology>)");
@@ -2401,9 +2528,10 @@
             // button21
             // 
             this.button21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button21.Location = new System.Drawing.Point(647, 90);
+            this.button21.Location = new System.Drawing.Point(809, 112);
+            this.button21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(64, 51);
+            this.button21.Size = new System.Drawing.Size(80, 64);
             this.button21.TabIndex = 6;
             this.button21.Text = "&Show emissions";
             this.toolTip1.SetToolTip(this.button21, "Show the annual emissions for all selected source groups");
@@ -2414,9 +2542,10 @@
             // label34
             // 
             this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label34.Location = new System.Drawing.Point(459, 31);
+            this.label34.Location = new System.Drawing.Point(574, 39);
+            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(181, 56);
+            this.label34.Size = new System.Drawing.Size(226, 70);
             this.label34.TabIndex = 15;
             this.label34.Text = "Select the pollutant for the simulation";
             // 
@@ -2424,9 +2553,11 @@
             // 
             this.listBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBox5.FormattingEnabled = true;
-            this.listBox5.Location = new System.Drawing.Point(460, 90);
+            this.listBox5.ItemHeight = 16;
+            this.listBox5.Location = new System.Drawing.Point(575, 112);
+            this.listBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listBox5.Name = "listBox5";
-            this.listBox5.Size = new System.Drawing.Size(181, 121);
+            this.listBox5.Size = new System.Drawing.Size(225, 148);
             this.listBox5.TabIndex = 5;
             this.toolTip1.SetToolTip(this.listBox5, "Select the pollutant");
             this.listBox5.SelectedIndexChanged += new System.EventHandler(this.ListBox5_SelectedIndexChanged);
@@ -2438,11 +2569,12 @@
             this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listView1.HideSelection = false;
             this.listView1.HoverSelection = true;
-            this.listView1.Location = new System.Drawing.Point(258, 90);
+            this.listView1.Location = new System.Drawing.Point(322, 112);
+            this.listView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(190, 433);
+            this.listView1.Size = new System.Drawing.Size(236, 540);
             this.listView1.TabIndex = 2;
             this.toolTip1.SetToolTip(this.listView1, "Double-click to set the emission modulation \r\nfor each source group");
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -2455,9 +2587,10 @@
             this.button17.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button17.BackgroundImage")));
             this.button17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button17.Location = new System.Drawing.Point(202, 191);
+            this.button17.Location = new System.Drawing.Point(252, 239);
+            this.button17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(50, 45);
+            this.button17.Size = new System.Drawing.Size(62, 56);
             this.button17.TabIndex = 4;
             this.toolTip1.SetToolTip(this.button17, "Remove the selected\r\nsource group from the\r\nused source groups list");
             this.button17.UseVisualStyleBackColor = true;
@@ -2468,9 +2601,10 @@
             this.button16.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button16.BackgroundImage")));
             this.button16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button16.Location = new System.Drawing.Point(202, 127);
+            this.button16.Location = new System.Drawing.Point(252, 159);
+            this.button16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(50, 45);
+            this.button16.Size = new System.Drawing.Size(62, 56);
             this.button16.TabIndex = 3;
             this.toolTip1.SetToolTip(this.button16, "Shift the selected\r\nsource groups to the \r\nused source groups list");
             this.button16.UseVisualStyleBackColor = true;
@@ -2479,9 +2613,10 @@
             // label31
             // 
             this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label31.Location = new System.Drawing.Point(269, 31);
+            this.label31.Location = new System.Drawing.Point(336, 39);
+            this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(190, 56);
+            this.label31.Size = new System.Drawing.Size(238, 70);
             this.label31.TabIndex = 3;
             this.label31.Text = "Used source groups for the simulation - set an emission modulation per source gro" +
     "up";
@@ -2489,9 +2624,10 @@
             // label30
             // 
             this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label30.Location = new System.Drawing.Point(6, 31);
+            this.label30.Location = new System.Drawing.Point(8, 39);
+            this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(211, 56);
+            this.label30.Size = new System.Drawing.Size(264, 70);
             this.label30.TabIndex = 1;
             this.label30.Text = "Available source groups inside the defined GRAL model domain";
             // 
@@ -2499,10 +2635,12 @@
             // 
             this.listBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBox4.FormattingEnabled = true;
-            this.listBox4.Location = new System.Drawing.Point(6, 90);
+            this.listBox4.ItemHeight = 16;
+            this.listBox4.Location = new System.Drawing.Point(8, 112);
+            this.listBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listBox4.Name = "listBox4";
             this.listBox4.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox4.Size = new System.Drawing.Size(190, 433);
+            this.listBox4.Size = new System.Drawing.Size(236, 532);
             this.listBox4.TabIndex = 1;
             this.toolTip1.SetToolTip(this.listBox4, "If no source groups are visible,\r\ncheck the GRAL domain area");
             // 
@@ -2519,10 +2657,11 @@
             this.Meteorology.Controls.Add(this.button6);
             this.Meteorology.Controls.Add(this.groupBox1);
             this.Meteorology.Controls.Add(this.OpenMetFile);
-            this.Meteorology.Location = new System.Drawing.Point(4, 22);
+            this.Meteorology.Location = new System.Drawing.Point(4, 25);
+            this.Meteorology.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Meteorology.Name = "Meteorology";
-            this.Meteorology.Padding = new System.Windows.Forms.Padding(3);
-            this.Meteorology.Size = new System.Drawing.Size(814, 539);
+            this.Meteorology.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Meteorology.Size = new System.Drawing.Size(1020, 677);
             this.Meteorology.TabIndex = 1;
             this.Meteorology.Text = "METEOROLOGY";
             // 
@@ -2531,9 +2670,11 @@
             this.groupBox23.Controls.Add(this.numericUpDown7);
             this.groupBox23.Controls.Add(this.label86);
             this.groupBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox23.Location = new System.Drawing.Point(472, 195);
+            this.groupBox23.Location = new System.Drawing.Point(590, 244);
+            this.groupBox23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(307, 70);
+            this.groupBox23.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox23.Size = new System.Drawing.Size(384, 88);
             this.groupBox23.TabIndex = 13;
             this.groupBox23.TabStop = false;
             this.groupBox23.Text = "Anemometer height above ground level";
@@ -2548,7 +2689,8 @@
             0,
             0,
             65536});
-            this.numericUpDown7.Location = new System.Drawing.Point(27, 25);
+            this.numericUpDown7.Location = new System.Drawing.Point(34, 31);
+            this.numericUpDown7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown7.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -2560,7 +2702,7 @@
             0,
             65536});
             this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(71, 22);
+            this.numericUpDown7.Size = new System.Drawing.Size(89, 26);
             this.numericUpDown7.TabIndex = 13;
             this.numericUpDown7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown7.Value = new decimal(new int[] {
@@ -2573,17 +2715,19 @@
             // label86
             // 
             this.label86.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label86.Location = new System.Drawing.Point(104, 27);
+            this.label86.Location = new System.Drawing.Point(130, 34);
+            this.label86.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(26, 23);
+            this.label86.Size = new System.Drawing.Size(32, 29);
             this.label86.TabIndex = 15;
             this.label86.Text = "m";
             // 
             // button106
             // 
-            this.button106.Location = new System.Drawing.Point(794, 0);
+            this.button106.Location = new System.Drawing.Point(992, 0);
+            this.button106.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button106.Name = "button106";
-            this.button106.Size = new System.Drawing.Size(20, 20);
+            this.button106.Size = new System.Drawing.Size(25, 25);
             this.button106.TabIndex = 20;
             this.button106.TabStop = false;
             this.button106.UseVisualStyleBackColor = true;
@@ -2594,9 +2738,11 @@
             this.groupBox20.Controls.Add(this.label101);
             this.groupBox20.Controls.Add(this.label102);
             this.groupBox20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.groupBox20.Location = new System.Drawing.Point(472, 282);
+            this.groupBox20.Location = new System.Drawing.Point(590, 352);
+            this.groupBox20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(307, 78);
+            this.groupBox20.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox20.Size = new System.Drawing.Size(384, 98);
             this.groupBox20.TabIndex = 14;
             this.groupBox20.TabStop = false;
             this.groupBox20.Text = "Number of classified weather situations";
@@ -2605,9 +2751,10 @@
             // label100
             // 
             this.label100.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label100.Location = new System.Drawing.Point(6, 21);
+            this.label100.Location = new System.Drawing.Point(8, 26);
+            this.label100.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(60, 19);
+            this.label100.Size = new System.Drawing.Size(75, 24);
             this.label100.TabIndex = 12;
             this.label100.Text = "0";
             this.label100.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -2618,9 +2765,10 @@
             // 
             this.label101.AutoSize = true;
             this.label101.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label101.Location = new System.Drawing.Point(87, 49);
+            this.label101.Location = new System.Drawing.Point(109, 61);
+            this.label101.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label101.Name = "label101";
-            this.label101.Size = new System.Drawing.Size(174, 16);
+            this.label101.Size = new System.Drawing.Size(226, 20);
             this.label101.TabIndex = 12;
             this.label101.Text = "   inclusive sunrise situations";
             this.toolTip1.SetToolTip(this.label101, "start GRAMM to refresh this value");
@@ -2629,9 +2777,10 @@
             // label102
             // 
             this.label102.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label102.Location = new System.Drawing.Point(6, 49);
+            this.label102.Location = new System.Drawing.Point(8, 61);
+            this.label102.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(60, 16);
+            this.label102.Size = new System.Drawing.Size(75, 20);
             this.label102.TabIndex = 12;
             this.label102.Text = "0";
             this.label102.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -2642,10 +2791,10 @@
             // 
             this.checkBox19.AutoSize = true;
             this.checkBox19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox19.Location = new System.Drawing.Point(18, 134);
+            this.checkBox19.Location = new System.Drawing.Point(22, 168);
             this.checkBox19.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox19.Name = "checkBox19";
-            this.checkBox19.Size = new System.Drawing.Size(125, 20);
+            this.checkBox19.Size = new System.Drawing.Size(155, 24);
             this.checkBox19.TabIndex = 3;
             this.checkBox19.Text = "No classification";
             this.toolTip1.SetToolTip(this.checkBox19, "Do not classify the meteo file for the computation");
@@ -2657,10 +2806,12 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.HorizontalScrollbar = true;
-            this.listBox1.Location = new System.Drawing.Point(208, 19);
+            this.listBox1.ItemHeight = 16;
+            this.listBox1.Location = new System.Drawing.Point(260, 24);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listBox1.Name = "listBox1";
             this.listBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.listBox1.Size = new System.Drawing.Size(571, 43);
+            this.listBox1.Size = new System.Drawing.Size(713, 52);
             this.listBox1.TabIndex = 11;
             this.listBox1.TabStop = false;
             // 
@@ -2672,9 +2823,11 @@
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.numericUpDown1);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(472, 71);
+            this.groupBox3.Location = new System.Drawing.Point(590, 89);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(307, 100);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Size = new System.Drawing.Size(384, 125);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Wind direction sectors";
@@ -2683,10 +2836,11 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(186, 57);
+            this.textBox1.Location = new System.Drawing.Point(232, 71);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(57, 22);
+            this.textBox1.Size = new System.Drawing.Size(70, 26);
             this.textBox1.TabIndex = 12;
             this.textBox1.Text = "10";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -2694,24 +2848,27 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(27, 60);
+            this.label2.Location = new System.Drawing.Point(34, 75);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 16);
+            this.label2.Size = new System.Drawing.Size(136, 20);
             this.label2.TabIndex = 2;
             this.label2.Text = "Sector size [deg]";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 22);
+            this.label1.Location = new System.Drawing.Point(34, 28);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 16);
+            this.label1.Size = new System.Drawing.Size(148, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Number of sectors";
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(186, 18);
+            this.numericUpDown1.Location = new System.Drawing.Point(232, 22);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             360,
             0,
@@ -2723,7 +2880,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(57, 22);
+            this.numericUpDown1.Size = new System.Drawing.Size(71, 26);
             this.numericUpDown1.TabIndex = 11;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Define the number of wind direction sectors\r\nfor the creation of a classified met" +
@@ -2741,9 +2898,11 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.numericUpDown2);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(208, 71);
+            this.groupBox2.Location = new System.Drawing.Point(260, 89);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(241, 444);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Size = new System.Drawing.Size(301, 555);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Wind speed classes";
@@ -2752,15 +2911,17 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 24);
+            this.label3.Location = new System.Drawing.Point(8, 30);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(120, 16);
+            this.label3.Size = new System.Drawing.Size(150, 20);
             this.label3.TabIndex = 1;
             this.label3.Text = "Number of classes";
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(132, 22);
+            this.numericUpDown2.Location = new System.Drawing.Point(165, 28);
+            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             10,
             0,
@@ -2772,7 +2933,7 @@
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(52, 22);
+            this.numericUpDown2.Size = new System.Drawing.Size(65, 26);
             this.numericUpDown2.TabIndex = 10;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown2, "Define the number of wind speed classes for the \r\ncreation of a classified meteor" +
@@ -2787,10 +2948,11 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(18, 71);
+            this.button6.Location = new System.Drawing.Point(22, 89);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button6.Name = "button6";
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.button6.Size = new System.Drawing.Size(116, 40);
+            this.button6.Size = new System.Drawing.Size(145, 50);
             this.button6.TabIndex = 2;
             this.button6.Text = "&Classification / Default";
             this.toolTip1.SetToolTip(this.button6, "Create a meteorological input for GRAL unsing\r\nthe recent meteorological file and" +
@@ -2809,9 +2971,11 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(9, 224);
+            this.groupBox1.Location = new System.Drawing.Point(11, 280);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(139, 291);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(174, 364);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Analyse Met-Data";
@@ -2820,9 +2984,10 @@
             // button39
             // 
             this.button39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button39.Location = new System.Drawing.Point(8, 68);
+            this.button39.Location = new System.Drawing.Point(10, 85);
+            this.button39.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button39.Name = "button39";
-            this.button39.Size = new System.Drawing.Size(116, 34);
+            this.button39.Size = new System.Drawing.Size(145, 42);
             this.button39.TabIndex = 5;
             this.button39.Text = "Windrose/&Stability";
             this.toolTip1.SetToolTip(this.button39, "Show a stability windrose of the meteo file");
@@ -2832,9 +2997,10 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(9, 246);
+            this.button5.Location = new System.Drawing.Point(11, 308);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(116, 34);
+            this.button5.Size = new System.Drawing.Size(145, 42);
             this.button5.TabIndex = 9;
             this.button5.Text = "Stability &classes";
             this.toolTip1.SetToolTip(this.button5, "Show a stability class statistic");
@@ -2844,9 +3010,10 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(9, 203);
+            this.button4.Location = new System.Drawing.Point(11, 254);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(116, 34);
+            this.button4.Size = new System.Drawing.Size(145, 42);
             this.button4.TabIndex = 8;
             this.button4.Text = "Diurnal &mean wind velocity";
             this.toolTip1.SetToolTip(this.button4, "Show the diurnal mean wind velocity");
@@ -2856,9 +3023,10 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(9, 158);
+            this.button3.Location = new System.Drawing.Point(11, 198);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(116, 34);
+            this.button3.Size = new System.Drawing.Size(145, 42);
             this.button3.TabIndex = 7;
             this.button3.Text = "&Diurnal frequencies wind directions";
             this.toolTip1.SetToolTip(this.button3, "Show diurnal frequencies of the wind direction");
@@ -2868,9 +3036,10 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(9, 113);
+            this.button2.Location = new System.Drawing.Point(11, 141);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(116, 34);
+            this.button2.Size = new System.Drawing.Size(145, 42);
             this.button2.TabIndex = 6;
             this.button2.Text = "&Vel. classes";
             this.toolTip1.SetToolTip(this.button2, "Show a velocity class statistic");
@@ -2880,9 +3049,10 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(9, 24);
+            this.button1.Location = new System.Drawing.Point(11, 30);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(116, 34);
+            this.button1.Size = new System.Drawing.Size(145, 42);
             this.button1.TabIndex = 4;
             this.button1.Text = "&Windrose";
             this.toolTip1.SetToolTip(this.button1, "Show a windrose of the meteo file");
@@ -2892,9 +3062,10 @@
             // OpenMetFile
             // 
             this.OpenMetFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OpenMetFile.Location = new System.Drawing.Point(17, 19);
+            this.OpenMetFile.Location = new System.Drawing.Point(21, 24);
+            this.OpenMetFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.OpenMetFile.Name = "OpenMetFile";
-            this.OpenMetFile.Size = new System.Drawing.Size(116, 34);
+            this.OpenMetFile.Size = new System.Drawing.Size(145, 42);
             this.OpenMetFile.TabIndex = 1;
             this.OpenMetFile.Text = "&Open Met-File";
             this.toolTip1.SetToolTip(this.OpenMetFile, "Open a meteorological file");
@@ -2919,10 +3090,11 @@
             this.Topography.Controls.Add(this.listBox2);
             this.Topography.Controls.Add(this.button19);
             this.Topography.Controls.Add(this.groupBox10);
-            this.Topography.Location = new System.Drawing.Point(4, 22);
+            this.Topography.Location = new System.Drawing.Point(4, 25);
+            this.Topography.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Topography.Name = "Topography";
-            this.Topography.Padding = new System.Windows.Forms.Padding(3);
-            this.Topography.Size = new System.Drawing.Size(814, 539);
+            this.Topography.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Topography.Size = new System.Drawing.Size(1020, 677);
             this.Topography.TabIndex = 4;
             this.Topography.Text = "TOPOGRAPHY";
             // 
@@ -2939,9 +3111,11 @@
             this.groupBox25.Controls.Add(this.label35);
             this.groupBox25.Controls.Add(this.checkBox35);
             this.groupBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox25.Location = new System.Drawing.Point(389, 15);
+            this.groupBox25.Location = new System.Drawing.Point(486, 19);
+            this.groupBox25.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox25.Name = "groupBox25";
-            this.groupBox25.Size = new System.Drawing.Size(269, 207);
+            this.groupBox25.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox25.Size = new System.Drawing.Size(336, 259);
             this.groupBox25.TabIndex = 60;
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "ECMWF coupling";
@@ -2949,7 +3123,8 @@
             // 
             // numericUpDown44
             // 
-            this.numericUpDown44.Location = new System.Drawing.Point(214, 95);
+            this.numericUpDown44.Location = new System.Drawing.Point(268, 119);
+            this.numericUpDown44.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown44.Maximum = new decimal(new int[] {
             744,
             0,
@@ -2961,7 +3136,7 @@
             0,
             0});
             this.numericUpDown44.Name = "numericUpDown44";
-            this.numericUpDown44.Size = new System.Drawing.Size(47, 25);
+            this.numericUpDown44.Size = new System.Drawing.Size(59, 29);
             this.numericUpDown44.TabIndex = 68;
             this.numericUpDown44.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown44, "Provide the EPSG code of the coordinate system used for the GRAMM simulation");
@@ -2976,15 +3151,17 @@
             // 
             this.label99.AutoSize = true;
             this.label99.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label99.Location = new System.Drawing.Point(14, 99);
+            this.label99.Location = new System.Drawing.Point(18, 124);
+            this.label99.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label99.Name = "label99";
-            this.label99.Size = new System.Drawing.Size(105, 16);
+            this.label99.Size = new System.Drawing.Size(125, 20);
             this.label99.TabIndex = 67;
             this.label99.Text = "Re-Initializing [h]";
             // 
             // numericUpDown37
             // 
-            this.numericUpDown37.Location = new System.Drawing.Point(214, 122);
+            this.numericUpDown37.Location = new System.Drawing.Point(268, 152);
+            this.numericUpDown37.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown37.Maximum = new decimal(new int[] {
             744,
             0,
@@ -2996,7 +3173,7 @@
             0,
             0});
             this.numericUpDown37.Name = "numericUpDown37";
-            this.numericUpDown37.Size = new System.Drawing.Size(47, 25);
+            this.numericUpDown37.Size = new System.Drawing.Size(59, 29);
             this.numericUpDown37.TabIndex = 66;
             this.numericUpDown37.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown37, "Provide the EPSG code of the coordinate system used for the GRAMM simulation");
@@ -3011,9 +3188,10 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(14, 126);
+            this.label5.Location = new System.Drawing.Point(18, 158);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(195, 16);
+            this.label5.Size = new System.Drawing.Size(229, 20);
             this.label5.TabIndex = 65;
             this.label5.Text = "Update boundary conditions [h]";
             // 
@@ -3021,9 +3199,10 @@
             // 
             this.label63.AutoSize = true;
             this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label63.Location = new System.Drawing.Point(14, 149);
+            this.label63.Location = new System.Drawing.Point(18, 186);
+            this.label63.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label63.Name = "label63";
-            this.label63.Size = new System.Drawing.Size(158, 16);
+            this.label63.Size = new System.Drawing.Size(191, 20);
             this.label63.TabIndex = 6;
             this.label63.Text = "Start date and time (UTC)";
             // 
@@ -3031,23 +3210,25 @@
             // 
             this.dateTimePicker1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(17, 173);
+            this.dateTimePicker1.Location = new System.Drawing.Point(21, 216);
+            this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(246, 25);
+            this.dateTimePicker1.Size = new System.Drawing.Size(306, 29);
             this.dateTimePicker1.TabIndex = 63;
             this.toolTip1.SetToolTip(this.dateTimePicker1, "Set the beginning date and time of the transient GRAMM simulation");
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // numericUpDown40
             // 
-            this.numericUpDown40.Location = new System.Drawing.Point(99, 65);
+            this.numericUpDown40.Location = new System.Drawing.Point(124, 81);
+            this.numericUpDown40.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown40.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.numericUpDown40.Name = "numericUpDown40";
-            this.numericUpDown40.Size = new System.Drawing.Size(120, 25);
+            this.numericUpDown40.Size = new System.Drawing.Size(150, 29);
             this.numericUpDown40.TabIndex = 62;
             this.numericUpDown40.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown40, "Provide the EPSG code of the coordinate system used for the GRAMM simulation");
@@ -3062,9 +3243,10 @@
             // 
             this.label62.AutoSize = true;
             this.label62.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label62.Location = new System.Drawing.Point(14, 69);
+            this.label62.Location = new System.Drawing.Point(18, 86);
+            this.label62.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(79, 16);
+            this.label62.Size = new System.Drawing.Size(93, 20);
             this.label62.TabIndex = 3;
             this.label62.Text = "EPSG code";
             // 
@@ -3072,9 +3254,10 @@
             // 
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(14, 45);
+            this.label35.Location = new System.Drawing.Point(18, 56);
+            this.label35.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(172, 16);
+            this.label35.Size = new System.Drawing.Size(204, 20);
             this.label35.TabIndex = 2;
             this.label35.Text = "GRAMM coordinate system";
             // 
@@ -3082,9 +3265,10 @@
             // 
             this.checkBox35.AutoSize = true;
             this.checkBox35.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox35.Location = new System.Drawing.Point(17, 23);
+            this.checkBox35.Location = new System.Drawing.Point(21, 29);
+            this.checkBox35.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox35.Name = "checkBox35";
-            this.checkBox35.Size = new System.Drawing.Size(146, 20);
+            this.checkBox35.Size = new System.Drawing.Size(173, 24);
             this.checkBox35.TabIndex = 64;
             this.checkBox35.Text = "Use ERA5 grib data";
             this.toolTip1.SetToolTip(this.checkBox35, "ERA5 are global meteorological  reanalysis data\r\nprovided by ECMWF with a horizon" +
@@ -3094,9 +3278,10 @@
             // 
             // label95
             // 
-            this.label95.Location = new System.Drawing.Point(136, 263);
+            this.label95.Location = new System.Drawing.Point(170, 329);
+            this.label95.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label95.Name = "label95";
-            this.label95.Size = new System.Drawing.Size(500, 21);
+            this.label95.Size = new System.Drawing.Size(625, 26);
             this.label95.TabIndex = 21;
             this.label95.Text = "Number of cells used for smoothing orography laterally:";
             this.label95.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3104,18 +3289,20 @@
             // 
             // button105
             // 
-            this.button105.Location = new System.Drawing.Point(794, 0);
+            this.button105.Location = new System.Drawing.Point(992, 0);
+            this.button105.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button105.Name = "button105";
-            this.button105.Size = new System.Drawing.Size(20, 20);
+            this.button105.Size = new System.Drawing.Size(25, 25);
             this.button105.TabIndex = 20;
             this.button105.TabStop = false;
             this.button105.UseVisualStyleBackColor = true;
             // 
             // button43
             // 
-            this.button43.Location = new System.Drawing.Point(26, 296);
+            this.button43.Location = new System.Drawing.Point(32, 370);
+            this.button43.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button43.Name = "button43";
-            this.button43.Size = new System.Drawing.Size(247, 34);
+            this.button43.Size = new System.Drawing.Size(309, 42);
             this.button43.TabIndex = 15;
             this.button43.Text = "Define/Amend land-use categories\r\nSet default values";
             this.toolTip1.SetToolTip(this.button43, "Default values are linked with land-use category 0.\r\nNew land-use categories can " +
@@ -3128,9 +3315,10 @@
             // 
             this.button24.BackgroundImage = global::Gral.Properties.Resources.Open;
             this.button24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button24.Location = new System.Drawing.Point(692, 25);
+            this.button24.Location = new System.Drawing.Point(865, 31);
+            this.button24.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button24.Name = "button24";
-            this.button24.Size = new System.Drawing.Size(119, 94);
+            this.button24.Size = new System.Drawing.Size(149, 118);
             this.button24.TabIndex = 31;
             this.button24.Text = "&Reference to existing  GRAMM data";
             this.button24.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -3159,9 +3347,11 @@
             this.groupBox12.Controls.Add(this.label58);
             this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox12.ForeColor = System.Drawing.Color.Black;
-            this.groupBox12.Location = new System.Drawing.Point(25, 379);
+            this.groupBox12.Location = new System.Drawing.Point(31, 474);
+            this.groupBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(764, 143);
+            this.groupBox12.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox12.Size = new System.Drawing.Size(955, 179);
             this.groupBox12.TabIndex = 20;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "GRAMM input";
@@ -3171,9 +3361,10 @@
             // 
             this.checkBox31.AutoSize = true;
             this.checkBox31.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox31.Location = new System.Drawing.Point(534, 117);
+            this.checkBox31.Location = new System.Drawing.Point(668, 146);
+            this.checkBox31.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox31.Name = "checkBox31";
-            this.checkBox31.Size = new System.Drawing.Size(129, 20);
+            this.checkBox31.Size = new System.Drawing.Size(155, 24);
             this.checkBox31.TabIndex = 30;
             this.checkBox31.Text = "Flat terrain option";
             this.toolTip1.SetToolTip(this.checkBox31, "This option can be used for flat or almost flat terrains");
@@ -3184,9 +3375,10 @@
             // 
             this.checkBox30.AutoSize = true;
             this.checkBox30.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox30.Location = new System.Drawing.Point(534, 39);
+            this.checkBox30.Location = new System.Drawing.Point(668, 49);
+            this.checkBox30.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox30.Name = "checkBox30";
-            this.checkBox30.Size = new System.Drawing.Size(138, 20);
+            this.checkBox30.Size = new System.Drawing.Size(163, 24);
             this.checkBox30.TabIndex = 27;
             this.checkBox30.Text = "Use sunrise option";
             this.toolTip1.SetToolTip(this.checkBox30, "Use variable sun positions with increased modelling times");
@@ -3197,9 +3389,10 @@
             // 
             this.checkBox27.AutoSize = true;
             this.checkBox27.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox27.Location = new System.Drawing.Point(534, 91);
+            this.checkBox27.Location = new System.Drawing.Point(668, 114);
+            this.checkBox27.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox27.Name = "checkBox27";
-            this.checkBox27.Size = new System.Drawing.Size(209, 20);
+            this.checkBox27.Size = new System.Drawing.Size(254, 24);
             this.checkBox27.TabIndex = 29;
             this.checkBox27.Text = "Write files \"...._steady_state.txt\"";
             this.toolTip1.SetToolTip(this.checkBox27, "If the box is checked, GRAMM writes a file for each disp. situation with steady-s" +
@@ -3211,9 +3404,10 @@
             // 
             this.checkBox21.AutoSize = true;
             this.checkBox21.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox21.Location = new System.Drawing.Point(534, 65);
+            this.checkBox21.Location = new System.Drawing.Point(668, 81);
+            this.checkBox21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox21.Name = "checkBox21";
-            this.checkBox21.Size = new System.Drawing.Size(145, 20);
+            this.checkBox21.Size = new System.Drawing.Size(173, 24);
             this.checkBox21.TabIndex = 28;
             this.checkBox21.Text = "Catabatic forcing on";
             this.toolTip1.SetToolTip(this.checkBox21, "If the box is clicked, sensible heat fluxes\r\nat the surface are being fixed in de" +
@@ -3224,14 +3418,15 @@
             // numericUpDown25
             // 
             this.numericUpDown25.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown25.Location = new System.Drawing.Point(426, 108);
+            this.numericUpDown25.Location = new System.Drawing.Point(532, 135);
+            this.numericUpDown25.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown25.Maximum = new decimal(new int[] {
             0,
             0,
             0,
             0});
             this.numericUpDown25.Name = "numericUpDown25";
-            this.numericUpDown25.Size = new System.Drawing.Size(55, 22);
+            this.numericUpDown25.Size = new System.Drawing.Size(69, 26);
             this.numericUpDown25.TabIndex = 25;
             this.numericUpDown25.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown25.Visible = false;
@@ -3241,9 +3436,10 @@
             // 
             this.label71.AutoSize = true;
             this.label71.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label71.Location = new System.Drawing.Point(287, 111);
+            this.label71.Location = new System.Drawing.Point(359, 139);
+            this.label71.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label71.Name = "label71";
-            this.label71.Size = new System.Drawing.Size(81, 16);
+            this.label71.Size = new System.Drawing.Size(92, 20);
             this.label71.TabIndex = 34;
             this.label71.Text = "Debug level";
             this.label71.Visible = false;
@@ -3252,9 +3448,10 @@
             // 
             this.checkBox20.AutoSize = true;
             this.checkBox20.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox20.Location = new System.Drawing.Point(534, 13);
+            this.checkBox20.Location = new System.Drawing.Point(668, 16);
+            this.checkBox20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox20.Name = "checkBox20";
-            this.checkBox20.Size = new System.Drawing.Size(135, 20);
+            this.checkBox20.Size = new System.Drawing.Size(162, 24);
             this.checkBox20.TabIndex = 26;
             this.checkBox20.Text = "Re-Initialization on";
             this.toolTip1.SetToolTip(this.checkBox20, "If the box is clicked, GRAMM tries to get a better fit\r\nbetween observation and m" +
@@ -3267,7 +3464,8 @@
             // numericUpDown24
             // 
             this.numericUpDown24.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown24.Location = new System.Drawing.Point(188, 40);
+            this.numericUpDown24.Location = new System.Drawing.Point(235, 50);
+            this.numericUpDown24.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown24.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -3279,7 +3477,7 @@
             0,
             0});
             this.numericUpDown24.Name = "numericUpDown24";
-            this.numericUpDown24.Size = new System.Drawing.Size(60, 22);
+            this.numericUpDown24.Size = new System.Drawing.Size(75, 26);
             this.numericUpDown24.TabIndex = 20;
             this.numericUpDown24.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown24.Value = new decimal(new int[] {
@@ -3293,9 +3491,10 @@
             // 
             this.label70.AutoSize = true;
             this.label70.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label70.Location = new System.Drawing.Point(6, 44);
+            this.label70.Location = new System.Drawing.Point(8, 55);
+            this.label70.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label70.Name = "label70";
-            this.label70.Size = new System.Drawing.Size(162, 16);
+            this.label70.Size = new System.Drawing.Size(201, 20);
             this.label70.TabIndex = 31;
             this.label70.Text = "Start with weather situation";
             // 
@@ -3308,7 +3507,8 @@
             0,
             0,
             131072});
-            this.numericUpDown23.Location = new System.Drawing.Point(426, 75);
+            this.numericUpDown23.Location = new System.Drawing.Point(532, 94);
+            this.numericUpDown23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown23.Maximum = new decimal(new int[] {
             1,
             0,
@@ -3320,7 +3520,7 @@
             0,
             131072});
             this.numericUpDown23.Name = "numericUpDown23";
-            this.numericUpDown23.Size = new System.Drawing.Size(55, 22);
+            this.numericUpDown23.Size = new System.Drawing.Size(69, 26);
             this.numericUpDown23.TabIndex = 24;
             this.numericUpDown23.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown23, "The lower the relaxation factor,\r\nthe higher the numerical stability.");
@@ -3335,9 +3535,10 @@
             // 
             this.label61.AutoSize = true;
             this.label61.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label61.Location = new System.Drawing.Point(287, 78);
+            this.label61.Location = new System.Drawing.Point(359, 98);
+            this.label61.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label61.Name = "label61";
-            this.label61.Size = new System.Drawing.Size(119, 16);
+            this.label61.Size = new System.Drawing.Size(138, 20);
             this.label61.TabIndex = 29;
             this.label61.Text = "Relaxation scalars";
             this.toolTip1.SetToolTip(this.label61, "Relaxation factor for temperature,\r\nhumidity, TKE, dissipation");
@@ -3351,7 +3552,8 @@
             0,
             0,
             131072});
-            this.numericUpDown22.Location = new System.Drawing.Point(426, 40);
+            this.numericUpDown22.Location = new System.Drawing.Point(532, 50);
+            this.numericUpDown22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown22.Maximum = new decimal(new int[] {
             1,
             0,
@@ -3363,7 +3565,7 @@
             0,
             131072});
             this.numericUpDown22.Name = "numericUpDown22";
-            this.numericUpDown22.Size = new System.Drawing.Size(55, 22);
+            this.numericUpDown22.Size = new System.Drawing.Size(69, 26);
             this.numericUpDown22.TabIndex = 23;
             this.numericUpDown22.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown22, "The lower the relaxation factor,\r\nthe higher the numerical stability");
@@ -3378,9 +3580,10 @@
             // 
             this.label60.AutoSize = true;
             this.label60.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label60.Location = new System.Drawing.Point(287, 44);
+            this.label60.Location = new System.Drawing.Point(359, 55);
+            this.label60.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(121, 16);
+            this.label60.Size = new System.Drawing.Size(139, 20);
             this.label60.TabIndex = 27;
             this.label60.Text = "Relaxation velocity";
             this.toolTip1.SetToolTip(this.label60, "Relaxation factor for velocity");
@@ -3388,7 +3591,8 @@
             // numericUpDown21
             // 
             this.numericUpDown21.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown21.Location = new System.Drawing.Point(147, 108);
+            this.numericUpDown21.Location = new System.Drawing.Point(184, 135);
+            this.numericUpDown21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown21.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -3400,7 +3604,7 @@
             0,
             65536});
             this.numericUpDown21.Name = "numericUpDown21";
-            this.numericUpDown21.Size = new System.Drawing.Size(101, 22);
+            this.numericUpDown21.Size = new System.Drawing.Size(126, 26);
             this.numericUpDown21.TabIndex = 22;
             this.numericUpDown21.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown21.Value = new decimal(new int[] {
@@ -3414,16 +3618,18 @@
             // 
             this.label59.AutoSize = true;
             this.label59.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label59.Location = new System.Drawing.Point(6, 111);
+            this.label59.Location = new System.Drawing.Point(8, 139);
+            this.label59.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(113, 16);
+            this.label59.Size = new System.Drawing.Size(130, 20);
             this.label59.TabIndex = 25;
             this.label59.Text = "Modelling time [s]";
             // 
             // numericUpDown20
             // 
             this.numericUpDown20.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown20.Location = new System.Drawing.Point(188, 75);
+            this.numericUpDown20.Location = new System.Drawing.Point(235, 94);
+            this.numericUpDown20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown20.Maximum = new decimal(new int[] {
             500,
             0,
@@ -3435,7 +3641,7 @@
             0,
             65536});
             this.numericUpDown20.Name = "numericUpDown20";
-            this.numericUpDown20.Size = new System.Drawing.Size(60, 22);
+            this.numericUpDown20.Size = new System.Drawing.Size(75, 26);
             this.numericUpDown20.TabIndex = 21;
             this.numericUpDown20.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown20.Value = new decimal(new int[] {
@@ -3449,9 +3655,10 @@
             // 
             this.label58.AutoSize = true;
             this.label58.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label58.Location = new System.Drawing.Point(6, 78);
+            this.label58.Location = new System.Drawing.Point(8, 98);
+            this.label58.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(111, 16);
+            this.label58.Size = new System.Drawing.Size(131, 20);
             this.label58.TabIndex = 0;
             this.label58.Text = "Max. time step [s]";
             // 
@@ -3459,9 +3666,10 @@
             // 
             this.label57.AutoSize = true;
             this.label57.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label57.Location = new System.Drawing.Point(25, 273);
+            this.label57.Location = new System.Drawing.Point(31, 341);
+            this.label57.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(68, 20);
+            this.label57.Size = new System.Drawing.Size(86, 25);
             this.label57.TabIndex = 12;
             this.label57.Text = "Options:";
             this.label57.Visible = false;
@@ -3470,9 +3678,10 @@
             // 
             this.button23.BackgroundImage = global::Gral.Properties.Resources.Rueckgaenging;
             this.button23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button23.Location = new System.Drawing.Point(759, 338);
+            this.button23.Location = new System.Drawing.Point(949, 422);
+            this.button23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(30, 31);
+            this.button23.Size = new System.Drawing.Size(38, 39);
             this.button23.TabIndex = 17;
             this.toolTip1.SetToolTip(this.button23, "Delete the landuse file");
             this.button23.UseVisualStyleBackColor = true;
@@ -3483,9 +3692,10 @@
             // 
             this.button22.BackgroundImage = global::Gral.Properties.Resources.Rueckgaenging;
             this.button22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button22.Location = new System.Drawing.Point(759, 228);
+            this.button22.Location = new System.Drawing.Point(949, 285);
+            this.button22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(30, 30);
+            this.button22.Size = new System.Drawing.Size(38, 38);
             this.button22.TabIndex = 10;
             this.toolTip1.SetToolTip(this.button22, "Delete the GRAMM topography grid");
             this.button22.UseVisualStyleBackColor = true;
@@ -3496,18 +3706,21 @@
             // 
             this.listBox6.Enabled = false;
             this.listBox6.FormattingEnabled = true;
-            this.listBox6.Location = new System.Drawing.Point(136, 338);
+            this.listBox6.ItemHeight = 16;
+            this.listBox6.Location = new System.Drawing.Point(170, 422);
+            this.listBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listBox6.Name = "listBox6";
-            this.listBox6.Size = new System.Drawing.Size(604, 30);
+            this.listBox6.Size = new System.Drawing.Size(754, 36);
             this.listBox6.TabIndex = 9;
             this.listBox6.TabStop = false;
             this.listBox6.Visible = false;
             // 
             // button20
             // 
-            this.button20.Location = new System.Drawing.Point(25, 335);
+            this.button20.Location = new System.Drawing.Point(31, 419);
+            this.button20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(104, 34);
+            this.button20.Size = new System.Drawing.Size(130, 42);
             this.button20.TabIndex = 16;
             this.button20.Text = "Create GRAMM &landuse file";
             this.button20.UseVisualStyleBackColor = true;
@@ -3518,18 +3731,21 @@
             // 
             this.listBox2.Enabled = false;
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(136, 228);
+            this.listBox2.ItemHeight = 16;
+            this.listBox2.Location = new System.Drawing.Point(170, 285);
+            this.listBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(604, 30);
+            this.listBox2.Size = new System.Drawing.Size(754, 36);
             this.listBox2.TabIndex = 7;
             this.listBox2.TabStop = false;
             this.listBox2.Visible = false;
             // 
             // button19
             // 
-            this.button19.Location = new System.Drawing.Point(26, 224);
+            this.button19.Location = new System.Drawing.Point(32, 280);
+            this.button19.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(104, 34);
+            this.button19.Size = new System.Drawing.Size(130, 42);
             this.button19.TabIndex = 6;
             this.button19.Text = "&Create GRAMM grid";
             this.button19.UseVisualStyleBackColor = true;
@@ -3553,9 +3769,11 @@
             this.groupBox10.Controls.Add(this.numericUpDown18);
             this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.groupBox10.ForeColor = System.Drawing.Color.Black;
-            this.groupBox10.Location = new System.Drawing.Point(25, 15);
+            this.groupBox10.Location = new System.Drawing.Point(31, 19);
+            this.groupBox10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(358, 203);
+            this.groupBox10.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox10.Size = new System.Drawing.Size(448, 254);
             this.groupBox10.TabIndex = 1;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "GRAMM grid";
@@ -3565,21 +3783,23 @@
             this.GRAMMmodelheight.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GRAMMmodelheight.FormattingEnabled = true;
             this.GRAMMmodelheight.IntegralHeight = false;
-            this.GRAMMmodelheight.ItemHeight = 17;
-            this.GRAMMmodelheight.Location = new System.Drawing.Point(204, 149);
-            this.GRAMMmodelheight.MinimumSize = new System.Drawing.Size(4, 21);
+            this.GRAMMmodelheight.ItemHeight = 20;
+            this.GRAMMmodelheight.Location = new System.Drawing.Point(255, 186);
+            this.GRAMMmodelheight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.GRAMMmodelheight.MinimumSize = new System.Drawing.Size(4, 25);
             this.GRAMMmodelheight.Name = "GRAMMmodelheight";
             this.GRAMMmodelheight.ScrollAlwaysVisible = true;
-            this.GRAMMmodelheight.Size = new System.Drawing.Size(110, 21);
+            this.GRAMMmodelheight.Size = new System.Drawing.Size(136, 25);
             this.GRAMMmodelheight.TabIndex = 15;
             this.GRAMMmodelheight.TabStop = false;
             // 
             // label56
             // 
             this.label56.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label56.Location = new System.Drawing.Point(320, 151);
+            this.label56.Location = new System.Drawing.Point(400, 189);
+            this.label56.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(19, 16);
+            this.label56.Size = new System.Drawing.Size(24, 20);
             this.label56.TabIndex = 29;
             this.label56.Text = "m";
             // 
@@ -3587,9 +3807,10 @@
             // 
             this.label55.AutoSize = true;
             this.label55.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label55.Location = new System.Drawing.Point(6, 154);
+            this.label55.Location = new System.Drawing.Point(8, 192);
+            this.label55.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(130, 16);
+            this.label55.Size = new System.Drawing.Size(151, 20);
             this.label55.TabIndex = 27;
             this.label55.Text = "Relative layer height";
             // 
@@ -3597,9 +3818,10 @@
             // 
             this.label54.AutoSize = true;
             this.label54.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label54.Location = new System.Drawing.Point(6, 121);
+            this.label54.Location = new System.Drawing.Point(8, 151);
+            this.label54.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(149, 16);
+            this.label54.Size = new System.Drawing.Size(181, 20);
             this.label54.TabIndex = 26;
             this.label54.Text = "Vertical stretching factor";
             // 
@@ -3612,7 +3834,8 @@
             0,
             0,
             131072});
-            this.numericUpDown19.Location = new System.Drawing.Point(246, 116);
+            this.numericUpDown19.Location = new System.Drawing.Point(308, 145);
+            this.numericUpDown19.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown19.Maximum = new decimal(new int[] {
             3,
             0,
@@ -3624,7 +3847,7 @@
             0,
             65536});
             this.numericUpDown19.Name = "numericUpDown19";
-            this.numericUpDown19.Size = new System.Drawing.Size(68, 22);
+            this.numericUpDown19.Size = new System.Drawing.Size(85, 26);
             this.numericUpDown19.TabIndex = 4;
             this.numericUpDown19.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown19.Value = new decimal(new int[] {
@@ -3638,23 +3861,25 @@
             // 
             this.label49.AutoSize = true;
             this.label49.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label49.Location = new System.Drawing.Point(6, 88);
+            this.label49.Location = new System.Drawing.Point(8, 110);
+            this.label49.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(156, 16);
+            this.label49.Size = new System.Drawing.Size(181, 20);
             this.label49.TabIndex = 24;
             this.label49.Text = "Number of vertical layers";
             // 
             // numericUpDown16
             // 
             this.numericUpDown16.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown16.Location = new System.Drawing.Point(246, 83);
+            this.numericUpDown16.Location = new System.Drawing.Point(308, 104);
+            this.numericUpDown16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown16.Minimum = new decimal(new int[] {
             10,
             0,
             0,
             65536});
             this.numericUpDown16.Name = "numericUpDown16";
-            this.numericUpDown16.Size = new System.Drawing.Size(68, 22);
+            this.numericUpDown16.Size = new System.Drawing.Size(85, 26);
             this.numericUpDown16.TabIndex = 3;
             this.numericUpDown16.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown16.Value = new decimal(new int[] {
@@ -3667,9 +3892,10 @@
             // label50
             // 
             this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label50.Location = new System.Drawing.Point(320, 53);
+            this.label50.Location = new System.Drawing.Point(400, 66);
+            this.label50.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(19, 16);
+            this.label50.Size = new System.Drawing.Size(24, 20);
             this.label50.TabIndex = 22;
             this.label50.Text = "m";
             // 
@@ -3677,9 +3903,10 @@
             // 
             this.label51.AutoSize = true;
             this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label51.Location = new System.Drawing.Point(4, 56);
+            this.label51.Location = new System.Drawing.Point(5, 70);
+            this.label51.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(182, 16);
+            this.label51.Size = new System.Drawing.Size(218, 20);
             this.label51.TabIndex = 21;
             this.label51.Text = "Vertical thickness of first layer";
             // 
@@ -3692,14 +3919,15 @@
             0,
             0,
             65536});
-            this.numericUpDown17.Location = new System.Drawing.Point(246, 50);
+            this.numericUpDown17.Location = new System.Drawing.Point(308, 62);
+            this.numericUpDown17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown17.Minimum = new decimal(new int[] {
             5,
             0,
             0,
             65536});
             this.numericUpDown17.Name = "numericUpDown17";
-            this.numericUpDown17.Size = new System.Drawing.Size(68, 22);
+            this.numericUpDown17.Size = new System.Drawing.Size(85, 26);
             this.numericUpDown17.TabIndex = 2;
             this.numericUpDown17.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown17.Value = new decimal(new int[] {
@@ -3712,9 +3940,10 @@
             // label52
             // 
             this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label52.Location = new System.Drawing.Point(320, 21);
+            this.label52.Location = new System.Drawing.Point(400, 26);
+            this.label52.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(19, 16);
+            this.label52.Size = new System.Drawing.Size(24, 20);
             this.label52.TabIndex = 19;
             this.label52.Text = "m";
             // 
@@ -3722,9 +3951,10 @@
             // 
             this.label53.AutoSize = true;
             this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label53.Location = new System.Drawing.Point(4, 25);
+            this.label53.Location = new System.Drawing.Point(5, 31);
+            this.label53.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(155, 16);
+            this.label53.Size = new System.Drawing.Size(184, 20);
             this.label53.TabIndex = 18;
             this.label53.Text = "Horizontal grid resolution";
             // 
@@ -3732,7 +3962,8 @@
             // 
             this.numericUpDown18.DecimalPlaces = 1;
             this.numericUpDown18.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown18.Location = new System.Drawing.Point(246, 19);
+            this.numericUpDown18.Location = new System.Drawing.Point(308, 24);
+            this.numericUpDown18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown18.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -3744,7 +3975,7 @@
             0,
             65536});
             this.numericUpDown18.Name = "numericUpDown18";
-            this.numericUpDown18.Size = new System.Drawing.Size(68, 22);
+            this.numericUpDown18.Size = new System.Drawing.Size(85, 26);
             this.numericUpDown18.TabIndex = 1;
             this.numericUpDown18.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown18.Value = new decimal(new int[] {
@@ -3770,9 +4001,10 @@
             this.Computation.Controls.Add(this.groupBox14);
             this.Computation.Controls.Add(this.groupBox13);
             this.Computation.Controls.Add(this.groupBox6);
-            this.Computation.Location = new System.Drawing.Point(4, 22);
+            this.Computation.Location = new System.Drawing.Point(4, 25);
+            this.Computation.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Computation.Name = "Computation";
-            this.Computation.Size = new System.Drawing.Size(814, 539);
+            this.Computation.Size = new System.Drawing.Size(1020, 677);
             this.Computation.TabIndex = 5;
             this.Computation.Text = "COMPUTATION";
             // 
@@ -3780,35 +4012,38 @@
             // 
             this.label94.AutoSize = true;
             this.label94.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label94.Location = new System.Drawing.Point(8, 486);
+            this.label94.Location = new System.Drawing.Point(10, 608);
             this.label94.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(102, 13);
+            this.label94.Size = new System.Drawing.Size(135, 17);
             this.label94.TabIndex = 14;
             this.label94.Text = "Meteorological input";
             // 
             // textBox16
             // 
             this.textBox16.Enabled = false;
-            this.textBox16.Location = new System.Drawing.Point(8, 506);
+            this.textBox16.Location = new System.Drawing.Point(10, 632);
+            this.textBox16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox16.Name = "textBox16";
-            this.textBox16.Size = new System.Drawing.Size(608, 20);
+            this.textBox16.Size = new System.Drawing.Size(759, 22);
             this.textBox16.TabIndex = 28;
             this.textBox16.TabStop = false;
             // 
             // label89
             // 
-            this.label89.Location = new System.Drawing.Point(424, 182);
+            this.label89.Location = new System.Drawing.Point(530, 228);
+            this.label89.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label89.Name = "label89";
-            this.label89.Size = new System.Drawing.Size(108, 23);
+            this.label89.Size = new System.Drawing.Size(135, 29);
             this.label89.TabIndex = 27;
             this.label89.Text = "GRAMM lock status";
             // 
             // label88
             // 
-            this.label88.Location = new System.Drawing.Point(630, 182);
+            this.label88.Location = new System.Drawing.Point(788, 228);
+            this.label88.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label88.Name = "label88";
-            this.label88.Size = new System.Drawing.Size(100, 23);
+            this.label88.Size = new System.Drawing.Size(125, 29);
             this.label88.TabIndex = 27;
             this.label88.Text = "GRAL lock status";
             // 
@@ -3816,9 +4051,10 @@
             // 
             this.gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("gramm_locked_button.BackgroundImage")));
             this.gramm_locked_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.gramm_locked_button.Location = new System.Drawing.Point(543, 172);
+            this.gramm_locked_button.Location = new System.Drawing.Point(679, 215);
+            this.gramm_locked_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gramm_locked_button.Name = "gramm_locked_button";
-            this.gramm_locked_button.Size = new System.Drawing.Size(55, 34);
+            this.gramm_locked_button.Size = new System.Drawing.Size(69, 42);
             this.gramm_locked_button.TabIndex = 35;
             this.toolTip1.SetToolTip(this.gramm_locked_button, "Lock status of GRAMM");
             this.gramm_locked_button.UseVisualStyleBackColor = true;
@@ -3828,9 +4064,10 @@
             // 
             this.project_locked_button.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("project_locked_button.BackgroundImage")));
             this.project_locked_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.project_locked_button.Location = new System.Drawing.Point(745, 172);
+            this.project_locked_button.Location = new System.Drawing.Point(931, 215);
+            this.project_locked_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.project_locked_button.Name = "project_locked_button";
-            this.project_locked_button.Size = new System.Drawing.Size(55, 34);
+            this.project_locked_button.Size = new System.Drawing.Size(69, 42);
             this.project_locked_button.TabIndex = 45;
             this.toolTip1.SetToolTip(this.project_locked_button, "Lock status of GRAL");
             this.project_locked_button.UseVisualStyleBackColor = true;
@@ -3845,9 +4082,11 @@
             this.groupBox18.Controls.Add(this.label83);
             this.groupBox18.Controls.Add(this.label82);
             this.groupBox18.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox18.Location = new System.Drawing.Point(9, 391);
+            this.groupBox18.Location = new System.Drawing.Point(11, 489);
+            this.groupBox18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(189, 87);
+            this.groupBox18.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox18.Size = new System.Drawing.Size(236, 109);
             this.groupBox18.TabIndex = 8;
             this.groupBox18.TabStop = false;
             this.groupBox18.Text = "GRAL intermediate file sizes";
@@ -3855,10 +4094,11 @@
             // label85
             // 
             this.label85.AutoSize = true;
-            this.label85.Location = new System.Drawing.Point(5, 54);
+            this.label85.Location = new System.Drawing.Point(6, 68);
+            this.label85.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label85.Name = "label85";
             this.label85.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label85.Size = new System.Drawing.Size(51, 15);
+            this.label85.Size = new System.Drawing.Size(62, 18);
             this.label85.TabIndex = 5;
             this.label85.Text = "0 MByte";
             this.label85.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3866,10 +4106,11 @@
             // label84
             // 
             this.label84.AutoSize = true;
-            this.label84.Location = new System.Drawing.Point(5, 28);
+            this.label84.Location = new System.Drawing.Point(6, 35);
+            this.label84.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label84.Name = "label84";
             this.label84.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label84.Size = new System.Drawing.Size(51, 15);
+            this.label84.Size = new System.Drawing.Size(62, 18);
             this.label84.TabIndex = 4;
             this.label84.Text = "0 MByte";
             this.label84.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3878,9 +4119,10 @@
             // 
             this.button42.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button42.BackgroundImage")));
             this.button42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button42.Location = new System.Drawing.Point(146, 50);
+            this.button42.Location = new System.Drawing.Point(182, 62);
+            this.button42.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button42.Name = "button42";
-            this.button42.Size = new System.Drawing.Size(26, 25);
+            this.button42.Size = new System.Drawing.Size(32, 31);
             this.button42.TabIndex = 9;
             this.toolTip1.SetToolTip(this.button42, "Delete all intermediate GRAL flow field files");
             this.button42.UseVisualStyleBackColor = true;
@@ -3890,9 +4132,10 @@
             // 
             this.button41.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button41.BackgroundImage")));
             this.button41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button41.Location = new System.Drawing.Point(146, 23);
+            this.button41.Location = new System.Drawing.Point(182, 29);
+            this.button41.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button41.Name = "button41";
-            this.button41.Size = new System.Drawing.Size(26, 25);
+            this.button41.Size = new System.Drawing.Size(32, 31);
             this.button41.TabIndex = 8;
             this.toolTip1.SetToolTip(this.button41, "Delete all intermediate GRAL concentration files");
             this.button41.UseVisualStyleBackColor = true;
@@ -3901,18 +4144,20 @@
             // label83
             // 
             this.label83.AutoSize = true;
-            this.label83.Location = new System.Drawing.Point(84, 54);
+            this.label83.Location = new System.Drawing.Point(105, 68);
+            this.label83.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label83.Name = "label83";
-            this.label83.Size = new System.Drawing.Size(53, 15);
+            this.label83.Size = new System.Drawing.Size(64, 18);
             this.label83.TabIndex = 1;
             this.label83.Text = "*.gff files";
             // 
             // label82
             // 
             this.label82.AutoSize = true;
-            this.label82.Location = new System.Drawing.Point(84, 27);
+            this.label82.Location = new System.Drawing.Point(105, 34);
+            this.label82.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label82.Name = "label82";
-            this.label82.Size = new System.Drawing.Size(60, 15);
+            this.label82.Size = new System.Drawing.Size(73, 18);
             this.label82.TabIndex = 0;
             this.label82.Text = "*.con files";
             // 
@@ -3940,9 +4185,11 @@
             this.groupBox17.Controls.Add(this.checkBox1);
             this.groupBox17.Controls.Add(this.label72);
             this.groupBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox17.Location = new System.Drawing.Point(212, 11);
+            this.groupBox17.Location = new System.Drawing.Point(265, 14);
+            this.groupBox17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(194, 467);
+            this.groupBox17.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox17.Size = new System.Drawing.Size(242, 584);
             this.groupBox17.TabIndex = 80;
             this.groupBox17.TabStop = false;
             this.groupBox17.Text = "GRAMM / GRAL Online";
@@ -3952,10 +4199,10 @@
             // 
             this.checkBox28.AutoSize = true;
             this.checkBox28.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox28.Location = new System.Drawing.Point(9, 330);
+            this.checkBox28.Location = new System.Drawing.Point(11, 412);
             this.checkBox28.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox28.Name = "checkBox28";
-            this.checkBox28.Size = new System.Drawing.Size(99, 19);
+            this.checkBox28.Size = new System.Drawing.Size(119, 22);
             this.checkBox28.TabIndex = 99;
             this.checkBox28.Text = "Stability class";
             this.checkBox28.UseVisualStyleBackColor = true;
@@ -3965,10 +4212,10 @@
             // 
             this.checkBox18.AutoSize = true;
             this.checkBox18.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox18.Location = new System.Drawing.Point(9, 200);
+            this.checkBox18.Location = new System.Drawing.Point(11, 250);
             this.checkBox18.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox18.Name = "checkBox18";
-            this.checkBox18.Size = new System.Drawing.Size(87, 19);
+            this.checkBox18.Size = new System.Drawing.Size(103, 22);
             this.checkBox18.TabIndex = 91;
             this.checkBox18.Text = "Dissipation";
             this.checkBox18.UseVisualStyleBackColor = true;
@@ -3978,10 +4225,10 @@
             // 
             this.checkBox17.AutoSize = true;
             this.checkBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox17.Location = new System.Drawing.Point(9, 184);
+            this.checkBox17.Location = new System.Drawing.Point(11, 230);
             this.checkBox17.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox17.Name = "checkBox17";
-            this.checkBox17.Size = new System.Drawing.Size(156, 19);
+            this.checkBox17.Size = new System.Drawing.Size(185, 22);
             this.checkBox17.TabIndex = 90;
             this.checkBox17.Text = "Turbulent kinetic energy";
             this.checkBox17.UseVisualStyleBackColor = true;
@@ -3991,10 +4238,10 @@
             // 
             this.checkBox16.AutoSize = true;
             this.checkBox16.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox16.Location = new System.Drawing.Point(9, 56);
+            this.checkBox16.Location = new System.Drawing.Point(11, 70);
             this.checkBox16.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox16.Name = "checkBox16";
-            this.checkBox16.Size = new System.Drawing.Size(91, 19);
+            this.checkBox16.Size = new System.Drawing.Size(108, 22);
             this.checkBox16.TabIndex = 82;
             this.checkBox16.Text = "Wind speed";
             this.checkBox16.UseVisualStyleBackColor = true;
@@ -4004,10 +4251,10 @@
             // 
             this.button36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button36.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button36.Location = new System.Drawing.Point(94, 428);
+            this.button36.Location = new System.Drawing.Point(118, 535);
             this.button36.Margin = new System.Windows.Forms.Padding(2);
             this.button36.Name = "button36";
-            this.button36.Size = new System.Drawing.Size(89, 27);
+            this.button36.Size = new System.Drawing.Size(111, 34);
             this.button36.TabIndex = 100;
             this.button36.Text = "&Show fields";
             this.toolTip1.SetToolTip(this.button36, "Show a map window for the GRAMM/GRAL online functions");
@@ -4018,10 +4265,10 @@
             // 
             this.checkBox15.AutoSize = true;
             this.checkBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox15.Location = new System.Drawing.Point(9, 312);
+            this.checkBox15.Location = new System.Drawing.Point(11, 390);
             this.checkBox15.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox15.Name = "checkBox15";
-            this.checkBox15.Size = new System.Drawing.Size(138, 19);
+            this.checkBox15.Size = new System.Drawing.Size(164, 22);
             this.checkBox15.TabIndex = 98;
             this.checkBox15.Text = "Surface temperature";
             this.checkBox15.UseVisualStyleBackColor = true;
@@ -4031,10 +4278,10 @@
             // 
             this.checkBox14.AutoSize = true;
             this.checkBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox14.Location = new System.Drawing.Point(9, 296);
+            this.checkBox14.Location = new System.Drawing.Point(11, 370);
             this.checkBox14.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox14.Name = "checkBox14";
-            this.checkBox14.Size = new System.Drawing.Size(150, 19);
+            this.checkBox14.Size = new System.Drawing.Size(179, 22);
             this.checkBox14.TabIndex = 97;
             this.checkBox14.Text = "Monin-Obukhov length";
             this.checkBox14.UseVisualStyleBackColor = true;
@@ -4044,10 +4291,10 @@
             // 
             this.checkBox13.AutoSize = true;
             this.checkBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox13.Location = new System.Drawing.Point(9, 280);
+            this.checkBox13.Location = new System.Drawing.Point(11, 350);
             this.checkBox13.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox13.Name = "checkBox13";
-            this.checkBox13.Size = new System.Drawing.Size(108, 19);
+            this.checkBox13.Size = new System.Drawing.Size(132, 22);
             this.checkBox13.TabIndex = 96;
             this.checkBox13.Text = "Friction velocity";
             this.checkBox13.UseVisualStyleBackColor = true;
@@ -4057,10 +4304,10 @@
             // 
             this.checkBox12.AutoSize = true;
             this.checkBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox12.Location = new System.Drawing.Point(9, 264);
+            this.checkBox12.Location = new System.Drawing.Point(11, 330);
             this.checkBox12.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox12.Name = "checkBox12";
-            this.checkBox12.Size = new System.Drawing.Size(109, 19);
+            this.checkBox12.Size = new System.Drawing.Size(128, 22);
             this.checkBox12.TabIndex = 95;
             this.checkBox12.Text = "Latent heat flux";
             this.checkBox12.UseVisualStyleBackColor = true;
@@ -4070,10 +4317,10 @@
             // 
             this.checkBox11.AutoSize = true;
             this.checkBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox11.Location = new System.Drawing.Point(9, 248);
+            this.checkBox11.Location = new System.Drawing.Point(11, 310);
             this.checkBox11.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(123, 19);
+            this.checkBox11.Size = new System.Drawing.Size(144, 22);
             this.checkBox11.TabIndex = 94;
             this.checkBox11.Text = "Sensible heat flux";
             this.checkBox11.UseVisualStyleBackColor = true;
@@ -4083,10 +4330,10 @@
             // 
             this.checkBox10.AutoSize = true;
             this.checkBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox10.Location = new System.Drawing.Point(9, 232);
+            this.checkBox10.Location = new System.Drawing.Point(11, 290);
             this.checkBox10.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox10.Name = "checkBox10";
-            this.checkBox10.Size = new System.Drawing.Size(132, 19);
+            this.checkBox10.Size = new System.Drawing.Size(156, 22);
             this.checkBox10.TabIndex = 93;
             this.checkBox10.Text = "Terrestrial radiation";
             this.checkBox10.UseVisualStyleBackColor = true;
@@ -4096,10 +4343,10 @@
             // 
             this.checkBox9.AutoSize = true;
             this.checkBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox9.Location = new System.Drawing.Point(9, 217);
+            this.checkBox9.Location = new System.Drawing.Point(11, 271);
             this.checkBox9.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(113, 19);
+            this.checkBox9.Size = new System.Drawing.Size(133, 22);
             this.checkBox9.TabIndex = 92;
             this.checkBox9.Text = "Global radiation";
             this.checkBox9.UseVisualStyleBackColor = true;
@@ -4109,10 +4356,10 @@
             // 
             this.checkBox8.AutoSize = true;
             this.checkBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox8.Location = new System.Drawing.Point(9, 168);
+            this.checkBox8.Location = new System.Drawing.Point(11, 210);
             this.checkBox8.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(156, 19);
+            this.checkBox8.Size = new System.Drawing.Size(190, 22);
             this.checkBox8.TabIndex = 89;
             this.checkBox8.Text = "Non-hydrostat. pressure";
             this.checkBox8.UseVisualStyleBackColor = true;
@@ -4122,10 +4369,10 @@
             // 
             this.checkBox7.AutoSize = true;
             this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox7.Location = new System.Drawing.Point(9, 152);
+            this.checkBox7.Location = new System.Drawing.Point(11, 190);
             this.checkBox7.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(74, 19);
+            this.checkBox7.Size = new System.Drawing.Size(87, 22);
             this.checkBox7.TabIndex = 88;
             this.checkBox7.Text = "Humidity";
             this.checkBox7.UseVisualStyleBackColor = true;
@@ -4135,10 +4382,10 @@
             // 
             this.checkBox6.AutoSize = true;
             this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox6.Location = new System.Drawing.Point(9, 137);
+            this.checkBox6.Location = new System.Drawing.Point(11, 171);
             this.checkBox6.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(148, 19);
+            this.checkBox6.Size = new System.Drawing.Size(175, 22);
             this.checkBox6.TabIndex = 87;
             this.checkBox6.Text = "Potential Temperature";
             this.checkBox6.UseVisualStyleBackColor = true;
@@ -4148,10 +4395,10 @@
             // 
             this.checkBox5.AutoSize = true;
             this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox5.Location = new System.Drawing.Point(9, 121);
+            this.checkBox5.Location = new System.Drawing.Point(11, 151);
             this.checkBox5.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(97, 19);
+            this.checkBox5.Size = new System.Drawing.Size(114, 22);
             this.checkBox5.TabIndex = 86;
             this.checkBox5.Text = "Temperature";
             this.checkBox5.UseVisualStyleBackColor = true;
@@ -4161,10 +4408,10 @@
             // 
             this.checkBox4.AutoSize = true;
             this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox4.Location = new System.Drawing.Point(9, 105);
+            this.checkBox4.Location = new System.Drawing.Point(11, 131);
             this.checkBox4.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(160, 19);
+            this.checkBox4.Size = new System.Drawing.Size(191, 22);
             this.checkBox4.TabIndex = 85;
             this.checkBox4.Text = "Vertical wind component";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -4174,10 +4421,10 @@
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox3.Location = new System.Drawing.Point(9, 89);
+            this.checkBox3.Location = new System.Drawing.Point(11, 111);
             this.checkBox3.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(183, 19);
+            this.checkBox3.Size = new System.Drawing.Size(221, 22);
             this.checkBox3.TabIndex = 84;
             this.checkBox3.Text = "North/south wind component";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -4187,10 +4434,10 @@
             // 
             this.checkBox2.AutoSize = true;
             this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox2.Location = new System.Drawing.Point(9, 73);
+            this.checkBox2.Location = new System.Drawing.Point(11, 91);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(174, 19);
+            this.checkBox2.Size = new System.Drawing.Size(212, 22);
             this.checkBox2.TabIndex = 83;
             this.checkBox2.Text = "West/East wind component";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -4200,10 +4447,10 @@
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(9, 40);
+            this.checkBox1.Location = new System.Drawing.Point(11, 50);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(89, 19);
+            this.checkBox1.Size = new System.Drawing.Size(109, 22);
             this.checkBox1.TabIndex = 81;
             this.checkBox1.Text = "Wind vector";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -4213,10 +4460,10 @@
             // 
             this.label72.AutoSize = true;
             this.label72.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label72.Location = new System.Drawing.Point(6, 22);
+            this.label72.Location = new System.Drawing.Point(8, 28);
             this.label72.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label72.Name = "label72";
-            this.label72.Size = new System.Drawing.Size(86, 15);
+            this.label72.Size = new System.Drawing.Size(100, 18);
             this.label72.TabIndex = 11;
             this.label72.Text = "Select fields";
             // 
@@ -4230,9 +4477,11 @@
             this.groupBox16.Controls.Add(this.button34);
             this.groupBox16.Controls.Add(this.button35);
             this.groupBox16.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox16.Location = new System.Drawing.Point(622, 11);
+            this.groupBox16.Location = new System.Drawing.Point(778, 14);
+            this.groupBox16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(178, 155);
+            this.groupBox16.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox16.Size = new System.Drawing.Size(222, 194);
             this.groupBox16.TabIndex = 40;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "GRAL";
@@ -4242,19 +4491,19 @@
             // 
             this.label68.AutoSize = true;
             this.label68.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label68.Location = new System.Drawing.Point(8, 106);
+            this.label68.Location = new System.Drawing.Point(10, 132);
             this.label68.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(149, 13);
+            this.label68.Size = new System.Drawing.Size(201, 17);
             this.label68.TabIndex = 13;
             this.label68.Text = "Actual dispersion situation: 0%";
             // 
             // progressBar3
             // 
-            this.progressBar3.Location = new System.Drawing.Point(8, 124);
+            this.progressBar3.Location = new System.Drawing.Point(10, 155);
             this.progressBar3.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar3.Name = "progressBar3";
-            this.progressBar3.Size = new System.Drawing.Size(165, 18);
+            this.progressBar3.Size = new System.Drawing.Size(206, 22);
             this.progressBar3.Step = 1;
             this.progressBar3.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar3.TabIndex = 44;
@@ -4263,19 +4512,19 @@
             // 
             this.label69.AutoSize = true;
             this.label69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label69.Location = new System.Drawing.Point(8, 62);
+            this.label69.Location = new System.Drawing.Point(10, 78);
             this.label69.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label69.Name = "label69";
-            this.label69.Size = new System.Drawing.Size(135, 13);
+            this.label69.Size = new System.Drawing.Size(180, 17);
             this.label69.TabIndex = 11;
             this.label69.Text = "Dispersion situation: 1 / 0%";
             // 
             // progressBar4
             // 
-            this.progressBar4.Location = new System.Drawing.Point(8, 80);
+            this.progressBar4.Location = new System.Drawing.Point(10, 100);
             this.progressBar4.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar4.Name = "progressBar4";
-            this.progressBar4.Size = new System.Drawing.Size(165, 18);
+            this.progressBar4.Size = new System.Drawing.Size(206, 22);
             this.progressBar4.Step = 1;
             this.progressBar4.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar4.TabIndex = 43;
@@ -4286,9 +4535,10 @@
             this.button33.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button33.BackgroundImage")));
             this.button33.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button33.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button33.Location = new System.Drawing.Point(127, 24);
+            this.button33.Location = new System.Drawing.Point(159, 30);
+            this.button33.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button33.Name = "button33";
-            this.button33.Size = new System.Drawing.Size(45, 34);
+            this.button33.Size = new System.Drawing.Size(56, 42);
             this.button33.TabIndex = 42;
             this.toolTip1.SetToolTip(this.button33, "Start the GRAL computation core");
             this.button33.UseVisualStyleBackColor = true;
@@ -4300,9 +4550,10 @@
             this.button34.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button34.BackgroundImage")));
             this.button34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button34.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button34.Location = new System.Drawing.Point(8, 24);
+            this.button34.Location = new System.Drawing.Point(10, 30);
+            this.button34.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button34.Name = "button34";
-            this.button34.Size = new System.Drawing.Size(45, 34);
+            this.button34.Size = new System.Drawing.Size(56, 42);
             this.button34.TabIndex = 40;
             this.toolTip1.SetToolTip(this.button34, "Stop the simulation");
             this.button34.UseVisualStyleBackColor = true;
@@ -4314,9 +4565,10 @@
             this.button35.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button35.BackgroundImage")));
             this.button35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button35.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button35.Location = new System.Drawing.Point(67, 24);
+            this.button35.Location = new System.Drawing.Point(84, 30);
+            this.button35.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button35.Name = "button35";
-            this.button35.Size = new System.Drawing.Size(45, 34);
+            this.button35.Size = new System.Drawing.Size(56, 42);
             this.button35.TabIndex = 41;
             this.toolTip1.SetToolTip(this.button35, "Pause");
             this.button35.UseVisualStyleBackColor = true;
@@ -4337,9 +4589,11 @@
             this.groupBox15.Controls.Add(this.button30);
             this.groupBox15.Controls.Add(this.button31);
             this.groupBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox15.Location = new System.Drawing.Point(422, 11);
+            this.groupBox15.Location = new System.Drawing.Point(528, 14);
+            this.groupBox15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(178, 467);
+            this.groupBox15.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox15.Size = new System.Drawing.Size(222, 584);
             this.groupBox15.TabIndex = 30;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "GRAMM";
@@ -4348,16 +4602,18 @@
             // label98
             // 
             this.label98.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label98.Location = new System.Drawing.Point(2, 219);
+            this.label98.Location = new System.Drawing.Point(2, 274);
+            this.label98.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label98.Name = "label98";
-            this.label98.Size = new System.Drawing.Size(116, 20);
+            this.label98.Size = new System.Drawing.Size(145, 25);
             this.label98.TabIndex = 24;
             this.label98.Text = "GRAMM instances";
             // 
             // numericUpDown33
             // 
             this.numericUpDown33.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown33.Location = new System.Drawing.Point(121, 215);
+            this.numericUpDown33.Location = new System.Drawing.Point(151, 269);
+            this.numericUpDown33.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown33.Maximum = new decimal(new int[] {
             10,
             0,
@@ -4369,7 +4625,7 @@
             0,
             0});
             this.numericUpDown33.Name = "numericUpDown33";
-            this.numericUpDown33.Size = new System.Drawing.Size(55, 22);
+            this.numericUpDown33.Size = new System.Drawing.Size(69, 26);
             this.numericUpDown33.TabIndex = 36;
             this.numericUpDown33.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown33, "Use multiple instances to speed up the computation");
@@ -4383,9 +4639,10 @@
             // label97
             // 
             this.label97.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.label97.Location = new System.Drawing.Point(2, 434);
+            this.label97.Location = new System.Drawing.Point(2, 542);
+            this.label97.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label97.Name = "label97";
-            this.label97.Size = new System.Drawing.Size(166, 23);
+            this.label97.Size = new System.Drawing.Size(208, 29);
             this.label97.TabIndex = 16;
             this.label97.Text = "0 MByte";
             // 
@@ -4393,9 +4650,10 @@
             // 
             this.button45.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button45.BackgroundImage")));
             this.button45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button45.Location = new System.Drawing.Point(146, 403);
+            this.button45.Location = new System.Drawing.Point(182, 504);
+            this.button45.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button45.Name = "button45";
-            this.button45.Size = new System.Drawing.Size(26, 25);
+            this.button45.Size = new System.Drawing.Size(32, 31);
             this.button45.TabIndex = 37;
             this.toolTip1.SetToolTip(this.button45, "Delete all GRAMM wind field files\r\n");
             this.button45.UseVisualStyleBackColor = true;
@@ -4404,9 +4662,10 @@
             // label96
             // 
             this.label96.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.label96.Location = new System.Drawing.Point(2, 407);
+            this.label96.Location = new System.Drawing.Point(2, 509);
+            this.label96.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label96.Name = "label96";
-            this.label96.Size = new System.Drawing.Size(140, 23);
+            this.label96.Size = new System.Drawing.Size(175, 29);
             this.label96.TabIndex = 14;
             this.label96.Text = "GRAMM Windfield files";
             // 
@@ -4414,19 +4673,19 @@
             // 
             this.label67.AutoSize = true;
             this.label67.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label67.Location = new System.Drawing.Point(4, 104);
+            this.label67.Location = new System.Drawing.Point(5, 130);
             this.label67.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label67.Name = "label67";
-            this.label67.Size = new System.Drawing.Size(121, 13);
+            this.label67.Size = new System.Drawing.Size(160, 17);
             this.label67.TabIndex = 13;
             this.label67.Text = "Actual flow situation: 0%";
             // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(3, 122);
+            this.progressBar2.Location = new System.Drawing.Point(4, 152);
             this.progressBar2.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(165, 18);
+            this.progressBar2.Size = new System.Drawing.Size(206, 22);
             this.progressBar2.Step = 1;
             this.progressBar2.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar2.TabIndex = 34;
@@ -4435,19 +4694,19 @@
             // 
             this.label66.AutoSize = true;
             this.label66.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label66.Location = new System.Drawing.Point(4, 60);
+            this.label66.Location = new System.Drawing.Point(5, 75);
             this.label66.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label66.Name = "label66";
-            this.label66.Size = new System.Drawing.Size(108, 13);
+            this.label66.Size = new System.Drawing.Size(141, 17);
             this.label66.TabIndex = 11;
             this.label66.Text = "Flow situation: 1 / 0%";
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(4, 78);
+            this.progressBar1.Location = new System.Drawing.Point(5, 98);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(165, 18);
+            this.progressBar1.Size = new System.Drawing.Size(206, 22);
             this.progressBar1.Step = 1;
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 33;
@@ -4458,9 +4717,10 @@
             this.button32.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button32.BackgroundImage")));
             this.button32.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button32.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button32.Location = new System.Drawing.Point(123, 21);
+            this.button32.Location = new System.Drawing.Point(154, 26);
+            this.button32.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button32.Name = "button32";
-            this.button32.Size = new System.Drawing.Size(45, 34);
+            this.button32.Size = new System.Drawing.Size(56, 42);
             this.button32.TabIndex = 32;
             this.toolTip1.SetToolTip(this.button32, "Start the GRAMM computation core");
             this.button32.UseVisualStyleBackColor = true;
@@ -4472,9 +4732,10 @@
             this.button30.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button30.BackgroundImage")));
             this.button30.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button30.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button30.Location = new System.Drawing.Point(6, 22);
+            this.button30.Location = new System.Drawing.Point(8, 28);
+            this.button30.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button30.Name = "button30";
-            this.button30.Size = new System.Drawing.Size(45, 34);
+            this.button30.Size = new System.Drawing.Size(56, 42);
             this.button30.TabIndex = 30;
             this.toolTip1.SetToolTip(this.button30, "Stop the simulation");
             this.button30.UseVisualStyleBackColor = true;
@@ -4486,9 +4747,10 @@
             this.button31.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button31.BackgroundImage")));
             this.button31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button31.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button31.Location = new System.Drawing.Point(65, 22);
+            this.button31.Location = new System.Drawing.Point(81, 28);
+            this.button31.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button31.Name = "button31";
-            this.button31.Size = new System.Drawing.Size(45, 34);
+            this.button31.Size = new System.Drawing.Size(56, 42);
             this.button31.TabIndex = 31;
             this.toolTip1.SetToolTip(this.button31, "Pause");
             this.button31.UseVisualStyleBackColor = true;
@@ -4501,9 +4763,11 @@
             this.groupBox14.Controls.Add(this.button26);
             this.groupBox14.Controls.Add(this.button27);
             this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox14.Location = new System.Drawing.Point(622, 380);
+            this.groupBox14.Location = new System.Drawing.Point(778, 475);
+            this.groupBox14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(178, 154);
+            this.groupBox14.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox14.Size = new System.Drawing.Size(222, 192);
             this.groupBox14.TabIndex = 60;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Compute odour hours";
@@ -4512,9 +4776,10 @@
             // button29
             // 
             this.button29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button29.Location = new System.Drawing.Point(6, 87);
+            this.button29.Location = new System.Drawing.Point(8, 109);
+            this.button29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button29.Name = "button29";
-            this.button29.Size = new System.Drawing.Size(166, 30);
+            this.button29.Size = new System.Drawing.Size(208, 38);
             this.button29.TabIndex = 62;
             this.button29.Text = "&All in all out stables";
             this.toolTip1.SetToolTip(this.button29, "Computes odour hours for\r\nstables with an \"all in all out\"\r\nprocedure");
@@ -4524,9 +4789,10 @@
             // button47
             // 
             this.button47.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button47.Location = new System.Drawing.Point(7, 118);
+            this.button47.Location = new System.Drawing.Point(9, 148);
+            this.button47.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button47.Name = "button47";
-            this.button47.Size = new System.Drawing.Size(166, 30);
+            this.button47.Size = new System.Drawing.Size(208, 38);
             this.button47.TabIndex = 63;
             this.button47.Text = "&Receptor met files";
             this.toolTip1.SetToolTip(this.button47, "Computes met files at receptor points\r\n");
@@ -4536,9 +4802,10 @@
             // button26
             // 
             this.button26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button26.Location = new System.Drawing.Point(6, 56);
+            this.button26.Location = new System.Drawing.Point(8, 70);
+            this.button26.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button26.Name = "button26";
-            this.button26.Size = new System.Drawing.Size(166, 30);
+            this.button26.Size = new System.Drawing.Size(208, 38);
             this.button26.TabIndex = 61;
             this.button26.Text = "C&ompost";
             this.toolTip1.SetToolTip(this.button26, "Computes odour hours for\r\na single source group with up\r\nto 3 different odour str" +
@@ -4549,9 +4816,10 @@
             // button27
             // 
             this.button27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button27.Location = new System.Drawing.Point(6, 25);
+            this.button27.Location = new System.Drawing.Point(8, 31);
+            this.button27.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button27.Name = "button27";
-            this.button27.Size = new System.Drawing.Size(166, 30);
+            this.button27.Size = new System.Drawing.Size(208, 38);
             this.button27.TabIndex = 60;
             this.button27.Text = "Mu&ltiple Sources";
             this.toolTip1.SetToolTip(this.button27, "Computes odour hours\r\nfor all defined source groups");
@@ -4565,9 +4833,11 @@
             this.groupBox13.Controls.Add(this.button25);
             this.groupBox13.Controls.Add(this.button28);
             this.groupBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox13.Location = new System.Drawing.Point(622, 215);
+            this.groupBox13.Location = new System.Drawing.Point(778, 269);
+            this.groupBox13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(178, 160);
+            this.groupBox13.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox13.Size = new System.Drawing.Size(222, 200);
             this.groupBox13.TabIndex = 50;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Compute concentrations";
@@ -4576,9 +4846,10 @@
             // button40
             // 
             this.button40.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button40.Location = new System.Drawing.Point(6, 121);
+            this.button40.Location = new System.Drawing.Point(8, 151);
+            this.button40.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button40.Name = "button40";
-            this.button40.Size = new System.Drawing.Size(166, 30);
+            this.button40.Size = new System.Drawing.Size(208, 38);
             this.button40.TabIndex = 53;
             this.button40.Text = "&Percentiles";
             this.toolTip1.SetToolTip(this.button40, "Computes high percentiles of concentrations.\r\n\r\n!!Caution: Computation times\r\ncan" +
@@ -4589,9 +4860,10 @@
             // button37
             // 
             this.button37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button37.Location = new System.Drawing.Point(6, 89);
+            this.button37.Location = new System.Drawing.Point(8, 111);
+            this.button37.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button37.Name = "button37";
-            this.button37.Size = new System.Drawing.Size(166, 30);
+            this.button37.Size = new System.Drawing.Size(208, 38);
             this.button37.TabIndex = 52;
             this.button37.Text = "&Receptor Concentrations";
             this.toolTip1.SetToolTip(this.button37, "Computes time series of concentrations at\r\nreceptor points");
@@ -4601,9 +4873,10 @@
             // button25
             // 
             this.button25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button25.Location = new System.Drawing.Point(6, 57);
+            this.button25.Location = new System.Drawing.Point(8, 71);
+            this.button25.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button25.Name = "button25";
-            this.button25.Size = new System.Drawing.Size(167, 30);
+            this.button25.Size = new System.Drawing.Size(209, 38);
             this.button25.TabIndex = 51;
             this.button25.Text = "Mean, Max, &Daily Max";
             this.toolTip1.SetToolTip(this.button25, "Computes average, maximum, and\r\nmaximum daily concentrations.\r\n\r\n!!Caution: Compu" +
@@ -4614,9 +4887,10 @@
             // button28
             // 
             this.button28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button28.Location = new System.Drawing.Point(6, 25);
+            this.button28.Location = new System.Drawing.Point(8, 31);
+            this.button28.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button28.Name = "button28";
-            this.button28.Size = new System.Drawing.Size(166, 30);
+            this.button28.Size = new System.Drawing.Size(208, 38);
             this.button28.TabIndex = 50;
             this.button28.Text = "Mean";
             this.toolTip1.SetToolTip(this.button28, "Computes average concentrations");
@@ -4637,9 +4911,11 @@
             this.groupBox6.Controls.Add(this.button7);
             this.groupBox6.Controls.Add(this.button10);
             this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox6.Location = new System.Drawing.Point(9, 11);
+            this.groupBox6.Location = new System.Drawing.Point(11, 14);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(189, 374);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Size = new System.Drawing.Size(236, 468);
             this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Generate input files";
@@ -4648,9 +4924,10 @@
             // 
             this.pictureBox4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox4.InitialImage = null;
-            this.pictureBox4.Location = new System.Drawing.Point(139, 165);
+            this.pictureBox4.Location = new System.Drawing.Point(174, 206);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(33, 33);
+            this.pictureBox4.Size = new System.Drawing.Size(41, 41);
             this.pictureBox4.TabIndex = 25;
             this.pictureBox4.TabStop = false;
             this.pictureBox4.Visible = false;
@@ -4659,9 +4936,10 @@
             // 
             this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox3.InitialImage = null;
-            this.pictureBox3.Location = new System.Drawing.Point(139, 124);
+            this.pictureBox3.Location = new System.Drawing.Point(174, 155);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(33, 33);
+            this.pictureBox3.Size = new System.Drawing.Size(41, 41);
             this.pictureBox3.TabIndex = 25;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Visible = false;
@@ -4670,9 +4948,10 @@
             // 
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox2.InitialImage = null;
-            this.pictureBox2.Location = new System.Drawing.Point(139, 83);
+            this.pictureBox2.Location = new System.Drawing.Point(174, 104);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(33, 33);
+            this.pictureBox2.Size = new System.Drawing.Size(41, 41);
             this.pictureBox2.TabIndex = 25;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Visible = false;
@@ -4681,9 +4960,10 @@
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(139, 44);
+            this.pictureBox1.Location = new System.Drawing.Point(174, 55);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(33, 33);
+            this.pictureBox1.Size = new System.Drawing.Size(41, 41);
             this.pictureBox1.TabIndex = 25;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Visible = false;
@@ -4691,16 +4971,18 @@
             // label20
             // 
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(13, 216);
+            this.label20.Location = new System.Drawing.Point(16, 270);
+            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(105, 20);
+            this.label20.Size = new System.Drawing.Size(131, 25);
             this.label20.TabIndex = 24;
             this.label20.Text = "Processor cores";
             // 
             // numericUpDown32
             // 
             this.numericUpDown32.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown32.Location = new System.Drawing.Point(124, 214);
+            this.numericUpDown32.Location = new System.Drawing.Point(155, 268);
+            this.numericUpDown32.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown32.Maximum = new decimal(new int[] {
             63,
             0,
@@ -4712,7 +4994,7 @@
             0,
             0});
             this.numericUpDown32.Name = "numericUpDown32";
-            this.numericUpDown32.Size = new System.Drawing.Size(59, 22);
+            this.numericUpDown32.Size = new System.Drawing.Size(74, 26);
             this.numericUpDown32.TabIndex = 5;
             this.numericUpDown32.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown32.Value = new decimal(new int[] {
@@ -4728,9 +5010,11 @@
             this.groupBox11.Controls.Add(this.radioButton2);
             this.groupBox11.Controls.Add(this.radioButton1);
             this.groupBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 3F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.groupBox11.Location = new System.Drawing.Point(6, 252);
+            this.groupBox11.Location = new System.Drawing.Point(8, 315);
+            this.groupBox11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(177, 111);
+            this.groupBox11.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox11.Size = new System.Drawing.Size(221, 139);
             this.groupBox11.TabIndex = 6;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = " GRAL Topography";
@@ -4738,9 +5022,10 @@
             // checkBox25
             // 
             this.checkBox25.AutoSize = true;
-            this.checkBox25.Location = new System.Drawing.Point(7, 68);
+            this.checkBox25.Location = new System.Drawing.Point(9, 85);
+            this.checkBox25.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox25.Name = "checkBox25";
-            this.checkBox25.Size = new System.Drawing.Size(156, 34);
+            this.checkBox25.Size = new System.Drawing.Size(187, 40);
             this.checkBox25.TabIndex = 7;
             this.checkBox25.Text = "Use original topo-\r\ngraphical data for GRAL";
             this.toolTip1.SetToolTip(this.checkBox25, "Prompts you for high resolution topographical\r\ndata used to define the GRAL topog" +
@@ -4753,9 +5038,10 @@
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Enabled = false;
-            this.radioButton2.Location = new System.Drawing.Point(7, 45);
+            this.radioButton2.Location = new System.Drawing.Point(9, 56);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(72, 19);
+            this.radioButton2.Size = new System.Drawing.Size(85, 22);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.Text = "complex";
             this.radioButton2.UseVisualStyleBackColor = true;
@@ -4765,9 +5051,10 @@
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
             this.radioButton1.Enabled = false;
-            this.radioButton1.Location = new System.Drawing.Point(7, 20);
+            this.radioButton1.Location = new System.Drawing.Point(9, 25);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(41, 19);
+            this.radioButton1.Size = new System.Drawing.Size(48, 22);
             this.radioButton1.TabIndex = 6;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "flat";
@@ -4777,9 +5064,10 @@
             // 
             this.button18.Cursor = System.Windows.Forms.Cursors.Default;
             this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button18.Location = new System.Drawing.Point(13, 123);
+            this.button18.Location = new System.Drawing.Point(16, 154);
+            this.button18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(116, 34);
+            this.button18.Size = new System.Drawing.Size(145, 42);
             this.button18.TabIndex = 3;
             this.button18.Text = "&Emission files";
             this.toolTip1.SetToolTip(this.button18, "Generate emission files for the computation core\r\nor the evaluation with changed " +
@@ -4792,9 +5080,10 @@
             // 
             this.button9.Cursor = System.Windows.Forms.Cursors.Default;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(13, 164);
+            this.button9.Location = new System.Drawing.Point(16, 205);
+            this.button9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(116, 34);
+            this.button9.Size = new System.Drawing.Size(145, 42);
             this.button9.TabIndex = 4;
             this.button9.Text = "&Obstacle files";
             this.toolTip1.SetToolTip(this.button9, "Generate building files for the computation core");
@@ -4806,9 +5095,10 @@
             // 
             this.button7.Cursor = System.Windows.Forms.Cursors.Default;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(13, 83);
+            this.button7.Location = new System.Drawing.Point(16, 104);
+            this.button7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(116, 34);
+            this.button7.Size = new System.Drawing.Size(145, 42);
             this.button7.TabIndex = 2;
             this.button7.Text = "&Meteo files";
             this.toolTip1.SetToolTip(this.button7, "Generate meteo files for the computation core");
@@ -4820,9 +5110,10 @@
             // 
             this.button10.AutoSize = true;
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(13, 43);
+            this.button10.Location = new System.Drawing.Point(16, 54);
+            this.button10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(116, 34);
+            this.button10.Size = new System.Drawing.Size(145, 42);
             this.button10.TabIndex = 1;
             this.button10.Text = "&Control files";
             this.toolTip1.SetToolTip(this.button10, "Generate the control files for the computation core");
@@ -4881,7 +5172,7 @@
             this.textBox8.Location = new System.Drawing.Point(148, 84);
             this.textBox8.Name = "textBox8";
             this.textBox8.ReadOnly = true;
-            this.textBox8.Size = new System.Drawing.Size(100, 20);
+            this.textBox8.Size = new System.Drawing.Size(100, 22);
             this.textBox8.TabIndex = 3;
             this.textBox8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -4891,7 +5182,7 @@
             this.textBox9.Location = new System.Drawing.Point(26, 84);
             this.textBox9.Name = "textBox9";
             this.textBox9.ReadOnly = true;
-            this.textBox9.Size = new System.Drawing.Size(100, 20);
+            this.textBox9.Size = new System.Drawing.Size(100, 22);
             this.textBox9.TabIndex = 2;
             this.textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -4901,7 +5192,7 @@
             this.textBox10.Location = new System.Drawing.Point(85, 124);
             this.textBox10.Name = "textBox10";
             this.textBox10.ReadOnly = true;
-            this.textBox10.Size = new System.Drawing.Size(100, 20);
+            this.textBox10.Size = new System.Drawing.Size(100, 22);
             this.textBox10.TabIndex = 1;
             this.textBox10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -4911,7 +5202,7 @@
             this.textBox11.Location = new System.Drawing.Point(85, 42);
             this.textBox11.Name = "textBox11";
             this.textBox11.ReadOnly = true;
-            this.textBox11.Size = new System.Drawing.Size(100, 20);
+            this.textBox11.Size = new System.Drawing.Size(100, 22);
             this.textBox11.TabIndex = 0;
             this.textBox11.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -4946,7 +5237,7 @@
             0,
             65536});
             this.numericUpDown13.Name = "numericUpDown13";
-            this.numericUpDown13.Size = new System.Drawing.Size(49, 22);
+            this.numericUpDown13.Size = new System.Drawing.Size(49, 26);
             this.numericUpDown13.TabIndex = 23;
             this.numericUpDown13.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown13.Value = new decimal(new int[] {
@@ -4995,7 +5286,7 @@
             0,
             65536});
             this.numericUpDown14.Name = "numericUpDown14";
-            this.numericUpDown14.Size = new System.Drawing.Size(49, 22);
+            this.numericUpDown14.Size = new System.Drawing.Size(49, 26);
             this.numericUpDown14.TabIndex = 20;
             this.numericUpDown14.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown14.Value = new decimal(new int[] {
@@ -5047,7 +5338,7 @@
             0,
             65536});
             this.numericUpDown15.Name = "numericUpDown15";
-            this.numericUpDown15.Size = new System.Drawing.Size(49, 22);
+            this.numericUpDown15.Size = new System.Drawing.Size(49, 26);
             this.numericUpDown15.TabIndex = 17;
             this.numericUpDown15.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown15.Value = new decimal(new int[] {
@@ -5064,14 +5355,15 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(819, 563);
+            this.ClientSize = new System.Drawing.Size(1024, 704);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.Text = "GRAL GUI";
