@@ -129,7 +129,7 @@
             this.numericUpDown4.Size = new System.Drawing.Size(86, 20);
             this.numericUpDown4.TabIndex = 7;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown4, "Set the raster size for this area soure");
+            this.toolTip1.SetToolTip(this.numericUpDown4, "Set the raster cell size for this area soure");
             this.numericUpDown4.Value = new decimal(new int[] {
             5,
             0,
@@ -206,7 +206,7 @@
             this.checkBox1.Size = new System.Drawing.Size(104, 21);
             this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "absolute height";
-            this.toolTip1.SetToolTip(this.checkBox1, "define height as absolute height over sea");
+            this.toolTip1.SetToolTip(this.checkBox1, "define height as absolute height above sea level");
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
             // 
@@ -240,8 +240,8 @@
             this.numericUpDown2.Size = new System.Drawing.Size(86, 20);
             this.numericUpDown2.TabIndex = 5;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown2, "Vertical extension [m]\r\n---- +Vert.ext./2\r\n+++  Mean height\r\n---- - Vert.ext./2\r\n" +
-        "####  Ground");
+            this.toolTip1.SetToolTip(this.numericUpDown2, "Vertical extension [m]\r\n----    + Vert.ext. / 2\r\n+++   Mean height\r\n----    -  Ve" +
+        "rt.ext. / 2\r\n####  Ground");
             // 
             // button4
             // 
