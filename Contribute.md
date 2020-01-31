@@ -3,6 +3,37 @@ Thank you very much for developing the GRAL User Interface (GUI) further or for 
 
 Do not hesitate to contact the project maintainers at the beginning of your work. 
 
+## Branch Configuration
+
+```
+-- master  : production and bug fixes
+-- develop : release ready commits and bug fixes
+-- features/feature-xx: always branch from develop and delete after merging to develop
+```
+
+- *master* branch is inteded for production release. Keep it simple and easy to rollback
+- *develop* branch is for release preparation. Only for release ready commits.
+
+
+## Recommended Process
+
+If you're developing a **new feature**
+
+1. Create a feature branch from `develop` branch
+2. Branch name dependend on your new `feature`
+3. When your code is ready for release, pull request to the `develop` branch
+4. Delete the feature branch
+
+
+If you're making a **bug fix**
+
+1. Pull request to the `develop` branch
+2. Add an issue tag in the commit message or pull request message
+
+If you're making a **hot fix**, which has to be deployed immediately.
+1. Pull request to `develop` **and** `master` branch
+
+
 ## Code of Conduct
 This project and everyone participating in it is governed by the our Code of Conduct. By participating, you are expected to uphold this code. 
 In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to make participation in our project
