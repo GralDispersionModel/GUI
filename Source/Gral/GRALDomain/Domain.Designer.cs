@@ -298,8 +298,8 @@
             this.button21.Size = new System.Drawing.Size(26, 25);
             this.button21.TabIndex = 13;
             this.button21.Text = "[m²]";
-            this.toolTip1.SetToolTip(this.button21, "Measure areas:\r\nLeft click:\r\nSet vertices of the polygon.\r\n\r\nRight click:\r\nClosin" +
-        "g the polygon.");
+            this.toolTip1.SetToolTip(this.button21, "Measure areas:\r\nLeft click:\r\nSet vertices of the polygon sketch.\r\n\r\nRight click:\r" +
+        "\nFinish the polygon sketch.");
             this.button21.UseVisualStyleBackColor = true;
             this.button21.Visible = false;
             this.button21.Click += new System.EventHandler(this.Button21_Click);
@@ -342,7 +342,7 @@
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(26, 25);
             this.button18.TabIndex = 10;
-            this.toolTip1.SetToolTip(this.button18, "Define position (cemtre)\r\nof north arrow.");
+            this.toolTip1.SetToolTip(this.button18, "Define position (center)\r\nof north arrow.");
             this.button18.UseVisualStyleBackColor = true;
             this.button18.Visible = false;
             this.button18.Click += new System.EventHandler(this.Button18_Click);
@@ -864,9 +864,9 @@
             this.button43.Name = "button43";
             this.button43.Size = new System.Drawing.Size(26, 25);
             this.button43.TabIndex = 47;
-            this.toolTip1.SetToolTip(this.button43, "Re-order wind fields to match\r\nnewly observed wind and stability data\r\n at any lo" +
-        "cation.\r\nLeft click on the map to define\r\nthe position of the new meteorological" +
-        "\r\nmeasurements.");
+            this.toolTip1.SetToolTip(this.button43, "Match-to-Observation: \r\nReorder wind fields to match\r\nnewly observed wind and sta" +
+        "bility data\r\n at any location.\r\nLeft click on the map to define\r\nthe position of" +
+        " the new meteorological\r\nmeasurements.");
             this.button43.UseVisualStyleBackColor = true;
             this.button43.Click += new System.EventHandler(this.Button43_Click);
             // 
@@ -1023,7 +1023,7 @@
             this.button_section_concentration.Name = "button_section_concentration";
             this.button_section_concentration.Size = new System.Drawing.Size(26, 25);
             this.button_section_concentration.TabIndex = 73;
-            this.toolTip1.SetToolTip(this.button_section_concentration, "Vertical concentration profile at a given section line");
+            this.toolTip1.SetToolTip(this.button_section_concentration, "Vertical concentration profile along\r\na given section line");
             this.button_section_concentration.UseVisualStyleBackColor = true;
             this.button_section_concentration.Click += new System.EventHandler(this.Button_section_concentrationClick);
             // 
@@ -1635,7 +1635,7 @@
             this.toolStripMenuItem18.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItem18.Name = "toolStripMenuItem18";
             this.toolStripMenuItem18.Size = new System.Drawing.Size(205, 22);
-            this.toolStripMenuItem18.Text = "Show &lenght label info";
+            this.toolStripMenuItem18.Text = "Show &length label info";
             this.toolStripMenuItem18.Click += new System.EventHandler(this.ToolStripMenuItem18Click);
             // 
             // toolStripMenuItem5
@@ -2105,14 +2105,14 @@
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.ShortcutKeyDisplayString = "T";
             this.toolsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 21);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // measureLenghtToolStripMenuItem
             // 
             this.measureLenghtToolStripMenuItem.Name = "measureLenghtToolStripMenuItem";
             this.measureLenghtToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
-            this.measureLenghtToolStripMenuItem.Text = "Lenght measurement";
+            this.measureLenghtToolStripMenuItem.Text = "Length measurement";
             this.measureLenghtToolStripMenuItem.Click += new System.EventHandler(this.Button20_Click);
             // 
             // measureAreaToolStripMenuItem
@@ -2375,7 +2375,7 @@
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.ShortcutKeyDisplayString = "E";
             this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 21);
             this.exportToolStripMenuItem.Text = "E&xport";
             // 
             // saveMapToDiscToolStripMenuItem
