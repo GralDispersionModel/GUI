@@ -60,7 +60,7 @@ namespace GralItemForms
         /// <summary>
         /// Z corner points of a wall in meters
         /// </summary>
-        public float[]  CornerWallZ  = new float[1000];   
+        public double[] CornerWallZ  = new double[1000];   
         
         private int vertices;                              //number of maximum corner points
         private CultureInfo ic = CultureInfo.InvariantCulture;
@@ -217,25 +217,25 @@ namespace GralItemForms
         		RedrawDomain(this, e);
         	}
 		}
-        
+
         private void get_edgepoint_height()
         {
-        	 int edge = trackBar2.Value - 1;
-        	 if (edge < Convert.ToInt32(textBox2.Text))
-        	 {
-        	 	float height = 0;
-        	 	if (checkBox1.Checked == true) // absolute height
-        	 		height = (float) numericUpDown1.Value * (-1);
-        	 	else
-        	 		height = (float) numericUpDown1.Value;
-        	 	CornerWallZ[edge] = height;
-        	 }
-       }
-        
+            int edge = trackBar2.Value - 1;
+            if (edge < Convert.ToInt32(textBox2.Text))
+            {
+                float height = 0;
+                if (checkBox1.Checked == true) // absolute height
+                    height = (float)numericUpDown1.Value * (-1);
+                else
+                    height = (float)numericUpDown1.Value;
+                CornerWallZ[edge] = height;
+            }
+        }
+
         //fill actual values
         /// <summary>
-    	/// Fills the dialog with data from the recent item object
-    	/// </summary> 
+        /// Fills the dialog with data from the recent item object
+        /// </summary> 
         public void FillValues()
         {
         	WallData _wdata;
@@ -453,6 +453,8 @@ namespace GralItemForms
                     e.Cancel = true;
                 }
             }
+            GralDomain.Domain.MarkerPoint.X = 0;
+            GralDomain.Domain.MarkerPoint.Y = 0;
         }
 
         void EditWallsFormClosed(object sender, FormClosedEventArgs e)
@@ -469,7 +471,9 @@ namespace GralItemForms
 		{
 			if (!Visible)
 			{
-			}
+                GralDomain.Domain.MarkerPoint.X = 0;
+                GralDomain.Domain.MarkerPoint.Y = 0;
+            }
 			else // Enable/disable items
 			{
 				bool enable = !Main.Project_Locked;

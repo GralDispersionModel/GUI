@@ -38,8 +38,7 @@ namespace GralShape
 		public double PixelMx {get {return _pixelmx;}}
 		private int _pixelmy;
 		public int PixelMy {get {return _pixelmy;}}
-		
-		
+
 		public ShapeReader(GralDomain.Domain d)
 		{
 			domain = d;
@@ -139,7 +138,8 @@ namespace GralShape
 					//domain.shplines[index].Add(line);
 					yield return line;
 				}
-				if (shapetype == 13)
+
+				if (shapetype == 13) // PolylineZ
 				{
 					SHPLine line = new SHPLine();
 					int recordShapeType = readIntLittle(data, recordContentStart);
@@ -152,21 +152,27 @@ namespace GralShape
 					line.Parts = new int[line.NumParts];
 					line.NumPoints = readIntLittle(data, recordContentStart + 40);
 					line.Points = new GralDomain.PointD[line.NumPoints];
+					line.PointsZ = new double[line.NumPoints];
+
 					int partStart = recordContentStart + 44;
 					for (int i = 0; i < line.NumParts; i++)
 					{
 						line.Parts[i] = readIntLittle(data, partStart + i * 4);
 					}
-					int pointStart = recordContentStart + 44 + 4 * line.NumParts;
 
-					for (int i = 0; i < line.NumPoints; i++)
+                    int pointStart = recordContentStart + 44 + 4 * line.NumParts;
+                    for (int i = 0; i < line.NumPoints; i++)
 					{
 						line.Points[i].X = readDoubleLittle(data, pointStart + (i * 16));
-						line.Points[i].Y = readDoubleLittle(data, pointStart + (i * 16) + 8);
+						int index = pointStart + (i * 16) + 8;
+						line.Points[i].Y = readDoubleLittle(data, index);
+						index = pointStart + 16 * line.NumPoints + 16 + 8 * i;
+						line.PointsZ[i]  = readDoubleLittle(data, index);
 					}
 					//domain.shplines[index].Add(line);
 					yield return line;
                 }
+
                 if (shapetype == 23)
                 {
                     GralShape.SHPLine line = new GralShape.SHPLine();

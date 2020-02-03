@@ -105,7 +105,7 @@ namespace Gral
 				double ymin = double.MaxValue;
 				double ymax = double.MinValue;
 				
-				foreach (GralDomain.PointD _pt in _lsdata.Pt)
+				foreach (GralData.PointD_3d _pt in _lsdata.Pt)
 				{
 					xmin = Math.Min(xmin, _pt.X);
 					xmax = Math.Max(xmax, _pt.X);

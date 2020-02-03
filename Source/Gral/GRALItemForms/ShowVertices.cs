@@ -32,7 +32,7 @@ namespace GralItemForms
 		public int Lines = 0;
 	    private double[] x1 = new double[20];            //x corner points 
 	    private double[] y1 = new double[20];            //y corner points 		
-	    private float[] z1 = new float[20];              //z
+	    private double[] z1 = new double[20];              //z
 		
         // delegate to send redraw Message
        	public event ForceDomainRedraw Vertices_redraw;
@@ -59,7 +59,7 @@ namespace GralItemForms
         /// <param name="x"> Double array of x coordinates></param>
         /// <param name="y"> Double array of y coordinates></param>
         /// <param name="z"> Float array of z values></param>
-        public VerticesEditDialog(int lines, ref double [] x, ref double [] y, ref float [] z)
+        public VerticesEditDialog(int lines, ref double [] x, ref double [] y, ref double [] z)
 		{
 			InitializeComponent();
 			Lines = lines;

@@ -210,6 +210,19 @@ namespace GralDomForms
                                 {
                                     _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
                                     _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    GralDomain.PointD[] pt = new GralDomain.PointD[_dta.Pt.Count];
+                                    for (int ik = 0; ik < _dta.Pt.Count; ik++)
+                                    {
+                                        pt[ik] = new GralDomain.PointD(_dta.Pt[ik].X, _dta.Pt[ik].Y);
+                                    }
+                                    _dta.Pt.Clear();
+                                    _dta.Pt.TrimExcess();
+                                    for (int ik = 0; ik < pt.Length; ik++)
+                                    {
+                                        _dta.Pt.Add(new GralData.PointD_3d(pt[ik].X, pt[ik].Y, _dta.Height));
+                                    }
+                                    _dta.Lines3D = false;
+
                                     _dta.VerticalExt = Convert.ToSingle(dataGridView1[4, index].Value);
                                     int SGIndex = Convert.ToInt32(dataGridView1[9, index].Value);
                                     _dta.Poll[SGIndex].SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);

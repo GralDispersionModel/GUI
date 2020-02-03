@@ -202,7 +202,7 @@ namespace GralDomain
                         double y0 = y - CopiedItem.LineSource.Pt[0].Y;
                         
                         int i = 0;
-                        foreach(PointD _pt in CopiedItem.LineSource.Pt)
+                        foreach(GralData.PointD_3d _pt in CopiedItem.LineSource.Pt)
                         {
                             int x1 = (int)((x0 + _pt.X - form1_west) * factor_x + TransformX);
                             int y1 = (int)((y0 + _pt.Y - form1_north) * factor_y + TransformY);

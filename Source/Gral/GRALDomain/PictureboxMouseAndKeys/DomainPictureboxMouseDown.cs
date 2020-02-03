@@ -128,6 +128,18 @@ namespace GralDomain
         {
             return new PointD(pt1.X - (pt1.X - pt2.X) / 2, pt1.Y - (pt1.Y - pt2.Y)/ 2);
         }
+        /// <summary>
+        /// Returns the point in the middle between pt1 and pt2
+        /// </summary>
+        /// <param name="pt1"></param>
+        /// <param name="pt2"></param>
+        /// <returns></returns>
+        GralData.PointD_3d GetPointBetween(GralData.PointD_3d pt1, GralData.PointD_3d pt2)
+        {
+            return new GralData.PointD_3d(pt1.X - (pt1.X - pt2.X) / 2, 
+                                          pt1.Y - (pt1.Y - pt2.Y) / 2,
+                                          pt1.Z - (pt1.Z - pt2.Z) / 2);
+        }
 
         // Section Form sends a closed message!
         void section_Form_Section_Closed(object sender, EventArgs e)

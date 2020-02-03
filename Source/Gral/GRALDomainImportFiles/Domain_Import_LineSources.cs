@@ -28,14 +28,14 @@ namespace GralDomain
 		private void ImportGralLineSource(object sender, EventArgs e)
 		{
 			OpenFileDialog dialog = openFileDialog1;
-			dialog.Filter = "(Lsources.txt;line.dat;*.shp)|Lsources.txt;line*.dat;*.shp";
+			dialog.Filter = "(Lsources.txt;LineSourceData.txt,line.dat;*.shp)|Lsources.txt;LineSourceData.txt,line*.dat;*.shp";
 			dialog.Title = "Select existing line source data";
 			dialog.FileName = "";
 			int numbvorher = EditLS.ItemData.Count;
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				int numblines = EditLS.ItemData.Count;
-				if ((!dialog.FileName.EndsWith("shp")) && (!dialog.FileName.EndsWith("Lsources.txt")))
+				if ((!dialog.FileName.EndsWith("shp")) && (!dialog.FileName.EndsWith("Lsources.txt")) && (!dialog.FileName.EndsWith("LineSourceData.txt")))
 				{
 					int i = 1;
 					try
@@ -69,6 +69,8 @@ namespace GralDomain
                             }
 
                             Cursor = Cursors.WaitCursor;
+                            double zmax = -1000000;
+                            double zmin = 1000000;
                             for (i = 1; i < 10000000; i++)
                             {
                                 dummy = myReader.ReadLine();
@@ -77,10 +79,15 @@ namespace GralDomain
                                     text1 = dummy.Split(new char[] { ',', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                     double[] x2 = new double[2];
                                     double[] y2 = new double[2];
+                                    double[] z2 = new double[2];
                                     x2[0] = Convert.ToDouble(text1[3].Replace(".", decsep));
-                                    x2[1] = Convert.ToDouble(text1[6].Replace(".", decsep));
                                     y2[0] = Convert.ToDouble(text1[4].Replace(".", decsep));
+                                    z2[0] = Convert.ToDouble(text1[5].Replace(".", decsep));
+                                    
+                                    x2[1] = Convert.ToDouble(text1[6].Replace(".", decsep));
                                     y2[1] = Convert.ToDouble(text1[7].Replace(".", decsep));
+                                    z2[1] = Convert.ToDouble(text1[8].Replace(".", decsep));
+                                    
                                     double length = Math.Pow((x2[1] - x2[0]), 2) + Math.Pow((y2[1] - y2[0]), 2);
 
                                     if ((x2[0] >= MainForm.GralDomRect.West) && (x2[1] <= MainForm.GralDomRect.East) &&
@@ -94,6 +101,7 @@ namespace GralDomain
                                             Height = Convert.ToSingle(text1[5], ic),
                                             Width = Convert.ToSingle(text1[9], ic)
                                         };
+
                                         _ls.Nemo.AvDailyTraffic = 1;
                                         if (baseyear.Length > 1)
                                         {
@@ -114,14 +122,22 @@ namespace GralDomain
                                             _poll.EmissionRate[k] = Convert.ToDouble(text1[13 + k], ic);
                                         }
                                         _ls.Poll.Add(_poll);
-                                        _ls.Pt.Add(new PointD(x2[0], y2[0]));
-                                        _ls.Pt.Add(new PointD(x2[1], y2[1]));
+                                        _ls.Pt.Add(new GralData.PointD_3d(x2[0], y2[0], z2[0]));
+                                        _ls.Pt.Add(new GralData.PointD_3d(x2[1], y2[1], z2[1]));
+                                        if (Math.Abs(z2[0] - z2[1]) < 0.1)
+                                        {
+                                            _ls.Lines3D = false;
+                                        }
+                                        else
+                                        {
+                                            _ls.Lines3D = true;
+                                        }
 
                                         EditLS.ItemData.Add(_ls);
                                     }
                                 }
                                 else
-                                    break;
+                                break;
                             }
                         }
                         //						//union all street segments with the same name, segment number, width, emissions
@@ -289,7 +305,7 @@ namespace GralDomain
 						EditLS.ItemData.RemoveRange(numbvorher, EditLS.ItemData.Count - numbvorher);
 					}
 				}
-				if (dialog.FileName.EndsWith("Lsources.txt"))
+				if (dialog.FileName.EndsWith("Lsources.txt") || dialog.FileName.EndsWith("LineSourceData.txt"))
 				{
 					try
 					{
@@ -373,7 +389,6 @@ namespace GralDomain
 			_drobj.ShpPoints.TrimExcess(); // Kuntner Memory
 			_drobj.ShpLines.TrimExcess(); // Kuntner
 			_drobj.ShpPolygons.TrimExcess(); // Kuntner
-
 		}
         
 		private bool ComparePoints(PointD p1, PointD p2)

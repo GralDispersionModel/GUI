@@ -337,12 +337,35 @@ namespace GralStaticFunctions
             //MessageBox.Show(this, "Number of vertices is below 3\t\nNo area could be computed");
             return Math.Round(lenght, 1);
         }
-        
         //compute lenght of a polygon
         /// <summary>
     	/// Compute the lenght of a polyline
     	/// </summary>
-    	/// <param name="polypoints">List of PointD with polygon points</param>
+    	/// <param name="numpoints">Number of points in the array</param> 
+    	/// <param name="polypoints">Array for polygon points</param> 
+        public static double CalcLenght(int numpoints, GralData.PointD_3d[] polypoints)
+        {
+            double lenght = 0;
+            if (numpoints > 1 && numpoints < (polypoints.Length - 1))
+            {
+                polypoints[numpoints] = polypoints[0];
+                for (int i = 0; i < numpoints - 1; i++)
+                {
+                    lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) + 
+                                        Math.Pow(polypoints[i].Y - polypoints[i + 1].Y, 2) +
+                                        Math.Pow(polypoints[i].Z - polypoints[i + 1].Z, 2));
+                }
+            }
+            //else
+            //MessageBox.Show(this, "Number of vertices is below 3\t\nNo area could be computed");
+            return Math.Round(lenght, 1);
+        }
+
+        //compute lenght of a polygon
+        /// <summary>
+        /// Compute the lenght of a polyline
+        /// </summary>
+        /// <param name="polypoints">List of PointD with polygon points</param>
         public static double CalcLenght(List <GralDomain.PointD> polypoints)
         {
             double lenght = 0;
@@ -351,6 +374,27 @@ namespace GralStaticFunctions
                 for (int i = 0; i < polypoints.Count - 1; i++)
                 {
                 	lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) + Math.Pow(polypoints[i].Y - polypoints[i + 1].Y, 2));
+                }
+            }
+            //else
+            //MessageBox.Show(this, "Number of vertices is below 3\t\nNo area could be computed");
+            return Math.Round(lenght, 1);
+        }
+        //compute lenght of a polygon
+        /// <summary>
+        /// Compute the lenght of a polyline
+        /// </summary>
+        /// <param name="polypoints">List of PointD_3D with polygon points</param>
+        public static double CalcLenght(List<GralData.PointD_3d> polypoints)
+        {
+            double lenght = 0;
+            if (polypoints.Count > 1)
+            {
+                for (int i = 0; i < polypoints.Count - 1; i++)
+                {
+                    lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) + 
+                                        Math.Pow(polypoints[i].Y - polypoints[i + 1].Y, 2) +
+                                        Math.Pow(polypoints[i].Z - polypoints[i + 1].Z, 2));
                 }
             }
             //else

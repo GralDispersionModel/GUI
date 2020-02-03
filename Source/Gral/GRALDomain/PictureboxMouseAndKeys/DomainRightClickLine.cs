@@ -110,7 +110,9 @@ namespace GralDomain
 				
 				for(int i = 0; i < CopiedItem.LineSource.Pt.Count; i++)
 				{
-					CopiedItem.LineSource.Pt[i] = new PointD(x  - x0 + CopiedItem.LineSource.Pt[i].X, y - y0 + CopiedItem.LineSource.Pt[i].Y);
+					CopiedItem.LineSource.Pt[i] = new GralData.PointD_3d(x  - x0 + CopiedItem.LineSource.Pt[i].X, 
+																		 y - y0 + CopiedItem.LineSource.Pt[i].Y,
+																		 CopiedItem.LineSource.Pt[i].Z);
 				}
 				
 				LineSourceData Temp = new LineSourceData(CopiedItem.LineSource);
@@ -161,13 +163,14 @@ namespace GralDomain
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD _pt in EditLS.ItemData[i].Pt)
+				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -181,11 +184,13 @@ namespace GralDomain
 					}
 					EditLS.ItemData[i].Pt.Insert(indexmin + 1, GetPointBetween(EditLS.ItemData[i].Pt[indexmin], EditLS.ItemData[i].Pt[indexnext]));
 				}
+
 				int count = 0;
-				foreach(PointD _pt in EditLS.ItemData[i].Pt)
+				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
 				{
 					EditLS.CornerLineX[count] = _pt.X;
 					EditLS.CornerLineY[count] = _pt.Y;
+					EditLS.CornerLineZ[count] = _pt.Z;
 					count++;
 				}
 				EditLS.SetNumberOfVerticesText(EditLS.ItemData[i].Pt.Count.ToString());
@@ -208,13 +213,13 @@ namespace GralDomain
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD _pt in EditLS.ItemData[i].Pt)
+				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -224,10 +229,11 @@ namespace GralDomain
 					EditLS.ItemData[i].Pt.RemoveAt(indexmin);
 				}
 				int count = 0;
-				foreach(PointD _pt in EditLS.ItemData[i].Pt)
+				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
 				{
 					EditLS.CornerLineX[count] = _pt.X;
 					EditLS.CornerLineY[count] = _pt.Y;
+					EditLS.CornerLineZ[count] = _pt.Z;
 					count++;
 				}
 				EditLS.SetNumberOfVerticesText(EditLS.ItemData[i].Pt.Count.ToString());

@@ -19,6 +19,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Globalization;
 
 namespace GralData
 {
@@ -33,9 +34,39 @@ namespace GralData
 		
 		public PointD_3d(double x, double y, double z)
 		{
-			X = x; 
-			Y = y;
-			Z = z;
+			X = Math.Round(x, 1); 
+			Y = Math.Round(y, 1);
+			Z = Math.Round(z, 1);
+		}
+		public PointD_3d(string x, string y, string z, CultureInfo cul)
+		{
+			X = Math.Round(Convert.ToDouble(x, cul), 1);
+			Y = Math.Round(Convert.ToDouble(y, cul), 1);
+			Z = Math.Round(Convert.ToDouble(z, cul), 1);
+		}		
+		public GralDomain.PointD ToPointD()
+		{
+			return new GralDomain.PointD(X, Y);
+		}
+		public System.Drawing.PointF ToPointF()
+		{
+			return new System.Drawing.PointF((float)X, (float)Y);
+		}
+		public override bool Equals(object obj)
+		{
+			return obj is PointD_3d && this == (PointD_3d)obj;
+		}
+		public override int GetHashCode()
+		{
+			return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
+		}
+		public static bool operator ==(PointD_3d a, PointD_3d b)
+		{
+			return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+		}
+		public static bool operator !=(PointD_3d a, PointD_3d b)
+		{
+			return !(a == b);
 		}
 	}
 }
