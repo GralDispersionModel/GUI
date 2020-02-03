@@ -430,8 +430,8 @@ namespace Gral
         }
         
         /// <summary>
-		/// Get all control item of the type T
-		/// </summary>
+        /// Get all control item of the type T
+        /// </summary>
         public static IList<T> GetAllControls<T>(Control control) where T : Control
         {
             var lst = new List<T>();
@@ -763,8 +763,8 @@ namespace Gral
 
         //save settings of meteorological input data
         /// <summary>
-		/// Save the file Meteorology.txt in the settings folder
-		/// </summary>
+        /// Save the file Meteorology.txt in the settings folder
+        /// </summary>
         public void SaveMeteoDataFile()
         {
             string newPath = Path.Combine(ProjectName, @"Settings", "Meteorology.txt");
@@ -996,10 +996,10 @@ namespace Gral
 
             InDatVariables indattemp = new InDatVariables();
             InDatFileIO InDataIO = new InDatFileIO();
-			indattemp.InDatPath = Path.Combine(ProjectName, "Computation", "in.dat");
+            indattemp.InDatPath = Path.Combine(ProjectName, "Computation", "in.dat");
 
-			InDataIO.Data = indattemp;
-			if (InDataIO.ReadInDat() == true)
+            InDataIO.Data = indattemp;
+            if (InDataIO.ReadInDat() == true)
             {
                 indattemp.DispersionSituation = GRALSettings.DispersionSituation;
                 InDataIO.WriteInDat();
@@ -1126,8 +1126,8 @@ namespace Gral
 
         //delete the file "in.dat" whenever a value is changed
         /// <summary>
-		/// Delete the file "in.dat" whenever a value is changed
-		/// </summary>
+        /// Delete the file "in.dat" whenever a value is changed
+        /// </summary>
         private void ResetInDat()
         {
             if (IndatReset == true)
@@ -1464,171 +1464,171 @@ namespace Gral
             #if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             #else
-			try
-			{
-				Nemo NemoWork = new Main.Nemo();
-				//source group seperation
-				GralMainForms.Nemostartwindow nemo = new GralMainForms.Nemostartwindow(this);
-				DialogResult dr = new DialogResult();
-				dr = nemo.ShowDialog();
-				string [] text=new string[2];
-				int sg1=1;
-				int sg2=1;
-				int sg3=1;
-				int sg4=1;
-				if (dr == DialogResult.OK)
-				{
-				}
-				//check, whether source seperation has been chosen or not
-				if (nemo.checkBox1.Checked == true)
-				{
-					//generate NEMO input files
-					text = nemo.comboBox1.Text.Split(new char[] { ',' });
-					try
-					{
-						sg1 = Convert.ToInt32(text[1].Replace(" ", ""));
-					}
-					catch
-					{
-						sg1 = Convert.ToInt32(text[0]);
-					}
-					text = nemo.comboBox4.Text.Split(new char[] { ',' });
-					try
-					{
-						sg2 = Convert.ToInt32(text[1].Replace(" ", ""));
-					}
-					catch
-					{
-						sg2 = Convert.ToInt32(text[0]);
-					}
-					text = nemo.comboBox2.Text.Split(new char[] { ',' });
-					try
-					{
-						sg3 = Convert.ToInt32(text[1].Replace(" ", ""));
-					}
-					catch
-					{
-						sg3 = Convert.ToInt32(text[0]);
-					}
-					text = nemo.comboBox3.Text.Split(new char[] { ',' });
-					try
-					{
-						sg4 = Convert.ToInt32(text[1].Replace(" ", ""));
-					}
-					catch
-					{
-						sg4 = Convert.ToInt32(text[0]);
-					}
-					NemoWork.NemoInput(true, sg1, sg2, sg3, sg4);
-				}
-				else
-				{
-					//generate NEMO input files
-					NemoWork.NemoInput(false, sg1, sg2, sg3, sg4);
-				}
-				NemoWork = null;
-				if (nemo != null)
-				{
-					nemo.Close();
-					nemo.Dispose();
-				}
-			}
-			catch
-			{
-				//MessageBox.Show (ex.Message);
-			}
+            try
+            {
+                Nemo NemoWork = new Main.Nemo();
+                //source group seperation
+                GralMainForms.Nemostartwindow nemo = new GralMainForms.Nemostartwindow(this);
+                DialogResult dr = new DialogResult();
+                dr = nemo.ShowDialog();
+                string [] text=new string[2];
+                int sg1=1;
+                int sg2=1;
+                int sg3=1;
+                int sg4=1;
+                if (dr == DialogResult.OK)
+                {
+                }
+                //check, whether source seperation has been chosen or not
+                if (nemo.checkBox1.Checked == true)
+                {
+                    //generate NEMO input files
+                    text = nemo.comboBox1.Text.Split(new char[] { ',' });
+                    try
+                    {
+                        sg1 = Convert.ToInt32(text[1].Replace(" ", ""));
+                    }
+                    catch
+                    {
+                        sg1 = Convert.ToInt32(text[0]);
+                    }
+                    text = nemo.comboBox4.Text.Split(new char[] { ',' });
+                    try
+                    {
+                        sg2 = Convert.ToInt32(text[1].Replace(" ", ""));
+                    }
+                    catch
+                    {
+                        sg2 = Convert.ToInt32(text[0]);
+                    }
+                    text = nemo.comboBox2.Text.Split(new char[] { ',' });
+                    try
+                    {
+                        sg3 = Convert.ToInt32(text[1].Replace(" ", ""));
+                    }
+                    catch
+                    {
+                        sg3 = Convert.ToInt32(text[0]);
+                    }
+                    text = nemo.comboBox3.Text.Split(new char[] { ',' });
+                    try
+                    {
+                        sg4 = Convert.ToInt32(text[1].Replace(" ", ""));
+                    }
+                    catch
+                    {
+                        sg4 = Convert.ToInt32(text[0]);
+                    }
+                    NemoWork.NemoInput(true, sg1, sg2, sg3, sg4);
+                }
+                else
+                {
+                    //generate NEMO input files
+                    NemoWork.NemoInput(false, sg1, sg2, sg3, sg4);
+                }
+                NemoWork = null;
+                if (nemo != null)
+                {
+                    nemo.Close();
+                    nemo.Dispose();
+                }
+            }
+            catch
+            {
+                //MessageBox.Show (ex.Message);
+            }
             #endif
         }
 
         /// <summary>
-		/// Temporary input box
-		/// </summary>
+        /// Temporary input box
+        /// </summary>
         private DialogResult InputBox1(string title, string promptText, int lowlimit, int uplimit, ref int trans)
         {
-        	DialogResult dialogResult = DialogResult.Cancel;
-        	using (Form form = new Form())
-        	{
-        		Label label = new Label();
-        		NumericUpDown numdown = new NumericUpDown();
-        		Button buttonOk = new Button();
-        		Button buttonCancel = new Button();
-        		form.Text = title;
-        		label.Text = promptText;
-        		numdown.Maximum = uplimit;
-        		numdown.Minimum = lowlimit;
-        		numdown.Value = trans;
-        		numdown.Increment = 1;
-        		buttonOk.Text = "OK";
-        		buttonCancel.Text = "Cancel";
-        		buttonOk.DialogResult = DialogResult.OK;
-        		buttonCancel.DialogResult = DialogResult.Cancel;
-        		label.SetBounds(9, 10, 372, 13);
-        		numdown.SetBounds(12, 36, 372, 20);
-        		buttonOk.SetBounds(228, 72, 75, 23);
-        		buttonCancel.SetBounds(309, 72, 75, 23);
-        		label.AutoSize = true;
-        		numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
-        		buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        		buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        		form.ClientSize = new Size(396, 107);
-        		form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
-        		form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
-        		form.FormBorderStyle = FormBorderStyle.FixedDialog;
-        		form.StartPosition = FormStartPosition.CenterScreen;
-        		form.MinimizeBox = false;
-        		form.MaximizeBox = false;
-        		form.AcceptButton = buttonOk;
-        		form.CancelButton = buttonCancel;
-        		dialogResult = form.ShowDialog();
-        		trans = Convert.ToInt32(numdown.Value);
-        	}
-        	return dialogResult;
+            DialogResult dialogResult = DialogResult.Cancel;
+            using (Form form = new Form())
+            {
+                Label label = new Label();
+                NumericUpDown numdown = new NumericUpDown();
+                Button buttonOk = new Button();
+                Button buttonCancel = new Button();
+                form.Text = title;
+                label.Text = promptText;
+                numdown.Maximum = uplimit;
+                numdown.Minimum = lowlimit;
+                numdown.Value = trans;
+                numdown.Increment = 1;
+                buttonOk.Text = "OK";
+                buttonCancel.Text = "Cancel";
+                buttonOk.DialogResult = DialogResult.OK;
+                buttonCancel.DialogResult = DialogResult.Cancel;
+                label.SetBounds(9, 10, 372, 13);
+                numdown.SetBounds(12, 36, 372, 20);
+                buttonOk.SetBounds(228, 72, 75, 23);
+                buttonCancel.SetBounds(309, 72, 75, 23);
+                label.AutoSize = true;
+                numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
+                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                form.ClientSize = new Size(396, 107);
+                form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
+                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.FormBorderStyle = FormBorderStyle.FixedDialog;
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.MinimizeBox = false;
+                form.MaximizeBox = false;
+                form.AcceptButton = buttonOk;
+                form.CancelButton = buttonCancel;
+                dialogResult = form.ShowDialog();
+                trans = Convert.ToInt32(numdown.Value);
+            }
+            return dialogResult;
         }
         
         /// <summary>
-		/// Temporary input box for floating values
-		/// </summary>
-		private DialogResult InputBox2(string title, string promptText, decimal lowlimit, decimal uplimit, ref decimal trans)
+        /// Temporary input box for floating values
+        /// </summary>
+        private DialogResult InputBox2(string title, string promptText, decimal lowlimit, decimal uplimit, ref decimal trans)
         {
-        	DialogResult dialogResult = DialogResult.Cancel;
-        	using (Form form = new Form())
-        	{
-        		Label label = new Label();
-        		NumericUpDown numdown = new NumericUpDown();
-        		Button buttonOk = new Button();
-        		Button buttonCancel = new Button();
-        		form.Text = title;
-        		label.Text = promptText;
-        		numdown.Maximum = uplimit;
-        		numdown.Minimum = lowlimit;
-        		numdown.Value = trans;
-        		numdown.Increment = 0.1M;
-        		numdown.DecimalPlaces = 1;
-        		buttonOk.Text = "OK";
-        		buttonCancel.Text = "Cancel";
-        		buttonOk.DialogResult = DialogResult.OK;
-        		buttonCancel.DialogResult = DialogResult.Cancel;
-        		label.SetBounds(9, 10, 372, 13);
-        		numdown.SetBounds(12, 36, 372, 20);
-        		buttonOk.SetBounds(228, 72, 75, 23);
-        		buttonCancel.SetBounds(309, 72, 75, 23);
-        		label.AutoSize = true;
-        		numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
-        		buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        		buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        		form.ClientSize = new Size(396, 107);
-        		form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
-        		form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
-        		form.FormBorderStyle = FormBorderStyle.FixedDialog;
-        		form.StartPosition = FormStartPosition.CenterScreen;
-        		form.MinimizeBox = false;
-        		form.MaximizeBox = false;
-        		form.AcceptButton = buttonOk;
-        		form.CancelButton = buttonCancel;
-        		dialogResult = form.ShowDialog();
-        		trans = numdown.Value;
-        	}
-        	return dialogResult;
+            DialogResult dialogResult = DialogResult.Cancel;
+            using (Form form = new Form())
+            {
+                Label label = new Label();
+                NumericUpDown numdown = new NumericUpDown();
+                Button buttonOk = new Button();
+                Button buttonCancel = new Button();
+                form.Text = title;
+                label.Text = promptText;
+                numdown.Maximum = uplimit;
+                numdown.Minimum = lowlimit;
+                numdown.Value = trans;
+                numdown.Increment = 0.1M;
+                numdown.DecimalPlaces = 1;
+                buttonOk.Text = "OK";
+                buttonCancel.Text = "Cancel";
+                buttonOk.DialogResult = DialogResult.OK;
+                buttonCancel.DialogResult = DialogResult.Cancel;
+                label.SetBounds(9, 10, 372, 13);
+                numdown.SetBounds(12, 36, 372, 20);
+                buttonOk.SetBounds(228, 72, 75, 23);
+                buttonCancel.SetBounds(309, 72, 75, 23);
+                label.AutoSize = true;
+                numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
+                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                form.ClientSize = new Size(396, 107);
+                form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
+                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.FormBorderStyle = FormBorderStyle.FixedDialog;
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.MinimizeBox = false;
+                form.MaximizeBox = false;
+                form.AcceptButton = buttonOk;
+                form.CancelButton = buttonCancel;
+                dialogResult = form.ShowDialog();
+                trans = numdown.Value;
+            }
+            return dialogResult;
         }
 
         /// <summary>
@@ -1754,9 +1754,9 @@ namespace Gral
         }
         
         /// <summary>
-		/// Check if the most important input files for a GRAL computation are available and enable/disable GRAL simulations
-		/// </summary>
-		public void Enable_GRAL()
+        /// Check if the most important input files for a GRAL computation are available and enable/disable GRAL simulations
+        /// </summary>
+        public void Enable_GRAL()
         {
             //enable/disable GRAL simulations
             bool enable = true;
@@ -1811,9 +1811,9 @@ namespace Gral
         }
         
         /// <summary>
-		/// Check if all files for a GRAMM computation are available and enable/disable GRAMM simulations
-		/// </summary>
-		public void Enable_GRAMM()
+        /// Check if all files for a GRAMM computation are available and enable/disable GRAMM simulations
+        /// </summary>
+        public void Enable_GRAMM()
         {
             //enable/disable GRAMM simulations
             bool enable = true;
@@ -2050,12 +2050,12 @@ namespace Gral
         /// <param name="e"></param>
         private void Button43_Click(object sender, EventArgs e)
         {
-        	GralMainForms.Amend_Landuse AL = new GralMainForms.Amend_Landuse()
-        	{
-        		Owner = this,
-        		StartPosition = FormStartPosition.Manual,
-        		Location = new System.Drawing.Point(this.Left, this.Top)
-        	};
+            GralMainForms.Amend_Landuse AL = new GralMainForms.Amend_Landuse()
+            {
+                Owner = this,
+                StartPosition = FormStartPosition.Manual,
+                Location = new System.Drawing.Point(this.Left, this.Top)
+            };
             AL.Show();
         }
 
@@ -2584,28 +2584,28 @@ namespace Gral
                 // activate FileSystemWatcher
                 #if __MonoCS__
                 #else
-				if (percentGRAL != null && Directory.Exists(percentGRAL.Path))
-					percentGRAL.EnableRaisingEvents = true;
-				if (dispnrGRAL != null && Directory.Exists(dispnrGRAL.Path))
-					dispnrGRAL.EnableRaisingEvents = true;
-				if (percentGramm != null && Directory.Exists(percentGramm.Path))
-					percentGramm.EnableRaisingEvents = true;
-				if (dispnrGramm != null && Directory.Exists(dispnrGramm.Path))
-					dispnrGramm.EnableRaisingEvents = true;
+                if (percentGRAL != null && Directory.Exists(percentGRAL.Path))
+                    percentGRAL.EnableRaisingEvents = true;
+                if (dispnrGRAL != null && Directory.Exists(dispnrGRAL.Path))
+                    dispnrGRAL.EnableRaisingEvents = true;
+                if (percentGramm != null && Directory.Exists(percentGramm.Path))
+                    percentGramm.EnableRaisingEvents = true;
+                if (dispnrGramm != null && Directory.Exists(dispnrGramm.Path))
+                    dispnrGramm.EnableRaisingEvents = true;
                 #endif
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
                 #if __MonoCS__
                 #else
-				if (percentGRAL != null)
-					percentGRAL.EnableRaisingEvents = false;
-				if (dispnrGRAL != null)
-					dispnrGRAL.EnableRaisingEvents = false;
-				if (percentGramm != null)
-					percentGramm.EnableRaisingEvents = false;
-				if (dispnrGramm != null)
-					dispnrGramm.EnableRaisingEvents = false;
+                if (percentGRAL != null)
+                    percentGRAL.EnableRaisingEvents = false;
+                if (dispnrGRAL != null)
+                    dispnrGRAL.EnableRaisingEvents = false;
+                if (percentGramm != null)
+                    percentGramm.EnableRaisingEvents = false;
+                if (dispnrGramm != null)
+                    dispnrGramm.EnableRaisingEvents = false;
                 #endif
             }
             // Lock elements because they do not exist if project is loaded
@@ -2616,17 +2616,17 @@ namespace Gral
         /// <summary>
         /// Output to the textbox "meteorological input" in the computation tab
         /// </summary>
-		void Textbox16_Set(string a)
-		{
-			if (listBox2.Items.Count == 0)
-			{
-				textBox16.Text = a;
-			}
-			else
-			{
-				textBox16.Text = GRAMMwindfield;
-			}
-		}
+        void Textbox16_Set(string a)
+        {
+            if (listBox2.Items.Count == 0)
+            {
+                textBox16.Text = a;
+            }
+            else
+            {
+                textBox16.Text = GRAMMwindfield;
+            }
+        }
 
         /// <summary>
         /// Set the bitmap for the vertical stretching factor button
@@ -2647,127 +2647,127 @@ namespace Gral
         /// Load and show comments
         /// </summary>
         void Button44Click(object sender, EventArgs e)
-		{
-		    //loading comments
-		    textBox17.Text = String.Empty;
-		    string name11 = Path.Combine(ProjectName, @"Settings","comments.txt");
-		    try
-		    {
-		        using (StreamReader ready = new StreamReader(name11, false))
-		        {
-		            textBox17.Text = ready.ReadToEnd();
-		        }
-		    }
-		    catch
-		    {
-		        string a = "Project:	" + ProjectName + Environment.NewLine;
-		        a +=       "Machine: 	" + Environment.MachineName + Environment.NewLine;
-		        a +=       "User:    	" + Environment.UserName + Environment.NewLine;
-		        a +=       "Domain:  	" + Environment.UserDomainName + Environment.NewLine;
-		        a +=       "Proc count: " + Environment.ProcessorCount  + Environment.NewLine;
-		        a +=       "GRAMM Windfield: " + GRAMMwindfield;
-		        textBox17.Text = a;
-		    }
-			panel1.Visible = false;
-			panel1.Hide();
-			textBox17.ReadOnly = false;
-			textBox17.Visible = true;
-			textBox17.Show();
-			button38.Visible = true;
-			button38.Show();
-		}
+        {
+            //loading comments
+            textBox17.Text = String.Empty;
+            string name11 = Path.Combine(ProjectName, @"Settings","comments.txt");
+            try
+            {
+                using (StreamReader ready = new StreamReader(name11, false))
+                {
+                    textBox17.Text = ready.ReadToEnd();
+                }
+            }
+            catch
+            {
+                string a = "Project:	" + ProjectName + Environment.NewLine;
+                a +=       "Machine: 	" + Environment.MachineName + Environment.NewLine;
+                a +=       "User:    	" + Environment.UserName + Environment.NewLine;
+                a +=       "Domain:  	" + Environment.UserDomainName + Environment.NewLine;
+                a +=       "Proc count: " + Environment.ProcessorCount  + Environment.NewLine;
+                a +=       "GRAMM Windfield: " + GRAMMwindfield;
+                textBox17.Text = a;
+            }
+            panel1.Visible = false;
+            panel1.Hide();
+            textBox17.ReadOnly = false;
+            textBox17.Visible = true;
+            textBox17.Show();
+            button38.Visible = true;
+            button38.Show();
+        }
 
-		void TabControl1Deselected(object sender, TabControlEventArgs e)
-		{
-			if (tabControl1.SelectedIndex != 1) return;
-			CheckGralInputData(); // check if
-		}
+        void TabControl1Deselected(object sender, TabControlEventArgs e)
+        {
+            if (tabControl1.SelectedIndex != 1) return;
+            CheckGralInputData(); // check if
+        }
 
         /// <summary>
         /// Read and set the number of the processor cores in the file Max_Proc.txt
         /// </summary>
-		void MaxProcFileRead()
-		{
-			//Read the actual number of threads to be used in each parallelized region
-			int prozessoranzahl = Math.Min(63, Environment.ProcessorCount);
-			try
-			{
-				string maxproc = Path.Combine(ProjectName, @"Computation","Max_Proc.txt");
-				if (File.Exists(maxproc))
-				{
-					try
-					{
-						using (StreamReader myreader = new StreamReader(maxproc))
-						{
-							string text = myreader.ReadLine();
-							prozessoranzahl = Math.Min(63, Math.Max(1, Convert.ToInt32(text)));
-						}
-					}
-					catch { }
-				}
-			}
-			catch
-			{}
+        void MaxProcFileRead()
+        {
+            //Read the actual number of threads to be used in each parallelized region
+            int prozessoranzahl = Math.Min(63, Environment.ProcessorCount);
+            try
+            {
+                string maxproc = Path.Combine(ProjectName, @"Computation","Max_Proc.txt");
+                if (File.Exists(maxproc))
+                {
+                    try
+                    {
+                        using (StreamReader myreader = new StreamReader(maxproc))
+                        {
+                            string text = myreader.ReadLine();
+                            prozessoranzahl = Math.Min(63, Math.Max(1, Convert.ToInt32(text)));
+                        }
+                    }
+                    catch { }
+                }
+            }
+            catch
+            {}
             numericUpDown32.Value = prozessoranzahl;
-		}
+        }
 
         /// <summary>
         /// Save the number of the processor cores to the file Max_Proc.txt
         /// </summary>
-		void NumericUpDown32ValueChanged(object sender, EventArgs e)
-		{
-			if (ProjectName.Length >0) // if a project exists
-			{
-				//user defines maximum number of processors to be used in the simulations
-				string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");
-				try
-				{
-					using (StreamWriter procwrite = new StreamWriter(maxproc))
-					{
-						procwrite.WriteLine(Convert.ToString(numericUpDown32.Value));
-					}
-				}
-				catch
-				{
-					MessageBox.Show("Unable to write file 'Max_Proc.txt'","GUI Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
-		}
+        void NumericUpDown32ValueChanged(object sender, EventArgs e)
+        {
+            if (ProjectName.Length >0) // if a project exists
+            {
+                //user defines maximum number of processors to be used in the simulations
+                string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");
+                try
+                {
+                    using (StreamWriter procwrite = new StreamWriter(maxproc))
+                    {
+                        procwrite.WriteLine(Convert.ToString(numericUpDown32.Value));
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to write file 'Max_Proc.txt'","GUI Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
         /// <summary>
         /// Load the main form
         /// </summary>
-		void MainLoad(object sender, EventArgs e)
-		{
-		}
+        void MainLoad(object sender, EventArgs e)
+        {
+        }
 
         /// <summary>
         /// Write steady state files checkbox changed
         /// </summary>
-		private void CheckBox27_CheckedChanged(object sender, EventArgs e)
-		{
-			//save GRAMM control file "GRAMMin.dat"
-			GRAMMin(EmifileReset);
-		}
+        private void CheckBox27_CheckedChanged(object sender, EventArgs e)
+        {
+            //save GRAMM control file "GRAMMin.dat"
+            GRAMMin(EmifileReset);
+        }
 
         /// <summary>
         /// Open one of the topmost 10 used project files
         /// </summary>
         void Button46Click(object sender, EventArgs e)
         {
-        	using (GralMainForms.MostRecentFiles MRF = new GralMainForms.MostRecentFiles())
-        	{
-        		if (MRF.ShowDialog() == DialogResult.OK)
-        		{
-        			string folder = MRF.SelectedFile;
-        			MRF.Close();
-        			MRF.Dispose();
-        			if (folder.Length > 2) // if a folder is selected
-        			{
-        				LoadProject(folder);
-        			}
-        		}
-        	}
+            using (GralMainForms.MostRecentFiles MRF = new GralMainForms.MostRecentFiles())
+            {
+                if (MRF.ShowDialog() == DialogResult.OK)
+                {
+                    string folder = MRF.SelectedFile;
+                    MRF.Close();
+                    MRF.Dispose();
+                    if (folder.Length > 2) // if a folder is selected
+                    {
+                        LoadProject(folder);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -2779,10 +2779,10 @@ namespace Gral
             string name = Path.Combine(ProjectName, @"Settings", "comments.txt");
             try
             {
-				using (StreamWriter write = new StreamWriter(name, false))
-				{
-                	write.WriteLine(Convert.ToString(textBox17.Text));
-				}
+                using (StreamWriter write = new StreamWriter(name, false))
+                {
+                    write.WriteLine(Convert.ToString(textBox17.Text));
+                }
             }
             catch { }
         }
@@ -2801,131 +2801,131 @@ namespace Gral
         /// </summary>
         public void SetEmissionFilesInvalid()
         {
-        	Change_Label(2, 0); // Emission label red
+            Change_Label(2, 0); // Emission label red
         }
         /// <summary>
-		/// Change the label color for the computation buttons
-		/// </summary>
-		/// <param name="button">0 = Control, 1= meteo, 2 = emission, 3 = building</param>
-		/// <param name="mode">0 = red dot, 1 = green dot, 2 = black hook, -1 invisible</param>
-		public void Change_Label(int button, int mode)
+        /// Change the label color for the computation buttons
+        /// </summary>
+        /// <param name="button">0 = Control, 1= meteo, 2 = emission, 3 = building</param>
+        /// <param name="mode">0 = red dot, 1 = green dot, 2 = black hook, -1 invisible</param>
+        public void Change_Label(int button, int mode)
         {
-        	// button: 0 = Control, 1= meteo, 2 = emission, 3 = building
-        	// mode: 0 = red dot, 1 = green dot, 2 = black hook, -1 invisible
-        	if (button == 0)
-        	{
-        		if (mode == -1)
-				{
-					pictureBox1.Visible = false;
-					Control_OK  = false;
-				}
-        		else
-        			pictureBox1.Visible = true;
-        		if (mode == 0)
-        		{
-        	      	pictureBox1.Image = Gral.Properties.Resources.RedDot;
-        	      	Control_OK = false;
-        	    }
-        		if (mode == 1)
-        		{
-        	      	pictureBox1.Image = Gral.Properties.Resources.GreenDot;
-					Control_OK = false;
-        		}
-        		if (mode == 2)
-        		{
-        	      	pictureBox1.Image = Gral.Properties.Resources.BlackHook;
-        	      	Control_OK = true;
-        		}
-        	}
-        	if (button == 1)
-        	{
-        		if (mode == -1)
-				{
-					pictureBox2.Visible = false;
-					Meteo_OK = false;
-				}
-        		else
-        			pictureBox2.Visible = true;
-        		if (mode == 0)
-        		{
-        	      	pictureBox2.Image = Gral.Properties.Resources.RedDot;
-        	      	Meteo_OK = false;
-        		}
-        		if (mode == 1)
-        		{
-        	      	pictureBox2.Image = Gral.Properties.Resources.GreenDot;
-					Meteo_OK = false;
-        		}
-        		if (mode == 2)
-        		{
-        	      	pictureBox2.Image = Gral.Properties.Resources.BlackHook;
-        	      	Meteo_OK = true;
-        		}
-        	}
-        	if (button == 2)
-        	{
-				if (mode == -1)
-				{
-					pictureBox3.Visible = false;
-					Emission_OK = false;
-				}
-				else
-					pictureBox3.Visible = true;
-        		if (mode == 0)
-        		{
-					pictureBox3.Image = Gral.Properties.Resources.RedDot;
-        	      	Emission_OK = false;
-        		}
-        		if (mode == 1)
-        		{
-					pictureBox3.Image = Gral.Properties.Resources.GreenDot;
-        	      	Emission_OK = false;
-        		}
-        		if (mode == 2)
-        		{
-					pictureBox3.Image = Gral.Properties.Resources.BlackHook;
-        	      	Emission_OK = true;
-        		}
-        	}
-        	if (button == 3)
-        	{
-				if (mode == -1)
-				{
-					pictureBox4.Visible = false;
-					Building_OK = true; // no buildings!
-				}
-				else
-					pictureBox4.Visible = true;
-        		if (mode == 0)
-        		{
-					pictureBox4.Image = Gral.Properties.Resources.RedDot;
-        	      	Building_OK = false;
-        	      	try // delete buildings.dat if file exists
-        	      	{
-        	      		string newPath1 = Path.Combine(ProjectName, @"Computation", "buildings.dat");
-        	      		if (Project_Locked == false)
-							File.Delete(newPath1);
-					}
-					catch {}
-					try // delete vegetation.dat if file exists
-        	      	{
-					    string newPath1 = Path.Combine(ProjectName, @"Computation", "vegetation.dat");
-        	      		if (Project_Locked == false)
-							File.Delete(newPath1);
-					}
-					catch {}
-        		}
-        		if (mode == 1)
-        		{
-					pictureBox4.Image = Gral.Properties.Resources.GreenDot;
-        	      	Building_OK = false;
-        		}
-        		if (mode == 2)
-        		{
-					pictureBox4.Image = Gral.Properties.Resources.BlackHook;
-        	      	Building_OK = true;
-        		}
-        	}
+            // button: 0 = Control, 1= meteo, 2 = emission, 3 = building
+            // mode: 0 = red dot, 1 = green dot, 2 = black hook, -1 invisible
+            if (button == 0)
+            {
+                if (mode == -1)
+                {
+                    pictureBox1.Visible = false;
+                    Control_OK  = false;
+                }
+                else
+                    pictureBox1.Visible = true;
+                if (mode == 0)
+                {
+                    pictureBox1.Image = Gral.Properties.Resources.RedDot;
+                    Control_OK = false;
+                }
+                if (mode == 1)
+                {
+                    pictureBox1.Image = Gral.Properties.Resources.GreenDot;
+                    Control_OK = false;
+                }
+                if (mode == 2)
+                {
+                    pictureBox1.Image = Gral.Properties.Resources.BlackHook;
+                    Control_OK = true;
+                }
+            }
+            if (button == 1)
+            {
+                if (mode == -1)
+                {
+                    pictureBox2.Visible = false;
+                    Meteo_OK = false;
+                }
+                else
+                    pictureBox2.Visible = true;
+                if (mode == 0)
+                {
+                    pictureBox2.Image = Gral.Properties.Resources.RedDot;
+                    Meteo_OK = false;
+                }
+                if (mode == 1)
+                {
+                    pictureBox2.Image = Gral.Properties.Resources.GreenDot;
+                    Meteo_OK = false;
+                }
+                if (mode == 2)
+                {
+                    pictureBox2.Image = Gral.Properties.Resources.BlackHook;
+                    Meteo_OK = true;
+                }
+            }
+            if (button == 2)
+            {
+                if (mode == -1)
+                {
+                    pictureBox3.Visible = false;
+                    Emission_OK = false;
+                }
+                else
+                    pictureBox3.Visible = true;
+                if (mode == 0)
+                {
+                    pictureBox3.Image = Gral.Properties.Resources.RedDot;
+                    Emission_OK = false;
+                }
+                if (mode == 1)
+                {
+                    pictureBox3.Image = Gral.Properties.Resources.GreenDot;
+                    Emission_OK = false;
+                }
+                if (mode == 2)
+                {
+                    pictureBox3.Image = Gral.Properties.Resources.BlackHook;
+                    Emission_OK = true;
+                }
+            }
+            if (button == 3)
+            {
+                if (mode == -1)
+                {
+                    pictureBox4.Visible = false;
+                    Building_OK = true; // no buildings!
+                }
+                else
+                    pictureBox4.Visible = true;
+                if (mode == 0)
+                {
+                    pictureBox4.Image = Gral.Properties.Resources.RedDot;
+                    Building_OK = false;
+                    try // delete buildings.dat if file exists
+                    {
+                        string newPath1 = Path.Combine(ProjectName, @"Computation", "buildings.dat");
+                        if (Project_Locked == false)
+                            File.Delete(newPath1);
+                    }
+                    catch {}
+                    try // delete vegetation.dat if file exists
+                    {
+                        string newPath1 = Path.Combine(ProjectName, @"Computation", "vegetation.dat");
+                        if (Project_Locked == false)
+                            File.Delete(newPath1);
+                    }
+                    catch {}
+                }
+                if (mode == 1)
+                {
+                    pictureBox4.Image = Gral.Properties.Resources.GreenDot;
+                    Building_OK = false;
+                }
+                if (mode == 2)
+                {
+                    pictureBox4.Image = Gral.Properties.Resources.BlackHook;
+                    Building_OK = true;
+                }
+            }
         }
 
         /// <summary>
@@ -2937,35 +2937,35 @@ namespace Gral
         {
             if (EmifileReset == true)
             {
-            	if (checkBox32.Checked == false || MessageBox.Show(this, "Enable GRAL transient mode? Caution: the computation slows down" + Environment.NewLine + "and GRAL version 18.03 or higher is needed!",
-            	                    "GRAL GUI", MessageBoxButtons.OKCancel , MessageBoxIcon.Question) == DialogResult.OK)
-            	{
-            		if (checkBox32.Checked == true)
-            		{
-            			label13.Enabled = true;
-            			numericUpDown34.Enabled = true;
-            			checkBox34.Enabled = true;
-            			groupBox21.Visible = true; // Wet Deposition settings
-            			groupBox24.Visible = true; // Decay rate
-            			numericUpDown5.Value = 1;  // lock setting of start dispersion situtation
+                if (checkBox32.Checked == false || MessageBox.Show(this, "Enable GRAL transient mode? Caution: the computation slows down" + Environment.NewLine + "and GRAL version 18.03 or higher is needed!",
+                                    "GRAL GUI", MessageBoxButtons.OKCancel , MessageBoxIcon.Question) == DialogResult.OK)
+                {
+                    if (checkBox32.Checked == true)
+                    {
+                        label13.Enabled = true;
+                        numericUpDown34.Enabled = true;
+                        checkBox34.Enabled = true;
+                        groupBox21.Visible = true; // Wet Deposition settings
+                        groupBox24.Visible = true; // Decay rate
+                        numericUpDown5.Value = 1;  // lock setting of start dispersion situtation
                         numericUpDown5.Enabled = false; // lock setting of start dispersion situtation
-            		}
-            		else
-            		{
-            		    numericUpDown5.Enabled = true; // release setting of start dispersion situtation
-            			label13.Enabled = false;
-            			numericUpDown34.Enabled = false;
-            			checkBox34.Enabled = false;
-            			groupBox21.Visible = false; // Wet Deposition settings
-            			groupBox24.Visible = false; // Decay rate
-            		}
-            		ResetInDat();
-            	}
-            	else
-            	{
-            		checkBox32.Checked = false;
-            		checkBox34.Checked = false;
-            	}
+                    }
+                    else
+                    {
+                        numericUpDown5.Enabled = true; // release setting of start dispersion situtation
+                        label13.Enabled = false;
+                        numericUpDown34.Enabled = false;
+                        checkBox34.Enabled = false;
+                        groupBox21.Visible = false; // Wet Deposition settings
+                        groupBox24.Visible = false; // Decay rate
+                    }
+                    ResetInDat();
+                }
+                else
+                {
+                    checkBox32.Checked = false;
+                    checkBox34.Checked = false;
+                }
             }
         }
 
@@ -2976,7 +2976,7 @@ namespace Gral
         /// <param name="e"></param>
         private void NumericUpDown34_ValueChanged(object sender, EventArgs e)
         {
-        	CultureInfo ic = CultureInfo.InvariantCulture;
+            CultureInfo ic = CultureInfo.InvariantCulture;
             try
             {
                 // write set cut-off concentration to file
@@ -3038,7 +3038,7 @@ namespace Gral
         /// <param name="e"></param>
         void NumericUpDown35ValueChanged(object sender, EventArgs e)
         {
-        	ListBox5_SelectedIndexChanged(sender, null);
+            ListBox5_SelectedIndexChanged(sender, null);
         }
 
         /// <summary>
@@ -3048,26 +3048,26 @@ namespace Gral
         /// <param name="e"></param>
         void CheckBox34Click(object sender, EventArgs e)
         {
-        	if (checkBox32.Checked == true)
-        	{
-        		string name = Path.Combine(ProjectName, @"Computation", "GRAL_Vert_Conc.txt");
-        		try
-        		{
-        			if (checkBox34.Checked)
-        			{
-        				File.Create(name).Close();
-        			}
-        			else
-        			{
-        				File.Delete(name);
-        			}
-        		}
-        		catch{}
-        	}
-        	else
-        	{
-        		checkBox34.Checked = false;
-        	}
+            if (checkBox32.Checked == true)
+            {
+                string name = Path.Combine(ProjectName, @"Computation", "GRAL_Vert_Conc.txt");
+                try
+                {
+                    if (checkBox34.Checked)
+                    {
+                        File.Create(name).Close();
+                    }
+                    else
+                    {
+                        File.Delete(name);
+                    }
+                }
+                catch{}
+            }
+            else
+            {
+                checkBox34.Checked = false;
+            }
         }
 
         /// <summary>
@@ -3079,9 +3079,9 @@ namespace Gral
         {
             GralMainForms.GUI_Settings settings = new GralMainForms.GUI_Settings
             {
-            	StartPosition = FormStartPosition.Manual,
-            	Location = new System.Drawing.Point(this.Left, this.Top),
-            	Owner = this
+                StartPosition = FormStartPosition.Manual,
+                Location = new System.Drawing.Point(this.Left, this.Top),
+                Owner = this
             };
             settings.Show();
         }
