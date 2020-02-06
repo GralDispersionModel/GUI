@@ -714,7 +714,7 @@ namespace GralDomForms
             {
                 RemoveLine = -999;
                 dataGridView1.ClearSelection();
-                // send delegate - Message to domain Form, that match process should start
+                // send delegate - Message to domain Form, that wind data should be selected by the user
                 try
                 {
                     if (LoadWindData != null)

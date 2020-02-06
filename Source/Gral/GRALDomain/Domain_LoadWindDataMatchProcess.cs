@@ -149,7 +149,7 @@ namespace GralDomain
                     {
                         MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(x0);
                         MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(y0);
-                        MMO.dataGridView1.Rows[zeilenindex].Cells[3].Value = Convert.ToInt32(Anemometerheight);
+                        MMO.dataGridView1.Rows[zeilenindex].Cells[3].Value = Convert.ToInt32((int) (Anemometerheight));
                     }
 
                     MeteoInput_Matchlocalobs FormatMetFile = new MeteoInput_Matchlocalobs()
@@ -158,6 +158,7 @@ namespace GralDomain
                         MetFile1 = metfile,
                         FileLength1 = MMOData.FileLenght,
                         DecSep1 = decsep,
+                        Anemometerheight = Anemometerheight,
                         Owner = this
                     };
                     if (FormatMetFile.ShowDialog() == DialogResult.OK)
