@@ -33,6 +33,7 @@ namespace GralDomForms
         public GralItemData.MatchMeteoData MMOData;
         public string[] StartDate = new string[3];
         public string[] EndDate = new string[3];
+        public double Anemometerheight;
 
         public MeteoInput_Matchlocalobs()
         {
@@ -274,6 +275,10 @@ namespace GralDomForms
         	if (Owner != null)
         		Location = new Point(Math.Max(0,Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
         		                    Math.Max(0, Owner.Location.Y + Owner.Height / 2 - Height / 2 -100));
+            if (Anemometerheight > 0)
+            {
+                numericUpDown1.Value = (decimal) Anemometerheight;
+            }
         }
 
         //select start date for met data input
