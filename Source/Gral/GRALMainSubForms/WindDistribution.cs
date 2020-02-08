@@ -79,6 +79,7 @@ namespace GralMainForms
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 1);
             Pen p3 = new Pen(Color.Black, 1);
+            RectangleF ClipBounds = new RectangleF(0, 0, panel1.Width, panel1.Height);
 
             SizeF _lenght  = g.MeasureString(MetFile, _mediumFont);
             SizeF _lenght2 = g.MeasureString("100", _smallFont);
@@ -108,13 +109,15 @@ namespace GralMainForms
             g.DrawLine(p2, x0, ymin, panel1.Width - 10, ymin);
             g.DrawLine(p2, xmax, ymin, xmax, y0);
 
+            int xr = 0;
             for (int i = 0; i < (MaxWind); i++)
             {
                 string fs = Convert.ToString(i);
-                int xr = (int)(x0 + i * xfac);
+                xr = (int)(x0 + i * xfac);
                 g.DrawString(fs, _smallFont, _blackBrush, new PointF(xr - _lenght2.Height / 2, y0 + 5), format1);
                 g.DrawLine(p3, xr, ymin, xr, y0 + 2);
             }
+            ClipBounds.Width = xr;
             
             g.DrawString("v [m/s]", _smallFont, _blackBrush, new PointF((int) (panel1.Width / 2 - 30), (int) (y0 + _lenght2.Height)), format1);
 
@@ -140,6 +143,7 @@ namespace GralMainForms
             Pen p4 = new Pen(Color.Blue, 3);
             PointF[] _pt = new PointF[WClassFrequency.Length];
             double vw = 0;
+            g.Clip = new Region(ClipBounds);
             for (int i = 0; i < WClassFrequency.Length; i++)
             {
                 _pt[i].X = (float) (x0 + vw * xfac);
@@ -148,7 +152,8 @@ namespace GralMainForms
             }
              
             g.DrawCurve(p4, _pt, 0F);
-
+            g.ResetClip();
+            
             p1.Dispose(); p2.Dispose(); p3.Dispose(); p4.Dispose();
             verticalString.Dispose();
             format1.Dispose();
