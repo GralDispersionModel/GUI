@@ -981,7 +981,7 @@
             this.numericUpDown5.TabIndex = 4;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown5, "Start the calculation with that dispersion situation\r\nThis option is not availabl" +
-        "e at transient calculations");
+        "e for transient calculations");
             this.numericUpDown5.Value = new decimal(new int[] {
             1,
             0,
