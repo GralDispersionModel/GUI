@@ -122,9 +122,9 @@ namespace GralMainForms
             // 
             this.checkBox1.Location = new System.Drawing.Point(12, 204);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(245, 24);
+            this.checkBox1.Size = new System.Drawing.Size(334, 24);
             this.checkBox1.TabIndex = 4;
-            this.checkBox1.Text = "File compatibility to GUI version 19.01";
+            this.checkBox1.Text = "File compatibility to GUI version 19.01 and 20.01";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.Click += new System.EventHandler(this.CheckBox1Click);
             // 

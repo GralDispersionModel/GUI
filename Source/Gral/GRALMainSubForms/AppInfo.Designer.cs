@@ -39,7 +39,7 @@
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(223, 282);
+            this.button1.Location = new System.Drawing.Point(223, 344);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(95, 40);
             this.button1.TabIndex = 0;
@@ -65,15 +65,17 @@
             this.listBox1.Items.AddRange(new object[] {
             "Dietmar Öttl",
             "Markus Kuntner",
-            "..."});
+            "Contributors:",
+            "  * Raphael Reifeltshammer"});
             this.listBox1.Location = new System.Drawing.Point(26, 43);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(489, 84);
+            this.listBox1.Size = new System.Drawing.Size(489, 124);
             this.listBox1.TabIndex = 2;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(26, 145);
+            this.textBox1.Location = new System.Drawing.Point(26, 207);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -85,7 +87,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(544, 334);
+            this.ClientSize = new System.Drawing.Size(544, 397);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label1);
