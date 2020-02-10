@@ -543,7 +543,10 @@ namespace GralDomain
                                     }
                                 }
                                 ReDrawContours = true;
-                                Contours(_drobj.ContourFilename, _drobj);
+                                if (File.Exists(_drobj.ContourFilename))
+                                {
+                                    Contours(_drobj.ContourFilename, _drobj);
+                                }
                             }
                             catch
                             {
@@ -583,7 +586,10 @@ namespace GralDomain
                                         }
                                     }
                                 }
-                                LoadVectors(_drobj.ContourFilename, _drobj);
+                                if (File.Exists(_drobj.ContourFilename))
+                                {
+                                    LoadVectors(_drobj.ContourFilename, _drobj);
+                                }
                             }
                             catch
                             {
