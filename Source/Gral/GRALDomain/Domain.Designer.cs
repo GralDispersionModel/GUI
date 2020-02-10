@@ -298,8 +298,8 @@
             this.button21.Size = new System.Drawing.Size(26, 25);
             this.button21.TabIndex = 13;
             this.button21.Text = "[m²]";
-            this.toolTip1.SetToolTip(this.button21, "Measure areas:\r\nLeft click:\r\nSet vertices of the polygon.\r\n\r\nRight click:\r\nClosin" +
-        "g the polygon.");
+            this.toolTip1.SetToolTip(this.button21, "Measure areas:\r\nLeft click:\r\nSet vertices of the polygon.\r\n\r\nRight click:\r\nClose " +
+        "the polygon.");
             this.button21.UseVisualStyleBackColor = true;
             this.button21.Visible = false;
             this.button21.Click += new System.EventHandler(this.Button21_Click);
@@ -342,7 +342,7 @@
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(26, 25);
             this.button18.TabIndex = 10;
-            this.toolTip1.SetToolTip(this.button18, "Define position (cemtre)\r\nof north arrow.");
+            this.toolTip1.SetToolTip(this.button18, "Define position (center)\r\nof north arrow.");
             this.button18.UseVisualStyleBackColor = true;
             this.button18.Visible = false;
             this.button18.Click += new System.EventHandler(this.Button18_Click);
@@ -372,7 +372,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(26, 25);
             this.button7.TabIndex = 8;
-            this.toolTip1.SetToolTip(this.button7, "Zoom in");
+            this.toolTip1.SetToolTip(this.button7, "Zoom in by rectangle");
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
@@ -615,7 +615,7 @@
             this.button30.Size = new System.Drawing.Size(26, 25);
             this.button30.TabIndex = 40;
             this.toolTip1.SetToolTip(this.button30, "Compute wind statistics at\r\na specific point.\r\nWindroses etc. can be viewed\r\nin t" +
-        "he menu \"");
+        "he menu tab \"Meteorology\"");
             this.button30.UseVisualStyleBackColor = true;
             this.button30.Click += new System.EventHandler(this.Button30_Click);
             // 
@@ -864,9 +864,9 @@
             this.button43.Name = "button43";
             this.button43.Size = new System.Drawing.Size(26, 25);
             this.button43.TabIndex = 47;
-            this.toolTip1.SetToolTip(this.button43, "Re-order wind fields to match\r\nnewly observed wind and stability data\r\n at any lo" +
-        "cation.\r\nLeft click on the map to define\r\nthe position of the new meteorological" +
-        "\r\nmeasurements.");
+            this.toolTip1.SetToolTip(this.button43, "Match-to-Observation:\r\nReorder wind fields to match\r\nnewly observed wind and stab" +
+        "ility data\r\nat any location.\r\nLeft click on the map to define\r\nthe position of t" +
+        "he new meteorological\r\nmeasurements.");
             this.button43.UseVisualStyleBackColor = true;
             this.button43.Click += new System.EventHandler(this.Button43_Click);
             // 
@@ -1635,7 +1635,7 @@
             this.toolStripMenuItem18.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItem18.Name = "toolStripMenuItem18";
             this.toolStripMenuItem18.Size = new System.Drawing.Size(205, 22);
-            this.toolStripMenuItem18.Text = "Show &lenght label info";
+            this.toolStripMenuItem18.Text = "Show &length label info";
             this.toolStripMenuItem18.Click += new System.EventHandler(this.ToolStripMenuItem18Click);
             // 
             // toolStripMenuItem5
@@ -2015,7 +2015,7 @@
             // 
             this.pointSourcesToolStripMenuItem1.Name = "pointSourcesToolStripMenuItem1";
             this.pointSourcesToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.pointSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.pointSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.pointSourcesToolStripMenuItem1.Text = "Point sources";
             this.pointSourcesToolStripMenuItem1.Click += new System.EventHandler(this.Button8_Click);
             // 
@@ -2023,7 +2023,7 @@
             // 
             this.areaSourcesToolStripMenuItem1.Name = "areaSourcesToolStripMenuItem1";
             this.areaSourcesToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F2)));
-            this.areaSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.areaSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.areaSourcesToolStripMenuItem1.Text = "Area sources";
             this.areaSourcesToolStripMenuItem1.Click += new System.EventHandler(this.Button10_Click);
             // 
@@ -2031,7 +2031,7 @@
             // 
             this.lineSourcesToolStripMenuItem1.Name = "lineSourcesToolStripMenuItem1";
             this.lineSourcesToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F3)));
-            this.lineSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.lineSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.lineSourcesToolStripMenuItem1.Text = "Line sources";
             this.lineSourcesToolStripMenuItem1.Click += new System.EventHandler(this.Button12_Click);
             // 
@@ -2039,7 +2039,7 @@
             // 
             this.tunnelPortalsToolStripMenuItem1.Name = "tunnelPortalsToolStripMenuItem1";
             this.tunnelPortalsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this.tunnelPortalsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.tunnelPortalsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.tunnelPortalsToolStripMenuItem1.Text = "Tunnel portals";
             this.tunnelPortalsToolStripMenuItem1.Click += new System.EventHandler(this.Button14_Click);
             // 
@@ -2047,7 +2047,7 @@
             // 
             this.buildingsToolStripMenuItem1.Name = "buildingsToolStripMenuItem1";
             this.buildingsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this.buildingsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.buildingsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.buildingsToolStripMenuItem1.Text = "Buildings";
             this.buildingsToolStripMenuItem1.Click += new System.EventHandler(this.Button16_Click);
             // 
@@ -2055,7 +2055,7 @@
             // 
             this.receptorPointsToolStripMenuItem1.Name = "receptorPointsToolStripMenuItem1";
             this.receptorPointsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
-            this.receptorPointsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.receptorPointsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.receptorPointsToolStripMenuItem1.Text = "Receptor points";
             this.receptorPointsToolStripMenuItem1.Click += new System.EventHandler(this.Button23_Click);
             // 
@@ -2063,7 +2063,7 @@
             // 
             this.wallsToolStripMenuItem1.Name = "wallsToolStripMenuItem1";
             this.wallsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F7)));
-            this.wallsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.wallsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.wallsToolStripMenuItem1.Text = "Walls";
             this.wallsToolStripMenuItem1.Click += new System.EventHandler(this.Button49Click);
             // 
@@ -2071,20 +2071,20 @@
             // 
             this.VegetationtToolStripMenuItem1.Name = "VegetationtToolStripMenuItem1";
             this.VegetationtToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F10)));
-            this.VegetationtToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
+            this.VegetationtToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
             this.VegetationtToolStripMenuItem1.Text = "Vegetation";
             this.VegetationtToolStripMenuItem1.Click += new System.EventHandler(this.Button50Click);
             // 
             // toolStripMenuItem17
             // 
             this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            this.toolStripMenuItem17.Size = new System.Drawing.Size(202, 6);
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(200, 6);
             // 
             // searchItemToolStripMenuItem
             // 
             this.searchItemToolStripMenuItem.Name = "searchItemToolStripMenuItem";
             this.searchItemToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.searchItemToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.searchItemToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.searchItemToolStripMenuItem.Text = "Search items";
             this.searchItemToolStripMenuItem.Click += new System.EventHandler(this.SearchItemToolStripMenuItemClick);
             // 
@@ -2105,14 +2105,14 @@
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.ShortcutKeyDisplayString = "T";
             this.toolsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 21);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // measureLenghtToolStripMenuItem
             // 
             this.measureLenghtToolStripMenuItem.Name = "measureLenghtToolStripMenuItem";
             this.measureLenghtToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
-            this.measureLenghtToolStripMenuItem.Text = "Lenght measurement";
+            this.measureLenghtToolStripMenuItem.Text = "Length measurement";
             this.measureLenghtToolStripMenuItem.Click += new System.EventHandler(this.Button20_Click);
             // 
             // measureAreaToolStripMenuItem
@@ -2375,7 +2375,7 @@
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.ShortcutKeyDisplayString = "E";
             this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 21);
             this.exportToolStripMenuItem.Text = "E&xport";
             // 
             // saveMapToDiscToolStripMenuItem
