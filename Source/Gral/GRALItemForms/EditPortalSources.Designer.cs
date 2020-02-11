@@ -138,7 +138,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(84, 20);
             this.numericUpDown1.TabIndex = 3;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown1, "Height of the portal top edge\r\nabove ground level");
+            this.toolTip1.SetToolTip(this.numericUpDown1, "Relative height of the portal top edge");
             this.numericUpDown1.Value = new decimal(new int[] {
             5,
             0,
@@ -454,7 +454,7 @@
             this.checkBox1.Size = new System.Drawing.Size(122, 21);
             this.checkBox1.TabIndex = 5;
             this.checkBox1.Text = "absolute heights";
-            this.toolTip1.SetToolTip(this.checkBox1, "define heights as absolute height over sea");
+            this.toolTip1.SetToolTip(this.checkBox1, "define heights as absolute height above sea level");
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
             // 
