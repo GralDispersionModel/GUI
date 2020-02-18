@@ -1352,5 +1352,11 @@ namespace GralItemForms
         {
             this.Close(); // does not close the form, because closing hides the form
         }
-    }
+
+		private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+		{
+			double height = (double) (numericUpDown1.Value);
+			textBox2.Text = Convert.ToInt32(height * Math.Sqrt(Math.Pow(CornerPortalX[0] - CornerPortalX[1], 2) + Math.Pow(CornerPortalY[0] - CornerPortalY[1], 2))).ToString();
+		}
+	}
 }
