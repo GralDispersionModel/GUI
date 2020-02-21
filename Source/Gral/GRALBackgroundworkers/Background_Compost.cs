@@ -8,7 +8,7 @@
 /// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 /// You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ///</remarks>
-#endregion
+#endregion#
 
 /*
  * Created by SharpDevelop.
@@ -123,7 +123,7 @@ namespace GralBackgroundworkers
 			ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
 			if (data_meteopgt.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read meteopgt.all");
+				BackgroundThreadMessageBox ("Error reading meteopgt.all");
 			}
 
 			string wgmet;

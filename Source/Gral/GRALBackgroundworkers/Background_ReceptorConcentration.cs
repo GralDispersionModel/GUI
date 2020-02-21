@@ -18,14 +18,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.IO;
-using System.Collections.Generic;
 using GralIO;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GralBackgroundworkers
 {
-    public partial class ProgressFormBackgroundworker
+	public partial class ProgressFormBackgroundworker
 	{
     	private string decsep;
     	private List<double> xrec = new List<double>();
@@ -128,7 +128,7 @@ namespace GralBackgroundworkers
 			}
 			if (mettimefilelength == 0) // File-lenght must > 0
 			{
-				BackgroundThreadMessageBox ("Can´t read mettimeseries.txt");
+				BackgroundThreadMessageBox ("Error reading mettimeseries.txt");
 				return; // leave method
 			}
 			//mettimefilelength--;
@@ -202,7 +202,7 @@ namespace GralBackgroundworkers
 					}
 					catch(Exception ex)
 					{
-						BackgroundThreadMessageBox (ex.Message + " Can´t read emissions_timeseries.txt - evaluation stopped");
+						BackgroundThreadMessageBox (ex.Message + " Error reading emissions_timeseries.txt - evaluation stopped");
 						return;
 					}
 				} // read value from emissions_timeseries.txt
@@ -261,7 +261,7 @@ namespace GralBackgroundworkers
 				}
 				catch
 				{
-					BackgroundThreadMessageBox ("Can´t read Receptor.dat");
+					BackgroundThreadMessageBox ("Error reading Receptor.dat");
 					return;
 				}
 				
@@ -286,7 +286,7 @@ namespace GralBackgroundworkers
 					}
 					catch
 					{
-						BackgroundThreadMessageBox ("Can´t read meteopgt.all");
+						BackgroundThreadMessageBox ("Error reading meteopgt.all");
 						return;
 					}
 				}
@@ -305,33 +305,38 @@ namespace GralBackgroundworkers
 			if (File.Exists(receptorfile) && mydata.Sel_Source_Grp != string.Empty)
 			{
 				zeitflag = true;
-				StreamReader read = new StreamReader(receptorfile);
+				
 				try
 				{
-					while (read.EndOfStream == false)
-					{
-						text5 = read.ReadLine().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-						int count = 0;
-						// read all conc data of all computed source-groups
-						for (int numbsource = 0; numbsource < maxcomputedsourcegroup; numbsource++)
-						{
-							int sg_number = Convert.ToInt32(computed_sourcegroups[numbsource]) - 1; // Source-Group Number of computed sourcegroups
-							
-							for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
-							{
-							    conc[numbrec][sg_number][numbwet] = Convert.ToDouble(text5[count].Replace(".", decsep));
-								count = count + 1;
-							}
-						}
-						numbwet = numbwet + 1;
-					}
-				}
-				catch
+                    using (StreamReader read = new StreamReader(receptorfile))
+                    {
+                        while (read.EndOfStream == false)
+                        {
+                            text5 = read.ReadLine().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                            int count = 0;
+                            // read all conc data of all computed source-groups
+                            for (int numbsource = 0; numbsource < maxcomputedsourcegroup; numbsource++)
+                            {
+                                int sg_number = Convert.ToInt32(computed_sourcegroups[numbsource]) - 1; // Source-Group Number of computed sourcegroups
+
+                                for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
+                                {
+                                    conc[numbrec][sg_number][numbwet] = Convert.ToDouble(text5[count].Replace(".", decsep));
+                                    count++;
+                                }
+                            }
+                            numbwet++;
+                        }
+                    }
+                }
+                catch
 				{
-					BackgroundThreadMessageBox ("Can´t read zeitreihe.dat");
+					BackgroundThreadMessageBox ("Error reading zeitreihe.dat. Is this file available?" + Environment.NewLine +
+												"Has the number of receptors or source groups changed?");
 					return;
 				}
-				read.Close();
+				
+				
 			}
 			
 			//read all wind speeds from file GRAL_Meteozeitreihe.dat
@@ -374,7 +379,7 @@ namespace GralBackgroundworkers
 							catch{}
 						}
 
-						//write results to file receptor_timeseries.dat
+						//write results to file receptor_timeseries.txt
 						using (StreamWriter recwrite = new StreamWriter(file))
 						{
 							//write header line
@@ -411,7 +416,7 @@ namespace GralBackgroundworkers
 							while (text2[0] != "")
 							{
 								count_ws++;
-								count_dispsit_in_mettime = count_dispsit_in_mettime + 1;
+								count_dispsit_in_mettime += 1;
 								
 								if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true))
 									break;
@@ -486,7 +491,7 @@ namespace GralBackgroundworkers
 					}
 					catch
 					{
-						BackgroundThreadMessageBox ("Can´t write receptor_timeseries.txt");
+						BackgroundThreadMessageBox ("Error writing the file receptor_timeseries.txt");
 						return;
 					}
 				}
@@ -559,7 +564,7 @@ namespace GralBackgroundworkers
 
 									//artificially increase year by one
 									if (Convert.ToInt32(month) < monthold)
-										year_increase = year_increase + 1;
+										year_increase += 1;
 									monthold = Convert.ToInt32(text3[1]);
 
 									int corr_situation = 0;
@@ -655,7 +660,7 @@ namespace GralBackgroundworkers
 				}
 				catch
 				{
-					BackgroundThreadMessageBox ("Can´t write GRAL-Metfiles");
+					BackgroundThreadMessageBox ("Error writing GRAL-Metfiles");
 					return;
 				}
 				
@@ -703,11 +708,11 @@ namespace GralBackgroundworkers
 							if (local_SCL) // 11.9.2017 Kuntner -> new File format
 							{
 								GRAL_SC[numbrec, numbwet] = Convert.ToInt32(text7[count + 2].Replace(".", decsep));
-								count = count + 3;
+								count += 3;
 							}
 							else
 							{
-								count = count + 2;
+								count += 2;
 							}
 						}
 						numbwet++;
@@ -715,7 +720,7 @@ namespace GralBackgroundworkers
 				}
 				catch
 				{
-					BackgroundThreadMessageBox ("Can´t read GRAL_Meteozeitreihe.dat");
+					BackgroundThreadMessageBox ("Error reading GRAL_Meteozeitreihe.dat");
 					return false;
 				}
 			}

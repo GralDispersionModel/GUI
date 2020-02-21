@@ -150,7 +150,7 @@ namespace GralBackgroundworkers
 
 			if (data_meteopgt.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read meteopgt.all");
+				BackgroundThreadMessageBox ("Error reading meteopgt.all");
 			}
 
 			string wgmet;

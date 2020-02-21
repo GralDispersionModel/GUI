@@ -182,7 +182,7 @@ namespace GralBackgroundworkers
 			ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
 			if (data_meteopgt.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read meteopgt.all");
+				BackgroundThreadMessageBox ("Error reading meteopgt.all");
 			}
 
 			string wgmet;

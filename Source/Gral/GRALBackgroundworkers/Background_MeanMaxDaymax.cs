@@ -110,7 +110,7 @@ namespace GralBackgroundworkers
 			ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
 			if (data_meteopgt.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read meteopgt.all");
+				BackgroundThreadMessageBox ("Error reading meteopgt.all");
 			}
 
 			foreach(string line_meteopgt in data_meteopgt)
@@ -270,7 +270,7 @@ namespace GralBackgroundworkers
 			ReadMettimeseries(Path.Combine(mydata.Projectname, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
 			if (data_mettimeseries.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read mettimeseries.dat");
+				BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
 			}
 
 			int count_ws = -1;

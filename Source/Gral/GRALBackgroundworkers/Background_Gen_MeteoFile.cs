@@ -66,7 +66,7 @@ namespace GralBackgroundworkers
 			ReadMeteopgtAll(Path.Combine(mydata.Path_GRAMMwindfield, @"meteopgt.all"), ref data_meteopgt);
 			if (data_meteopgt.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read meteopgt.all");
+				BackgroundThreadMessageBox ("Error reading meteopgt.all");
 			}
 
 			// read mettimeseries
@@ -74,7 +74,7 @@ namespace GralBackgroundworkers
 			ReadMettimeseries(Path.Combine(mydata.Path_GRAMMwindfield, @"mettimeseries.dat"), ref data_mettimeseries);
 			if (data_mettimeseries.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Can't read mettimeseries.dat");
+				BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
 			}
 
 			//loop over all weather situations
