@@ -293,7 +293,7 @@ namespace GralShape
 							
 							for (int di = 0; di < 10; di++) // save deposition
 							{
-								_as.Dep[di] = dep[di];
+								_as.GetDep()[di] = dep[di];
 							}
 							
 							domain.EditAS.ItemData.Add(_as);

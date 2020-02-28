@@ -28,13 +28,67 @@ namespace GralItemData
 	public class MatchMeteoData
 	{
 		public int FileLenght     	{ get; set; }
-		public int[] Hour 			{ get; set; }
-        public double[] WindVel		{ get; set; }
-        public double[] WindDir		{ get; set; }
-        public int[] SC 			{ get; set; }
-        public string[] Date 		{ get; set; }
-        public string[] Time 		{ get; set; }
-        public string MetFileExt 	{ get; set; }
+
+		private int[] hour;
+		public int[] GetHour()
+		{
+			return hour;
+		}
+    	public void SetHour(int[] value)
+		{
+			hour = value;
+		}
+
+		private double[] windVel;
+		public double[] GetWindVel()
+		{
+			return windVel;
+		}
+		public void SetWindVel(double[] value)
+		{
+			windVel = value;
+		}
+
+		private double[] windDir;
+		public double[] GetWindDir()
+		{
+			return windDir;
+		}
+		public void SetWindDir(double[] value)
+		{
+			windDir = value;
+		}
+		private int[] sC;
+		public int[] GetSC()
+		{
+			return sC;
+		}
+		public void SetSC(int[] value)
+		{
+			sC = value;
+		}
+
+		private string[] date;
+		public string[] GetDate()
+		{
+			return date;
+		}
+		public void SetDate(string[] value)
+		{
+			date = value;
+		}
+
+		private string[] time;
+		public string[] GetTime()
+		{
+			return time;
+		}
+		public void SetTime(string[] value)
+		{
+			time = value;
+		}
+
+		public string MetFileExt 	{ get; set; }
         public char MetColumnSeperator { get; set; }
         public string MetDecSeperator  { get; set; }
         public double AnemometerHeight { get; set; }
@@ -48,12 +102,12 @@ namespace GralItemData
 		public MatchMeteoData()
 		{
 			FileLenght = 0;
-			Hour = new int[1000000];
-			WindVel = new double[1000000];
-			WindDir = new double[1000000];
-			SC = new int[1000000];
-			Date = new string[1000000];
-			Time = new string[1000000];
+			SetHour(new int[1000000]);
+			SetWindVel(new double[1000000]);
+			SetWindDir(new double[1000000]);
+			SetSC(new int[1000000]);
+			SetDate(new string[1000000]);
+			SetTime(new string[1000000]);
 			MetFileExt = string.Empty;
 			MetColumnSeperator = ',';
 			MetDecSeperator = ".";

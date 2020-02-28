@@ -31,8 +31,8 @@ namespace GralDomain
     
     public partial class Domain : Form
     {
-        private string decsep;                                                // global decimal separator of the system
-        private Gral.Main MainForm = null;
+        private readonly string decsep;                                                // global decimal separator of the system
+        private readonly Gral.Main MainForm = null;
         private string MapFileName;
         private string ImageFileName;
         /// <summary>
@@ -62,7 +62,7 @@ namespace GralDomain
         /// <summary>
         /// Copied object container 
         /// </summary>
-        private CopyObjects CopiedItem = new CopyObjects();        
+        private readonly CopyObjects CopiedItem = new CopyObjects();        
         /// <summary>
         /// form for georeferencing bitmap file using one reference point and a map scale
         /// </summary>
@@ -138,7 +138,7 @@ namespace GralDomain
         private int RubberRedrawAllowed = 0;
         
         private PointF FirstPointLenght;				  // Lenght measurement
-        private ToolTip ToolTipMousePosition;			  // Tooltip for picturebox1
+        private readonly ToolTip ToolTipMousePosition;	  // Tooltip for picturebox1
         /// <summary>
         ///  x,y corner points of an area/line source in pixel for intermediate drawing during editing
         /// </summary> 
@@ -146,12 +146,12 @@ namespace GralDomain
         /// <summary>
         /// [0] = 1st point for lenght label [1] = Point for Rubberline
         /// </summary> 
-        private Point[] RubberLineCoors = new Point[2]; 	       
+        private readonly Point[] RubberLineCoors = new Point[2]; 	       
         
         private Bitmap NorthArrowBitmap;                       // Icon for north arrow
         private Bitmap PictureBoxBitmap;					   // Bitmap for the picture box
-        private NorthArrowData NorthArrow = new NorthArrowData(); // Data for the north arrow
-        private MapScaleData MapScale = new MapScaleData();       //Data for the MapScale
+        private readonly NorthArrowData NorthArrow = new NorthArrowData(); // Data for the north arrow
+        private readonly MapScaleData MapScale = new MapScaleData();       //Data for the MapScale
 
         /// <summary>
         /// Map transformation X when zooming and shifting
@@ -196,7 +196,7 @@ namespace GralDomain
         /// <summary>
         /// Online or Domain mode?
         /// </summary>
-        private bool GRAMMOnline;             
+        private readonly bool GRAMMOnline;             
         
         /// <summary>
         /// Objectmanager form: it is possible to close the objectmanager if domain is closed
@@ -205,7 +205,7 @@ namespace GralDomain
         /// <summary>
         /// List of all selectet Items of one type to delete all selected items
         /// </summary>
-        private List<int> SelectedItems = new List<int>();        
+        private readonly List<int> SelectedItems = new List<int>();        
         private string ConcFilename = "";						  // filename for concentration files
         private float [,] CellHeights = new float[1,1];           // Cell heights
         /// <summary>
@@ -215,7 +215,7 @@ namespace GralDomain
         /// <summary>
         /// variables needed for the routine to import newly observed meteo data
         /// </summary>
-        private MatchMeteoData MMOData =  new MatchMeteoData();
+        private readonly MatchMeteoData MMOData =  new MatchMeteoData();
         /// <summary>
         /// form for matching GRAMM wind fields with multiple observations
         /// </summary>
@@ -224,7 +224,7 @@ namespace GralDomain
         public VerticalProfileConcentration VerticalProfileForm;
         public DomainformClosed DomainClosed;
         
-        private ShowFirstItem ShowFirst = new ShowFirstItem();	          // contains info about the first visible item form
+        private readonly ShowFirstItem ShowFirst = new ShowFirstItem();	          // contains info about the first visible item form
         /// <summary>
         /// Visible Columns in the search datagridview
         /// </summary>
@@ -247,20 +247,18 @@ namespace GralDomain
         /// <summary>
         /// Size & Position of Geo-Referenced Map
         /// </summary>
-        private MapSizes MapSize = new MapSizes();                         
+        private readonly MapSizes MapSize = new MapSizes();                         
                 
         private bool GRAL_Locked = false;
         private bool GRAMM_Locked = false;
         
         private MessageWindow MessageInfoForm;
         
-        private VerticalWindProfile ProfileConcentration = new VerticalWindProfile();
-        
-        private ToolTip InfoBoxTip = new ToolTip();
+        private readonly VerticalWindProfile ProfileConcentration = new VerticalWindProfile();
+       
+        private readonly ForceDomainRedraw DomainRedrawDelegate;
 
-        private ForceDomainRedraw DomainRedrawDelegate;
-
-        private ForceItemFormHide DomainItemFormHide;
+        private readonly ForceItemFormHide DomainItemFormHide;
 
         /// <summary>
         ///Cancel Token for all created await tasks
@@ -491,7 +489,6 @@ namespace GralDomain
                     CellHeightsType = 1;
                 }
             }
-            InfoBoxTip.AutomaticDelay = 0;
         }
         
 		/// <summary>
@@ -2213,6 +2210,14 @@ namespace GralDomain
             {
                 disp.StartPosition = FormStartPosition.Manual;
                 disp.Location = GetScreenPositionForNewDialog();
+
+                string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
+                if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                {
+                    grammpath = MainForm.GRAMMwindfield;
+                }
+                disp.SCLPath = grammpath;
+
                 if (disp.ShowDialog() == DialogResult.OK) // Situation selected!
                 {
                     int sel = disp.selected_situation;
@@ -2382,16 +2387,32 @@ namespace GralDomain
                         if (windfieldfiles == false)
                         {
                             disp.selectGRAMM_GRAL = 0; // default: no selection
+                            string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
+                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            {
+                                grammpath = MainForm.GRAMMwindfield;
+                            }
+                            disp.GrammPath = grammpath;
+                            disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
                         }
                         else
                         {
                             disp.selectGRAMM_GRAL = 1; // default: select GRAMM
+                            string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
+                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            {
+                                grammpath = MainForm.GRAMMwindfield;
+                            }
+                            disp.GrammPath = grammpath;
+                            disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
                         }
                     }
-                    else
+                    else if(Gral.Main.ProjectName != null)
                     {
                         disp.selectGRAMM_GRAL = 2; // select GRAL
+                        disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
                     }
+
                     disp.StartPosition = FormStartPosition.Manual;
                     disp.Location = GetScreenPositionForNewDialog();
                     if (disp.ShowDialog() == DialogResult.OK)
@@ -2766,7 +2787,11 @@ namespace GralDomain
             if (temp != 0) // compressed files?
             {
                 //select dispersion situation
-                SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm);
+                SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm)
+                {
+                    selectGRAMM_GRAL = 2,
+                    GRZPath = files
+                };
                 disp.StartPosition = FormStartPosition.Manual;
                 disp.Location = GetScreenPositionForNewDialog();
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation

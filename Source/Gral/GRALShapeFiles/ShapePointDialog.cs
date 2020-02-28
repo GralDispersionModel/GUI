@@ -294,7 +294,7 @@ namespace GralShape
 							
 							for (int di = 0; di < 10; di++) // save deposition
 							{
-								_psdata.Dep[di] = dep[di];
+								_psdata.GetDep()[di] = dep[di];
 							}
 							
 							domain.EditPS.ItemData.Add(_psdata);

@@ -542,7 +542,7 @@ namespace GralShape
 							
 							for (int di = 0; di < 10; di++) // save deposition
 							{
-								_ls.Dep[di] = dep[di];
+								_ls.GetDep()[di] = dep[di];
 							}
 							
 							domain.EditLS.ItemData.Add(_ls);

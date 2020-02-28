@@ -186,12 +186,12 @@ namespace GralDomain
                     
                     for (int length = 0; length < MMOData.FileLenght; length++)
                     {
-                        MMO.stunde[MMOdatagridindex][length] = MMOData.Hour[length];
-                        MMO.wind_speeds[MMOdatagridindex][length] = MMOData.WindVel[length];
-                        MMO.wind_direction[MMOdatagridindex][length] = MMOData.WindDir[length];
-                        MMO.datum[MMOdatagridindex][length] = MMOData.Date[length];
-                        MMO.zeit[MMOdatagridindex][length] = MMOData.Time[length];
-                        MMO.stability[MMOdatagridindex][length] = MMOData.SC[length];
+                        MMO.stunde[MMOdatagridindex][length] = MMOData.GetHour()[length];
+                        MMO.wind_speeds[MMOdatagridindex][length] = MMOData.GetWindVel()[length];
+                        MMO.wind_direction[MMOdatagridindex][length] = MMOData.GetWindDir()[length];
+                        MMO.datum[MMOdatagridindex][length] = MMOData.GetDate()[length];
+                        MMO.zeit[MMOdatagridindex][length] = MMOData.GetTime()[length];
+                        MMO.stability[MMOdatagridindex][length] = MMOData.GetSC()[length];
                     }
                     
                     char temp = char.Parse(FormatMetFile.DecSepUser);

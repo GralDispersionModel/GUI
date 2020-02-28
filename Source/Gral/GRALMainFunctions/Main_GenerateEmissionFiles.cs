@@ -118,17 +118,17 @@ namespace Gral
 										_psdata.Temperature.ToString(ic) + "," +
 										_psdata.Poll.SourceGroup.ToString(ic);
 									
-									if (_psdata.Dep != null) // deposition entry exists
+									if (_psdata.GetDep() != null) // deposition entry exists
 									{
 										pqline += "," +
-											_psdata.Dep[j].Frac_2_5.ToString(ic) + "," +
-											_psdata.Dep[j].Frac_10.ToString(ic) + "," +
-											_psdata.Dep[j].DM_30.ToString(ic) + "," +
-											_psdata.Dep[j].Density.ToString(ic) + "," +
-											_psdata.Dep[j].V_Dep1.ToString(ic) + "," +
-											_psdata.Dep[j].V_Dep2.ToString(ic) + "," +
-											_psdata.Dep[j].V_Dep3.ToString(ic) + "," +
-											_psdata.Dep[j].Conc.ToString(ic);
+											_psdata.GetDep()[j].Frac_2_5.ToString(ic) + "," +
+											_psdata.GetDep()[j].Frac_10.ToString(ic) + "," +
+											_psdata.GetDep()[j].DM_30.ToString(ic) + "," +
+											_psdata.GetDep()[j].Density.ToString(ic) + "," +
+											_psdata.GetDep()[j].V_Dep1.ToString(ic) + "," +
+											_psdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
+											_psdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
+											_psdata.GetDep()[j].Conc.ToString(ic);
 									}
 									
 									if (!string.IsNullOrEmpty(_psdata.TemperatureTimeSeries))
@@ -278,17 +278,17 @@ namespace Gral
 												"0,0,0," +
 												_asdata.Poll.SourceGroup.ToString(ic);
 											
-											if (_asdata.Dep != null) // deposition entry exists
+											if (_asdata.GetDep() != null) // deposition entry exists
 											{
 												cadestre += "," +
-													_asdata.Dep[j].Frac_2_5.ToString(ic) + "," +
-													_asdata.Dep[j].Frac_10.ToString(ic) + "," +
-													_asdata.Dep[j].DM_30.ToString(ic) + "," +
-													_asdata.Dep[j].Density.ToString(ic) + "," +
-													_asdata.Dep[j].V_Dep1.ToString(ic) + "," +
-													_asdata.Dep[j].V_Dep2.ToString(ic) + "," +
-													_asdata.Dep[j].V_Dep3.ToString(ic) + "," +
-													_asdata.Dep[j].Conc.ToString(ic);
+													_asdata.GetDep()[j].Frac_2_5.ToString(ic) + "," +
+													_asdata.GetDep()[j].Frac_10.ToString(ic) + "," +
+													_asdata.GetDep()[j].DM_30.ToString(ic) + "," +
+													_asdata.GetDep()[j].Density.ToString(ic) + "," +
+													_asdata.GetDep()[j].V_Dep1.ToString(ic) + "," +
+													_asdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
+													_asdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
+													_asdata.GetDep()[j].Conc.ToString(ic);
 											}
 											
 											myWriter.WriteLine(cadestre);
@@ -395,17 +395,17 @@ namespace Gral
 													_poll.EmissionRate[j].ToString(ic) + "," +
 													"0,0,0,0,0";
 												
-												if (_lsdata.Dep != null) // deposition entry exists
+												if (_lsdata.GetDep() != null) // deposition entry exists
 												{
 													line += "," +
-														_lsdata.Dep[j].Frac_2_5.ToString(ic) + "," +
-														_lsdata.Dep[j].Frac_10.ToString(ic) + "," +
-														_lsdata.Dep[j].DM_30.ToString(ic) + "," +
-														_lsdata.Dep[j].Density.ToString(ic) + "," +
-														_lsdata.Dep[j].V_Dep1.ToString(ic) + "," +
-														_lsdata.Dep[j].V_Dep2.ToString(ic) + "," +
-														_lsdata.Dep[j].V_Dep3.ToString(ic) + "," +
-														_lsdata.Dep[j].Conc.ToString(ic);
+														_lsdata.GetDep()[j].Frac_2_5.ToString(ic) + "," +
+														_lsdata.GetDep()[j].Frac_10.ToString(ic) + "," +
+														_lsdata.GetDep()[j].DM_30.ToString(ic) + "," +
+														_lsdata.GetDep()[j].Density.ToString(ic) + "," +
+														_lsdata.GetDep()[j].V_Dep1.ToString(ic) + "," +
+														_lsdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
+														_lsdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
+														_lsdata.GetDep()[j].Conc.ToString(ic);
 												}
 												
 												myWriter.WriteLine(line);
@@ -517,17 +517,17 @@ namespace Gral
 											"0,0,0," +
 											_poll.SourceGroup.ToString(ic);
 										
-										if (_pdData.Dep != null) // deposition entry exists
+										if (_pdData.GetDep() != null) // deposition entry exists
 										{
 											portal += "," +
-												_pdData.Dep[j].Frac_2_5.ToString(ic) + "," +
-												_pdData.Dep[j].Frac_10.ToString(ic) + "," +
-												_pdData.Dep[j].DM_30.ToString(ic) + "," +
-												_pdData.Dep[j].Density.ToString(ic) + "," +
-												_pdData.Dep[j].V_Dep1.ToString(ic) + "," +
-												_pdData.Dep[j].V_Dep2.ToString(ic) + "," +
-												_pdData.Dep[j].V_Dep3.ToString(ic) + "," +
-												_pdData.Dep[j].Conc.ToString(ic);
+												_pdData.GetDep()[j].Frac_2_5.ToString(ic) + "," +
+												_pdData.GetDep()[j].Frac_10.ToString(ic) + "," +
+												_pdData.GetDep()[j].DM_30.ToString(ic) + "," +
+												_pdData.GetDep()[j].Density.ToString(ic) + "," +
+												_pdData.GetDep()[j].V_Dep1.ToString(ic) + "," +
+												_pdData.GetDep()[j].V_Dep2.ToString(ic) + "," +
+												_pdData.GetDep()[j].V_Dep3.ToString(ic) + "," +
+												_pdData.GetDep()[j].Conc.ToString(ic);
 										}
 										
 										portal += "," + _pdData.DeltaT.ToString(ic) + "," +

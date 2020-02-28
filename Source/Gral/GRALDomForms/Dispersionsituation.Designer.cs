@@ -34,6 +34,7 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.showSituations = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -67,19 +68,20 @@
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Location = new System.Drawing.Point(13, 272);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(327, 43);
+            this.groupBox1.Size = new System.Drawing.Size(183, 43);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             // 
             // radioButton2
             // 
-            this.radioButton2.Location = new System.Drawing.Point(236, 13);
+            this.radioButton2.Location = new System.Drawing.Point(108, 13);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(85, 24);
+            this.radioButton2.Size = new System.Drawing.Size(69, 24);
             this.radioButton2.TabIndex = 0;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "GRAL";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -90,6 +92,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "GRAMM";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // dataGridView1
             // 
@@ -105,6 +108,18 @@
             this.dataGridView1.TabIndex = 3;
             this.dataGridView1.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1RowHeaderMouseDoubleClick);
             // 
+            // showSituations
+            // 
+            this.showSituations.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.showSituations.AutoSize = true;
+            this.showSituations.Location = new System.Drawing.Point(214, 288);
+            this.showSituations.Name = "showSituations";
+            this.showSituations.Size = new System.Drawing.Size(113, 17);
+            this.showSituations.TabIndex = 4;
+            this.showSituations.Text = "Show all situations";
+            this.showSituations.UseVisualStyleBackColor = true;
+            this.showSituations.CheckedChanged += new System.EventHandler(this.showSituations_CheckedChanged);
+            // 
             // SelectDispersionSituation
             // 
             this.AcceptButton = this.button1;
@@ -113,6 +128,7 @@
             this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(352, 353);
             this.ControlBox = false;
+            this.Controls.Add(this.showSituations);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
@@ -125,6 +141,7 @@
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -136,5 +153,6 @@
         #endregion
 
         public System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox showSituations;
     }
 }

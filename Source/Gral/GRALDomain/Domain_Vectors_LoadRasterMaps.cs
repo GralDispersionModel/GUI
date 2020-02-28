@@ -256,11 +256,24 @@ namespace GralDomain
                     {
                         //select dispersion situation
                         SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm);
-                        DialogResult dr = new DialogResult();
+                        
+                        if (windfieldenable == 2)
+                        {
+                            disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
+                        }
+                        else if (windfieldenable > 2 || windfieldenable == 1)
+                        {
+                            disp.GrammPath = Path.GetDirectoryName(MainForm.GRAMMwindfield);
+                        }
+                        else
+                        {
+
+                        }
+
                         disp.StartPosition = FormStartPosition.Manual;
                         disp.Location = new Point(met_st.Right + 20, met_st.Top);
-                        dr = disp.ShowDialog();
-                        if (dr == DialogResult.OK)
+
+                        if (disp.ShowDialog() == DialogResult.OK)
                         {
                             int dissit = disp.selected_situation;
 
