@@ -207,6 +207,9 @@ namespace GralDomain
         /// </summary>
         private readonly List<int> SelectedItems = new List<int>();        
         private string ConcFilename = "";						  // filename for concentration files
+        /// <summary>
+        /// Array to display GRAMM or GRAL cell heights
+        /// </summary>
         private float [,] CellHeights = new float[1,1];           // Cell heights
         /// <summary>
         /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL
@@ -453,42 +456,9 @@ namespace GralDomain
             ToolTipMousePosition.BackColor = Color.Transparent;
             #endif
             ToolTipMousePosition.UseAnimation = false;
-            
-            // Try to load cell height information
-            if (ReadGralGeometry()) // GRAL geometry is available
-            {
-                CellHeightsType = 2;
-                // check, if Topography-Modification is allowed
-                if (windfieldfiles == false && Gral.Main.Project_Locked == false)
-                {
-                    modifyTopographyToolStripMenuItem.Enabled = true;
-                    saveTopographyToolStripMenuItem.Enabled = true;
-                    restoreGRALTopographyToolStripMenuItem.Enabled = true;
-                    lowPassGRALTopographyToolStripMenuItem.Enabled = true;
-                }
-            }
-            else // Try GRAMM geometry
-            {
-                GGeomFileIO ggeom = new GGeomFileIO
-                {
-                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
-                };
 
-                double[,] AH = new double[1, 1];
-                ggeom.AH = AH;
-                
-                if (ggeom.ReadGGeomAsc(1) == true)
-                {
-                    AH = ggeom.AH;
-                    ggeom = null;
-                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
-                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
-                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
-                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
-                    
-                    CellHeightsType = 1;
-                }
-            }
+            // Try to load cell height information
+            TryToLoadCellHeights();
         }
         
 		/// <summary>
@@ -672,7 +642,64 @@ namespace GralDomain
             {
             }
         }
-        
+
+        /// <summary>
+        /// Try to load cell height information
+        /// </summary>
+        private bool TryToLoadCellHeights()
+        {
+            modifyTopographyToolStripMenuItem.Enabled = false;
+            saveTopographyToolStripMenuItem.Enabled = false;
+            restoreGRALTopographyToolStripMenuItem.Enabled = false;
+            lowPassGRALTopographyToolStripMenuItem.Enabled = false;
+
+            if ((CellHeightsType == 0 || CellHeightsType == 2) && ReadGralGeometry()) // GRAL geometry is available
+            {
+                bool windfieldfiles = WindfieldsAvailable();
+                SetCellHeightsType(2);
+                // check, if Topography-Modification is allowed
+                if (windfieldfiles == false && Gral.Main.Project_Locked == false)
+                {
+                    modifyTopographyToolStripMenuItem.Enabled = true;
+                    saveTopographyToolStripMenuItem.Enabled = true;
+                    restoreGRALTopographyToolStripMenuItem.Enabled = true;
+                    lowPassGRALTopographyToolStripMenuItem.Enabled = true;
+                }
+            }
+
+            if (CellHeightsType < 2) // Try to read GRAMM geometry
+            {
+                GGeomFileIO ggeom = new GGeomFileIO
+                {
+                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                };
+
+                double[,] AH = new double[1, 1];
+                ggeom.AH = AH;
+
+                if (ggeom.ReadGGeomAsc(1) == true)
+                {
+                    AH = ggeom.AH;
+                    ggeom = null;
+                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
+                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
+                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+
+                    SetCellHeightsType(1);
+                }
+            }
+            
+            if (CellHeightsType > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 		/// <summary>
         /// Check if *.gff wind fields are available
         /// </summary>
@@ -3462,7 +3489,7 @@ namespace GralDomain
             bool smooth = true;
             double vert_fac=2;
             bool GRAL_Topo = false;
-            if (CellHeightsType == 2) // Show GRAL height
+            if (CellHeightsType == 2) // Show GRAL height -> show GRAL 3D
                 GRAL_Topo = true;
 
             using (Dialog_3D dial = new Dialog_3D
@@ -3865,7 +3892,7 @@ namespace GralDomain
                 {
                     if (ReadGralGeometry()) // GRAL geometry is available
                     {
-                        CellHeightsType = 2;
+                        SetCellHeightsType(2);
                         MainForm.checkBox25.Checked = true;
                         MainForm.checkBox25.Enabled = true;
 
@@ -4095,6 +4122,51 @@ namespace GralDomain
                 x += panel1.Left - 350;
             }
             return new System.Drawing.Point(x, 60);
+        }
+
+        private void MenuCellHeightsGramm(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGramm.Checked)
+            {
+                SetCellHeightsType(1);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }
+        }
+
+        private void MenuCellHeightsGral(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGral.Checked)
+            {
+
+                SetCellHeightsType(2);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }      
+        }
+
+        private void SetCellHeightsType(int type)
+        {
+            CellHeightsType = type;
+            if (CellHeightsType == 0)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = false;
+            }
+            else if (CellHeightsType == 1)
+            {
+                MenuEntryCellHeightsGramm.Checked = true;
+                MenuEntryCellHeightsGral.Checked = false;
+            }
+            else if (CellHeightsType == 2)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = true;
+            }
         }
     }
 }
