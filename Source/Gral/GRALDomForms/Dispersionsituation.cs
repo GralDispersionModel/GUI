@@ -127,21 +127,25 @@ namespace GralDomForms
             string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 
             int selectentries = 0;
-            if (radioButton1.Checked && GrammPath != String.Empty)
+            if (radioButton1.Checked && !string.IsNullOrEmpty(GrammPath))
             {
                 selectentries = 1;
+                textBox1.Text = GrammPath;
             }
-            if (radioButton2.Checked && GFFPath != String.Empty)
+            if (radioButton2.Checked && !string.IsNullOrEmpty(GFFPath))
             {
                 selectentries = 2;
+                textBox1.Text = GFFPath;
             }
-            if (radioButton1.Checked && SCLPath != String.Empty)
+            if (radioButton1.Checked && !string.IsNullOrEmpty(SCLPath))
             {
                 selectentries = 3;
+                textBox1.Text = SCLPath;
             }
-            if (radioButton2.Checked && GRZPath != String.Empty)
+            if (radioButton2.Checked && !string.IsNullOrEmpty(GRZPath))
             {
                 selectentries = 4;
+                textBox1.Text = GRZPath;
             }
             
             //read file meteopgt.all
@@ -324,7 +328,8 @@ namespace GralDomForms
         void DispersionsituationResizeEnd (object sender, EventArgs e)
         {
             dataGridView1.Width = ClientSize.Width - 5;
-            dataGridView1.Height = Math.Max (30, ClientSize.Height - 75);
+            dataGridView1.Height = Math.Max (10, label1.Top - 5);
+            textBox1.Width = Math.Max(5, ClientSize.Width - textBox1.Left  - 15);
         }
 
         void button2_Click (object sender, EventArgs e) // Cancel
