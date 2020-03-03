@@ -675,15 +675,22 @@ namespace GralBackgroundworkers
 		{
 			string[] text7 = new string[1];
 			numbwet = 1;
-			
+            int ParamOffset = 2; // old file format
 			try // 11.9.2017 Kuntner -> new File format?
 			{
 				using(StreamReader read1 = new StreamReader(GRAL_metfile))
 				{
-					if (read1.ReadLine().Trim() == "U,V,SC")
+                    string header = read1.ReadLine().Trim();
+                    if (header.Equals("U,V,SC"))
 					{
 						local_SCL = true;
+                        ParamOffset = 3; // U,V,SC
 					}
+                    else if (header.Equals("U,V,SC,BLH"))
+                    {
+                        local_SCL = true;
+                        ParamOffset = 4; // U,V,SC,BLH
+                    }
 				}
 			}
 			catch{}
@@ -703,16 +710,16 @@ namespace GralBackgroundworkers
 						int count = 0;
 						for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
 						{
-							GRAL_u[numbrec, numbwet] = Convert.ToDouble(text7[count].Replace(".", decsep));
-							GRAL_v[numbrec, numbwet] = Convert.ToDouble(text7[count + 1].Replace(".", decsep));
+							GRAL_u[numbrec, numbwet] = Convert.ToDouble(text7[count], ic);
+							GRAL_v[numbrec, numbwet] = Convert.ToDouble(text7[count + 1], ic);
 							if (local_SCL) // 11.9.2017 Kuntner -> new File format
 							{
-								GRAL_SC[numbrec, numbwet] = Convert.ToInt32(text7[count + 2].Replace(".", decsep));
-								count += 3;
+								GRAL_SC[numbrec, numbwet] = Convert.ToInt32(text7[count + 2], ic);
+								count += ParamOffset;
 							}
 							else
 							{
-								count += 2;
+								count += ParamOffset;
 							}
 						}
 						numbwet++;
