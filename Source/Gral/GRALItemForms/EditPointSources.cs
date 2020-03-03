@@ -322,7 +322,7 @@ namespace GralItemForms
 
 				for (int i = 0; i < 10; i++) // save deposition
 				{
-					_pdata.Dep[i] = new Deposition(dep[i]);
+					_pdata.GetDep()[i] = new Deposition(dep[i]);
 				}
 
 				string[] text2 = new string[2];
@@ -435,7 +435,7 @@ namespace GralItemForms
 
 				for (int i = 0; i < 10; i++)
 				{
-					dep[i] = _pdata.Dep[i];
+					dep[i] = _pdata.GetDep()[i];
 
 					if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
 						but1[i].BackColor = Color.LightGreen; // mark that deposition is set

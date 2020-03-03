@@ -118,7 +118,7 @@ namespace GralDomain
             
             
             MMO = null;
-            MMOData.WindVel =null; MMOData.WindDir = null; MMOData.SC = null; MMOData.Date = null; MMOData.Time = null; MMOData.Hour = null;
+            MMOData.SetWindVel(null); MMOData.SetWindDir(null); MMOData.SetSC(null); MMOData.SetDate(null); MMOData.SetTime(null); MMOData.SetHour(null);
             
             if (NorthArrowBitmap != null)
                 NorthArrowBitmap.Dispose();
@@ -239,7 +239,6 @@ namespace GralDomain
             }
             ItemOptions.Clear();
             ItemOptions.TrimExcess();
-            InfoBoxTip.Dispose();
             Application.DoEvents();
             
             try

@@ -31,8 +31,8 @@ namespace GralDomain
     
     public partial class Domain : Form
     {
-        private string decsep;                                                // global decimal separator of the system
-        private Gral.Main MainForm = null;
+        private readonly string decsep;                                                // global decimal separator of the system
+        private readonly Gral.Main MainForm = null;
         private string MapFileName;
         private string ImageFileName;
         /// <summary>
@@ -62,7 +62,7 @@ namespace GralDomain
         /// <summary>
         /// Copied object container 
         /// </summary>
-        private CopyObjects CopiedItem = new CopyObjects();        
+        private readonly CopyObjects CopiedItem = new CopyObjects();        
         /// <summary>
         /// form for georeferencing bitmap file using one reference point and a map scale
         /// </summary>
@@ -138,7 +138,7 @@ namespace GralDomain
         private int RubberRedrawAllowed = 0;
         
         private PointF FirstPointLenght;				  // Lenght measurement
-        private ToolTip ToolTipMousePosition;			  // Tooltip for picturebox1
+        private readonly ToolTip ToolTipMousePosition;	  // Tooltip for picturebox1
         /// <summary>
         ///  x,y corner points of an area/line source in pixel for intermediate drawing during editing
         /// </summary> 
@@ -146,12 +146,12 @@ namespace GralDomain
         /// <summary>
         /// [0] = 1st point for lenght label [1] = Point for Rubberline
         /// </summary> 
-        private Point[] RubberLineCoors = new Point[2]; 	       
+        private readonly Point[] RubberLineCoors = new Point[2]; 	       
         
         private Bitmap NorthArrowBitmap;                       // Icon for north arrow
         private Bitmap PictureBoxBitmap;					   // Bitmap for the picture box
-        private NorthArrowData NorthArrow = new NorthArrowData(); // Data for the north arrow
-        private MapScaleData MapScale = new MapScaleData();       //Data for the MapScale
+        private readonly NorthArrowData NorthArrow = new NorthArrowData(); // Data for the north arrow
+        private readonly MapScaleData MapScale = new MapScaleData();       //Data for the MapScale
 
         /// <summary>
         /// Map transformation X when zooming and shifting
@@ -196,7 +196,7 @@ namespace GralDomain
         /// <summary>
         /// Online or Domain mode?
         /// </summary>
-        private bool GRAMMOnline;             
+        private readonly bool GRAMMOnline;             
         
         /// <summary>
         /// Objectmanager form: it is possible to close the objectmanager if domain is closed
@@ -205,8 +205,11 @@ namespace GralDomain
         /// <summary>
         /// List of all selectet Items of one type to delete all selected items
         /// </summary>
-        private List<int> SelectedItems = new List<int>();        
+        private readonly List<int> SelectedItems = new List<int>();        
         private string ConcFilename = "";						  // filename for concentration files
+        /// <summary>
+        /// Array to display GRAMM or GRAL cell heights
+        /// </summary>
         private float [,] CellHeights = new float[1,1];           // Cell heights
         /// <summary>
         /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL
@@ -215,7 +218,7 @@ namespace GralDomain
         /// <summary>
         /// variables needed for the routine to import newly observed meteo data
         /// </summary>
-        private MatchMeteoData MMOData =  new MatchMeteoData();
+        private readonly MatchMeteoData MMOData =  new MatchMeteoData();
         /// <summary>
         /// form for matching GRAMM wind fields with multiple observations
         /// </summary>
@@ -224,7 +227,7 @@ namespace GralDomain
         public VerticalProfileConcentration VerticalProfileForm;
         public DomainformClosed DomainClosed;
         
-        private ShowFirstItem ShowFirst = new ShowFirstItem();	          // contains info about the first visible item form
+        private readonly ShowFirstItem ShowFirst = new ShowFirstItem();	          // contains info about the first visible item form
         /// <summary>
         /// Visible Columns in the search datagridview
         /// </summary>
@@ -247,20 +250,18 @@ namespace GralDomain
         /// <summary>
         /// Size & Position of Geo-Referenced Map
         /// </summary>
-        private MapSizes MapSize = new MapSizes();                         
+        private readonly MapSizes MapSize = new MapSizes();                         
                 
         private bool GRAL_Locked = false;
         private bool GRAMM_Locked = false;
         
         private MessageWindow MessageInfoForm;
         
-        private VerticalWindProfile ProfileConcentration = new VerticalWindProfile();
-        
-        private ToolTip InfoBoxTip = new ToolTip();
+        private readonly VerticalWindProfile ProfileConcentration = new VerticalWindProfile();
+       
+        private readonly ForceDomainRedraw DomainRedrawDelegate;
 
-        private ForceDomainRedraw DomainRedrawDelegate;
-
-        private ForceItemFormHide DomainItemFormHide;
+        private readonly ForceItemFormHide DomainItemFormHide;
 
         /// <summary>
         ///Cancel Token for all created await tasks
@@ -455,43 +456,9 @@ namespace GralDomain
             ToolTipMousePosition.BackColor = Color.Transparent;
             #endif
             ToolTipMousePosition.UseAnimation = false;
-            
-            // Try to load cell height information
-            if (ReadGralGeometry()) // GRAL geometry is available
-            {
-                CellHeightsType = 2;
-                // check, if Topography-Modification is allowed
-                if (windfieldfiles == false && Gral.Main.Project_Locked == false)
-                {
-                    modifyTopographyToolStripMenuItem.Enabled = true;
-                    saveTopographyToolStripMenuItem.Enabled = true;
-                    restoreGRALTopographyToolStripMenuItem.Enabled = true;
-                    lowPassGRALTopographyToolStripMenuItem.Enabled = true;
-                }
-            }
-            else // Try GRAMM geometry
-            {
-                GGeomFileIO ggeom = new GGeomFileIO
-                {
-                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
-                };
 
-                double[,] AH = new double[1, 1];
-                ggeom.AH = AH;
-                
-                if (ggeom.ReadGGeomAsc(1) == true)
-                {
-                    AH = ggeom.AH;
-                    ggeom = null;
-                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
-                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
-                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
-                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
-                    
-                    CellHeightsType = 1;
-                }
-            }
-            InfoBoxTip.AutomaticDelay = 0;
+            // Try to load cell height information
+            TryToLoadCellHeights();
         }
         
 		/// <summary>
@@ -675,7 +642,64 @@ namespace GralDomain
             {
             }
         }
-        
+
+        /// <summary>
+        /// Try to load cell height information
+        /// </summary>
+        private bool TryToLoadCellHeights()
+        {
+            modifyTopographyToolStripMenuItem.Enabled = false;
+            saveTopographyToolStripMenuItem.Enabled = false;
+            restoreGRALTopographyToolStripMenuItem.Enabled = false;
+            lowPassGRALTopographyToolStripMenuItem.Enabled = false;
+
+            if ((CellHeightsType == 0 || CellHeightsType == 2) && ReadGralGeometry()) // GRAL geometry is available
+            {
+                bool windfieldfiles = WindfieldsAvailable();
+                SetCellHeightsType(2);
+                // check, if Topography-Modification is allowed
+                if (windfieldfiles == false && Gral.Main.Project_Locked == false)
+                {
+                    modifyTopographyToolStripMenuItem.Enabled = true;
+                    saveTopographyToolStripMenuItem.Enabled = true;
+                    restoreGRALTopographyToolStripMenuItem.Enabled = true;
+                    lowPassGRALTopographyToolStripMenuItem.Enabled = true;
+                }
+            }
+
+            if (CellHeightsType < 2) // Try to read GRAMM geometry
+            {
+                GGeomFileIO ggeom = new GGeomFileIO
+                {
+                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                };
+
+                double[,] AH = new double[1, 1];
+                ggeom.AH = AH;
+
+                if (ggeom.ReadGGeomAsc(1) == true)
+                {
+                    AH = ggeom.AH;
+                    ggeom = null;
+                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
+                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
+                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+
+                    SetCellHeightsType(1);
+                }
+            }
+            
+            if (CellHeightsType > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 		/// <summary>
         /// Check if *.gff wind fields are available
         /// </summary>
@@ -2213,6 +2237,14 @@ namespace GralDomain
             {
                 disp.StartPosition = FormStartPosition.Manual;
                 disp.Location = GetScreenPositionForNewDialog();
+
+                string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
+                if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                {
+                    grammpath = MainForm.GRAMMwindfield;
+                }
+                disp.SCLPath = grammpath;
+
                 if (disp.ShowDialog() == DialogResult.OK) // Situation selected!
                 {
                     int sel = disp.selected_situation;
@@ -2382,16 +2414,32 @@ namespace GralDomain
                         if (windfieldfiles == false)
                         {
                             disp.selectGRAMM_GRAL = 0; // default: no selection
+                            string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
+                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            {
+                                grammpath = MainForm.GRAMMwindfield;
+                            }
+                            disp.GrammPath = grammpath;
+                            disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
                         }
                         else
                         {
                             disp.selectGRAMM_GRAL = 1; // default: select GRAMM
+                            string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
+                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            {
+                                grammpath = MainForm.GRAMMwindfield;
+                            }
+                            disp.GrammPath = grammpath;
+                            disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
                         }
                     }
-                    else
+                    else if(Gral.Main.ProjectName != null)
                     {
                         disp.selectGRAMM_GRAL = 2; // select GRAL
+                        disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
                     }
+
                     disp.StartPosition = FormStartPosition.Manual;
                     disp.Location = GetScreenPositionForNewDialog();
                     if (disp.ShowDialog() == DialogResult.OK)
@@ -2766,7 +2814,11 @@ namespace GralDomain
             if (temp != 0) // compressed files?
             {
                 //select dispersion situation
-                SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm);
+                SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm)
+                {
+                    selectGRAMM_GRAL = 2,
+                    GRZPath = files
+                };
                 disp.StartPosition = FormStartPosition.Manual;
                 disp.Location = GetScreenPositionForNewDialog();
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
@@ -3437,7 +3489,7 @@ namespace GralDomain
             bool smooth = true;
             double vert_fac=2;
             bool GRAL_Topo = false;
-            if (CellHeightsType == 2) // Show GRAL height
+            if (CellHeightsType == 2) // Show GRAL height -> show GRAL 3D
                 GRAL_Topo = true;
 
             using (Dialog_3D dial = new Dialog_3D
@@ -3840,7 +3892,7 @@ namespace GralDomain
                 {
                     if (ReadGralGeometry()) // GRAL geometry is available
                     {
-                        CellHeightsType = 2;
+                        SetCellHeightsType(2);
                         MainForm.checkBox25.Checked = true;
                         MainForm.checkBox25.Enabled = true;
 
@@ -4070,6 +4122,51 @@ namespace GralDomain
                 x += panel1.Left - 350;
             }
             return new System.Drawing.Point(x, 60);
+        }
+
+        private void MenuCellHeightsGramm(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGramm.Checked)
+            {
+                SetCellHeightsType(1);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }
+        }
+
+        private void MenuCellHeightsGral(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGral.Checked)
+            {
+
+                SetCellHeightsType(2);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }      
+        }
+
+        private void SetCellHeightsType(int type)
+        {
+            CellHeightsType = type;
+            if (CellHeightsType == 0)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = false;
+            }
+            else if (CellHeightsType == 1)
+            {
+                MenuEntryCellHeightsGramm.Checked = true;
+                MenuEntryCellHeightsGral.Checked = false;
+            }
+            else if (CellHeightsType == 2)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = true;
+            }
         }
     }
 }

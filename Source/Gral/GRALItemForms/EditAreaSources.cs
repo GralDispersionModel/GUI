@@ -327,7 +327,7 @@ namespace GralItemForms
 					
 					for (int i = 0; i < 10; i++) // save deposition
 					{
-						_as.Dep[i] = new Deposition(dep[i]);
+						_as.GetDep()[i] = new Deposition(dep[i]);
 					}
 					
 					float height = (float) (numericUpDown1.Value);
@@ -423,7 +423,7 @@ namespace GralItemForms
 				
 				for (int i = 0; i < 10; i++)
 				{
-					dep[i] = _as.Dep[i];
+					dep[i] = _as.GetDep()[i];
 					
 					if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
 						but1[i].BackColor = Color.LightGreen; // mark that deposition is set

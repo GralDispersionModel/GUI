@@ -45,8 +45,17 @@ namespace GralItemData
 		public List <PollutantsData> Poll	{ get; set;}
 		
 		public NemoData Nemo		{ get; set;}
-		public Deposition[] Dep	{ get; set;}
-		
+
+		private Deposition[] dep;
+		public Deposition[] GetDep()
+		{
+			return dep;
+		}
+		public void SetDep(Deposition[] value)
+		{
+			dep = value;
+		}
+
 		public string VelocityTimeSeries		{ get; set;}
 		public string TemperatureTimeSeries	{ get; set;}
 		
@@ -62,15 +71,15 @@ namespace GralItemData
 			
 			Poll = new List<PollutantsData>();
 			Nemo = new NemoData();
-			Dep = new Deposition[10];
+			SetDep(new Deposition[10]);
 			Pt1 = new PointD(0, 0);
 			Pt2 = new PointD(0, 0);
 			BaseHeight = 0;
 			
 			for (int i = 0; i < 10; i++)
 			{
-				Dep[i] = new Deposition(); // initialize Deposition array
-				Dep[i].init();
+				GetDep()[i] = new Deposition(); // initialize Deposition array
+				GetDep()[i].init();
 			}
 		}
 		
@@ -83,7 +92,7 @@ namespace GralItemData
 			int version = 0;
 			string[] text = new string[1];
 			text = sourcedata.Split(new char[] { ',' });
-			Dep = new Deposition[10];
+			SetDep(new Deposition[10]);
 			Nemo = new NemoData();
 			
 			try
@@ -146,8 +155,8 @@ namespace GralItemData
 						{
 							for (int i = 0; i < 10; i++)
 							{
-								Dep[i] = new Deposition(); // initialize Deposition array
-								Dep[i].String_to_Val(depostart + i * 10, text);
+								GetDep()[i] = new Deposition(); // initialize Deposition array
+								GetDep()[i].String_to_Val(depostart + i * 10, text);
 							}
 						}
 						catch{}
@@ -156,8 +165,8 @@ namespace GralItemData
 					{
 						for (int i = 0; i < 10; i++)
 						{
-							Dep[i] = new Deposition(); // initialize Deposition array
-							Dep[i].init();
+							GetDep()[i] = new Deposition(); // initialize Deposition array
+							GetDep()[i].init();
 						}
 					}
 					
@@ -207,13 +216,13 @@ namespace GralItemData
 				
 				Poll = new List<PollutantsData>();
 				Nemo = new NemoData();
-				Dep = new Deposition[10];
+				SetDep(new Deposition[10]);
 				Pt1 = new PointD();
 				Pt2 = new PointD();
 				for (int i = 0; i < 10; i++)
 				{
-					Dep[i] = new Deposition(); // initialize Deposition array
-					Dep[i].init();
+					GetDep()[i] = new Deposition(); // initialize Deposition array
+					GetDep()[i].init();
 				}
 			}
 		}
@@ -251,10 +260,10 @@ namespace GralItemData
 			}
 			
 			Nemo = new NemoData(other.Nemo);
-			Dep = new Deposition[10];
+			SetDep(new Deposition[10]);
 			for (int i = 0; i < 10; i++)
 			{
-				Dep[i] = new Deposition(other.Dep[i]); // initialize Deposition array
+				GetDep()[i] = new Deposition(other.GetDep()[i]); // initialize Deposition array
 			}
 			
 			if (other.TemperatureTimeSeries != null)
@@ -304,7 +313,7 @@ namespace GralItemData
 			dummy += "Dep@_,";
 			for (int i = 0; i < 10; i++)
 			{
-				dummy += Dep[i].ToString() + ",";
+				dummy += GetDep()[i].ToString() + ",";
 			}
 			 
 			dummy += St_F.DblToIvarTxt(Math.Round(BaseHeight, 1)) + ",";

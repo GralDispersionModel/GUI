@@ -74,15 +74,15 @@ namespace GralDomForms
 			int n1 = 0;
 			foreach(WindData wd in winddata)
 			{
-				MMOData.Date[n1] = wd.Date;
+				MMOData.GetDate()[n1] = wd.Date;
 				
 				if (n1 < index) // fill preview
 				{
 					//read met file finally
-					MMOData.Time[n1] = wd.Time;
-					MMOData.WindVel[n1] = wd.Vel;
-					MMOData.WindDir[n1] = wd.Dir;
-					MMOData.SC[n1] = wd.StabClass;
+					MMOData.GetTime()[n1] = wd.Time;
+					MMOData.GetWindVel()[n1] = wd.Vel;
+					MMOData.GetWindDir()[n1] = wd.Dir;
+					MMOData.GetSC()[n1] = wd.StabClass;
 					
 					ListViewItem item = new ListViewItem(wd.Date);
 					//if (zeile.GetLength(0) > 4)
@@ -106,8 +106,8 @@ namespace GralDomForms
           	//show month calender to select the desired time period of the time series
             try
             {
-                StartDate = MMOData.Date[0].Split(new char[] { '.', ':', '-' });
-                EndDate = MMOData.Date[FileLength1 - 1].Split(new char[] { '.', ':', '-' });
+                StartDate = MMOData.GetDate()[0].Split(new char[] { '.', ':', '-' });
+                EndDate = MMOData.GetDate()[FileLength1 - 1].Split(new char[] { '.', ':', '-' });
                 if (Convert.ToInt16(StartDate[2]) < 1900)
                 {
                     if (Convert.ToInt32(StartDate[2]) < 60)
@@ -193,27 +193,27 @@ namespace GralDomForms
 					    ((Convert.ToInt32(date[2]) * 10000 + Convert.ToInt16(date[1]) * 100 + Convert.ToInt16(date[0])) <= (Convert.ToInt32(EndDate[2]) * 10000 + Convert.ToInt16(EndDate[1]) * 100 + Convert.ToInt16(EndDate[0]))))
 					{
 						
-						MMOData.Date[length] = wd.Date;
-						MMOData.Time[length] = wd.Time;
-						MMOData.WindVel[length] = wd.Vel;
-						MMOData.WindDir[length] = wd.Dir;
-						MMOData.SC[length] = wd.StabClass;
-						MMOData.Hour[length] = wd.Hour;
+						MMOData.GetDate()[length] = wd.Date;
+						MMOData.GetTime()[length] = wd.Time;
+						MMOData.GetWindVel()[length] = wd.Vel;
+						MMOData.GetWindDir()[length] = wd.Dir;
+						MMOData.GetSC()[length] = wd.StabClass;
+						MMOData.GetHour()[length] = wd.Hour;
 						
 						//check for unplausible values
-						if(MMOData.WindVel[length]>55||MMOData.WindVel[length]<0)
+						if(MMOData.GetWindVel()[length]>55||MMOData.GetWindVel()[length]<0)
 						{
 							if (error_count < 4)
 								MessageBox.Show(this, "Wind speed implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
 							error_count++;
 						}
-						else if (MMOData.WindDir[length] > 360 || MMOData.WindDir[length] < 0)
+						else if (MMOData.GetWindDir()[length] > 360 || MMOData.GetWindDir()[length] < 0)
 						{
 							if (error_count < 4)
 								MessageBox.Show(this, "Wind direction implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
 							error_count++;
 						}
-						else if (MMOData.SC[length] > 7 || MMOData.SC[length] < 1)
+						else if (MMOData.GetSC()[length] > 7 || MMOData.GetSC()[length] < 1)
 						{
 							if (error_count < 4)
 								MessageBox.Show(this, "Stability class implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
