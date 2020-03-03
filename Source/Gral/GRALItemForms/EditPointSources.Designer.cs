@@ -169,6 +169,7 @@
             this.numericUpDown2.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown2.TabIndex = 8;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown2, "Exit velocity");
             // 
             // numericUpDown3
             // 
@@ -182,15 +183,16 @@
             this.numericUpDown3.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown3.TabIndex = 10;
             this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown3, "Exhaust gas temperature above ambient temperature");
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(0, 223);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(69, 13);
+            this.label7.Size = new System.Drawing.Size(77, 13);
             this.label7.TabIndex = 12;
-            this.label7.Text = "Exit temp. [K]";
+            this.label7.Text = "Exit temp.Δ[°C]";
             // 
             // numericUpDown4
             // 
@@ -210,6 +212,7 @@
             this.numericUpDown4.Size = new System.Drawing.Size(92, 20);
             this.numericUpDown4.TabIndex = 11;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown4, "Stack diameter");
             // 
             // label8
             // 
