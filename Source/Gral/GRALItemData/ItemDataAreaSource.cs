@@ -39,8 +39,17 @@ namespace GralItemData
 		public float RasterSize	{ get; set;}
 		public List<GralDomain.PointD> Pt  { get; set;}
 		public PollutantsData Poll	{ get; set;}
-		public Deposition[] Dep	{ get; set;}
-		
+
+		private Deposition[] dep;
+		public Deposition[] GetDep()
+		{
+			return dep;
+		}
+		public void SetDep(Deposition[] value)
+		{
+			dep = value;
+		}
+
 		private static CultureInfo ic = CultureInfo.InvariantCulture;
 		
 		/// <summary>
@@ -50,14 +59,14 @@ namespace GralItemData
 		{
 			Name = "AS";
 			Poll = new PollutantsData();
-			Dep = new Deposition[10];
+			SetDep(new Deposition[10]);
 			VerticalExt = 3;
 			Pt = new List<PointD>();
 			
 			for (int i = 0; i < 10; i++)
 			{
-				Dep[i] = new Deposition(); // initialize Deposition array
-				Dep[i].init();
+				GetDep()[i] = new Deposition(); // initialize Deposition array
+				GetDep()[i].init();
 			}
 		}
 		
@@ -70,7 +79,7 @@ namespace GralItemData
 			int version = 0;
 			string[] text = new string[1];
 			text = sourcedata.Split(new char[] { ',' });
-			Dep = new Deposition[10];
+			SetDep(new Deposition[10]);
 			Pt = new List<PointD>();
 			
 			try
@@ -116,8 +125,8 @@ namespace GralItemData
 						{
 							for (int i = 0; i < 10; i++)
 							{
-								Dep[i] = new Deposition(); // initialize Deposition array
-								Dep[i].String_to_Val(depostart + i * 10, text);
+								GetDep()[i] = new Deposition(); // initialize Deposition array
+								GetDep()[i].String_to_Val(depostart + i * 10, text);
 							}
 						}
 						catch{}
@@ -126,8 +135,8 @@ namespace GralItemData
 					{
 						for (int i = 0; i < 10; i++)
 						{
-							Dep[i] = new Deposition(); // initialize Deposition array
-							Dep[i].init();
+							GetDep()[i] = new Deposition(); // initialize Deposition array
+							GetDep()[i].init();
 						}
 					}
 				}
@@ -140,15 +149,15 @@ namespace GralItemData
 			{
 				Name = String.Empty;
 				Poll = new PollutantsData();
-				Dep = new Deposition[10];
+				SetDep(new Deposition[10]);
 				Height = 0;
 				VerticalExt = 3;
 				Pt = new List<PointD>();
 				
 				for (int i = 0; i < 10; i++)
 				{
-					Dep[i] = new Deposition(); // initialize Deposition array
-					Dep[i].init();
+					GetDep()[i] = new Deposition(); // initialize Deposition array
+					GetDep()[i].init();
 				}
 			}
 		}
@@ -171,7 +180,7 @@ namespace GralItemData
 			}
 			
 			Poll = new PollutantsData();
-			Dep = new Deposition[10];
+			SetDep(new Deposition[10]);
 			
 			Poll.SourceGroup = other.Poll.SourceGroup;
 			for (int i = 0; i < 10; i++)
@@ -179,11 +188,11 @@ namespace GralItemData
 				Poll.EmissionRate[i] = other.Poll.EmissionRate[i];
 				Poll.Pollutant[i] = other.Poll.Pollutant[i];
 			}
-			
-			Dep = new Deposition[10];
+
+			SetDep(new Deposition[10]);
 			for (int i = 0; i < 10; i++)
 			{
-				Dep[i] = new Deposition(other.Dep[i]); // initialize Deposition array
+				GetDep()[i] = new Deposition(other.GetDep()[i]); // initialize Deposition array
 			}
 		}
 		
@@ -219,7 +228,7 @@ namespace GralItemData
 			dummy += ",Dep@_,";
 			for (int i = 0; i < 10; i++)
 			{
-				dummy += Dep[i].ToString() + ",";
+				dummy += GetDep()[i].ToString() + ",";
 			}
 			
 			return dummy;

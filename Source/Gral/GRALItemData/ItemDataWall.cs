@@ -38,7 +38,7 @@ namespace GralItemData
 		public float Lenght 		{ get; set;}
 		public List<PointD_3d> Pt   { get; set;}
 		
-		private static CultureInfo ic = CultureInfo.InvariantCulture;
+		private static readonly CultureInfo ic = CultureInfo.InvariantCulture;
 		
 		/// <summary>
 		/// Create a new empty wall data object

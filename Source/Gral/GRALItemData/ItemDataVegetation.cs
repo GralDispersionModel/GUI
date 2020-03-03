@@ -42,7 +42,7 @@ namespace GralItemData
 		public float Coverage	{ get; set;}
 		public List<GralDomain.PointD> Pt  { get; set;}
 		
-		private static CultureInfo ic = CultureInfo.InvariantCulture;
+		private static readonly CultureInfo ic = CultureInfo.InvariantCulture;
 		
 		/// <summary>
 		/// Create a new empty vegetation data object

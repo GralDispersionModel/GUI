@@ -95,14 +95,14 @@ namespace GralDomain
                                         }
                                         if (text1.Length > 16)
                                         {
-                                            _psdata.Dep[0].Frac_2_5 = Convert.ToInt32(text1[11]);
-                                            _psdata.Dep[0].Frac_10 = Convert.ToInt32(text1[12]);
-                                            _psdata.Dep[0].DM_30 = Convert.ToInt32(text1[13]);
-                                            _psdata.Dep[0].Density = Convert.ToDouble(text1[14], ic);
-                                            _psdata.Dep[0].V_Dep1 = Convert.ToDouble(text1[15], ic);
-                                            _psdata.Dep[0].V_Dep2 = Convert.ToDouble(text1[16], ic);
-                                            _psdata.Dep[0].V_Dep3 = Convert.ToDouble(text1[17], ic);
-                                            _psdata.Dep[0].Conc = Convert.ToInt32(text1[18], ic);
+                                            _psdata.GetDep()[0].Frac_2_5 = Convert.ToInt32(text1[11]);
+                                            _psdata.GetDep()[0].Frac_10 = Convert.ToInt32(text1[12]);
+                                            _psdata.GetDep()[0].DM_30 = Convert.ToInt32(text1[13]);
+                                            _psdata.GetDep()[0].Density = Convert.ToDouble(text1[14], ic);
+                                            _psdata.GetDep()[0].V_Dep1 = Convert.ToDouble(text1[15], ic);
+                                            _psdata.GetDep()[0].V_Dep2 = Convert.ToDouble(text1[16], ic);
+                                            _psdata.GetDep()[0].V_Dep3 = Convert.ToDouble(text1[17], ic);
+                                            _psdata.GetDep()[0].Conc = Convert.ToInt32(text1[18], ic);
                                         }
                                         EditPS.ItemData.Add(_psdata);
                                     }

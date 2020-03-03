@@ -135,6 +135,9 @@
             this.moveMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.arrowCursorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
+            this.shownCellHeightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuEntryCellHeightsGramm = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuEntryCellHeightsGral = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.sectionViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1550,6 +1553,7 @@
             this.moveMapToolStripMenuItem,
             this.arrowCursorToolStripMenuItem1,
             this.toolStripMenuItem18,
+            this.shownCellHeightToolStripMenuItem,
             this.toolStripMenuItem5,
             this.sectionViewToolStripMenuItem,
             this.dViewToolStripMenuItem,
@@ -1637,6 +1641,29 @@
             this.toolStripMenuItem18.Size = new System.Drawing.Size(205, 22);
             this.toolStripMenuItem18.Text = "Show &length label info";
             this.toolStripMenuItem18.Click += new System.EventHandler(this.ToolStripMenuItem18Click);
+            // 
+            // shownCellHeightToolStripMenuItem
+            // 
+            this.shownCellHeightToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuEntryCellHeightsGramm,
+            this.MenuEntryCellHeightsGral});
+            this.shownCellHeightToolStripMenuItem.Name = "shownCellHeightToolStripMenuItem";
+            this.shownCellHeightToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.shownCellHeightToolStripMenuItem.Text = "Show cell heights for";
+            // 
+            // MenuEntryCellHeightsGramm
+            // 
+            this.MenuEntryCellHeightsGramm.Name = "MenuEntryCellHeightsGramm";
+            this.MenuEntryCellHeightsGramm.Size = new System.Drawing.Size(180, 22);
+            this.MenuEntryCellHeightsGramm.Text = "GRAMM grid";
+            this.MenuEntryCellHeightsGramm.Click += new System.EventHandler(this.MenuCellHeightsGramm);
+            // 
+            // MenuEntryCellHeightsGral
+            // 
+            this.MenuEntryCellHeightsGral.Name = "MenuEntryCellHeightsGral";
+            this.MenuEntryCellHeightsGral.Size = new System.Drawing.Size(180, 22);
+            this.MenuEntryCellHeightsGral.Text = "GRAL grid";
+            this.MenuEntryCellHeightsGral.Click += new System.EventHandler(this.MenuCellHeightsGral);
             // 
             // toolStripMenuItem5
             // 
@@ -2015,7 +2042,7 @@
             // 
             this.pointSourcesToolStripMenuItem1.Name = "pointSourcesToolStripMenuItem1";
             this.pointSourcesToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.pointSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.pointSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.pointSourcesToolStripMenuItem1.Text = "Point sources";
             this.pointSourcesToolStripMenuItem1.Click += new System.EventHandler(this.Button8_Click);
             // 
@@ -2023,7 +2050,7 @@
             // 
             this.areaSourcesToolStripMenuItem1.Name = "areaSourcesToolStripMenuItem1";
             this.areaSourcesToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F2)));
-            this.areaSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.areaSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.areaSourcesToolStripMenuItem1.Text = "Area sources";
             this.areaSourcesToolStripMenuItem1.Click += new System.EventHandler(this.Button10_Click);
             // 
@@ -2031,7 +2058,7 @@
             // 
             this.lineSourcesToolStripMenuItem1.Name = "lineSourcesToolStripMenuItem1";
             this.lineSourcesToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F3)));
-            this.lineSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.lineSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.lineSourcesToolStripMenuItem1.Text = "Line sources";
             this.lineSourcesToolStripMenuItem1.Click += new System.EventHandler(this.Button12_Click);
             // 
@@ -2039,7 +2066,7 @@
             // 
             this.tunnelPortalsToolStripMenuItem1.Name = "tunnelPortalsToolStripMenuItem1";
             this.tunnelPortalsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this.tunnelPortalsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.tunnelPortalsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.tunnelPortalsToolStripMenuItem1.Text = "Tunnel portals";
             this.tunnelPortalsToolStripMenuItem1.Click += new System.EventHandler(this.Button14_Click);
             // 
@@ -2047,7 +2074,7 @@
             // 
             this.buildingsToolStripMenuItem1.Name = "buildingsToolStripMenuItem1";
             this.buildingsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this.buildingsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.buildingsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.buildingsToolStripMenuItem1.Text = "Buildings";
             this.buildingsToolStripMenuItem1.Click += new System.EventHandler(this.Button16_Click);
             // 
@@ -2055,7 +2082,7 @@
             // 
             this.receptorPointsToolStripMenuItem1.Name = "receptorPointsToolStripMenuItem1";
             this.receptorPointsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
-            this.receptorPointsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.receptorPointsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.receptorPointsToolStripMenuItem1.Text = "Receptor points";
             this.receptorPointsToolStripMenuItem1.Click += new System.EventHandler(this.Button23_Click);
             // 
@@ -2063,7 +2090,7 @@
             // 
             this.wallsToolStripMenuItem1.Name = "wallsToolStripMenuItem1";
             this.wallsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F7)));
-            this.wallsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.wallsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.wallsToolStripMenuItem1.Text = "Walls";
             this.wallsToolStripMenuItem1.Click += new System.EventHandler(this.Button49Click);
             // 
@@ -2071,20 +2098,20 @@
             // 
             this.VegetationtToolStripMenuItem1.Name = "VegetationtToolStripMenuItem1";
             this.VegetationtToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F10)));
-            this.VegetationtToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            this.VegetationtToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.VegetationtToolStripMenuItem1.Text = "Vegetation";
             this.VegetationtToolStripMenuItem1.Click += new System.EventHandler(this.Button50Click);
             // 
             // toolStripMenuItem17
             // 
             this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            this.toolStripMenuItem17.Size = new System.Drawing.Size(200, 6);
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(202, 6);
             // 
             // searchItemToolStripMenuItem
             // 
             this.searchItemToolStripMenuItem.Name = "searchItemToolStripMenuItem";
             this.searchItemToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.searchItemToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.searchItemToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.searchItemToolStripMenuItem.Text = "Search items";
             this.searchItemToolStripMenuItem.Click += new System.EventHandler(this.SearchItemToolStripMenuItemClick);
             // 
@@ -2105,7 +2132,7 @@
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.ShortcutKeyDisplayString = "T";
             this.toolsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 21);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // measureLenghtToolStripMenuItem
@@ -2375,7 +2402,7 @@
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.ShortcutKeyDisplayString = "E";
             this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 21);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
             this.exportToolStripMenuItem.Text = "E&xport";
             // 
             // saveMapToDiscToolStripMenuItem
@@ -2788,5 +2815,8 @@
         private System.Windows.Forms.ToolStripMenuItem contourLinesToolStripMenuItem;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.ToolStripMenuItem shownCellHeightToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuEntryCellHeightsGramm;
+        private System.Windows.Forms.ToolStripMenuItem MenuEntryCellHeightsGral;
     }
 }
