@@ -31,7 +31,7 @@ namespace GralMainForms
 
         private void WindDistribution_Load(object sender, EventArgs e)
         {
-            Text = "Velocity distribution - " + MetFile; 
+            Text = "Wind velocity - cumulative frequency distribution - " + MetFile; 
         }
 
         private void WindDistribution_Resize(object sender, EventArgs e)
