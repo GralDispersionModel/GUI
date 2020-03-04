@@ -704,7 +704,7 @@ namespace GralBackgroundworkers
                                           ref double[,] GRAL_u, ref double[,] GRAL_v, ref int[,] GRAL_SC, ref string[] ReceptorHeader)
         {
             numbwet = 1;
-            int ParamOffset = 2; // old file format
+            int columnOffset = 2; // old file format
             int headerLineNumber = 0;
 
             try // 11.9.2017 Kuntner -> new File format?
@@ -715,19 +715,19 @@ namespace GralBackgroundworkers
                     if (header.Equals("U,V,SC"))
                     {
                         local_SCL = true;
-                        ParamOffset = 3; // U,V,SC
+                        columnOffset = 3; // U,V,SC
                         headerLineNumber = 1;
                     }
                     else if (header.StartsWith("U,V,SC,BLH"))
                     {
                         local_SCL = true;
-                        ParamOffset = 4; // U,V,SC,BLH
+                        columnOffset = 4; // U,V,SC,BLH
                         headerLineNumber = 1;
                     }
                     else if (header.StartsWith("U,V,BLH"))
                     {
                         local_SCL = false;
-                        ParamOffset = 3; //U,V,BLH
+                        columnOffset = 3; //U,V,BLH
                         headerLineNumber = 1;
                     }
                     if (header.EndsWith("+")) // Additional header lines for name and coordinates of receptors
@@ -765,23 +765,21 @@ namespace GralBackgroundworkers
                     while (read.EndOfStream == false)
                     {
                         string[] columns = read.ReadLine().Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        int numberOfReceptors = (int)(columns.Length / columnOffset);
                         int count = 0;
-                        for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
+                        
+                        for (int numbrec = 0; numbrec < numberOfReceptors; numbrec++)
                         {
                             //check if this situation has been computed, otherwise this line is 0
-                            if (columns.Length > count + 2)
+                            if (columns.Length > count + 2 && GRAL_u.GetUpperBound(0) >= numberOfReceptors)
                             {
                                 GRAL_u[numbrec, numbwet] = Convert.ToDouble(columns[count], ic);
                                 GRAL_v[numbrec, numbwet] = Convert.ToDouble(columns[count + 1], ic);
                                 if (local_SCL) // 11.9.2017 Kuntner -> new File format
                                 {
                                     GRAL_SC[numbrec, numbwet] = Convert.ToInt32(columns[count + 2], ic);
-                                    count += ParamOffset;
                                 }
-                                else
-                                {
-                                    count += ParamOffset;
-                                }
+                                count += columnOffset;
                             }
                         }
                         numbwet++;
