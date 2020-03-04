@@ -350,16 +350,16 @@ namespace GralBackgroundworkers
 			double[,] GRAL_u = new double[xrec.Count, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
 			double[,] GRAL_v = new double[xrec.Count, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
 			int[,] GRAL_SC = new int[xrec.Count, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
-			
+            string[] ReceptorMeteoCoors = new string[5];
 			
 			if (File.Exists(GRAL_metfile))
 			{
 				metflag = true;
 				numbwet = 0;
 				
-				if (Read_Meteo_Zeitreihe(GRAL_metfile, ref numbwet, ref local_SCL, ref GRAL_u, ref GRAL_v, ref GRAL_SC) == false)
+				if (Read_Meteo_Zeitreihe(GRAL_metfile, ref numbwet, ref local_SCL, ref GRAL_u, ref GRAL_v, ref GRAL_SC, ref ReceptorMeteoCoors) == false)
 				{
-					return;
+                    metflag = false;
 				}
 			}
 
@@ -503,28 +503,56 @@ namespace GralBackgroundworkers
 			
 			if (metflag == true) // write meteorological data for all receptor points
 			{
-				try
-				{
-					for (int k = 0; k < rec_names.Count; k++)
-					{
-						//write results to file(s) GRAL_*metstations*.met
-						double windspeed_GRAL = 0;
-						double winddirection_GRAL = 0;
+                try
+                {
+                    string[] recname = new string[0];
+                    string[] recX = new string[0];
+                    string[] recY = new string[0];
+                    string[] recZ = new string[0];
+                   
+                    if (!string.IsNullOrEmpty(ReceptorMeteoCoors[0]))
+                    {
+                        recname = ReceptorMeteoCoors[0].Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        recX = ReceptorMeteoCoors[1].Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        recY = ReceptorMeteoCoors[2].Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        recZ = ReceptorMeteoCoors[3].Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                    }
 
-						string file = Path.Combine(mydata.Projectname, @"Metfiles","GRAL" + Convert.ToString(k +1) + "_"+rec_names[k]+".met");
-						if (File.Exists(file))
-						{
-							try
-							{
-								File.Delete(file);
-							}
-							catch{}
-						}
+                    for (int k = 0; k < rec_names.Count; k++)
+                    {
+                        //write results to file(s) GRAL_*metstations*.met
+                        double windspeed_GRAL = 0;
+                        double winddirection_GRAL = 0;
 
-						using (StreamWriter recwrite = new StreamWriter(file))
-						{
-							//write header lines
-							recwrite.WriteLine("//" + Path.GetFileName(file));
+                        string file = Path.Combine(mydata.Projectname, @"Metfiles", "GRAL" + Convert.ToString(k + 1) + "_" + rec_names[k] + ".met");
+                        if (File.Exists(file))
+                        {
+                            try
+                            {
+                                File.Delete(file);
+                            }
+                            catch { }
+                        }
+
+                        using (StreamWriter recwrite = new StreamWriter(file))
+                        {
+                            //write header lines
+                            if (string.IsNullOrEmpty(ReceptorMeteoCoors[0]) || k >= recname.Length)
+                            {
+                                recwrite.WriteLine("//" + Path.GetFileName(file));
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    recwrite.WriteLine(recname[k]);
+                                    recwrite.WriteLine(@"\\X=" + recX[k]);
+                                    recwrite.WriteLine(@"\\Y=" + recY[k]);
+                                    recwrite.WriteLine(@"\\Z=" + recZ[k]);
+                                }
+                                catch { }
+                            }
+
 							string[] text6 = new string[2];
 
 							//read mettimeseries.dat
@@ -671,11 +699,14 @@ namespace GralBackgroundworkers
 			}
 		}
 		
-		private bool Read_Meteo_Zeitreihe(string GRAL_metfile, ref int numbwet, ref bool local_SCL, ref double[,] GRAL_u, ref double[,] GRAL_v, ref int[,] GRAL_SC)
+		private bool Read_Meteo_Zeitreihe(string GRAL_metfile, ref int numbwet, ref bool local_SCL, 
+                                          ref double[,] GRAL_u, ref double[,] GRAL_v, ref int[,] GRAL_SC, ref string[] ReceptorHeader)
 		{
 			string[] text7 = new string[1];
 			numbwet = 1;
             int ParamOffset = 2; // old file format
+            int headerLineNumber = 0;
+
 			try // 11.9.2017 Kuntner -> new File format?
 			{
 				using(StreamReader read1 = new StreamReader(GRAL_metfile))
@@ -685,13 +716,25 @@ namespace GralBackgroundworkers
 					{
 						local_SCL = true;
                         ParamOffset = 3; // U,V,SC
+                        headerLineNumber = 1;
 					}
-                    else if (header.Equals("U,V,SC,BLH"))
+                    else if (header.StartsWith("U,V,SC,BLH"))
                     {
                         local_SCL = true;
                         ParamOffset = 4; // U,V,SC,BLH
+                        headerLineNumber = 1;
                     }
-				}
+                    else if (header.StartsWith("U,V,BLH"))
+                    {
+                        local_SCL = false;
+                        ParamOffset = 3; //U,V,BLH
+                        headerLineNumber = 1;
+                    }
+                    if (header.EndsWith("+")) // Additional header lines for name and coordinates of receptors
+                    {
+                        headerLineNumber = 5;
+                    }
+                }
 			}
 			catch{}
 				
@@ -699,14 +742,29 @@ namespace GralBackgroundworkers
 			{
 				try
 				{
-					if (local_SCL) // Read Header
-					{
-						read.ReadLine();
-					}
+					if (headerLineNumber > 0) // Read header lines
+                    {
+                        ReceptorHeader = new string[headerLineNumber + 1];
+
+                        if (headerLineNumber > 0) // compatibility to old projects
+                        {
+                            read.ReadLine();
+                        }
+
+                        // read all available header lines
+                        for (int i = 0; i < headerLineNumber - 1; i++)
+                        {
+                            if (headerLineNumber > 1 && headerLineNumber < ReceptorHeader.Length)
+                            {
+                                ReceptorHeader[i] = read.ReadLine();
+                            }
+                        }
+                    }
 					
+                    // read entire file
 					while (read.EndOfStream == false)
 					{
-						text7 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+						text7 = read.ReadLine().Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 						int count = 0;
 						for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
 						{
