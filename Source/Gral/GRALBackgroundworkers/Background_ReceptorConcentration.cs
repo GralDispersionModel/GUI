@@ -22,6 +22,7 @@ using GralIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GralBackgroundworkers
 {
@@ -301,15 +302,51 @@ namespace GralBackgroundworkers
             bool zeitflag = false;
             string[] text5 = new string[xrec.Count * sg_names.Length];
             int numbwet = 0;
-            receptorfile=Path.Combine(mydata.Projectname, "Computation","zeitreihe.dat");
+
+            //switch between new (V21.01) and old GRAL concentration files
+            receptorfile = Path.Combine(mydata.Projectname, "Computation", "ReceptorConcentrations.dat");
+            bool NewFileFormat = false;
+            if (File.Exists(receptorfile))
+            {
+                NewFileFormat = true;
+            }
+            else
+            {
+                receptorfile = Path.Combine(mydata.Projectname, "Computation", "zeitreihe.dat");
+            }
+
+            string[] ConcentrationHeader = new string[5];
+            int NumberOfReceptors = xrec.Count;
+
             if (File.Exists(receptorfile) && mydata.Sel_Source_Grp != string.Empty)
             {
                 zeitflag = true;
-                
                 try
                 {
                     using (StreamReader read = new StreamReader(receptorfile))
                     {
+                        // Read header of new file format
+                        if (NewFileFormat)
+                        {
+                            for (int ianz = 0; ianz < 5; ianz++)
+                            {
+                                ConcentrationHeader[ianz] = read.ReadLine();
+                            }
+                        }
+
+                        if (sg_names.Count() > 0)
+                        {
+                            NumberOfReceptors = (int)ConcentrationHeader[0].Count(ch => ch == '\t') / sg_names.Count();
+
+                            //if the project has been changed - who knows what user are doing...
+                            if (NumberOfReceptors > xrec.Count)
+                            {
+                                conc = GralIO.Landuse.CreateArray<double[][]>(NumberOfReceptors, ()
+                                                        => GralIO.Landuse.CreateArray<double[]>(maxsource, ()
+                                                                                 => new double[wrmet.Count]));
+                            }
+                        }
+
                         while (read.EndOfStream == false)
                         {
                             text5 = read.ReadLine().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -371,7 +408,7 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        string file = Path.Combine(mydata.Projectname, "Computation","Receptor_timeseries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
+                        string file = Path.Combine(mydata.Projectname, "Computation","Receptor_TimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
                         if (File.Exists(file))
                         {
                             try
@@ -385,16 +422,31 @@ namespace GralBackgroundworkers
                         using (StreamWriter recwrite = new StreamWriter(file))
                         {
                             //write header line
+                            if (NewFileFormat)
+                            {
+                                string[] headerInfo = {"Name", "X", "Y", "Z", "-----"};
+
+                                System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentCulture;
+                                for (int ianz = 0; ianz < 5; ianz++)
+                                {
+                                    // use local culture for user files
+                                    if (ianz > 0)
+                                    {
+                                        ConcentrationHeader[ianz] = ConcentrationHeader[ianz].Replace(".", ci.NumberFormat.CurrencyDecimalSeparator);
+                                    }
+                                    recwrite.WriteLine("\t" + headerInfo[ianz] + "\t" + ConcentrationHeader[ianz]);
+                                }
+                            }
                             string[] text6 = new string[2];
                             //write source groups
                             recwrite.Write("Date \t Time \t"); // Header Date, Time
-                            
+
                             foreach (string hy in sg_names)
                             {
-                                for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
+                                for (int numbrec = 0; numbrec < NumberOfReceptors; numbrec++)
                                 {
                                     text6 = hy.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                                    recwrite.Write(text6[0]+"-Rec:"+Convert.ToString(numbrec+1) + "\t"); // Header source-groups use Tabulator
+                                    recwrite.Write(text6[0] + "-Rec:" + Convert.ToString(numbrec + 1) + "\t"); // Header source-groups use Tabulator
                                 }
                             }
                             recwrite.WriteLine();
@@ -464,7 +516,7 @@ namespace GralBackgroundworkers
                                                     //compute emission modulation factor
                                                     fmod = emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
                                                     
-                                                    for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
+                                                    for (int numbrec = 0; numbrec < NumberOfReceptors; numbrec++)
                                                     {
                                                         dummy = dummy + Convert.ToString(conc[numbrec][itm][n] * fmod) + "\t";
                                                     }
@@ -492,7 +544,7 @@ namespace GralBackgroundworkers
                     }
                     catch
                     {
-                        BackgroundThreadMessageBox ("Error writing the file receptor_timeseries.txt");
+                        BackgroundThreadMessageBox ("Error writing the file Receptor_TimeSeries.txt");
                         return;
                     }
                 }
