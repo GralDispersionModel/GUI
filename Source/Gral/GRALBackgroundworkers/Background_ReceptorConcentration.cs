@@ -332,18 +332,18 @@ namespace GralBackgroundworkers
                             {
                                 ConcentrationHeader[ianz] = read.ReadLine();
                             }
-                        }
 
-                        if (sg_names.Count() > 0)
-                        {
-                            NumberOfReceptors = (int)ConcentrationHeader[0].Count(ch => ch == '\t') / sg_names.Count();
-
-                            //if the project has been changed - who knows what user are doing...
-                            if (NumberOfReceptors > xrec.Count)
+                            if (sg_names.Count() > 0)
                             {
-                                conc = GralIO.Landuse.CreateArray<double[][]>(NumberOfReceptors, ()
-                                                        => GralIO.Landuse.CreateArray<double[]>(maxsource, ()
-                                                                                 => new double[wrmet.Count]));
+                                NumberOfReceptors = (int)ConcentrationHeader[0].Count(ch => ch == '\t') / sg_names.Count();
+
+                                //if the project has been changed - who knows what user are doing...
+                                if (NumberOfReceptors > xrec.Count)
+                                {
+                                    conc = GralIO.Landuse.CreateArray<double[][]>(NumberOfReceptors, ()
+                                                            => GralIO.Landuse.CreateArray<double[]>(maxsource, ()
+                                                                                     => new double[wrmet.Count]));
+                                }
                             }
                         }
 
