@@ -472,94 +472,104 @@ namespace GralBackgroundworkers
                             
                             //read mettimeseries.dat
                             newpath = Path.Combine("Computation", "mettimeseries.dat");
-                            StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath));
-                            text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                            text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
 
-                            //consider, if meteopgt.all represents a time series or a statistics
-                            int dispersionsituations = 0;
-                            if (mydata.Checkbox19 == true)
-                                dispersionsituations = numbwet + 1;
-                            else
-                                dispersionsituations = wrmet.Count;
-                            
-                            int count_dispsit_in_mettime = 0;
-                            int count_ws = -1;
-
-                            while (text2[0] != "")
+                            using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
                             {
-                                count_ws++;
-                                count_dispsit_in_mettime += 1;
-                                
-                                if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true))
-                                    break;
+                                text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
 
-                                month = text3[1];
-                                day = text3[0];
-                                hour = text2[1];
-                                if (hour == "24")
-                                    hourplus = 1;
-                                wgmettime = text2[2];
-                                wrmettime = text2[3];
-                                akmettime = text2[4];
+                                //consider, if meteopgt.all represents a time series or a statistics
+                                int dispersionsituations = 0;
+                                if (mydata.Checkbox19 == true)
+                                    dispersionsituations = numbwet + 1;
+                                else
+                                    dispersionsituations = wrmet.Count;
 
-                                //search in file meteopgt.all for the corresponding dispersion situation
+                                int count_dispsit_in_mettime = 0;
+                                int count_ws = -1;
 
-                                for (int n = 0; n < dispersionsituations; n++)
+                                while (!string.IsNullOrEmpty(text2[0]))
                                 {
-                                    if ((wgmet[n] == wgmettime) && (wrmet[n] == wrmettime) && (akmet[n] == akmettime))
+                                    count_ws++;
+                                    count_dispsit_in_mettime += 1;
+
+                                    if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true))
+                                        break;
+
+                                    month = text3[1];
+                                    day = text3[0];
+                                    hour = text2[1];
+                                    if (hour == "24")
+                                        hourplus = 1;
+                                    wgmettime = text2[2];
+                                    wrmettime = text2[3];
+                                    akmettime = text2[4];
+
+                                    //search in file meteopgt.all for the corresponding dispersion situation
+
+                                    for (int n = 0; n < dispersionsituations; n++)
                                     {
-                                        //take care if not all dispersion situations have been computed
-                                        if (n >= numbwet)
+                                        if ((wgmet[n] == wgmettime) && (wrmet[n] == wrmettime) && (akmet[n] == akmettime))
                                         {
-                                            //write results
-                                            dummy = "";
-                                            recwrite.WriteLine(dummy);
+                                            //take care if not all dispersion situations have been computed
+                                            if (n >= numbwet)
+                                            {
+                                                //write results
+                                                dummy = "";
+                                                recwrite.WriteLine(dummy);
+                                            }
+                                            else
+                                            {
+                                                SetText("Day.Month: " + day + "." + month);
+
+                                                int std = Convert.ToInt32(hour);
+                                                int mon = Convert.ToInt32(month) - 1;
+
+                                                //write results
+                                                dummy = "";
+                                                dummy = day + "." + month + "\t" + hour + ":00\t";
+                                                fmod = 1;
+                                                foreach (string hy in sg_names)
+                                                {
+                                                    {
+                                                        int itm = Convert.ToInt32(GetSgNumbers(hy)) - 1;
+
+                                                        //compute emission modulation factor
+                                                        fmod = emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
+
+                                                        for (int numbrec = 0; numbrec < NumberOfReceptors; numbrec++)
+                                                        {
+                                                            dummy = dummy + Convert.ToString(conc[numbrec][itm][n] * fmod) + "\t";
+                                                        }
+                                                    }
+                                                }
+                                                recwrite.WriteLine(dummy);
+                                                //consider, if meteopgt.all represents a time series or a statistics
+                                                if (mydata.Checkbox19 == true)
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                    try
+                                    {
+                                        if (read.EndOfStream)
+                                        {
+                                            text2[0] = string.Empty; //quit reading
                                         }
                                         else
                                         {
-                                            SetText("Day.Month: " + day + "." + month);
-                                            
-                                            int std = Convert.ToInt32(hour);
-                                            int mon = Convert.ToInt32(month) - 1;
-
-                                            //write results
-                                            dummy = "";
-                                            dummy = day + "." + month + "\t" + hour+":00\t";
-                                            fmod = 1;
-                                            foreach (string hy in sg_names)
-                                            {
-                                                {
-                                                    int itm = Convert.ToInt32(GetSgNumbers(hy)) - 1;
-                                                    
-                                                    //compute emission modulation factor
-                                                    fmod = emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
-                                                    
-                                                    for (int numbrec = 0; numbrec < NumberOfReceptors; numbrec++)
-                                                    {
-                                                        dummy = dummy + Convert.ToString(conc[numbrec][itm][n] * fmod) + "\t";
-                                                    }
-                                                }										
-                                            }
-                                            recwrite.WriteLine(dummy);
-                                            //consider, if meteopgt.all represents a time series or a statistics
-                                            if (mydata.Checkbox19 == true)
-                                                break;
+                                            text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                            text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                                         }
                                     }
+                                    catch
+                                    {
+                                        break;
+                                    }
                                 }
-                                try
-                                {
-                                    text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                    text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
-                                }
-                                catch
-                                {
-                                    break;
-                                }
-                            }
+                            } // using reader of mettimeseries
                             
-                        } // using
+                        } // using rec write
                     }
                     catch
                     {
@@ -746,8 +756,15 @@ namespace GralBackgroundworkers
                                     }
                                     try
                                     {
-                                        text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                        text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                                        if (read.EndOfStream)
+                                        {
+                                            text2[0] = string.Empty; //quit reading
+                                        }
+                                        else
+                                        {
+                                            text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                            text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                                        }
                                     }
                                     catch
                                     {
@@ -762,8 +779,7 @@ namespace GralBackgroundworkers
                 {
                     BackgroundThreadMessageBox ("Error writing GRAL-Metfiles");
                     return;
-                }
-                
+                }          
             }
             else
             {
