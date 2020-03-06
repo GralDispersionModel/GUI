@@ -337,6 +337,25 @@ namespace GralBackgroundworkers
                             {
                                 NumberOfReceptors = (int)ConcentrationHeader[0].Count(ch => ch == '\t') / sg_names.Count();
 
+                                //check all source groups within the file ReceptorConcentrations.dat
+                                List<int> containedSourceGroups = new List<int>();
+                                string[] headerSourceGroups = ConcentrationHeader[0].Split(new char[] { ':', '\t'});
+                                for(int i = 1; i < headerSourceGroups.Length; i += 2) 
+                                {
+                                    int _sg = 0;
+                                    if (Int32.TryParse(headerSourceGroups[i], out _sg))
+                                    {
+                                        if (!containedSourceGroups.Contains(_sg))
+                                        {
+                                            containedSourceGroups.Add(_sg);
+                                        }
+                                    }
+                                }
+                                if (containedSourceGroups.Count() != sg_names.Count())
+                                {
+                                    BackgroundThreadMessageBox("The number of source groups between calculation and current project does not match!");
+                                }
+
                                 //if the project has been changed - who knows what user are doing...
                                 if (NumberOfReceptors > xrec.Count)
                                 {
@@ -386,9 +405,9 @@ namespace GralBackgroundworkers
             string GRAL_metfile = Path.Combine(mydata.Projectname, "Computation","GRAL_Meteozeitreihe.dat");
             int zeitreihe_lenght = (int) GralStaticFunctions.St_F.CountLinesInFile(GRAL_metfile);
             
-            double[,] GRAL_u = new double[xrec.Count, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
-            double[,] GRAL_v = new double[xrec.Count, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
-            int[,] GRAL_SC = new int[xrec.Count, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
+            double[,] GRAL_u = new double[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
+            double[,] GRAL_v = new double[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
+            int[,] GRAL_SC = new int[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
             string[] ReceptorMeteoCoors = new string[5];
             
             if (File.Exists(GRAL_metfile))
@@ -818,12 +837,13 @@ namespace GralBackgroundworkers
                     {
                         string[] columns = read.ReadLine().Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                         int numberOfReceptors = (int)(columns.Length / columnOffset);
+                        
                         int count = 0;
                         
                         for (int numbrec = 0; numbrec < numberOfReceptors; numbrec++)
                         {
                             //check if this situation has been computed, otherwise this line is 0
-                            if (columns.Length > count + 2 && GRAL_u.GetUpperBound(0) >= numberOfReceptors)
+                            if (columns.Length > count + 2 && GRAL_u.GetUpperBound(0) >= (numberOfReceptors - 1))
                             {
                                 GRAL_u[numbrec, numbwet] = Convert.ToDouble(columns[count], ic);
                                 GRAL_v[numbrec, numbwet] = Convert.ToDouble(columns[count + 1], ic);
