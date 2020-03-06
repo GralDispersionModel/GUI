@@ -91,41 +91,49 @@ namespace GralShape
 			ShapeReader shape = new ShapeReader(domain);
 			foreach (object shp in shape.ReadShapeFile(file))
 			{
-				if (shp is PointF)
+				if (shp is PointF || shp is GralDomain.PointD)
 				{
                     GralDomain.PointD pt = (GralDomain.PointD) shp;
 					pt.X = Math.Round(pt.X, 1);
 					pt.Y = Math.Round(pt.Y, 1);
-					
-					inside = false;
-					
-					if ((pt.X > GralDomRect.West) && (pt.X < GralDomRect.East) && (pt.Y > GralDomRect.South) && (pt.Y < GralDomRect.North))
-						inside = true;
+
+                    inside = false;
+
+                    if ((pt.X > GralDomRect.West) && (pt.X < GralDomRect.East) && (pt.Y > GralDomRect.South) && (pt.Y < GralDomRect.North))
+                    {
+                        inside = true;
+                    }
 
 					if (inside == true)
 					{
-						ReceptorData _rd = new ReceptorData();
-						
-						//check for names
-						if (comboBox3.SelectedIndex != 0)
-						{
-							_rd.Name = Convert.ToString(dataGridView1[Convert.ToString(comboBox3.SelectedItem), SHP_Line].Value).Trim();
-						}
-						else
-							_rd.Name = "Receptor" + Convert.ToString(SHP_Line);
-						
-						//check for stack heights
-						if (comboBox1.SelectedIndex != 0)
-						{
-							height = (double) (dataGridView1[Convert.ToString(comboBox1.SelectedItem), SHP_Line].Value);
-							height = Math.Round(height, 1);
-						}
-						else
-							height = 3;
-						if (height - _deltaZ * 0.5 < 0)
+                        ReceptorData _rd = new ReceptorData();
+
+                        //check for names
+                        if (comboBox3.SelectedIndex != 0)
+                        {
+                            _rd.Name = Convert.ToString(dataGridView1[Convert.ToString(comboBox3.SelectedItem), SHP_Line].Value).Trim();
+                        }
+                        else
+                        {
+                            _rd.Name = "Receptor" + Convert.ToString(SHP_Line);
+                        }
+
+                        //check for stack heights
+                        if (comboBox1.SelectedIndex != 0)
+                        {
+                            height = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox1.SelectedItem), SHP_Line].Value, ic);
+                            height = Math.Round(height, 1);
+                        }
+                        else
+                        {
+                            height = 3;
+                        }
+
+                        if (height - _deltaZ * 0.5 < 0)
 						{
 							height = _deltaZ;
 						}
+
 						_rd.Height = (float) Math.Round(height, 1);
 						_rd.Pt = new GralDomain.PointD(pt.X, pt.Y);
 						
