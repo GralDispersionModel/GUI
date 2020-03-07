@@ -20,7 +20,7 @@ using GralItemData;
 
 namespace GralShape
 {
-	/// <summary>
+    /// <summary>
     /// Write a shape file
     /// </summary>
     public class ShapeWriter
@@ -98,7 +98,7 @@ namespace GralShape
                 {
                     for (int i = 0; i < _ls.Pt.Count - 1; i++)
                     {
-                    	x1 = _ls.Pt[i].X;
+                        x1 = _ls.Pt[i].X;
                         y1 = _ls.Pt[i].Y;
                         x2 = _ls.Pt[i + 1].X;
                         y2 = _ls.Pt[i + 1].Y;
@@ -273,7 +273,7 @@ namespace GralShape
                 {
                     for (int i = 0; i < _as.Pt.Count; i++)
                     {
-                    	x1 = _as.Pt[i].X;
+                        x1 = _as.Pt[i].X;
                         y1 = _as.Pt[i].Y;
                         xMin = Math.Min(xMin, x1);
                         yMin = Math.Min(yMin, y1);
@@ -381,24 +381,24 @@ namespace GralShape
                     //check direction
                     if (inorth > 0)
                     {
-                    	x_minus = Convert.ToDouble(_as.Pt[(inorth - 1)].X);
-                    	y_minus = Convert.ToDouble(_as.Pt[(inorth - 1)].Y);
+                        x_minus = Convert.ToDouble(_as.Pt[(inorth - 1)].X);
+                        y_minus = Convert.ToDouble(_as.Pt[(inorth - 1)].Y);
                     }
                     else
                     {
-                    	x_minus = Convert.ToDouble(_as.Pt[_as.Pt.Count - 1].X);
-                    	y_minus = Convert.ToDouble(_as.Pt[_as.Pt.Count - 1].Y);
+                        x_minus = Convert.ToDouble(_as.Pt[_as.Pt.Count - 1].X);
+                        y_minus = Convert.ToDouble(_as.Pt[_as.Pt.Count - 1].Y);
                     }
                     //check direction
                     if (inorth < _as.Pt.Count - 1)
                     {
-                    	x_plus = Convert.ToDouble(_as.Pt[(inorth + 1)].X);
-                    	y_plus = Convert.ToDouble(_as.Pt[(inorth + 1)].Y);
+                        x_plus = Convert.ToDouble(_as.Pt[(inorth + 1)].X);
+                        y_plus = Convert.ToDouble(_as.Pt[(inorth + 1)].Y);
                     }
                     else
                     {
-                    	x_plus = Convert.ToDouble(_as.Pt[0].X);
-                    	y_plus = Convert.ToDouble(_as.Pt[0].Y);
+                        x_plus = Convert.ToDouble(_as.Pt[0].X);
+                        y_plus = Convert.ToDouble(_as.Pt[0].Y);
                     }
 
                     bool clockwise = true;
@@ -415,9 +415,9 @@ namespace GralShape
                     {
                         for (int i = 0; i < _as.Pt.Count; i++)
                         {
-                        	x1 = Convert.ToDouble(_as.Pt[i].X);
-                        	y1 = Convert.ToDouble(_as.Pt[i].Y);
-                        	                                            
+                            x1 = Convert.ToDouble(_as.Pt[i].X);
+                            y1 = Convert.ToDouble(_as.Pt[i].Y);
+                                                                        
                             data8 = WriteDoubleLittle(x1);
                             fs.Write(data8, 0, 8);
                             data8 = WriteDoubleLittle(y1);
@@ -435,8 +435,8 @@ namespace GralShape
                     {
                         for (int i = _as.Pt.Count - 1; i > -1; i--)
                         {
-                        	x1 = Convert.ToDouble(_as.Pt[i].X);
-                        	y1 = Convert.ToDouble(_as.Pt[i].Y);
+                            x1 = Convert.ToDouble(_as.Pt[i].X);
+                            y1 = Convert.ToDouble(_as.Pt[i].Y);
                             data8 = WriteDoubleLittle(x1);
                             fs.Write(data8, 0, 8);
                             data8 = WriteDoubleLittle(y1);
@@ -642,7 +642,7 @@ namespace GralShape
                 
                 foreach (ReceptorData _rd in domain.EditR.ItemData)
                 {
-                	x1 = Math.Round(_rd.Pt.X, 1);
+                    x1 = Math.Round(_rd.Pt.X, 1);
                     y1 = Math.Round(_rd.Pt.Y, 1);
                     xMin = Math.Min(xMin, x1);
                     yMin = Math.Min(yMin, y1);
