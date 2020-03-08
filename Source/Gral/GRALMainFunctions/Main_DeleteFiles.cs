@@ -126,6 +126,18 @@ namespace Gral
                 if (File.Exists(newPath))
                     File.Delete(newPath);
 
+                newPath = Path.Combine(ProjectName, "Computation", "zeitreihe.dat");
+                if (File.Exists(newPath))
+                    File.Delete(newPath);
+
+                newPath = Path.Combine(ProjectName, "Computation", "ReceptorConcentrations.dat");
+                if (File.Exists(newPath))
+                    File.Delete(newPath);
+
+                newPath = Path.Combine(ProjectName, "Computation", "GRAL_Meteozeitreihe.dat");
+                if (File.Exists(newPath))
+                    File.Delete(newPath);
+
                 DispNrChanged(null, null); // change displaynumber
                 GralFileSizes();
             }

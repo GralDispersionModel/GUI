@@ -298,7 +298,7 @@ namespace GralBackgroundworkers
                                                                                  => new double[wrmet.Count]));
             double fmod = 1;
 
-            //read all computed concentrations from file zeitreihe.dat
+            //read all computed concentrations from file zeitreihe.dat or ReceptorConcentration.dat
             bool zeitflag = false;
             string[] text5 = new string[xrec.Count * sg_names.Length];
             int numbwet = 0;
@@ -315,7 +315,7 @@ namespace GralBackgroundworkers
                 receptorfile = Path.Combine(mydata.Projectname, "Computation", "zeitreihe.dat");
             }
 
-            string[] ConcentrationHeader = new string[5];
+            string[] ConcentrationHeader = new string[6];
             int NumberOfReceptors = xrec.Count;
 
             if (File.Exists(receptorfile) && mydata.Sel_Source_Grp != string.Empty)
@@ -328,7 +328,7 @@ namespace GralBackgroundworkers
                         // Read header of new file format
                         if (NewFileFormat)
                         {
-                            for (int ianz = 0; ianz < 5; ianz++)
+                            for (int ianz = 0; ianz < 6; ianz++)
                             {
                                 ConcentrationHeader[ianz] = read.ReadLine();
                             }
@@ -339,8 +339,8 @@ namespace GralBackgroundworkers
 
                                 //check all source groups within the file ReceptorConcentrations.dat
                                 List<int> containedSourceGroups = new List<int>();
-                                string[] headerSourceGroups = ConcentrationHeader[0].Split(new char[] { ':', '\t'});
-                                for(int i = 1; i < headerSourceGroups.Length; i += 2) 
+                                string[] headerSourceGroups = ConcentrationHeader[1].Split(new char[] {'\t'});
+                                for (int i = 0; i < headerSourceGroups.Length; i++)
                                 {
                                     int _sg = 0;
                                     if (Int32.TryParse(headerSourceGroups[i], out _sg))
@@ -366,6 +366,8 @@ namespace GralBackgroundworkers
                             }
                         }
 
+                        // read concentration file
+                        numbwet = 0;
                         while (read.EndOfStream == false)
                         {
                             text5 = read.ReadLine().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -381,8 +383,8 @@ namespace GralBackgroundworkers
                                     if (text5.Length > count)
                                     {
                                         conc[numbrec][sg_number][numbwet] = Convert.ToDouble(text5[count].Replace(".", decsep));
-                                        count++;
                                     }
+                                    count++;
                                 }
                             }
                             numbwet++;
@@ -391,7 +393,7 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    BackgroundThreadMessageBox ("Error reading zeitreihe.dat. Is this file available?" + Environment.NewLine +
+                    BackgroundThreadMessageBox ("Error reading" + Path.GetFileName(receptorfile) +  "Is this file available?" + Environment.NewLine +
                                                 "Has the number of receptors or source groups changed?");
                     return;
                 }			
@@ -427,26 +429,26 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        string file = Path.Combine(mydata.Projectname, "Computation","Receptor_TimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
-                        if (File.Exists(file))
+                        string writerRecTimeSeries = Path.Combine(mydata.Projectname, "Computation","Receptor_TimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
+                        if (File.Exists(writerRecTimeSeries))
                         {
                             try
                             {
-                                File.Delete(file);
+                                File.Delete(writerRecTimeSeries);
                             }
                             catch{}
                         }
 
                         //write results to file receptor_timeseries.txt
-                        using (StreamWriter recwrite = new StreamWriter(file))
+                        using (StreamWriter recwrite = new StreamWriter(writerRecTimeSeries))
                         {
                             //write header line
                             if (NewFileFormat)
                             {
-                                string[] headerInfo = {"Name", "X", "Y", "Z", "-----"};
+                                string[] headerInfo = {"Name", "Source group", "X", "Y", "Z", "-----"};
 
                                 System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentCulture;
-                                for (int ianz = 0; ianz < 5; ianz++)
+                                for (int ianz = 0; ianz < 6; ianz++)
                                 {
                                     // use local culture for user files
                                     if (ianz > 0)
@@ -456,8 +458,9 @@ namespace GralBackgroundworkers
                                     recwrite.WriteLine("\t" + headerInfo[ianz] + "\t" + ConcentrationHeader[ianz]);
                                 }
                             }
-                            string[] text6 = new string[2];
+
                             //write source groups
+                            string[] text6 = new string[2];
                             recwrite.Write("Date \t Time \t"); // Header Date, Time
 
                             foreach (string hy in sg_names)
@@ -472,10 +475,9 @@ namespace GralBackgroundworkers
                             
                             //read mettimeseries.dat
                             newpath = Path.Combine("Computation", "mettimeseries.dat");
-
-                            using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                            using (StreamReader readMetTimeSeries = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
                             {
-                                text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                text2 = readMetTimeSeries.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
 
                                 //consider, if meteopgt.all represents a time series or a statistics
@@ -499,6 +501,7 @@ namespace GralBackgroundworkers
                                     month = text3[1];
                                     day = text3[0];
                                     hour = text2[1];
+                                    
                                     if (hour == "24")
                                         hourplus = 1;
                                     wgmettime = text2[2];
@@ -506,17 +509,15 @@ namespace GralBackgroundworkers
                                     akmettime = text2[4];
 
                                     //search in file meteopgt.all for the corresponding dispersion situation
-
                                     for (int n = 0; n < dispersionsituations; n++)
                                     {
-                                        if ((wgmet[n] == wgmettime) && (wrmet[n] == wrmettime) && (akmet[n] == akmettime))
+                                        if ((wgmet[n].Equals(wgmettime)) && (wrmet[n].Equals(wrmettime)) && (akmet[n].Equals(akmettime)))
                                         {
                                             //take care if not all dispersion situations have been computed
-                                            if (n >= numbwet)
+                                            if (n >= numbwet - 1)
                                             {
                                                 //write results
-                                                dummy = "";
-                                                recwrite.WriteLine(dummy);
+                                                recwrite.WriteLine(string.Empty);
                                             }
                                             else
                                             {
@@ -526,7 +527,6 @@ namespace GralBackgroundworkers
                                                 int mon = Convert.ToInt32(month) - 1;
 
                                                 //write results
-                                                dummy = "";
                                                 dummy = day + "." + month + "\t" + hour + ":00\t";
                                                 fmod = 1;
                                                 foreach (string hy in sg_names)
@@ -544,21 +544,24 @@ namespace GralBackgroundworkers
                                                     }
                                                 }
                                                 recwrite.WriteLine(dummy);
+                                                //BackgroundThreadMessageBox(dummy);
+
                                                 //consider, if meteopgt.all represents a time series or a statistics
                                                 if (mydata.Checkbox19 == true)
                                                     break;
                                             }
+                                            n = dispersionsituations; // situation found -> stop searching
                                         }
                                     }
                                     try
                                     {
-                                        if (read.EndOfStream)
+                                        if (readMetTimeSeries.EndOfStream)
                                         {
                                             text2[0] = string.Empty; //quit reading
                                         }
                                         else
                                         {
-                                            text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                            text2 = readMetTimeSeries.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                             text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                                         }
                                     }
