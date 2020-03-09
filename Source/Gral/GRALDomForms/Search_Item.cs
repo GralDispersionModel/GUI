@@ -151,6 +151,9 @@ namespace GralDomForms
             Close();
         }
 
+        /// <summary>
+        /// Save all changed values
+        /// </summary>
         private void button3_Click(object sender, EventArgs e)
         {
             if (Locked == false)
@@ -161,224 +164,239 @@ namespace GralDomForms
                     int selected_item = Convert.ToInt32(dataGridView1[0, index].Value) - 1;
                     string selected_type = Convert.ToString(dataGridView1[2, index].Value);
 
-                    if (selected_type == "Point source" && EditPSSearch != null)
+                    //check if a value has been changed
+                    bool changed = false;
+                    foreach (DataGridViewCell c in dataGridView1.Rows[i].Cells)
                     {
-                        int k = 0;
-                        foreach (GralItemData.PointSourceData _dta in EditPSSearch.ItemData)
+                        if (c.Style == ChangedCellStyle)
                         {
-                            try
+                            changed = true;
+                        }
+                    }
+
+                    if (changed)
+                    {
+                        if (selected_type == "Point source" && EditPSSearch != null)
+                        {
+
+                            int k = 0;
+                            foreach (GralItemData.PointSourceData _dta in EditPSSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
-                                    _dta.Poll.SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
-                                    if (string.IsNullOrEmpty(_dta.VelocityTimeSeries))
+                                    if (k == selected_item)
                                     {
-                                        _dta.Velocity = Convert.ToSingle(dataGridView1[6, index].Value);
-                                    }
-                                    if (string.IsNullOrEmpty(_dta.TemperatureTimeSeries))
-                                    {
-                                        _dta.Temperature = Convert.ToSingle(dataGridView1[7, index].Value) + 273F;
-                                    }
-                                    _dta.Diameter = Convert.ToSingle(dataGridView1[8, index].Value);
-                                    for (int j = 0; j < 10; j++)
-                                    {
-                                        int _col = 10 + 2 * j;
-                                        // MessageBox.Show(dataGridView1.Columns.Count.ToString());
-                                        //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
-                                        if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                        _dta.Poll.SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
+                                        if (string.IsNullOrEmpty(_dta.VelocityTimeSeries))
                                         {
-                                            _dta.Poll.EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            _dta.Velocity = Convert.ToSingle(dataGridView1[6, index].Value);
+                                        }
+                                        if (string.IsNullOrEmpty(_dta.TemperatureTimeSeries))
+                                        {
+                                            _dta.Temperature = Convert.ToSingle(dataGridView1[7, index].Value) + 273F;
+                                        }
+                                        _dta.Diameter = Convert.ToSingle(dataGridView1[8, index].Value);
+                                        for (int j = 0; j < 10; j++)
+                                        {
+                                            int _col = 10 + 2 * j;
+                                            // MessageBox.Show(dataGridView1.Columns.Count.ToString());
+                                            //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
+                                            if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                            {
+                                                _dta.Poll.EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            }
                                         }
                                     }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
+
                         }
-                    }
 
-                    if (selected_type == "Line source" && EditLSSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.LineSourceData _dta in EditLSSearch.ItemData)
+                        if (selected_type == "Line source" && EditLSSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.LineSourceData _dta in EditLSSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
-                                    GralDomain.PointD[] pt = new GralDomain.PointD[_dta.Pt.Count];
-                                    for (int ik = 0; ik < _dta.Pt.Count; ik++)
+                                    if (k == selected_item)
                                     {
-                                        pt[ik] = new GralDomain.PointD(_dta.Pt[ik].X, _dta.Pt[ik].Y);
-                                    }
-                                    _dta.Pt.Clear();
-                                    _dta.Pt.TrimExcess();
-                                    for (int ik = 0; ik < pt.Length; ik++)
-                                    {
-                                        _dta.Pt.Add(new GralData.PointD_3d(pt[ik].X, pt[ik].Y, _dta.Height));
-                                    }
-                                    _dta.Lines3D = false;
-
-                                    _dta.VerticalExt = Convert.ToSingle(dataGridView1[4, index].Value);
-                                    int SGIndex = Convert.ToInt32(dataGridView1[9, index].Value);
-                                    _dta.Poll[SGIndex].SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
-                                    for (int j = 0; j < 10; j++)
-                                    {
-                                        int _col = 10 + 2 * j;
-                                        // MessageBox.Show(dataGridView1.Columns.Count.ToString());
-                                        //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
-                                        if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                        GralDomain.PointD[] pt = new GralDomain.PointD[_dta.Pt.Count];
+                                        for (int ik = 0; ik < _dta.Pt.Count; ik++)
                                         {
-                                            _dta.Poll[SGIndex].EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            pt[ik] = new GralDomain.PointD(_dta.Pt[ik].X, _dta.Pt[ik].Y);
+                                        }
+                                        _dta.Pt.Clear();
+                                        _dta.Pt.TrimExcess();
+                                        for (int ik = 0; ik < pt.Length; ik++)
+                                        {
+                                            _dta.Pt.Add(new GralData.PointD_3d(pt[ik].X, pt[ik].Y, _dta.Height));
+                                        }
+                                        _dta.Lines3D = false;
+
+                                        _dta.VerticalExt = Convert.ToSingle(dataGridView1[4, index].Value);
+                                        int SGIndex = Convert.ToInt32(dataGridView1[9, index].Value);
+                                        _dta.Poll[SGIndex].SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
+                                        for (int j = 0; j < 10; j++)
+                                        {
+                                            int _col = 10 + 2 * j;
+                                            // MessageBox.Show(dataGridView1.Columns.Count.ToString());
+                                            //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
+                                            if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                            {
+                                                _dta.Poll[SGIndex].EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            }
                                         }
                                     }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
 
-                    if (selected_type == "Portal source" && EditPortalsSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.PortalsData _dta in EditPortalsSearch.ItemData)
+                        if (selected_type == "Portal source" && EditPortalsSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.PortalsData _dta in EditPortalsSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.Height = Convert.ToSingle(dataGridView1[4, index].Value);
-                                    
-                                    if (string.IsNullOrEmpty(_dta.VelocityTimeSeries))
+                                    if (k == selected_item)
                                     {
-                                        _dta.ExitVel = Convert.ToSingle(dataGridView1[6, index].Value);
-                                    }
-                                    if (string.IsNullOrEmpty(_dta.TemperatureTimeSeries))
-                                    {
-                                        _dta.DeltaT = Convert.ToSingle(dataGridView1[7, index].Value);
-                                    }
-                                    int SGIndex = Convert.ToInt32(dataGridView1[9, index].Value);
-                                    _dta.Poll[SGIndex].SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
-                                    for (int j = 0; j < 10; j++)
-                                    {
-                                        int _col = 10 + 2 * j;
-                                        // MessageBox.Show(dataGridView1.Columns.Count.ToString());
-                                        //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
-                                        if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.Height = Convert.ToSingle(dataGridView1[4, index].Value);
+
+                                        if (string.IsNullOrEmpty(_dta.VelocityTimeSeries))
                                         {
-                                            _dta.Poll[SGIndex].EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            _dta.ExitVel = Convert.ToSingle(dataGridView1[6, index].Value);
+                                        }
+                                        if (string.IsNullOrEmpty(_dta.TemperatureTimeSeries))
+                                        {
+                                            _dta.DeltaT = Convert.ToSingle(dataGridView1[7, index].Value);
+                                        }
+                                        int SGIndex = Convert.ToInt32(dataGridView1[9, index].Value);
+                                        _dta.Poll[SGIndex].SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
+                                        for (int j = 0; j < 10; j++)
+                                        {
+                                            int _col = 10 + 2 * j;
+                                            // MessageBox.Show(dataGridView1.Columns.Count.ToString());
+                                            //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
+                                            if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                            {
+                                                _dta.Poll[SGIndex].EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            }
                                         }
                                     }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
 
-                    if (selected_type == "Area source" && EditASSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.AreaSourceData _dta in EditASSearch.ItemData)
+                        if (selected_type == "Area source" && EditASSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.AreaSourceData _dta in EditASSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
-                                    _dta.Poll.SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
-                                    _dta.VerticalExt = Convert.ToSingle(dataGridView1[4, index].Value);
-                                    for (int j = 0; j < 10; j++)
+                                    if (k == selected_item)
                                     {
-                                        int _col = 10 + 2 * j;
-                                        // MessageBox.Show(dataGridView1.Columns.Count.ToString());
-                                        //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
-                                        if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                        _dta.Poll.SourceGroup = Convert.ToInt32(dataGridView1[5, index].Value);
+                                        _dta.VerticalExt = Convert.ToSingle(dataGridView1[4, index].Value);
+                                        for (int j = 0; j < 10; j++)
                                         {
-                                            _dta.Poll.EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            int _col = 10 + 2 * j;
+                                            // MessageBox.Show(dataGridView1.Columns.Count.ToString());
+                                            //MessageBox.Show(Convert.ToDouble(dataGridView1[_col, index].Value).ToString());
+                                            if (dataGridView1.Rows[i].Cells[_col].Value != DBNull.Value)
+                                            {
+                                                _dta.Poll.EmissionRate[j] = Convert.ToDouble(dataGridView1[_col, index].Value);
+                                            }
                                         }
                                     }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
 
-                    if (selected_type == "Receptor point" && EditRSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.ReceptorData _dta in EditRSearch.ItemData)
+                        if (selected_type == "Receptor point" && EditRSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.ReceptorData _dta in EditRSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    if (k == selected_item)
+                                    {
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
-                    if (selected_type == "Building" && EditBSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.BuildingData _dta in EditBSearch.ItemData)
+                        if (selected_type == "Building" && EditBSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.BuildingData _dta in EditBSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    if (k == selected_item)
+                                    {
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.Height = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
-                    if (selected_type == "Wall" && EditWallSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.WallData _dta in EditWallSearch.ItemData)
+                        if (selected_type == "Wall" && EditWallSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.WallData _dta in EditWallSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                    if (k == selected_item)
+                                    {
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                    }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
-                    if (selected_type == "Vegetation" && EditVegetationSearch != null)
-                    {
-                        int k = 0;
-                        foreach (GralItemData.VegetationData _dta in EditVegetationSearch.ItemData)
+                        if (selected_type == "Vegetation" && EditVegetationSearch != null)
                         {
-                            try
+                            int k = 0;
+                            foreach (GralItemData.VegetationData _dta in EditVegetationSearch.ItemData)
                             {
-                                if (k == selected_item)
+                                try
                                 {
-                                    _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
-                                    _dta.VerticalExt = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    if (k == selected_item)
+                                    {
+                                        _dta.Name = Convert.ToString(dataGridView1[1, index].Value);
+                                        _dta.VerticalExt = Convert.ToSingle(dataGridView1[3, index].Value);
+                                    }
                                 }
+                                catch { }
+                                k++;
                             }
-                            catch { }
-                            k++;
                         }
-                    }
+                    } // cell changed?
                 }
             }
 
