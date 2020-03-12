@@ -16,7 +16,7 @@ using System.Globalization;
 
 namespace GralShape
 {
-	/// <summary>
+    /// <summary>
     /// Add a column to a shape file data table
     /// </summary>
     public partial class ShapeImport_AddColumn : Form
