@@ -41,14 +41,23 @@ namespace Gral
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm;*.akt)|*.akterm;*.akt",
-                Title = "Select meteorological data",
-                InitialDirectory = Path.Combine(ProjectName, @"Metfiles")
+                Title = "Select meteorological data"
             })
             {
+                if (Directory.Exists(MeteoDirectory))
+                {
+                    dialog.InitialDirectory = MeteoDirectory;
+                 }
+                else
+                {
+                    dialog.InitialDirectory = Path.Combine(ProjectName, @"Metfiles");
+                }
+
                 //dialog.InitialDirectory = projectname;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     MetfileName = dialog.FileName;
+                    MeteoDirectory = Path.GetDirectoryName(dialog.FileName);
                     //metfileext = Path.GetExtension(metfile);
                 }
                 else
