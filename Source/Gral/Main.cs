@@ -269,6 +269,10 @@ namespace Gral
         /// Store the data for decay rates for each source group
         /// </summary>
         private List<GralData.DecayRates> DecayRate = new List<GralData.DecayRates>();
+        /// <summary>
+        /// Path and name of the meteo data folder
+        /// </summary>
+        private string MeteoDirectory = String.Empty;
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
