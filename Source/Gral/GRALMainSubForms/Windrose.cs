@@ -18,6 +18,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Linq;
 using GralStaticFunctions;
+using Gral;
 
 namespace GralMainForms
 {
@@ -70,6 +71,12 @@ namespace GralMainForms
         private Brush BrushLightBlue = new SolidBrush(Color.LightSkyBlue);
         private Brush BrushBlack = new SolidBrush(Color.Black);
         private StringFormat StringFormatNearFar;
+
+        private Rectangle LegendPosition = new Rectangle();
+        private Point MousedXdY = new Point();
+        private bool MoveLegend = false;
+        private Rectangle InfoPosition = new Rectangle();
+        private bool MoveInfo = false;
 
         /// <summary>
         /// Show a wind speed or wind SC wind rose
@@ -131,7 +138,7 @@ namespace GralMainForms
             StringFormatNearFar = new StringFormat
             {
                 LineAlignment = StringAlignment.Near,
-                Alignment = StringAlignment.Far
+                Alignment = StringAlignment.Near
             };
 
             Font kleinfont;
@@ -144,23 +151,35 @@ namespace GralMainForms
             int distance = (int)(g.MeasureString("J", kleinfont, 200).Height * 1.04);
             int y_text = pictureBox1.Height - distance * 7;
 
-            g.DrawString("Data points: " + Convert.ToString(WindData.Count), kleinfont, BrushBlack, mid_x * 2 - 20, y_text + distance, StringFormatNearFar);
-            //g.DrawString(Convert.ToString(wind.Count), kleinfont, blackbrush, mid_x*2-20, y_text + distance, format1);
-            //g.DrawString(wind[0].Date, kleinfont, blackbrush, mid_x*2-85, y_text + 2 * distance, format1);
+            InfoPosition.Width = (int)g.MeasureString("Bias correction not applied", kleinfont).Width;
+            InfoPosition.Height = distance * 5;
+            if (InfoPosition.X == 0 && InfoPosition.Y == 0)
+            {
+                InfoPosition.X = mid_x * 2 - 20 - InfoPosition.Width; 
+                InfoPosition.Y = y_text;
+            }
+
+            
+           
+            g.DrawString("Data points: " + Convert.ToString(WindData.Count), kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + distance, StringFormatNearFar);
+            //g.DrawString(Convert.ToString(wind.Count), kleinfont, blackbrush, mid_x*2-20, InfoPosition.Y + distance, format1);
+            //g.DrawString(wind[0].Date, kleinfont, blackbrush, mid_x*2-85, InfoPosition.Y + 2 * distance, format1);
             if (WindData.Count > 1)
-                g.DrawString(WindData[0].Date + " - " + WindData[WindData.Count - 1].Date, kleinfont, BrushBlack, mid_x * 2 - 20, y_text + 2 * distance, StringFormatNearFar);
-            g.DrawString(Convert.ToString(StartHour) + ":00h-" + Convert.ToString(FinalHour) + ":00h", kleinfont, BrushBlack, mid_x * 2 - 20, y_text + 3 * distance, StringFormatNearFar);
-            g.DrawString(MetFileName, kleinfont, BrushBlack, mid_x * 2 - 20, y_text + 4 * distance, StringFormatNearFar);
+                g.DrawString(WindData[0].Date + " - " + WindData[WindData.Count - 1].Date, kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 2 * distance, StringFormatNearFar);
+            g.DrawString(Convert.ToString(StartHour) + ":00h-" + Convert.ToString(FinalHour) + ":00h", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 3 * distance, StringFormatNearFar);
+            g.DrawString(MetFileName, kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 4 * distance, StringFormatNearFar);
             if (BiasCorrection == 1)
             {
-                g.DrawString("Bias correction applied", kleinfont, BrushBlack, mid_x * 2 - 20, y_text + 5 * distance, StringFormatNearFar);
+                g.DrawString("Bias correction applied", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 5 * distance, StringFormatNearFar);
             }
             else if (BiasCorrection == 2)
             {
-                g.DrawString("Bias correction not applied", kleinfont, BrushBlack, mid_x * 2 - 20, y_text + 5 * distance, StringFormatNearFar);
+                g.DrawString("Bias correction not applied", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 5 * distance, StringFormatNearFar);
             }
 
             g.DrawString("N", new Font("Arial", 15), BrushBlack, mid_x, 2, format2);
+
+
 
             //draw windrose
             double[] sektsum = new double[16];
@@ -190,19 +209,27 @@ namespace GralMainForms
 
             if (x_legend < 0) return;
             StringFormatNearFar.Alignment = StringAlignment.Near;
+            if (LegendPosition.X == 0 && LegendPosition.Y == 0)
+            {
+                LegendPosition.X = x_legend;
+                LegendPosition.Y = 13;
+            }
 
+            LegendPosition.Width = (int)(25 + g.MeasureString(Convert.ToString(WndClasses[0]).PadLeft(2) + " -" + Convert.ToString(WndClasses[1]).PadLeft(2) + " m/s", kleinfont).Width);
+            LegendPosition.Height = LegendPosition.Y + (int)Math.Max(20, distance * 1.01F) * 7;
+            
             for (int n = 7; n >= 0; n--)
             {
                 int VertDist = (int)Math.Max(20, distance * 1.01F);
-                int y0 = 13 + VertDist * (7 - n);
+                int y0 = LegendPosition.Y + VertDist * (7 - n);
 
                 if (DrawingMode == 0)
                 {
-                    DrawWindSpeedScale(g, n, x_legend, VertDist, y0, kleinfont);
+                    DrawWindSpeedScale(g, n, VertDist, y0, kleinfont);
                 }
                 else if (DrawingMode == 1)
                 {
-                    DrawWindSCScale(g, n, x_legend, VertDist, y0, kleinfont);
+                    DrawWindSCScale(g, n, VertDist, y0, kleinfont);
                 }
             }
 
@@ -281,8 +308,10 @@ namespace GralMainForms
             StringFormatNearFar.Dispose();
         }
 
-        private void DrawWindSpeedScale(Graphics g, int n, int x_legend, int VertDist, int y0, Font kleinfont)
+        private void DrawWindSpeedScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
+            int x_legend = LegendPosition.X;
+
             switch (n)
             {
                 case 7:
@@ -336,8 +365,10 @@ namespace GralMainForms
             }
         }
 
-        private void DrawWindSCScale(Graphics g, int n, int x_legend, int VertDist, int y0, Font kleinfont)
+        private void DrawWindSCScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
+            int x_legend = LegendPosition.X;
+
             switch (n)
             {
                 case 7:
@@ -657,12 +688,19 @@ namespace GralMainForms
                 WindroseResizeEnd(null, null);
                 // Maximized!
             }
-            if (WindowState == FormWindowState.Normal)
+            else if (WindowState == FormWindowState.Normal)
             {
                 WindroseResizeEnd(null, null);
                 // Restored!
+                // restore legend position
+                LegendPosition.X = 0;
+                LegendPosition.Y = 0;
+                InfoPosition.X = 0;
+                InfoPosition.Y = 0;
             }
+            
             St_F.WindRoseFormSize = this.Size;
+
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -681,5 +719,53 @@ namespace GralMainForms
             }
             wrt.Show();
         }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            //check if mouse cursor is within the legend -> move legend 
+            if (LegendPosition.Contains(e.Location))
+            {
+                MoveLegend = true;
+                MousedXdY = new Point(e.X - LegendPosition.X, e.Y - LegendPosition.Y);
+            }
+
+            //MessageBox.Show(InfoPosition.Left.ToString() + "/" + InfoPosition.Right.ToString() + "/" + e.X.ToString() +"/" +e.Y.ToString());
+
+            if (InfoPosition.Contains(e.Location))
+            {
+                MoveInfo = true;
+                MousedXdY = new Point(e.X - InfoPosition.X, e.Y - InfoPosition.Y);
+            }
+        }
+
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (MoveLegend)
+            {
+                LegendPosition.X = e.X - MousedXdY.X;
+                LegendPosition.Y = e.Y - MousedXdY.Y;
+                pictureBox1.Refresh();
+            }
+            if(MoveInfo)
+            {
+                InfoPosition.X = e.X - MousedXdY.X;
+                InfoPosition.Y = e.Y - MousedXdY.Y;
+                pictureBox1.Refresh();
+            }
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (MoveLegend)
+            {
+                MoveLegend = false;
+            }
+            if (MoveInfo)
+            {
+                MoveInfo = false;
+            }
+        }
+
     }
 }
