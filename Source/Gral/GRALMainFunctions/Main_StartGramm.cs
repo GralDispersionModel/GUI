@@ -236,16 +236,6 @@ namespace Gral
 							if (count == (int)numericUpDown33.Value) // avoid rounding errors
 								instance_end = final_sit;
 
-							string gramm_start = String.Empty;
-							if (GRAMM_Project_Path == String.Empty)
-							{
-								gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
-							}
-							else
-							{
-								gramm_start = " " + "'" + GRAMM_Project_Path + "'" + " " + instance_start.ToString() + " " + instance_end.ToString();
-							}
-
 							if (count == 1) // first instance
 							{
 								//start computation routine GRAMM*.exe to compute wind fields
@@ -273,8 +263,16 @@ namespace Gral
 								GRAMMProcess.StartInfo.FileName = GRAMM_Program_Path;
 								GRAMMProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 								GRAMMProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
-								GRAMMProcess.StartInfo.Arguments = gramm_start;
-								GRAMMProcess.Start();
+                                if (GRAMM_Project_Path == String.Empty)
+                                {
+                                    GRAMMProcess.StartInfo.Arguments = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                }
+                                else
+                                {
+                                    GRAMMProcess.StartInfo.Arguments = " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
+                                }
+
+                                GRAMMProcess.Start();
 								#endif
 								Thread.Sleep(5000);
 							}
@@ -304,8 +302,15 @@ namespace Gral
 								gramm_local.StartInfo.FileName = GRAMM_Program_Path;
 								gramm_local.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 								gramm_local.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
-								gramm_local.StartInfo.Arguments = gramm_start;
-								gramm_local.Start();
+                                if (GRAMM_Project_Path == String.Empty)
+                                {
+                                    gramm_local.StartInfo.Arguments = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                }
+                                else
+                                {
+                                    gramm_local.StartInfo.Arguments = " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
+                                }
+                                gramm_local.Start();
 								#endif
 								Thread.Sleep(500);
 							}
@@ -315,13 +320,27 @@ namespace Gral
 							string filename_batch = Path.Combine(Project_Computation_Path, "GRAMM_instance_" + count.ToString() + ".bat");
 							try
 							{
-								using (StreamWriter batchfile = new StreamWriter(filename_batch))
+                                string gramm_start = String.Empty;
+                                if (GRAMM_Project_Path == String.Empty)
+                                {
+                                    gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                }
+                                else
+                                {
+                                    gramm_start = " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
+                                }
+
+                                using (StreamWriter batchfile = new StreamWriter(filename_batch))
 								{
 									if (CopyCorestoProject == true)
 									{
 										batchfile.WriteLine(Path.GetFileName(GRAMM_Program_Path) + gramm_start);
 									}
-									else
+                                    else if (Path.GetExtension(GRAMM_Program_Path).EndsWith("exe"))
+                                    {
+                                        batchfile.WriteLine("\"" + GRAMM_Program_Path + "\"" + gramm_start);
+                                    }
+                                    else
 									{
 										batchfile.WriteLine("dotnet " + "\"" + GRAMM_Program_Path.Replace(".bat", ".dll") + "\"" + gramm_start);
 									}
