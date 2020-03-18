@@ -300,6 +300,8 @@ namespace Gral
         	{
         		checkBox30.Checked =! checkBox30.Checked;
         	}
+            // create new GRAMMin.dat
+            GRAMMin(true);
         }
 	}
 }
