@@ -72,10 +72,10 @@ namespace GralMainForms
         private Brush BrushBlack = new SolidBrush(Color.Black);
         private StringFormat StringFormatNearFar;
 
-        private Rectangle LegendPosition = new Rectangle();
+        private Rectangle LegendPosition = St_F.WindRoseLegend;
         private Point MousedXdY = new Point();
         private bool MoveLegend = false;
-        private Rectangle InfoPosition = new Rectangle();
+        private Rectangle InfoPosition = St_F.WindRoseInfo;
         private bool MoveInfo = false;
 
         /// <summary>
@@ -158,9 +158,7 @@ namespace GralMainForms
                 InfoPosition.X = mid_x * 2 - 20 - InfoPosition.Width; 
                 InfoPosition.Y = y_text;
             }
-
-            
-           
+          
             g.DrawString("Data points: " + Convert.ToString(WindData.Count), kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + distance, StringFormatNearFar);
             //g.DrawString(Convert.ToString(wind.Count), kleinfont, blackbrush, mid_x*2-20, InfoPosition.Y + distance, format1);
             //g.DrawString(wind[0].Date, kleinfont, blackbrush, mid_x*2-85, InfoPosition.Y + 2 * distance, format1);
@@ -745,12 +743,16 @@ namespace GralMainForms
             {
                 LegendPosition.X = e.X - MousedXdY.X;
                 LegendPosition.Y = e.Y - MousedXdY.Y;
+                St_F.WindRoseLegend.X = LegendPosition.X;
+                St_F.WindRoseLegend.Y = LegendPosition.Y;
                 pictureBox1.Refresh();
             }
             if(MoveInfo)
             {
                 InfoPosition.X = e.X - MousedXdY.X;
                 InfoPosition.Y = e.Y - MousedXdY.Y;
+                St_F.WindRoseInfo.X = InfoPosition.X;
+                St_F.WindRoseInfo.Y = InfoPosition.Y;
                 pictureBox1.Refresh();
             }
         }

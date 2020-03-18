@@ -24,6 +24,8 @@ namespace GralStaticFunctions
 
     	public static Font Small_Font;
     	public static double Pin_Wind_Scale;
+        public static Rectangle WindRoseLegend = new Rectangle();
+        public static Rectangle WindRoseInfo = new Rectangle();
         public static Size WindRoseFormSize;
         public static string NumberFormat = String.Empty;
     	
