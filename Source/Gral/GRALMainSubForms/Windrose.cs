@@ -120,6 +120,8 @@ namespace GralMainForms
             }
             pictureBox1.Width = Math.Max(1, ClientSize.Width - 69);
             pictureBox1.Height = Math.Max(1, ClientRectangle.Height - 1);
+            LegendPosition = St_F.WindRoseLegend;
+            InfoPosition = St_F.WindRoseInfo;
         }
 
         void PictureBox1Paint(object sender, PaintEventArgs e)
