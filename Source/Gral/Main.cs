@@ -410,6 +410,7 @@ namespace Gral
             checkBox35.Checked = false;
             groupBox25.Enabled = true;
             dateTimePicker1.CustomFormat = "MMMM dd, yyyy '-' HH:mm";
+            dateTimePicker1.Value = DateTime.Today;
             button105.Image = (System.Drawing.Image)(Properties.Resources.Unlocked);
             button104.Image = (System.Drawing.Image)(Properties.Resources.Unlocked);
             button101.Image = (System.Drawing.Image)(Properties.Resources.Unlocked);

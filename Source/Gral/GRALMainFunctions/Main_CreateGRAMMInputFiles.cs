@@ -29,8 +29,8 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
-		private void GRAMMin(bool write)
+    {
+        private void GRAMMin(bool write)
         {
             if (write == true)
             {
@@ -100,26 +100,26 @@ namespace Gral
             SaveIINDatFile();
             
             if (checkBox31.Checked == false) // no flat terrain -> sunrise allowed
-            	checkBox30.Enabled = true;
+                checkBox30.Enabled = true;
             else
-            	checkBox30.Enabled = false;
+                checkBox30.Enabled = false;
             
             if (checkBox31.Checked == true && checkBox30.Checked == true) // deactivate sunrise option if necessary
             {
-            	if (SunriseResetMeteoFiles() == true)
-            	{
-            		checkBox30.Checked = false;
-            		checkBox30.Enabled = false;
-            	}
-            	else
-            	{
-            		checkBox31.Checked = false;
-            		checkBox30.Enabled = true;
-            		SaveIINDatFile(); // reset value for flat terrain in this case
-            	}
+                if (SunriseResetMeteoFiles() == true)
+                {
+                    checkBox30.Checked = false;
+                    checkBox30.Enabled = false;
+                }
+                else
+                {
+                    checkBox31.Checked = false;
+                    checkBox30.Enabled = true;
+                    SaveIINDatFile(); // reset value for flat terrain in this case
+                }
             }
         }		        
-		
+        
         //write file "GRAMM.geb"
         public void WriteGrammGebFile()
         {
@@ -130,9 +130,9 @@ namespace Gral
 
                 using (StreamWriter myWriter1 = File.CreateText(newPath1))
                 {
-                    myWriter1.WriteLine(Convert.ToString(Convert.ToInt32((GrammDomRect.East - GrammDomRect.West) / GRAMMHorGridSize)) + "                !number of cells in x-direction");
-                    myWriter1.WriteLine(Convert.ToString(Convert.ToInt32((GrammDomRect.North - GrammDomRect.South) / GRAMMHorGridSize)) + "                !number of cells in y-direction");
-                    myWriter1.WriteLine(Convert.ToString(numericUpDown16.Value) + "               !number of cells in z-direction");
+                    myWriter1.WriteLine(Convert.ToString(Convert.ToInt32((GrammDomRect.East - GrammDomRect.West) / GRAMMHorGridSize, ic)) + "                !number of cells in x-direction");
+                    myWriter1.WriteLine(Convert.ToString(Convert.ToInt32((GrammDomRect.North - GrammDomRect.South) / GRAMMHorGridSize, ic)) + "                !number of cells in y-direction");
+                    myWriter1.WriteLine(Convert.ToString(numericUpDown16.Value, ic) + "               !number of cells in z-direction");
                     myWriter1.WriteLine(textBox13.Text + "                !West border of GRAMM model domain [m]");
                     myWriter1.WriteLine(textBox12.Text + "                !East border of GRAMM model domain [m]");
                     myWriter1.WriteLine(textBox14.Text + "                !South border of GRAMM model domain [m]");
@@ -157,30 +157,29 @@ namespace Gral
                 {
                     using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Computation", "IIN.dat")))
                     {
-                        string date = dateTimePicker1.Value.ToShortDateString();
-                        string yy = date.Substring(8, 2);
-                        if (checkBox35.Checked == true)
+                        DateTime selTime = dateTimePicker1.Value;
+                        string yy = selTime.Year.ToString();
+                        if (!checkBox35.Checked)
                         {
-                            yy = date.Substring(6, 4);
+                            yy = selTime.Year.ToString().Substring(2,2);
                         }
-                        string mm = date.Substring(3, 2);
-                        string dd = date.Substring(0, 2);
-                        string time = dateTimePicker1.Value.ToShortTimeString();
-                        string hh = time.Substring(0, 2);
-                        string mi = time.Substring(3, 2);
-                        
+                        string mm = selTime.Month.ToString("00");
+                        string dd = selTime.Day.ToString("00");
+                        string hh = selTime.Hour.ToString("00");
+                        string mi = selTime.Minute.ToString("00");
+
                         if (checkBox35.Checked == true)
                         {
-                            mywriter.WriteLine("COMPUTATION DATE         (YYYYMMDD)           :  " + yy + mm + dd + "               !No influence for steady-state simulations");
+                            mywriter.WriteLine("COMPUTATION DATE         (YYYYMMDD)           :  " + yy + mm + dd + "             !No influence for steady-state simulations");
                         }
                         else
                         {
                             mywriter.WriteLine("COMPUTATION DATE         (YYMMDD)             :  " + yy + mm + dd + "               !No influence for steady-state simulations");
                         }
-                        
+
                         mywriter.WriteLine("BEGINNING OF COMPUTATION   (hhmm)             :  " + hh + mi + "                 !No influence for steady-state simulations");
-                        mywriter.WriteLine("MAXIMUM ALLOWED TIME STEP DT  [ s ]           :  " + Convert.ToString(numericUpDown20.Value) + "                   !Range 1-100");
-                        mywriter.WriteLine("MODELLING TIME (FOR VALUES >1(s) AND <1[%])   :  " + Convert.ToString(numericUpDown21.Value) + "                 !Range 0.01-1% or 2-infinite sec.");
+                        mywriter.WriteLine("MAXIMUM ALLOWED TIME STEP DT  [ s ]           :  " + Convert.ToString(numericUpDown20.Value, ic) + "                   !Range 1-100");
+                        mywriter.WriteLine("MODELLING TIME (FOR VALUES >1(s) AND <1[%])   :  " + Convert.ToString(numericUpDown21.Value, ic) + "                 !Range 0.01-1% or 2-infinite sec.");
                         mywriter.WriteLine("BUFFERING AFTER TIMESTEPS                     :  3600                 !No influence for steady-state simulations");
                         mywriter.WriteLine("MAX. PERMISSIBLE W-DEVIATION ABOVE < 1 [mm/s] :  0.01                 !Not used    ");
                         mywriter.WriteLine("RELATIVE INITIAL HUMIDITY  [ % ] GT.0         :  20                   !No influence for steady-state simulations");
@@ -254,7 +253,9 @@ namespace Gral
                         }
                     }
                     else
+                    {
                         File.Delete(Path.Combine(ProjectName, @"Computation", "reinit.dat"));
+                    }
 
                     //save GRAMM input file
                     GRAMMin(EmifileReset);
@@ -274,5 +275,5 @@ namespace Gral
             Enable_GRAMM();
         }
         
-	}
+    }
 }
