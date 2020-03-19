@@ -728,10 +728,7 @@ namespace GralMainForms
                 MoveLegend = true;
                 MousedXdY = new Point(e.X - LegendPosition.X, e.Y - LegendPosition.Y);
             }
-
-            //MessageBox.Show(InfoPosition.Left.ToString() + "/" + InfoPosition.Right.ToString() + "/" + e.X.ToString() +"/" +e.Y.ToString());
-
-            if (InfoPosition.Contains(e.Location))
+            else if (InfoPosition.Contains(e.Location)) // legend has priority
             {
                 MoveInfo = true;
                 MousedXdY = new Point(e.X - InfoPosition.X, e.Y - InfoPosition.Y);
@@ -741,6 +738,16 @@ namespace GralMainForms
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
+            //show SizeAll cursor when moving mouse above legend or info box
+            if (LegendPosition.Contains(e.Location) || InfoPosition.Contains(e.Location))
+            {
+                pictureBox1.Cursor = Cursors.SizeAll;
+            }
+            else if (pictureBox1.Cursor != Cursors.Arrow)
+            {
+                pictureBox1.Cursor = Cursors.Arrow;
+            }
+
             if (MoveLegend)
             {
                 LegendPosition.X = e.X - MousedXdY.X;
@@ -764,10 +771,12 @@ namespace GralMainForms
             if (MoveLegend)
             {
                 MoveLegend = false;
+                pictureBox1.Cursor = Cursors.Arrow;
             }
             if (MoveInfo)
             {
                 MoveInfo = false;
+                pictureBox1.Cursor = Cursors.Arrow;
             }
         }
 
