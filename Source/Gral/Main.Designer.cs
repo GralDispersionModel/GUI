@@ -45,6 +45,7 @@
             this.Comments = new System.Windows.Forms.TabPage();
             this.button101 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button57 = new System.Windows.Forms.Button();
             this.checkBox29 = new System.Windows.Forms.CheckBox();
             this.numericUpDown43 = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
@@ -628,6 +629,7 @@
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.Color.Blue;
+            this.groupBox4.Controls.Add(this.button57);
             this.groupBox4.Controls.Add(this.checkBox29);
             this.groupBox4.Controls.Add(this.numericUpDown43);
             this.groupBox4.Controls.Add(this.label15);
@@ -656,13 +658,27 @@
             this.groupBox4.Text = "GRAL - General";
             this.groupBox4.Visible = false;
             // 
+            // button57
+            // 
+            this.button57.BackgroundImage = global::Gral.Properties.Resources.WrenchBlue;
+            this.button57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button57.FlatAppearance.BorderSize = 0;
+            this.button57.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button57.Location = new System.Drawing.Point(219, 225);
+            this.button57.Name = "button57";
+            this.button57.Size = new System.Drawing.Size(24, 24);
+            this.button57.TabIndex = 60;
+            this.toolTip1.SetToolTip(this.button57, "Special settings");
+            this.button57.UseVisualStyleBackColor = true;
+            this.button57.Click += new System.EventHandler(this.button57_Click);
+            // 
             // checkBox29
             // 
             this.checkBox29.AutoSize = true;
             this.checkBox29.Checked = true;
             this.checkBox29.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.checkBox29.Location = new System.Drawing.Point(17, 235);
+            this.checkBox29.Location = new System.Drawing.Point(17, 225);
             this.checkBox29.Name = "checkBox29";
             this.checkBox29.Size = new System.Drawing.Size(201, 20);
             this.checkBox29.TabIndex = 59;
@@ -674,7 +690,7 @@
             // numericUpDown43
             // 
             this.numericUpDown43.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown43.Location = new System.Drawing.Point(165, 206);
+            this.numericUpDown43.Location = new System.Drawing.Point(165, 196);
             this.numericUpDown43.Maximum = new decimal(new int[] {
             3,
             0,
@@ -698,7 +714,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(11, 208);
+            this.label15.Location = new System.Drawing.Point(11, 198);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(147, 16);
             this.label15.TabIndex = 58;
@@ -713,7 +729,7 @@
             this.groupBox29.Controls.Add(this.radioButton3);
             this.groupBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox29.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox29.Location = new System.Drawing.Point(5, 268);
+            this.groupBox29.Location = new System.Drawing.Point(5, 264);
             this.groupBox29.Name = "groupBox29";
             this.groupBox29.Size = new System.Drawing.Size(240, 120);
             this.groupBox29.TabIndex = 5;
@@ -800,7 +816,7 @@
             // 
             this.numericUpDown39.DecimalPlaces = 2;
             this.numericUpDown39.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown39.Location = new System.Drawing.Point(143, 135);
+            this.numericUpDown39.Location = new System.Drawing.Point(143, 129);
             this.numericUpDown39.Maximum = new decimal(new int[] {
             90,
             0,
@@ -832,7 +848,7 @@
             0,
             0,
             65536});
-            this.numericUpDown38.Location = new System.Drawing.Point(142, 99);
+            this.numericUpDown38.Location = new System.Drawing.Point(142, 96);
             this.numericUpDown38.Name = "numericUpDown38";
             this.numericUpDown38.Size = new System.Drawing.Size(70, 22);
             this.numericUpDown38.TabIndex = 2;
@@ -928,7 +944,7 @@
             // numericUpDown6
             // 
             this.numericUpDown6.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown6.Location = new System.Drawing.Point(142, 63);
+            this.numericUpDown6.Location = new System.Drawing.Point(142, 61);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -956,7 +972,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(11, 65);
+            this.label16.Location = new System.Drawing.Point(11, 63);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(111, 16);
             this.label16.TabIndex = 15;
@@ -965,7 +981,7 @@
             // numericUpDown5
             // 
             this.numericUpDown5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.numericUpDown5.Location = new System.Drawing.Point(143, 171);
+            this.numericUpDown5.Location = new System.Drawing.Point(143, 163);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -993,7 +1009,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(11, 163);
+            this.label14.Location = new System.Drawing.Point(11, 155);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(123, 32);
             this.label14.TabIndex = 11;
@@ -1003,7 +1019,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(216, 137);
+            this.label12.Location = new System.Drawing.Point(216, 131);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(32, 16);
             this.label12.TabIndex = 8;
@@ -1013,7 +1029,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(11, 137);
+            this.label11.Location = new System.Drawing.Point(11, 131);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(55, 16);
             this.label11.TabIndex = 6;
@@ -1023,7 +1039,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(218, 103);
+            this.label10.Location = new System.Drawing.Point(218, 99);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(19, 16);
             this.label10.TabIndex = 5;
@@ -1033,7 +1049,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(11, 101);
+            this.label9.Location = new System.Drawing.Point(11, 99);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(120, 16);
             this.label9.TabIndex = 3;
@@ -1227,7 +1243,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 135);
+            this.label4.Location = new System.Drawing.Point(6, 130);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(103, 32);
             this.label4.TabIndex = 1;
@@ -5532,6 +5548,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown37;
         private System.Windows.Forms.NumericUpDown numericUpDown44;
         private System.Windows.Forms.Button button56;
+        private System.Windows.Forms.Button button57;
     }
 }
 

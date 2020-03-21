@@ -671,6 +671,12 @@
     <Compile Include="GRALItemForms\ShowVertices.Designer.cs">
       <DependentUpon>ShowVertices.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALMainFunctions\Main_SpecialSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALMainFunctions\Main_SpecialSettings.Designer.cs">
+      <DependentUpon>Main_SpecialSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="GRALMainSubForms\Allinallout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1129,6 +1135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GRALItemForms\ShowVertices.resx">
       <DependentUpon>ShowVertices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GRALMainFunctions\Main_SpecialSettings.resx">
+      <DependentUpon>Main_SpecialSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALMainSubForms\AppInfo.resx">
       <DependentUpon>AppInfo.cs</DependentUpon>

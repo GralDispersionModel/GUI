@@ -2411,6 +2411,7 @@ namespace Gral
             if (tabControl1.SelectedIndex == 1) // GRAL Settings
             {
                 SetButton12Bitmap();
+                SetButton57Bitmap();           
             }
             if (tabControl1.SelectedIndex == 2) // Domain
             {
@@ -2648,13 +2649,28 @@ namespace Gral
         }
 
         /// <summary>
+        /// Set the bitmap for the special options button
+        /// </summary>
+        void SetButton57Bitmap()
+        {
+            if (GRALSettings.WriteESRIResult || File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")))
+            {
+                button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
+            }
+            else
+            {
+                button57.BackgroundImage = Gral.Properties.Resources.WrenchBlue;
+            }
+        }
+
+        /// <summary>
         /// Load and show comments
         /// </summary>
         void Button44Click(object sender, EventArgs e)
         {
             //loading comments
             textBox17.Text = String.Empty;
-            string name11 = Path.Combine(ProjectName, @"Settings","comments.txt");
+            string name11 = Path.Combine(ProjectName, @"Settings", "comments.txt");
             try
             {
                 using (StreamReader ready = new StreamReader(name11, false))
@@ -3279,6 +3295,31 @@ namespace Gral
                     Owner = this
                 };
                 Ai.Show();
+            }
+        }
+
+        /// <summary>
+        /// Special GRAL options - Write Ascii results - KeepAndReadTransientFiles
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button57_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(this, "These special settings are only intended for a few applications. Do not proceed if you cannot assess the effects", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                using (Main_SpecialSettings MSp = new Main_SpecialSettings())
+                {
+                    MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
+                    if (MSp.ShowDialog() == DialogResult.OK )
+                    {
+                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult)
+                        {
+                            GRALSettings.WriteESRIResult = MSp.WriteASCiiOutput;
+                            ResetInDat();
+                        }
+                        SetButton57Bitmap();
+                    }
+                }
             }
         }
     }
