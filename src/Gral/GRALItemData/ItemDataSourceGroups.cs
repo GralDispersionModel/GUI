@@ -38,10 +38,20 @@ namespace Gral
         
         public override bool Equals(object obj)
         {
-            if (obj == null) return false;
+            if (obj == null)
+            {
+                return false;
+            }
+
             SG_Class objAsSG = obj as SG_Class;
-            if (objAsSG == null) return false;
-            else return Equals(objAsSG);
+            if (objAsSG == null)
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(objAsSG);
+            }
         }
         
         public int SortByNameAscending(string name1, string name2)
@@ -55,10 +65,13 @@ namespace Gral
         {
             // A null value means that this object is greater.
             if (compareSG == null)
+            {
                 return 1;
-
+            }
             else
+            {
                 return SG_Number.CompareTo(compareSG.SG_Number);
+            }
         }
         
         public override int GetHashCode()
@@ -68,7 +81,11 @@ namespace Gral
         
         public bool Equals(SG_Class other)
         {
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return (SG_Number.Equals(other.SG_Number));
         }
      }

@@ -18,17 +18,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents supports reading/writing the portal source data
     /// </summary>
-	public class PortalsDataIO
+    public class PortalsDataIO
 	{
 		public bool LoadPortalSources(List<PortalsData> _data, string _filename) // overload with 2 parameters only
 		{

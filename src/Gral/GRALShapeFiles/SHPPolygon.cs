@@ -10,7 +10,6 @@
 ///</remarks>
 #endregion
 
-using System.Drawing;
 
 namespace GralShape
 {

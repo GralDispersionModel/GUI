@@ -138,9 +138,11 @@ namespace GralDomain
 					{
 						//save data to world file
 						if (SaveWorldFile() == false)
-							throw new IOException();
-						
-						SwitchMenuGeoreference();
+                        {
+                            throw new IOException();
+                        }
+
+                        SwitchMenuGeoreference();
 					}
 					catch
 					{
@@ -361,9 +363,11 @@ namespace GralDomain
 					{
 						//save data to world file
 						if (SaveWorldFile() == false)
-							throw new IOException();
-						
-						SwitchMenuGeoreference();
+                        {
+                            throw new IOException();
+                        }
+
+                        SwitchMenuGeoreference();
 					}
 					catch
 					{
@@ -475,8 +479,10 @@ namespace GralDomain
 			button35.Visible = true;
 			//dont show button to define GRAMM domain, when GRAMM is used to take buildings into account
 			if (MainForm.GRALSettings.BuildingMode != 3)
-				button29.Visible = true;
-		}
+            {
+                button29.Visible = true;
+            }
+        }
 		
 		private bool SaveWorldFile()
 		{

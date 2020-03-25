@@ -21,7 +21,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.IO.Compression;
 using GralIO;
 
 namespace GralBackgroundworkers
@@ -61,7 +60,9 @@ namespace GralBackgroundworkers
                             text = myreader.ReadLine().Split(new char[] { ',' });
                             emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
                             if (j < 12)
+                            {
                                 emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
+                            }
                         }
                     }
 					itm++;
@@ -88,7 +89,9 @@ namespace GralBackgroundworkers
                         {
                             emifac_day[j, itm] = 1;
                             if (j < 12)
+                            {
                                 emifac_mon[j, itm] = 1;
+                            }
                         }
                     }
                 }
@@ -122,7 +125,10 @@ namespace GralBackgroundworkers
                         month.Add(text3[1]);
                         hour.Add(text2[1]);
                         if (hour[hour.Count - 1] == "24")
+                        {
                             hourplus = 1;
+                        }
+
                         wgmettime.Add(text2[2]);
                         wrmettime.Add(text2[3]);
                         akmettime.Add(text2[4]);
@@ -333,24 +339,28 @@ namespace GralBackgroundworkers
 					if (mydata.Checkbox2 == true)
 					{
 						for (int i = 0; i <= mydata.CellsGralX; i++)
-							for (int j = 0; j <= mydata.CellsGralY; j++)
+                        {
+                            for (int j = 0; j <= mydata.CellsGralY; j++)
 						{
 							concmit[i, j, itm] = concmit[i, j, itm] / (float)nnn;
 							depmit[i, j, itm] = depmit[i, j, itm] / (float)nnn;
 						}
-					}
+                        }
+                    }
 					itm++;
 				}
 				if (mydata.Checkbox2 == true)
 				{
 					//total concentration
 					for (int i = 0; i <= mydata.CellsGralX; i++)
-						for (int j = 0; j <= mydata.CellsGralY; j++)
+                    {
+                        for (int j = 0; j <= mydata.CellsGralY; j++)
 					{
 						concmit[i, j, maxsource] = concmit[i, j, maxsource] / (float)nnn;
 						depmit[i, j, maxsource] = depmit[i, j, maxsource] / (float)nnn;
 					}
-				}
+                    }
+                }
 			}
 
             GralIO.WriteESRIFile Result = new GralIO.WriteESRIFile
@@ -383,9 +393,11 @@ namespace GralBackgroundworkers
 						name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0];
 					}
 					else
-						name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] ;
-					
-					file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    {
+                        name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] ;
+                    }
+
+                    file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
 					Result.Unit = Gral.Main.My_p_m3;
 					Result.Round = 5;
 					Result.Z = itm;

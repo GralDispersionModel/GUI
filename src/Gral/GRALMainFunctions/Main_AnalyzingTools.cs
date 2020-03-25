@@ -71,7 +71,11 @@ namespace Gral
 
                             DataCollection.Projectname = ProjectName;
                             DataCollection.Prefix = sel_sg.Prefix;
-                            if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                            if (sel_sg.Prefix.Length > 1)
+                            {
+                                FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                            }
+
                             DataCollection.Decsep = DecimalSep;
                             DataCollection.MaxSource = maxsource;
                             DataCollection.CellsGralX = CellsGralX;
@@ -90,8 +94,15 @@ namespace Gral
                             DataCollection.Caption = "Compute Mean concentrations";
                             DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                 "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine;
-                            if (DataCollection.Checkbox2) DataCollection.UserText += "Mean concentrations / ";
-                            if (DataCollection.Checkbox1) DataCollection.UserText += "Max. concentrations / ";
+                            if (DataCollection.Checkbox2)
+                            {
+                                DataCollection.UserText += "Mean concentrations / ";
+                            }
+
+                            if (DataCollection.Checkbox1)
+                            {
+                                DataCollection.UserText += "Max. concentrations / ";
+                            }
 
                             WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                             DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
@@ -150,7 +161,11 @@ namespace Gral
 
                             DataCollection.Projectname = ProjectName;
                             DataCollection.Prefix = sel_sg.Prefix;
-                            if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                            if (sel_sg.Prefix.Length > 1)
+                            {
+                                FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                            }
+
                             DataCollection.Decsep = DecimalSep;
                             DataCollection.MaxSource = maxsource;
                             DataCollection.CellsGralX = CellsGralX;
@@ -170,9 +185,20 @@ namespace Gral
                             DataCollection.Caption = "Compute Mean, Max, Daily Max.";
                             DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                 "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine;
-                            if (DataCollection.Checkbox2) DataCollection.UserText += "Mean concentrations / ";
-                            if (DataCollection.Checkbox1) DataCollection.UserText += "Max. concentrations / ";
-                            if (DataCollection.Checkbox3) DataCollection.UserText += "Daily max. concentrations ";
+                            if (DataCollection.Checkbox2)
+                            {
+                                DataCollection.UserText += "Mean concentrations / ";
+                            }
+
+                            if (DataCollection.Checkbox1)
+                            {
+                                DataCollection.UserText += "Max. concentrations / ";
+                            }
+
+                            if (DataCollection.Checkbox3)
+                            {
+                                DataCollection.UserText += "Daily max. concentrations ";
+                            }
 
                             WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                             DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
@@ -232,9 +258,13 @@ namespace Gral
                         string[] sg = new string[2];
                         sg = listView1.Items[index].SubItems[0].Text.Split(new char[] { ':' });
                         if (sg.Length > 1) // does a ':' exist?
+                        {
                             DataCollection.Comp_Source_Grp = DataCollection.Comp_Source_Grp + sg[1] + ","; // number of computed source groups
+                        }
                         else
+                        {
                             DataCollection.Comp_Source_Grp = DataCollection.Comp_Source_Grp + sg[0] + ","; // number of computed source groups
+                        }
                     }
                     //MessageBox.Show(DataCollection.Comp_Source_Grp);
                     if (c >= 1) // at least one SG selected
@@ -266,8 +296,9 @@ namespace Gral
                         // now the backgroundworker works
                     }
                     else
+                    {
                         MessageBox.Show("No sourcegroup selected", "Receptor concentration", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    }
                 }
             }
         }
@@ -350,7 +381,11 @@ namespace Gral
 
                             DataCollection.Projectname = ProjectName;
                             DataCollection.Prefix = sel_sg.Prefix;
-                            if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                            if (sel_sg.Prefix.Length > 1)
+                            {
+                                FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                            }
+
                             DataCollection.Decsep = DecimalSep;
                             DataCollection.MaxSource = maxsource;
                             DataCollection.CellsGralX = CellsGralX;
@@ -430,7 +465,10 @@ namespace Gral
                                 string newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
                                 DirectoryInfo di = new DirectoryInfo(newPath);
                                 FileInfo[] files_conc = di.GetFiles("*.odr");
-                                if (files_conc.Length == 0) files_conc = di.GetFiles("*.grz");
+                                if (files_conc.Length == 0)
+                                {
+                                    files_conc = di.GetFiles("*.grz");
+                                }
 
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
@@ -477,7 +515,11 @@ namespace Gral
 
                                     DataCollection.Projectname = ProjectName;
                                     DataCollection.Prefix = sel_sg.Prefix;
-                                    if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                    if (sel_sg.Prefix.Length > 1)
+                                    {
+                                        FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                    }
+
                                     DataCollection.Decsep = DecimalSep;
                                     DataCollection.MaxSource = maxsource;
                                     DataCollection.CellsGralX = CellsGralX;
@@ -547,7 +589,11 @@ namespace Gral
 
                                 DataCollection.Projectname = ProjectName;
                                 DataCollection.Prefix = sel_sg.Prefix;
-                                if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                if (sel_sg.Prefix.Length > 1)
+                                {
+                                    FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                }
+
                                 DataCollection.Decsep = DecimalSep;
                                 DataCollection.MaxSource = maxsource;
                                 DataCollection.CellsGralX = CellsGralX;
@@ -675,7 +721,11 @@ namespace Gral
                                 string newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
                                 DirectoryInfo di = new DirectoryInfo(newPath);
                                 FileInfo[] files_conc = di.GetFiles("*.odr");
-                                if (files_conc.Length == 0) files_conc = di.GetFiles("*.grz");
+                                if (files_conc.Length == 0)
+                                {
+                                    files_conc = di.GetFiles("*.grz");
+                                }
+
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
                                 {
@@ -723,7 +773,11 @@ namespace Gral
 
                                     DataCollection.Projectname = ProjectName;
                                     DataCollection.Prefix = sel_sg.Prefix;
-                                    if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                    if (sel_sg.Prefix.Length > 1)
+                                    {
+                                        FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                    }
+
                                     DataCollection.Decsep = DecimalSep;
                                     DataCollection.MaxSource = maxsource;
                                     DataCollection.CellsGralX = CellsGralX;
@@ -810,7 +864,10 @@ namespace Gral
 
                             //fill combobox with selected source groups
                             foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                            {
                                 allin.comboBox1.Items.Add(sel_sg.listBox1.Items[itm]);
+                            }
+
                             allin.comboBox1.SelectedIndex = 0;
 
                             dial = allin.ShowDialog();
@@ -829,7 +886,11 @@ namespace Gral
                                 string newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
                                 DirectoryInfo di = new DirectoryInfo(newPath);
                                 FileInfo[] files_conc = di.GetFiles("*.odr");
-                                if (files_conc.Length == 0) files_conc = di.GetFiles("*.grz");
+                                if (files_conc.Length == 0)
+                                {
+                                    files_conc = di.GetFiles("*.grz");
+                                }
+
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
                                 {
@@ -876,7 +937,11 @@ namespace Gral
 
                                     DataCollection.Projectname = ProjectName;
                                     DataCollection.Prefix = sel_sg.Prefix;
-                                    if (sel_sg.Prefix.Length > 1) FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                    if (sel_sg.Prefix.Length > 1)
+                                    {
+                                        FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                    }
+
                                     DataCollection.Decsep = DecimalSep;
                                     DataCollection.MaxSource = maxsource;
                                     DataCollection.CellsGralX = CellsGralX;

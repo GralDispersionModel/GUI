@@ -61,8 +61,10 @@ namespace GralBackgroundworkers
 						text = myreader.ReadLine().Split(new char[] { ',' });
 						emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
 						if (j < 12)
-							emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-					}
+                        {
+                            emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
+                        }
+                    }
 					myreader.Close();
 					itm++;
 				}
@@ -96,7 +98,10 @@ namespace GralBackgroundworkers
                         month.Add(text3[1]);
                         hour.Add(text2[1]);
                         if (hour[hour.Count - 1] == "24")
+                        {
                             hourplus = 1;
+                        }
+
                         wgmettime.Add(text2[2]);
                         wrmettime.Add(text2[3]);
                         akmettime.Add(text2[4]);
@@ -156,13 +161,16 @@ namespace GralBackgroundworkers
 					foreach (string source_group_name in sg_names)
 					{
 						for (int i = 0; i <= mydata.CellsGralX; i++)
-							for (int j = 0; j <= mydata.CellsGralY; j++)
+                        {
+                            for (int j = 0; j <= mydata.CellsGralY; j++)
 						{
                             conc[i, j, itm] = 0;
                             concp[i, j, itm] = 0;
                             concm[i, j, itm] = 0;
 						}
-						itm++;
+                        }
+
+                        itm++;
 					}
 
 					//meteopgt.all
@@ -285,7 +293,9 @@ namespace GralBackgroundworkers
                                             float Q_cv = 0;
 
                                             if ((ii == 0) && (j == 0))
+                                            {
                                                 fmod[n_source] += emission_modulation;
+                                            }
 
                                             if (mydata.Peakmean < 0)
                                             {
@@ -307,12 +317,16 @@ namespace GralBackgroundworkers
                                             if (mydata.Peakmean < 0)
                                             {
                                                 if (conc[ii, j, n_source] * mydata.Scale * totemi * R90 * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                {
                                                     frequ = Math.Max(frequ, totfreq);
+                                                }
                                             }
                                             else
                                             {
                                                 if (conc[ii, j, n_source] * mydata.Scale * totemi * (float)(mydata.Peakmean) * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                {
                                                     frequ = Math.Max(frequ, totfreq);
+                                                }
                                             }
 
                                             //frequency of single processes
@@ -321,7 +335,9 @@ namespace GralBackgroundworkers
                                                 for (int r = 0; r < 3; r++)
                                                 {
                                                     if (conc[ii, j, n_source] * mydata.Scale * mydata.Odemi[r] * R90 * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                    {
                                                         frequ = Math.Max(frequ, mydata.OdFreq[r]);
+                                                    }
                                                 }
                                             }
                                             else
@@ -329,7 +345,9 @@ namespace GralBackgroundworkers
                                                 for (int r = 0; r < 3; r++)
                                                 {
                                                     if (conc[ii, j, n_source] * mydata.Scale * mydata.Odemi[r] * (float)(mydata.Peakmean) * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                    {
                                                         frequ = Math.Max(frequ, mydata.OdFreq[r]);
+                                                    }
                                                 }
                                             }
 
@@ -343,7 +361,9 @@ namespace GralBackgroundworkers
                                                         emi2 = mydata.Odemi[r] + mydata.Odemi[l];
                                                         frequ2 = mydata.OdFreq[r] * mydata.OdFreq[l];
                                                         if (conc[ii, j, n_source] * mydata.Scale * emi2 * R90 * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                        {
                                                             frequ = Math.Max(frequ, frequ2);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -356,7 +376,9 @@ namespace GralBackgroundworkers
                                                         emi2 = mydata.Odemi[r] + mydata.Odemi[l];
                                                         frequ2 = mydata.OdFreq[r] * mydata.OdFreq[l];
                                                         if (conc[ii, j, n_source] * mydata.Scale * emi2 * (float)(mydata.Peakmean) * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                        {
                                                             frequ = Math.Max(frequ, frequ2);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -370,14 +392,17 @@ namespace GralBackgroundworkers
                                             {
                                                 weight = 0.6447;
                                                 if ((std >= 6) && (std < 18))
+                                                {
                                                     weight = 1;
-
+                                                }
                                             }
                                             else
                                             {
                                                 weight = 0.8381;
                                                 if ((std >= 6) && (std < 21))
+                                                {
                                                     weight = 1.3;
+                                                }
                                             }
                                             concmit[ii, j, maxsource + 4] += (float)(frequ * weight);
 
@@ -426,11 +451,14 @@ namespace GralBackgroundworkers
 				{
 					fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
 					for (int i = 0; i <= mydata.CellsGralX; i++)
-						for (int j = 0; j <= mydata.CellsGralY; j++)
+                    {
+                        for (int j = 0; j <= mydata.CellsGralY; j++)
 					{
                         concmit[i, j, itm] = concmit[i, j, itm] / (float)nnn * 100;
 					}
-					itm++;
+                    }
+
+                    itm++;
 				}
 
                 Parallel.For(0, mydata.CellsGralX + 1, i =>
@@ -480,8 +508,11 @@ namespace GralBackgroundworkers
 					name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
 				}
 				else
-					name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-				file = Path.Combine(mydata.Projectname, @"Maps", "Mean_Compost_" + name + ".txt");
+                {
+                    name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
+                }
+
+                file = Path.Combine(mydata.Projectname, @"Maps", "Mean_Compost_" + name + ".txt");
 				Result.Z = itm;
 				Result.Values = concmit;
 				Result.FileName = file;

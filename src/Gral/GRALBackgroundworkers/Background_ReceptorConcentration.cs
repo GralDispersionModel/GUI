@@ -44,9 +44,12 @@ namespace GralBackgroundworkers
 			double[,] emifac_day = new double[24, maxsource];
 			double[,] emifac_mon = new double[12, maxsource];
 			string[] text = new string[15];
-			for (int k=0; k <15; k++) text[k] = "";
-			
-			string dummy;
+			for (int k=0; k <15; k++)
+            {
+                text[k] = "";
+            }
+
+            string dummy;
 			string newpath="";
 			int[]  sg_numbers = new int[maxsource];
 			string[] sg_names = mydata.Sel_Source_Grp.Split(',');
@@ -89,8 +92,10 @@ namespace GralBackgroundworkers
 										text = myreader.ReadLine().Split(new char[] { ',' });
 										emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
 										if (j < 12)
-											emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-									}
+                                        {
+                                            emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
+                                        }
+                                    }
 								}
 								sg = sg_names.Length + 1; // break
 							}
@@ -100,8 +105,10 @@ namespace GralBackgroundworkers
 								{
 									emifac_day[j, itm] = 0;
 									if (j < 12)
-										emifac_mon[j, itm] = 0;
-								}
+                                    {
+                                        emifac_mon[j, itm] = 0;
+                                    }
+                                }
 								sg_numbers[itm] = -1;
 							}
 						}
@@ -175,8 +182,10 @@ namespace GralBackgroundworkers
 										{
 											emifac_day[j, itm1] = 1;
 											if (j < 12)
-												emifac_mon[j, itm1] = 1;
-										}
+                                            {
+                                                emifac_mon[j, itm1] = 1;
+                                            }
+                                        }
 									}
 								}
 
@@ -241,15 +250,20 @@ namespace GralBackgroundworkers
 								xrec.Add(Convert.ToDouble(text[1].Replace(".", decsep)));
 								
 								string a = text[0]; 	// take number as name
-								if (text.Length > 4) 	// get name from line
-									a = text[4];   
-								
-								if (text.Length >= 5) // if the Receptor-Name contains ","
+								if (text.Length > 4)    // get name from line
+                                {
+                                    a = text[4];
+                                }
+
+                                if (text.Length >= 5) // if the Receptor-Name contains ","
 								{
 									for (int k = 5; k < text.Length; k++) // make it possible, that "," is in the Receptor point
 									{
-										if (text[k] != "") a = a + "_" + text[k];
-									}
+										if (text[k] != "")
+                                        {
+                                            a = a + "_" + text[k];
+                                        }
+                                    }
 								}
 								
 								// if the receptor name contains invalid characters for a file!
@@ -406,11 +420,15 @@ namespace GralBackgroundworkers
 							//consider, if meteopgt.all represents a time series or a statistics
 							int dispersionsituations = 0;
 							if (mydata.Checkbox19 == true)
-								dispersionsituations = numbwet + 1;
-							else
-								dispersionsituations = wrmet.Count;
-							
-							int count_dispsit_in_mettime = 0;
+                            {
+                                dispersionsituations = numbwet + 1;
+                            }
+                            else
+                            {
+                                dispersionsituations = wrmet.Count;
+                            }
+
+                            int count_dispsit_in_mettime = 0;
 							int count_ws = -1;
 
 							while (text2[0] != "")
@@ -419,14 +437,19 @@ namespace GralBackgroundworkers
 								count_dispsit_in_mettime += 1;
 								
 								if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true))
-									break;
+                                {
+                                    break;
+                                }
 
-								month = text3[1];
+                                month = text3[1];
 								day = text3[0];
 								hour = text2[1];
 								if (hour == "24")
-									hourplus = 1;
-								wgmettime = text2[2];
+                                {
+                                    hourplus = 1;
+                                }
+
+                                wgmettime = text2[2];
 								wrmettime = text2[3];
 								akmettime = text2[4];
 
@@ -472,8 +495,10 @@ namespace GralBackgroundworkers
 											recwrite.WriteLine(dummy);
 											//consider, if meteopgt.all represents a time series or a statistics
 											if (mydata.Checkbox19 == true)
-												break;
-										}
+                                            {
+                                                break;
+                                            }
+                                        }
 									}
 								}
 								try
@@ -541,31 +566,43 @@ namespace GralBackgroundworkers
 								//consider, if meteopgt.all represents a time series or a statistics
 								int dispersionsituations = 0;
 								if (mydata.Checkbox19 == true || transient == true)
-									dispersionsituations = numbwet + 1;
-								else
-									dispersionsituations = wrmet.Count;
-								
-								int count_dispsit_in_mettime = 0;
+                                {
+                                    dispersionsituations = numbwet + 1;
+                                }
+                                else
+                                {
+                                    dispersionsituations = wrmet.Count;
+                                }
+
+                                int count_dispsit_in_mettime = 0;
 
 								while (text2[0] != "")
 								{
 									count_dispsit_in_mettime++;
 									if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true || transient == true))
-										break;
+                                    {
+                                        break;
+                                    }
 
-									month = text3[1];
+                                    month = text3[1];
 									day = text3[0];
 									hour = text2[1];
 									if (hour == "24")
-										hourplus = 1;
-									wgmettime = text2[2];
+                                    {
+                                        hourplus = 1;
+                                    }
+
+                                    wgmettime = text2[2];
 									wrmettime = text2[3];
 									akmettime = text2[4];
 
 									//artificially increase year by one
 									if (Convert.ToInt32(month) < monthold)
-										year_increase += 1;
-									monthold = Convert.ToInt32(text3[1]);
+                                    {
+                                        year_increase += 1;
+                                    }
+
+                                    monthold = Convert.ToInt32(text3[1]);
 
 									int corr_situation = 0;
 									
@@ -611,17 +648,30 @@ namespace GralBackgroundworkers
 										//compute wind speed and direction
 										windspeed_GRAL = Math.Round(Math.Pow(Math.Pow(GRAL_u[k,n], 2) + Math.Pow(GRAL_v[k,n], 2), 0.5),2);
 										if (GRAL_v[k,n] == 0)
-											winddirection_GRAL = 90;
-										else
-											winddirection_GRAL = Convert.ToInt32(Math.Abs(Math.Atan(GRAL_u[k, n] / GRAL_v[k, n])) * 180 / 3.14);
-										if ((GRAL_v[k, n] > 0) && (GRAL_u[k, n] <= 0))
-											winddirection_GRAL = 180 - winddirection_GRAL;
-										if ((GRAL_v[k, n] >= 0) && (GRAL_u[k, n] > 0))
-											winddirection_GRAL = 180 + winddirection_GRAL;
-										if ((GRAL_v[k, n] < 0) && (GRAL_u[k, n] >= 0))
-											winddirection_GRAL = 360 - winddirection_GRAL;
+                                        {
+                                            winddirection_GRAL = 90;
+                                        }
+                                        else
+                                        {
+                                            winddirection_GRAL = Convert.ToInt32(Math.Abs(Math.Atan(GRAL_u[k, n] / GRAL_v[k, n])) * 180 / 3.14);
+                                        }
 
-										dummy = dummy + Convert.ToString(windspeed_GRAL, ic) + "," + Convert.ToString(Math.Round(winddirection_GRAL, 0));
+                                        if ((GRAL_v[k, n] > 0) && (GRAL_u[k, n] <= 0))
+                                        {
+                                            winddirection_GRAL = 180 - winddirection_GRAL;
+                                        }
+
+                                        if ((GRAL_v[k, n] >= 0) && (GRAL_u[k, n] > 0))
+                                        {
+                                            winddirection_GRAL = 180 + winddirection_GRAL;
+                                        }
+
+                                        if ((GRAL_v[k, n] < 0) && (GRAL_u[k, n] >= 0))
+                                        {
+                                            winddirection_GRAL = 360 - winddirection_GRAL;
+                                        }
+
+                                        dummy = dummy + Convert.ToString(windspeed_GRAL, ic) + "," + Convert.ToString(Math.Round(winddirection_GRAL, 0));
 
 										if (local_SCL == true) // 11.9.2017 Kuntner -> new File format?
 										{

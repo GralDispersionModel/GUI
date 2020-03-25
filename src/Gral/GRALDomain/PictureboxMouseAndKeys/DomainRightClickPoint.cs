@@ -96,8 +96,10 @@ namespace GralDomain
 				EditAndSavePointSourceData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditPS.ItemData.Count > 0)
-					MouseControl = 7;
-			}
+                {
+                    MouseControl = 7;
+                }
+            }
 			if (mi.Index == 3) // Copy source
 			{
 				CopiedItem.PointSource = new PointSourceData(EditPS.ItemData[Convert.ToInt32(mi.Tag)]);

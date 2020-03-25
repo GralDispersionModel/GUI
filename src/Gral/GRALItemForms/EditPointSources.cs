@@ -242,16 +242,24 @@ namespace GralItemForms
 			for (int nr = 0; nr < 10; nr++)
 			{
 				if (ppollutant[nr].SelectedIndex == 2)
-					but1[nr].Text = "[MOU/h]";
-				else
-					but1[nr].Text = "[kg/h]";
-			}
+                {
+                    but1[nr].Text = "[MOU/h]";
+                }
+                else
+                {
+                    but1[nr].Text = "[kg/h]";
+                }
+            }
 		}
 
 		private void Comma1(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == ',') e.KeyChar = '.';
-			int asc = (int)e.KeyChar; //get ASCII code
+			if (e.KeyChar == ',')
+            {
+                e.KeyChar = '.';
+            }
+
+            int asc = (int)e.KeyChar; //get ASCII code
 		}
 
 		private void Comma2(object sender, KeyPressEventArgs e)
@@ -340,10 +348,11 @@ namespace GralItemForms
 
 				_pdata.Height = Convert.ToSingle(numericUpDown1.Value, ic);
 				if (checkBox1.Checked) // absolute height over sea
-					_pdata.Height *= -1;
+                {
+                    _pdata.Height *= -1;
+                }
 
-
-				_pdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
+                _pdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
 				_pdata.Pt = new PointD(textBox2.Text, textBox3.Text, CultureInfo.CurrentCulture);
 				_pdata.Velocity = (float) (numericUpDown2.Value);
 				_pdata.Temperature = (float) (numericUpDown3.Value + 273);
@@ -424,11 +433,15 @@ namespace GralItemForms
 					ppollutant[i].SelectedIndex = _pdata.Poll.Pollutant[i];
 
 					if (ppollutant[i].SelectedIndex == 2)
-						but1[i].Text = "[MOU/h]";
-					else
-						but1[i].Text = "[kg/h]";
+                    {
+                        but1[i].Text = "[MOU/h]";
+                    }
+                    else
+                    {
+                        but1[i].Text = "[kg/h]";
+                    }
 
-					labelpollutant[i].Text = ppollutant[i].Text;
+                    labelpollutant[i].Text = ppollutant[i].Text;
 					pemission[i].Text = St_F.DblToLocTxt(_pdata.Poll.EmissionRate[i]);
 					but1[i].BackColor = SystemColors.ButtonFace;
 				}
@@ -438,10 +451,14 @@ namespace GralItemForms
 					dep[i] = _pdata.GetDep()[i];
 
 					if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
-						but1[i].BackColor = Color.LightGreen; // mark that deposition is set
-					else
-						but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
-				}
+                    {
+                        but1[i].BackColor = Color.LightGreen; // mark that deposition is set
+                    }
+                    else
+                    {
+                        but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
+                    }
+                }
 
 				TempTimeSeries = _pdata.TemperatureTimeSeries;
 				if (!string.IsNullOrEmpty(TempTimeSeries))
@@ -485,10 +502,14 @@ namespace GralItemForms
 			if (ask == true)
 			{
                 if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                {
                     ask = false;
-				else
-					ask = true; // Cancel -> do not delete!
-			}
+                }
+                else
+                {
+                    ask = true; // Cancel -> do not delete!
+                }
+            }
 			if (ask == false)
 			{
 				textBox1.Text = "";
@@ -500,15 +521,20 @@ namespace GralItemForms
 				numericUpDown4.Value = 0;
 				comboBox1.SelectedIndex = 0;
 				for (int i = 0; i < 10; i++)
-					pemission[i].Text = "0";
-				
-				if (ItemDisplayNr >= 0)
+                {
+                    pemission[i].Text = "0";
+                }
+
+                if (ItemDisplayNr >= 0)
 				{
 					try
 					{
 						if (trackBar1.Maximum > 1)
-							trackBar1.Maximum = trackBar1.Maximum - 1;
-						trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
+                        {
+                            trackBar1.Maximum = trackBar1.Maximum - 1;
+                        }
+
+                        trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
 
 						ItemData.RemoveAt(ItemDisplayNr);
 
@@ -651,8 +677,10 @@ namespace GralItemForms
 			try
 			{
 				if (PointSourceRedraw != null)
-					PointSourceRedraw(this, e);
-			}
+                {
+                    PointSourceRedraw(this, e);
+                }
+            }
 			catch
 			{}
 		}
@@ -663,8 +691,10 @@ namespace GralItemForms
 			for (int i = 0; i < 10; i++)
 			{
 				if (sender == but1[i])
-					nr = i;
-			}
+                {
+                    nr = i;
+                }
+            }
 			using (EditDeposition edit = new EditDeposition
 			{
 			  	StartPosition = FormStartPosition.Manual
@@ -682,17 +712,23 @@ namespace GralItemForms
 				edit.Emission = St_F.TxtToDbl(pemission[nr].Text, true);
 				edit.Pollutant = ppollutant[nr].SelectedIndex;
 				if (edit.ShowDialog() == DialogResult.OK)
-					edit.Hide();
-			}
+                {
+                    edit.Hide();
+                }
+            }
 
 			if (Main.Project_Locked == false)
 			{
 				if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
-					but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
-				else
-					but1[nr].BackColor = SystemColors.ButtonFace;
+                {
+                    but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
+                }
+                else
+                {
+                    but1[nr].BackColor = SystemColors.ButtonFace;
+                }
 
-				SaveArray(); // save values
+                SaveArray(); // save values
 			}
 		}
 
@@ -706,9 +742,13 @@ namespace GralItemForms
         void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
         	if (checkBox1.Checked)
-        		label5.BackColor = Color.Yellow;
-        	else
-        		label5.BackColor = Color.Transparent;
+            {
+                label5.BackColor = Color.Yellow;
+            }
+            else
+            {
+                label5.BackColor = Color.Transparent;
+            }
         }
 
         private void EditPointSources_FormClosing(object sender, FormClosingEventArgs e)
@@ -747,9 +787,11 @@ namespace GralItemForms
         		tex.KeyPress -= new KeyPressEventHandler(St_F.NumericInput); //only point as decimal seperator is allowed
 			}
         	foreach(Button but in but1)
-        		but.Click -= new EventHandler(edit_deposition);
+            {
+                but.Click -= new EventHandler(edit_deposition);
+            }
 
-        	textBox2.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            textBox2.TextChanged -= new System.EventHandler(St_F.CheckInput);
 		    textBox3.TextChanged -= new System.EventHandler(St_F.CheckInput);
 		    textBox2.KeyPress -= new KeyPressEventHandler(St_F.NumericInput); //only point as decimal seperator is allowed
 			textBox3.KeyPress -= new KeyPressEventHandler(St_F.NumericInput); //only point as decimal seperator is allowed

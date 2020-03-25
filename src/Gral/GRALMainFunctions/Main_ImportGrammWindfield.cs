@@ -38,7 +38,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMSetReferenceToExitingWindfields(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
 
             bool other_folder = true; // Project folder and windfield folder are different -> otherwise change windfeld.txt only!
 
@@ -151,7 +154,10 @@ namespace Gral
                         {
                             string grammin = Path.Combine(ProjectName, "Computation", "GRAMMin.dat");
                             if (File.Exists(grammin))
+                            {
                                 File.Delete(grammin);
+                            }
+
                             File.Copy(Path.Combine(Path.GetDirectoryName(GRAMMproject), "GRAMMin.dat"), grammin, true);
                         }
                         catch (Exception ex)
@@ -242,9 +248,13 @@ namespace Gral
                                 text = myreader.ReadLine();
                                 int click = Convert.ToInt32(text);
                                 if (click > 0)
+                                {
                                     checkBox20.Checked = true;
+                                }
                                 else
+                                {
                                     checkBox20.Checked = false;
+                                }
                             }
                         }
                         catch

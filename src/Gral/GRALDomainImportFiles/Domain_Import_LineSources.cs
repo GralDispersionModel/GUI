@@ -59,7 +59,9 @@ namespace GralDomain
                                 for (int i1 = 0; i1 < Gral.Main.PollutantList.Count; i1++)
                                 {
                                     if (text1[i + 13] == (Gral.Main.PollutantList[i1] + "[kg/(km*h)]"))
+                                    {
                                         polli[i] = Convert.ToString(i1);
+                                    }
                                 }
                                 if (polli[i] == Convert.ToString(Gral.Main.PollutantList.IndexOf("Unknown")))
                                 {
@@ -137,7 +139,9 @@ namespace GralDomain
                                     }
                                 }
                                 else
-                                break;
+                                {
+                                    break;
+                                }
                             }
                         }
                         //						//union all street segments with the same name, segment number, width, emissions

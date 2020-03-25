@@ -71,15 +71,21 @@ namespace GralDomForms
 		{
 			VertFactor = Convert.ToDouble(numericUpDown1.Value);
 			if (checkBox1.Checked)
-				_sm = true;
-			else
-				_sm = false;
-			
-			GRAL_Topo = false;
+            {
+                _sm = true;
+            }
+            else
+            {
+                _sm = false;
+            }
+
+            GRAL_Topo = false;
 			if (radioButton2.Checked)
-				GRAL_Topo = true;
-			
-			Close();
+            {
+                GRAL_Topo = true;
+            }
+
+            Close();
 		}
 		
 		

@@ -122,10 +122,14 @@ namespace GralMainForms
             	string fs = Convert.ToString(i);
             	string ls = Convert.ToString(i+1);
             	if (i == 0)
-            		e.Graphics.DrawString(fs +".5-" + ls + " m/s", _smallFont,  _blackBrush, new PointF(132 + i *64, 445), stringFormat);
-            	else
-            		e.Graphics.DrawString(fs +" - " + ls + " m/s", _smallFont,  _blackBrush, new PointF(132 + i *64, 445), stringFormat);
-			}
+                {
+                    e.Graphics.DrawString(fs +".5-" + ls + " m/s", _smallFont,  _blackBrush, new PointF(132 + i *64, 445), stringFormat);
+                }
+                else
+                {
+                    e.Graphics.DrawString(fs +" - " + ls + " m/s", _smallFont,  _blackBrush, new PointF(132 + i *64, 445), stringFormat);
+                }
+            }
             e.Graphics.DrawString(">" + Convert.ToString(maxwind-1.0) + ".0 m/s", _smallFont,  _blackBrush, new PointF(132 + (maxwind - 1) *64, 445), stringFormat);
             
             g.DrawString("Frequency [%]", _mediumFont,  _blackBrush, 12, 5);

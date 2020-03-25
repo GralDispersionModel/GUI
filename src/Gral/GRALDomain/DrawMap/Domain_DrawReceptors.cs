@@ -59,17 +59,27 @@ namespace GralDomain
                 _drobj.LineColor = Color.Red;
             }
             else
+            {
                 penrec = new Pen(_drobj.LineColors[0]);
-            
+            }
+
             int width = 4;
             if (_drobj.LineWidth <= 1)
+            {
                 if (_drobj.LineWidth == 0)
+                {
                     width = 4;
+                }
                 else
+                {
                     width = Math.Max (1, Math.Min(200, Convert.ToInt32(1 / BmpScale / MapSize.SizeX))); // 4 m lenght
-                else
-                    width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 8 * factor_x)));
-            
+                }
+            }
+            else
+            {
+                width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 8 * factor_x)));
+            }
+
             //width = 3;
             penrec.Width = width;
             width *= 2;
@@ -107,10 +117,12 @@ namespace GralDomain
                             double display_value = Math.Abs(_rd.DisplayValue);
                             int index = -1;
                             for (int r = _drobj.FillColors.Count - 1; r > -1; r--)
+                            {
                                 if (display_value >= _drobj.ItemValues[r])
                             {
                                 index = r;
                                 break;
+                            }
                             }
                             //values below the minimum are drawn completely transparant
                             int transparancy_new = transparency;

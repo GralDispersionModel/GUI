@@ -91,8 +91,10 @@ namespace Gral
 									count = count + 1;
 								}
 								if (count == 7)
-									break;
-							}
+                                {
+                                    break;
+                                }
+                            }
 							inputfile = myreader.ReadLine();
 						}
 						myreader.Close();
@@ -830,16 +832,26 @@ namespace Gral
 										{
 											//share of HDV for the two source groups PC and HDV
 											if (k == 0)
-												hdv = 0;
-											if (k == 1)
-												hdv = 1;
-											//anual average daily traffic
-											if (k == 0)
-												aadt = _lines.Nemo.AvDailyTraffic - _lines.Nemo.AvDailyTraffic * hdv_share;
-											if (k == 1)
-												aadt = _lines.Nemo.AvDailyTraffic * hdv_share;
-											//write line sources to NEMO input file
-											myWriter.WriteLine(velo[0] + "," + _lines.Section + "," + Convert.ToString(length, ic) + "," +
+                                            {
+                                                hdv = 0;
+                                            }
+
+                                            if (k == 1)
+                                            {
+                                                hdv = 1;
+                                            }
+                                            //anual average daily traffic
+                                            if (k == 0)
+                                            {
+                                                aadt = _lines.Nemo.AvDailyTraffic - _lines.Nemo.AvDailyTraffic * hdv_share;
+                                            }
+
+                                            if (k == 1)
+                                            {
+                                                aadt = _lines.Nemo.AvDailyTraffic * hdv_share;
+                                            }
+                                            //write line sources to NEMO input file
+                                            myWriter.WriteLine(velo[0] + "," + _lines.Section + "," + Convert.ToString(length, ic) + "," +
                                                                Convert.ToString(_lines.Nemo.Slope) + "," + velo[3] + "," + Convert.ToString(aadt, ic) + "," + Convert.ToString(v1, ic) + "," + Convert.ToString(v1, ic) + "," + Convert.ToString(v3, ic) + "," + Convert.ToString(v3, ic) + "," + Convert.ToString(v5, ic) + "," + Convert.ToString(v6, ic) + "," + Convert.ToString(v7, ic) + "," + Convert.ToString(v7, ic) + "," + Convert.ToString(v9, ic) + ",0," +
 											                   "-1," + Convert.ToString(hdv, ic) + "," + "-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0," + Convert.ToString(sgroups[k]) + "," +
 											                   "0,0," + Convert.ToString(_lines.Height) + "," + "1000,0," + Convert.ToString(_lines.Height) + "," + Convert.ToString(_lines.Width) + ",0," +

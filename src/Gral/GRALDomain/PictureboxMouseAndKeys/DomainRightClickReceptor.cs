@@ -96,8 +96,10 @@ namespace GralDomain
 				EditAndSaveReceptorData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditR.ItemData.Count > 0)
-					MouseControl = 25;
-			}
+                {
+                    MouseControl = 25;
+                }
+            }
 			if (mi.Index == 3) // Copy receptor
 			{
 				CopiedItem.Receptor = new ReceptorData(EditR.ItemData[Convert.ToInt32(mi.Tag)]);

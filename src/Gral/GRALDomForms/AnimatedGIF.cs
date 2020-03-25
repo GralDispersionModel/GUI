@@ -41,13 +41,19 @@ namespace GralDomForms
         public GifWriter(Stream OutStream, int DefaultFrameDelay = 500, int Repeat = -1)
         {
             if (OutStream == null)
+            {
                 throw new ArgumentNullException("Stream error");
-            
+            }
+
             if (DefaultFrameDelay <= 0)
+            {
                 throw new ArgumentOutOfRangeException("Frame delay error");
+            }
 
             if (Repeat < -1)
+            {
                 throw new ArgumentOutOfRangeException("Repeat value error");
+            }
 
             _writer = new BinaryWriter(OutStream);
             this.DefaultFrameDelay = DefaultFrameDelay;
@@ -99,6 +105,7 @@ namespace GralDomForms
         public void WriteFrame(Image Image, int Delay = 0)
         {
             lock (_syncLock)
+            {
                 using (var gifStream = new MemoryStream())
                 {
                     Image.Save(gifStream, ImageFormat.Gif);
@@ -106,15 +113,19 @@ namespace GralDomForms
 
                     // Steal the global color table info
                     if (_firstFrame)
+                    {
                         InitHeader(gifStream, _writer, Image.Width, Image.Height);
-
+                    }
 
                     WriteGraphicControlBlock(gifStream, _writer, Delay == 0 ? DefaultFrameDelay : Delay);
                     WriteImageBlock(gifStream, _writer, !_firstFrame, 0, 0, Image.Width, Image.Height);
                 }
-            
+            }
+
             if (_firstFrame)
+            {
                 _firstFrame = false;
+            }
         }
 
 
@@ -139,8 +150,9 @@ namespace GralDomForms
 
             // App Extension Header for Repeating
             if (Repeat == -1)
+            {
                 return;
-
+            }
 
             Writer.Write(unchecked((short)0xff21)); // Application Extension Block Identifier
             Writer.Write((byte)0x0b); // Application Block Size
@@ -195,8 +207,10 @@ namespace GralDomForms
                 Writer.Write((byte)(SourceGif.ReadByte() & 0x3f | 0x80)); // Enabling local color table
                 WriteColorTable(SourceGif, Writer);
             }
-            else Writer.Write((byte)(header[9] & 0x07 | 0x07)); // Disabling local color table
-
+            else
+            {
+                Writer.Write((byte)(header[9] & 0x07 | 0x07)); // Disabling local color table
+            }
 
             Writer.Write(header[10]); // LZW Min Code Size
 

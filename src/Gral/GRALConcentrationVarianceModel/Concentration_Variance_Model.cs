@@ -43,9 +43,13 @@ namespace GralConcentrationVarianceModel
 
                 //fluctuation intensity
                 if (conc > 0)
+                {
                     Q_cv = (float)Math.Sqrt(Q_cv) / conc;
+                }
                 else
+                {
                     Q_cv = 3.77F;
+                }
 
                 Q_cv = (float)Math.Min(Q_cv, 3.77); //3.77 leads to R90=1 when using a 2-parameter Weibull PDF, lower values than 1 are not allowed
 

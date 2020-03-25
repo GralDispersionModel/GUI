@@ -43,7 +43,10 @@ namespace Gral
                         ProjectName = ProjectName
                     };
                     if (OpenProject.ReadGrammInFile() == true) // get final situation from GRAMMin.dat if sunrise is activated
+                    {
                         final_sit = OpenProject.GRAMMsunrise;
+                    }
+
                     OpenProject = null;
 
                     using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat")))
@@ -53,14 +56,20 @@ namespace Gral
                         mywriter.WriteLine(numericUpDown38.Value.ToString(ic)); // Roughness lenght
                         mywriter.WriteLine(Convert.ToString(numericUpDown24.Value) + "," + Convert.ToString(CellNrTopographySmooth));
                         if (checkBox27.Checked == true)
+                        {
                             mywriter.WriteLine("yes      ! write steady-state-file");
+                        }
                         else
+                        {
                             mywriter.WriteLine("no       ! write steady-state-file");
+                        }
 
                         if (checkBox30.Checked) // sunrise option selected
                         {
                             if (final_sit > 0) // final situation from GRAMMin.dat
+                            {
                                 GRAMM_Sunrise = final_sit;
+                            }
                             else
                             {
                                 string filename = Path.Combine(ProjectName, "Computation", "meteopgt.all");
@@ -68,7 +77,9 @@ namespace Gral
                             }
 
                             if (GRAMM_Sunrise >= 1)
+                            {
                                 mywriter.WriteLine(GRAMM_Sunrise.ToString() + "      ! Number of original meteo length for GRAMM Sunrise option");
+                            }
                             else
                             {
                                 //MessageBox.Show("Error writing the sunrise option. Sunrise is not activated. Create meteo files first, please", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -100,10 +111,14 @@ namespace Gral
             SaveIINDatFile();
             
             if (checkBox31.Checked == false) // no flat terrain -> sunrise allowed
+            {
                 checkBox30.Enabled = true;
+            }
             else
+            {
                 checkBox30.Enabled = false;
-            
+            }
+
             if (checkBox31.Checked == true && checkBox30.Checked == true) // deactivate sunrise option if necessary
             {
                 if (SunriseResetMeteoFiles() == true)
@@ -212,7 +227,9 @@ namespace Gral
                             mywriter.WriteLine(@"Force catab flows -40/-25/-15 W/m" + SquareString + " AKLA 7/6/5 :  0                    !1=ON suitable with steady state meteopgt.all");
                         }
                         else
+                        {
                             mywriter.WriteLine(@"Force catab flows -40/-25/-15 W/m" + SquareString + " AKLA 7/6/5 :  1                    !1=ON suitable with steady state meteopgt.all");
+                        }
 
                         mywriter.WriteLine("UPDATE ERA5 BOUNDARY CONDITIONS (HOURS)       :  " + Convert.ToString(Convert.ToDouble(numericUpDown37.Value), ic) + "                    !Defines the interval after which the boundary conditions are updated with certain ERA5 data");
 

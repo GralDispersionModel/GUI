@@ -107,9 +107,11 @@ namespace GralIO
 					}
 				}
 				else
-					throw new FileNotFoundException(_filename + @"not found");
+                {
+                    throw new FileNotFoundException(_filename + @"not found");
+                }
 
-				return true; // Reading OK
+                return true; // Reading OK
 			}
 			catch
 			{
@@ -133,12 +135,15 @@ namespace GralIO
 				Scl_Array = new double[NI,NJ]; // create new array
 
 				for (int i = 0; i < NI; i++)
-					for (int j = 0; j < NJ; j++)
+                {
+                    for (int j = 0; j < NJ; j++)
 				{
 					short temp = stability.ReadInt16();
 					Scl_Array[i, j] = Convert.ToDouble(temp);
 				}
-				return true;
+                }
+
+                return true;
 			}
 			catch
 			{
@@ -180,9 +185,11 @@ namespace GralIO
 											// Seek doesn't work in zipped files
 											// stability.BaseStream.Seek(position, SeekOrigin.Begin);
 											for (int i = 0; i < position; i++) // seek manually
-												stability.ReadInt16();
-											
-											temp = stability.ReadInt16(); // read this value
+                                            {
+                                                stability.ReadInt16();
+                                            }
+
+                                            temp = stability.ReadInt16(); // read this value
 										}
 									}
 								}
@@ -213,9 +220,11 @@ namespace GralIO
 					}
 				}
 				else
-					throw new FileNotFoundException(_filename + @"not found");
+                {
+                    throw new FileNotFoundException(_filename + @"not found");
+                }
 
-				return temp; // Reading OK
+                return temp; // Reading OK
 			}
 			catch(Exception e)
 			{
@@ -269,12 +278,14 @@ namespace GralIO
 			catch {}
 			
 			if (counter > 0)
-				return (int) Math.Round(sum / counter); // compute nearest value
-			else
-				return 0;
-			
-			
-		}
+            {
+                return (int) Math.Round(sum / counter); // compute nearest value
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
 		/// <summary>
 		/// Export the stability classes, friction velocity, and Obukhov length for a GRAMM sub domain
@@ -306,12 +317,14 @@ namespace GralIO
 								writer.Write(_NZ);
 								writer.Write(_GRAMMhorgridsize);
 								for (int i = _X0; i < _NX; i++)
-									for (int j = _Y0; j < _NY; j++)
+                                {
+                                    for (int j = _Y0; j < _NY; j++)
 								{
 									dummy = Convert.ToInt16(_Ustar[i, j]);
 									writer.Write(dummy);
 								}
-							}
+                                }
+                            }
 
 							string obukhovfilename = (Path.GetFileNameWithoutExtension(_filename) + ".obl");
 							ZipArchiveEntry write_entry2 = archive.CreateEntry(obukhovfilename);
@@ -323,12 +336,14 @@ namespace GralIO
 								writer.Write(_NZ);
 								writer.Write(_GRAMMhorgridsize);
 								for (int i = _X0; i < _NX; i++)
-									for (int j = _Y0; j < _NY; j++)
+                                {
+                                    for (int j = _Y0; j < _NY; j++)
 								{
 									dummy = Convert.ToInt16(_MOlength[i, j]);
 									writer.Write(dummy);
 								}
-							}
+                                }
+                            }
 
 							//computation and ouput of stability classes
 							string stabilityfile = (Path.GetFileNameWithoutExtension(_filename) + ".scl");
@@ -341,12 +356,14 @@ namespace GralIO
 								writer.Write(_NZ);
 								writer.Write(_GRAMMhorgridsize);
 								for (int i = _X0; i < _NX; i++)
-									for (int j = _Y0; j < _NY; j++)
+                                {
+                                    for (int j = _Y0; j < _NY; j++)
 								{
 									dummy = Convert.ToInt16(_Stabclasses[i, j]);
 									writer.Write(dummy);
 								}
-							}
+                                }
+                            }
 						} // archive
 					} // Zip File
 				} // catch

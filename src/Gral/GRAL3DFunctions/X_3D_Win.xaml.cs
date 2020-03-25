@@ -28,7 +28,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.IO;
-using GralStaticFunctions;
 
 namespace Gral3DFunctions
 {
@@ -119,13 +118,21 @@ namespace Gral3DFunctions
         		//File.SetAttributes(dta_Path, FileAttributes.Normal);
         		//File.SetAttributes(arrow_Path, FileAttributes.Normal);
         		
-        		if (File.Exists(DtaPath)) File.Delete(DtaPath);
-        		
-        		if (File.Exists(ArrowPath)) File.Delete(ArrowPath);
-        		
-        		if (File.Exists(ElementsPath)) File.Delete(ElementsPath);
-        		
-        	}
+        		if (File.Exists(DtaPath))
+                {
+                    File.Delete(DtaPath);
+                }
+
+                if (File.Exists(ArrowPath))
+                {
+                    File.Delete(ArrowPath);
+                }
+
+                if (File.Exists(ElementsPath))
+                {
+                    File.Delete(ElementsPath);
+                }
+            }
         	catch
         	{}
         }
@@ -144,8 +151,12 @@ namespace Gral3DFunctions
         {
         	try
         	{
-        		if (File.Exists(DtaPath) == false) return false;
-        		string a;
+        		if (File.Exists(DtaPath) == false)
+                {
+                    return false;
+                }
+
+                string a;
         		string[] dummy = new string[1000000];
         		int x_anz; int xc;
         		int y_anz; int yc;
@@ -161,9 +172,20 @@ namespace Gral3DFunctions
 
                 double[,] heights = new double[x_anz + 1,y_anz + 1];
         		Thickness = 0.02;
-        			if (x_anz >  20) Thickness = 0.01;
-        			if (x_anz >  50) Thickness = 0.004;
-        			if (x_anz >  100) Thickness = 0.002;
+        			if (x_anz >  20)
+                {
+                    Thickness = 0.01;
+                }
+
+                if (x_anz >  50)
+                {
+                    Thickness = 0.004;
+                }
+
+                if (x_anz >  100)
+                {
+                    Thickness = 0.002;
+                }
 
                 using (BinaryReader myreader = new BinaryReader(File.Open(DtaPath, FileMode.Open)))
                 {
@@ -197,9 +219,12 @@ namespace Gral3DFunctions
         		for (xc = 0; xc <= x_anz;xc++)
         		{
         			double y = -(y_anz/2);
-        			if (y_anz > 3) y = -5; // for the 3D surface 
-        			
-        			for (yc=0; yc < y_anz;yc++)
+        			if (y_anz > 3)
+                    {
+                        y = -5; // for the 3D surface 
+                    }
+
+                    for (yc=0; yc < y_anz;yc++)
         			{
         				if (Smooth)
         				{
@@ -221,13 +246,22 @@ namespace Gral3DFunctions
         					double hmin = 1000;     					
         					{
         						for (int i=-1; i<2; i++)
-        							for(int j = -1; j<2;j++)
-        								if (xc+i >= 0 && yc+j >= 0 && xc+i <= x_anz && yc+j <= y_anz) // search lowest height around the actual Box
-        								  hmin = Math.Min(hmin, heights[xc+i, yc+j]);
-        					}
-        					if (hmin > 999) hmin = heights[xc,yc] * 0.4;
-        					
-        					double dxh = dx/2; double dyh = dy/2;
+                                {
+                                    for (int j = -1; j<2;j++)
+                                    {
+                                        if (xc+i >= 0 && yc+j >= 0 && xc+i <= x_anz && yc+j <= y_anz) // search lowest height around the actual Box
+                                        {
+                                            hmin = Math.Min(hmin, heights[xc+i, yc+j]);
+                                        }
+                                    }
+                                }
+                            }
+        					if (hmin > 999)
+                            {
+                                hmin = heights[xc,yc] * 0.4;
+                            }
+
+                            double dxh = dx/2; double dyh = dy/2;
         					Point3D p0= new Point3D(x-dxh, hmin, y+dyh);
         					Point3D p1= new Point3D(x+dxh, hmin, y+dyh);
         					Point3D p2= new Point3D(x+dxh, heights[xc,yc], y+dyh);
@@ -308,7 +342,11 @@ namespace Gral3DFunctions
         		string[] dummy = new string[1000000];
         		bool valid = false;
         		
-        		if (File.Exists(ArrowPath) == false) return false;
+        		if (File.Exists(ArrowPath) == false)
+                {
+                    return false;
+                }
+
                 using (BinaryReader myreader = new BinaryReader(File.Open(ArrowPath, FileMode.Open)))
                 {
                     double dx = myreader.ReadDouble();
@@ -455,8 +493,11 @@ namespace Gral3DFunctions
         				TextModel = new GeometryModel3D(mg, mat);
         				model_group.Children.Add(TextModel);
         				
-        				if (i>=40) i+=5;
-        			}
+        				if (i>=40)
+                        {
+                            i +=5;
+                        }
+                    }
         		}
         		
         		return true;
@@ -475,7 +516,10 @@ namespace Gral3DFunctions
         		string a;
         		string[] dummy = new string[1000000];
         		
-        		if (File.Exists(ElementsPath) == false) return false;
+        		if (File.Exists(ElementsPath) == false)
+                {
+                    return false;
+                }
 
                 using (BinaryReader myreader = new BinaryReader(File.Open(ElementsPath, FileMode.Open)))
                 {
@@ -519,10 +563,13 @@ namespace Gral3DFunctions
         		// Make a mesh to hold the surface.
         		MeshGeometry3D mesh = new MeshGeometry3D();
 
-        		if (Load_Data(mesh) == false) return;
+        		if (Load_Data(mesh) == false)
+                {
+                    return;
+                }
 
-        		// Make the surface's material using a solid green brush.
-        		DiffuseMaterial surface_material = new DiffuseMaterial(Brushes.LightGreen);
+                // Make the surface's material using a solid green brush.
+                DiffuseMaterial surface_material = new DiffuseMaterial(Brushes.LightGreen);
 
                 // Make the surface's model.
                 SurfaceModel = new GeometryModel3D(mesh, surface_material)
@@ -541,8 +588,10 @@ namespace Gral3DFunctions
         			DiffuseMaterial wireframe_material = new DiffuseMaterial(Brushes.Gray);
         			WireframeModel = new GeometryModel3D(wireframe, wireframe_material);
         			if ((WireframeModel != null) && ((bool)chkWireframe.IsChecked))
-        				model_group.Children.Add(WireframeModel);
-        		}
+                    {
+                        model_group.Children.Add(WireframeModel);
+                    }
+                }
         		catch{}
         		
         		try
@@ -579,26 +628,32 @@ namespace Gral3DFunctions
         			DiffuseMaterial x_arrow_material = new DiffuseMaterial(Brushes.Red);
         			XArrowModel = new GeometryModel3D(x_arrow_mesh, x_arrow_material);
         			if ((bool)chkCoor.IsChecked)
-        				model_group.Children.Add(XArrowModel);
+                    {
+                        model_group.Children.Add(XArrowModel);
+                    }
 
-        			// Y = Green.
-        			MeshGeometry3D y_arrow_mesh = new MeshGeometry3D();
+                    // Y = Green.
+                    MeshGeometry3D y_arrow_mesh = new MeshGeometry3D();
         			y_arrow_mesh.AddArrow(origin, new Point3D(0, arrow_length - 1, 0),
         			                      new Vector3D(1, 0, 0), arrowhead_length);
         			DiffuseMaterial y_arrow_material = new DiffuseMaterial(Brushes.Green);
         			YArrowModel = new GeometryModel3D(y_arrow_mesh, y_arrow_material);
         			if ((bool)chkCoor.IsChecked)
-        				model_group.Children.Add(YArrowModel);
+                    {
+                        model_group.Children.Add(YArrowModel);
+                    }
 
-        			// Z = Blue.
-        			MeshGeometry3D z_arrow_mesh = new MeshGeometry3D();
+                    // Z = Blue.
+                    MeshGeometry3D z_arrow_mesh = new MeshGeometry3D();
         			z_arrow_mesh.AddArrow(origin, new Point3D(0, 0, arrow_length),
         			                      new Vector3D(0, 1, 0), arrowhead_length);
         			DiffuseMaterial z_arrow_material = new DiffuseMaterial(Brushes.Blue);
         			ZArrowModel = new GeometryModel3D(z_arrow_mesh, z_arrow_material);
         			if ((bool)chkCoor.IsChecked)
-        				model_group.Children.Add(ZArrowModel);
-        		}
+                    {
+                        model_group.Children.Add(ZArrowModel);
+                    }
+                }
         		catch
         		{}
         	}
@@ -633,7 +688,9 @@ namespace Gral3DFunctions
             // If the point is in the point dictionary,
             // return its saved index.
             if (PointDictionary.ContainsKey(point))
+            {
                 return PointDictionary[point];
+            }
 
             // We didn't find the point. Create it.
             points.Add(point);
@@ -648,10 +705,15 @@ namespace Gral3DFunctions
 			// Get two vectors perpendicular to the axis.
 			Vector3D v1;
 			if ((axis.Z < -0.01) || (axis.Z > 0.01))
-				v1 = new Vector3D(axis.Z, axis.Z, -axis.X - axis.Y);
-			else
-				v1 = new Vector3D(-axis.Y - axis.Z, axis.X, axis.X);
-			Vector3D v2 = Vector3D.CrossProduct(v1, axis);
+            {
+                v1 = new Vector3D(axis.Z, axis.Z, -axis.X - axis.Y);
+            }
+            else
+            {
+                v1 = new Vector3D(-axis.Y - axis.Z, axis.X, axis.X);
+            }
+
+            Vector3D v2 = Vector3D.CrossProduct(v1, axis);
 
 			// Make the vectors have length radius.
 			v1 *= (radius / v1.Length);
@@ -722,8 +784,11 @@ namespace Gral3DFunctions
             		else
             		{
             			CameraPhi += CameraDPhi;
-            			if (CameraPhi > Math.PI / 2.0) CameraPhi = Math.PI / 2.0;
-            		}
+            			if (CameraPhi > Math.PI / 2.0)
+                        {
+                            CameraPhi = Math.PI / 2.0;
+                        }
+                    }
             		break;
             	case Key.Down:
             		if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control || (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
@@ -734,8 +799,11 @@ namespace Gral3DFunctions
             		else
             		{
             			CameraPhi -= CameraDPhi;
-            			if (CameraPhi < -Math.PI / 2.0) CameraPhi = -Math.PI / 2.0;
-            		}
+            			if (CameraPhi < -Math.PI / 2.0)
+                        {
+                            CameraPhi = -Math.PI / 2.0;
+                        }
+                    }
             		break;
             	case Key.Left:
             		if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
@@ -777,7 +845,10 @@ namespace Gral3DFunctions
                     else
                     {
                     	CameraR -= CameraDR;
-                    	if (CameraR < CameraDR) CameraR = CameraDR;
+                    	if (CameraR < CameraDR)
+                        {
+                            CameraR = CameraDR;
+                        }
                     }
                     break;
                 case Key.Subtract:
@@ -850,25 +921,34 @@ namespace Gral3DFunctions
         	for (int i = MainModel3Dgroup.Children.Count - 1; i >= 0; i--)
         	{
         		if (MainModel3Dgroup.Children[i] is GeometryModel3D)
-        			MainModel3Dgroup.Children.RemoveAt(i);
-        	}
+                {
+                    MainModel3Dgroup.Children.RemoveAt(i);
+                }
+            }
 
         	// Add the selected GeometryModel3Ds.
         	if ((SurfaceModel != null) && ((bool)chkSurface.IsChecked))
-        		MainModel3Dgroup.Children.Add(SurfaceModel);
-        	if ((WireframeModel != null) && ((bool)chkWireframe.IsChecked))
-        		MainModel3Dgroup.Children.Add(WireframeModel);
-        	
-        	//        	if ((ArrowModel != null) && ((bool)chkArrows.IsChecked))
-        	//        	{
-        	Load_Arrows(MainModel3Dgroup);
+            {
+                MainModel3Dgroup.Children.Add(SurfaceModel);
+            }
+
+            if ((WireframeModel != null) && ((bool)chkWireframe.IsChecked))
+            {
+                MainModel3Dgroup.Children.Add(WireframeModel);
+            }
+
+            //        	if ((ArrowModel != null) && ((bool)chkArrows.IsChecked))
+            //        	{
+            Load_Arrows(MainModel3Dgroup);
         	//        		//MainModel3Dgroup.Children.Add(ArrowModel);
         	//        	}
         	
         	if (ElementsModel != null)
-        		MainModel3Dgroup.Children.Add(ElementsModel);
-        	
-        	if ((XArrowModel != null) && ((bool)chkCoor.IsChecked))
+            {
+                MainModel3Dgroup.Children.Add(ElementsModel);
+            }
+
+            if ((XArrowModel != null) && ((bool)chkCoor.IsChecked))
         	{
         		MainModel3Dgroup.Children.Add(XArrowModel);
         		MainModel3Dgroup.Children.Add(YArrowModel);

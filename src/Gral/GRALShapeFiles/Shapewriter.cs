@@ -11,11 +11,9 @@
 #endregion
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
-using Gral;
 using GralItemData;
 
 namespace GralShape
@@ -403,13 +401,25 @@ namespace GralShape
 
                     bool clockwise = true;
                     if (x_plus < x_minus)
+                    {
                         clockwise = false;
+                    }
+
                     if ((x_plus < xnorth) && (x_minus < xnorth))
+                    {
                         if (y_minus < y_plus)
+                        {
                             clockwise = false;
+                        }
+                    }
+
                     if ((x_plus > xnorth) && (x_minus > xnorth))
+                    {
                         if (y_minus > y_plus)
+                        {
                             clockwise = false;
+                        }
+                    }
 
                     if (clockwise == true)
                     {

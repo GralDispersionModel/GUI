@@ -20,14 +20,13 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace GralStaticFunctions
 {
-	/// <summary>
-	/// Analyze if there is a binned Meteo Time Series
-	/// </summary>
-	public class GetMetFileSectionWidth
+    /// <summary>
+    /// Analyze if there is a binned Meteo Time Series
+    /// </summary>
+    public class GetMetFileSectionWidth
 	{
 		/// <summary>
 		/// Returns the section width of a MettimeSeries

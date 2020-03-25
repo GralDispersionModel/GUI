@@ -27,7 +27,9 @@ namespace GralDomain
         {
             
             if (PictureBoxBitmap == null)
+            {
                 PictureBoxBitmap = new Bitmap(picturebox1.Width, picturebox1.Height);
+            }
             else
             {
                 if (PictureBoxBitmap.Width != picturebox1.Width || PictureBoxBitmap.Height != picturebox1.Height)
@@ -373,24 +375,32 @@ namespace GralDomain
             Pen p = new Pen(Color.LightBlue, 3);
             //draw actual edited GRAL model domain
             if (MouseControl == 5)
+            {
                 g.DrawRectangle(p, GRALDomain);
+            }
 
             //draw actual edited GRAMM model domain
             if (MouseControl == 31)
+            {
                 g.DrawRectangle(p, GRAMMDomain);
-            
+            }
+
             //draw actual edited line source
             if ((EditLS.CornerLineSource > 0) && (MouseControl == 10))
             {
                 for (int i = 0; i < EditLS.CornerLineSource; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
             
             //draw actual edited wall
             if ((EditWall.CornerWallCount > 0) && (MouseControl == 75))
             {
                 for (int i = 0; i < EditWall.CornerWallCount; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
             
             //draw actual edited tunnel portal
@@ -404,35 +414,45 @@ namespace GralDomain
             if ((EditLS.CornerLineSource > 0) && (MouseControl == 22))
             {
                 for (int i = 0; i < EditLS.CornerLineSource ; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
 
             //draw line for windfield section drawing
             if ((EditLS.CornerLineSource > 0) && (MouseControl == 44))
             {
                 for (int i = 0; i < EditLS.CornerLineSource ; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
             
             //draw acutal edited area source
             if ((EditAS.CornerAreaCount > 0) && ((MouseControl == 8) || (MouseControl == 23)))
             {
                 for (int i = 0; i < EditAS.CornerAreaCount ; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
 
             //draw acutal edited vegetation
             if ((EditVegetation.CornerVegetation > 0) && ((MouseControl == 79)))
             {
                 for (int i = 0; i < EditVegetation.CornerVegetation ; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
             
             //draw actual edited building
             if ((EditB.CornerBuilding > 0) && (MouseControl == 17))
             {
                 for (int i = 0; i < EditB.CornerBuilding ; i++)
+                {
                     g.DrawLine(p, CornerAreaSource[i], CornerAreaSource[i + 1]);
+                }
             }
             p.Dispose();
             

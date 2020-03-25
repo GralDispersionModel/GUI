@@ -102,7 +102,9 @@ namespace GralDomain
                                     }
                                 }
                                 else
+                                {
                                     break;
+                                }
                             }
 
                             //union all portals with the same location and name

@@ -43,12 +43,27 @@ namespace GralDomain
                 if (ShowFirst.Ls) // set the inital position & height of the form
                 {
                     EditLS.Height = 750;
-                    if (ShowFirst.Ps == false) EditLS.Location = EditPS.Location;
-                    else if (ShowFirst.As == false) EditLS.Location = EditAS.Location;
-                    else if (ShowFirst.Bu == false) EditLS.Location = EditB.Location;
-                    else if (ShowFirst.Wa == false) EditLS.Location = EditWall.Location;
+                    if (ShowFirst.Ps == false)
+                    {
+                        EditLS.Location = EditPS.Location;
+                    }
+                    else if (ShowFirst.As == false)
+                    {
+                        EditLS.Location = EditAS.Location;
+                    }
+                    else if (ShowFirst.Bu == false)
+                    {
+                        EditLS.Location = EditB.Location;
+                    }
+                    else if (ShowFirst.Wa == false)
+                    {
+                        EditLS.Location = EditWall.Location;
+                    }
                     else
+                    {
                         EditLS.Location = GetScreenPositionForNewDialog();
+                    }
+
                     ShowFirst.Ls = false;
                 }
                 MouseControl = 10;

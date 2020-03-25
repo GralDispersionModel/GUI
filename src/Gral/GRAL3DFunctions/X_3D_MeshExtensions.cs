@@ -28,10 +28,12 @@ namespace Gral3DFunctions
 			// Copy existing vertex normals.
 			Vector3D[] vertex_normals = new Vector3D[mesh.Positions.Count];
 			for (int i = 0; i < mesh.Normals.Count; i++)
-				vertex_normals[i] = mesh.Normals[i];
+            {
+                vertex_normals[i] = mesh.Normals[i];
+            }
 
-			// Calculate missing vetex normals.
-			for (int vertex = mesh.Normals.Count; vertex < mesh.Positions.Count; vertex++)
+            // Calculate missing vetex normals.
+            for (int vertex = mesh.Normals.Count; vertex < mesh.Positions.Count; vertex++)
 			{
 				Vector3D total_vector = new Vector3D(0, 0, 0);
 				int num_triangles = 0;
@@ -65,11 +67,13 @@ namespace Gral3DFunctions
 
 				// Set the vertex's normal.
 				if (num_triangles > 0)
-					vertex_normals[vertex] = new Vector3D(
+                {
+                    vertex_normals[vertex] = new Vector3D(
 						total_vector.X / num_triangles,
 						total_vector.Y / num_triangles,
 						total_vector.Z / num_triangles);
-			}
+                }
+            }
 
 			// Make a mesh to hold the normals.
 			MeshGeometry3D normals = new MeshGeometry3D();
@@ -196,8 +200,12 @@ namespace Gral3DFunctions
 
 			// If we've already added this segment for
 			// another triangle, do nothing.
-			if (already_drawn.ContainsKey(segment_id)) return;
-			already_drawn.Add(segment_id, segment_id);
+			if (already_drawn.ContainsKey(segment_id))
+            {
+                return;
+            }
+
+            already_drawn.Add(segment_id, segment_id);
 
 			// Create the segment.
 			AddSegment(wireframe, mesh.Positions[index1], mesh.Positions[index2], thickness);
@@ -235,10 +243,12 @@ namespace Gral3DFunctions
 			Vector3D segment = point2 - point1;
 			segment.Normalize();
 			if (Math.Abs(Vector3D.DotProduct(up, segment)) > 0.9)
-				up = new Vector3D(1, 0, 0);
+            {
+                up = new Vector3D(1, 0, 0);
+            }
 
-			// Add the segment.
-			AddSegment(mesh, point1, point2, up, thickness, extend);
+            // Add the segment.
+            AddSegment(mesh, point1, point2, up, thickness, extend);
 		}
 		public static void AddSegment(MeshGeometry3D mesh,
 		                              Point3D point1, Point3D point2, double thickness)

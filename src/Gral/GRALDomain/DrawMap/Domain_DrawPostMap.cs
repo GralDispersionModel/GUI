@@ -84,7 +84,10 @@ namespace GralDomain
                                     }
                                 }
                             }
-                            if (CancelDrawing) break;
+                            if (CancelDrawing)
+                            {
+                                break;
+                            }
                         }
                     }
                     else
@@ -131,7 +134,10 @@ namespace GralDomain
                                     br1.Dispose();
                                 }
                             }
-                            if (CancelDrawing) break;
+                            if (CancelDrawing)
+                            {
+                                break;
+                            }
                         }
                     }
                 }

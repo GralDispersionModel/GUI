@@ -61,7 +61,9 @@ namespace GralBackgroundworkers
                             text = myreader.ReadLine().Split(new char[] { ',' });
                             emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
                             if (j < 12)
+                            {
                                 emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
+                            }
                         }
                     }
 					itm++;
@@ -194,8 +196,10 @@ namespace GralBackgroundworkers
 									{
 										emifac_day[j, itm1] = 1;
 										if (j < 12)
-											emifac_mon[j, itm1] = 1;
-									}
+                                        {
+                                            emifac_mon[j, itm1] = 1;
+                                        }
+                                    }
 								}
 							}
 
@@ -246,7 +250,9 @@ namespace GralBackgroundworkers
                             {
                                 emifac_day[j, n] = 1;
                                 if (j < 12)
+                                {
                                     emifac_mon[j, n] = 1;
+                                }
                             }
                         }
                         for (int i = 0; i < mettimefilelength; i++)
@@ -297,8 +303,11 @@ namespace GralBackgroundworkers
 				day=text3[0];
 				hour=text2[1];
 				if (hour == "24")
-					hourplus = 1;
-				wgmettime=text2[2];
+                {
+                    hourplus = 1;
+                }
+
+                wgmettime =text2[2];
 				wrmettime=text2[3];
 				akmettime=text2[4];
 
@@ -321,7 +330,9 @@ namespace GralBackgroundworkers
                     else
                     {
                         if ((wgmet[n] == wgmettime) && (wrmet[n] == wrmettime) && (akmet[n] == akmettime))
+                        {
                             meteo_situation_found = true;
+                        }
                     }
 
                     if (meteo_situation_found == true)
@@ -426,7 +437,8 @@ namespace GralBackgroundworkers
 							int std = Convert.ToInt32(hour);
 							int mon = Convert.ToInt32(month) - 1;
 							for (int ii = 0; ii <= mydata.CellsGralX; ii++)
-								for (int j = 0; j <= mydata.CellsGralY; j++)
+                            {
+                                for (int j = 0; j <= mydata.CellsGralY; j++)
 							{
 								//reset max. daily concentrations for each source group
 								concmaxdummy[ii, j] = 0;
@@ -455,16 +467,21 @@ namespace GralBackgroundworkers
 									}
 
 									if ((ii >= mydata.CellsGralX) && (j >= mydata.CellsGralY)) // Kuntner: changed from == to >=
-										numhour = 1;
-								}
+                                        {
+                                            numhour = 1;
+                                        }
+                                    }
 								
 								itm = 0;
 								foreach (string source_group_name in sg_names)
 								{
 									//compute mean emission modulation factor
 									if ((ii == 0) && (j == 0))
-										fmod[itm] = fmod[itm] + emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
-									float fac = conc[ii, j, itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
+                                        {
+                                            fmod[itm] = fmod[itm] + emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
+                                        }
+
+                                        float fac = conc[ii, j, itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
 									float facdep = dep[ii, j, itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
 									//compute mean concentrations for each source group and in total
 									concmit[ii, j, itm] = concmit[ii, j, itm] + fac;
@@ -486,7 +503,8 @@ namespace GralBackgroundworkers
 								concmax[ii, j, maxsource] = Math.Max(concmax[ii, j, maxsource], concmaxdummy[ii, j]);
 								depmax[ii, j, maxsource] = Math.Max(depmax[ii, j, maxsource], depmaxdummy[ii, j]);
 							}
-						}
+                            }
+                        }
 					}
 				}
 				
@@ -515,13 +533,14 @@ namespace GralBackgroundworkers
 				}
 				//total concentration
 				for (int i = 0; i <= mydata.CellsGralX; i++)
-					for (int j = 0; j <= mydata.CellsGralY; j++)
+                {
+                    for (int j = 0; j <= mydata.CellsGralY; j++)
 				{
 					concmit[i, j, maxsource] = concmit[i, j, maxsource] / (float)nnn;
 					depmit[i, j, maxsource] = depmit[i, j, maxsource] / (float)nnn;
 				}
-
-			}
+                }
+            }
 
 			string file;
 			string name;
@@ -553,9 +572,11 @@ namespace GralBackgroundworkers
 						name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0];
 					}
 					else
-						name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
-					
-					file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    {
+                        name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
+                    }
+
+                    file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
 					
 					Result.Unit = Gral.Main.My_p_m3;
 					Result.Round = 5;

@@ -74,15 +74,17 @@ namespace GralBackgroundworkers
 			iy = Convert.ToInt32(Math.Floor(eta / mydata.GRAMMhorgridsize)) + 1;
 			//obtain index in the vertical direction
 			for (int k = 1; k <= NZ; k++)
-				if (ZSP[ix, iy, k] - AH[ix, iy] >= mydata.Schnitt)
+            {
+                if (ZSP[ix, iy, k] - AH[ix, iy] >= mydata.Schnitt)
 			{
 				ischnitt = k;
 				break;
 			}
+            }
 
-			//windfield file Readers
-			//PSFReader windfield = new PSFReader(form1.GRAMMwindfield, true);
-			StreamReader meteopgt = new StreamReader(Path.Combine(mydata.Path_GRAMMwindfield, @"meteopgt.all"));
+            //windfield file Readers
+            //PSFReader windfield = new PSFReader(form1.GRAMMwindfield, true);
+            StreamReader meteopgt = new StreamReader(Path.Combine(mydata.Path_GRAMMwindfield, @"meteopgt.all"));
 			//loop over all weather situations
 			double Uoben = 0;
 			double Voben = 0;
@@ -169,16 +171,30 @@ namespace GralBackgroundworkers
 					Vmittel = Voben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.Schnitt;
 				}
 				if (Vmittel == 0)
-					iwr[n] = 90;
-				else
-					iwr[n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
-				if ((Vmittel > 0) && (Umittel <= 0))
-					iwr[n] = 180 - iwr[n];
-				if ((Vmittel >= 0) && (Umittel > 0))
-					iwr[n] = 180 + iwr[n];
-				if ((Vmittel < 0) && (Umittel >= 0))
-					iwr[n] = 360 - iwr[n];
-				wgi[n] = Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
+                {
+                    iwr[n] = 90;
+                }
+                else
+                {
+                    iwr[n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
+                }
+
+                if ((Vmittel > 0) && (Umittel <= 0))
+                {
+                    iwr[n] = 180 - iwr[n];
+                }
+
+                if ((Vmittel >= 0) && (Umittel > 0))
+                {
+                    iwr[n] = 180 + iwr[n];
+                }
+
+                if ((Vmittel < 0) && (Umittel >= 0))
+                {
+                    iwr[n] = 360 - iwr[n];
+                }
+
+                wgi[n] = Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
 				u_GRAMM[n] = Umittel;
 				v_GRAMM[n] = Vmittel;
 			}
@@ -240,21 +256,26 @@ namespace GralBackgroundworkers
 				orifile=Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".scl");
 				targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".scl");
 				if (File.Exists(orifile))
-					File.Copy(orifile, targetfile,true);
-				
-				// copy .obl file
-				orifile=Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".obl");
+                {
+                    File.Copy(orifile, targetfile,true);
+                }
+
+                // copy .obl file
+                orifile =Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".obl");
 				targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".obl");
 				if (File.Exists(orifile))
-					File.Copy(orifile, targetfile,true);
-				
-				// copy .ust file
-				orifile=Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".ust");
+                {
+                    File.Copy(orifile, targetfile,true);
+                }
+
+                // copy .ust file
+                orifile =Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".ust");
 				targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".ust");
 				if (File.Exists(orifile))
-					File.Copy(orifile, targetfile,true);
-				
-			}
+                {
+                    File.Copy(orifile, targetfile,true);
+                }
+            }
 			
 		}
 	}

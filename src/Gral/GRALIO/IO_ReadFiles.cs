@@ -147,9 +147,11 @@ namespace GralIO
         public bool ReadGrammInFile()
 		{
 			if (_projectname.Length == 0 )
-				return false;
-			
-			if (File.Exists(Path.Combine(_projectname, @"Computation","GRAMMin.dat")))
+            {
+                return false;
+            }
+
+            if (File.Exists(Path.Combine(_projectname, @"Computation","GRAMMin.dat")))
 			{
 				try
 				{
@@ -175,10 +177,14 @@ namespace GralIO
 							{
 								dummy=myreader.ReadLine(); // yes/no: write steady-state file
 								if (dummy.Contains("yes"))
-									_GRAMMsteadystate = true;
-								else
-									_GRAMMsteadystate = false;
-							}
+                                {
+                                    _GRAMMsteadystate = true;
+                                }
+                                else
+                                {
+                                    _GRAMMsteadystate = false;
+                                }
+                            }
 							// sunrise option
 							if (myreader.EndOfStream == false)
 							{
@@ -562,10 +568,14 @@ namespace GralIO
 					{
 						text[1] = text[1].Trim();
 						if (text[1] == "1")
-							_MeteoClassification = true; // no classification
-						else
-							_MeteoClassification = false;
-					}
+                        {
+                            _MeteoClassification = true; // no classification
+                        }
+                        else
+                        {
+                            _MeteoClassification = false;
+                        }
+                    }
 					catch
 					{
 						_MeteoClassification = false;
@@ -685,23 +695,34 @@ namespace GralIO
 					_GRAMMRelaxscal = Convert.ToDecimal(text[1].Replace(".", decsep)); // Relax scal
 					text = myreader.ReadLine().Split(new char[] { ':', '!' });
 					if (Convert.ToInt32(text[1]) > 0)
-						_GRAMMCatabatic = true; // catabatic forcing
-					else
-	                    _GRAMMCatabatic = false; // catabatic forcing
+                    {
+                        _GRAMMCatabatic = true; // catabatic forcing
+                    }
+                    else
+                    {
+                        _GRAMMCatabatic = false; // catabatic forcing
+                    }
 
-	                text = myreader.ReadLine().Split(new char[] { ':', '!' });
+                    text = myreader.ReadLine().Split(new char[] { ':', '!' });
 	                text = myreader.ReadLine().Split(new char[] { ':', '!' });
 	                if (Convert.ToInt32(text[1]) < 6)
-	                    _GRAMMBoundaryCondition = true; // boundary condition for flat terrain
-	                else
-	                    _GRAMMBoundaryCondition = false; // boundary condition for flat terrain
+                    {
+                        _GRAMMBoundaryCondition = true; // boundary condition for flat terrain
+                    }
+                    else
+                    {
+                        _GRAMMBoundaryCondition = false; // boundary condition for flat terrain
+                    }
 
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     if (Convert.ToInt32(text[1]) == 2)
+                    {
                         _GRAMMERA5 = true; // large-scale forcing
+                    }
                     else
+                    {
                         _GRAMMERA5 = false;
-
+                    }
                 }
 
 				return true;
@@ -733,8 +754,10 @@ namespace GralIO
 						
 						string[] tt = text.Split('\t');
 						if (tt.Length > 2) // found unit entry
-							_unit = tt[2];
-					}
+                        {
+                            _unit = tt[2];
+                        }
+                    }
 					return true;
 				}
 				catch
@@ -756,13 +779,19 @@ namespace GralIO
 				{
 					int mode = 0; // read met files
 					if (Path.GetExtension(_winddatafile).ToLower() == ".met")
-						mode = 0;
-					else if (Path.GetExtension(_winddatafile).ToLower()  == ".akterm")
-						mode = 1;
-					else if (Path.GetExtension(_winddatafile).ToLower() == ".akt")
-						mode = 2;
+                    {
+                        mode = 0;
+                    }
+                    else if (Path.GetExtension(_winddatafile).ToLower()  == ".akterm")
+                    {
+                        mode = 1;
+                    }
+                    else if (Path.GetExtension(_winddatafile).ToLower() == ".akt")
+                    {
+                        mode = 2;
+                    }
 
-					string[] zeile;
+                    string[] zeile;
 					string[] uhrzeit = new string[2];
                 	string[] text = new string[50];
 					int counter = 0;
@@ -786,8 +815,11 @@ namespace GralIO
 								wd.StabClass = Convert.ToInt32(zeile[4]);
 								wd.Hour = Convert.ToInt32(uhrzeit[0]);
 								if (wd.Hour == 24) // if met-file contains 24:00 instead of 00:00
-									wd.Hour = 0;
-								_winddata.Add(wd);
+                                {
+                                    wd.Hour = 0;
+                                }
+
+                                _winddata.Add(wd);
 							}
 						}
 						
@@ -800,21 +832,31 @@ namespace GralIO
 								wd.Time = text[5] + ":00";
 								wd.Hour  = Convert.ToInt32(text[5]);
 								if (text[8] == "0")
-									wd.Vel = Convert.ToDouble(text[10]) * 0.514;
-								else
-									wd.Vel = Convert.ToDouble(text[10].Replace(decsepuser, decsep1)) * 0.1;
-								
-								if (text[8] == "0")
-									wd.Dir = Convert.ToDouble(text[9]) * 10;
-								else
-									wd.Dir = Convert.ToDouble(text[9]);
+                                {
+                                    wd.Vel = Convert.ToDouble(text[10]) * 0.514;
+                                }
+                                else
+                                {
+                                    wd.Vel = Convert.ToDouble(text[10].Replace(decsepuser, decsep1)) * 0.1;
+                                }
+
+                                if (text[8] == "0")
+                                {
+                                    wd.Dir = Convert.ToDouble(text[9]) * 10;
+                                }
+                                else
+                                {
+                                    wd.Dir = Convert.ToDouble(text[9]);
+                                }
 
                                 //Klug-Manier stability classes are transformed to GRAL stability classes in a way to match subsequent Obukhov length calculations
                                 wd.StabClass = 8 - Convert.ToInt32(text[12]);
                                 if (wd.StabClass < 6)
+                                {
                                     wd.StabClass = wd.StabClass - 1;
+                                }
 
-								_winddata.Add(wd);
+                                _winddata.Add(wd);
 							}
 						}
 						
@@ -830,8 +872,11 @@ namespace GralIO
                                 //Klug-Manier stability classes are transformed to GRAL stability classes in a way to match subsequent Obukhov length calculations
                                 wd.StabClass = 8 - Convert.ToInt32(readline.Substring(20, 1));
                                 if (wd.StabClass < 6)
+                                {
                                     wd.StabClass = wd.StabClass - 1;
-								_winddata.Add(wd);
+                                }
+
+                                _winddata.Add(wd);
 							}
 						}
 							

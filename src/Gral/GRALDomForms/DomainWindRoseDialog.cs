@@ -155,8 +155,10 @@ namespace GralDomForms
 											Anemometerheight = EvalMetFileHeader(reihe);
 										}
 										if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
-											filelength = filelength + 1;
-									}
+                                        {
+                                            filelength = filelength + 1;
+                                        }
+                                    }
 								}
 								else if (Path.GetExtension(metfile).ToLower() == ".akterm")
 								{
@@ -170,8 +172,10 @@ namespace GralDomForms
 										{
 											text = reihe.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 											if ((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
-												filelength = filelength + 1;
-										}
+                                            {
+                                                filelength = filelength + 1;
+                                            }
+                                        }
 										if (text[0] == "+")
 										{
 											try
@@ -339,8 +343,11 @@ namespace GralDomForms
 		    {
 		        listBox1.BeginUpdate();
 		        for (var i = 0; i < listBox1.Items.Count; i++)
-		            listBox1.SetSelected(i, true);
-		        listBox1.EndUpdate();
+                {
+                    listBox1.SetSelected(i, true);
+                }
+
+                listBox1.EndUpdate();
 		    }
 		    
 		}

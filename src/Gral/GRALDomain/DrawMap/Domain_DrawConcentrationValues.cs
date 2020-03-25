@@ -20,9 +20,6 @@
  */
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-
-using GralItemData;
 
 namespace GralDomain
 {
@@ -50,20 +47,30 @@ namespace GralDomain
                 _drobj.LineColor = Color.Blue;
             }
             else
+            {
                 penrec = new Pen(_drobj.LineColors[0]);
+            }
 
             Brush whitebrush = new SolidBrush(Color.White);
             Pen framePen = new Pen(Color.Black);
 
             int width = 2;
             if (_drobj.LineWidth <= 1)
+            {
                 if (_drobj.LineWidth == 0)
+                {
                     width = 2;
+                }
                 else
+                {
                     width = Math.Max (1, Math.Min(200, Convert.ToInt32(1 / BmpScale / MapSize.SizeX))); // 4 m lenght
-                else
-                    width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 8 * factor_x)));
-            
+                }
+            }
+            else
+            {
+                width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 8 * factor_x)));
+            }
+
             //width = 3;
             penrec.Width = width;
             width *= 2;

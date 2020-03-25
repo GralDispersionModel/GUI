@@ -21,7 +21,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using GralIO;
 
 namespace Gral

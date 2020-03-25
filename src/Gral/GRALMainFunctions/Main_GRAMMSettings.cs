@@ -76,13 +76,25 @@ namespace Gral
                         FileDeleteMessage fdm = new FileDeleteMessage();
                         DialogResult dia = new DialogResult();
                         if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMM.geb")))
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "GRAMM.geb");
+                        }
+
                         if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                        }
+
                         if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.txt")))
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.txt");
+                        }
+
                         if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                        }
+
                         dia = fdm.ShowDialog();
                         if (dia == DialogResult.OK)
                         {
@@ -116,7 +128,9 @@ namespace Gral
             if (EmifileReset == true)
             {
                 if (textBox12.Text != "")
+                {
                     WriteGrammGebFile();
+                }
                 //compute top height of GRAMM domain
                 ComputeGrammModelHeights();
 
@@ -131,9 +145,15 @@ namespace Gral
                     FileDeleteMessage fdm = new FileDeleteMessage();
                     DialogResult dia = new DialogResult();
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                    }
+
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                    }
+
                     dia = fdm.ShowDialog();
                     if (dia == DialogResult.OK)
                     {
@@ -168,9 +188,15 @@ namespace Gral
                     FileDeleteMessage fdm = new FileDeleteMessage();
                     DialogResult dia = new DialogResult();
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                    }
+
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                    }
+
                     dia = fdm.ShowDialog();
                     if (dia == DialogResult.OK)
                     {

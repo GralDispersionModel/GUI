@@ -250,10 +250,14 @@ namespace GralDomain
                         // GRAL topography allowed?
                         if (MainForm.GRALSettings.BuildingMode > 0 && Gral.Main.Project_Locked == false &&
                             MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
+                        {
                             originalGRALTopographyToolStripMenuItem.Enabled = true;
+                        }
                         else
+                        {
                             originalGRALTopographyToolStripMenuItem.Enabled = false;
-                        
+                        }
+
                         Cursor = Cursors.Default;
                         
                         //add GRAL domain to object list
@@ -430,11 +434,21 @@ namespace GralDomain
             
             //Console.Beep(1000,100);
             // zoom picturebox, zoom=1 +, zoom=-1 -
-            if (zoom == 0) return; // exit by zoom=0
-            
-            if(zoom>0) faktor = 1.5; // zoom in
-            if(zoom<0) faktor = 1 / 1.5; // zoom out
-            
+            if (zoom == 0)
+            {
+                return; // exit by zoom=0
+            }
+
+            if (zoom>0)
+            {
+                faktor = 1.5; // zoom in
+            }
+
+            if (zoom<0)
+            {
+                faktor = 1 / 1.5; // zoom out
+            }
+
             try // Kuntner: catch 1/0 and convert.ToInt32 Overflow
             {
                 XFac = XFac * faktor;

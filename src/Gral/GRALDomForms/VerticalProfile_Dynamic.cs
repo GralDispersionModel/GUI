@@ -80,7 +80,9 @@ namespace GralDomForms
                         zsp[i] = Convert.ToDouble(text[0].Replace(".", decsep));
                         val[i] = Convert.ToDouble(text[1].Replace(".", decsep));
                         if (i < zsp.Length)
+                        {
                             i = i + 1;
+                        }
                     }
                     zlevels = i;
                     zlevels_userdefined = zlevels;
@@ -135,15 +137,21 @@ namespace GralDomForms
             if (zlevels > 0)
             {
                 if (max - min > 0)
+                {
                     horscale = (rightbound - leftbound) / (max - min);
+                }
                 else
+                {
                     horscale = 1;
-                
+                }
+
                 double vert_diff = zsp[zlevels_userdefined - 1] - zsp[0];
                 if (vert_diff > 0)
-                	vertscale = (bottombound - topbound) / vert_diff;
-                
-               	int x1 = Convert.ToInt32(leftbound-2);
+                {
+                    vertscale = (bottombound - topbound) / vert_diff;
+                }
+
+                int x1 = Convert.ToInt32(leftbound-2);
                 int y1 = Convert.ToInt32(bottombound+2);
                 g.DrawString(Convert.ToString(Math.Round(zsp[0],0)), font, new SolidBrush(Color.Black), x1, y1 - font.Size*2, format2);
                 g.DrawString(Convert.ToString(Math.Round(zsp[zlevels_userdefined - 1], 0)), font, new SolidBrush(Color.Black), x1, y1 - font.Size * 2 - (bottombound - topbound), format2);

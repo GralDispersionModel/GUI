@@ -17,7 +17,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 using GralIO;
-using Gral;
 using GralData;
 
 namespace GralDomForms
@@ -215,7 +214,9 @@ namespace GralDomForms
                     try
                     {
                         if (StartMatchProcess != null)
+                        {
                             StartMatchProcess(this, e);
+                        }
                     }
                     catch
                     {}
@@ -243,9 +244,13 @@ namespace GralDomForms
             checkBox1.Checked = false;
 
             if (Match_Methode == 2)
+            {
                 radioButton2.Checked = true;
-            else 
+            }
+            else
+            {
                 radioButton1.Checked = true;
+            }
         }
 
         //show windrose of selected meteo-file
@@ -273,17 +278,26 @@ namespace GralDomForms
                         for (int c = 0; c < 6; c++)
                         {
                             if (vel > wndclasses[c] && vel <= wndclasses[c+1])
+                            {
                                 wklass = c + 1;
+                            }
                         }
                         
                         if (vel <= wndclasses[0])
+                        {
                             wklass = 0;
+                        }
+
                         if (vel > wndclasses[6])
+                        {
                             wklass = 7;
-                        
+                        }
+
                         if (sektor > 15)
+                        {
                             sektor = 0;
-                        
+                        }
+
                         count = count + 1;
                         
                         sectFrequency[sektor, wklass] ++;
@@ -296,7 +310,10 @@ namespace GralDomForms
                             Hour = stunde[RemoveLine][i]
                         };
                         if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
+                        {
                             date.Hour = 0;
+                        }
+
                         date.StabClass = stability[RemoveLine][i];
                         wind.Add(date);
                     }
@@ -304,7 +321,9 @@ namespace GralDomForms
                     for (int sektor = 0; sektor < 16; sektor++)
                     {
                         for (int wklass = 0; wklass < 8; wklass++)
+                        {
                             sectFrequency[sektor, wklass] = sectFrequency[sektor, wklass] / Convert.ToDouble(count);
+                        }
                     }
 
                     GralMainForms.Windrose windrose = new GralMainForms.Windrose
@@ -370,14 +389,22 @@ namespace GralDomForms
                 dataGridView1.Columns[3].ReadOnly = true; // Change height not alowed if match is tuned
                 
                 if (Match_Methode == 2)
+                {
                     radioButton2.Checked = true;
+                }
                 else if (Match_Methode == 1)
+                {
                     radioButton1.Checked = true;
+                }
 
                 if (Remove_Outliers)
+                {
                     checkBox1.Checked = true;
+                }
                 else
+                {
                     checkBox1.Checked = false;
+                }
 
                 dataGridView1.Enabled = true;
 
@@ -543,9 +570,11 @@ namespace GralDomForms
         								line++;
         							}
         							else
-        								dataGridView1.Rows[zeilenindex].Cells[7].Value = 1;
-        							
-        							string windfilename = data[line];
+                                    {
+                                        dataGridView1.Rows[zeilenindex].Cells[7].Value = 1;
+                                    }
+
+                                    string windfilename = data[line];
         							line++;
         							
         							if (data.Length > 8)
@@ -595,8 +624,10 @@ namespace GralDomForms
         									MessageBox.Show(this, "Error when reading Meteo-File " + Path.GetFileName(windfilename) +
         									                " in line" + winddata.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
         									if (winddata.Count == 0)
-        										ok = false;
-        								}
+                                            {
+                                                ok = false;
+                                            }
+                                        }
         								
         								winddata = readwindfile.WindData;
         								readwindfile = null;
@@ -718,7 +749,9 @@ namespace GralDomForms
                 try
                 {
                     if (LoadWindData != null)
+                    {
                         LoadWindData(this, e);
+                    }
                 }
                 catch
                 { }

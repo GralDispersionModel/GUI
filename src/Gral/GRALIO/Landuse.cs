@@ -415,9 +415,11 @@ namespace GralIO
 				    Application.DoEvents(); // Kuntner
 				    
 				    if (NNJ % 40 == 0)
-				        wait.Text =  "Reading landuse file " + ((int)((float)NNJ / (NROW + 2) * 100F)).ToString() +"%";
-				    
-				    int I = 1;
+                    {
+                        wait.Text =  "Reading landuse file " + ((int)((float)NNJ / (NROW + 2) * 100F)).ToString() +"%";
+                    }
+
+                    int I = 1;
 				    int JKOO = Convert.ToInt32(JLIUN + (NROW - NNJ + 1) * ICSIZE);
 				    string line_text = reader.ReadLine();
 				    
@@ -460,11 +462,16 @@ namespace GralIO
 				            {
 				                //compute cell indices
 				                if (IKOO >= IKOOA + DX * I)
-				                    I = I + 1;
-				                if (JKOO <= JKOOA + DY * (J - 1))
-				                    J = J - 1;
+                                {
+                                    I = I + 1;
+                                }
 
-				                int LUSDUM = ADH[NNI];
+                                if (JKOO <= JKOOA + DY * (J - 1))
+                                {
+                                    J = J - 1;
+                                }
+
+                                int LUSDUM = ADH[NNI];
 
 				                /*
                             //which landuse data exist

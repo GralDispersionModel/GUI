@@ -161,7 +161,7 @@ namespace GralDomain
 
                 case 8:
                     //digitize position of the corner points of area sources
-                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CorneAareaX.Length > 1) // Kuntner: change one edge-point of area source
+                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {
                         // Change one edge of the area source
                         MoveEdgepointArea();
@@ -180,7 +180,7 @@ namespace GralDomain
                         {
                             //set new area source - get x,y coordinates
                             CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
-                            EditAS.CorneAareaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                             EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                             EditAS.CornerAreaCount = EditAS.CornerAreaCount + 1;
                             EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount));
@@ -230,7 +230,7 @@ namespace GralDomain
 
                 case 79:
                     //digitize position of the corner points of forests
-                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CorneAareaX.Length > 1) // Kuntner: change one edge-point of area source
+                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {
                         // Change one edge of the area source
                         MoveEdgepointVegetation();
@@ -322,7 +322,9 @@ namespace GralDomain
                                 EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                                 EditWall.CornerWallZ[EditWall.CornerWallCount] = EditWall.GetNumericUpDownHeightValue();
                                 if (EditWall.CheckboxAbsHeightChecked()) // absolute height
+                                {
                                     EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
+                                }
 
                                 EditWall.CornerWallCount = EditWall.CornerWallCount + 1;
                                 EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount));
@@ -368,7 +370,10 @@ namespace GralDomain
                         foreach (PointSourceData _psdata in EditPS.ItemData)
                         {
                             Array.Clear(emission, 0, emission.Length);
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
 
                             int x1 = (int)((_psdata.Pt.X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
                             int y1 = (int)((_psdata.Pt.Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
@@ -385,9 +390,13 @@ namespace GralDomain
                                 // show info in a Tooltip
                                 string infotext = "'" + _psdata.Name + "'\n";
                                 if (height >= 0)
+                                {
                                     infotext += "Height (rel) [m]: " + Math.Round(height, 1).ToString() + "\n";
+                                }
                                 else
+                                {
                                     infotext += "Height (abs) [m]: " + Math.Abs(Math.Round(height,1)).ToString() + "\n";
+                                }
 
                                 infotext += "Exit velocity [m/s]:  " + Math.Round(_psdata.Velocity, 1).ToString() + "\n";
                                 infotext += "Exit temperature [K]: " + Math.Round(_psdata.Temperature, 1).ToString() + "\n";
@@ -440,7 +449,11 @@ namespace GralDomain
                         bool stop = false;
                         foreach (ReceptorData _rd in EditR.ItemData)
                         {
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
+
                             int x1 = Convert.ToInt32((_rd.Pt.X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
                             int y1 = Convert.ToInt32((_rd.Pt.Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
                             if ((e.X >= x1 - 10) && (e.X <= x1 + 10) && (e.Y >= y1 - 10) && (e.Y <= y1 + 10))
@@ -480,7 +493,10 @@ namespace GralDomain
                         foreach (AreaSourceData _as in EditAS.ItemData)
                         {
                             Array.Clear(emission, 0, emission.Length);
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
 
                             //filter source group
                             List<Point> poly = new List<Point>();
@@ -517,9 +533,13 @@ namespace GralDomain
 
                                             string infotext = "'" + _as.Name + "'\n";
                                             if (height >= 0)
+                                            {
                                                 infotext += "Mean height (rel) [m]:  " + Math.Round(height, 1).ToString() + "\n";
+                                            }
                                             else
+                                            {
                                                 infotext += "Mean height (abs) [m]:  " + Math.Abs(Math.Round(height, 1)).ToString() + "\n";
+                                            }
 
                                             infotext +=     "Vertical extension [m]: " + Math.Round(_as.VerticalExt, 1).ToString() + "\n";
                                             infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_as.Area, 1).ToString() + "\n";
@@ -572,7 +592,11 @@ namespace GralDomain
 
                         foreach (VegetationData _vdata in EditVegetation.ItemData)
                         {
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
+
                             poly.Clear();
                             List<PointD> _points = _vdata.Pt;
                             for (int j = 0; j < _points.Count; j++)
@@ -614,7 +638,11 @@ namespace GralDomain
                         List<Point> poly = new List<Point>();
                         foreach (BuildingData _bd in EditB.ItemData)
                         {
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
+
                             List<PointD> _pt = _bd.Pt;
                             poly.Clear();
                             for (int j = 0; j < _pt.Count; j++)
@@ -635,9 +663,13 @@ namespace GralDomain
                                 //Ausgabe der Info in Infobox
                                 string infotext = "'" + _bd.Name + "'\n";
                                 if (height >= 0)
+                                {
                                     infotext += "Height (rel) [m]: " + Math.Round(_bd.Height, 1).ToString() + "\n";
+                                }
                                 else
+                                {
                                     infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(Math.Round(height, 1))) + "\n";
+                                }
 
                                 infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
                                 infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_bd.Area, 1).ToString() + "\n";
@@ -661,7 +693,11 @@ namespace GralDomain
                         foreach (LineSourceData _ls in EditLS.ItemData)
                         {
                             Array.Clear(emission, 0, emission.Length);
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
+
                             poly.Clear();
                             //Point[] poly = new Point[4];
 
@@ -674,7 +710,9 @@ namespace GralDomain
 
                                 double length = Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
                                 if (length == 0)
+                                {
                                     length = 0.1;
+                                }
 
                                 double cosalpha = (x2 - x1) / length;
                                 double sinalpha = (y1 - y2) / length;
@@ -764,7 +802,10 @@ namespace GralDomain
 
                         foreach (PortalsData _po in EditPortals.ItemData)
                         {
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
 
                             int sourcegroups = _po.Poll.Count;
                             double x1 = (_po.Pt1.X - MapSize.West) / BmpScale / MapSize.SizeX + TransformX;
@@ -848,7 +889,11 @@ namespace GralDomain
                         List<Point> poly = new List<Point>();
                         foreach (WallData _wd in EditWall.ItemData)
                         {
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
+
                             poly.Clear();
 
                             for (int j = 0; j < _wd.Pt.Count - 1; j++)
@@ -860,7 +905,9 @@ namespace GralDomain
 
                                 double length = Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
                                 if (length == 0)
+                                {
                                     length = 0.1;
+                                }
 
                                 double cosalpha = (x2 - x1) / length;
                                 double sinalpha = (y1 - y2) / length;
@@ -900,12 +947,15 @@ namespace GralDomain
 
                         bool exist = false;
                         foreach (DrawingObjects _drobj in ItemOptions)
+                        {
                             if (_drobj.Name == "NORTH ARROW")
                             {
                                 exist = true;
                                 _drobj.ContourLabelDist = (int)(NorthArrow.Scale * 100);
                                 break;
                             }
+                        }
+
                         if (exist == false)
                         {
                             DrawingObjects _drobj = new DrawingObjects("NORTH ARROW")
@@ -1016,7 +1066,7 @@ namespace GralDomain
                     {
                         //get x,y coordinates
                         CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
-                        EditAS.CorneAareaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                        EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                         EditAS.CornerAreaCount = EditAS.CornerAreaCount + 1;
                         // Reset Rubber-Line Drawing
@@ -1217,7 +1267,9 @@ namespace GralDomain
                             {
                                 sel = Convert.ToInt32(Path.GetFileNameWithoutExtension(_drobj.ContourFilename)); // get the number of this file
                                 if (sel > 0)
+                                {
                                     break; // if first file found
+                                }
                             }
                         }
 
@@ -1245,9 +1297,13 @@ namespace GralDomain
 
                         int result = 0;
                         if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                        {
                             result = reader.ReadSclMean(x1, y1);
+                        }
                         else
+                        {
                             result = reader.ReadSclFile(x1, y1); // true => reader = OK
+                        }
 
                         if (result > 0)
                         {

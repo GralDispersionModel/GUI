@@ -81,14 +81,18 @@ namespace GralItemForms
             
             //labels/names hide/show
             if (DrawObject.Label == 2)
+            {
                 CheckBox3.Checked = true;
+            }
             else if (DrawObject.Label == 3)
             {
             	CheckBox3.Checked = true;
             	CheckBox3.CheckState = CheckState.Indeterminate;
             }
             else if(DrawObject.Label == 1)
+            {
                 CheckBox3.Checked = false;
+            }
             else if (DrawObject.Label == 0)
             {
                 CheckBox3.Visible = false;
@@ -162,9 +166,13 @@ namespace GralItemForms
 
             //color scale yes/now
             if (DrawObject.ColorScale == "-999,-999,-999")
+            {
                 checkBox2.Checked = false;
+            }
             else
+            {
                 checkBox2.Checked = true;
+            }
 
             //label frequency
             if (DrawObject.LabelInterval == 0)
@@ -234,9 +242,13 @@ namespace GralItemForms
 			
             //objects filled or not
             if (DrawObject.FillYesNo == false)
+            {
                 checkBox1.Checked=false;
+            }
             else
+            {
                 checkBox1.Checked = true;
+            }
 
             //fill text boxes with legendtitle and legendunit
             textBox1.Text = DrawObject.LegendTitle;
@@ -303,19 +315,29 @@ namespace GralItemForms
 
             //selected item
             if (DrawObject.Item == -1)
+            {
                 comboBox2.SelectedIndex = 0;
+            }
             else if (DrawObject.Item == 100)
+            {
                 comboBox2.SelectedIndex = 1;
+            }
             else if (DrawObject.Item == 200)
+            {
                 comboBox2.SelectedIndex = 2;
+            }
             else if (DrawObject.Item == 300)
+            {
                 comboBox2.SelectedIndex = 3;
-            
+            }
+
             //selected source group/bezugsjahr
             try
             {
                 if (DrawObject.SourceGroup == -1)
+                {
                     comboBox1.SelectedIndex = 0;
+                }
             }
             catch
             {
@@ -341,7 +363,9 @@ namespace GralItemForms
                     	listBox1.Items.Add(DrawObject.ItemValues[i].ToString());
                     }
                     else
+                    {
                         listBox1.Items.Add("");
+                    }
                 }
             }
 
@@ -357,6 +381,7 @@ namespace GralItemForms
                 button2.Visible = true;
                 button12.Visible = true;
             }
+
             //enable changing values and colors for contour, post- and vector maps
             try
             {
@@ -392,6 +417,7 @@ namespace GralItemForms
                     button12.Visible = true;
                     CheckBox3.Visible = false;
                     checkBox4.Visible = false;
+                    label4.Text = "Drawing iterator";
                 }
                 if (DrawObject.Name.Substring(0, 3) == "PM:")
                 {
@@ -408,12 +434,10 @@ namespace GralItemForms
                 
                 if (DrawObject.Name.StartsWith("CONCENTRATION VALUES") || DrawObject.Name.StartsWith("ITEM INFO"))
                 {
-                    // decimal places
-                    groupBox3.Visible = true;
+                    groupBox4.Visible = false;
                     label9.Visible = true;
                     numericUpDown1.Visible = true;
                     numericUpDown4.Visible = true;
-                    groupBox4.Visible = true;
                     textBox1.Visible = true;
                     textBox2.Visible = true;
                     label4.Visible = true;
@@ -434,7 +458,16 @@ namespace GralItemForms
                     checkBox5.Visible = false; //default interval values
                     checkBox1.Visible = true;  // fill
                     checkBox1.Checked = DrawObject.FillYesNo;
-                    toolTip1.SetToolTip(checkBox1, "Fill the background of a concentration label");
+                    if (DrawObject.Name.StartsWith("CONCENTRATION VALUES"))
+                    {
+                        // decimal places
+                        groupBox3.Visible = true;
+                        toolTip1.SetToolTip(checkBox1, "Fill the background of a concentration label");
+                    }
+                    else
+                    {
+                        groupBox3.Visible = false;
+                    }
                 }
             }
             catch
@@ -456,10 +489,14 @@ namespace GralItemForms
 
             //low pass filtering on/off
             if (DrawObject.Filter == true)
+            {
                 checkBox4.Checked = true;
+            }
             else
+            {
                 checkBox4.Checked = false;
-            
+            }
+
             if (DrawObject.Name == "LINE SOURCES" || DrawObject.Name == "BUILDINGS")
             {
             	checkBox4.Text = "Smart draw";
@@ -485,8 +522,10 @@ namespace GralItemForms
 			    groupBox5.Visible = true;
                 groupBox5.Text = "Opacity";
                 if (DrawObject.Transparancy <= 0 | DrawObject.Transparancy >= 100)
-                	DrawObject.Transparancy = 100;
-                
+                {
+                    DrawObject.Transparancy = 100;
+                }
+
                 trackBar1.Value = DrawObject.Transparancy;
                 
                 label4.Text = "Raster size";
@@ -571,8 +610,10 @@ namespace GralItemForms
         {
         	
             if(DrawObject.LabelInterval !=0)
+            {
                 DrawObject.ContourLabelDist = Convert.ToInt32(numericUpDown1.Value);
-            
+            }
+
             DrawObject.LabelInterval = Convert.ToInt32(numericUpDown6.Value);
             
             DrawObject.ContourDrawBorder = checkBox6.Checked;
@@ -596,16 +637,18 @@ namespace GralItemForms
 
             DrawObject.Transparancy = Convert.ToInt32((100 - trackBar1.Value) * 2.55);
             if (checkBox1.Checked == true)
+            {
                 DrawObject.Fill = true;
+            }
 
-            #if __MonoCS__
+#if __MonoCS__
             // Update of form for LINUX version, otherwise the backgroundworker sometimes cant access this form -> app crashes 
 			for (int i = 0; i < 20; i++) {
 				System.Threading.Thread.Sleep(5);
 				Application.DoEvents();
 			}
-            #endif
-            
+#endif
+
             DrawObject.ScaleLabelFont = checkBox7.Checked;
             
             //changes in contour map
@@ -655,9 +698,12 @@ namespace GralItemForms
             {
                 if (DrawObject.Name.Substring(0, 3) == "BM:")
                 {
-                	if (trackBar1.Value < 1) trackBar1.Value = 1; // min opacity
-                	
-                	if (DrawObject.Transparancy != trackBar1.Value) // changed opacity
+                	if (trackBar1.Value < 1)
+                    {
+                        trackBar1.Value = 1; // min opacity
+                    }
+
+                    if (DrawObject.Transparancy != trackBar1.Value) // changed opacity
                 	{
                 		// reload picture
                 		DrawObject.Picture = null;
@@ -700,12 +746,18 @@ namespace GralItemForms
                 if (CheckBox3.Checked == true)
                 {
                 	if (CheckBox3.CheckState == CheckState.Indeterminate)
-                		DrawObject.Label = 3;
-                	else
-                    	DrawObject.Label = 2;
+                    {
+                        DrawObject.Label = 3;
+                    }
+                    else
+                    {
+                        DrawObject.Label = 2;
+                    }
                 }
                 else
+                {
                     DrawObject.Label = 1;
+                }
             }
         }
 
@@ -715,9 +767,13 @@ namespace GralItemForms
             if (init == true)
             {
                 if (checkBox1.Checked == true)
+                {
                     DrawObject.FillYesNo = true;
+                }
                 else
+                {
                     DrawObject.FillYesNo = false;
+                }
             }
         }
 
@@ -748,7 +804,10 @@ namespace GralItemForms
         {
         	ColorDialog ct = new ColorDialog();
         	if (DrawObject.LabelColor != null)
-        		ct.Color = DrawObject.LabelColor;
+            {
+                ct.Color = DrawObject.LabelColor;
+            }
+
             if (ct.ShowDialog() == DialogResult.OK)
             {
                 DrawObject.LabelColor = ct.Color;
@@ -761,8 +820,11 @@ namespace GralItemForms
         {
         	FontDialog ft = new FontDialog();
         	if (DrawObject.LabelFont != null)
-        		ft.Font = DrawObject.LabelFont;
-        	if (ft.ShowDialog() == DialogResult.OK)
+            {
+                ft.Font = DrawObject.LabelFont;
+            }
+
+            if (ft.ShowDialog() == DialogResult.OK)
             {
                 DrawObject.LabelFont = ft.Font;
             }
@@ -842,11 +904,15 @@ namespace GralItemForms
                     
                     DrawObject.ItemValues.Clear();
                     for (int i = 1; i < listBox1.Items.Count; i++)
-                    	DrawObject.ItemValues.Add(St_F.TxtToDbl(Convert.ToString(listBox1.Items[i]), false));
-                    
+                    {
+                        DrawObject.ItemValues.Add(St_F.TxtToDbl(Convert.ToString(listBox1.Items[i]), false));
+                    }
+
                     if (DrawObject.ItemValues.Count == 0)
+                    {
                         DrawObject.ItemValues.Add(0);
-                    
+                    }
+
                     //enable re-calculation of contours
                     if (DrawObject.Name.Substring(0, 3) == "CM:")
                     {
@@ -876,7 +942,9 @@ namespace GralItemForms
             try
             {
                 if (colorDialog1.ShowDialog() == DialogResult.OK)
+                {
                     DrawObject.LineColors[listBox2.SelectedIndex - 1] = colorDialog1.Color;
+                }
             }
             catch
             {
@@ -888,7 +956,10 @@ namespace GralItemForms
         private void listBox3_DoubleClick(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
                 DrawObject.FillColors[listBox3.SelectedIndex-1] = colorDialog1.Color;
+            }
+
             Refresh();
         }
 
@@ -957,9 +1028,13 @@ namespace GralItemForms
                         listBox3.Items.Add("");
 
                         if (checkBox5.Checked)
+                        {
                             listBox1.Items.Insert(1, Convert.ToString(normalize(min)));
+                        }
                         else
+                        {
                             listBox1.Items.Insert(1, Convert.ToString(min));
+                        }
 
                         listBox2.Items.Insert(1, "");
                         listBox3.Items.Insert(1, "");
@@ -967,9 +1042,13 @@ namespace GralItemForms
                         DrawObject.FillColors.Insert(0, Color.LightGreen);
 
                         if (checkBox5.Checked)
+                        {
                             listBox1.Items.Add(Convert.ToString(normalize(max)));
+                        }
                         else
+                        {
                             listBox1.Items.Add(Convert.ToString(max, ic));
+                        }
 
                         listBox2.Items.Add("");
                         listBox3.Items.Add("");
@@ -979,7 +1058,9 @@ namespace GralItemForms
                         {
                             double val = min + (max - min) / Math.Pow(2, Convert.ToDouble(i + 1));
                             if (checkBox5.Checked)
+                            {
                                 val = normalize(val);
+                            }
 
                             listBox1.Items.Insert(2, Convert.ToString(val, ic));
                             listBox2.Items.Insert(2, "");
@@ -1069,18 +1150,27 @@ namespace GralItemForms
                     listBox3.Items.Add("");
                     
                     if (checkBox5.Checked)
+                    {
                         listBox1.Items.Insert(1, Convert.ToString(normalize(min)));
+                    }
                     else
+                    {
                         listBox1.Items.Insert(1, Convert.ToString(min));
-                    
+                    }
+
                     listBox2.Items.Insert(1, "");
                     listBox3.Items.Insert(1, "");
                     DrawObject.LineColors.Insert(0, Color.LightGreen);
                     DrawObject.FillColors.Insert(0, Color.LightGreen);
                     if (checkBox5.Checked)
+                    {
                         listBox1.Items.Add(Convert.ToString(normalize(max)));
+                    }
                     else
+                    {
                         listBox1.Items.Add(Convert.ToString(max,ic));
+                    }
+
                     listBox2.Items.Add("");
                     listBox3.Items.Add("");
                     DrawObject.LineColors.Add(Color.Red);
@@ -1089,7 +1179,9 @@ namespace GralItemForms
                     {
                         double val = min + (max - min) / Math.Pow(2, Convert.ToDouble(i + 1));
                         if (checkBox5.Checked)
+                        {
                             val = normalize(val);
+                        }
 
                         listBox1.Items.Insert(2, Convert.ToString(val,ic));
                         listBox2.Items.Insert(2, "");
@@ -1115,7 +1207,10 @@ namespace GralItemForms
                         //filter source groups
                         string selpoll = Convert.ToString(comboBox1.SelectedItem,ic);
                         if (comboBox1.SelectedIndex == 0)
+                        {
                             exist = true;
+                        }
+
                         string[] dummy = new string[2];
                         dummy = selpoll.Split(new char[] { ':' });
                         if (dummy.Length > 1)
@@ -1190,17 +1285,27 @@ namespace GralItemForms
                                 listBox2.Items.Add("");
                                 listBox3.Items.Add("");
                                 if (checkBox5.Checked)
-                                	listBox1.Items.Insert(1, Convert.ToString(normalize(min)));
+                                {
+                                    listBox1.Items.Insert(1, Convert.ToString(normalize(min)));
+                                }
                                 else
-                                	listBox1.Items.Insert(1, Convert.ToString(min));
+                                {
+                                    listBox1.Items.Insert(1, Convert.ToString(min));
+                                }
+
                                 listBox2.Items.Insert(1, "");
                                 listBox3.Items.Insert(1, "");
                                 DrawObject.LineColors.Insert(0, Color.LightGreen);
                                 DrawObject.FillColors.Insert(0, Color.LightGreen);
                                 if (checkBox5.Checked)
-	                                listBox1.Items.Add(Convert.ToString(normalize(max)));
+                                {
+                                    listBox1.Items.Add(Convert.ToString(normalize(max)));
+                                }
                                 else
-                                	listBox1.Items.Add(Convert.ToString(max,ic));
+                                {
+                                    listBox1.Items.Add(Convert.ToString(max,ic));
+                                }
+
                                 listBox2.Items.Add("");
                                 listBox3.Items.Add("");
                                 DrawObject.LineColors.Add(Color.Red);
@@ -1209,8 +1314,10 @@ namespace GralItemForms
                                 {
                                 	double val = min + (max - min) / Math.Pow(2, Convert.ToDouble(i + 1));
                                 	if (checkBox5.Checked)
-                                		val = normalize(val);
-                                	
+                                    {
+                                        val = normalize(val);
+                                    }
+
                                     listBox1.Items.Insert(2, Convert.ToString(val,ic));
                                     listBox2.Items.Insert(2, "");
                                     listBox3.Items.Insert(2, "");
@@ -1410,17 +1517,27 @@ namespace GralItemForms
                                 listBox2.Items.Add("");
                                 listBox3.Items.Add("");
                                 if (checkBox5.Checked)
-                                	listBox1.Items.Insert(1, Convert.ToString(normalize(min)));
+                                {
+                                    listBox1.Items.Insert(1, Convert.ToString(normalize(min)));
+                                }
                                 else
-                                	listBox1.Items.Insert(1, Convert.ToString(min, ic));
+                                {
+                                    listBox1.Items.Insert(1, Convert.ToString(min, ic));
+                                }
+
                                 listBox2.Items.Insert(1, "");
                                 listBox3.Items.Insert(1, "");
                                 DrawObject.LineColors.Insert(0, Color.LightGreen);
                                 DrawObject.FillColors.Insert(0, Color.LightGreen);
                                 if (checkBox5.Checked)
-                                	listBox1.Items.Add(Convert.ToString(normalize(max)));
+                                {
+                                    listBox1.Items.Add(Convert.ToString(normalize(max)));
+                                }
                                 else
-                                	listBox1.Items.Add(Convert.ToString(max, ic));
+                                {
+                                    listBox1.Items.Add(Convert.ToString(max, ic));
+                                }
+
                                 listBox2.Items.Add("");
                                 listBox3.Items.Add("");
                                 DrawObject.LineColors.Add(Color.Red);
@@ -1429,8 +1546,10 @@ namespace GralItemForms
                                 {
                                 	double val = min + (max - min) / Math.Pow(2, Convert.ToDouble(i + 1));
                                 	if (checkBox5.Checked)
-                                		val = normalize(val);
-                                	
+                                    {
+                                        val = normalize(val);
+                                    }
+
                                     listBox1.Items.Insert(2, Convert.ToString(val, ic));
                                     listBox2.Items.Insert(2, "");
                                     listBox3.Items.Insert(2, "");
@@ -1447,9 +1566,14 @@ namespace GralItemForms
                 }
                 DrawObject.ItemValues.Clear();
                 for (int i = 1; i < listBox1.Items.Count; i++)
-                	DrawObject.ItemValues.Add(St_F.TxtToDbl(Convert.ToString(listBox1.Items[i]), false));
+                {
+                    DrawObject.ItemValues.Add(St_F.TxtToDbl(Convert.ToString(listBox1.Items[i]), false));
+                }
+
                 if (DrawObject.ItemValues.Count == 0)
+                {
                     DrawObject.ItemValues.Add(0);
+                }
             }         
             
             Cursor = Cursors.Default;
@@ -1510,9 +1634,14 @@ namespace GralItemForms
                     
                     DrawObject.ItemValues.Clear();
                     for (int i = 1; i < listBox1.Items.Count; i++)
-                    	DrawObject.ItemValues.Add(St_F.TxtToDbl(Convert.ToString(listBox1.Items[i]), false));
+                    {
+                        DrawObject.ItemValues.Add(St_F.TxtToDbl(Convert.ToString(listBox1.Items[i]), false));
+                    }
+
                     if (DrawObject.ItemValues.Count == 0)
+                    {
                         DrawObject.ItemValues.Add(0);
+                    }
 
                     //enable re-calculation of contours
                     if (DrawObject.Name.Substring(0, 3) == "CM:")
@@ -1947,9 +2076,13 @@ namespace GralItemForms
                 domain.ReDrawContours = true;
             }
             if (checkBox4.Checked == true)
+            {
                 DrawObject.Filter = true;
+            }
             else
+            {
                 DrawObject.Filter = false;
+            }
         }
 
         //change the scale of vectors for a vector map
@@ -2126,9 +2259,11 @@ namespace GralItemForms
         					zlevel[j, i] = Math.Sqrt(u * u + v * v); // u and v components are stored at the .vec file
         				}
         				else
-        					zlevel[j, i] = Convert.ToDouble(data[j], ic);
-        				
-        				if (Convert.ToInt32(zlevel[j, i]) != nodata)
+                        {
+                            zlevel[j, i] = Convert.ToDouble(data[j], ic);
+                        }
+
+                        if (Convert.ToInt32(zlevel[j, i]) != nodata)
         				{
         					min = Math.Min(min, zlevel[j, i]);
         					max = Math.Max(max, zlevel[j, i]);
@@ -2162,15 +2297,19 @@ namespace GralItemForms
         		double val = min + (max - min) / Math.Pow(2, Convert.ToDouble(8));
         		
         		if (checkBox5.Checked)
-        			val = normalize(val);
-        		
-        		DrawObject.ItemValues[0] = val;
+                {
+                    val = normalize(val);
+                }
+
+                DrawObject.ItemValues[0] = val;
         		
         		val = max;
         		if (checkBox5.Checked)
-        			val = normalize(val);
-        		
-        		DrawObject.ItemValues[8] = val;
+                {
+                    val = normalize(val);
+                }
+
+                DrawObject.ItemValues[8] = val;
         		//apply color gradient between light green and red
         		int r1 = DrawObject.FillColors[0].R;
         		int g1 = DrawObject.FillColors[0].G;
@@ -2184,12 +2323,16 @@ namespace GralItemForms
         			val = min + (max - min) / Math.Pow(2, Convert.ToDouble(8 - (i+1)));
         			
         			if (DrawObject.Name.Substring(0, 3) == "VM:")
-        			  val =  min + (max - min) / 10 * Convert.ToDouble(i + 1);
-        			        			
-        			if (checkBox5.Checked)
-        				val = normalize(val);
-        		
-        			DrawObject.ItemValues[i + 1] = val;
+                    {
+                        val =  min + (max - min) / 10 * Convert.ToDouble(i + 1);
+                    }
+
+                    if (checkBox5.Checked)
+                    {
+                        val = normalize(val);
+                    }
+
+                    DrawObject.ItemValues[i + 1] = val;
         			int intr = r1 + (r2 - r1) / 10 * (i + 1);
         			int intg = g1 + (g2 - g1) / 10 * (i + 1);
         			int intb = b1 + (b2 - b1) / 10 * (i + 1);
@@ -2237,24 +2380,38 @@ namespace GralItemForms
         	val = Math.Abs(val);
         	
         	if (val > double.MinValue)
-        	    exp = (int) Math.Floor(Math.Log10(val)) * (-1);
-        	
-        	double norm = val * Math.Pow(10, exp);
+            {
+                exp = (int) Math.Floor(Math.Log10(val)) * (-1);
+            }
+
+            double norm = val * Math.Pow(10, exp);
         	
         	if (norm < 1.5)
-        		norm = 1;
-        	else if (norm < 3)
-        		norm  = 2;
+            {
+                norm = 1;
+            }
+            else if (norm < 3)
+            {
+                norm  = 2;
+            }
             else if (norm < 4)
+            {
                 norm = 4;
+            }
             else if (norm < 6.5)
-        		norm = 5;
-        	else if (norm < 9)
-        		norm = 8;
-        	else
-        		norm = 10;
-        	
-        	exp *= -1;
+            {
+                norm = 5;
+            }
+            else if (norm < 9)
+            {
+                norm = 8;
+            }
+            else
+            {
+                norm = 10;
+            }
+
+            exp *= -1;
         	return norm * Math.Pow(10, exp) * negative;
         }
      

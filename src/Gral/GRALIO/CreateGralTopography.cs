@@ -24,7 +24,6 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Linq;
 using Gral;
-using System.Threading.Tasks;
 namespace GralIO
 {
     /// <summary>
@@ -42,7 +41,11 @@ namespace GralIO
         public bool CreateTopography(Main f)
         {
             form1 = f;
-            if (form1 == null) return false;
+            if (form1 == null)
+            {
+                return false;
+            }
+
             return ReadTopoData(Main.HR_topofile);
         }
 
@@ -94,9 +97,13 @@ namespace GralIO
             string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
             char[] splitchar = null;
             if (decsep == ",")
+            {
                 splitchar = new char[] { ' ', '\t', ';' };
+            }
             else
+            {
                 splitchar = new char[] { ' ', '\t', ',', ';' };
+            }
 
             bool GRALdomainOK = false;
             int nx = 0;
@@ -124,9 +131,13 @@ namespace GralIO
                 dx = Convert.ToDouble(data[1].Replace(".", decsep));
                 string dummytext = myreader.ReadLine();
                 if ((form1.GralDomRect.West < x11) || (form1.GralDomRect.East > x11 + dx * nx) || (form1.GralDomRect.South < y11) || (form1.GralDomRect.North > y11 + dx * ny))
+                {
                     MessageBox.Show("GRAL Domain is outside the borders of the selected topography file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 else
+                {
                     GRALdomainOK = true;
+                }
 
                 if (GRALdomainOK == true)
                 {

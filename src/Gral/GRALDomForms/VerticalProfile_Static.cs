@@ -131,13 +131,19 @@ namespace GralDomForms
             if (zlevels_userdefined > 0)
             {
                 if (max - min > 0)
+                {
                     horscale = (rightbound - leftbound) / (max - min);
+                }
                 else
+                {
                     horscale = 1;
-               
+                }
+
                 double vert_diff = zsp[zlevels_userdefined - 1] - zsp[0];
                 if (vert_diff > 0)
-                	vertscale = (bottombound - topbound) / vert_diff;
+                {
+                    vertscale = (bottombound - topbound) / vert_diff;
+                }
 
                 int x1 = Convert.ToInt32(leftbound-2);
                 int y1 = Convert.ToInt32(bottombound+2);
@@ -148,29 +154,60 @@ namespace GralDomForms
             
                 int y_step = 1000;
                 if (zsp[zlevels_userdefined - 1] < 4000)
-                	y_step = 500;
+                {
+                    y_step = 500;
+                }
+
                 if (zsp[zlevels_userdefined - 1] < 2000)
-                	y_step = 250;
+                {
+                    y_step = 250;
+                }
+
                 if (zsp[zlevels_userdefined - 1] < 600)
-                	y_step = 100;
+                {
+                    y_step = 100;
+                }
+
                 if (zsp[zlevels_userdefined - 1] < 250)
-                	y_step = 50;
+                {
+                    y_step = 50;
+                }
+
                 if (zsp[zlevels_userdefined - 1] < 120)
-                	y_step = 20;
-                
+                {
+                    y_step = 20;
+                }
+
                 double x_step = 45;
                 if ((max - min) < 90)
-                	x_step = 30;
+                {
+                    x_step = 30;
+                }
+
                 if ((max - min) < 60)
-                	x_step = 15;
+                {
+                    x_step = 15;
+                }
+
                 if ((max - min) < 30)
-                	x_step = 5;
+                {
+                    x_step = 5;
+                }
+
                 if ((max - min) < 10)
-                	x_step = 2;
+                {
+                    x_step = 2;
+                }
+
                 if ((max - min) < 5)
-                	x_step = 1;
+                {
+                    x_step = 1;
+                }
+
                 if ((max - min) < 2)
-                	x_step = 0.5;
+                {
+                    x_step = 0.5;
+                }
 
                 Pen p3 = new Pen(Color.Black, 1)
                 {

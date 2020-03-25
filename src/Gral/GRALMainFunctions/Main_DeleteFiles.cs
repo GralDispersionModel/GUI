@@ -37,7 +37,11 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALDeleteConcentrationFiles(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
             try
             {
                 string newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
@@ -48,12 +52,17 @@ namespace Gral
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
                         if (files_conc.Length > 0)
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
+                        }
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
                             for (int i = 0; i < files_conc.Length; i++)
+                            {
                                 files_conc[i].Delete();
+                            }
+
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -67,12 +76,17 @@ namespace Gral
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
                         if (files_conc.Length > 0)
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
+                        }
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
                             for (int i = 0; i < files_conc.Length; i++)
+                            {
                                 files_conc[i].Delete();
+                            }
+
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -86,12 +100,17 @@ namespace Gral
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
                         if (files_conc.Length > 0)
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.odr");
+                        }
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
                             for (int i = 0; i < files_conc.Length; i++)
+                            {
                                 files_conc[i].Delete();
+                            }
+
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -105,12 +124,17 @@ namespace Gral
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
                         if (files_conc.Length > 0)
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.dep");
+                        }
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
                             for (int i = 0; i < files_conc.Length; i++)
+                            {
                                 files_conc[i].Delete();
+                            }
+
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -120,11 +144,15 @@ namespace Gral
 
                 newPath = Path.Combine(ProjectName, "Computation", "DispNr.txt");
                 if (File.Exists(newPath))
+                {
                     File.Delete(newPath);
+                }
 
                 newPath = Path.Combine(ProjectName, "Computation", "Percent.txt");
                 if (File.Exists(newPath))
+                {
                     File.Delete(newPath);
+                }
 
                 DispNrChanged(null, null); // change displaynumber
                 GralFileSizes();
@@ -163,7 +191,11 @@ namespace Gral
         /// <param name="e"></param>
         void GRAMMDeleteWindFields(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
             try
             {
                 string newPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
@@ -178,19 +210,25 @@ namespace Gral
                     })
                     {
                         if (files_wnd.Length > 0)
+                        {
                             fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.wnd");
+                        }
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
                             for (int i = 0; i < files_wnd.Length; i++)
+                            {
                                 files_wnd[i].Delete();
+                            }
 
                             //delete *.scl files
                             files_wnd = di.GetFiles("*.scl");
                             if (files_wnd.Length > 0)
                             {
                                 for (int i = 0; i < files_wnd.Length; i++)
+                                {
                                     files_wnd[i].Delete();
+                                }
                             }
 
                             //delete *.obl files
@@ -198,7 +236,9 @@ namespace Gral
                             if (files_wnd.Length > 0)
                             {
                                 for (int i = 0; i < files_wnd.Length; i++)
+                                {
                                     files_wnd[i].Delete();
+                                }
                             }
 
                             //delete *.ust files
@@ -206,7 +246,9 @@ namespace Gral
                             if (files_wnd.Length > 0)
                             {
                                 for (int i = 0; i < files_wnd.Length; i++)
+                                {
                                     files_wnd[i].Delete();
+                                }
                             }
 
                             //delete steady_state.txt files
@@ -214,7 +256,9 @@ namespace Gral
                             if (files_wnd.Length > 0)
                             {
                                 for (int i = 0; i < files_wnd.Length; i++)
+                                {
                                     files_wnd[i].Delete();
+                                }
                             }
 
                             GRAMM_Locked = false;                 // unlock GRAMM project
@@ -225,7 +269,10 @@ namespace Gral
 
                 newPath = Path.Combine(ProjectName, "Computation", "DispNrGramm.txt");
                 if (File.Exists(newPath))
+                {
                     File.Delete(newPath);
+                }
+
                 DispnrGrammChanged(null, null); // change displaynumber
                 GralFileSizes(); // actualize file size
             }
@@ -240,7 +287,11 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALDeleteFlowFieldFiles(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
             DeleteGralGffFile();
         }
 		
@@ -288,7 +339,9 @@ namespace Gral
                 using (FileDeleteMessage fdm = new FileDeleteMessage())
                 {
                     if (files_conc.Length > 0)
+                    {
                         fdm.listView1.Items.Add("..." + GffFilePath.Substring(Math.Max(0, GffFilePath.Length - 45)) + "*.gff");
+                    }
 
                     if (fdm.ShowDialog() == DialogResult.OK)
                     {

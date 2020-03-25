@@ -18,19 +18,17 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using Gral;
 using GralData;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents supports reading/writing the building data
     /// </summary>
-	public class WallDataIO
+    public class WallDataIO
 	{
 		public bool LoadWallData(List<WallData> _data, string _filename)
 		{

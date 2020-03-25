@@ -481,11 +481,18 @@ namespace GralDomain
                 columnname = dsExport.Tables[0].Columns[iCol].ColumnName.ToString().Replace("[", "_").Replace("]", "_").Replace("?", "3").Replace(" ", "").Replace(@"/", "");
                 //limit length to 11 characters
                 if (columnname.Length > 11)
+                {
                     columnname = columnname.Substring(0, 11);
+                }
+
                 if (length1 != 0)
+                {
                     odbf.Header.AddColumn(new DbfColumn(columnname, dtype, length1, length2));
+                }
                 else
+                {
                     odbf.Header.AddColumn(new DbfColumn(columnname, dtype));
+                }
             }
 
             //add records...
@@ -501,7 +508,9 @@ namespace GralDomain
                     //nur zahlenwerte von OENACE und SNAP werden exportiert
                     inhalt = Convert.ToString(dsExport.Tables[0].Rows[row][col]).Split(new char[] { ':' });
                     if (inhalt[0] == "")
+                    {
                         inhalt[0] = "0";
+                    }
 
                     if (double.TryParse(inhalt[0], out double value))
                     {

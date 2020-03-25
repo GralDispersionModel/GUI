@@ -301,11 +301,17 @@ namespace GralDomForms
                 selected_situation = Convert.ToInt32 (dataGridView1.Rows [dataGridView1.SelectedCells [0].RowIndex].Cells [0].Value);
 #endif
                 if (radioButton1.Checked)
+                {
                     selectGRAMM_GRAL = 1;
+                }
                 else if (radioButton2.Checked)
+                {
                     selectGRAMM_GRAL = 2;
+                }
                 else
+                {
                     selectGRAMM_GRAL = 0;
+                }
                 //this.Close();
             } 
             catch
@@ -361,9 +367,15 @@ namespace GralDomForms
         void DispersionsituationFormClosed(object sender, FormClosedEventArgs e)
         {
             if (dataGridView1.DataSource != null)
+            {
                 dataGridView1.DataSource = null;
+            }
+
             if (_data != null)
+            {
                 _data.Dispose();
+            }
+
             _data = null;
             if (dataGridView1 != null)
             {

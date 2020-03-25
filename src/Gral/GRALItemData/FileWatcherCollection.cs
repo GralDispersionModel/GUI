@@ -18,15 +18,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.IO;
 
 namespace GralItemData
 {
-	/// <summary>
-	/// Contains all possible FileSystemWatchers
-	/// </summary>
-	public class FileWatcherCollection
+    /// <summary>
+    /// Contains all possible FileSystemWatchers
+    /// </summary>
+    public class FileWatcherCollection
 	{
 		public FileSystemWatcher UVGramm	{ get; set; }  //control changes in the file uv_Gramm.txt, containing the actual GRAMM windfield online
 		public FileSystemWatcher UGramm		{ get; set; }  //control changes in the file u_Gramm.txt, containing the actual GRAMM windcomponent u online

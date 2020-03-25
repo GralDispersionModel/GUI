@@ -12,10 +12,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Globalization;
-using Gral;
 
 namespace GralShape
 {
@@ -24,10 +22,10 @@ namespace GralShape
     /// </summary>
     public class ShapeReader
     {
-        int filecode, filelength, version, shapetype;
-        double xMin, yMin, xMax, yMax, zMin, zMax, mMin, mMax;
-        public GralDomain.Domain domain = null;
-        public string decsep;
+        private int filecode, filelength, version, shapetype;
+        private double xMin, yMin, xMax, yMax, zMin, zMax, mMin, mMax;
+        private readonly GralDomain.Domain domain = null;
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private bool  _readbuildings = true;
         public bool ReadBuildings {set {_readbuildings = value;}}
         private double _west;
@@ -42,8 +40,6 @@ namespace GralShape
         public ShapeReader(GralDomain.Domain d)
         {
             domain = d;
-            //User defined column seperator and decimal seperator
-            decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         }
 
         /// <summary>
@@ -91,6 +87,8 @@ namespace GralShape
                 int recordNumber = readIntBig(data, recordStart);
                 int contentLength = readIntBig(data, recordStart + 4);
                 int recordContentStart = recordStart + 8;
+
+                //Shape-Type: Point
                 if (shapetype == 1)
                 {
                     GralDomain.PointD point = new GralDomain.PointD();
@@ -101,15 +99,20 @@ namespace GralShape
                     yield return point;
                         
                 }
+
+                //Shape-Type: PointZ
                 if (shapetype == 11)
                 {
-                    GralDomain.PointD point = new GralDomain.PointD();
+                    GralData.PointD_3d point = new GralData.PointD_3d();
                     int recordShapeType = readIntLittle(data, recordContentStart);
                     point.X = readDoubleLittle(data, recordContentStart + 4);
                     point.Y = readDoubleLittle(data, recordContentStart + 12);
+                    point.Z = readDoubleLittle(data, recordContentStart + 20);
                     //domain.shppoints[index].Add(point);
                     yield return point;
                 }
+
+                //Shape-Type: Polyline
                 if (shapetype == 3)
                 {
                     SHPLine line = new SHPLine();
@@ -139,7 +142,8 @@ namespace GralShape
                     yield return line;
                 }
 
-                if (shapetype == 13) // PolylineZ
+                //Shape-Type: PolylineZ
+                if (shapetype == 13) 
                 {
                     SHPLine line = new SHPLine();
                     int recordShapeType = readIntLittle(data, recordContentStart);
@@ -173,6 +177,7 @@ namespace GralShape
                     yield return line;
                 }
 
+                //Shape-Type: PolylineM
                 if (shapetype == 23)
                 {
                     GralShape.SHPLine line = new GralShape.SHPLine();
@@ -201,6 +206,8 @@ namespace GralShape
                     //domain.shplines[index].Add(line);
                     yield return line;
                 }
+
+                //Shape-Type: Polygon
                 if (shapetype == 5)
                 {
                     SHPPolygon polygon = new SHPPolygon();
@@ -214,9 +221,14 @@ namespace GralShape
                     polygon.Parts = new int[polygon.NumParts];
                     polygon.NumPoints = readIntLittle(data, recordContentStart + 40);
                     if (polygon.NumParts > 1)
+                    {
                         polygon.Points = new GralDomain.PointD[polygon.NumPoints + polygon.NumParts];
+                    }
                     else
+                    {
                         polygon.Points = new GralDomain.PointD[polygon.NumPoints];
+                    }
+
                     int partStart = recordContentStart + 44;
                     for (int i = 0; i < polygon.NumParts; i++)
                     {
@@ -238,7 +250,10 @@ namespace GralShape
                                 {
                                     ruecksprung[parts].X = polygon.Points[i].X;
                                     ruecksprung[parts].Y = polygon.Points[i].Y;
-                                    if (parts < polygon.NumParts - 1) parts++;
+                                    if (parts < polygon.NumParts - 1)
+                                    {
+                                        parts++;
+                                    }
                                 }
                             }
                         }
@@ -262,8 +277,15 @@ namespace GralShape
                         for (int parts = 0; parts < polygon.NumParts; parts++)
                         {
                             int end = 0;
-                            if ((polygon.NumParts - parts) > 1) end = polygon.Parts[parts + 1];
-                            else end = polygon.NumPoints;
+                            if ((polygon.NumParts - parts) > 1)
+                            {
+                                end = polygon.Parts[parts + 1];
+                            }
+                            else
+                            {
+                                end = polygon.NumPoints;
+                            }
+
                             polygon.Points = null;
                             polygon.Points = new GralDomain.PointD[end - polygon.Parts[parts]];
                             int cp = 0;
@@ -278,6 +300,8 @@ namespace GralShape
                         }
                     }
                 }
+
+                //Shape-Type: PolygonZ
                 if (shapetype == 15)
                 {
                     SHPPolygon polygon = new SHPPolygon();
@@ -291,10 +315,14 @@ namespace GralShape
                     polygon.Parts = new int[polygon.NumParts];
                     polygon.NumPoints = readIntLittle(data, recordContentStart + 40);
                     if (polygon.NumParts > 1)
+                    {
                         polygon.Points = new GralDomain.PointD[polygon.NumPoints + polygon.NumParts];
+                    }
                     else
+                    {
                         polygon.Points = new GralDomain.PointD[polygon.NumPoints];
-                    
+                    }
+
                     int partStart = recordContentStart + 44;
                     
                     for (int i = 0; i < polygon.NumParts; i++)
@@ -317,7 +345,10 @@ namespace GralShape
                                 {
                                     ruecksprung[parts].X = polygon.Points[i].X;
                                     ruecksprung[parts].Y = polygon.Points[i].Y;
-                                    if (parts < polygon.NumParts - 1) parts++;
+                                    if (parts < polygon.NumParts - 1)
+                                    {
+                                        parts++;
+                                    }
                                 }
                             }
                         }
@@ -341,8 +372,15 @@ namespace GralShape
                         for (int parts = 0; parts < polygon.NumParts; parts++)
                         {
                             int end = 0;
-                            if ((polygon.NumParts - parts) > 1) end = polygon.Parts[parts + 1];
-                            else end = polygon.NumPoints;
+                            if ((polygon.NumParts - parts) > 1)
+                            {
+                                end = polygon.Parts[parts + 1];
+                            }
+                            else
+                            {
+                                end = polygon.NumPoints;
+                            }
+
                             polygon.Points = null;
                             polygon.Points = new GralDomain.PointD[end - polygon.Parts[parts]];
                             int cp = 0;

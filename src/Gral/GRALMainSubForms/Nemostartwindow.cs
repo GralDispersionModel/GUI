@@ -92,9 +92,13 @@ namespace GralMainForms
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked == true)
+            {
                 groupBox1.Visible = true;
+            }
             else
+            {
                 groupBox1.Visible = false;
+            }
         }
 
         //close the form

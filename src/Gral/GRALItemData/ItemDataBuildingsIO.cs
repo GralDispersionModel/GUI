@@ -18,7 +18,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -26,11 +25,11 @@ using Gral;
 using GralDomain;
 
 namespace GralItemData
-{	
-	/// <summary>
+{
+    /// <summary>
     /// This class represents supports reading/writing the buidling data
     /// </summary>
-	public class BuildingDataIO
+    public class BuildingDataIO
 	{
 		public bool LoadBuildings(List<BuildingData> _data, string _filename)
 		{

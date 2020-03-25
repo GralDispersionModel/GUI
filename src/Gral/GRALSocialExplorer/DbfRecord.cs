@@ -113,7 +113,9 @@ namespace SocialExplorer.IO.FastDBF
             encoding = oHeader.encoding;
 
             for (int i = 0; i < oHeader._fields.Count; i++)
+            {
                 _colNameToIdx[oHeader._fields[i].Name] = i;
+            }
         }
 
 
@@ -153,7 +155,9 @@ namespace SocialExplorer.IO.FastDBF
                     if (ocolType == DbfColumn.DbfColumnType.Character)
                     {
                         if (!_allowStringTruncate && value.Length > ocol.Length)
+                        {
                             throw new DbfDataTruncateException("Value not set. String truncation would occur and AllowStringTruncate flag is set to false. To supress this exception change AllowStringTruncate to true.");
+                        }
 
                         //BlockCopy copies bytes.  First clear the previous value, then set the new one.
                         Buffer.BlockCopy(_emptyRecord, ocol.DataAddress, _data, ocol.DataAddress, ocol.Length);
@@ -171,7 +175,9 @@ namespace SocialExplorer.IO.FastDBF
 
                             //throw an exception if integer overflow would occur
                             if (!_allowIntegerTruncate && value.Length > ocol.Length)
+                            {
                                 throw new DbfDataTruncateException("Value not set. Integer does not fit and would be truncated. AllowIntegerTruncate is set to false. To supress this exception set AllowIntegerTruncate to true, although that is not recomended.");
+                            }
 
 
                             //clear all numbers, set to [space].
@@ -205,22 +211,27 @@ namespace SocialExplorer.IO.FastDBF
 
                                 //throw an exception if decimal overflow would occur
                                 if (!_allowDecimalTruncate && cDec.Length > ocol.DecimalCount)
+                                {
                                     throw new DbfDataTruncateException("Value not set. Decimal does not fit and would be truncated. AllowDecimalTruncate is set to false. To supress this exception set AllowDecimalTruncate to true.");
-
+                                }
                             }
                             else
+                            {
                                 cNum = value.ToCharArray();
+                            }
 
 
                             //throw an exception if integer overflow would occur
                             if (!_allowIntegerTruncate && cNum.Length > ocol.Length - ocol.DecimalCount - 1)
+                            {
                                 throw new DbfDataTruncateException("Value not set. Integer does not fit and would be truncated. AllowIntegerTruncate is set to false. To supress this exception set AllowIntegerTruncate to true, although that is not recomended.");
+                            }
 
 
                             //------------------------------------------------------------------------------------------------------------------
                             // NUMERIC TYPE
                             //------------------------------------------------------------------------------------------------------------------
-                                
+
                             //clear all decimals, set to 0.
                             //-----------------------------------------------------
                             Buffer.BlockCopy(_decimalClear, 0, _data, (ocol.DataAddress + ocol.Length - ocol.DecimalCount), ocol.DecimalCount);
@@ -263,9 +274,10 @@ namespace SocialExplorer.IO.FastDBF
 
                         // check size, throw exception if value won't fit:
                         if (value.Length > ocol.Length)
+                        {
                             throw new DbfDataTruncateException("Value not set. Float value does not fit and would be truncated.");
+                        }
 
-                        
                         double parsed_value;
                         if (!Double.TryParse(value, out parsed_value))
                         {
@@ -304,12 +316,17 @@ namespace SocialExplorer.IO.FastDBF
                         if (String.Compare(value, "true", true) == 0 || String.Compare(value, "1", true) == 0 ||
                             String.Compare(value, "T", true) == 0 || String.Compare(value, "yes", true) == 0 ||
                             String.Compare(value, "Y", true) == 0)
+                        {
                             _data[ocol.DataAddress] = (byte)'T';
+                        }
                         else if (value == " " || value == "?")
+                        {
                             _data[ocol.DataAddress] = (byte)'?';
+                        }
                         else
+                        {
                             _data[ocol.DataAddress] = (byte)'F';
-
+                        }
                     }
                     else if (ocolType == DbfColumn.DbfColumnType.Date)
                     {
@@ -320,15 +337,18 @@ namespace SocialExplorer.IO.FastDBF
                             SetDateValue(nColIndex, dateval);
                         }
                         else
+                        {
                             throw new InvalidOperationException("Date could not be parsed from source string! Please parse the Date and set the value (you can try using DateTime.Parse() or DateTime.TryParse() functions).");
-
+                        }
                     }
                     else if (ocolType == DbfColumn.DbfColumnType.Binary)
+                    {
                         throw new InvalidOperationException("Can not use string source to set binary data. Use SetBinaryValue() and GetBinaryValue() functions instead.");
-
+                    }
                     else
+                    {
                         throw new InvalidDataException("Unrecognized data type: " + ocolType.ToString());
-
+                    }
                 }
 
             }
@@ -353,15 +373,22 @@ namespace SocialExplorer.IO.FastDBF
             get
             {
                 if (_colNameToIdx.ContainsKey(nColName))
+                {
                     return this[_colNameToIdx[nColName]];
+                }
+
                 throw new InvalidOperationException(string.Format("There's no column with name '{0}'", nColName));
             }
             set
             {
                 if (_colNameToIdx.ContainsKey(nColName))
+                {
                     this[_colNameToIdx[nColName]] = value;
+                }
                 else
+                {
                     throw new InvalidOperationException(string.Format("There's no column with name '{0}'", nColName));
+                }
             }
         }
 
@@ -381,8 +408,9 @@ namespace SocialExplorer.IO.FastDBF
 
             }
             else
+            {
                 throw new Exception("Invalid data type. Column '" + ocol.Name + "' is not a date column.");
-
+            }
         }
 
 
@@ -407,9 +435,9 @@ namespace SocialExplorer.IO.FastDBF
 
             }
             else
+            {
                 throw new Exception("Invalid data type. Column is of '" + ocol.ColumnType.ToString() + "' type, not date.");
-
-
+            }
         }
 
 
@@ -576,8 +604,9 @@ namespace SocialExplorer.IO.FastDBF
             obw.Write(_data, 0, _data.Length);
 
             if (bClearRecordAfterWrite)
+            {
                 Clear();
-
+            }
         }
 
 

@@ -52,16 +52,20 @@ namespace GralMainForms
 				for (int i = 0; i < data.NumHorSlices; i++)
 				{
 					if (i < horslice.Length && horslice[i] > 0)
-						listBox1.Items.Add(horslice[i]+"m");
-				}
+                    {
+                        listBox1.Items.Add(horslice[i]+"m");
+                    }
+                }
 			}
 			else // in.dat not available
 			{
 				for (int i = 0; i < form1.GRALSettings.NumHorSlices; i++)
 				{
 					if (i < form1.GRALSettings.HorSlices.Length && form1.GRALSettings.HorSlices[i] > 0)
-						listBox1.Items.Add(form1.GRALSettings.HorSlices[i]+"m");
-				}
+                    {
+                        listBox1.Items.Add(form1.GRALSettings.HorSlices[i]+"m");
+                    }
+                }
 			}
 			data = null;
 			ReadInData = null;

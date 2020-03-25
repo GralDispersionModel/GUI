@@ -144,15 +144,29 @@ namespace GralBackgroundworkers
 
                         //check if raster B is equal to raster A
                         if (nxB != nxA)
+                        {
                             caseswitch = 1;
+                        }
+
                         if (nyB != nyA)
+                        {
                             caseswitch = 1;
+                        }
+
                         if (Math.Abs(x11B - x11A) > 0.1 )
+                        {
                             caseswitch = 1;
+                        }
+
                         if (Math.Abs(y11B - y11A) > 0.1)
+                        {
                             caseswitch = 1;
+                        }
+
                         if (Math.Abs(dxB - dxA) > 0.1)
+                        {
                             caseswitch = 1;
+                        }
 
                         switch (caseswitch)
                         {
@@ -231,9 +245,13 @@ namespace GralBackgroundworkers
                                         mywriter.WriteLine("yllcorner         " + Convert.ToString(y11A, ic));
                                         mywriter.WriteLine("cellsize          " + Convert.ToString(dxA, ic));
                                         if (mydata.Unit.Length > 0)
+                                        {
                                             mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA) + "\t" + "UNIT \t" + mydata.Unit);
+                                        }
                                         else
+                                        {
                                             mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA));
+                                        }
 
                                         for (int i = nyB - 1; i > -1; i--)
                                         {
@@ -309,25 +327,55 @@ namespace GralBackgroundworkers
 
                             //check if raster B and raster C are equal to raster A
                             if (nxB != nxA)
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (nyB != nyA)
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (Math.Abs(x11B - x11A) > 0.1 )
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (Math.Abs(y11B - y11A) > 0.1 )
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (Math.Abs(dxB - dxA) > 0.1 )
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (nxC != nxA)
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (nyC != nyA)
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (Math.Abs(x11C - x11A) > 0.1 )
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (Math.Abs(y11C - y11A) > 0.1 )
+                            {
                                 caseswitch = 1;
+                            }
+
                             if (Math.Abs(x11C -  x11A) > 0.1 )
+                            {
                                 caseswitch = 1;
+                            }
+
                             switch (caseswitch)
                             {
                                 case 0:
@@ -415,9 +463,13 @@ namespace GralBackgroundworkers
                                             mywriter.WriteLine("yllcorner         " + Convert.ToString(y11A, ic));
                                             mywriter.WriteLine("cellsize          " + Convert.ToString(dxA, ic));
                                             if (mydata.Unit.Length > 0)
+                                            {
                                                 mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA) + "\t" + "UNIT \t" + mydata.Unit);
+                                            }
                                             else
+                                            {
                                                 mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA));
+                                            }
 
                                             for (int i = nyB - 1; i > -1; i--)
                                             {
@@ -511,35 +563,80 @@ namespace GralBackgroundworkers
 
                                 //check if raster B and raster C and raster D are equal to raster A
                                 if (nxB != nxA)
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (nyB != nyA)
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(x11B - x11A) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(y11B - y11A) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(dxB - dxA) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (nxC != nxA)
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (nyC != nyA)
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(x11C -x11A) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(y11C - y11A) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(dxC -  dxA) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (nxD != nxA)
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (nyD != nyA)
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(x11D -  x11A) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(y11D -  y11A) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 if (Math.Abs(dxD -  dxA) > 0.1 )
+                                {
                                     caseswitch = 1;
+                                }
+
                                 switch (caseswitch)
                                 {
                                     case 0:
@@ -644,9 +741,14 @@ namespace GralBackgroundworkers
                                                 mywriter.WriteLine("yllcorner         " + Convert.ToString(y11A, ic));
                                                 mywriter.WriteLine("cellsize          " + Convert.ToString(dxA, ic));
                                                 if (mydata.Unit.Length > 0)
+                                                {
                                                     mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA) + "\t" + "UNIT \t" + mydata.Unit);
+                                                }
                                                 else
+                                                {
                                                     mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA));
+                                                }
+
                                                 for (int i = nyB - 1; i > -1; i--)
                                                 {
                                                     for (int j = 0; j < nxB; j++)
@@ -758,45 +860,105 @@ namespace GralBackgroundworkers
 
                                     //check if raster B, raster C, raster D, and raster E are equal to raster A
                                     if (nxB != nxA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nyB != nyA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(x11B - x11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(y11B - y11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(dxB - dxA) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nxC != nxA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nyC != nyA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(x11C -x11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(y11C - y11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(dxC - dxA) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nxD != nxA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nyD != nyA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(x11D -  x11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(y11D - y11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(dxD - dxA) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nxE != nxA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (nyE != nyA)
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(x11E - x11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(y11E - y11A) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     if (Math.Abs(dxE - dxA) > 0.1 )
+                                    {
                                         caseswitch = 1;
+                                    }
+
                                     switch (caseswitch)
                                     {
                                         case 0:
@@ -915,9 +1077,13 @@ namespace GralBackgroundworkers
                                                     mywriter.WriteLine("yllcorner         " + Convert.ToString(y11A, ic));
                                                     mywriter.WriteLine("cellsize          " + Convert.ToString(dxA, ic));
                                                     if (mydata.Unit.Length > 0)
+                                                    {
                                                         mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA) + "\t" + "UNIT \t" + mydata.Unit);
+                                                    }
                                                     else
+                                                    {
                                                         mywriter.WriteLine("NODATA_value      " + Convert.ToString(nodataA));
+                                                    }
 
                                                     for (int i = nyB - 1; i > -1; i--)
                                                     {
@@ -1023,11 +1189,15 @@ namespace GralBackgroundworkers
 						mywriter.WriteLine ("yllcorner         " + Convert.ToString (y11A, ic));
 						mywriter.WriteLine ("cellsize          " + Convert.ToString (dxA, ic));
 						if (mydata.Unit.Length > 0)
-							mywriter.WriteLine ("NODATA_value      " + Convert.ToString (nodataA) + "\t" + "UNIT \t" + mydata.Unit);
-						else
-							mywriter.WriteLine ("NODATA_value      " + Convert.ToString (nodataA));
-					
-						for (int i = nyA - 1; i > -1; i--) {
+                        {
+                            mywriter.WriteLine ("NODATA_value      " + Convert.ToString (nodataA) + "\t" + "UNIT \t" + mydata.Unit);
+                        }
+                        else
+                        {
+                            mywriter.WriteLine ("NODATA_value      " + Convert.ToString (nodataA));
+                        }
+
+                        for (int i = nyA - 1; i > -1; i--) {
 							for (int j = 0; j < nxA; j++) 
 							{
 								if (Double.IsNaN(F[j, i]) || Double.IsInfinity(F[j, i]))

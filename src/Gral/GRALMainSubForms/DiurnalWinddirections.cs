@@ -126,7 +126,11 @@ namespace GralMainForms
                     {
                         int hoehe = Convert.ToInt32(meanwinddir[i, n] * scale);
                         int ecke1 = Convert.ToInt32(55 + i * 25);
-                        if (i > 0) g.DrawLine(p4, 55 + 25 * (i + 1), 440 - hoehe, 55 + 25 * (i), 440 - hoehe2);
+                        if (i > 0)
+                        {
+                            g.DrawLine(p4, 55 + 25 * (i + 1), 440 - hoehe, 55 + 25 * (i), 440 - hoehe2);
+                        }
+
                         hoehe2 = hoehe;
                        // base.OnPaint(e);
                     }
@@ -165,8 +169,10 @@ namespace GralMainForms
             //draw frequency levels
             int off = 1;
             if (classmax > 0.5)
-            	off = 2;
-            
+            {
+                off = 2;
+            }
+
             for (int i = 1; i < 20; i += off)
             {
                 int levels = Convert.ToInt32(Convert.ToDouble(i) / 20 * scale);
@@ -192,7 +198,9 @@ namespace GralMainForms
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             for (int i=0;i<16;i++)
+            {
                 check[i] =0;
+            }
 
             foreach (int indexChecked in checkedListBox1.CheckedIndices)
             {

@@ -67,9 +67,17 @@ namespace GralItemForms
 			_dep.V_Dep3 = Convert.ToDouble(numericUpDown8.Value);
 			
 			int i = 1; // PM2,5 = emission
-			if (checkBox2.Checked) i = 2; // PM10 = emission 
-			if (checkBox3.Checked) i = 3; // PM30 = emission
-			_dep.Conc   = i;
+			if (checkBox2.Checked)
+            {
+                i = 2; // PM10 = emission 
+            }
+
+            if (checkBox3.Checked)
+            {
+                i = 3; // PM30 = emission
+            }
+
+            _dep.Conc   = i;
 		}
 		
 		void Button3Click(object sender, EventArgs e)
@@ -96,11 +104,17 @@ namespace GralItemForms
 				Close();
 			}
 			
-			if (_dep.Frac_30 == 0) init_pollutant(0);
-			else init_pollutant(1);
+			if (_dep.Frac_30 == 0)
+            {
+                init_pollutant(0);
+            }
+            else
+            {
+                init_pollutant(1);
+            }
 
             // read deposition settings if available from application path
-			string settings = Path.Combine(Main.App_Settings_Path, "DepositionSettings.txt");
+            string settings = Path.Combine(Main.App_Settings_Path, "DepositionSettings.txt");
 			if (File.Exists(settings))
 			{
                 try
@@ -150,8 +164,12 @@ namespace GralItemForms
 			numericUpDown2.ValueChanged += new EventHandler(NumericUpDown2ValueChanged);
 			numericUpDown3.ValueChanged += new EventHandler(NumericUpDown2ValueChanged);
 			
-			if (_dep.Conc == 2) checkBox2.Checked = true;
-			if (_dep.Conc == 3)
+			if (_dep.Conc == 2)
+            {
+                checkBox2.Checked = true;
+            }
+
+            if (_dep.Conc == 3)
 			{
 				checkBox2.Checked = true;
 				checkBox3.Checked = true;
@@ -183,15 +201,23 @@ namespace GralItemForms
 			{
 				case 0: // NOx
 				case 6: // NO2
-					if (type == 0) _dep.V_Dep1 = 0.003;
-					_dep.Conc    = 1;
+					if (type == 0)
+                    {
+                        _dep.V_Dep1 = 0.003;
+                    }
+
+                    _dep.Conc    = 1;
 					numericUpDown5.Enabled = false;
 					numericUpDown7.Enabled = false;
 					numericUpDown8.Enabled = false;
 					break;
 				case 5: // NH3
-					if (type == 0) _dep.V_Dep1 = 0.01;
-					_dep.Conc    = 1;
+					if (type == 0)
+                    {
+                        _dep.V_Dep1 = 0.01;
+                    }
+
+                    _dep.Conc    = 1;
 					numericUpDown5.Enabled = false;
 					numericUpDown7.Enabled = false;
 					numericUpDown8.Enabled = false;
@@ -228,8 +254,11 @@ namespace GralItemForms
 					break;
 				case 3: // SO2
 					if (type == 0)
-						_dep.V_Dep1 = 0.01;
-					_dep.Conc    = 1;
+                    {
+                        _dep.V_Dep1 = 0.01;
+                    }
+
+                    _dep.Conc    = 1;
 					numericUpDown5.Enabled = false;
 					numericUpDown7.Enabled = false;
 					numericUpDown8.Enabled = false;
@@ -243,9 +272,17 @@ namespace GralItemForms
 						_dep.V_Dep2 = 0.01;
 						_dep.V_Dep3 = 0.05;
 						_dep.Frac_2_5 = 100;
-						if (_pollutant == 15) _dep.Density = 11430;
-						if (_pollutant == 17) _dep.Density = 8900;
-						_dep.Conc    = 2;
+						if (_pollutant == 15)
+                        {
+                            _dep.Density = 11430;
+                        }
+
+                        if (_pollutant == 17)
+                        {
+                            _dep.Density = 8900;
+                        }
+
+                        _dep.Conc    = 2;
 					}
 					numericUpDown1.Enabled = true;
 					numericUpDown2.Enabled = true;
@@ -254,8 +291,11 @@ namespace GralItemForms
 					break;
 				case 19: //HG
 					if (type == 0)
-						_dep.V_Dep1 = 0.005;
-					_dep.Conc    = 1;
+                    {
+                        _dep.V_Dep1 = 0.005;
+                    }
+
+                    _dep.Conc    = 1;
 					numericUpDown5.Enabled = true;
 					numericUpDown7.Enabled = false;
 					numericUpDown8.Enabled = false;
@@ -270,22 +310,28 @@ namespace GralItemForms
 		void NumericUpDown2ValueChanged(object sender, EventArgs e)
 		{
 			if (numericUpDown3.Value < numericUpDown2.Value)
-				numericUpDown2.Value = numericUpDown3.Value;
-			
-			if (numericUpDown2.Value > numericUpDown3.Value)
-				numericUpDown3.Value = numericUpDown2.Value;
-			
-			
-			//MessageBox.Show(Convert.ToString(_poll) + "/" +Convert.ToString(_em));
-			
-			float p1 = (float) numericUpDown2.Value;
+            {
+                numericUpDown2.Value = numericUpDown3.Value;
+            }
+
+            if (numericUpDown2.Value > numericUpDown3.Value)
+            {
+                numericUpDown3.Value = numericUpDown2.Value;
+            }
+
+
+            //MessageBox.Show(Convert.ToString(_poll) + "/" +Convert.ToString(_em));
+
+            float p1 = (float) numericUpDown2.Value;
 			float p2 = (float) numericUpDown3.Value;
 			float p3 = 100;
 			int comma = 5;
 			if (_emission > 0)
-				comma = Math.Max(0, Convert.ToInt32(5 - (Math.Log10(_emission) + 1)));
-			
-			if (_dep.Conc == 1) // PM 2.5
+            {
+                comma = Math.Max(0, Convert.ToInt32(5 - (Math.Log10(_emission) + 1)));
+            }
+
+            if (_dep.Conc == 1) // PM 2.5
 			{
 				float em100 = (float) _emission * 100 / p1; // 100 % of emission
 				label12.Text = Convert.ToString(Math.Round(em100 * p1 / 100, comma)); // PM 2,5
@@ -305,14 +351,20 @@ namespace GralItemForms
 		
 		void CheckBox3CheckedChanged(object sender, EventArgs e)
 		{
-			if (checkBox3.Checked) checkBox2.Checked = true;
-		}
+			if (checkBox3.Checked)
+            {
+                checkBox2.Checked = true;
+            }
+        }
 		
 		
 		void CheckBox2CheckedChanged(object sender, EventArgs e)
 		{
-			if (checkBox2.Checked == false) checkBox3.Checked = false;
-		}
+			if (checkBox2.Checked == false)
+            {
+                checkBox3.Checked = false;
+            }
+        }
 		
 		void ListBox1SelectedIndexChanged(object sender, EventArgs e)
 		{

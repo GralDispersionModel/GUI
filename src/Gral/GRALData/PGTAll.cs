@@ -55,16 +55,23 @@ namespace GralData
 		{
 			// A null value means that this object is greater.
 			if (comparePart == null)
-				return 1;
-
-			else
-				return PGTFrq.CompareTo(comparePart.PGTFrq);
-		}
+            {
+                return 1;
+            }
+            else
+            {
+                return PGTFrq.CompareTo(comparePart.PGTFrq);
+            }
+        }
 		
 		public bool Equals(PGTAll other)
 		{
-			if (other == null) return false;
-			return (PGTFrq.Equals(other.PGTFrq));
+			if (other == null)
+            {
+                return false;
+            }
+
+            return (PGTFrq.Equals(other.PGTFrq));
 		}
 		// Should also override == and != operators.
 

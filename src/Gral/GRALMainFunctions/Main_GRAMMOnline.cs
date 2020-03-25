@@ -505,13 +505,24 @@ namespace Gral
             int gramm = 1;
 
             if (groupBox15.Visible == true & groupBox17.Visible == true)
+            {
                 gramm = 1;
+            }
+
             if (groupBox15.Visible == false & groupBox17.Visible == true)
+            {
                 gramm = -2;
+            }
+
             if (groupBox15.Visible == true & groupBox17.Visible == false)
+            {
                 gramm = -1;
+            }
+
             if (layer == -1) // just show GRAMM
+            {
                 gramm = -1;
+            }
 
             layer = 1;
             GralMainForms.SelectHorizontalLayer selection = new GralMainForms.SelectHorizontalLayer(layer, gramm, Convert.ToInt32(numericUpDown16.Value), Convert.ToInt32(numericUpDown26.Value), OnlineRefreshInterval);
@@ -522,9 +533,13 @@ namespace Gral
             selection.Dispose();
 
             if (selection.DialogResult == DialogResult.OK)
+            {
                 return layer;
+            }
             else
+            {
                 return -1;
+            }
         }
 
 	}

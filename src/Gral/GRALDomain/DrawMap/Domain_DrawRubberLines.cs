@@ -38,7 +38,9 @@ namespace GralDomain
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
+                    {
                         picturebox1.Image.Dispose();
+                    }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
                     
@@ -105,7 +107,9 @@ namespace GralDomain
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
+                    {
                         picturebox1.Image.Dispose();
+                    }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
                     
@@ -183,7 +187,9 @@ namespace GralDomain
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
+                    {
                         picturebox1.Image.Dispose();
+                    }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
                     
@@ -238,8 +244,10 @@ namespace GralDomain
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
+                    {
                         picturebox1.Image.Dispose();
-                    
+                    }
+
                     double form1_west = MapSize.West, form1_north = MapSize.North;
                     double factor_x = 1 / BmpScale / MapSize.SizeX;
                     double factor_y = 1 / BmpScale / MapSize.SizeY;
@@ -290,7 +298,9 @@ namespace GralDomain
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
+                    {
                         picturebox1.Image.Dispose();
+                    }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
                     
@@ -332,7 +342,9 @@ namespace GralDomain
                 {
                     RubberRedrawAllowed = 2;
                     if (picturebox1.Image != null)
+                    {
                         picturebox1.Image.Dispose();
+                    }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
                     

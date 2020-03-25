@@ -77,7 +77,9 @@ namespace GralDomain
                             int y1 = (int)((_pt[i].Y - form1_north) * factor_y + TransformY);
                             
                             if (dismiss && (x1 > 0) && (x1 < pb1_width) && (y1 > 0) && (y1 < pb1_height))
+                            {
                                 dismiss = false;
+                            }
 
                             xmean +=  x1;
                             ymean +=  y1;
@@ -149,7 +151,10 @@ namespace GralDomain
                             g.DrawString(_bd.Name, LabelFont, LabelBrush, xmean, ymean, StringFormat1);
                         }
                     }
-                    if (CancelDrawing) break;
+                    if (CancelDrawing)
+                    {
+                        break;
+                    }
                 }
                 catch{  	}
             }

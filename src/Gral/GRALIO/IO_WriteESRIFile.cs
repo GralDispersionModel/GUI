@@ -81,9 +81,13 @@ namespace GralIO
 					myWriter.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
 					myWriter.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
 					if (_unit.Length > 0)
-						myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
-					else
-						myWriter.WriteLine("NODATA_value  " + "-9999");
+                    {
+                        myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                    }
 
                     StringBuilder SB = new StringBuilder();
 					for (int j = _nrows - 1; j > -1; j--)
@@ -146,9 +150,13 @@ namespace GralIO
 					myWriter.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
 					myWriter.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
 					if (_unit.Length > 0)
-						myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
-					else
-						myWriter.WriteLine("NODATA_value  " + "-9999");
+                    {
+                        myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                    }
 
                     StringBuilder SB = new StringBuilder();
                     for (int j = _nrows; j > 0; j--)

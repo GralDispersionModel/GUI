@@ -91,18 +91,32 @@ namespace GralDomain
                 double x_step = (_dx * _NII) / 10;
                 int exp = 0;
                 if (x_step != 0.0)
+                {
                     exp = (int) Math.Floor(Math.Log10(x_step)) * (-1);
+                }
+
                 double norm = x_step * Math.Pow(10, exp);
                 if (norm < 1.5)
+                {
                     norm = 1;
+                }
                 else if (norm < 3.4)
+                {
                     norm  = 2;
+                }
                 else if (norm < 6.5)
+                {
                     norm = 5;
+                }
                 else if (norm < 9)
+                {
                     norm = 8;
+                }
                 else
+                {
                     norm = 10;
+                }
+
                 exp *= -1;
                 x_step = norm * Math.Pow(10, exp);
                 
@@ -121,18 +135,32 @@ namespace GralDomain
                 x_step = (_dx * _NJJ) / 10;
                 exp = 0;
                 if (x_step != 0.0)
+                {
                     exp = (int) Math.Floor(Math.Log10(x_step)) * (-1);
+                }
+
                 norm = x_step * Math.Pow(10, exp);
                 if (norm < 1.5)
+                {
                     norm = 1;
+                }
                 else if (norm < 3.4)
+                {
                     norm  = 2;
+                }
                 else if (norm < 6.5)
+                {
                     norm = 5;
+                }
                 else if (norm < 9)
+                {
                     norm = 8;
+                }
                 else
+                {
                     norm = 10;
+                }
+
                 exp *= -1;
                 x_step = norm * Math.Pow(10, exp);
                 
@@ -245,15 +273,22 @@ namespace GralDomain
                     
                     int transparancy_new = transparancy_name;
                     if (_drobj.FillColors[k] == Color.White)
+                    {
                         transparancy_new = 0;
-                    
+                    }
+
                     Brush fill_contour = new SolidBrush(Color2Transparent(transparancy_new, _drobj.FillColors[k]));
                     
                     Pen myPen;
                     if ((label_interval > 1) && (k % label_interval) == 0) // linewidth +1 if label-line
+                    {
                         myPen = new Pen(Color2Transparent(255, _drobj.LineColors[k]), _drobj.LineWidth + 1);
+                    }
                     else
+                    {
                         myPen = new Pen(Color2Transparent(255, _drobj.LineColors[k]), _drobj.LineWidth);
+                    }
+
                     Pen labelPen = new Pen(Color2Transparent(255, _drobj.LineColors[k]), Math.Min(2, _drobj.LineWidth));
                     
                     PointD[] _pts = _drobj.ContourPolygons[i].EdgePoints;
@@ -343,7 +378,9 @@ namespace GralDomain
                                         label_value = Convert.ToString(Math.Round(_drobj.ItemValues[k], _drobj.DecimalPlaces));
                                         double angle = 90;
                                         if (pt2.X != pt1.X)
+                                        {
                                             angle = Math.Atan((pt2.Y - pt1.Y) / (pt2.X - pt1.X)) * 180 / 3.14;
+                                        }
 
                                         SizeF stringSize = g.MeasureString(label_value, LabelFont);
                                         int sW = (int) (stringSize.Width * 0.5) + 2 ;
@@ -372,7 +409,10 @@ namespace GralDomain
                                         #else
                                         excludeRegion.Union (gp);
                                         if (_drobj.Label == 3)
+                                        {
                                             g.DrawPath(labelPen, gp); // draw rectangle around label
+                                        }
+
                                         g.ExcludeClip(excludeRegion); // exclude label region from redraw
                                         gp.Reset();
                                         excludeRegion.MakeEmpty();
@@ -380,7 +420,10 @@ namespace GralDomain
                                     }
                                 }
                             }
-                            if (CancelDrawing) break;
+                            if (CancelDrawing)
+                            {
+                                break;
+                            }
                         } // show labels
                         
                         if (_drobj.LineWidth > 0) // draw contour lines
@@ -440,8 +483,10 @@ namespace GralDomain
                                          Color fillit = new Color();
                                          fillit = _drobj.FillColors[col];
                                          if (fillit == Color.White)
+                                         {
                                              transparancy_new = 0;
-                                         
+                                         }
+
                                          bm_loc.SetPixel(0, y_loc, Color2Transparent(transparancy_new, _drobj.FillColors[col]));
                                      }
                                  }
@@ -513,14 +558,19 @@ namespace GralDomain
                                     Color fillit = new Color();
                                     fillit = _drobj.FillColors[contourcolor_name[i, j]];
                                     if (fillit == Color.White)
+                                    {
                                         transparancy_new = 0;
-                                    
+                                    }
+
                                     Brush br1 = new SolidBrush(Color2Transparent(transparancy_new, _drobj.FillColors[contourcolor_name[i, j]]));
                                     g.FillRectangle(br1, ix, iy - recwidth, recwidth + addonex, recwidth + addoney);
                                     br1.Dispose();
                                 }
                             }
-                            if (CancelDrawing) break;
+                            if (CancelDrawing)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
@@ -544,10 +594,14 @@ namespace GralDomain
                         
                         Pen myPen;
                         if ((label_interval > 1) && (i % label_interval) == 0) // linewidth +1 if label-line
+                        {
                             myPen = new Pen(Color2Transparent(255, _drobj.LineColors[i]), _drobj.LineWidth + 1);
+                        }
                         else
+                        {
                             myPen = new Pen(Color2Transparent(255, _drobj.LineColors[i]), _drobj.LineWidth);
-                        
+                        }
+
                         Pen labelPen = new Pen(Color2Transparent(255, _drobj.LineColors[i]), Math.Min(2, _drobj.LineWidth));
                         Brush myBrush = new SolidBrush(_drobj.LineColors[i]);
                         Matrix mat = new Matrix();
@@ -582,7 +636,9 @@ namespace GralDomain
                                         label_value = Convert.ToString(Math.Round(_drobj.ItemValues[i], _drobj.DecimalPlaces));
                                         double angle = 90;
                                         if (x2 != x1)
+                                        {
                                             angle = Math.Atan((y2 - y1) / (x2 - x1)) * 180 / 3.14;
+                                        }
 
                                         SizeF stringSize = g.MeasureString(label_value, LabelFont);
                                         
@@ -611,7 +667,10 @@ namespace GralDomain
                                         #else
                                         excludeRegion.Union (gp);
                                         if (_drobj.Label == 3)
+                                        {
                                             g.DrawPath(labelPen, gp); // draw rectangle around label
+                                        }
+
                                         g.ExcludeClip(excludeRegion); // exclude label region from redraw
                                         gp.Reset();
                                         excludeRegion.MakeEmpty();
@@ -627,7 +686,10 @@ namespace GralDomain
                             }
                             //g.DrawLine(myPen, Convert.ToInt32(x1), Convert.ToInt32(y1), Convert.ToInt32(x2), Convert.ToInt32(y2));
                             //	}
-                            if (CancelDrawing) break;
+                            if (CancelDrawing)
+                            {
+                                break;
+                            }
                         } // while all points
                         
                         // draw the lines
@@ -643,7 +705,10 @@ namespace GralDomain
                         myBrush.Dispose();
                         gp.Dispose();
                         labelPen.Dispose();
-                        if (CancelDrawing) break;
+                        if (CancelDrawing)
+                        {
+                            break;
+                        }
                     }
                 }
             }

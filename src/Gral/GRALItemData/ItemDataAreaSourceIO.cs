@@ -18,7 +18,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -27,10 +26,10 @@ using Gral;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents supports reading/writing the area source data
     /// </summary>
-	public class AreaSourceDataIO
+    public class AreaSourceDataIO
 	{
 		public bool LoadAreaData(List<AreaSourceData> _data, string _filename) // overload with 2 parameters only
 		{

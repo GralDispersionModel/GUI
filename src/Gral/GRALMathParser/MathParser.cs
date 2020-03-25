@@ -43,7 +43,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Collections.ObjectModel;
-using System.Windows.Forms;
 
 namespace MathParserMathos
 {
@@ -155,9 +154,11 @@ namespace MathParserMathos
                 {
                     double a = 1;
                    	for (int i = 1; i<= input[0];i++)
-                    	a *= i;
-                                   	
-                   	return (double)a;
+                    {
+                        a *= i;
+                    }
+
+                    return (double)a;
                 });
                 
                 LocalFunctions.Add("rem", x => (double)Math.IEEERemainder((double)x[0], (double)x[1]));
@@ -301,8 +302,10 @@ namespace MathParserMathos
         		{
         			var ch1 = mathExpression[i-1];
         			if (Char.IsDigit(ch1))
-        				ch = '?';
-        		}
+                    {
+                        ch = '?';
+                    }
+                }
         		a = a + ch;
         	}
         	mathExpression = a;
@@ -342,8 +345,10 @@ namespace MathParserMathos
             }
 
             if (correctExpression)
+            {
                 mathExpression = Correction(mathExpression);
-                    // this refers to the Correction function which will correct stuff like artn to arctan, etc.
+            }
+            // this refers to the Correction function which will correct stuff like artn to arctan, etc.
 
             string varName;
             double varValue;
@@ -366,15 +371,22 @@ namespace MathParserMathos
                 varValue = Parse(mathExpression);
 
                 if (LocalVariables.ContainsKey(varName))
+                {
                     LocalVariables[varName] = varValue;
+                }
                 else
+                {
                     LocalVariables.Add(varName, varValue);
+                }
 
                 return varValue;
             }
 
-            if (!mathExpression.Contains(":=")) return Parse(mathExpression);
-            
+            if (!mathExpression.Contains(":="))
+            {
+                return Parse(mathExpression);
+            }
+
             //mathExpression = mathExpression.Replace(" ", ""); // remove white space
             varName = mathExpression.Substring(0, mathExpression.IndexOf(":=", StringComparison.Ordinal));
             mathExpression = mathExpression.Replace(varName + ":=", "");
@@ -510,7 +522,9 @@ namespace MathParserMathos
                         tokens.Add("(");
                     }
                     else
+                    {
                         tokens.Add("(");
+                    }
                 }
                 else
                 {
@@ -639,9 +653,11 @@ namespace MathParserMathos
                     var op = tokens[0];
 
                     if (op == "-" || op == "+")
-                        return double.Parse((op == "+" ? "" : "-") + tokens[1], CultureInfo);
+                        {
+                            return double.Parse((op == "+" ? "" : "-") + tokens[1], CultureInfo);
+                        }
 
-                    return OperatorAction[op](0, double.Parse(tokens[1], CultureInfo));
+                        return OperatorAction[op](0, double.Parse(tokens[1], CultureInfo));
                 }
                 case 0:
                     return 0;

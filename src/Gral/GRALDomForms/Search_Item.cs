@@ -25,7 +25,6 @@ using System.Data;
 using System.Text;
 using GralStaticFunctions;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GralDomForms
 {
@@ -453,16 +452,24 @@ namespace GralDomForms
                 {
                     string filter3 = "Height " + compare + " '" + Convert.ToString(St_F.TxtToDbl(number, false)) + "'";
                     if (textBox4.Text.Length > 0)
+                    {
                         datasorted.RowFilter = filter1 + " AND " + filter2 + " AND " + filter3 + " AND " + filter4;
+                    }
                     else
+                    {
                         datasorted.RowFilter = filter1 + " AND " + filter2 + " AND " + filter3;
+                    }
                 }
                 else
                 {
                     if (textBox4.Text.Length > 0)
+                    {
                         datasorted.RowFilter = filter1 + " AND " + filter2 + " AND " + filter4;
+                    }
                     else
+                    {
                         datasorted.RowFilter = filter1 + " AND " + filter2;
+                    }
                 }
                 textBox3.BackColor = textBox2.BackColor;
             }
@@ -480,11 +487,17 @@ namespace GralDomForms
             {
                 char c = st[i];
                 if (c == '*' || c == '%' || c == '[' || c == ']')
+                {
                     sb.Append("[").Append(c).Append("]");
+                }
                 else if (c == '\'')
+                {
                     sb.Append("''");
+                }
                 else
+                {
                     sb.Append(c);
+                }
             }
             return sb.ToString();
         }

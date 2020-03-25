@@ -41,8 +41,10 @@ namespace GralDomain
 
                 //set the opacity
                 if (_drobj.Transparancy <= 0 || _drobj.Transparancy >= 100) // set standard-values - compatibility to old projects
+                {
                     _drobj.Transparancy = 100;
-                
+                }
+
                 matrix.Matrix33 = _drobj.Transparancy * 0.01F;
 
                 //create image attributes

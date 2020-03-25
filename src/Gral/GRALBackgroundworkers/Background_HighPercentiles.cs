@@ -38,9 +38,11 @@ namespace GralBackgroundworkers
                                      System.ComponentModel.DoWorkEventArgs e)
         {
 			if (mydata.EmissionFactor == 0) // set emission factor to 1 if this value = 0 
-				mydata.EmissionFactor = 1;
+            {
+                mydata.EmissionFactor = 1;
+            }
 
-			int maxsource = mydata.MaxSource;
+            int maxsource = mydata.MaxSource;
 			double[,] emifac_day = new double[24, maxsource];
 			double[,] emifac_mon = new double[12, maxsource];
 			string[] text = new string[5];
@@ -66,8 +68,10 @@ namespace GralBackgroundworkers
 							text = myreader.ReadLine ().Split (new char[] { ',' });
 							emifac_day [j, itm] = Convert.ToDouble (text [1].Replace (".", decsep));
 							if (j < 12)
-								emifac_mon [j, itm] = Convert.ToDouble (text [2].Replace (".", decsep));
-						}
+                            {
+                                emifac_mon [j, itm] = Convert.ToDouble (text [2].Replace (".", decsep));
+                            }
+                        }
 					}
 					itm++;
 				}
@@ -182,8 +186,10 @@ namespace GralBackgroundworkers
 	                				{
 	                					emifac_day[j, itm1] = 1;
 	                					if (j < 12)
-	                						emifac_mon[j, itm1] = 1;
-	                				}
+                                        {
+                                            emifac_mon[j, itm1] = 1;
+                                        }
+                                    }
 	                			}
 	                		}
 
@@ -233,7 +239,9 @@ namespace GralBackgroundworkers
                             {
                                 emifac_day[j, n] = 1;
                                 if (j < 12)
+                                {
                                     emifac_mon[j, n] = 1;
+                                }
                             }
                         }
                         for (int i = 0; i < mettimefilelength; i++)
@@ -301,8 +309,11 @@ namespace GralBackgroundworkers
 				day = text3[0];
 				hour = text2[1];
 				if (hour == "24")
-					hourplus = 1;
-				wgmettime = text2[2];
+                {
+                    hourplus = 1;
+                }
+
+                wgmettime = text2[2];
 				wrmettime = text2[3];
 				akmettime = text2[4];
                 //MessageBox.Show(wgmettime+"/"+wrmettime+"/"+akmettime);
@@ -327,7 +338,9 @@ namespace GralBackgroundworkers
                     else
                     {
                         if ((wgmet[n] == wgmettime) && (wrmet[n] == wrmettime) && (akmet[n] == akmettime))
+                        {
                             meteo_situation_found = true;
+                        }
                     }
 
                     if (meteo_situation_found == true)
@@ -349,11 +362,15 @@ namespace GralBackgroundworkers
 						Parallel.For(0, sg_names.Length, itmp =>
 						{
 							if (sg_names.Length > 0) // counts the number of elements in sg_names >0
+                            {
                                 con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
-							else
+                            }
+                            else
+                            {
                                 con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
+                            }
 
-							if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itmp])) == false &&
+                            if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itmp])) == false &&
                                 File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
 							{
 								lock(thisLock)
@@ -364,12 +381,14 @@ namespace GralBackgroundworkers
 							}
 							//set variables to zero
 							for (int i = 0; i <= mydata.CellsGralX; i++)
-								for (int j = 0; j <= mydata.CellsGralY; j++)
+                            {
+                                for (int j = 0; j <= mydata.CellsGralY; j++)
 							{
 								conc[i, j, itmp] = 0;
 							}
-							//read GRAL concentration files
-							string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
+                            }
+                            //read GRAL concentration files
+                            string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
 							if (!ReadConFiles(filename, mydata, itmp, ref conc))
                             {
                                 // Error reading one *.con file
@@ -489,8 +508,11 @@ namespace GralBackgroundworkers
 						name = Convert.ToString(Math.Round(mydata.Percentile,1)).Replace(decsep, "_")  + "_" + mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename;
 					}
 					else
-						name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
-					file = Path.Combine(mydata.Projectname, @"Maps", name + ".txt");
+                    {
+                        name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
+                    }
+
+                    file = Path.Combine(mydata.Projectname, @"Maps", name + ".txt");
 					
 					try
 					{

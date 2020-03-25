@@ -89,22 +89,43 @@ namespace GralDomain
                         {
                             angle = (float)(Math.Atan((y2 - y1) / (x2 - x1)) * 180 / 3.14);
                             if ((x1 < x2) && (y1 < y2))
+                            {
                                 angle = 90 + angle;
+                            }
+
                             if ((x1 > x2) && (y1 < y2))
+                            {
                                 angle = 270 + angle;
+                            }
+
                             if ((x1 < x2) && (y1 > y2))
+                            {
                                 angle = 90 + angle;
+                            }
+
                             if ((x1 > x2) && (y1 > y2))
+                            {
                                 angle = angle - 90;
+                            }
                         }
                         else
                             if (y1 < y2)
-                                angle = 180;
+                        {
+                            angle = 180;
+                        }
+
                         if (angle == 0)
+                        {
                             if (x1 < x2)
+                            {
                                 angle = 90;
-                        else if (x1 > x2)
-                            angle = -90;
+                            }
+                            else if (x1 > x2)
+                            {
+                                angle = -90;
+                            }
+                        }
+
                         m.RotateAt(angle, new Point(Convert.ToInt32((x1 + x2) * 0.5), Convert.ToInt32((y1 + y2) * 0.5)));
                         g.Transform = m;
                         //g.DrawImage(portal, xmean - 15, ymean - 15, 30, 30);
@@ -122,13 +143,21 @@ namespace GralDomain
                         //length = 50;
                         
                         if (_drobj.LineWidth <= 1)
+                        {
                             if (_drobj.LineWidth == 0)
+                            {
                                 length = 50;
+                            }
                             else
+                            {
                                 length = Math.Max (1, Math.Min(200, Convert.ToInt32(14 / BmpScale / MapSize.SizeX))); // 14 m lenght
-                            else
-                                length = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / BmpScale / MapSize.SizeX)));
-                        
+                            }
+                        }
+                        else
+                        {
+                            length = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / BmpScale / MapSize.SizeX)));
+                        }
+
                         //point 1 of arrow
                         x1 = xmean - length * 0.5;
                         y1 = ymean - length * 0.1;

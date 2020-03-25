@@ -265,9 +265,11 @@ namespace GralDomain
 				}
 				
 				for (i = 0; i < 6; i++) // set basic data visible
-					SearchDatagridviewVisible[i] = true;
-				
-				SearchDatagridviewVisible[emission_index] = true;
+                {
+                    SearchDatagridviewVisible[i] = true;
+                }
+
+                SearchDatagridviewVisible[emission_index] = true;
 				SearchDatagridviewVisible[emission_index + 1] = true;
 				
 				search.Items_visible = SearchDatagridviewVisible; // set visible items
@@ -300,7 +302,9 @@ namespace GralDomain
                             EditPS.FillValues();
 
                             if (checkBox4.Checked == false)
+                            {
                                 PointSourcesToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             if ((i - 1) >= 0 && (i - 1) < EditPS.ItemData.Count)
@@ -326,7 +330,9 @@ namespace GralDomain
                             EditLS.FillValues();
 
                             if (checkBox8.Checked == false)
+                            {
                                 LineSourcesToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             if (text1.Length > 32)
@@ -352,7 +358,9 @@ namespace GralDomain
                             EditAS.FillValues();
 
                             if (checkBox5.Checked == false)
+                            {
                                 AreaSourcesToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             if ((i - 1) >= 0 && (i - 1) < EditAS.ItemData.Count)
@@ -378,7 +386,9 @@ namespace GralDomain
                             EditPortals.FillValues();
 
                             if (checkBox12.Checked == false)
+                            {
                                 TunnelPortalsToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             if ((i - 1) >= 0 && (i - 1) < EditPortals.ItemData.Count)
@@ -404,7 +414,9 @@ namespace GralDomain
                             EditB.FillValues();
 
                             if (checkBox15.Checked == false)
+                            {
                                 BuildingsToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             if ((i - 1) >= 0 && (i - 1) < EditB.ItemData.Count)
@@ -431,7 +443,9 @@ namespace GralDomain
 
                             // move map to the item
                             if (checkBox20.Checked == false)
+                            {
                                 ReceptorPointsToolStripMenuItemClick(null, null);
+                            }
 
                             double x0 = EditR.ItemData[i - 1].Pt.X - 150;
                             double y0 = EditR.ItemData[i - 1].Pt.Y + 100;
@@ -453,7 +467,9 @@ namespace GralDomain
                             EditWall.FillValues();
 
                             if (checkBox25.Checked == false)
+                            {
                                 WallsToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             WallData _wd = EditWall.ItemData[i - 1];
@@ -476,7 +492,9 @@ namespace GralDomain
                             EditVegetation.FillValues();
 
                             if (checkBox26.Checked == false)
+                            {
                                 VegetationToolStripMenuItemClick(null, null);
+                            }
 
                             // move map to the item
                             VegetationData _vdata = EditVegetation.ItemData[i - 1];

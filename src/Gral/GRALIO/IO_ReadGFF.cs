@@ -182,15 +182,22 @@ namespace GralIO
                 int zipheader = 0;
                 const int ZIP_LEAD_BYTES = 0x04034b50;
 
-                if (File.Exists(file) == false) return false;
+                if (File.Exists(file) == false)
+                {
+                    return false;
+                }
 
                 using (BinaryReader header = new BinaryReader(File.Open(file, FileMode.Open)))
                 {
                     zipheader = header.ReadInt32();
                     if (zipheader == ZIP_LEAD_BYTES) // file is zipped
+                    {
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
             }
             catch

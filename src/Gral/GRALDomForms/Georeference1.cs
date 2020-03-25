@@ -124,8 +124,10 @@ namespace GralDomForms
         	try
 			{
 				if (Form_Georef1_Closed != null)
-					Form_Georef1_Closed(this, e); // call function closed()
-			}
+                {
+                    Form_Georef1_Closed(this, e); // call function closed()
+                }
+            }
 			catch{}
         }
         

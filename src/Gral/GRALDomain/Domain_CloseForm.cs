@@ -18,7 +18,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -27,7 +26,7 @@ using GralItemForms;
 
 namespace GralDomain
 {
-	public partial class Domain
+    public partial class Domain
 	{
 		/// <summary>
 		/// Close the domain form and release all objects, like bitmaps and list
@@ -69,7 +68,9 @@ namespace GralDomain
                                                          || Application.OpenForms[i].Text == "GRAL GUI - Section drawing"
                                                          || Application.OpenForms[i].Text == "GRAL -  3D Viewer")
                   )
+                {
                     Application.OpenForms[i].Close();
+                }
             }
          
             // cancel all await tasks
@@ -121,7 +122,10 @@ namespace GralDomain
             MMOData.SetWindVel(null); MMOData.SetWindDir(null); MMOData.SetSC(null); MMOData.SetDate(null); MMOData.SetTime(null); MMOData.SetHour(null);
             
             if (NorthArrowBitmap != null)
+            {
                 NorthArrowBitmap.Dispose();
+            }
+
             NorthArrowBitmap = null;
            
             CornerAreaSource = null;
@@ -149,9 +153,16 @@ namespace GralDomain
             GeoReferenceOne.Form_Georef1_Closed -= new Georeference1_Closed(CloseGeoRef1); // Message, that georef1 is closed
             GeoReferenceTwo.Form_Georef2_Closed -= new Georeference2_Closed(CloseGeoRef2); // Message, that georef2 is closed
             
-            if (GeoReferenceOne != null) GeoReferenceOne.Close();
-            if (GeoReferenceTwo != null) GeoReferenceTwo.Close();
-            
+            if (GeoReferenceOne != null)
+            {
+                GeoReferenceOne.Close();
+            }
+
+            if (GeoReferenceTwo != null)
+            {
+                GeoReferenceTwo.Close();
+            }
+
             if (EditPS != null)
             {
                 EditPS.AllowClosing = true;
@@ -213,27 +224,49 @@ namespace GralDomain
             for(int i = Application.OpenForms.Count-1; i >=0; i--)
             {
                 if(Application.OpenForms[i] != MainForm && Application.OpenForms[i].Name.Contains("Profile_"))
+                {
                     Application.OpenForms[i].Close();
+                }
             }
             
             MouseWheel -= new MouseEventHandler(form1_MouseWheel); // Kuntner
             ToolTipMousePosition.Dispose();
             if (toolTip1 != null)
+            {
                 toolTip1.Dispose();
+            }
+
             if (menuStrip1 != null)
+            {
                 menuStrip1.Dispose();
+            }
+
             if (panel1 != null)
+            {
                 panel1.Dispose();
+            }
+
             if (colorDialog1 != null)
+            {
                 colorDialog1.Dispose();
+            }
+
             if (openFileDialog1 != null)
+            {
                 openFileDialog1.Dispose();
+            }
+
             if (fontDialog1 != null)
+            {
                 fontDialog1.Dispose();
+            }
+
             if (saveFileDialog1 != null)
+            {
                 saveFileDialog1.Dispose();
-            
-            foreach(DrawingObjects _drobj  in ItemOptions)
+            }
+
+            foreach (DrawingObjects _drobj  in ItemOptions)
             {
                 _drobj.Dispose();
             }
@@ -244,7 +277,9 @@ namespace GralDomain
             try
             {
                 if (DomainClosed!= null)
+                {
                     DomainClosed(this, e);
+                }
             }
             catch
             {}
@@ -385,7 +420,9 @@ namespace GralDomain
             for(int i = Application.OpenForms.Count-1; i >=0; i--)
             {
                 if(Application.OpenForms[i] != MainForm && Application.OpenForms[i].Name == "Infobox")
+                {
                     Application.OpenForms[i].Close();
+                }
             }
             SelectedItems.Clear(); // delete the Select-List
         }

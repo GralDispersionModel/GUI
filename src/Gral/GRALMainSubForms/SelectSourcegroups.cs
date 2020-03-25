@@ -29,10 +29,14 @@ namespace GralMainForms
 		public string Prefix
 		{ get 
         	{ if (_prefix.Length > 0)
-        			return _prefix + "_";
-        		else
-        			return String.Empty;
-        	} set {_prefix = value;}
+                {
+                    return _prefix + "_";
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            } set {_prefix = value;}
 		} // Filename
 
 		public SelectSourcegroups (Main f, int _mode)
@@ -78,8 +82,10 @@ namespace GralMainForms
                 }
             }
             for (int i = 0; i < listBox1.Items.Count; i++)
+            {
                 listBox1.SelectedIndex = i;
-            
+            }
+
             textBox1.Text = _prefix;
             
             if (Mode == 0) // do not show odour group box

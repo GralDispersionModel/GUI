@@ -96,8 +96,11 @@ namespace Gral
 				if (ReadFile.ReadMeteopgtAllFile() == true)
 				{
 					if (ReadFile.MeteoFrequ > 0)
-						progressBar4.Maximum = Convert.ToInt32(ReadFile.MeteoFrequ);
-					DispSituationfrequ = ReadFile.DispsituationFrequ;
+                    {
+                        progressBar4.Maximum = Convert.ToInt32(ReadFile.MeteoFrequ);
+                    }
+
+                    DispSituationfrequ = ReadFile.DispsituationFrequ;
 				}
 			}
 			else
@@ -115,8 +118,10 @@ namespace Gral
 			string[] filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL*.exe", SearchOption.TopDirectoryOnly);
 			string dir;
 			if (filePaths.Length > 0)
-				dir = Path.GetDirectoryName(filePaths[0]);
-			else
+            {
+                dir = Path.GetDirectoryName(filePaths[0]);
+            }
+            else
 			{
 				#if __MonoCS__
 				filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL*.dll", SearchOption.TopDirectoryOnly);
@@ -125,10 +130,14 @@ namespace Gral
 				#endif
 
 				if (filePaths.Length > 0)
-					dir = Path.GetDirectoryName(filePaths[0]);
-				else
-					dir = Path.GetDirectoryName(Application.ExecutablePath);
-			}
+                {
+                    dir = Path.GetDirectoryName(filePaths[0]);
+                }
+                else
+                {
+                    dir = Path.GetDirectoryName(Application.ExecutablePath);
+                }
+            }
 
 			OpenFileDialog dialog = new OpenFileDialog();
 			#if __MonoCS__
@@ -175,10 +184,12 @@ namespace Gral
 								batch = "GRAL*.dll";
 							#else
 							if (Path.GetExtension(dialog.FileName).ToLower() == ".bat")
-								batch = "GRAL*.bat";
-							#endif
+                            {
+                                batch = "GRAL*.bat";
+                            }
+#endif
 
-							if (batch != String.Empty)
+                            if (batch != String.Empty)
 							{
 								filePaths = Directory.GetFiles(Path.GetDirectoryName(dialog.FileName),
 								                               Path.GetFileNameWithoutExtension(dialog.FileName) + ".*",
@@ -205,9 +216,11 @@ namespace Gral
 					DirectoryInfo di = new DirectoryInfo(newPath1);
 					FileInfo[] files_conc = di.GetFiles("*.con");
 					if (files_conc.Length == 0) // compressed files?
-						files_conc = di.GetFiles("*.grz");
+                    {
+                        files_conc = di.GetFiles("*.grz");
+                    }
 
-					if (transient == 1) // steady state mode
+                    if (transient == 1) // steady state mode
 					{
 						if (files_conc.Length >= numericUpDown5.Value)
 						{
@@ -215,16 +228,21 @@ namespace Gral
 							                                   + Convert.ToString(numericUpDown5.Value)
 							                                   + " will be deleted", "Delete existing concentration files",
 							                                   MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-							if (res == DialogResult.Cancel) return; // exit, if user cancels
-						}
+							if (res == DialogResult.Cancel)
+                            {
+                                return; // exit, if user cancels
+                            }
+                        }
 
 						for (int i = 0; i < files_conc.Length; i++)
 						{
 							try
 							{
 								if (Convert.ToInt32(files_conc[i].Name.Substring(0, 5)) >= Convert.ToInt32(numericUpDown5.Value))
-									files_conc[i].Delete();
-							}
+                                {
+                                    files_conc[i].Delete();
+                                }
+                            }
 							catch { }
 						}
 						files_conc = di.GetFiles("*.odr"); // delete *.odr files
@@ -235,8 +253,10 @@ namespace Gral
 								try
 								{
 									if (Convert.ToInt32(files_conc[i].Name.Substring(0, 5)) >= Convert.ToInt32(numericUpDown5.Value))
-										files_conc[i].Delete();
-								}
+                                    {
+                                        files_conc[i].Delete();
+                                    }
+                                }
 								catch { }
 							}
 						}
@@ -342,7 +362,10 @@ namespace Gral
                 using (StreamReader read = new StreamReader(Path.Combine(Main.App_Settings_Path, @"DefaultPath")))
                 {
                     a = read.ReadLine();
-                    if (!read.EndOfStream) b = read.ReadLine();
+                    if (!read.EndOfStream)
+                    {
+                        b = read.ReadLine();
+                    }
                 }
 
                 using (StreamWriter write = new StreamWriter(Path.Combine(Main.App_Settings_Path, @"DefaultPath")))

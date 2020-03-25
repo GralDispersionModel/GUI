@@ -18,7 +18,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -89,7 +88,10 @@ namespace GralDomain
                             }
                         }
                     }
-                    if (CancelDrawing) break;
+                    if (CancelDrawing)
+                    {
+                        break;
+                    }
                 }
             }
             
@@ -154,7 +156,10 @@ namespace GralDomain
                             }
                         }
                     }
-                    if (CancelDrawing) break;
+                    if (CancelDrawing)
+                    {
+                        break;
+                    }
                 }
             }
         }

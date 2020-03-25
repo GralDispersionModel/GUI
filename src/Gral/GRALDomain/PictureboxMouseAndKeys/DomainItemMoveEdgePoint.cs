@@ -40,11 +40,13 @@ namespace GralDomain
 			}
 			
 			if (vertices < 1)
-				return;
-			
-			while (i < vertices)
+            {
+                return;
+            }
+
+            while (i < vertices)
 			{
-				double dx = Convert.ToDouble(textBox1.Text.Replace(".",decsep)) - EditAS.CorneAareaX[i];
+				double dx = Convert.ToDouble(textBox1.Text.Replace(".",decsep)) - EditAS.CornerAreaX[i];
 				double dy = Convert.ToDouble(textBox2.Text.Replace(".",decsep)) - EditAS.CornerAreaY[i];
 				if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
 				{
@@ -59,16 +61,21 @@ namespace GralDomain
 			// 1st line
 			int index = indexmin - 1;
 			if (index < 0)
-				index = vertices - 1;
-			
-			CornerAreaSource[1].X =  Convert.ToInt32((EditAS.CorneAareaX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = vertices - 1;
+            }
+
+            CornerAreaSource[1].X =  Convert.ToInt32((EditAS.CornerAreaX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			CornerAreaSource[1].Y =  Convert.ToInt32((EditAS.CornerAreaY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			//2nd line
 			index  = indexmin + 1;
 			if (index >= vertices)
-				index = 0;
-			RubberLineCoors[1].X =  Convert.ToInt32((EditAS.CorneAareaX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = 0;
+            }
+
+            RubberLineCoors[1].X =  Convert.ToInt32((EditAS.CornerAreaX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditAS.CornerAreaY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
@@ -92,9 +99,11 @@ namespace GralDomain
 			}
 			
 			if (vertices < 1)
-				return;
-			
-			while (i < vertices)
+            {
+                return;
+            }
+
+            while (i < vertices)
 			{
 				double dx = Convert.ToDouble(textBox1.Text.Replace(".",decsep)) - EditVegetation.CornerVegX[i];
 				double dy = Convert.ToDouble(textBox2.Text.Replace(".",decsep)) - EditVegetation.CornerVegY[i];
@@ -112,17 +121,21 @@ namespace GralDomain
 			// 1st line
 			int index = indexmin - 1;
 			if (index < 0)
-				index = vertices - 1;
-			
-			CornerAreaSource[1].X =  Convert.ToInt32((EditVegetation.CornerVegX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = vertices - 1;
+            }
+
+            CornerAreaSource[1].X =  Convert.ToInt32((EditVegetation.CornerVegX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			CornerAreaSource[1].Y =  Convert.ToInt32((EditVegetation.CornerVegY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			//2nd line
 			index  = indexmin + 1;
 			if (index >= vertices)
-				index = 0;
-			
-			RubberLineCoors[1].X =  Convert.ToInt32((EditVegetation.CornerVegX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = 0;
+            }
+
+            RubberLineCoors[1].X =  Convert.ToInt32((EditVegetation.CornerVegX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditVegetation.CornerVegY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
@@ -142,9 +155,11 @@ namespace GralDomain
 			int vertices = 0;
 			Int32.TryParse(EditLS.GetNumberOfVerticesText(), out vertices);
 			if (vertices < 1)
-				return;
-			
-			while (i < vertices)
+            {
+                return;
+            }
+
+            while (i < vertices)
 			{
 				double dx = Convert.ToDouble(textBox1.Text.Replace(".",decsep)) - EditLS.CornerLineX[i];
 				double dy = Convert.ToDouble(textBox2.Text.Replace(".",decsep)) - EditLS.CornerLineY[i];
@@ -161,16 +176,21 @@ namespace GralDomain
 			// 1st line
 			int index = indexmin - 1;
 			if (index < 0)
-				index = indexmin + 1;
-			CornerAreaSource[1].X =  Convert.ToInt32((EditLS.CornerLineX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = indexmin + 1;
+            }
+
+            CornerAreaSource[1].X =  Convert.ToInt32((EditLS.CornerLineX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			CornerAreaSource[1].Y =  Convert.ToInt32((EditLS.CornerLineY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			//2nd line
 			index  = indexmin + 1;
 			if (index >= vertices)
-				index = vertices - 2;
-			
-			RubberLineCoors[1].X =  Convert.ToInt32((EditLS.CornerLineX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = vertices - 2;
+            }
+
+            RubberLineCoors[1].X =  Convert.ToInt32((EditLS.CornerLineX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditLS.CornerLineY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			
@@ -189,9 +209,11 @@ namespace GralDomain
 			int vertices = 0;
 			Int32.TryParse(EditWall.GetNumberOfVerticesText(), out vertices);
 			if (vertices < 1)
-				return;
-			
-			while (i < vertices)
+            {
+                return;
+            }
+
+            while (i < vertices)
 			{
 				double dx = Convert.ToDouble(textBox1.Text.Replace(".",decsep)) - EditWall.CornerWallX[i];
 				double dy = Convert.ToDouble(textBox2.Text.Replace(".",decsep)) - EditWall.CornerWallY[i];
@@ -208,16 +230,21 @@ namespace GralDomain
 			// 1st line
 			int index = indexmin - 1;
 			if (index < 0)
-				index = indexmin + 1;
-			CornerAreaSource[1].X =  Convert.ToInt32((EditWall.CornerWallX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = indexmin + 1;
+            }
+
+            CornerAreaSource[1].X =  Convert.ToInt32((EditWall.CornerWallX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			CornerAreaSource[1].Y =  Convert.ToInt32((EditWall.CornerWallY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			//2nd line
 			index  = indexmin + 1;
 			if (index >= vertices)
-				index = vertices - 2;
-			
-			RubberLineCoors[1].X =  Convert.ToInt32((EditWall.CornerWallX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = vertices - 2;
+            }
+
+            RubberLineCoors[1].X =  Convert.ToInt32((EditWall.CornerWallX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditWall.CornerWallY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			EditWall.CornerWallCount = indexmin;
@@ -238,9 +265,11 @@ namespace GralDomain
 				vertices = EditB.ItemData[EditB.ItemDisplayNr].Pt.Count;
 			}
 			if (vertices < 1)
-				return;
-			
-			while (i < vertices)
+            {
+                return;
+            }
+
+            while (i < vertices)
 			{
 				double dx = Convert.ToDouble(textBox1.Text.Replace(".",decsep)) - EditB.CornerBuildingX[i];
 				double dy = Convert.ToDouble(textBox2.Text.Replace(".",decsep)) - EditB.CornerBuildingY[i];
@@ -257,17 +286,22 @@ namespace GralDomain
 			// 1st line
 			int index = indexmin - 1;
 			if (index < 0)
-				index = vertices - 1;
-			CornerAreaSource[1].X =  Convert.ToInt32((EditB.CornerBuildingX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = vertices - 1;
+            }
+
+            CornerAreaSource[1].X =  Convert.ToInt32((EditB.CornerBuildingX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			CornerAreaSource[1].Y =  Convert.ToInt32((EditB.CornerBuildingY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			
 			//2nd line
 			index  = indexmin + 1;
 			
 			if (index >= vertices)
-				index = 0;
-			
-			RubberLineCoors[1].X =  Convert.ToInt32((EditB.CornerBuildingX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
+            {
+                index = 0;
+            }
+
+            RubberLineCoors[1].X =  Convert.ToInt32((EditB.CornerBuildingX[index] - MapSize.West) * 1 / BmpScale / MapSize.SizeX + TransformX);
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditB.CornerBuildingY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			EditB.CornerBuilding = indexmin;

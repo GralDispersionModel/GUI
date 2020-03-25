@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using GralIO;
-using GralStaticFunctions;
 using GralMessage;
 
 namespace GralDomain
@@ -546,39 +545,51 @@ namespace GralDomain
                             })
                             {
                                 if (files_wnd.Length > 0)
+                                {
                                     fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.wnd");
+                                }
 
                                 if (fdm.ShowDialog() == DialogResult.OK)
                                 {
                                     for (int i = 0; i < files_wnd.Length; i++)
+                                    {
                                         files_wnd[i].Delete();
+                                    }
                                     //delete *.scl files
                                     files_wnd = di.GetFiles("*.scl");
                                     if (files_wnd.Length > 0)
                                     {
                                         for (int i = 0; i < files_wnd.Length; i++)
+                                        {
                                             files_wnd[i].Delete();
+                                        }
                                     }
                                     //delete *.obl files
                                     files_wnd = di.GetFiles("*.obl");
                                     if (files_wnd.Length > 0)
                                     {
                                         for (int i = 0; i < files_wnd.Length; i++)
+                                        {
                                             files_wnd[i].Delete();
+                                        }
                                     }
                                     //delete *.ust files
                                     files_wnd = di.GetFiles("*.ust");
                                     if (files_wnd.Length > 0)
                                     {
                                         for (int i = 0; i < files_wnd.Length; i++)
+                                        {
                                             files_wnd[i].Delete();
+                                        }
                                     }
                                     //delete steady_state.txt files
                                     files_wnd = di.GetFiles("?????_steady_state.txt");
                                     if (files_wnd.Length > 0)
                                     {
                                         for (int i = 0; i < files_wnd.Length; i++)
+                                        {
                                             files_wnd[i].Delete();
+                                        }
                                     }
                                 }
                             }

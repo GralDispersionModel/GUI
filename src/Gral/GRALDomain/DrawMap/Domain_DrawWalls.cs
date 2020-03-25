@@ -122,7 +122,10 @@ namespace GralDomain
                                         Matrix m = new Matrix();
                                         float angle = 90;
                                         if (x2 != x1)
+                                        {
                                             angle = (float)(Math.Atan((y2 - y1) / (x2 - x1)) * 180 / 3.14);
+                                        }
+
                                         m.RotateAt(angle, new Point((int)((x1 + x2) * 0.5), (int)((y1 + y2) * 0.5)));
                                         g.Transform = m;
                                         
@@ -158,8 +161,10 @@ namespace GralDomain
                         linePoints = null;
 
                     }
-                    if (CancelDrawing) break;
-                    
+                    if (CancelDrawing)
+                    {
+                        break;
+                    }
                 }
                 catch{}
             } // foreach

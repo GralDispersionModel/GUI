@@ -41,13 +41,31 @@ namespace GralDomain
                 HideWindows(25); // Kuntner
                 if (ShowFirst.Wa) // set the inital position of the form
                 {
-                    if (ShowFirst.Ls == false) EditWall.Location = EditLS.Location;
-                    else if (ShowFirst.As == false) EditWall.Location = EditAS.Location;
-                    else if (ShowFirst.Bu == false) EditWall.Location = EditB.Location;
-                    else if (ShowFirst.Ps == false) EditWall.Location = EditPS.Location;
-                    else if (ShowFirst.Re == false) EditWall.Location = EditR.Location;
+                    if (ShowFirst.Ls == false)
+                    {
+                        EditWall.Location = EditLS.Location;
+                    }
+                    else if (ShowFirst.As == false)
+                    {
+                        EditWall.Location = EditAS.Location;
+                    }
+                    else if (ShowFirst.Bu == false)
+                    {
+                        EditWall.Location = EditB.Location;
+                    }
+                    else if (ShowFirst.Ps == false)
+                    {
+                        EditWall.Location = EditPS.Location;
+                    }
+                    else if (ShowFirst.Re == false)
+                    {
+                        EditWall.Location = EditR.Location;
+                    }
                     else
+                    {
                         EditWall.Location = GetScreenPositionForNewDialog();
+                    }
+
                     ShowFirst.Wa = false;
                 }
                 MouseControl = 75; //edit walls
@@ -114,10 +132,14 @@ namespace GralDomain
             }
             //show/hide button to select walls
             if (EditWall.ItemData.Count > 0)
+            {
                 button49.Visible = true;
+            }
             else
+            {
                 button49.Visible = false;
-            
+            }
+
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations

@@ -69,7 +69,9 @@ namespace GralDomain
                         int ymean = 0;
                         int index = -2;
                         if ((_drobj.Item == -1) && (_drobj.SourceGroup == -1))
+                        {
                             index = 0;
+                        }
 
                         bool dismiss = true;
 
@@ -82,7 +84,9 @@ namespace GralDomain
                             ymean += y1;
                             
                             if (dismiss && (x1 > 0) && (x1 < pb1_width) && (y1 > 0) && (y1 < pb1_height))
+                            {
                                 dismiss = false;
+                            }
 
                             // at last point
                             if ((i == vertices - 1) && (dismiss == false))
@@ -103,7 +107,9 @@ namespace GralDomain
                                     if ((_drobj.SourceGroup == _as.Poll.SourceGroup) || (_drobj.SourceGroup == -1))
                                     {
                                         if (_drobj.Item == -1)
+                                        {
                                             index = 0;
+                                        }
                                         else
                                         {
                                             //filter pollutant

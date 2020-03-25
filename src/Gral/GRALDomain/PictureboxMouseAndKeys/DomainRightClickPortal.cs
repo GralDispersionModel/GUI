@@ -72,8 +72,10 @@ namespace GralDomain
 				EditAndSavePortalSourceData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditPortals.ItemData.Count > 0)
-					MouseControl = 16;
-			}
+                {
+                    MouseControl = 16;
+                }
+            }
 			if (mi.Index == 2) // Flip exit surface
 			{
 			    PortalsData _pdata = EditPortals.ItemData[Convert.ToInt32(mi.Tag)];

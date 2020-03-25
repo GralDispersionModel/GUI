@@ -175,19 +175,29 @@ namespace GralDomForms
 		{
 			Meteo_Init = textBox1.Text;
 			if (!Meteo_Init.EndsWith(Meteo_Ext))
-				Meteo_Init += Meteo_Ext;
-			// if Meteo_Init contains invalid characters for a file!					
-			Meteo_Init = string.Join("_", Meteo_Init.Split(Path.GetInvalidFileNameChars()));
+            {
+                Meteo_Init += Meteo_Ext;
+            }
+            // if Meteo_Init contains invalid characters for a file!					
+            Meteo_Init = string.Join("_", Meteo_Init.Split(Path.GetInvalidFileNameChars()));
 			Meteo_Height = Convert.ToInt32(numericUpDown1.Value);
 			if (radioButton1.Checked)
-				Meteo_Model = 1;
-			else if (radioButton2.Checked)
-				Meteo_Model = 2;
-			
-			if (checkBox1.Checked)
-				Local_Stability = true;
-			else
-				Local_Stability = false;
+            {
+                Meteo_Model = 1;
+            }
+            else if (radioButton2.Checked)
+            {
+                Meteo_Model = 2;
+            }
+
+            if (checkBox1.Checked)
+            {
+                Local_Stability = true;
+            }
+            else
+            {
+                Local_Stability = false;
+            }
 
             if (checkBox2.Checked)
             {
@@ -203,8 +213,10 @@ namespace GralDomForms
 			try
 			{
 				if (Start_computation != null)
-					Start_computation(this, e);
-			}
+                {
+                    Start_computation(this, e);
+                }
+            }
 			catch
 			{}
 		}
@@ -236,8 +248,10 @@ namespace GralDomForms
 			try
 			{
 				if (Cancel_computation != null)
-					Cancel_computation(this, e);
-			}
+                {
+                    Cancel_computation(this, e);
+                }
+            }
 			catch
 			{}
 			Close();

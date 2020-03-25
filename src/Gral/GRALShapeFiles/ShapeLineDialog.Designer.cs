@@ -81,11 +81,11 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox31 = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -613,6 +613,17 @@
             this.toolTip1.SetToolTip(this.checkBox2, "1/conversion factor");
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
+            // checkBox3
+            // 
+            this.checkBox3.ForeColor = System.Drawing.Color.Blue;
+            this.checkBox3.Location = new System.Drawing.Point(384, 4);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(236, 21);
+            this.checkBox3.TabIndex = 63;
+            this.checkBox3.Text = "3D Line - ShapeFile PolyLineZ";
+            this.toolTip1.SetToolTip(this.checkBox3, "Use PolylineZ from the shape file");
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -654,17 +665,6 @@
             this.label8.Size = new System.Drawing.Size(90, 13);
             this.label8.TabIndex = 68;
             this.label8.Text = "Vertical extension";
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.ForeColor = System.Drawing.Color.Blue;
-            this.checkBox3.Location = new System.Drawing.Point(384, 4);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(104, 21);
-            this.checkBox3.TabIndex = 63;
-            this.checkBox3.Text = "3D Line";
-            this.toolTip1.SetToolTip(this.checkBox3, "Use PolylineZ from the shape file");
-            this.checkBox3.UseVisualStyleBackColor = true;
             // 
             // button4
             // 

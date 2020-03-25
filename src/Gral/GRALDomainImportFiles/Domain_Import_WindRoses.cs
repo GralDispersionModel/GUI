@@ -165,39 +165,61 @@ namespace GralDomain
             }
 
             if (maxwind <= 6)
-				wndclasses = new double[] { 0.5, 1, 2, 3, 4, 5, 6 };
-			else if (maxwind <= 7)
-				wndclasses = new double[] { 0.5, 1, 2, 3, 4, 5, 7 };
-			else if (maxwind <= 8)
-				wndclasses = new double[] { 0.5, 1, 2, 3, 4, 6, 8 };
-			else if (maxwind <= 10)
-				wndclasses = new double[] { 0.5, 1, 2, 3, 4, 7, 10 };
-			else if (maxwind <= 14)
-				wndclasses = new double[] { 0.5, 1, 2, 4, 7, 10, 14 };
-			else if (maxwind <= 20)
-				wndclasses = new double[] { 0.5, 1, 2, 4, 8, 12, 20 };
+            {
+                wndclasses = new double[] { 0.5, 1, 2, 3, 4, 5, 6 };
+            }
+            else if (maxwind <= 7)
+            {
+                wndclasses = new double[] { 0.5, 1, 2, 3, 4, 5, 7 };
+            }
+            else if (maxwind <= 8)
+            {
+                wndclasses = new double[] { 0.5, 1, 2, 3, 4, 6, 8 };
+            }
+            else if (maxwind <= 10)
+            {
+                wndclasses = new double[] { 0.5, 1, 2, 3, 4, 7, 10 };
+            }
+            else if (maxwind <= 14)
+            {
+                wndclasses = new double[] { 0.5, 1, 2, 4, 7, 10, 14 };
+            }
+            else if (maxwind <= 20)
+            {
+                wndclasses = new double[] { 0.5, 1, 2, 4, 8, 12, 20 };
+            }
 
-			foreach (WindData data in MeteoTimeSeries)
+            foreach (WindData data in MeteoTimeSeries)
 			{
 				{
 					int sektor = Convert.ToInt32(Math.Round(data.Dir / 22.5, 0));
 					if (sektor > 15)
-					  sektor = 0;
-					  
-					if (_dr.Filter) // show wind velocity
+                    {
+                        sektor = 0;
+                    }
+
+                    if (_dr.Filter) // show wind velocity
 					{
 					    int wklass = 0; //Convert.ToInt32(Math.Truncate(windge[i])) + 1;
 
 					    for (int c = 0; c < 6; c++)
 					    {
 					        if (data.Vel > wndclasses[c] && data.Vel <= wndclasses[c + 1])
-					            wklass = c + 1;
-					    }
+                            {
+                                wklass = c + 1;
+                            }
+                        }
 
 					    if (data.Vel <= wndclasses[0])
-					        wklass = 0;
-					    if (data.Vel > wndclasses[6])
-					        wklass = 7;
+                        {
+                            wklass = 0;
+                        }
+
+                        if (data.Vel > wndclasses[6])
+                        {
+                            wklass = 7;
+                        }
+
                         if (_dr.ContourDrawBorder && sectorWidth > 1)
                         {
                             double start = data.Dir - sectorWidth * 0.5F;

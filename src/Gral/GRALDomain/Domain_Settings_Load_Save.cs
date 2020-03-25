@@ -42,7 +42,9 @@ namespace GralDomain
                 SaveSettings2("Settings1.ini", 2); // write new setting file
             }
             if (mode > 0)
+            {
                 ObjectmanagerUpdateListbox(); // update objectmanager
+            }
         }
 
         
@@ -137,8 +139,10 @@ namespace GralDomain
                                     myWriter.WriteLine(Convert.ToString(_drobj.North, ic));
                                     myWriter.WriteLine(bol.ConvertToString(_drobj.Filter));
                                     for (int j = 0; j < _drobj.FillColors.Count; j++)
+                                    {
                                         myWriter.Write(ColorTranslator.ToHtml(_drobj.FillColors[j]) + "\t");
-                                    
+                                    }
+
                                     myWriter.WriteLine();
                                     if (_drobj.ItemValues == null)
                                     {
@@ -146,8 +150,10 @@ namespace GralDomain
                                         _drobj.ItemValues.Add(0);
                                     }
                                     for (int j = 0; j < _drobj.ItemValues.Count; j++)
+                                    {
                                         myWriter.Write((_drobj.ItemValues[j].ToString(ic)) + "\t");
-                                    
+                                    }
+
                                     myWriter.WriteLine();
                                     if (_drobj.LineColors == null)
                                     {
@@ -155,7 +161,10 @@ namespace GralDomain
                                         _drobj.LineColors.Add(Color.Black);
                                     }
                                     for (int j = 0; j < _drobj.LineColors.Count; j++)
+                                    {
                                         myWriter.Write(ColorTranslator.ToHtml(_drobj.LineColors[j]) + "\t");
+                                    }
+
                                     myWriter.WriteLine();
                                 }
                                 catch
@@ -221,10 +230,25 @@ namespace GralDomain
                     int version = 0;
                     
                     dummy = myReader.ReadLine();
-                    if (dummy == "Settings for displaying V16") version = 1;
-                    if (dummy == "Settings for displaying V18") version = 1;
-                    if (dummy == "Settings for displaying V20") version = 2;
-                    if (dummy == "Settings for displaying V20.01") version = 3;
+                    if (dummy == "Settings for displaying V16")
+                    {
+                        version = 1;
+                    }
+
+                    if (dummy == "Settings for displaying V18")
+                    {
+                        version = 1;
+                    }
+
+                    if (dummy == "Settings for displaying V20")
+                    {
+                        version = 2;
+                    }
+
+                    if (dummy == "Settings for displaying V20.01")
+                    {
+                        version = 3;
+                    }
 
                     int count = Convert.ToInt32(myReader.ReadLine());
                     NorthArrow.Scale = Convert.ToDecimal(myReader.ReadLine().Replace(".", decsep));
@@ -430,7 +454,9 @@ namespace GralDomain
                             {
                                 string tempfilename=Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
                                 if (File.Exists(tempfilename) == true)
+                                {
                                     _drobj.ContourFilename = tempfilename;
+                                }
                             }
                             
                             if (File.Exists(_drobj.ContourFilename) == false)
@@ -528,9 +554,10 @@ namespace GralDomain
                         ggeom = null;
                     }
                     else
+                    {
                         throw new FileNotFoundException("Error reading ggeom.asc");
-                    
-                    
+                    }
+
                     ix0 = Math.Min(Math.Max(ix0, 0), NX);
                     ix1 = Math.Min(Math.Max(ix1, 0), NX);
                     iy0 = Math.Min(Math.Max(iy0, 0), NY);
@@ -571,9 +598,14 @@ namespace GralDomain
                             for (int z = iy0; z >= iy1; z --)
                             {
                                 if (z <= 0 || z >= NY || i <= 0 || i >= NX) // otherwise outside the GRAMM domain
+                                {
                                     height = -1; // 0 - 5
+                                }
                                 else
+                                {
                                     height = (AH[i, z] - AH_Min) * vert_fac;
+                                }
+
                                 mywriter.Write(height);
                             }							
                         }

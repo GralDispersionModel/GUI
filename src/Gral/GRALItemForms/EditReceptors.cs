@@ -12,7 +12,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -211,9 +210,13 @@ namespace GralItemForms
             if (ask == true)
             {
                 if (St_F.InputBox("Attention", "Do you really want to delete this receptor?", this) == DialogResult.OK)
+                {
                     ask = false;
+                }
                 else
+                {
                     ask = true; // Cancel -> do not delete!
+                }
             }
 
             if (ask == false)
@@ -228,7 +231,10 @@ namespace GralItemForms
                     try
                     {
                         if (trackBar1.Maximum > 1)
+                        {
                             trackBar1.Maximum = trackBar1.Maximum - 1;
+                        }
+
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
                         ItemData.RemoveAt(ItemDisplayNr);
                         ItemDisplayNr = trackBar1.Value - 1;
@@ -266,8 +272,10 @@ namespace GralItemForms
 			try
 			{
 			if (ReceptorRedraw != null)
-				ReceptorRedraw(this, e);
-			}
+                {
+                    ReceptorRedraw(this, e);
+                }
+            }
 			catch
 			{}
         }

@@ -20,7 +20,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 using GralData;
@@ -198,8 +197,11 @@ namespace GralDomain
 				EditAndSaveLineSourceData(sender, null); // save changes
 				
 				if (EditLS.ItemData.Count > 0)
-					MouseControl = 11;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 11;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 3) // Delete edge point
 			{
@@ -241,8 +243,11 @@ namespace GralDomain
 				EditAndSaveLineSourceData(sender, null); // save changes
 				
 				if (EditLS.ItemData.Count > 0)
-					MouseControl = 11;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 11;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 4) // Delete line Source
 			{
@@ -255,8 +260,10 @@ namespace GralDomain
 				EditAndSaveLineSourceData(sender, null); // save changes
 				Picturebox1_Paint();
 				if (EditLS.ItemData.Count > 0)
-					MouseControl = 11;
-			}
+                {
+                    MouseControl = 11;
+                }
+            }
 			if (mi.Index == 5) // Copy line source
 			{
 				CopiedItem.LineSource = new LineSourceData(EditLS.ItemData[Convert.ToInt32(mi.Tag)]);
