@@ -40,7 +40,7 @@ namespace GralItemForms
         /// <summary>
         /// X corner points of an area source in meters
         /// </summary>
-        public double [] CorneAareaX = new double [1000];
+        public double [] CornerAreaX = new double [1000];
         /// <summary>
         /// Y corner points of an area source in meters
         /// </summary>
@@ -54,17 +54,17 @@ namespace GralItemForms
         //delegate to send a message, that user tries to close the form
         public event ForceItemFormHide ItemFormHide;
 
-        private TextBox [] areaemission = new TextBox [10];     //textboxes for emission strenght input of area sources
-		private ComboBox [] areapollutant = new ComboBox [10];  //ComboBoxes for selecting pollutants of area sources
-		private Label [] labelpollutant = new Label [10];       //labels for pollutant types
-		private Button [] but1 = new Button [10];               //Buttons for units
+        private readonly TextBox [] areaemission = new TextBox [10];     //textboxes for emission strenght input of area sources
+		private readonly ComboBox [] areapollutant = new ComboBox [10];  //ComboBoxes for selecting pollutants of area sources
+		private readonly Label [] labelpollutant = new Label [10];       //labels for pollutant types
+		private readonly Button [] but1 = new Button [10];               //Buttons for units
 		
-		private Deposition [] dep = new Deposition [10];
-		private CultureInfo ic = CultureInfo.InvariantCulture;
+		private readonly Deposition [] dep = new Deposition [10];
+		private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 		private int Dialog_Initial_Width = 0;
-		private int Button1_Width = 50;
-		private int Button1_Height = 10;
-		private int TBWidth = 80;
+		private readonly int Button1_Width = 50;
+		private readonly int Button1_Height = 10;
+		private readonly int TBWidth = 80;
 		private int TextBox_x0 = 0;
 		private int TrackBar_x0 = 0;
 		private int Numericupdown_x0 = 0;
@@ -231,10 +231,14 @@ namespace GralItemForms
 			for (int nr = 0; nr < 10; nr++)
 			{
 				if (areapollutant[nr].SelectedIndex == 2)
-					but1[nr].Text = "[MOU/h]";
-				else
-					but1[nr].Text = "[kg/h]";
-			}
+                {
+                    but1[nr].Text = "[MOU/h]";
+                }
+                else
+                {
+                    but1[nr].Text = "[kg/h]";
+                }
+            }
 		}
 		
 		private void Comma1(object sender, KeyPressEventArgs e)
@@ -264,9 +268,11 @@ namespace GralItemForms
 				textBox2.Text = "0";
 				textBox2.Text = "";
 				for (int i = 0; i < 10; i++)
-					areaemission[i].Text = "0";
+                {
+                    areaemission[i].Text = "0";
+                }
 
-				trackBar1.Maximum = trackBar1.Maximum + 1;
+                trackBar1.Maximum = trackBar1.Maximum + 1;
 				trackBar1.Value = trackBar1.Maximum;
 				ItemDisplayNr = trackBar1.Maximum - 1;
 				Domain.EditSourceShape = true;  // allow input of new vertices
@@ -309,16 +315,19 @@ namespace GralItemForms
 					_as.Pt.TrimExcess();
 					for (int i = 0; i < number_of_vertices; i++)
                     {
-						_as.Pt.Add(new PointD(CorneAareaX[i], CornerAreaY[i]));
+						_as.Pt.Add(new PointD(CornerAreaX[i], CornerAreaY[i]));
                     }
 					
 					double areapolygon = Math.Round(St_F.CalcArea(_as.Pt), 1);
                 	textBox3.Text = St_F.DblToIvarTxt(areapolygon);
                 	_as.Area = (float) areapolygon;
 					
-					if (number_of_vertices > 0) Domain.EditSourceShape = false;  // block input of new vertices
-					
-					for (int i = 0; i < 10; i++) // save pollutants
+					if (number_of_vertices > 0)
+                    {
+                        Domain.EditSourceShape = false;  // block input of new vertices
+                    }
+
+                    for (int i = 0; i < 10; i++) // save pollutants
 					{
 						_as.Poll.Pollutant[i] = areapollutant[i].SelectedIndex;
 						_as.Poll.EmissionRate[i] = St_F.TxtToDbl(areaemission[i].Text, false);
@@ -333,8 +342,11 @@ namespace GralItemForms
 					float height = (float) (numericUpDown1.Value);
 					
 					if (checkBox1.Checked) // absolute height over sea
-						height *= (-1);
-					_as.Height = height;
+                    {
+                        height *= (-1);
+                    }
+
+                    _as.Height = height;
 					_as.VerticalExt = (float) (numericUpDown2.Value);
 					_as.RasterSize = (float) (numericUpDown4.Value);
 					_as.Name = textBox1.Text;
@@ -386,11 +398,15 @@ namespace GralItemForms
 				
 				decimal height = (decimal) (_as.Height);
 				if (height >= 0) // height above ground
-					checkBox1.Checked = false;
-				else // height above sea
-					checkBox1.Checked = true;
-				
-				numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double) Math.Abs(height));
+                {
+                    checkBox1.Checked = false;
+                }
+                else // height above sea
+                {
+                    checkBox1.Checked = true;
+                }
+
+                numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double) Math.Abs(height));
 				
 				numericUpDown2.Value = St_F.ValueSpan(0, 999, _as.VerticalExt);
 				
@@ -402,34 +418,51 @@ namespace GralItemForms
 				{
 					areapollutant[i].SelectedIndex = _as.Poll.Pollutant[i];
 					if (areapollutant[i].SelectedIndex == 2)
-						but1[i].Text = "[MOU/h]";
-					else
-						but1[i].Text = "[kg/h]";
-					
-					labelpollutant[i].Text = areapollutant[i].Text;
+                    {
+                        but1[i].Text = "[MOU/h]";
+                    }
+                    else
+                    {
+                        but1[i].Text = "[kg/h]";
+                    }
+
+                    labelpollutant[i].Text = areapollutant[i].Text;
 					areaemission[i].Text   = St_F.DblToLocTxt(_as.Poll.EmissionRate[i]);
 					but1[i].BackColor = SystemColors.ButtonFace;
 				}
 				
+				if (_as.Pt.Count > CornerAreaX.Length)
+				{
+					Array.Resize(ref CornerAreaX, _as.Pt.Count + 1);
+					Array.Resize(ref CornerAreaY, _as.Pt.Count + 1);
+				}
+
 				int j = 0;
 				foreach (PointD _pt in _as.Pt)
                 {
-                    CorneAareaX[j] = _pt.X;
+					CornerAreaX[j] = _pt.X;
                     CornerAreaY[j] = _pt.Y;
                     j++;
                 }
 				
-				if (_as.Pt.Count > 0) Domain.EditSourceShape = false;  // block input of new vertices
-				
-				for (int i = 0; i < 10; i++)
+				if (_as.Pt.Count > 0)
+                {
+                    Domain.EditSourceShape = false;  // block input of new vertices
+                }
+
+                for (int i = 0; i < 10; i++)
 				{
 					dep[i] = _as.GetDep()[i];
 					
 					if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
-						but1[i].BackColor = Color.LightGreen; // mark that deposition is set
-					else
-						but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
-				}
+                    {
+                        but1[i].BackColor = Color.LightGreen; // mark that deposition is set
+                    }
+                    else
+                    {
+                        but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
+                    }
+                }
 			}
 			catch{}		
 		}
@@ -450,10 +483,14 @@ namespace GralItemForms
 			if (ask == true)
 			{
 				if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
-                        ask = false;
-				else
-					ask = true; // Cancel -> do not delete!
-			}
+                {
+                    ask = false;
+                }
+                else
+                {
+                    ask = true; // Cancel -> do not delete!
+                }
+            }
 			if (ask == false)
 			{
 				textBox1.Text = "";
@@ -464,14 +501,20 @@ namespace GralItemForms
 				numericUpDown4.Value = 1;
 				comboBox1.SelectedIndex = 0;
 				for (int i = 0; i < 10; i++)
-					areaemission[i].Text = "0";
-				if (ItemDisplayNr >= 0)
+                {
+                    areaemission[i].Text = "0";
+                }
+
+                if (ItemDisplayNr >= 0)
 				{
 					try
 					{
 						if (trackBar1.Maximum > 1)
-							trackBar1.Maximum = trackBar1.Maximum - 1;
-						trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
+                        {
+                            trackBar1.Maximum = trackBar1.Maximum - 1;
+                        }
+
+                        trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
 						ItemData.RemoveAt(ItemDisplayNr);
 						ItemDisplayNr = trackBar1.Value - 1;
 						FillValues();
@@ -613,8 +656,10 @@ namespace GralItemForms
 			try
 			{
 				if (AreaSourceRedraw != null)
-					AreaSourceRedraw(this, e);
-			}
+                {
+                    AreaSourceRedraw(this, e);
+                }
+            }
 			catch
 			{}
 		}
@@ -631,8 +676,12 @@ namespace GralItemForms
 				try
 				{
 					int number_of_vertices = Convert.ToInt32(textBox2.Text);
-					if (number_of_vertices < 2) throw new System.InvalidOperationException("Nothing digitized");
-                    VerticesEditDialog vert = new VerticesEditDialog(number_of_vertices, ref CorneAareaX, ref CornerAreaY)
+					if (number_of_vertices < 2)
+                    {
+                        throw new System.InvalidOperationException("Nothing digitized");
+                    }
+
+                    VerticesEditDialog vert = new VerticesEditDialog(number_of_vertices, ref CornerAreaX, ref CornerAreaY)
                     {
                         Location = new System.Drawing.Point(Right - 180 - 280, Top + 60),
                         StartPosition = FormStartPosition.Manual
@@ -668,8 +717,10 @@ namespace GralItemForms
 			for (int i = 0; i < 10; i++)
 			{
 				if (sender == but1[i])
-					nr = i;
-			}
+                {
+                    nr = i;
+                }
+            }
 			using (EditDeposition edit = new EditDeposition
 			{
 			  	StartPosition = FormStartPosition.Manual
@@ -687,27 +738,37 @@ namespace GralItemForms
 				edit.Emission = St_F.TxtToDbl(areaemission[nr].Text,true);
 				edit.Pollutant = areapollutant[nr].SelectedIndex;
 				if (edit.ShowDialog() == DialogResult.OK)
-					edit.Hide();
-			}
+                {
+                    edit.Hide();
+                }
+            }
 			
 			if (Main.Project_Locked == false)
 			{
 				if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
-					but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
-				else
-					but1[nr].BackColor = SystemColors.ButtonFace;
-				
-				SaveArray(); // save values
+                {
+                    but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
+                }
+                else
+                {
+                    but1[nr].BackColor = SystemColors.ButtonFace;
+                }
+
+                SaveArray(); // save values
 			}
 		}
 		
 		void CheckBox1CheckedChanged(object sender, EventArgs e)
 		{
 			if (checkBox1.Checked)
-				label5.BackColor = Color.Yellow;
-			else
-				label5.BackColor = Color.Transparent;
-		}
+            {
+                label5.BackColor = Color.Yellow;
+            }
+            else
+            {
+                label5.BackColor = Color.Transparent;
+            }
+        }
 
         private void EditAreaSources_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -744,12 +805,14 @@ namespace GralItemForms
 				tex.TextChanged -= new System.EventHandler(St_F.CheckInput);
 			}
 			foreach(Button but in but1)
-				but.Click -= new EventHandler(edit_deposition);
-			
-			textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
+            {
+                but.Click -= new EventHandler(edit_deposition);
+            }
+
+            textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
 			comboBox1.KeyPress -= new KeyPressEventHandler(Comma2); //only point as decimal seperator is allowed
 			
-			CorneAareaX = null;
+			CornerAreaX = null;
 			CornerAreaY = null;
 						
 			for (int nr = 0; nr < 10; nr++)

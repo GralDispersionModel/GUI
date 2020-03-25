@@ -89,7 +89,11 @@ namespace GralItemForms
 
         private void Comma1(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == ',') e.KeyChar = '.';
+            if (e.KeyChar == ',')
+            {
+                e.KeyChar = '.';
+            }
+
             int asc = (int)e.KeyChar; //get ASCII code
         }
 
@@ -147,12 +151,18 @@ namespace GralItemForms
                 	double areapolygon = St_F.CalcArea(_bdata.Pt);
                 	textBox3.Text = St_F.DblToIvarTxt(areapolygon);
                 	
-                	if (number_of_vertices > 0) Domain.EditSourceShape = false;  // block input of new vertices
-                	
-                	float height = Convert.ToSingle(numericUpDown1.Value);
+                	if (number_of_vertices > 0)
+                    {
+                        Domain.EditSourceShape = false;  // block input of new vertices
+                    }
+
+                    float height = Convert.ToSingle(numericUpDown1.Value);
                 	if (checkBox1.Checked) // absolute height over sea
-                		height *= (-1);
-                	_bdata.Name =  St_F.RemoveinvalidChars(textBox1.Text) + '\t' + St_F.RemoveinvalidChars(textBox4.Text) + '\t' + St_F.RemoveinvalidChars(textBox5.Text);
+                    {
+                        height *= (-1);
+                    }
+
+                    _bdata.Name =  St_F.RemoveinvalidChars(textBox1.Text) + '\t' + St_F.RemoveinvalidChars(textBox4.Text) + '\t' + St_F.RemoveinvalidChars(textBox5.Text);
                 	_bdata.Area = (float) areapolygon;
                 	_bdata.Height = height;
                 	
@@ -198,29 +208,46 @@ namespace GralItemForms
                 name = _bdata.Name.Split(new char[] {'\t'});
                 
                 if (name.Length <= 1) // just name but no street/number
-                	textBox1.Text = name[0];
+                {
+                    textBox1.Text = name[0];
+                }
                 else
                 {
                 	textBox1.Text = name[0];
                 	if (name.Length > 1)
-                		textBox4.Text = name[1];
-                	if (name.Length > 2)
-                		textBox5.Text = name[2];
+                    {
+                        textBox4.Text = name[1];
+                    }
+
+                    if (name.Length > 2)
+                    {
+                        textBox5.Text = name[2];
+                    }
                 }
                 
                 textBox3.Text = St_F.DblToIvarTxt(Math.Round(_bdata.Area,1));
                 
                 decimal height = Convert.ToDecimal(_bdata.Height);
 				if (height >= 0) // height above ground
-					checkBox1.Checked = false;
-				else // height above sea
-					checkBox1.Checked = true;
-				numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double) Math.Abs(height));
+                {
+                    checkBox1.Checked = false;
+                }
+                else // height above sea
+                {
+                    checkBox1.Checked = true;
+                }
+
+                numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double) Math.Abs(height));
                 
 				// Lower bound - not active at the moment				
 				numericUpDown2.Value = St_F.ValueSpan(0, 1000, Convert.ToDouble(_bdata.LowerBound));
-                
-				int i = 0;
+
+                if (_bdata.Pt.Count > CornerBuildingX.Length)
+                {
+                    Array.Resize(ref CornerBuildingX, _bdata.Pt.Count + 1);
+                    Array.Resize(ref CornerBuildingY, _bdata.Pt.Count + 1);
+                }
+                int i = 0;
 				foreach (PointD _pt in _bdata.Pt)
                 {
                     CornerBuildingX[i] = _pt.X;
@@ -229,7 +256,10 @@ namespace GralItemForms
                 }
 				
 				textBox2.Text = _bdata.Pt.Count.ToString();
-                if (_bdata.Pt.Count > 0) Domain.EditSourceShape = false;  // block input of new vertices
+                if (_bdata.Pt.Count > 0)
+                {
+                    Domain.EditSourceShape = false;  // block input of new vertices
+                }
             }
             catch
             {
@@ -251,10 +281,14 @@ namespace GralItemForms
         	if (ask == true)
         	{
               if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this building?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
-                ask = false;
-              else
-              	ask = true; // Cancel -> do not delete!   
-        	}
+                {
+                    ask = false;
+                }
+                else
+                {
+                    ask = true; // Cancel -> do not delete!   
+                }
+            }
         	
         	if (ask == false)
             {
@@ -268,7 +302,10 @@ namespace GralItemForms
                     try
                     {
                         if (trackBar1.Maximum > 1)
+                        {
                             trackBar1.Maximum = trackBar1.Maximum - 1;
+                        }
+
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
                         ItemData.RemoveAt(ItemDisplayNr);
                         ItemDisplayNr = trackBar1.Value - 1;
@@ -278,7 +315,10 @@ namespace GralItemForms
                     {
                     }
                 }
-                if (redraw) RedrawDomain(this, null);
+                if (redraw)
+                {
+                    RedrawDomain(this, null);
+                }
             }
         }
 
@@ -320,8 +360,10 @@ namespace GralItemForms
 			try
 			{
 			if (BuildingRedraw != null)
-				BuildingRedraw(this, e); 
-			}
+                {
+                    BuildingRedraw(this, e);
+                }
+            }
 			catch
 			{}
         }
@@ -336,9 +378,13 @@ namespace GralItemForms
         void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
         	if (checkBox1.Checked)
-        		label5.BackColor = Color.Yellow;
-        	else
-        		label5.BackColor = Color.Transparent;
+            {
+                label5.BackColor = Color.Yellow;
+            }
+            else
+            {
+                label5.BackColor = Color.Transparent;
+            }
         }
 
         private void EditBuildings_FormClosing(object sender, FormClosingEventArgs e)
@@ -468,7 +514,11 @@ namespace GralItemForms
             try
             {
                 int number_of_vertices = Convert.ToInt32(textBox2.Text);
-                if (number_of_vertices < 2) throw new System.InvalidOperationException("Nothing digitized");
+                if (number_of_vertices < 2)
+                {
+                    throw new System.InvalidOperationException("Nothing digitized");
+                }
+
                 VerticesEditDialog vert = new VerticesEditDialog(number_of_vertices, ref CornerBuildingX, ref CornerBuildingY)
                 {
                     StartPosition = FormStartPosition.Manual
