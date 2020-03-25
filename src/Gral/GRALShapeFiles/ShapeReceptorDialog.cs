@@ -16,7 +16,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
 using GralStaticFunctions;
-using Gral;
 using GralItemData;
 
 namespace GralShape
@@ -26,16 +25,16 @@ namespace GralShape
     /// </summary>
     public partial class Shape_Receptor_Dialog : Form
     {
-        private GralDomain.Domain domain = null;
-        private string file;
+        private readonly GralDomain.Domain domain = null;
+        private readonly string ShapeFileName;
         private double areapolygon = 0;  //area of a polygon
         private DataTable dt;
         private bool  _vegetation = false;
         public bool Vegetation {set {_vegetation = value;}}
-        private CultureInfo ic = CultureInfo.InvariantCulture;
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
-        private GralData.DomainArea GralDomRect;
-        private double _deltaZ;
+        private readonly CultureInfo ic = CultureInfo.InvariantCulture;
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private readonly GralData.DomainArea GralDomRect;
+        private readonly double _deltaZ;
 
         /// <summary>
         /// Dialog for the shape import of Receptors and Vegetation Areas
@@ -51,7 +50,7 @@ namespace GralShape
             domain = d;
             GralDomRect = GralDomainRectangle;
             _deltaZ = DeltaZ;
-            file = Filename;
+            ShapeFileName = Filename;
             button1.DialogResult = DialogResult.OK;
         }
 
@@ -89,16 +88,26 @@ namespace GralShape
             // for (int i = 0; i < domain.shppoints[index].Count; i++)
             int SHP_Line = 0;
             ShapeReader shape = new ShapeReader(domain);
-            foreach (object shp in shape.ReadShapeFile(file))
+            foreach (object shp in shape.ReadShapeFile(ShapeFileName))
             {
-                if (shp is PointF || shp is GralDomain.PointD)
+                if (shp is PointF || shp is GralDomain.PointD || shp is GralData.PointD_3d)
                 {
-                    GralDomain.PointD pt = (GralDomain.PointD) shp;
-                    pt.X = Math.Round(pt.X, 1);
-                    pt.Y = Math.Round(pt.Y, 1);
+                    GralData.PointD_3d _ptshp;
+                    if (shp is GralData.PointD_3d)
+                    {
+                        _ptshp = (GralData.PointD_3d)shp;
+                    }
+                    else
+                    {
+                        _ptshp = ((GralDomain.PointD)shp).ToPoint3d();
+                    }
+                    
+                    GralDomain.PointD pt = new GralDomain.PointD();
+                    pt.X = Math.Round(_ptshp.X, 1);
+                    pt.Y = Math.Round(_ptshp.Y, 1);
+                    double ptZ = Math.Round(_ptshp.Z, 1); 
 
                     inside = false;
-
                     if ((pt.X > GralDomRect.West) && (pt.X < GralDomRect.East) && (pt.Y > GralDomRect.South) && (pt.Y < GralDomRect.North))
                     {
                         inside = true;
@@ -123,6 +132,10 @@ namespace GralShape
                         {
                             height = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox1.SelectedItem), SHP_Line].Value, ic);
                             height = Math.Round(height, 1);
+                        }
+                        else if (shp is GralData.PointD_3d)
+                        {
+                            height = ptZ;
                         }
                         else
                         {
@@ -163,14 +176,22 @@ namespace GralShape
             dt.Clear(); // clear data table
             
             if (dt != null)
+            {
                 dt.Dispose();
-            
-            #endif
-            
+            }
+
+#endif
+
             if (dt != null)
+            {
                 dt.Dispose();
-            
-            if (dataGridView1 != null) dataGridView1.Dispose(); // Kuntner
+            }
+
+            if (dataGridView1 != null)
+            {
+                dataGridView1.Dispose(); // Kuntner
+            }
+
             dataGridView1 = null;
             wait.Close();
             wait.Dispose();
@@ -190,7 +211,7 @@ namespace GralShape
             //for (int i = 0; i < SHPPolygons[index].Count; i++)
             int SHP_Line = 0;
             ShapeReader shape = new ShapeReader(domain);
-            foreach (object shp in shape.ReadShapeFile(file))
+            foreach (object shp in shape.ReadShapeFile(ShapeFileName))
             {
                 if (shp is SHPPolygon)
                 {
@@ -207,7 +228,9 @@ namespace GralShape
                         pt[j].X =  Math.Round(polygons.Points[j].X, 1);
                         pt[j].Y =  Math.Round(polygons.Points[j].Y, 1);
                         if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
+                        {
                             inside = true;
+                        }
                     }
                     
                     if (inside == true)
@@ -223,12 +246,15 @@ namespace GralShape
                         {
                             name = Convert.ToString(dataGridView1[Convert.ToString(comboBox3.SelectedItem), SHP_Line].Value).Trim();
                             if (name.Length < 1) // a name is needed
+                            {
                                 name = "Vegetation " + Convert.ToString(SHP_Line);
-                            
+                            }
                         }
                         else
+                        {
                             name = "Vegetation " + Convert.ToString(SHP_Line);
-                        
+                        }
+
                         _vdata.Name = name;
                         
                         //compute area
@@ -277,14 +303,22 @@ namespace GralShape
             dt.Clear(); // clear data table
             
             if (dt != null)
+            {
                 dt.Dispose();
-            
-            #endif
-            
+            }
+
+#endif
+
             if (dt != null)
+            {
                 dt.Dispose();
-            
-            if (dataGridView1 != null) dataGridView1.Dispose(); // Kuntner
+            }
+
+            if (dataGridView1 != null)
+            {
+                dataGridView1.Dispose(); // Kuntner
+            }
+
             dataGridView1 = null;
             
             wait.Close();
@@ -312,7 +346,7 @@ namespace GralShape
             dbf_reader.StartPosition = FormStartPosition.Manual;
             dbf_reader.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
             dbf_reader.Top = 80;
-            dbf_reader.ReadDBF(file.Replace(".shp", ".dbf"));
+            dbf_reader.ReadDBF(ShapeFileName.Replace(".shp", ".dbf"));
             dt = dbf_reader.dt;
             dbf_reader.Close();
             dbf_reader.Dispose();
@@ -439,7 +473,9 @@ namespace GralShape
                         //fill data grid with fix value
                         string trans = shpimport.textBox2.Text;
                         for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
                             dataGridView1[header, i].Value = trans;
+                        }
                     }
                 }
             }
