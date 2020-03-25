@@ -71,13 +71,17 @@ namespace GralIO
                         dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Nz
                         float temp = windfieldb.ReadInt32(); // read 4 bytes from stream = DXX
                         for (int i = 1; i <= NX; i++)
+                        {
                             for (int j = 1; j <= NY; j++)
+                            {
                                 for (int k = 1; k <= NZ; k++)
                                 {
                                     UWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F; // 2 Bytes  = word integer value;
                                     VWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F;
                                     WWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F;
                                 }
+                            }
+                        }
 
                         windfieldb.Close(); windfieldb.Dispose(); 
                     }
@@ -87,7 +91,9 @@ namespace GralIO
 
                         StreamReader windfield = new StreamReader(filename);
                         for (int i = 1; i <= NX; i++)
+                        {
                             for (int j = 1; j <= NY; j++)
+                            {
                                 for (int k = 1; k <= NZ; k++)
                                 {
                                     text = windfield.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -95,6 +101,9 @@ namespace GralIO
                                     VWI[i, j, k] = (float)Convert.ToDouble(text[1].Replace(".", decsep));
                                     WWI[i, j, k] = (float)Convert.ToDouble(text[2].Replace(".", decsep));
                                 }
+                            }
+                        }
+
                         windfield.Close();
                     }
                 }
@@ -129,7 +138,9 @@ namespace GralIO
                     writer.Write(GRAMMhorgridsize);
 
                     for (int i = 1; i <= _NI; i++)
+                    {
                         for (int j = 1; j <= _NJ; j++)
+                        {
                             for (int k = 1; k <= _NK; k++)
                             {
                                 try
@@ -161,6 +172,8 @@ namespace GralIO
                                 }
                                 writer.Write(dummy);
                             }
+                        }
+                    }
                 }
 
                 return true; // Writer OK

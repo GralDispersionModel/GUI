@@ -75,8 +75,10 @@ namespace GralDomain
 							}
 						}
 						else
-							x0string += st;
-					}
+                        {
+                            x0string += st;
+                        }
+                    }
 
                     x0 = Math.Floor(ycoor0 / Convert.ToDouble(_drobj.ContourLabelDist));
 					x0 = x0 *  Convert.ToDouble(_drobj.ContourLabelDist);
@@ -97,8 +99,10 @@ namespace GralDomain
 							}
 						}
 						else
-							y0string -= st;
-					}
+                        {
+                            y0string -= st;
+                        }
+                    }
 				}
 				catch{}
 				

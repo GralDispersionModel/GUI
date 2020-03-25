@@ -44,7 +44,9 @@ namespace GralConcentrationVarianceModel
             const double gamma = 0.577215664901532860606512090; // Euler's gamma constant
 
             if (x < 0.001)
+            {
                 return 1.0 / (x * (1.0 + gamma * x));
+            }
 
             ///////////////////////////////////////////////////////////////////////////
             // Second interval: [0.001, 12)
@@ -120,7 +122,9 @@ namespace GralConcentrationVarianceModel
                 {
                     // Use the identity gamma(z+n) = z*(z+1)* ... *(z+n-1)*gamma(z)
                     for (i = 0; i < n; i++)
+                    {
                         result *= y++;
+                    }
                 }
 
                 return result;

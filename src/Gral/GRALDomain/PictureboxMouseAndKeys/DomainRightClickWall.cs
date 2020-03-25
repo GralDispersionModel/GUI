@@ -20,7 +20,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 using GralData;
@@ -169,8 +168,11 @@ namespace GralDomain
 				EditAndSaveWallData(sender, null); // save changes
 				
 				if (EditWall.ItemData.Count > 0)
-					MouseControl = 76;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 76;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 3) // Delete edge point
 			{
@@ -212,8 +214,11 @@ namespace GralDomain
 				EditAndSaveWallData(sender, null); // save changes
 				
 				if (EditWall.ItemData.Count > 0)
-					MouseControl = 76;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 76;
+                }
+
+                Picturebox1_Paint();
 			}
 			
 			
@@ -228,8 +233,10 @@ namespace GralDomain
 				EditAndSaveWallData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditWall.ItemData.Count > 0)
-					MouseControl = 76;
-			}
+                {
+                    MouseControl = 76;
+                }
+            }
 			Menu m = sender as Menu;
 			m.Dispose ();
 		}

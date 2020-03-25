@@ -108,7 +108,9 @@ namespace GralDomain
                                 ds = (w1 - contour_value) * dx / (w1 - w2); // interpolation
                             }
                             else
+                            {
                                 ds = 0; // at the border bottom left
+                            }
 
                             x_a = x11 + xz * dx - ds;
                             x_a_s = x_a;
@@ -169,7 +171,9 @@ namespace GralDomain
                                                 }
                                             }
                                             else // at the border
+                                            {
                                                 q = 4; // turn down
+                                            }
 
                                             break;
 
@@ -206,7 +210,10 @@ namespace GralDomain
                                                 }
                                             }
                                             else // at the border
+                                            {
                                                 q = 1; // turn right
+                                            }
+
                                             break;
 
                                         case 3: // direction left
@@ -242,7 +249,9 @@ namespace GralDomain
                                                 }
                                             }
                                             else // at the border
+                                            {
                                                 q = 2; // turn up
+                                            }
 
                                             break;
 
@@ -279,7 +288,9 @@ namespace GralDomain
                                                 }
                                             }
                                             else // at the border
+                                            {
                                                 q = 3; // turn left
+                                            }
 
                                             break;
                                     }

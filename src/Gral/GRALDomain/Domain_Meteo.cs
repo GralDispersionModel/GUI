@@ -62,10 +62,14 @@ namespace GralDomain
 					item.X = EditR.ItemData[i].Pt.X;
 					item.Y = EditR.ItemData[i].Pt.Y;
 					if ((item.X < MainForm.GrammDomRect.West) || (item.X > MainForm.GrammDomRect.East) || (item.Y < MainForm.GrammDomRect.South) || (item.Y > MainForm.GrammDomRect.North))
-						a = a + "";
-					else
-						receptor_points.Add(item);
-				}
+                    {
+                        a = a + "";
+                    }
+                    else
+                    {
+                        receptor_points.Add(item);
+                    }
+                }
 			}
 			else // Single point
 			{
@@ -80,14 +84,20 @@ namespace GralDomain
                 };
                 
 				if ((item.X < MainForm.GrammDomRect.West) || (item.X > MainForm.GrammDomRect.East) || (item.Y < MainForm.GrammDomRect.South) || (item.Y > MainForm.GrammDomRect.North))
-					a = a + "";
-				else
-					receptor_points.Add(item);
-			}
+                {
+                    a = a + "";
+                }
+                else
+                {
+                    receptor_points.Add(item);
+                }
+            }
 			
 			if (receptor_points.Count == 0)
-				MessageBox.Show(this, "No points inside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			else
+            {
+                MessageBox.Show(this, "No points inside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
 			{
 
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData

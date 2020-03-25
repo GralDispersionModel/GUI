@@ -207,12 +207,16 @@ namespace Gral
 					int index = -1;
 					ComboSearchSourceGroup(sg, ref index);
 					if (index > -1)
-						listBox4.Items.Add(DefinedSourceGroups[index].SG_Name + ": " + DefinedSourceGroups[index].SG_Number.ToString());
-					else
-						listBox4.Items.Add(sg);
-					
-					// sort Listbox entries
-					List <SG_Class> _sg = new List<SG_Class>();
+                    {
+                        listBox4.Items.Add(DefinedSourceGroups[index].SG_Name + ": " + DefinedSourceGroups[index].SG_Number.ToString());
+                    }
+                    else
+                    {
+                        listBox4.Items.Add(sg);
+                    }
+
+                    // sort Listbox entries
+                    List <SG_Class> _sg = new List<SG_Class>();
 					for (int i = 0; i < listBox4.Items.Count; i++)
 					{
 						text = Convert.ToString(listBox4.Items[i]).Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -279,8 +283,12 @@ namespace Gral
         /// <param name="e"></param>
         private void AddSourceGroups(object sender, EventArgs e)
 		{
-			if (ProjectName == "") return; // exit if no project loaded
-			foreach (string text in listBox4.SelectedItems)
+			if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
+            foreach (string text in listBox4.SelectedItems)
 			{
 				bool exist = false;
 				for (int i = 0; i < listView1.Items.Count; i++)
@@ -422,7 +430,11 @@ namespace Gral
         /// <param name="e"></param>
         private void RemoveSourceGroups(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
             for (int index = 0; index < listView1.Items.Count; index++)
             {
                 if (listView1.Items[index].Selected == true)
@@ -491,7 +503,9 @@ namespace Gral
             for (int i = 0; i < listView1.Items.Count; i++)
             {
                 if (listView1.Items[i].SubItems[0].BackColor == Color.LightGoldenrodYellow)
+                {
                     check = 0;
+                }
             }
             
             //fill form1.listbox5 with available pollutants

@@ -93,21 +93,26 @@ namespace GralDomForms
 			double dy = myData.Y1 - myData.Y0;
 			SectionAngle = Math.Atan2(dx,dy) * 180 / Math.PI+180;
 			if (SectionAngle < 0)
-				SectionAngle += 360;
-			if (SectionAngle > 360)
-				SectionAngle -= 360;
-			//angle = Math.Round(angle/myData.Wind_sector_size) * myData.Wind_sector_size;
-//
-//			int x0 = Convert.ToInt32(Math.Floor((myData.x0-myData.GRAMM_west) / myData.GRAMM_cellsize )) ;
-//			int x1 = Convert.ToInt32(Math.Floor((myData.x1-myData.GRAMM_west) / myData.GRAMM_cellsize )) ;
-//			int y0 = Convert.ToInt32(Math.Floor((myData.y0-myData.GRAMM_south) / myData.GRAMM_cellsize));
-//			int y1 = Convert.ToInt32(Math.Floor((myData.y1-myData.GRAMM_south) / myData.GRAMM_cellsize));
-//			int x0 = Convert.ToInt32(Math.Floor((myData.x0-myData.GRAL_west) / myData.cellsize)) + 1;
-//			int x1 = Convert.ToInt32(Math.Floor((myData.x1-myData.GRAL_west) / myData.cellsize)) + 1;
-//			int y0 = Convert.ToInt32(Math.Floor((myData.y0-myData.GRAL_south) / myData.cellsize)) + 1;
-//			int y1 = Convert.ToInt32(Math.Floor((myData.y1-myData.GRAL_south) / myData.cellsize)) +1;
-//
-			string caption = "GRAL GUI - Section drawing" ; //  + "  x0: "+
+            {
+                SectionAngle += 360;
+            }
+
+            if (SectionAngle > 360)
+            {
+                SectionAngle -= 360;
+            }
+            //angle = Math.Round(angle/myData.Wind_sector_size) * myData.Wind_sector_size;
+            //
+            //			int x0 = Convert.ToInt32(Math.Floor((myData.x0-myData.GRAMM_west) / myData.GRAMM_cellsize )) ;
+            //			int x1 = Convert.ToInt32(Math.Floor((myData.x1-myData.GRAMM_west) / myData.GRAMM_cellsize )) ;
+            //			int y0 = Convert.ToInt32(Math.Floor((myData.y0-myData.GRAMM_south) / myData.GRAMM_cellsize));
+            //			int y1 = Convert.ToInt32(Math.Floor((myData.y1-myData.GRAMM_south) / myData.GRAMM_cellsize));
+            //			int x0 = Convert.ToInt32(Math.Floor((myData.x0-myData.GRAL_west) / myData.cellsize)) + 1;
+            //			int x1 = Convert.ToInt32(Math.Floor((myData.x1-myData.GRAL_west) / myData.cellsize)) + 1;
+            //			int y0 = Convert.ToInt32(Math.Floor((myData.y0-myData.GRAL_south) / myData.cellsize)) + 1;
+            //			int y1 = Convert.ToInt32(Math.Floor((myData.y1-myData.GRAL_south) / myData.cellsize)) +1;
+            //
+            string caption = "GRAL GUI - Section drawing" ; //  + "  x0: "+
 //				Convert.ToString(x0 ) + " / y0: " +
 //				Convert.ToString(y0 ) + " / x1: " +
 //				Convert.ToString(x1 ) + " / y1: " +
@@ -129,9 +134,11 @@ namespace GralDomForms
 			Read_ggeom();
 
 			if (myData.cellsize > 0)
-				Read_GRAL_geometries();
+            {
+                Read_GRAL_geometries();
+            }
 
-			SectiondrawingResizeEnd(null, null);
+            SectiondrawingResizeEnd(null, null);
 			vScrollBar1.Maximum = 4000;
 			vScrollBar1.Minimum = 0;
 			vScrollBar1.Value = 2020;
@@ -147,11 +154,16 @@ namespace GralDomForms
 			double dy = myData.Y1 - myData.Y0;
 			double angle = Math.Atan2(dx,dy) * 180 / Math.PI +180;
 			if (angle < 0)
-				angle += 360;
-			if (SectionAngle > 360)
-				SectionAngle -= 360;
+            {
+                angle += 360;
+            }
 
-			select_situation.Clear();
+            if (SectionAngle > 360)
+            {
+                SectionAngle -= 360;
+            }
+
+            select_situation.Clear();
 			select_situation.GridLines = true;
 			select_situation.Columns.Add("Situation", 55, HorizontalAlignment.Center);
 			select_situation.Columns.Add("Wind sector", 83, HorizontalAlignment.Center);
@@ -253,9 +265,11 @@ namespace GralDomForms
 					ggeom = null;
 				}
 				else
-					throw new FileNotFoundException("Error reading ggeom.asc");
+                {
+                    throw new FileNotFoundException("Error reading ggeom.asc");
+                }
 
-				int x0 = Convert.ToInt32(Math.Floor((myData.X0-myData.GrammWest) / myData.GrammCellsize )) ;
+                int x0 = Convert.ToInt32(Math.Floor((myData.X0-myData.GrammWest) / myData.GrammCellsize )) ;
 				int x1 = Convert.ToInt32(Math.Floor((myData.X1-myData.GrammWest) / myData.GrammCellsize )) ;
 				int y0 = Convert.ToInt32(Math.Floor((myData.Y0-myData.GrammSouth) / myData.GrammCellsize));
 				int y1 = Convert.ToInt32(Math.Floor((myData.Y1-myData.GrammSouth) / myData.GrammCellsize));
@@ -280,17 +294,26 @@ namespace GralDomForms
 				dy = y1 - y0;
 
 				if (dx == 0 & dy == 0)
-					GRAMMsurface.Add(Convert.ToSingle(-0.01));
-				else
+                {
+                    GRAMMsurface.Add(Convert.ToSingle(-0.01));
+                }
+                else
 				{
 					// sign of the increment
 					incx = Math.Sign(dx);
 					incy = Math.Sign(dy);
-					if(dx<0) dx = -dx;
-					if(dy<0) dy = -dy;
+					if(dx<0)
+                    {
+                        dx = -dx;
+                    }
 
-					// where is the highest distance?
-					if (dx>dy)
+                    if (dy<0)
+                    {
+                        dy = -dy;
+                    }
+
+                    // where is the highest distance?
+                    if (dx>dy)
 					{
 						// x the faster direction
 						pdx=incx; pdy=0;    // pd. is the parellel step
@@ -451,11 +474,18 @@ namespace GralDomForms
 						// sign of the increment
 						incx = Math.Sign(dx);
 						incy = Math.Sign(dy);
-						if(dx<0) dx = -dx;
-						if(dy<0) dy = -dy;
+						if(dx<0)
+                        {
+                            dx = -dx;
+                        }
 
-						// where is the highest distance?
-						if (dx>dy)
+                        if (dy<0)
+                        {
+                            dy = -dy;
+                        }
+
+                        // where is the highest distance?
+                        if (dx>dy)
 						{
 							// x the faster direction
 							pdx=incx; pdy=0;    // pd. is the parellel step
@@ -553,9 +583,15 @@ namespace GralDomForms
             })
             {
                 if (GRAL_surface.Count > 0 && show_gral.Checked == true) // Allow GRAL selection
+                {
                     dial.GRAL_Topo = true;
+                }
 
-                if (dial.ShowDialog() == DialogResult.Cancel) return; // Cancel
+                if (dial.ShowDialog() == DialogResult.Cancel)
+                {
+                    return; // Cancel
+                }
+
                 smooth = dial.Smoothing;
                 vert_fac = dial.VertFactor;
                 GRAL_Topo = dial.GRAL_Topo;
@@ -597,15 +633,18 @@ namespace GralDomForms
 				}
 			}
 
-			if (AH_Min == 10000000) AH_Min = 0; // no element in range
-			//MessageBox.Show(Convert.ToString(AH_Min));
-			//double vert_fac;
-//			if ((AH_MAX-AH_Min) >10)
-//				vert_fac = 5 / (AH_MAX-AH_Min); // 0 -5
-//			else
-//				vert_fac = 0.5; // 0 -5
+			if (AH_Min == 10000000)
+            {
+                AH_Min = 0; // no element in range
+            }
+            //MessageBox.Show(Convert.ToString(AH_Min));
+            //double vert_fac;
+            //			if ((AH_MAX-AH_Min) >10)
+            //				vert_fac = 5 / (AH_MAX-AH_Min); // 0 -5
+            //			else
+            //				vert_fac = 0.5; // 0 -5
 
-			double	x_step = 10 / (double) GRAMMsurface.Count; // -5 to +5 = 10
+            double	x_step = 10 / (double) GRAMMsurface.Count; // -5 to +5 = 10
 			double x = -5;
 			vert_fac = vert_fac * x_step / myData.GrammCellsize;
 
@@ -624,9 +663,11 @@ namespace GralDomForms
 						{
 							double height = -1;
 							if (GRAMMsurface[i] >=0) // otherwise outside the GRAMM domain
-								height = (GRAMMsurface[i]-AH_Min) * vert_fac; // 0 - 5
+                            {
+                                height = (GRAMMsurface[i]-AH_Min) * vert_fac; // 0 - 5
+                            }
 
-							for (int z = -1; z <= 1; z += 1)
+                            for (int z = -1; z <= 1; z += 1)
 							{
                                 mywriter.Write(height);
 							}
@@ -713,11 +754,15 @@ namespace GralDomForms
 			else if (GRAL_surface.Count > 0 & (show_buildings.Checked || show_gral.Checked) & myData.cellsize > 0 && GRAL_KKart.Count > 2 && GRAL_Topo == true) // GRAL DATA
 			{
 				if ((AH_MAX-AH_Min) >10)
-					vert_fac = 5 / (AH_MAX-AH_Min); // 0 -5
-				else
-					vert_fac = 0.5; // 0 -5
+                {
+                    vert_fac = 5 / (AH_MAX-AH_Min); // 0 -5
+                }
+                else
+                {
+                    vert_fac = 0.5; // 0 -5
+                }
 
-				x_step = 10 / (double) GRAL_KKart.Count; // -5 to +5 = 10
+                x_step = 10 / (double) GRAL_KKart.Count; // -5 to +5 = 10
 				x = -5;
 				try
 				{
@@ -899,8 +944,12 @@ namespace GralDomForms
 			capPath.AddLine(-3, 0, 0, 3);
 			capPath.AddLine(0, 3, 3, 0);
 
-			if (AH_Min == 10000000) AH_Min = 0; // no element in range
-			AH_Min = Convert.ToInt32(AH_Min/10)*10 + VerticalOffset; // normalize to 10m step
+			if (AH_Min == 10000000)
+            {
+                AH_Min = 0; // no element in range
+            }
+
+            AH_Min = Convert.ToInt32(AH_Min/10)*10 + VerticalOffset; // normalize to 10m step
 
 			// draw GRAMM surface and GRAMM wind vectors
 			if (GRAMMsurface.Count > 0 & show_gramm.Checked & myData.GrammCellsize > 0)
@@ -916,8 +965,10 @@ namespace GralDomForms
 						int b = Convert.ToInt32(Math.Max(1,x_step));
 						int xl = Convert.ToInt32(x);
 						if (b == 1)
-							g.DrawLine(mypen, xl,ymax,xl,height);
-						else
+                        {
+                            g.DrawLine(mypen, xl,ymax,xl,height);
+                        }
+                        else
 						{
 							int y0 = Math.Min(25000, Math.Max(-25000, ymax - height));
 							int h = Math.Min(25000, Math.Max(-25000, height));
@@ -1047,8 +1098,11 @@ namespace GralDomForms
 								int ym = Math.Min(32000, Math.Max(-32000, ymax));
 
 								if (show_gral.Checked)
-									g.DrawLine(mypen, xl, ym, xl, y0);
-								if (bheight> 1 & show_buildings.Checked)
+                                {
+                                    g.DrawLine(mypen, xl, ym, xl, y0);
+                                }
+
+                                if (bheight> 1 & show_buildings.Checked)
 								{
 									g.DrawLine(buildingspen, xl, y0, xl, Math.Min(y0 + bheight, ym));
 								}
@@ -1213,22 +1267,34 @@ namespace GralDomForms
         {
         	int exp = 0;
         	if (val != 0.0)
-        		exp = (int) Math.Floor(Math.Log10(val)) * (-1);
+            {
+                exp = (int) Math.Floor(Math.Log10(val)) * (-1);
+            }
 
-        	double norm = val * Math.Pow(10, exp);
+            double norm = val * Math.Pow(10, exp);
 
         	if (norm < 1.5)
-        		norm = 1;
-        	else if (norm < 3.4)
-        		norm  = 2;
-        	else if (norm < 6.5)
-        		norm = 5;
-        	else if (norm < 9)
-        		norm = 8;
-        	else
-        		norm = 10;
+            {
+                norm = 1;
+            }
+            else if (norm < 3.4)
+            {
+                norm  = 2;
+            }
+            else if (norm < 6.5)
+            {
+                norm = 5;
+            }
+            else if (norm < 9)
+            {
+                norm = 8;
+            }
+            else
+            {
+                norm = 10;
+            }
 
-        	exp *= -1;
+            exp *= -1;
         	return norm * Math.Pow(10, exp);
         }
 
@@ -1236,8 +1302,10 @@ namespace GralDomForms
 		{
 			Color col;
 			if (Math.Abs(vv) < 0.2)
-				col = Color.Gray;
-			else
+            {
+                col = Color.Gray;
+            }
+            else
 			{
 				//vv *= ws_factor;
 
@@ -1247,16 +1315,22 @@ namespace GralDomForms
 					int gb = Convert.ToInt16(Math.Max(0,Math.Min(132, 177-Math.Abs(vv*45)))); // 0-3 m/s light colors
 					int r = 255;
 					if (gb == 0)
-						r=Convert.ToInt16(Math.Max(0,255-Math.Abs((vv-3.8)*50)));
-					col = Color.FromArgb(r,gb,gb);
+                    {
+                        r =Convert.ToInt16(Math.Max(0,255-Math.Abs((vv-3.8)*50)));
+                    }
+
+                    col = Color.FromArgb(r,gb,gb);
 				}
 				else
 				{
 					int gb = Convert.ToInt16(Math.Max(0,Math.Min(192, 222-Math.Abs(vv*30)))); // 0-4 m/s light colors
 					int b = 255;
 					if (gb == 0)
-						b=Convert.ToInt16(Math.Max(0,255-Math.Max(0,Math.Abs((vv-7)*40))));
-					col = Color.FromArgb(gb,gb,b);
+                    {
+                        b =Convert.ToInt16(Math.Max(0,255-Math.Max(0,Math.Abs((vv-7)*40))));
+                    }
+
+                    col = Color.FromArgb(gb,gb,b);
 				}
 
 			}
@@ -1330,11 +1404,15 @@ namespace GralDomForms
 				}
 
 				if (show_gral.Checked == true)
-					Read_gral_windfield(dissit);
-				else
+                {
+                    Read_gral_windfield(dissit);
+                }
+                else
 					if (show_gramm.Checked == true)
-						Read_gramm_windfield(dissit);
-			}
+                {
+                    Read_gramm_windfield(dissit);
+                }
+            }
 			catch
 			{
 				MessageBox.Show(this, "Select a dispersion situation, please!","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1466,11 +1544,18 @@ namespace GralDomForms
 					// sign of the increment
 					incx = Math.Sign(dx);
 					incy = Math.Sign(dy);
-					if(dx<0) dx = -dx;
-					if(dy<0) dy = -dy;
+					if(dx<0)
+                    {
+                        dx = -dx;
+                    }
 
-					// where is the highest distance?
-					if (dx>dy)
+                    if (dy<0)
+                    {
+                        dy = -dy;
+                    }
+
+                    // where is the highest distance?
+                    if (dx>dy)
 					{
 						// x the faster direction
 						pdx=incx; pdy=0;    // pd. is the parellel step
@@ -1589,10 +1674,12 @@ namespace GralDomForms
 					ggeom = null;
 				}
 				else
-					throw new FileNotFoundException("Error reading ggeom.asc");
+                {
+                    throw new FileNotFoundException("Error reading ggeom.asc");
+                }
 
-				// compute start and end index of section line
-				int x0 = Convert.ToInt32((myData.X0-myData.GrammWest) / myData.GrammCellsize + 0.5) ;
+                // compute start and end index of section line
+                int x0 = Convert.ToInt32((myData.X0-myData.GrammWest) / myData.GrammCellsize + 0.5) ;
 				int x1 = Convert.ToInt32((myData.X1-myData.GrammWest) / myData.GrammCellsize + 0.5) ;
 				int y0 = Convert.ToInt32((myData.Y0-myData.GrammSouth) / myData.GrammCellsize + 0.5);
 				int y1 = Convert.ToInt32((myData.Y1-myData.GrammSouth) / myData.GrammCellsize + 0.5);
@@ -1657,11 +1744,18 @@ namespace GralDomForms
 					// sign of the increment
 					incx = Math.Sign(dx);
 					incy = Math.Sign(dy);
-					if(dx<0) dx = -dx;
-					if(dy<0) dy = -dy;
+					if(dx<0)
+                    {
+                        dx = -dx;
+                    }
 
-					// where is the highest distance?
-					if (dx>dy)
+                    if (dy<0)
+                    {
+                        dy = -dy;
+                    }
+
+                    // where is the highest distance?
+                    if (dx>dy)
 					{
 						// x the faster direction
 						pdx=incx; pdy=0;    // pd. is the parellel step
@@ -2012,8 +2106,10 @@ namespace GralDomForms
 			try
 			{
 				if (Form_Section_Closed != null)
-					Form_Section_Closed(this, null); // call function closed()
-			}
+                {
+                    Form_Section_Closed(this, null); // call function closed()
+                }
+            }
 			catch{}
 		}
 

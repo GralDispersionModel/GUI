@@ -40,12 +40,27 @@ namespace GralDomain
                 HideWindows(4); // Kuntner
                 if (ShowFirst.Ps) // set the inital position of the form
                 {
-                    if (ShowFirst.Ls == false) EditPS.Location = EditLS.Location;
-                    else if (ShowFirst.As == false) EditPS.Location = EditAS.Location;
-                    else if (ShowFirst.Bu == false) EditPS.Location = EditB.Location;
-                    else if (ShowFirst.Wa == false) EditPS.Location = EditWall.Location;
+                    if (ShowFirst.Ls == false)
+                    {
+                        EditPS.Location = EditLS.Location;
+                    }
+                    else if (ShowFirst.As == false)
+                    {
+                        EditPS.Location = EditAS.Location;
+                    }
+                    else if (ShowFirst.Bu == false)
+                    {
+                        EditPS.Location = EditB.Location;
+                    }
+                    else if (ShowFirst.Wa == false)
+                    {
+                        EditPS.Location = EditWall.Location;
+                    }
                     else
+                    {
                         EditPS.Location = GetScreenPositionForNewDialog();
+                    }
+
                     ShowFirst.Ps = false;
                 }
                 MouseControl = 6;

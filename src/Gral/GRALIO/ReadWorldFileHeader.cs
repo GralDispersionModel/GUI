@@ -56,9 +56,13 @@ namespace GralIO
                     North = St_F.TxtToDbl(myReader.ReadLine(), false);
                     
                     if (myReader.EndOfStream)
+                    {
                         Imagefile = String.Empty;
+                    }
                     else
+                    {
                         Imagefile = myReader.ReadLine();
+                    }
                 }
                 
                 #if __MonoCS__

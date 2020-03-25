@@ -33,7 +33,9 @@ namespace GralMessage
 			AcceptButton = button2;
 			ActiveControl = button2;
 			if (_gramm)
-				label1.Text = "Delete all wind field files at the project folder?";
+            {
+                label1.Text = "Delete all wind field files at the project folder?";
+            }
         }
 
         //delete files

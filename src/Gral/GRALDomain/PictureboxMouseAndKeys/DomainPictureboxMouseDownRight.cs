@@ -19,7 +19,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -387,7 +386,10 @@ namespace GralDomain
                                 stop = true;
                             }
                             i = i + 1;
-                            if (stop) break;
+                            if (stop)
+                            {
+                                break;
+                            }
                         }
                     }
                     break;
@@ -509,12 +511,14 @@ namespace GralDomain
                     {
                         //get x,y coordinates
                         CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
-                        EditAS.CorneAareaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                        EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                         EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount + 1));
                         PointD[] mypoint = new PointD[1000];
                         for (int i = 0; i < EditAS.CornerAreaCount + 1; i++)
-                            mypoint[i] = new PointD(EditAS.CorneAareaX[i], EditAS.CornerAreaY[i]);
+                        {
+                            mypoint[i] = new PointD(EditAS.CornerAreaX[i], EditAS.CornerAreaY[i]);
+                        }
 
                         double areapolygon = St_F.CalcArea(EditAS.CornerAreaCount + 1, mypoint);
                         EditAS.SetRasterSize(Convert.ToDecimal(Math.Max(Math.Round(Math.Sqrt(areapolygon / 25), 1), 0.5)));
@@ -565,7 +569,9 @@ namespace GralDomain
                         EditB.SetNumberOfVerticesText(Convert.ToString(EditB.CornerBuilding + 1));
                         PointD[] mypoint = new PointD[1000];
                         for (int i = 0; i < EditB.CornerBuilding + 1; i++)
+                        {
                             mypoint[i] = new PointD(EditB.CornerBuildingX[i], EditB.CornerBuildingY[i]);
+                        }
 
                         EditB.SaveArray();
                         for (int i = 0; i <= EditB.CornerBuilding; i++)
@@ -624,7 +630,9 @@ namespace GralDomain
                         EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                         EditWall.CornerWallZ[EditWall.CornerWallCount] = EditWall.GetNumericUpDownHeightValue();
                         if (EditWall.CheckboxAbsHeightChecked()) // absolute height
+                        {
                             EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
+                        }
 
                         EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount + 1));
                         EditWall.SaveArray();
@@ -759,9 +767,13 @@ namespace GralDomain
 
                         string ggeom_path;
                         if (MainForm.GRAMMwindfield != null)
+                        {
                             ggeom_path = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), "ggeom.asc");
+                        }
                         else
+                        {
                             ggeom_path = Path.Combine(Gral.Main.ProjectName, "Computation", "ggeom.asc");
+                        }
 
                         windfield_data.GRAMM_path = ggeom_path;
 
@@ -820,13 +832,13 @@ namespace GralDomain
                     {
                         //get x,y coordinates
                         CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
-                        EditAS.CorneAareaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                        EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
 
                         PointD[] _mypoint = new PointD[EditAS.CornerAreaCount + 2];
                         for (int i = 0; i < EditAS.CornerAreaCount + 2; i++)
                         {
-                            _mypoint[i] = new PointD(EditAS.CorneAareaX[i], EditAS.CornerAreaY[i]);
+                            _mypoint[i] = new PointD(EditAS.CornerAreaX[i], EditAS.CornerAreaY[i]);
                         }
                         double areapolygon = St_F.CalcArea(EditAS.CornerAreaCount, _mypoint);
 

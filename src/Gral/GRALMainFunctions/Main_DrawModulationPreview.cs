@@ -214,10 +214,13 @@ namespace Gral
         		foreach(string dum in emissionmodulation)
         		{
         			sg = dum.Split(new char[] { ',' }); // sg[0] = Source group
-        			if (sg.Count() < 2) return false;
-        			
-        			// find source group
-        			if (String.Compare(sg[0], SG_name) == 0)
+        			if (sg.Count() < 2)
+                    {
+                        return false;
+                    }
+
+                    // find source group
+                    if (String.Compare(sg[0], SG_name) == 0)
         			{
         				//find the diurnal modulation
                         string[] text1;
@@ -230,7 +233,9 @@ namespace Gral
                                 for (int k = 1; k < text1.Length; k++)
                                 {
                                 	if (k < fac_diurnal.Length)
-                                		fac_diurnal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
+                                    {
+                                        fac_diurnal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
+                                    }
                                 }
                                 break;
                             }
@@ -246,7 +251,9 @@ namespace Gral
                                 for (int k = 1; k < text1.Length; k++)
                                 {
                                 	if (k < fac_seasonal.Length)
-                                		fac_seasonal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
+                                    {
+                                        fac_seasonal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
+                                    }
                                 }
                                 break;
                             }

@@ -146,8 +146,11 @@ namespace GralDomForms
         		EmissionFile = RasterA
         	};
         	if (read_unit.ReadRasterUnit()) // 
-        		unit = read_unit.Unit;
-        	read_unit =  null;
+            {
+                unit = read_unit.Unit;
+            }
+
+            read_unit =  null;
         	textBox2.Text = unit;
         }
 
@@ -251,7 +254,11 @@ namespace GralDomForms
         //only defined characters are allowed as input in textbox1
         private void Comma(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == ',') e.KeyChar = '.';
+            if (e.KeyChar == ',')
+            {
+                e.KeyChar = '.';
+            }
+
             int asc = (int)e.KeyChar; //get ASCII code
         }
 

@@ -37,9 +37,11 @@ namespace GralDomain
 			if ((MouseControl == 6) || (MouseControl == 8) || (MouseControl == 17) || (MouseControl == 10)
 			    || (MouseControl == 15) || (MouseControl == 24) || (MouseControl == 3) || (MouseControl == 12) 
 			    || (MouseControl == 75) || (MouseControl == 79))
-				Activate();
+            {
+                Activate();
+            }
 
-			double x_real = (e.X-TransformX) * BmpScale * MapSize.SizeX + MapSize.West;
+            double x_real = (e.X-TransformX) * BmpScale * MapSize.SizeX + MapSize.West;
 			double y_real = (e.Y-TransformY) * BmpScale * MapSize.SizeY + MapSize.North;
 			
 			textBox1.Text = x_real.ToString("F1");
@@ -116,9 +118,13 @@ namespace GralDomain
                                         if (TopoModify.AbsoluteHeight == false)
                                         {
                                             if (TopoModify.Height >= 0)
+                                            {
                                                 br = new SolidBrush(Color.FromArgb(128, 0, 0, 255));
+                                            }
                                             else if (TopoModify.Height < 0)
+                                            {
                                                 br = new SolidBrush(Color.FromArgb(128, 255, 0, 0));
+                                            }
                                         }
 
                                         float x0 = (float)(MainForm.GralDomRect.West + (i - 1) * flowfieldraster + flowfieldraster / 2);
@@ -132,10 +138,14 @@ namespace GralDomain
                                     }
 
                                     if (picturebox1.Image != null)
+                                    {
                                         picturebox1.Image.Dispose();
+                                    }
 
                                     if (PictureBoxBitmap != null)
+                                    {
                                         picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
+                                    }
                                 }
                             }
                         }

@@ -96,9 +96,11 @@ namespace Gral
 					myreader.Dispose();
 
 					if ((GrammDomRect.West < x11) || (GrammDomRect.East > x11 + dx * nx) || (GrammDomRect.South < y11) || (GrammDomRect.North > y11 + dx * ny))
-						MessageBox.Show("GRAMM Domain is outside the borders of the selected topography file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    {
+                        MessageBox.Show("GRAMM Domain is outside the borders of the selected topography file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
 
-					if (dx > Convert.ToDouble(numericUpDown18.Value))
+                    if (dx > Convert.ToDouble(numericUpDown18.Value))
 					{
 						MessageBox.Show("The cellsize of the topography file (" + dx.ToString() + " m)" + Environment.NewLine +
 						                "is lower than the GRAMM grid resolution"
@@ -216,10 +218,16 @@ namespace Gral
 					FileDeleteMessage fdm = new FileDeleteMessage();
 					DialogResult dia = new DialogResult();
 					if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
-						fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
-					if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
-						fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
-					dia = fdm.ShowDialog();
+                    {
+                        fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                    }
+
+                    if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                    {
+                        fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                    }
+
+                    dia = fdm.ShowDialog();
 					if (dia == DialogResult.OK)
 					{
 						File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
@@ -270,9 +278,13 @@ namespace Gral
                 label57.Visible = true;
                 //check if GRAL_topofile.txt exists
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAL_topofile.txt")))
+                {
                     checkBox25.Checked = true;
+                }
                 else
+                {
                     checkBox25.Checked = false;
+                }
             }
 
             button22.Visible = true;
@@ -317,11 +329,20 @@ namespace Gral
                     FileDeleteMessage fdm = new FileDeleteMessage();
                     DialogResult dia = new DialogResult();
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                    }
+
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                    }
+
                     if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMM.geb")))
+                    {
                         fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "GRAMM.geb");
+                    }
+
                     dia = fdm.ShowDialog();
                     if (dia == DialogResult.OK)
                     {
@@ -399,7 +420,9 @@ namespace Gral
                             double dx = Convert.ToDouble(data[1].Replace(".", DecimalSep));
                             myreader.Close();
                             if ((GrammDomRect.West < x11) || (GrammDomRect.East > x11 + dx * nx) || (GrammDomRect.South < y11) || (GrammDomRect.North > y11 + dx * ny))
+                            {
                                 MessageBox.Show("GRAMM Domain is outside the borders of the selected landuse file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
 
                             if (dx > Convert.ToDouble(numericUpDown18.Value))
                             {
@@ -421,7 +444,10 @@ namespace Gral
                                 Landuse lu = new Landuse();
                                 lu.GenerateLanduseFile(this);
                                 if (lu.ok == true)
+                                {
                                     Invoke(new showtopo(ShowLanduse));
+                                }
+
                                 Cursor = Cursors.Default;
                             }
                             catch
@@ -448,7 +474,10 @@ namespace Gral
                             Landuse lu = new Landuse();
                             lu.GenerateLanduseFile(this);
                             if (lu.ok == true)
+                            {
                                 Invoke(new showtopo(ShowLanduse));
+                            }
+
                             Cursor = Cursors.Default;
                         }
                         catch

@@ -98,7 +98,11 @@ namespace GralMainForms
             {
                 int hoehe = Convert.ToInt32(meanwind[i] * scale);
                 int ecke1 = Convert.ToInt32(55 + i * 25);
-                if (hoehe2 > 0) g.DrawLine(p4, 55 + 25 * (i + 1), 440 - hoehe, 55 + 25 * (i), 440 - hoehe2);
+                if (hoehe2 > 0)
+                {
+                    g.DrawLine(p4, 55 + 25 * (i + 1), 440 - hoehe, 55 + 25 * (i), 440 - hoehe2);
+                }
+
                 hoehe2 = hoehe;
                 base.OnPaint(e);
             }
@@ -137,9 +141,13 @@ namespace GralMainForms
             for (int i = 1; i < 20; i++)
             {
                 if (classmax > 4)
+                {
                     step = 1;
+                }
                 else
+                {
                     step = 0.5;
+                }
 
                 int levels = Convert.ToInt32(Convert.ToDouble(i) * step * scale);
                 int lev1 = Convert.ToInt32(440 - levels);

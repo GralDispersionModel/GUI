@@ -92,11 +92,15 @@ namespace Gral
                     GRALSettings.PrognosticSubDomains = (int)numericUpDown42.Value;
                
 					if (checkBox32.Checked == true)
+                    {
                         GRALSettings.Transientflag = 0;
-					else
+                    }
+                    else
+                    {
                         GRALSettings.Transientflag = 1;
+                    }
 
-					InDatFileIO writer = new InDatFileIO
+                    InDatFileIO writer = new InDatFileIO
 					{
 						Data = GRALSettings
 					};
@@ -150,8 +154,10 @@ namespace Gral
 						DirectoryInfo di = new DirectoryInfo(newPath);
 						FileInfo[] files_emission = di.GetFiles("emissions*.dat");
 						for (int i = 0; i < files_emission.Length; i++)
-							files_emission[i].Delete();
-					}
+                        {
+                            files_emission[i].Delete();
+                        }
+                    }
 					catch { }
 
 					Change_Label(3, 0); // Building label red & delete buildings.dat
@@ -210,10 +216,14 @@ namespace Gral
 							//search for the next lower value until a natural divisor is found
 							wertint = (int)(Math.Floor(numericUpDown10.Value / numericUpDown9.Value));
 							if (wertint != 0)
-								numericUpDown10.Value = numericUpDown9.Value * (decimal)wertint;
-							else
-								numericUpDown10.Value = numericUpDown9.Value;
-						}
+                            {
+                                numericUpDown10.Value = numericUpDown9.Value * (decimal)wertint;
+                            }
+                            else
+                            {
+                                numericUpDown10.Value = numericUpDown9.Value;
+                            }
+                        }
 					}
 					else
 					{
@@ -262,8 +272,10 @@ namespace Gral
 		{
 			int buildings = GRALSettings.BuildingMode;
 			if ((buildings == 0) || (buildings == 3))
-				groupBox8.Visible = false;
-			else
+            {
+                groupBox8.Visible = false;
+            }
+            else
 			{
 				groupBox8.Visible = true;
 
@@ -508,9 +520,11 @@ namespace Gral
 				{
 					//number of maximum iteratsions needs to be larger than the minimum number of iterations
 					if (numericUpDown30.Value < numericUpDown29.Value)
-						numericUpDown30.Value = Math.Min(numericUpDown29.Value + 1, 10001);
+                    {
+                        numericUpDown30.Value = Math.Min(numericUpDown29.Value + 1, 10001);
+                    }
 
-					string newPath1 = Path.Combine(ProjectName, @"Computation", "Integrationtime.txt");
+                    string newPath1 = Path.Combine(ProjectName, @"Computation", "Integrationtime.txt");
 					try
 					{
 						using (StreamWriter mywriter = new StreamWriter(newPath1))

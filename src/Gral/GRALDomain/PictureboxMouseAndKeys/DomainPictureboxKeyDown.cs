@@ -137,17 +137,34 @@ namespace GralDomain
                         delta = Math.Max(2, _drobj.DestRec.Width / 8000);
 
                         if (keyData == Keys.Left)
+                        {
                             movex = -delta;
+                        }
+
                         if (keyData == Keys.Right)
+                        {
                             movex = delta;
+                        }
+
                         if (keyData == Keys.Up)
+                        {
                             movey = -delta;
+                        }
+
                         if (keyData == Keys.Down)
+                        {
                             movey = delta;
+                        }
+
                         if (keyData == Keys.Oemplus || keyData == Keys.Add)
+                        {
                             zoom = delta / 2;
+                        }
+
                         if (keyData == Keys.OemMinus || keyData == Keys.Subtract)
+                        {
                             zoom = -delta / 2;
+                        }
 
                         int destrec_width = _drobj.DestRec.Width;
                         _drobj.DestRec = new Rectangle(_drobj.DestRec.Left + movex, _drobj.DestRec.Top + movey, Math.Max(1, _drobj.DestRec.Width + zoom), Math.Max(1, (_drobj.DestRec.Width + zoom) * _drobj.SourceRec.Height / _drobj.SourceRec.Width));
@@ -180,13 +197,24 @@ namespace GralDomain
 
 
             if (keyData == Keys.Left)
+            {
                 movex = -Convert.ToInt32(100);
+            }
+
             if (keyData == Keys.Right)
+            {
                 movex = Convert.ToInt32(100);
+            }
+
             if (keyData == Keys.Up)
+            {
                 movey = -Convert.ToInt32(100);
+            }
+
             if (keyData == Keys.Down)
+            {
                 movey = Convert.ToInt32(100);
+            }
 
             TransformX = TransformX + movex;
             TransformY = TransformY + movey;
@@ -383,7 +411,10 @@ namespace GralDomain
         /// </summary>
         private void MoveCoordinatesOfEditedItems(double xfac_old, double transformx_old, double transformy_old)
         {
-            if (MouseControl == 50) InfoBoxCloseAllForms(); // delete info boxes at concentration info
+            if (MouseControl == 50)
+            {
+                InfoBoxCloseAllForms(); // delete info boxes at concentration info
+            }
 
             //new coordinates for edited line source, walls or section drawing for wind fields
             if ((MouseControl == 10) || (MouseControl == 22) || (MouseControl == 44) || (MouseControl == 45) || (MouseControl == 100) || (MouseControl == 1000))

@@ -167,8 +167,11 @@ namespace GralDomain
 				EditAndSaveBuildingsData(sender, null); // save changes
 				
 				if (EditB.ItemData.Count > 0)
-					MouseControl = 19;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 19;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 3) // Delete edge point
 			{
@@ -209,8 +212,11 @@ namespace GralDomain
 				EditAndSaveBuildingsData(sender, null); // save changes
 				
 				if (EditB.ItemData.Count > 0)
-					MouseControl = 19;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 19;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 4) // Delete Building
 			{
@@ -222,8 +228,10 @@ namespace GralDomain
 				EditAndSaveBuildingsData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditB.ItemData.Count > 0)
-					MouseControl = 19;
-			}
+                {
+                    MouseControl = 19;
+                }
+            }
 			if (mi.Index == 5) // Copy building
 			{
 				CopiedItem.Building = new BuildingData( EditB.ItemData[Convert.ToInt32(mi.Tag)]);

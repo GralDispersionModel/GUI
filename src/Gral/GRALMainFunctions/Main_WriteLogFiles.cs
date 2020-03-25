@@ -68,11 +68,15 @@ namespace Gral
 							mywriter.WriteLine(Convert.ToString(numericUpDown5.Value).PadLeft(10) + "  \t  // Start with dispersion situation");
 
 							if (File.Exists(Landusefile))
-								mywriter.WriteLine(Landusefile + "\t  // Surface roughness from landuse file");
-							else
-							    mywriter.WriteLine(numericUpDown38.Value.ToString().PadLeft(10) + "\t  // Surface roughness");
-							
-							mywriter.WriteLine(" ");
+                            {
+                                mywriter.WriteLine(Landusefile + "\t  // Surface roughness from landuse file");
+                            }
+                            else
+                            {
+                                mywriter.WriteLine(numericUpDown38.Value.ToString().PadLeft(10) + "\t  // Surface roughness");
+                            }
+
+                            mywriter.WriteLine(" ");
 							mywriter.WriteLine("Concentration grids".PadRight(40,'='));
 							mywriter.WriteLine(Convert.ToString(numericUpDown8.Value).PadLeft(10) + "  \t  // Vertical thickness of concentration layers");
 							mywriter.WriteLine(Convert.ToString(numericUpDown9.Value).PadLeft(10) + "  \t  // Horizontal grid resolution");
@@ -95,13 +99,17 @@ namespace Gral
 							mywriter.WriteLine(" ");
 							mywriter.WriteLine("Topography".PadRight(40,'='));
 							if (radioButton1.Checked)
-								mywriter.WriteLine("Flat terrain");
-							else
+                            {
+                                mywriter.WriteLine("Flat terrain");
+                            }
+                            else
 							{
 								mywriter.WriteLine("Complex terrain");
 								if (checkBox25.Checked)
-									mywriter.WriteLine("Use original topographical data for GRAL");
-							}
+                                {
+                                    mywriter.WriteLine("Use original topographical data for GRAL");
+                                }
+                            }
 							
 							mywriter.WriteLine(" ");
 							mywriter.WriteLine("Buildings".PadRight(40,'='));
@@ -133,11 +141,15 @@ namespace Gral
 							mywriter.WriteLine(" ");
 							
 							if (GRALSettings.Compressed == 1)
-								mywriter.WriteLine("Write compressed GRAL result files");
-							else
-								mywriter.WriteLine("Write uncompressed GRAL result files");
-							
-							mywriter.WriteLine(" ");
+                            {
+                                mywriter.WriteLine("Write compressed GRAL result files");
+                            }
+                            else
+                            {
+                                mywriter.WriteLine("Write uncompressed GRAL result files");
+                            }
+
+                            mywriter.WriteLine(" ");
 							mywriter.WriteLine("Receptor points".PadRight(40,'='));
 							
 							pathy = Path.Combine(ProjectName, @"Computation","Receptor.dat");
@@ -390,9 +402,11 @@ namespace Gral
 							mywriter.WriteLine(" ");
 							mywriter.WriteLine("Topography".PadRight(40,'='));
 							if (checkBox31.Checked == true)
-								mywriter.WriteLine("Flat terrain option activated");
-							
-							mywriter.WriteLine(Topofile + "  \t  // Topography file");
+                            {
+                                mywriter.WriteLine("Flat terrain option activated");
+                            }
+
+                            mywriter.WriteLine(Topofile + "  \t  // Topography file");
 							mywriter.WriteLine(Landusefile + "  \t  // Landuse file");
 							mywriter.WriteLine(textBox15.Text.PadLeft(10) + "  \t  // Northern border of GRAMM model domain [m]");
 							mywriter.WriteLine(textBox12.Text.PadLeft(10) + "  \t  // Eastern border of GRAMM model domain [m]");
@@ -405,9 +419,11 @@ namespace Gral
 							mywriter.WriteLine(Convert.ToString(numericUpDown19.Value).PadLeft(10) + "  \t  // Vertical streching factor");
 							
 							for (int i = 0; i < GRAMMmodelheight.Items.Count; i++)
-								mywriter.WriteLine(Convert.ToString(GRAMMmodelheight.Items[i]).PadLeft(10) + "  \t  // Relative top level height");
-							
-							mywriter.WriteLine(" ");
+                            {
+                                mywriter.WriteLine(Convert.ToString(GRAMMmodelheight.Items[i]).PadLeft(10) + "  \t  // Relative top level height");
+                            }
+
+                            mywriter.WriteLine(" ");
 							mywriter.WriteLine("GRAMM input".PadRight(40,'='));
 							mywriter.WriteLine(Convert.ToString(numericUpDown20.Value).PadLeft(10) + "  \t  // Max. time step [s]");
 							mywriter.WriteLine(Convert.ToString(numericUpDown21.Value).PadLeft(10) + "  \t  // Modelling time [s]");
@@ -416,11 +432,15 @@ namespace Gral
 							
 							mywriter.WriteLine(info + "  \t  // Dispersion situations");
 							if (checkBox30.Checked) // sunrise option selected
-								mywriter.WriteLine("Sunrise option activated - original meteopgt.all line numbers: " + GRAMM_Sunrise.ToString());
-							else
-								mywriter.WriteLine("Sunrise option not activated");
-							
-							break;
+                            {
+                                mywriter.WriteLine("Sunrise option activated - original meteopgt.all line numbers: " + GRAMM_Sunrise.ToString());
+                            }
+                            else
+                            {
+                                mywriter.WriteLine("Sunrise option not activated");
+                            }
+
+                            break;
 					}
 				}
 				

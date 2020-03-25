@@ -198,7 +198,7 @@ namespace GralDomain
                 int count = 0;
                 foreach(PointD _pt in EditAS.ItemData[i].Pt)
                 {
-                    EditAS.CorneAareaX[count] = _pt.X;
+                    EditAS.CornerAreaX[count] = _pt.X;
                     EditAS.CornerAreaY[count] = _pt.Y;
                     count++;
                 }
@@ -207,7 +207,10 @@ namespace GralDomain
                 EditAndSaveAreaSourceData(sender, null); // save changes
                 
                 if (EditAS.ItemData.Count > 0)
+                {
                     MouseControl = 9;
+                }
+
                 Picturebox1_Paint();
             }
             if (mi.Index == 3) // Delete edge point
@@ -240,7 +243,7 @@ namespace GralDomain
                 int count = 0;
                 foreach(PointD _pt in EditAS.ItemData[i].Pt)
                 {
-                    EditAS.CorneAareaX[count] = _pt.X;
+                    EditAS.CornerAreaX[count] = _pt.X;
                     EditAS.CornerAreaY[count] = _pt.Y;
                     count++;
                 }
@@ -249,7 +252,10 @@ namespace GralDomain
                 EditAndSaveAreaSourceData(sender, null); // save changes
                 
                 if (EditAS.ItemData.Count > 0)
+                {
                     MouseControl = 9;
+                }
+
                 Picturebox1_Paint();
             }
             if (mi.Index == 4) // Delete Area Source
@@ -262,7 +268,9 @@ namespace GralDomain
                 EditAndSaveAreaSourceData(null, null); // save changes
                 Picturebox1_Paint();
                 if (EditAS.ItemData.Count > 0)
+                {
                     MouseControl = 9;
+                }
             }
             if (mi.Index == 5) // Copy source
             {

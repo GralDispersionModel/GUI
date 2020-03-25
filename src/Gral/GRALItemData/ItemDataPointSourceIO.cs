@@ -18,17 +18,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents supports reading/writing the point source data
     /// </summary>
-	public class PointSourceDataIO
+    public class PointSourceDataIO
 	{
 		public bool LoadPointSources(List<PointSourceData> _data, string _filename) // overload with 2 parameters only
 		{

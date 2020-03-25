@@ -18,14 +18,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 
 namespace GralItemData
 {
-	/// <summary>
-	/// Contains the data for added meteo stations to the match dialog
-	/// </summary>
-	public class MatchMeteoData
+    /// <summary>
+    /// Contains the data for added meteo stations to the match dialog
+    /// </summary>
+    public class MatchMeteoData
 	{
 		public int FileLenght     	{ get; set; }
 

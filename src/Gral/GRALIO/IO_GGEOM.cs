@@ -428,8 +428,10 @@ namespace GralIO
 								}
 							}
 							if (ix > 2 && iy > 2 && iz >=_NZ)
-								break;
-						}
+                            {
+                                break;
+                            }
+                        }
 					} // mode 0
 				} // mode 1
 

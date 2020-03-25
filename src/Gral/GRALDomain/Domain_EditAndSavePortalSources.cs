@@ -42,13 +42,31 @@ namespace GralDomain
                 if (ShowFirst.Ts) // set the inital position of the form
                 {
                     EditPortals.Height = 750;
-                    if (ShowFirst.Ls == false) EditPortals.Location = EditLS.Location;
-                    else if (ShowFirst.As == false) EditPortals.Location = EditAS.Location;
-                    else if (ShowFirst.Bu == false) EditPortals.Location = EditB.Location;
-                    else if (ShowFirst.Ps == false) EditPortals.Location = EditPS.Location;
-                    else if (ShowFirst.Wa == false) EditPortals.Location = EditWall.Location;
+                    if (ShowFirst.Ls == false)
+                    {
+                        EditPortals.Location = EditLS.Location;
+                    }
+                    else if (ShowFirst.As == false)
+                    {
+                        EditPortals.Location = EditAS.Location;
+                    }
+                    else if (ShowFirst.Bu == false)
+                    {
+                        EditPortals.Location = EditB.Location;
+                    }
+                    else if (ShowFirst.Ps == false)
+                    {
+                        EditPortals.Location = EditPS.Location;
+                    }
+                    else if (ShowFirst.Wa == false)
+                    {
+                        EditPortals.Location = EditWall.Location;
+                    }
                     else
+                    {
                         EditPortals.Location = GetScreenPositionForNewDialog();
+                    }
+
                     ShowFirst.Ts = false;
                 }
                 MouseControl = 15;
@@ -108,7 +126,9 @@ namespace GralDomain
                     button47.Visible = true;
                 }
                 else
+                {
                     button14.Visible = false;
+                }
             }
 
             

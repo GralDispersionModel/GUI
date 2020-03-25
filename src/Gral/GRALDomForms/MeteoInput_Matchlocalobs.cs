@@ -15,12 +15,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using GralIO;
-using Gral;
 using GralData;
 
 namespace GralDomForms
 {
-	/// <summary>
+    /// <summary>
     /// Load meteo data for the matching process
     /// </summary>
     public partial class MeteoInput_Matchlocalobs: Form
@@ -111,16 +110,24 @@ namespace GralDomForms
                 if (Convert.ToInt16(StartDate[2]) < 1900)
                 {
                     if (Convert.ToInt32(StartDate[2]) < 60)
+                    {
                         StartDate[2] = "20" + StartDate[2];
+                    }
                     else
+                    {
                         StartDate[2] = "19" + StartDate[2];
+                    }
                 }
                 if (Convert.ToInt32(EndDate[2]) < 1900)
                 {
                     if (Convert.ToInt32(EndDate[2]) < 60)
+                    {
                         EndDate[2] = "20" + EndDate[2];
+                    }
                     else
+                    {
                         EndDate[2] = "19" + EndDate[2];
+                    }
                 }
                 monthCalendar1.MinDate = new System.DateTime(Convert.ToInt16(StartDate[2]), Convert.ToInt16(StartDate[1]), Convert.ToInt16(StartDate[0]), 0, 0, 0, 0);
                 monthCalendar1.MaxDate = new System.DateTime(Convert.ToInt16(EndDate[2]), Convert.ToInt16(EndDate[1]), Convert.ToInt16(EndDate[0]), 0, 0, 0, 0);
@@ -166,8 +173,10 @@ namespace GralDomForms
 			{
 				MessageBox.Show(this, "Error when reading Meteo-File in line" + winddata.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				if (winddata.Count == 0)
-					MMOData.Meteo = false;
-			}
+                {
+                    MMOData.Meteo = false;
+                }
+            }
 			
 			winddata = readwindfile.WindData;
 			//readwindfile = null;
@@ -184,10 +193,14 @@ namespace GralDomForms
 					if (Convert.ToInt16(date[2]) < 1900)
 					{
 						if (Convert.ToInt16(date[2]) < 60)
-							date[2] = "20" + date[2];
-						else
-							date[2] = "19" + date[2];
-					}
+                        {
+                            date[2] = "20" + date[2];
+                        }
+                        else
+                        {
+                            date[2] = "19" + date[2];
+                        }
+                    }
 					
 					if (((Convert.ToInt32(date[2]) * 10000 + Convert.ToInt16(date[1]) * 100 + Convert.ToInt16(date[0])) >= (Convert.ToInt32(StartDate[2]) * 10000 + Convert.ToInt16(StartDate[1]) * 100 + Convert.ToInt16(StartDate[0]))) &&
 					    ((Convert.ToInt32(date[2]) * 10000 + Convert.ToInt16(date[1]) * 100 + Convert.ToInt16(date[0])) <= (Convert.ToInt32(EndDate[2]) * 10000 + Convert.ToInt16(EndDate[1]) * 100 + Convert.ToInt16(EndDate[0]))))
@@ -204,31 +217,44 @@ namespace GralDomForms
 						if(MMOData.GetWindVel()[length]>55||MMOData.GetWindVel()[length]<0)
 						{
 							if (error_count < 4)
-								MessageBox.Show(this, "Wind speed implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-							error_count++;
+                            {
+                                MessageBox.Show(this, "Wind speed implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            error_count++;
 						}
 						else if (MMOData.GetWindDir()[length] > 360 || MMOData.GetWindDir()[length] < 0)
 						{
 							if (error_count < 4)
-								MessageBox.Show(this, "Wind direction implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-							error_count++;
+                            {
+                                MessageBox.Show(this, "Wind direction implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            error_count++;
 						}
 						else if (MMOData.GetSC()[length] > 7 || MMOData.GetSC()[length] < 1)
 						{
 							if (error_count < 4)
-								MessageBox.Show(this, "Stability class implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-							error_count++;
+                            {
+                                MessageBox.Show(this, "Stability class implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            error_count++;
 						}
 						else
-							length++;
-					}
+                        {
+                            length++;
+                        }
+                    }
 					n1++;
 				}
 				
 				if (error_count > 0)
-					MessageBox.Show(this, error_count.ToString() + " errors at the wind file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				
-				MMOData.FileLenght = length;
+                {
+                    MessageBox.Show(this, error_count.ToString() + " errors at the wind file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                MMOData.FileLenght = length;
 			}
 			winddata = null;
 		
@@ -273,8 +299,11 @@ namespace GralDomForms
         private void Form2_Load(object sender, EventArgs e)
         {
         	if (Owner != null)
-        		Location = new Point(Math.Max(0,Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
+            {
+                Location = new Point(Math.Max(0,Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
         		                    Math.Max(0, Owner.Location.Y + Owner.Height / 2 - Height / 2 -100));
+            }
+
             if (Anemometerheight > 0)
             {
                 numericUpDown1.Value = (decimal) Anemometerheight;

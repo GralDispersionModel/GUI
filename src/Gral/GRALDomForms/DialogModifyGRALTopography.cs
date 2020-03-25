@@ -60,10 +60,14 @@ namespace GralDomForms
 			checkBox1.Checked = modify.AbsoluteHeight;
 			
 			if ((modify.Raster) < comboBox1.Items.Count && (modify.Raster) > 0)
-				comboBox1.SelectedIndex = modify.Raster;
-			else
-				comboBox1.SelectedIndex = 0;
-		}
+            {
+                comboBox1.SelectedIndex = modify.Raster;
+            }
+            else
+            {
+                comboBox1.SelectedIndex = 0;
+            }
+        }
 		
 		// OK
 		void Button2Click(object sender, EventArgs e)

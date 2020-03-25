@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
 using System.Drawing.Drawing2D;
-using Gral;
 
 namespace GralDomForms
 {
@@ -163,11 +162,22 @@ namespace GralDomForms
 	
 		void PictureBox1Paint(object sender, PaintEventArgs e)
 		{
-			if (height.Count < 2) return;
-			if (concentration.Count < 2) return;
-			if (zlevels_userdefined < 1) return;
-			
-			Graphics g = e.Graphics;
+			if (height.Count < 2)
+            {
+                return;
+            }
+
+            if (concentration.Count < 2)
+            {
+                return;
+            }
+
+            if (zlevels_userdefined < 1)
+            {
+                return;
+            }
+
+            Graphics g = e.Graphics;
 			
 			int wi = Math.Max(0, Width - 40);
 			int he = Math.Max(0, Height - 20);
@@ -212,15 +222,21 @@ namespace GralDomForms
 			{
 				//horizontal/vertical scales
 				if (max - min > 0)
-					horscale = (rightbound - leftbound) / (max - min);
-				else
-					horscale = 1;
-				
-				double vert_diff = height[zlevels_userdefined - 1] - height[0];
-				if (vert_diff > 0)
-					vertscale = (bottombound - topbound) / vert_diff;
+                {
+                    horscale = (rightbound - leftbound) / (max - min);
+                }
+                else
+                {
+                    horscale = 1;
+                }
 
-				int x1 = Convert.ToInt32(leftbound-2);
+                double vert_diff = height[zlevels_userdefined - 1] - height[0];
+				if (vert_diff > 0)
+                {
+                    vertscale = (bottombound - topbound) / vert_diff;
+                }
+
+                int x1 = Convert.ToInt32(leftbound-2);
 				int y1 = Convert.ToInt32(bottombound+2);
 				
 				//g.DrawString(Convert.ToString(Math.Round(min,0)), font, black_brush, x1, y1 - font.Size*2, format2);
@@ -233,36 +249,70 @@ namespace GralDomForms
 				
 				int y_step = 1000;
 				if (height[zlevels_userdefined - 1] < 4000)
-					y_step = 500;
-				if (height[zlevels_userdefined - 1]< 2000)
-					y_step = 250;
-				if (height[zlevels_userdefined - 1] < 600)
-					y_step = 100;
-				if (height[zlevels_userdefined - 1] < 250)
-					y_step = 50;
-				if (height[zlevels_userdefined - 1] < 120)
-					y_step = 20;
-				if (height[zlevels_userdefined - 1] < 40)
-					y_step = 10;
-				if (height[zlevels_userdefined - 1] < 20)
-					y_step = 5;
-				
-				double x_step = (max - min) / 4;
+                {
+                    y_step = 500;
+                }
+
+                if (height[zlevels_userdefined - 1]< 2000)
+                {
+                    y_step = 250;
+                }
+
+                if (height[zlevels_userdefined - 1] < 600)
+                {
+                    y_step = 100;
+                }
+
+                if (height[zlevels_userdefined - 1] < 250)
+                {
+                    y_step = 50;
+                }
+
+                if (height[zlevels_userdefined - 1] < 120)
+                {
+                    y_step = 20;
+                }
+
+                if (height[zlevels_userdefined - 1] < 40)
+                {
+                    y_step = 10;
+                }
+
+                if (height[zlevels_userdefined - 1] < 20)
+                {
+                    y_step = 5;
+                }
+
+                double x_step = (max - min) / 4;
 				int exp = 0;
 				if (x_step != 0.0)
-					exp = (int) Math.Floor(Math.Log10(x_step)) * (-1);
-				double norm = x_step * Math.Pow(10, exp);
+                {
+                    exp = (int) Math.Floor(Math.Log10(x_step)) * (-1);
+                }
+
+                double norm = x_step * Math.Pow(10, exp);
 				if (norm < 1.5)
-					norm = 1;
-				else if (norm < 3.4)
-					norm  = 2;
-				else if (norm < 6.5)
-					norm = 5;
-				else if (norm < 9)
-					norm = 8;
-				else
-					norm = 10;
-				exp *= -1;
+                {
+                    norm = 1;
+                }
+                else if (norm < 3.4)
+                {
+                    norm  = 2;
+                }
+                else if (norm < 6.5)
+                {
+                    norm = 5;
+                }
+                else if (norm < 9)
+                {
+                    norm = 8;
+                }
+                else
+                {
+                    norm = 10;
+                }
+
+                exp *= -1;
 				x_step = norm * Math.Pow(10, exp);
 
                 Pen p3 = new Pen(Color.Black, 1)

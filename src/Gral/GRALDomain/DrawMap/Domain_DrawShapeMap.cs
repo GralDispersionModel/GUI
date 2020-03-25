@@ -77,7 +77,10 @@ namespace GralDomain
                             g.DrawLines(myPen, pt);
                         }
 
-                        if (CancelDrawing) break;
+                        if (CancelDrawing)
+                        {
+                            break;
+                        }
                     }
                     catch { }
                 }
@@ -132,7 +135,10 @@ namespace GralDomain
                     }
                     g.DrawPolygon(Pens.Black, pt);
                 }
-                if (CancelDrawing) break;
+                if (CancelDrawing)
+                {
+                    break;
+                }
             }
             mybrush.Dispose();
         }

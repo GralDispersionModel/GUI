@@ -46,7 +46,6 @@
             this.button101 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button57 = new System.Windows.Forms.Button();
-            this.checkBox29 = new System.Windows.Forms.CheckBox();
             this.numericUpDown43 = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
@@ -630,7 +629,6 @@
             // 
             this.groupBox4.BackColor = System.Drawing.Color.Blue;
             this.groupBox4.Controls.Add(this.button57);
-            this.groupBox4.Controls.Add(this.checkBox29);
             this.groupBox4.Controls.Add(this.numericUpDown43);
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.groupBox29);
@@ -664,28 +662,13 @@
             this.button57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button57.FlatAppearance.BorderSize = 0;
             this.button57.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button57.Location = new System.Drawing.Point(219, 225);
+            this.button57.Location = new System.Drawing.Point(17, 222);
             this.button57.Name = "button57";
-            this.button57.Size = new System.Drawing.Size(24, 24);
+            this.button57.Size = new System.Drawing.Size(32, 28);
             this.button57.TabIndex = 60;
             this.toolTip1.SetToolTip(this.button57, "Special settings");
             this.button57.UseVisualStyleBackColor = true;
             this.button57.Click += new System.EventHandler(this.button57_Click);
-            // 
-            // checkBox29
-            // 
-            this.checkBox29.AutoSize = true;
-            this.checkBox29.Checked = true;
-            this.checkBox29.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.checkBox29.Location = new System.Drawing.Point(17, 225);
-            this.checkBox29.Name = "checkBox29";
-            this.checkBox29.Size = new System.Drawing.Size(201, 20);
-            this.checkBox29.TabIndex = 59;
-            this.checkBox29.Text = "Keystroke when exiting GRAL";
-            this.toolTip1.SetToolTip(this.checkBox29, "Wait for a keystroke if GRAL has been finished or if an error occurs");
-            this.checkBox29.UseVisualStyleBackColor = true;
-            this.checkBox29.CheckedChanged += new System.EventHandler(this.checkBox29_CheckedChanged);
             // 
             // numericUpDown43
             // 
@@ -5538,7 +5521,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button button54;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.CheckBox checkBox29;
         private System.Windows.Forms.Button button55;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label99;

@@ -54,7 +54,9 @@ namespace GralDomain
                                 for (int i1 = 0; i1 < Gral.Main.PollutantList.Count; i1++)
                                 {
                                     if (text1[i + 3] == (Gral.Main.PollutantList[i1] + "[kg/h]"))
+                                    {
                                         polli[i] = i1;
+                                    }
                                 }
                                 
                                 if (polli[i] == Gral.Main.PollutantList.IndexOf("Unknown"))
@@ -108,7 +110,9 @@ namespace GralDomain
                                     }
                                 }
                                 else
+                                {
                                     break;
+                                }
                             }
                         }
                         

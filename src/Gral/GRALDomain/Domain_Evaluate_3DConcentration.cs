@@ -142,7 +142,9 @@ namespace GralDomain
                                 for (int i = 1; i <= NII + 1; i++)
                                 {
                                     if (i < txt.GetUpperBound(0))
+                                    {
                                         Concentration[i][j][h] = Convert.ToSingle(txt[i], ic);
+                                    }
                                 }
                             }
                         }
@@ -218,9 +220,13 @@ namespace GralDomain
                                                 }
 
                                                 if (vertical_layer > height_of_layers.Count - 2)
+                                                {
                                                     Result[x_result][k] = 0;
+                                                }
                                                 else
+                                                {
                                                     Result[x_result][k] = Concentration[raster.X][raster.Y][vertical_layer];
+                                                }
                                             }
                                         } // loop over vertical layers
                                     }

@@ -256,9 +256,13 @@ namespace GralItemForms
             for (int nr = 0; nr < 10; nr++)
             {
                 if (linepollutant[nr].SelectedIndex == 2)
+                {
                     but1[nr].Text = "[MOU/h/km]";
+                }
                 else
+                {
                     but1[nr].Text = "[kg/h/km]";
+                }
             }
         }
 
@@ -275,7 +279,9 @@ namespace GralItemForms
             {
                 SaveArray();
                 for (int i = 0; i < 10; i++)
+                {
                     lineemission[i].Text = "0";
+                }
 
                 trackBar1.Maximum = trackBar1.Maximum + 1;
                 trackBar1.Value = trackBar1.Maximum;
@@ -337,7 +343,9 @@ namespace GralItemForms
                 if ((textBox1.Text != "") && (Convert.ToInt32(textBox2.Text) > 1))
                 {
                     if (textBox4.Text == "") // section
+                    {
                         textBox4.Text = "1";
+                    }
 
                     _ls.Pt.Clear();
                     _ls.Pt.TrimExcess();
@@ -374,7 +382,10 @@ namespace GralItemForms
                     double lenght = St_F.CalcLenght(_ls.Pt);
                     label15.Text = lenght.ToString(ic);
 
-                    if (Convert.ToInt32(textBox2.Text) > 0) Domain.EditSourceShape = false;  // block input of new vertices
+                    if (Convert.ToInt32(textBox2.Text) > 0)
+                    {
+                        Domain.EditSourceShape = false;  // block input of new vertices
+                    }
 
                     // collect pollutants
                     _ls.Poll.Clear();
@@ -429,9 +440,13 @@ namespace GralItemForms
             }
             // enable Remove SG if SG_count > 1 && a selected entry
             if (listBox2.Items.Count > 1 && listBox2.SelectedIndex >= 0)
+            {
                 button5.Enabled = true;
+            }
             else
+            {
                 button5.Enabled = false;
+            }
         }
 
         //fill actual values
@@ -481,9 +496,13 @@ namespace GralItemForms
                 }
 
                 if (height >= 0) // height above ground
+                {
                     checkBox1.Checked = false;
+                }
                 else // height above sea
+                {
                     checkBox1.Checked = true;
+                }
 
                 numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double)Math.Abs(height));
                 numericUpDown3.Value = St_F.ValueSpan(0, 7999, (double)Math.Abs(_ldata.VerticalExt));
@@ -509,15 +528,23 @@ namespace GralItemForms
                 }
                 ListBox2SelectedIndexChanged(null, null); // fill values
 
-                // limit to the lenght of cornerlinex
-                for (int i = 0; i < Math.Min(_ldata.Pt.Count, CornerLineX.Length); i++)
+                if (_ldata.Pt.Count > CornerLineX.Length)
+                {
+                    Array.Resize(ref CornerLineX, _ldata.Pt.Count + 1);
+                    Array.Resize(ref CornerLineY, _ldata.Pt.Count + 1);
+                    Array.Resize(ref CornerLineZ, _ldata.Pt.Count + 1);
+                }
+                for (int i = 0; i < _ldata.Pt.Count; i++)
                 {
                     CornerLineX[i] = _ldata.Pt[i].X;
                     CornerLineY[i] = _ldata.Pt[i].Y;
                     CornerLineZ[i] = Math.Abs(_ldata.Pt[i].Z);
                 }
 
-                if (_ldata.Pt.Count > 0) Domain.EditSourceShape = false;  // block input of new vertices
+                if (_ldata.Pt.Count > 0)
+                {
+                    Domain.EditSourceShape = false;  // block input of new vertices
+                }
 
                 // new lenght
                 double lenght = St_F.CalcLenght(_ldata.Pt);
@@ -531,9 +558,13 @@ namespace GralItemForms
                     dep[i] = _ldata.GetDep()[i];
 
                     if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
+                    {
                         but1[i].BackColor = Color.LightGreen; // mark that deposition is set
+                    }
                     else
+                    {
                         but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
+                    }
                 }
 
                 
@@ -574,9 +605,13 @@ namespace GralItemForms
 
             // enable Remove SG if SG_count > 1 && a selected entry
             if (listBox2.Items.Count > 1 && listBox2.SelectedIndex >= 0)
+            {
                 button5.Enabled = true;
+            }
             else
+            {
                 button5.Enabled = false;
+            }
         }
 
         //remove actual line source data
@@ -595,9 +630,13 @@ namespace GralItemForms
             if (ask == true)
             {
                 if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                {
                     ask = false;
+                }
                 else
+                {
                     ask = true; // Cancel -> do not delete!
+                }
             }
             if (ask == false)
             {
@@ -609,14 +648,19 @@ namespace GralItemForms
                 numericUpDown7.Value = Convert.ToDecimal(-0.1);
                 numericUpDown4.Value = 0;
                 for (int i = 0; i < 10; i++)
+                {
                     lineemission[i].Text = "0";
+                }
 
                 if (ItemDisplayNr >= 0)
                 {
                     try
                     {
                         if (trackBar1.Maximum > 1)
+                        {
                             trackBar1.Maximum = trackBar1.Maximum - 1;
+                        }
+
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
 
                         ItemData.RemoveAt(ItemDisplayNr);
@@ -930,7 +974,9 @@ namespace GralItemForms
             try
             {
                 if (LinesourceRedraw != null)
+                {
                     LinesourceRedraw(this, e);
+                }
             }
             catch
             { }
@@ -949,7 +995,11 @@ namespace GralItemForms
                 try
                 {
                     int number_of_vertices = Convert.ToInt32(textBox2.Text);
-                    if (number_of_vertices < 2) throw new System.InvalidOperationException("Nothing digitized");
+                    if (number_of_vertices < 2)
+                    {
+                        throw new System.InvalidOperationException("Nothing digitized");
+                    }
+
                     VerticesEditDialog vert;
 
                     if (checkBox2.Checked) // 3D Lines
@@ -999,7 +1049,9 @@ namespace GralItemForms
             for (int i = 0; i < 10; i++)
             {
                 if (sender == but1[i])
+                {
                     nr = i;
+                }
             }
 
             using (EditDeposition edit = new EditDeposition
@@ -1019,14 +1071,20 @@ namespace GralItemForms
                 edit.Emission = St_F.TxtToDbl(lineemission[nr].Text, true);
                 edit.Pollutant = linepollutant[nr].SelectedIndex;
                 if (edit.ShowDialog() == DialogResult.OK)
+                {
                     edit.Hide();
+                }
             }
             if (Main.Project_Locked == false)
             {
                 if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
+                {
                     but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
+                }
                 else
+                {
                     but1[nr].BackColor = SystemColors.ButtonFace;
+                }
 
                 SaveArray(); // save values
             }
@@ -1142,9 +1200,13 @@ namespace GralItemForms
         void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
+            {
                 label5.BackColor = Color.Yellow;
+            }
             else
+            {
                 label5.BackColor = Color.Transparent;
+            }
         }
 
         private void EditLinesources_FormClosing(object sender, FormClosingEventArgs e)
@@ -1185,7 +1247,9 @@ namespace GralItemForms
             }
 
             foreach (Button but in but1)
+            {
                 but.Click -= new EventHandler(edit_deposition);
+            }
 
             textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
 
@@ -1344,9 +1408,13 @@ namespace GralItemForms
 
             // absolut height allowed at point 0
             if (trackBar2.Value > 1 || Main.Project_Locked == true)
+            {
                 checkBox1.Enabled = false;
+            }
             else
+            {
                 checkBox1.Enabled = true;
+            }
 
             if (edge < Convert.ToInt32(textBox2.Text))
             {
@@ -1356,9 +1424,13 @@ namespace GralItemForms
                 Domain.MarkerPoint.Y = CornerLineY[edge];
 
                 if (checkBox1.Checked)
+                {
                     label5.BackColor = Color.Yellow;
+                }
                 else
+                {
                     label5.BackColor = Color.Transparent;
+                }
 
                 RedrawDomain(this, e);
             }
@@ -1382,7 +1454,10 @@ namespace GralItemForms
             {
                 get_edgepoint_height(); // get recent edgepoint height
                 vertices = Convert.ToInt32(textBox2.Text);
-                if (vertices <= 1) return; // not enough vertices
+                if (vertices <= 1)
+                {
+                    return; // not enough vertices
+                }
 
                 trackBar2.Maximum = vertices;
             }
@@ -1394,9 +1469,14 @@ namespace GralItemForms
             {
                 float height = 0;
                 if (checkBox1.Checked == true) // absolute height
+                {
                     height = (float)numericUpDown1.Value * (-1);
+                }
                 else
+                {
                     height = (float)numericUpDown1.Value;
+                }
+
                 CornerLineZ[edge] = height;
                 //MessageBox.Show(edge.ToString());
             }

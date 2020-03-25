@@ -34,7 +34,9 @@ namespace GralMessage
         private void Messagewindow_Load(object sender, EventArgs e)
         {
         	if (_titlebar.Length > 1)
-        		Text = _titlebar;
+            {
+                Text = _titlebar;
+            }
         }
 
         void MessagewindowResize(object sender, EventArgs e)
@@ -44,8 +46,10 @@ namespace GralMessage
         
         void ListBox1KeyDown(object sender, KeyEventArgs e)
         {
-        	if (e.Control == true && e.KeyCode == Keys.C) 
-        		Clipboard.SetText( string.Join( Environment.NewLine, listBox1.SelectedItems.OfType<string>().ToArray() ) );
+        	if (e.Control == true && e.KeyCode == Keys.C)
+            {
+                Clipboard.SetText( string.Join( Environment.NewLine, listBox1.SelectedItems.OfType<string>().ToArray() ) );
+            }
         }
     }
 }

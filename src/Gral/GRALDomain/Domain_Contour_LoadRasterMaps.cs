@@ -19,13 +19,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Globalization;
 using GralIO;
-using GralStaticFunctions;
-using GralDomForms;
 using GralMessage;
 
 namespace GralDomain
 {
-	public partial class Domain
+    public partial class Domain
 	{
 		/// <summary>
         /// Load and create contour maps
@@ -74,9 +72,11 @@ namespace GralDomain
 								ny = ggeom.NY;
 							}
 							else
-								throw new FileNotFoundException("Error reading ggeom.asc");
-							
-							ggeom = null;
+                            {
+                                throw new FileNotFoundException("Error reading ggeom.asc");
+                            }
+
+                            ggeom = null;
 							
 							x11 = MainForm.GrammDomRect.West;
 							y11 = MainForm.GrammDomRect.South;
@@ -150,10 +150,14 @@ namespace GralDomain
 							Parallel.For(0, nx, j =>
 				             {
 								if (low_pass_filter == true)
-									zlevelfilter[j, i] = Convert.ToDouble(data[j], ic);
-				             	else
-				             		zlevel[j, i] = Convert.ToDouble(data[j], ic);
-				             });
+                                 {
+                                     zlevelfilter[j, i] = Convert.ToDouble(data[j], ic);
+                                 }
+                                 else
+                                 {
+                                     zlevel[j, i] = Convert.ToDouble(data[j], ic);
+                                 }
+                             });
 						}
 						myReader.Close();
 						myReader.Dispose();
@@ -168,11 +172,15 @@ namespace GralDomain
 								{
 									double value = 0;
 									if (_drobj.Filter == true)
-										value = zlevelfilter[j, i];
-									else
-										value = zlevel[j, i];
+                                    {
+                                        value = zlevelfilter[j, i];
+                                    }
+                                    else
+                                    {
+                                        value = zlevel[j, i];
+                                    }
 
-									if (Math.Abs (value - nodata) > 0.1) // Value != NODATA
+                                    if (Math.Abs (value - nodata) > 0.1) // Value != NODATA
 									{
 										terrain_index = i;
 										i = ny; // break
@@ -307,9 +315,12 @@ namespace GralDomain
 					Application.DoEvents();
 					
 					bool largeArray = false;
-					if ((nx * ny) > 200000) largeArray = true; // >200.000 raster cells -> draw contour lines faster, reduce vertices
-					
-					int point_counter = 0;
+					if ((nx * ny) > 200000)
+                    {
+                        largeArray = true; // >200.000 raster cells -> draw contour lines faster, reduce vertices
+                    }
+
+                    int point_counter = 0;
 					List<List<RectangleF>> unsorted = new List<List<RectangleF>>();   // unsorted lines
 					for (int k = 0; k < _drobj.ItemValues.Count; k++)
 					{
@@ -378,12 +389,18 @@ namespace GralDomain
 		             								yh[0] = (float) (0.5F * (y11 + (j) * dx + y11 + (j + 1) * dx));
 		             							}
 		             							if (h[m] > 0)
-		             								sh[m] = 2;
-		             							else if (h[m] < 0)
-		             								sh[m] = 0;
-		             							else
-		             								sh[m] = 1;
-		             						}
+                                                 {
+                                                     sh[m] = 2;
+                                                 }
+                                                 else if (h[m] < 0)
+                                                 {
+                                                     sh[m] = 0;
+                                                 }
+                                                 else
+                                                 {
+                                                     sh[m] = 1;
+                                                 }
+                                             }
 		             						anz = 5;
 		             						start = 1;
 		             					}
@@ -396,29 +413,35 @@ namespace GralDomain
 		             							yh[m] = (float) (y11 + (j + jm[m]) * dx);
 		             							
 		             							if (h[m] > 0)
-		             								sh[m] = 2;
-		             							else if (h[m] < 0)
-		             								sh[m] = 0;
-		             							else
-		             								sh[m] = 1;
-		             							/*  Note: at this stage the relative heights of the corners are in the h array, and the corresponding coordinates are
-											in the xh and yh arrays. The 4 corners are indexed by 0 to 3 as shown below.
-											Each triangle is then indexed by the parameter m, and the 3
-											vertices of each triangle are indexed by parameters m1,m2,and m3.
-											
-											vertex 3 +-------------------+ vertex 2
-											|                 / |
-											|               /   |
-											|             /     |
-											|           /       |
-											|  m=1    /         |
-											|       /           |
-											|     /             |
-											|   /    m=0        |
-											| /                 |
-											vertex 0 +-------------------+ vertex 1
-		             							 */
-		             						}
+                                                 {
+                                                     sh[m] = 2;
+                                                 }
+                                                 else if (h[m] < 0)
+                                                 {
+                                                     sh[m] = 0;
+                                                 }
+                                                 else
+                                                 {
+                                                     sh[m] = 1;
+                                                 }
+                                                 /*  Note: at this stage the relative heights of the corners are in the h array, and the corresponding coordinates are
+in the xh and yh arrays. The 4 corners are indexed by 0 to 3 as shown below.
+Each triangle is then indexed by the parameter m, and the 3
+vertices of each triangle are indexed by parameters m1,m2,and m3.
+
+vertex 3 +-------------------+ vertex 2
+|                 / |
+|               /   |
+|             /     |
+|           /       |
+|  m=1    /         |
+|       /           |
+|     /             |
+|   /    m=0        |
+| /                 |
+vertex 0 +-------------------+ vertex 1
+  */
+                                             }
 		             						anz = 2;
 		             						start = 0;
 		             					}
@@ -466,8 +489,10 @@ namespace GralDomain
 		             								m3++;
 		             							}
 		             							else
-		             								m3 = 1;
-		             						}
+                                                 {
+                                                     m3 = 1;
+                                                 }
+                                             }
 		             						else
 		             						{
 		             							if (m == 1)
@@ -610,10 +635,14 @@ namespace GralDomain
 			             					
 			             					unsorted[k].RemoveAt(i);
 			             					if (Math.Abs(xA - xf) < 0.01 && Math.Abs(yA - yf) < 0.01) // contour line closed
-			             						i = unsorted[k].Count; // start new contour line
-			             					else
-			             						i = -1; // start searching
-			             				}
+                                             {
+                                                 i = unsorted[k].Count; // start new contour line
+                                             }
+                                             else
+                                             {
+                                                 i = -1; // start searching
+                                             }
+                                         }
 			             				else if (Math.Abs(xA - unsorted[k][i].Width ) < 0.01 && Math.Abs(yA - unsorted[k][i].Height) < 0.01)
 			             				{
 			             					_contPts[k].Add(new PointF(unsorted[k][i].Width , unsorted[k][i].Height)); // reverse order in list
@@ -624,10 +653,14 @@ namespace GralDomain
 			             					
 			             					unsorted[k].RemoveAt(i);
 			             					if (Math.Abs(xA - xf) < 0.01 && Math.Abs(yA - yf) < 0.01) // contour line closed
-			             						i = unsorted[k].Count; // start new contour line
-			             					else
-			             						i = -1;// start searching
-			             				}
+                                             {
+                                                 i = unsorted[k].Count; // start new contour line
+                                             }
+                                             else
+                                             {
+                                                 i = -1;// start searching
+                                             }
+                                         }
 			             				
 			             				i++;
 			             			}

@@ -134,19 +134,39 @@ namespace GralItemForms
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
             	if ((Convert.ToString(listBox1.Items[i]) == "POINT SOURCES") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button8.Visible = true;
+                }
+
                 if ((Convert.ToString(listBox1.Items[i]) == "AREA SOURCES") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button10.Visible = true;
+                }
+
                 if ((Convert.ToString(listBox1.Items[i]) == "LINE SOURCES") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button12.Visible = true;
+                }
+
                 if ((Convert.ToString(listBox1.Items[i]) == "TUNNEL PORTALS") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button14.Visible = true;
+                }
+
                 if ((Convert.ToString(listBox1.Items[i]) == "BUILDINGS") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button16.Visible = true;
+                }
+
                 if ((Convert.ToString(listBox1.Items[i]) == "RECEPTORS") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button23.Visible = true;
+                }
+
                 if ((Convert.ToString(listBox1.Items[i]) == "WALLS") && (domain.ItemOptions[i].Show == true))
+                {
                     domain.button49.Visible = true;
+                }
             }
             
            RedrawDomain(this, null);
@@ -155,7 +175,9 @@ namespace GralItemForms
         void Button6Click(object sender, EventArgs e)
         {
         	if (listBox1.SelectedIndex > -1)
-        		listBox1_DoubleClick(null, null);
+            {
+                listBox1_DoubleClick(null, null);
+            }
         }
 
         //open layout manager
@@ -199,7 +221,8 @@ namespace GralItemForms
                         for (int i1 = 0; i1 < Main.PollutantList.Count; i1++)
                         {
                         	if (_as.Poll.Pollutant[j] == i1)
-                        		if (_as.Poll.EmissionRate[j] != 0)
+                            {
+                                if (_as.Poll.EmissionRate[j] != 0)
                                 {
                                     poll = Main.PollutantList[i1];
                                     exist = false;
@@ -217,10 +240,15 @@ namespace GralItemForms
                                         break;
                                     }
                                     else
+                                    {
                                         break;
+                                    }
                                 }
                                 else
+                                {
                                     break;
+                                }
+                            }
                         }
                     }
                 }
@@ -250,6 +278,7 @@ namespace GralItemForms
                 for (int j = 1; j < layout.comboBox2.Items.Count; j++)
                 {
                     for(int i1=0;i1<Main.PollutantList.Count; i1++)
+                    {
                         if (Convert.ToString(layout.comboBox2.Items[j]) == Main.PollutantList[i1])
                         {
                             if (i1 == domain.ItemOptions[listBox1.SelectedIndex].Item)
@@ -258,7 +287,7 @@ namespace GralItemForms
                                 break;
                             }
                         }
-
+                    }
                 }
             }
 
@@ -306,10 +335,14 @@ namespace GralItemForms
                                             break;
                                         }
                                         else
+                                        {
                                             break;
+                                        }
                                     }
                                     else
+                                    {
                                         break;
+                                    }
                                 }
                             }
                         }
@@ -340,6 +373,7 @@ namespace GralItemForms
                 for (int j = 1; j < layout.comboBox2.Items.Count; j++)
                 {
                     for (int i1 = 0; i1 < Main.PollutantList.Count; i1++)
+                    {
                         if (Convert.ToString(layout.comboBox2.Items[j]) == Main.PollutantList[i1])
                         {
                             if (i1 == domain.ItemOptions[listBox1.SelectedIndex].Item)
@@ -348,7 +382,7 @@ namespace GralItemForms
                                 break;
                             }
                         }
-
+                    }
                 }
             }
             
@@ -358,7 +392,9 @@ namespace GralItemForms
                 layout.comboBox2.Visible = true;
                 layout.comboBox2.Items.Add("Height [m]");
                 if (domain.ItemOptions[listBox1.SelectedIndex].Item == 1)
+                {
                     layout.comboBox2.SelectedIndex = 1;
+                }
             }
 
             if (Convert.ToString(listBox1.SelectedItem) == "VEGETATION")
@@ -367,7 +403,9 @@ namespace GralItemForms
                 layout.comboBox2.Visible = true;
                 layout.comboBox2.Items.Add("Height [m]");
                 if (domain.ItemOptions[listBox1.SelectedIndex].Item == 1)
+                {
                     layout.comboBox2.SelectedIndex = 1;
+                }
             }
 
             if (Convert.ToString(listBox1.SelectedItem) == "RECEPTORS")
@@ -376,7 +414,9 @@ namespace GralItemForms
                 layout.comboBox2.Visible = true;
                 layout.comboBox2.Items.Add("Display value");
                 if (domain.ItemOptions[listBox1.SelectedIndex].Item == 1)
+                {
                     layout.comboBox2.SelectedIndex = 1;
+                }
             }
 
             Cursor = Cursors.Default;
@@ -425,9 +465,13 @@ namespace GralItemForms
             try
             {
                 if (domain.ItemOptions[listBox1.SelectedIndex].Show == true)
+                {
                     checkBox1.Checked = true;
+                }
                 else
+                {
                     checkBox1.Checked = false;
+                }
             }
             catch
             {
@@ -438,30 +482,61 @@ namespace GralItemForms
             button6.Visible = false;
             
             if (listBox1.SelectedIndex > -1) // item selected
-            	button6.Visible = true;	// show button Layout
-            
+            {
+                button6.Visible = true; // show button Layout
+            }
+
             try
             {
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Substring(0, 3) == "CM:")
+                {
                     button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Substring(0, 3) == "VM:")
+                {
                     button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Substring(0, 3) == "BM:")
+                {
                     button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Substring(0, 3) == "PM:")
+                {
                     button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Substring(0, 3) == "SM:")
+                {
                     button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Equals("NORTH ARROW"))
-                	button4.Visible = true;
+                {
+                    button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.Equals("SCALE BAR"))
-                	button4.Visible = true;
+                {
+                    button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.StartsWith("CONCENTRATION VALUES"))
-                	button4.Visible = true;
+                {
+                    button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.StartsWith("ITEM INFO"))
+                {
                     button4.Visible = true;
+                }
+
                 if (domain.ItemOptions[listBox1.SelectedIndex].Name.StartsWith("WINDROSE"))
+                {
                     button4.Visible = true;
+                }
             }
             catch
             {
@@ -478,9 +553,13 @@ namespace GralItemForms
                 listBox1.SelectedIndex = 0;
                 
                 if (domain.ItemOptions[0].Show == true)
+                {
                     checkBox1.Checked = true;
+                }
                 else
+                {
                     checkBox1.Checked = false;
+                }
             }
             catch
             {
@@ -541,9 +620,13 @@ namespace GralItemForms
                 int index = -1;
                 combo(SGNumber, ref index);
                 if (index > -1)
+                {
                     layout.comboBox1.Items.Add(Main.DefinedSourceGroups[index].SG_Name + ": " + Main.DefinedSourceGroups[index].SG_Number.ToString());
+                }
                 else
+                {
                     layout.comboBox1.Items.Add(SGNumber);
+                }
             }
         }
         
@@ -568,8 +651,10 @@ namespace GralItemForms
         	if (e.KeyCode == Keys.Delete)
         	{
         		if (MessageBox.Show(this, "Remove selected items?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-        			button4_Click(null, null);
-        	}
+                {
+                    button4_Click(null, null);
+                }
+            }
             if (e.KeyCode == Keys.Space)
             {
                 if (listBox1.SelectedItems.Count > 0)
@@ -626,17 +711,24 @@ namespace GralItemForms
         					try
         					{
         						if (File.Exists(file))
-        							File.Delete(file);
-        						string path = Path.GetDirectoryName(file);
+                                {
+                                    File.Delete(file);
+                                }
+
+                                string path = Path.GetDirectoryName(file);
         						
         						file = Path.Combine(path, Path.GetFileNameWithoutExtension(file) + ".u");
         						if (File.Exists(file))
-        							File.Delete(file);
-        						
-        						file = Path.Combine(path, Path.GetFileNameWithoutExtension(file) + ".v");
+                                {
+                                    File.Delete(file);
+                                }
+
+                                file = Path.Combine(path, Path.GetFileNameWithoutExtension(file) + ".v");
         						if (File.Exists(file))
-        							File.Delete(file);
-        					}
+                                {
+                                    File.Delete(file);
+                                }
+                            }
         					catch {}
         				}
 
@@ -666,8 +758,10 @@ namespace GralItemForms
 			for(int i = Application.OpenForms.Count-1; i >=0; i--)
 			{
 				if(Application.OpenForms[i].Name.StartsWith("Layout"))
-					Application.OpenForms[i].Close();
-			}
+                {
+                    Application.OpenForms[i].Close();
+                }
+            }
 		}
 		
 		private void RedrawDomain(object sender, EventArgs e)
@@ -676,8 +770,10 @@ namespace GralItemForms
 			try
 			{
 				if (object_redraw != null)
-					object_redraw(this, e);
-			}
+                {
+                    object_redraw(this, e);
+                }
+            }
 			catch
 			{}
 		}

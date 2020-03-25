@@ -648,8 +648,10 @@ namespace GralDomain
                     ggeom = null;
                 }
                 else
+                {
                     throw new FileNotFoundException("Error reading ggeom.asc");
-                
+                }
+
                 //read wind fields
                 message.listBox1.Items.Add("Reading wind field data...");
                 message.Refresh();
@@ -703,15 +705,29 @@ namespace GralDomain
                     for (int k = 1; k <= NZ; k++)
                     {
                         if (VWI[x1, y1, k] == 0)
+                        {
                             windrichtung = 90;
+                        }
                         else
+                        {
                             windrichtung = Convert.ToInt32(Math.Abs(Math.Atan(UWI[x1, y1, k] / VWI[x1, y1, k])) * 180 / 3.14);
+                        }
+
                         if ((VWI[x1, y1, k] > 0) && (UWI[x1, y1, k] <= 0))
+                        {
                             windrichtung = 180 - windrichtung;
+                        }
+
                         if ((VWI[x1, y1, k] >= 0) && (UWI[x1, y1, k] > 0))
+                        {
                             windrichtung = 180 + windrichtung;
+                        }
+
                         if ((VWI[x1, y1, k] < 0) && (UWI[x1, y1, k] >= 0))
+                        {
                             windrichtung = 360 - windrichtung;
+                        }
+
                         text[0] = Convert.ToString(Math.Round(ZSP[x1, y1, k] - AH[x1, y1], 1), ic) + " " + Convert.ToString(Math.Round(windrichtung, 0));
                         write.WriteLine(text[0]);
                     }
@@ -925,16 +941,29 @@ namespace GralDomain
                         if (HOKART[k] + AHMIN >= AH[x1, y1] - Building_heights[x1, y1]) //check if point is above ground level
                         {
                             if (vk[x1][y1][k] == 0)
+                            {
                                 windrichtung = 90;
+                            }
                             else
+                            {
                                 windrichtung = Convert.ToInt32(Math.Abs(Math.Atan(uk[x1][y1][k] / vk[x1][y1][k])) * 180 / 3.14);
+                            }
+
                             if ((vk[x1][y1][k] > 0) && (uk[x1][y1][k] <= 0))
+                            {
                                 windrichtung = 180 - windrichtung;
+                            }
+
                             if ((vk[x1][y1][k] >= 0) && (uk[x1][y1][k] > 0))
+                            {
                                 windrichtung = 180 + windrichtung;
+                            }
+
                             if ((vk[x1][y1][k] < 0) && (uk[x1][y1][k] >= 0))
+                            {
                                 windrichtung = 360 - windrichtung;
-                            
+                            }
+
                             text[0] = Convert.ToString(Math.Round(HOKART[k] + AHMIN - AH[x1, y1] + Building_heights[x1, y1], 1), ic)
                                 + " " + Convert.ToString(Math.Round(windrichtung, 0));
                             write.WriteLine(text[0]);

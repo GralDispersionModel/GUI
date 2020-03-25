@@ -49,11 +49,18 @@ namespace GralStaticFunctions
 				// sign of the increment
 				incx = Math.Sign(dx);
 				incy = Math.Sign(dy);
-				if(dx<0) dx = -dx;
-				if(dy<0) dy = -dy;
+				if(dx<0)
+                {
+                    dx = -dx;
+                }
 
-				// where is the highest distance?
-				if (dx>dy)
+                if (dy<0)
+                {
+                    dy = -dy;
+                }
+
+                // where is the highest distance?
+                if (dx>dy)
 				{
 					// x the faster direction
 					pdx=incx; pdy=0;    // pd. is the parellel step

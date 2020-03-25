@@ -106,8 +106,11 @@ namespace GralStaticFunctions
         	using (FontDialog ft = new FontDialog())
         	{
         		if (Small_Font != null)
-        			ft.Font = Small_Font;
-        		if (ft.ShowDialog() == DialogResult.OK)
+                {
+                    ft.Font = Small_Font;
+                }
+
+                if (ft.ShowDialog() == DialogResult.OK)
         		{
         			Small_Font = ft.Font;
         		}
@@ -433,9 +436,13 @@ namespace GralStaticFunctions
             if (tb != null)
             {
                 if (CheckDoubleValid(tb.Text))
+                {
                     tb.BackColor = Color.White;
+                }
                 else
+                {
                     tb.BackColor = Color.Yellow;
+                }
             }
         }
 
@@ -457,7 +464,9 @@ namespace GralStaticFunctions
             double h;
 
             if (double.TryParse(a.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator), out h))
+            {
                 a = Convert.ToString(Math.Round(h, dig), ic);
+            }
 
             return a;
         }

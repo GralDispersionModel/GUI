@@ -13,7 +13,6 @@
 using System;
 using System.Windows.Forms;
 using GralShape;
-using GralItemData;
 using GralMessage;
 
 namespace GralDomain

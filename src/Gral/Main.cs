@@ -43,8 +43,7 @@ namespace Gral
         /// <summary>
         /// Default path for the GUI Settings
         /// </summary>
-        public static string App_Settings_Path =
-            Path.GetDirectoryName(Application.ExecutablePath);
+        public static string App_Settings_Path = Path.GetDirectoryName(Application.ExecutablePath);
         /// <summary>
         /// Default path for the calculation cores
         /// </summary>
@@ -180,11 +179,11 @@ namespace Gral
         /// <summary>
         /// Control changes in the file Percent.txt, which indicates the GRAL simulation status for the actual computed dispersion simulation
         /// </summary>
-        private FileSystemWatcher percentGRAL = new FileSystemWatcher();
+        private readonly FileSystemWatcher percentGRAL = new FileSystemWatcher();
         /// <summary>
         /// Control changes in the file DispNr.txt, which indicates the GRAL simulation status for the actual computed dispersion simulation
         /// </summary>
-        private FileSystemWatcher dispnrGRAL = new FileSystemWatcher();
+        private readonly FileSystemWatcher dispnrGRAL = new FileSystemWatcher();
         /// <summary>
         /// Frequencies of each dispersion situation
         /// </summary>
@@ -424,10 +423,25 @@ namespace Gral
                 using (StreamReader read = new StreamReader(Path.Combine(App_Settings_Path, @"DefaultPath")))
                 {
                     read.ReadLine();
-                    if (!read.EndOfStream) read.ReadLine();
-                    if (!read.EndOfStream) CopyCorestoProject = Convert.ToBoolean(read.ReadLine());
-                    if (!read.EndOfStream) CompatibilityToVersion1901 = Convert.ToBoolean(read.ReadLine());
-                    if (!read.EndOfStream) CalculationCoresPath = read.ReadLine();
+                    if (!read.EndOfStream)
+                    {
+                        read.ReadLine();
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        CopyCorestoProject = Convert.ToBoolean(read.ReadLine());
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        CompatibilityToVersion1901 = Convert.ToBoolean(read.ReadLine());
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        CalculationCoresPath = read.ReadLine();
+                    }
                 }
             }
             catch { }
@@ -444,9 +458,13 @@ namespace Gral
             {
                 var ctr = item as T;
                 if (ctr != null)
+                {
                     lst.Add(ctr);
+                }
                 else
+                {
                     lst.AddRange(GetAllControls<T>(item));
+                }
             }
             return lst;
         }
@@ -462,19 +480,25 @@ namespace Gral
                 {
                     if (MessageBox.Show("The current GRAL settings are not saved", "Close the GRAL user interface?", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
                         == DialogResult.Cancel)
+                    {
                         e.Cancel = true;
+                    }
                 }
                 else if (File.Exists(Path.Combine(ProjectName, @"Computation", "in.dat")) == false) // in.dat does not exist
                 {
                     if (MessageBox.Show("The current GRAL settings are not saved", "Close the GRAL user interface?", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
                         == DialogResult.Cancel)
+                    {
                         e.Cancel = true;
+                    }
                 }
                 else if (ChangedWindData) // meteo set but not saved
                 {
                     if (MessageBox.Show("The current meteorological settings are not saved", "Close the GRAL user interface?", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
                         == DialogResult.Cancel)
+                    {
                         e.Cancel = true;
+                    }
                 }
             }
         }
@@ -487,7 +511,9 @@ namespace Gral
             for (int nr = 0; nr < WindSpeedClasses - 1; nr++)
             {
                 if (NumUpDown[nr] != null)
+                {
                     NumUpDown[nr].ValueChanged -= new System.EventHandler(CheckWindClassesInput);
+                }
             }
             for (int nr = 0; nr < WindSpeedClasses - 1; nr++)
             {
@@ -503,7 +529,9 @@ namespace Gral
             for (int nr = 0; nr < WindSpeedClasses - 1; nr++)
             {
                 if (NumUpDown[nr] != null)
+                {
                     NumUpDown[nr].ValueChanged += new System.EventHandler(CheckWindClassesInput);
+                }
             }
         }
         //////////////////////////////////////////////////////////////
@@ -531,7 +559,10 @@ namespace Gral
                         using (StreamReader read = new StreamReader(Path.Combine(App_Settings_Path, @"DefaultPath")))
                         {
                             currentDir = read.ReadLine();
-                            if (!read.EndOfStream) HR_topofile = read.ReadLine();
+                            if (!read.EndOfStream)
+                            {
+                                HR_topofile = read.ReadLine();
+                            }
                         }
                     }
                     catch
@@ -748,7 +779,10 @@ namespace Gral
         private void SetDomainClosed(object sender, EventArgs e)
         {
             if (DomainClosedHandle != null)
+            {
                 DomainGISForm.DomainClosed -= DomainClosedHandle;
+            }
+
             DomainGISForm = null;
             //GC.Collect(); // Debug only
         }
@@ -784,7 +818,10 @@ namespace Gral
                     myWriter.WriteLine(numericUpDown1.Value);
                     myWriter.WriteLine(numericUpDown2.Value);
                     for (int i = 0; i < WindSpeedClasses - 1; i++)
+                    {
                         myWriter.WriteLine(NumUpDown[i].Value.ToString(ic));
+                    }
+
                     Textbox16_Set(MetfileName);
                 }
             }
@@ -1011,12 +1048,6 @@ namespace Gral
             }
         }
 
-        //Wait for a keystroke when GRAL has been finished?
-        private void checkBox29_CheckedChanged(object sender, EventArgs e)
-        {
-            GRALSettings.WaitForKeyStroke = checkBox29.Checked;
-            ResetInDat();
-        }
         //change the vertical thickness of the counting grid
         private void NumericUpDown8_ValueChanged(object sender, EventArgs e)
         {
@@ -1649,9 +1680,13 @@ namespace Gral
                     groupBox14.Visible = false;
                     string receptorfile = Path.Combine(ProjectName, @"Computation", "zeitreihe.dat");
                     if (File.Exists(receptorfile))
+                    {
                         button37.Visible = true;
+                    }
                     else
+                    {
                         button37.Visible = false;
+                    }
                     //check transient GRAL simulation
                     InDatVariables data = new InDatVariables();
                     InDatFileIO ReadInData = new InDatFileIO();
@@ -1736,7 +1771,9 @@ namespace Gral
                 return Math.Max(temp, GRAL_con.Length);
             }
             else
+            {
                 return 0;
+            }
         }
 
         /// <summary>
@@ -1766,29 +1803,54 @@ namespace Gral
             //enable/disable GRAL simulations
             bool enable = true;
             if ((button10.Visible == true) && (Control_OK == false))
+            {
                 enable = false;
+            }
+
             if ((button7.Visible == true) && (Meteo_OK == false))
+            {
                 enable = false;
+            }
+
             if ((button18.Visible == true) && (Emission_OK == false))
+            {
                 enable = false;
+            }
+
             if (button18.Visible == false)
+            {
                 enable = false;
+            }
+
             if ((button9.Visible == true) && (Building_OK == false))
+            {
                 enable = false;
+            }
+
             if (ProjectName != null)
             {
                 //get number of wind field files
                 //DirectoryInfo di = new DirectoryInfo(Path.Combine(projectname, @"Computation"));
                 //FileInfo[] GRAMM_wind = di.GetFiles("*.wnd");
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "meteopgt.all")) == false)
+                {
                     enable = false;
+                }
+
                 if ((File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")) == true) && (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")) == false))
+                {
                     enable = false;
+                }
+
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAL.geb")) == false)
+                {
                     enable = false;
+                }
             }
             else
+            {
                 enable = false;
+            }
 
             //if ERA5 data is used, but no wind fields have yet been generated
             if (checkBox35.Checked == true)
@@ -1797,9 +1859,13 @@ namespace Gral
                 DirectoryInfo di = new DirectoryInfo(newPath);
                 FileInfo[] files_conc = di.GetFiles("*.wnd");
                 if (files_conc.Length > 0)
+                {
                     enable = true;
+                }
                 else
+                {
                     enable = false;
+                }
             }
 
             //MessageBox.Show (enable.ToString ());
@@ -1807,7 +1873,9 @@ namespace Gral
             {
                 groupBox16.Visible = true; // GRAl-Start Group Box
                 if (GRALSettings.BuildingMode == 2) // Prognostic GRAL -> Online GroupBox visible
+                {
                     groupBox17.Visible = true;
+                }
             }
             else
             {
@@ -1825,16 +1893,30 @@ namespace Gral
             if (ProjectName != null)
             {
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "meteopgt.all")) == false)
+                {
                     enable = false;
+                }
+
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")) == false)
+                {
                     enable = false;
+                }
+
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "IIN.dat")) == false)
+                {
                     enable = false;
+                }
+
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMM.geb")) == false)
+                {
                     enable = false;
+                }
             }
             else
+            {
                 enable = false;
+            }
+
             if (enable == true)
             {
                 groupBox15.Visible = true;
@@ -1849,7 +1931,11 @@ namespace Gral
         /// <param name="e"></param>
         private void Button38_Click(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
             string name = Path.Combine(ProjectName, @"Settings", "comments.txt");
             try
             {
@@ -1951,7 +2037,10 @@ namespace Gral
                 DirectoryInfo _directory = new DirectoryInfo(_file);
                 FileInfo[] files_conc = _directory.GetFiles("*.con");
                 if (files_conc.Length == 0) // compressed files?
+                {
                     files_conc = _directory.GetFiles("*.grz");
+                }
+
                 long file_size = 0;
                 for (int i = 0; i < files_conc.Length; i++)
                 {
@@ -2097,7 +2186,10 @@ namespace Gral
                 }
             }
             else if (sender != null && GRAMM_Locked == false) // Project is locked by the user!
+            {
                 GRAMM_Locked = true;
+            }
+
             if (GRAMM_Locked) // if locked Lock is closed!
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
@@ -2129,7 +2221,10 @@ namespace Gral
                 }
             }
             else if (sender != null && Project_Locked == false) // Project is locked by the user!
+            {
                 Project_Locked = true;
+            }
+
             if (Project_Locked) // if locked Lock is closed!
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
@@ -2146,7 +2241,10 @@ namespace Gral
                 toolTip1.SetToolTip(button101, "GRAL project is unlocked");
                 toolTip1.SetToolTip(button104, "GRAL project is unlocked");
                 if (GRAMM_Locked != true)
+                {
                     toolTip1.SetToolTip(button106, "GRAL project is unlocked");
+                }
+
                 ProjectLockedLockElements(Project_Locked);
             }
         }
@@ -2182,7 +2280,10 @@ namespace Gral
             // set increment in upDowns to 0 if locked = true
             int inc = 0;
             if (locked == false)
+            {
                 inc = 1;
+            }
+
             if (Project_Locked == false) // lock because of GRAMM if not locked because of GRAL
             {
                 numericUpDown1.Increment = inc; // Meteo Tab
@@ -2201,9 +2302,14 @@ namespace Gral
             checkBox21.Enabled = !locked;
             checkBox31.Enabled = !locked;
             if (checkBox31.Checked == false) // check flat terrain option
+            {
                 checkBox30.Enabled = !locked;
+            }
             else
+            {
                 checkBox30.Enabled = false; // lock sunrise at flat terrain
+            }
+
             if (locked)
             {
                 button105.Image = (System.Drawing.Image)(Properties.Resources.Locked);
@@ -2265,7 +2371,7 @@ namespace Gral
             numericUpDown38.Enabled = !locked; // Roughness lenght
             numericUpDown39.Enabled = !locked; // Latidude
             numericUpDown43.Enabled = !locked; // Compressed mode for GRAL output
-            checkBox29.Enabled = !locked;      // Wait for Key when exiting GRAL
+            
             if (GRALSettings.BuildingMode == 2)
             {
                 numericUpDown42.Enabled = !locked; // Sub domain factor
@@ -2319,7 +2425,10 @@ namespace Gral
             // set increment in upDowns to 0 if locked = true
             int inc = 0;
             if (locked == false)
+            {
                 inc = 1;
+            }
+
             if (GRAMM_Locked == false)
             {
                 numericUpDown1.Increment = inc; // Meteo Tab
@@ -2366,7 +2475,10 @@ namespace Gral
             else
             {
                 if (GRAMM_Locked != true)
+                {
                     button106.Image = (System.Drawing.Image)(Properties.Resources.Unlocked);
+                }
+
                 button104.Image = (System.Drawing.Image)(Properties.Resources.Unlocked);
                 button101.Image = (System.Drawing.Image)(Properties.Resources.Unlocked);
             }
@@ -2427,7 +2539,10 @@ namespace Gral
             if (tabControl1.SelectedIndex == 3) // Emissions
             {
                 if (listView1.Items.Count == 0)
+                {
                     return;
+                }
+
                 listView1.Items[0].Selected = true;
                 listView1.Select();
                 ListView1ItemActivate(null, null);
@@ -2467,7 +2582,10 @@ namespace Gral
                         ProjectName = ProjectName
                     };
                     if (OpenProject.ReadGrammInFile() == true) // get final situation from GRAMMin.dat if sunrise is activated
+                    {
                         final_sit = OpenProject.GRAMMsunrise;
+                    }
+
                     OpenProject = null;
                     if (final_sit > 0)
                     {
@@ -2507,9 +2625,13 @@ namespace Gral
                 {
                     // show number of cells
                     if (CellsGralX > 0)
+                    {
                         label91.Text = "Concentration cells : " + Convert.ToString(CellsGralX) + " x " + Convert.ToString(CellsGralY) + " x " + numericUpDown3.Text;
+                    }
                     else
+                    {
                         label91.Text = "0 x 0 cells";
+                    }
                 }
                 catch
                 {
@@ -2525,7 +2647,9 @@ namespace Gral
                         label93.Text = "Flow field cells :         " + Convert.ToString(Math.Round(CellsGralX / n * c, 0)) + " x " + Convert.ToString(Math.Round(CellsGralY / n * c, 0)) + " x " + numericUpDown26.Text;
                     }
                     else
+                    {
                         label93.Text = "";
+                    }
                 }
                 catch
                 { }
@@ -2533,10 +2657,14 @@ namespace Gral
                 try
                 {
                     if (n > 0)
+                    {
                         label92.Text = Convert.ToString(Math.Abs(Convert.ToDouble(textBox12.Text) - Convert.ToDouble(textBox13.Text)) / n)
                             + " x " + Convert.ToString(Math.Abs(Convert.ToDouble(textBox14.Text) - Convert.ToDouble(textBox15.Text)) / n) + " x " + numericUpDown16.Text + " cells";
+                    }
                     else
+                    {
                         label92.Text = "0 x 0 cells";
+                    }
                 }
                 catch
                 {
@@ -2572,7 +2700,10 @@ namespace Gral
 
                 }
                 else
+                {
                     GRAMM_Locked = false;                   // lock GRAMM project
+                }
+
                 Gramm_locked_buttonClick(null, null);
                 //enable/disable GRAL/GRAMM simulations
                 Enable_GRAL();
@@ -2591,28 +2722,50 @@ namespace Gral
                 #if __MonoCS__
                 #else
                 if (percentGRAL != null && Directory.Exists(percentGRAL.Path))
+                {
                     percentGRAL.EnableRaisingEvents = true;
+                }
+
                 if (dispnrGRAL != null && Directory.Exists(dispnrGRAL.Path))
+                {
                     dispnrGRAL.EnableRaisingEvents = true;
+                }
+
                 if (percentGramm != null && Directory.Exists(percentGramm.Path))
+                {
                     percentGramm.EnableRaisingEvents = true;
+                }
+
                 if (dispnrGramm != null && Directory.Exists(dispnrGramm.Path))
+                {
                     dispnrGramm.EnableRaisingEvents = true;
-                #endif
+                }
+#endif
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
                 #if __MonoCS__
                 #else
                 if (percentGRAL != null)
+                {
                     percentGRAL.EnableRaisingEvents = false;
+                }
+
                 if (dispnrGRAL != null)
+                {
                     dispnrGRAL.EnableRaisingEvents = false;
+                }
+
                 if (percentGramm != null)
+                {
                     percentGramm.EnableRaisingEvents = false;
+                }
+
                 if (dispnrGramm != null)
+                {
                     dispnrGramm.EnableRaisingEvents = false;
-                #endif
+                }
+#endif
             }
             // Lock elements because they do not exist if project is loaded
             GrammLockedLockElements(GRAMM_Locked);
@@ -2654,7 +2807,7 @@ namespace Gral
         /// </summary>
         void SetButton57Bitmap()
         {
-            if (GRALSettings.WriteESRIResult || File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")))
+            if (GRALSettings.WriteESRIResult || File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) || !GRALSettings.WaitForKeyStroke)
             {
                 button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
             }
@@ -2700,7 +2853,11 @@ namespace Gral
 
         void TabControl1Deselected(object sender, TabControlEventArgs e)
         {
-            if (tabControl1.SelectedIndex != 1) return;
+            if (tabControl1.SelectedIndex != 1)
+            {
+                return;
+            }
+
             CheckGralInputData(); // check if
         }
 
@@ -2796,7 +2953,11 @@ namespace Gral
         /// </summary>
         private void Button38_Click_1(object sender, EventArgs e)
         {
-            if (ProjectName == "") return; // exit if no project loaded
+            if (ProjectName == "")
+            {
+                return; // exit if no project loaded
+            }
+
             string name = Path.Combine(ProjectName, @"Settings", "comments.txt");
             try
             {
@@ -2841,7 +3002,10 @@ namespace Gral
                     Control_OK  = false;
                 }
                 else
+                {
                     pictureBox1.Visible = true;
+                }
+
                 if (mode == 0)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.RedDot;
@@ -2866,7 +3030,10 @@ namespace Gral
                     Meteo_OK = false;
                 }
                 else
+                {
                     pictureBox2.Visible = true;
+                }
+
                 if (mode == 0)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.RedDot;
@@ -2891,7 +3058,10 @@ namespace Gral
                     Emission_OK = false;
                 }
                 else
+                {
                     pictureBox3.Visible = true;
+                }
+
                 if (mode == 0)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.RedDot;
@@ -2916,7 +3086,10 @@ namespace Gral
                     Building_OK = true; // no buildings!
                 }
                 else
+                {
                     pictureBox4.Visible = true;
+                }
+
                 if (mode == 0)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.RedDot;
@@ -2925,14 +3098,18 @@ namespace Gral
                     {
                         string newPath1 = Path.Combine(ProjectName, @"Computation", "buildings.dat");
                         if (Project_Locked == false)
+                        {
                             File.Delete(newPath1);
+                        }
                     }
                     catch {}
                     try // delete vegetation.dat if file exists
                     {
                         string newPath1 = Path.Combine(ProjectName, @"Computation", "vegetation.dat");
                         if (Project_Locked == false)
+                        {
                             File.Delete(newPath1);
+                        }
                     }
                     catch {}
                 }
@@ -3308,14 +3485,17 @@ namespace Gral
         {
             if (MessageBox.Show(this, "These special settings are only intended for a few applications. Do not proceed if you cannot assess the effects", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                using (Main_SpecialSettings MSp = new Main_SpecialSettings())
+                using (GralMainForms.Main_SpecialSettings MSp = new GralMainForms.Main_SpecialSettings())
                 {
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
+                    MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
+
                     if (MSp.ShowDialog() == DialogResult.OK )
                     {
-                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult)
+                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke)
                         {
                             GRALSettings.WriteESRIResult = MSp.WriteASCiiOutput;
+                            GRALSettings.WaitForKeyStroke = MSp.KeyStrokeWhenExitGRAL;
                             ResetInDat();
                         }
                         SetButton57Bitmap();

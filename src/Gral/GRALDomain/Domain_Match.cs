@@ -116,8 +116,9 @@ namespace GralDomain
                     ggeom = null;
                 }
                 else
+                {
                     throw new FileNotFoundException("Error reading ggeom.asc");
-
+                }
 
                 int[] ix = new int[MMO.metfiles.Count];
                 int[] iy = new int[MMO.metfiles.Count];
@@ -153,11 +154,13 @@ namespace GralDomain
                     }
                     //obtain index in the vertical direction
                     for (int k = 1; k <= NZ; k++)
+                    {
                         if (ZSP[ix[met], iy[met], k] - AH[ix[met], iy[met]] >= schnitt[met])
                         {
                             ischnitt[met] = k;
                             break;
                         }
+                    }
                 }
                 wait.Hide(); // Kuntner: close wait at he end of the method
 
@@ -188,9 +191,20 @@ namespace GralDomain
 
                 int optimization = 1;
                 bool outliers = true;
-                if (MMO.checkBox1.Checked == false) outliers = false;
-                if (MMO.radioButton1.Checked == true) optimization = 1;
-                if (MMO.radioButton2.Checked == true) optimization = 2;
+                if (MMO.checkBox1.Checked == false)
+                {
+                    outliers = false;
+                }
+
+                if (MMO.radioButton1.Checked == true)
+                {
+                    optimization = 1;
+                }
+
+                if (MMO.radioButton2.Checked == true)
+                {
+                    optimization = 2;
+                }
 
                 StreamReader meteopgt_ori = new StreamReader(Path.Combine(MainForm.GRAMMwindfield, @"meteopgt.all")); // Read from original meteopgt.all
                                                                                                                       //loop over all weather situations
@@ -351,16 +365,28 @@ namespace GralDomain
                                 }
 
                                 if (Vmittel == 0)
+                                {
                                     iwr[met, n] = 90;
+                                }
                                 else
+                                {
                                     iwr[met, n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
+                                }
 
                                 if ((Vmittel > 0) && (Umittel <= 0))
+                                {
                                     iwr[met, n] = 180 - iwr[met, n];
+                                }
+
                                 if ((Vmittel >= 0) && (Umittel > 0))
+                                {
                                     iwr[met, n] = 180 + iwr[met, n];
+                                }
+
                                 if ((Vmittel < 0) && (Umittel >= 0))
+                                {
                                     iwr[met, n] = 360 - iwr[met, n];
+                                }
 
                                 // wg_GRAMM = lenght of vector
                                 wg_GRAMM[met, n] = Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
@@ -392,9 +418,14 @@ namespace GralDomain
                     Array.Clear(Vector_Error_Sum, 0, Vector_Error_Sum.Length);
                     Array.Clear(SC_Error_Sum, 0, SC_Error_Sum.Length);
                     if (MMO.checkBox1.Checked == false)
+                    {
                         outliers = false;
+                    }
                     else
+                    {
                         outliers = true;
+                    }
+
                     if (MMO.radioButton1.Checked == true)
                     {
                         optimization = 1;
@@ -469,9 +500,13 @@ namespace GralDomain
                             if (met_year < 100)
                             {
                                 if (met_year < 70)
+                                {
                                     met_year += 2000;
+                                }
                                 else
+                                {
                                     met_year += 1900;
+                                }
                             }
                             met_day = Convert.ToInt32(dummytext[0]);
                             met_month = Convert.ToInt32(dummytext[1]);
@@ -518,9 +553,13 @@ namespace GralDomain
                                         if (met_yearj < 100)
                                         {
                                             if (met_yearj < 70)
+                                            {
                                                 met_yearj += 2000;
+                                            }
                                             else
+                                            {
                                                 met_yearj += 1900;
+                                            }
                                         }
                                         int met_dayj = Convert.ToInt32(dummytext[0]);
                                         int met_monthj = Convert.ToInt32(dummytext[1]);
@@ -608,7 +647,11 @@ namespace GralDomain
                                             {
                                                 // error for direction
                                                 err = Math.Abs(iwr[j, n] - Wind_Dir_Meas);
-                                                if (err > 180) err = 360 - err;
+                                                if (err > 180)
+                                                {
+                                                    err = 360 - err;
+                                                }
+
                                                 err = Math.Abs(err);
                                                 err = Math.Pow(Math.Max(0, (err - 12)), 1.8) * weighting_Direction[j]; // weighting factor
                                                                                                                        // error for speed - normalized
@@ -622,8 +665,14 @@ namespace GralDomain
                                             }
 
                                             // use weighting factor for met-station-error
-                                            if (weighting_factor[j] >= 0) err_st[j] = err * weighting_factor[j];
-                                            else err_st[j] = err;
+                                            if (weighting_factor[j] >= 0)
+                                            {
+                                                err_st[j] = err * weighting_factor[j];
+                                            }
+                                            else
+                                            {
+                                                err_st[j] = err;
+                                            }
 
                                             //										    double xxx;
                                             //										    // error for stability - +- 1 ak = no error - stability error not weighted
@@ -633,9 +682,13 @@ namespace GralDomain
                                                 double temp = Math.Abs(localstability[0, n] - MMO.stability[0][met_count]) * 200; // stability
                                                                                                                                   //											    xxx = temp;
                                                 if (optimization == 2) // error using components
+                                                {
                                                     err_st[j] += temp; // stability
+                                                }
                                                 else // error using vectors
+                                                {
                                                     err_st[j] += Math.Sqrt(err_st[j] * err_st[j] + temp * temp);
+                                                }
                                             }
                                             else
                                             {
@@ -643,9 +696,13 @@ namespace GralDomain
                                                 temp += Math.Abs(localstability[0, n] - MMO.stability[0][met_count]) * 4; // little additional error. that best SCL can be found
                                                                                                                           //											    xxx = temp;
                                                 if (optimization == 2) // error using components
+                                                {
                                                     err_st[j] += temp; // stability
+                                                }
                                                 else // error using vectors
+                                                {
                                                     err_st[j] += Math.Sqrt(err_st[j] * err_st[j] + temp * temp);
+                                                }
                                             }
                                             //										    mess.listBox1.Items.Add(Convert.ToString(localstability[n]) + "/" + Convert.ToString(err_st[j]-xxx) + "/" + Convert.ToString(xxx));
                                             //									       	mess.Show();
@@ -691,9 +748,13 @@ namespace GralDomain
                                     }
 
                                     if (match_station > 0)
+                                    {
                                         err = err / match_station; // norm to the count of matches stations
+                                    }
                                     else
+                                    {
                                         err = err_st[0];
+                                    }
 
                                     if (err < best_err) // find best fitting weather situation
                                     {
@@ -734,24 +795,44 @@ namespace GralDomain
                                     //evaluation of error values for user feedback
                                     double errp = 0;
                                     if (wg_METEO > 0.5)
+                                    {
                                         errp = err / wg_METEO;
+                                    }
                                     else
+                                    {
                                         errp = err / 0.5;
+                                    }
 
                                     if (errp <= 0.1)
+                                    {
                                         Vector_Error_Sum[j, 0]++;
+                                    }
+
                                     if (errp <= 0.2)
+                                    {
                                         Vector_Error_Sum[j, 1]++;
+                                    }
+
                                     if (errp <= 0.4)
+                                    {
                                         Vector_Error_Sum[j, 2]++;
+                                    }
+
                                     if (errp <= 0.6)
+                                    {
                                         Vector_Error_Sum[j, 3]++;
+                                    }
 
                                     err = Math.Abs(localstability[j, best_fit] - MMO.stability[j][met_count]);
                                     if (err == 0)
+                                    {
                                         SC_Error_Sum[j, 0]++;
+                                    }
+
                                     if (err <= 1)
+                                    {
                                         SC_Error_Sum[j, 1]++;
+                                    }
                                 }
                                 //write_debug.WriteLine(Convert.ToString(best_fit)+"/"+Convert.ToString((double) 1000/MMO.filelength[0]));
                                 //write_debug.WriteLine(Convert.ToString(PGT[best_fit-1].PGT_Number)+"/"+Convert.ToString(PGT[best_fit-1].PGT_FRQ));
@@ -894,7 +975,9 @@ namespace GralDomain
                             using (StreamWriter write_mettimeseries = File.CreateText(newPath))
                             {
                                 for (int i = 0; i < mettimestring.Length; i++)
+                                {
                                     write_mettimeseries.WriteLine(mettimestring[i]);
+                                }
                             }
 
                         }
@@ -982,21 +1065,27 @@ namespace GralDomain
                                 orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
                                 targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".scl");
                                 if (File.Exists(orifile))
+                                {
                                     File.Copy(orifile, targetfile, true);
+                                }
 
                                 // copy .obl file
                                 windfieldfile = Convert.ToString(a_Line.PGTNumber).PadLeft(5, '0') + ".obl";//copy selected .scl file
                                 orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
                                 targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".obl");
                                 if (File.Exists(orifile))
+                                {
                                     File.Copy(orifile, targetfile, true);
+                                }
 
                                 // copy .ust file
                                 windfieldfile = Convert.ToString(a_Line.PGTNumber).PadLeft(5, '0') + ".ust";//copy selected .scl file
                                 orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
                                 targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".ust");
                                 if (File.Exists(orifile))
+                                {
                                     File.Copy(orifile, targetfile, true);
+                                }
 
                                 i++;
                                 if (wait1 != null && wait1.Visible) // Kuntner form does exist and is visible
@@ -1102,9 +1191,15 @@ namespace GralDomain
                         MainForm.numericUpDown7.Value = (decimal)MMOData.AnemometerHeight;
 
                         if (MMOData.WdClasses > 0)
+                        {
                             MainForm.numericUpDown1.Value = Convert.ToInt16(3600 / MMOData.WdClasses / 10);
+                        }
+
                         if (MMOData.WsClasses > 1 && MMOData.WsClasses < 11)
+                        {
                             MainForm.numericUpDown2.Value = MMOData.WsClasses;
+                        }
+
                         MainForm.WindSpeedClasses = MMOData.WsClasses;
                         //				for (int i = 0; i < wsclasses - 1; i++)
                         //				{
@@ -1115,7 +1210,9 @@ namespace GralDomain
                         //				}
                         MainForm.TBox[0].Text = "0";
                         if (MMOData.WsClasses > 1 && MMOData.WsClasses < 11)
-                            MainForm.TBox[MMOData.WsClasses - 1].Text = MainForm.NumUpDown[MMOData.WsClasses - 2].Text; ;
+                        {
+                            MainForm.TBox[MMOData.WsClasses - 1].Text = MainForm.NumUpDown[MMOData.WsClasses - 2].Text;
+                        };
                     }
                     catch { }
 
@@ -1267,8 +1364,15 @@ namespace GralDomain
                     MessageInfoForm.Close();
                     MessageInfoForm = null;
                 }
-                if (wait != null) wait.Close();
-                if (wait1 != null) wait1.Close();
+                if (wait != null)
+                {
+                    wait.Close();
+                }
+
+                if (wait1 != null)
+                {
+                    wait1.Close();
+                }
 
 #if __MonoCS__
 				MMO.close_allowed = true;

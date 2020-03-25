@@ -103,17 +103,25 @@ namespace GralMainForms
 				if (Convert.ToInt16(_startdate[2]) < 1900)
 				{
 					if (Convert.ToInt16(_startdate[2]) < 60)
-						_startdate[2] = "20" + _startdate[2];
-					else
-						_startdate[2] = "19" + _startdate[2];
-				}
+                    {
+                        _startdate[2] = "20" + _startdate[2];
+                    }
+                    else
+                    {
+                        _startdate[2] = "19" + _startdate[2];
+                    }
+                }
 				if (Convert.ToInt16(_enddate[2]) < 1900)
 				{
 					if (Convert.ToInt16(_enddate[2]) < 60)
-						_enddate[2] = "20" + _enddate[2];
-					else
-						_enddate[2] = "19" + _enddate[2];
-				}
+                    {
+                        _enddate[2] = "20" + _enddate[2];
+                    }
+                    else
+                    {
+                        _enddate[2] = "19" + _enddate[2];
+                    }
+                }
 
 				monthCalendar1.MinDate = new System.DateTime(Convert.ToInt16(_startdate[2]), Convert.ToInt16(_startdate[1]), Convert.ToInt16(_startdate[0]), 0, 0, 0, 0);
 				monthCalendar1.MaxDate = new System.DateTime(Convert.ToInt16(_enddate[2]), Convert.ToInt16(_enddate[1]), Convert.ToInt16(_enddate[0]), 0, 0, 0, 0);
@@ -163,8 +171,10 @@ namespace GralMainForms
 			{
 				MessageBox.Show(this, "Error when reading Meteo-File in line" + readwindfile.WindData.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				if (winddata.Count == 0)
-					met = false;
-			}
+                {
+                    met = false;
+                }
+            }
 			
 			int length = 0;
 			
@@ -184,10 +194,14 @@ namespace GralMainForms
 					if (Convert.ToInt16(date[2]) < 1900)
 					{
 						if (Convert.ToInt16(date[2]) < 60)
-							date[2] = "20" + date[2];
-						else
-							date[2] = "19" + date[2];
-					}
+                        {
+                            date[2] = "20" + date[2];
+                        }
+                        else
+                        {
+                            date[2] = "19" + date[2];
+                        }
+                    }
 					
 					if (((Convert.ToInt32(date[2]) * 10000 + Convert.ToInt16(date[1]) * 100 + Convert.ToInt16(date[0])) >= (Convert.ToInt32(_startdate[2]) * 10000 + Convert.ToInt16(_startdate[1]) * 100 + Convert.ToInt16(_startdate[0]))) &&
 					    ((Convert.ToInt32(date[2]) * 10000 + Convert.ToInt16(date[1]) * 100 + Convert.ToInt16(date[0])) <= (Convert.ToInt32(_enddate[2]) * 10000 + Convert.ToInt16(_enddate[1]) * 100 + Convert.ToInt16(_enddate[0]))))
@@ -199,30 +213,43 @@ namespace GralMainForms
 						if(wd.Vel > 55 || wd.Vel < 0)
 						{
 							if (error_count < 4)
-								MessageBox.Show(this, "Wind speed implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-							error_count++;
+                            {
+                                MessageBox.Show(this, "Wind speed implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            error_count++;
 						}
 						else if (wd.Dir > 360 || wd.Dir < 0)
 						{
 							if (error_count < 4)
-								MessageBox.Show(this, "Wind direction implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-							error_count++;
+                            {
+                                MessageBox.Show(this, "Wind direction implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            error_count++;
 						}
 						else if (wd.StabClass > 7 || wd.StabClass < 1)
 						{
 							if (error_count < 4)
-								MessageBox.Show(this, "Stability class implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-							error_count++;
+                            {
+                                MessageBox.Show(this, "Stability class implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            error_count++;
 						}
 						else
-							length++;
-					}
+                        {
+                            length++;
+                        }
+                    }
 					n1++;
 				}
 				
 				if (error_count > 0)
-					MessageBox.Show(this, error_count.ToString() + " errors at the wind file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			}
+                {
+                    MessageBox.Show(this, error_count.ToString() + " errors at the wind file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
 			
 			readwindfile.WindData.Clear();
 			readwindfile.WindData.TrimExcess();
@@ -284,9 +311,11 @@ namespace GralMainForms
 		private void Form2_Load(object sender, EventArgs e)
 		{
 			if (Owner != null)
-				Location = new Point(Math.Max(0,Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
+            {
+                Location = new Point(Math.Max(0,Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
 				                     Math.Max(0, Owner.Location.Y + Owner.Height / 2 - Height / 2 -100));
-		}
+            }
+        }
 
 		//select start date for met data input
 		private void MonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)

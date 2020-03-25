@@ -271,16 +271,24 @@ namespace GralItemForms
 			for (int nr = 0; nr < 10; nr++)
 			{
 				if (portalpollutant[nr].SelectedIndex == 2)
-					but1[nr].Text = "[MOU/h]";
-				else
-					but1[nr].Text = "[kg/h]";
-			}
+                {
+                    but1[nr].Text = "[MOU/h]";
+                }
+                else
+                {
+                    but1[nr].Text = "[kg/h]";
+                }
+            }
 		}
 		
 		private void Comma1(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == ',') e.KeyChar = '.';
-			int asc = (int)e.KeyChar; //get ASCII code
+			if (e.KeyChar == ',')
+            {
+                e.KeyChar = '.';
+            }
+
+            int asc = (int)e.KeyChar; //get ASCII code
 		}
 		
 		//increase the number of portal sources by one
@@ -364,11 +372,16 @@ namespace GralItemForms
 				
 				string tunneldirection = "1";      //indicates whether the tunnel is bi- or uni-directional
 				if(radioButton1.Checked==true)
-					tunneldirection="1";
-				if(radioButton2.Checked==true)
-					tunneldirection="2";
-				
-				_ps.Pt1 = new PointD(CornerPortalX[0], CornerPortalY[0]);
+                {
+                    tunneldirection ="1";
+                }
+
+                if (radioButton2.Checked==true)
+                {
+                    tunneldirection ="2";
+                }
+
+                _ps.Pt1 = new PointD(CornerPortalX[0], CornerPortalY[0]);
 				_ps.Pt2 = new PointD(CornerPortalX[1], CornerPortalY[1]);
 				
 				listBox1.SelectedIndex = listBox1.TopIndex; // NEMO
@@ -377,9 +390,11 @@ namespace GralItemForms
 				
 				_ps.BaseHeight = Convert.ToSingle(numericUpDown5.Value);
 				if (checkBox1.Checked) // absolute height over sea
-					_ps.BaseHeight *= -1;
-				
-				_ps.ExitVel = Convert.ToSingle(numericUpDown2.Value);
+                {
+                    _ps.BaseHeight *= -1;
+                }
+
+                _ps.ExitVel = Convert.ToSingle(numericUpDown2.Value);
 				_ps.DeltaT = Convert.ToSingle(numericUpDown3.Value);
 				_ps.Direction = tunneldirection;
 				_ps.Nemo.AvDailyTraffic = Convert.ToInt32(numericUpDown6.Value);
@@ -408,10 +423,14 @@ namespace GralItemForms
 			
 			// enable Remove SG if SG_count > 1 && a selected entry
 			if (listBox2.Items.Count > 1 && listBox2.SelectedIndex >= 0)
-				button5.Enabled = true;
-			else
-				button5.Enabled = false;
-		}
+            {
+                button5.Enabled = true;
+            }
+            else
+            {
+                button5.Enabled = false;
+            }
+        }
 
 		//fill actual values
 		/// <summary>
@@ -469,11 +488,15 @@ namespace GralItemForms
 				numericUpDown2.Value = St_F.ValueSpan(0, 100, (double) Math.Abs(_pdata.ExitVel));
 				numericUpDown3.Value = St_F.ValueSpan(-499, 499, _pdata.DeltaT);
 				if (_pdata.Direction == "1")
-					radioButton1.Checked = true;
-				else
-					radioButton2.Checked = true;
-				
-				numericUpDown6.Value = St_F.ValueSpan(0, 1000000, _pdata.Nemo.AvDailyTraffic);
+                {
+                    radioButton1.Checked = true;
+                }
+                else
+                {
+                    radioButton2.Checked = true;
+                }
+
+                numericUpDown6.Value = St_F.ValueSpan(0, 1000000, _pdata.Nemo.AvDailyTraffic);
 				numericUpDown7.Value = St_F.ValueSpan(-0.1, 100, _pdata.Nemo.ShareHDV);
 				numericUpDown4.Value = St_F.ValueSpan(-10, 10, _pdata.Nemo.Slope);
 				listBox1.SelectedIndex = _pdata.Nemo.TrafficSit;
@@ -511,10 +534,14 @@ namespace GralItemForms
 					dep[i] = _pdata.GetDep()[i];
 					
 					if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
-						but1[i].BackColor = Color.LightGreen; // mark that deposition is set
-					else
-						but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
-				}
+                    {
+                        but1[i].BackColor = Color.LightGreen; // mark that deposition is set
+                    }
+                    else
+                    {
+                        but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
+                    }
+                }
 				
 				TempTimeSeries = _pdata.TemperatureTimeSeries;
 				if (!string.IsNullOrEmpty(TempTimeSeries))
@@ -557,10 +584,14 @@ namespace GralItemForms
 			
 			// enable Remove SG if SG_count > 1 && a selected entry
 			if (listBox2.Items.Count > 1 && listBox2.SelectedIndex >= 0)
-				button5.Enabled = true;
-			else
-				button5.Enabled = false;
-		}
+            {
+                button5.Enabled = true;
+            }
+            else
+            {
+                button5.Enabled = false;
+            }
+        }
 
 		//remove actual portal source data
 		private void Button2Click(object sender, EventArgs e)
@@ -578,10 +609,14 @@ namespace GralItemForms
 			if (ask == true)
 			{
                 if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                {
                     ask = false;
-				else
-					ask = true; // Cancel -> do not delete!
-			}
+                }
+                else
+                {
+                    ask = true; // Cancel -> do not delete!
+                }
+            }
 			
 			if (ask == false)
 			{
@@ -607,8 +642,11 @@ namespace GralItemForms
 					try
 					{
 						if (trackBar1.Maximum > 1)
-							trackBar1.Maximum = trackBar1.Maximum - 1;
-						trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
+                        {
+                            trackBar1.Maximum = trackBar1.Maximum - 1;
+                        }
+
+                        trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
 						
 						ItemData.RemoveAt(ItemDisplayNr);
 						
@@ -916,8 +954,10 @@ namespace GralItemForms
 			try
 			{
 				if (PortalSourceRedraw != null)
-					PortalSourceRedraw(this, e);
-			}
+                {
+                    PortalSourceRedraw(this, e);
+                }
+            }
 			catch
 			{}
 		}
@@ -934,8 +974,10 @@ namespace GralItemForms
 			for (int i = 0; i < 10; i++)
 			{
 				if (sender == but1[i])
-					nr = i;
-			}
+                {
+                    nr = i;
+                }
+            }
 			using (EditDeposition edit = new EditDeposition
 			{
 			  	StartPosition = FormStartPosition.Manual
@@ -954,17 +996,23 @@ namespace GralItemForms
 				edit.Pollutant = portalpollutant[nr].SelectedIndex;
 				
 				if (edit.ShowDialog() == DialogResult.OK)
-					edit.Hide();
-			}
+                {
+                    edit.Hide();
+                }
+            }
 			
 			if (Main.Project_Locked == false)
 			{
 				if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
-					but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
-				else
-					but1[nr].BackColor = SystemColors.ButtonFace;
-				
-				SaveArray(); // save values
+                {
+                    but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
+                }
+                else
+                {
+                    but1[nr].BackColor = SystemColors.ButtonFace;
+                }
+
+                SaveArray(); // save values
 			}
 		}
 		
@@ -1111,9 +1159,11 @@ namespace GralItemForms
 				tex.KeyPress -= new KeyPressEventHandler(Comma); //only point as decimal seperator is allowed
 			}
 			foreach(Button but in but1)
-				but.Click -= new EventHandler(edit_deposition);
-			
-			textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
+            {
+                but.Click -= new EventHandler(edit_deposition);
+            }
+
+            textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
 			textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
 			
 			CornerPortalX = null;

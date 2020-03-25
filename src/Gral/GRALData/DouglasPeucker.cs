@@ -19,10 +19,12 @@ namespace GralData
 	{
 		public void DouglasPeuckerRun(List<GralDomain.PointD> points, double epsilon)
         {
-        	if (epsilon < 0.05) 
-        		return;
-        	
-        	var bitArray = DouglasPeuckerDo(points, epsilon);
+        	if (epsilon < 0.05)
+            {
+                return;
+            }
+
+            var bitArray = DouglasPeuckerDo(points, epsilon);
         	
         	int points_removed = 0;
         	

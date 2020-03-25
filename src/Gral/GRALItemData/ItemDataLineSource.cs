@@ -22,14 +22,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using GralStaticFunctions;
-using GralDomain;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents the line source data
     /// </summary>
-	[Serializable]
+    [Serializable]
 	public class LineSourceData
 	{
 		public string Name		{ get; set;}
@@ -150,12 +149,15 @@ namespace GralItemData
 					
 					int depostart = text.Length;
 					for (int i = 4; i < text.Length; i++)
-						if (text[i] == "Dep@_")
+                    {
+                        if (text[i] == "Dep@_")
 					{
 						depostart = i + 1;
 						break;
 					}
-					if (text.Length > depostart + 2) // read deposition
+                    }
+
+                    if (text.Length > depostart + 2) // read deposition
 					{
 						try
 						{
@@ -183,11 +185,15 @@ namespace GralItemData
 						{
 							VerticalExt = (float) (St_F.TxtToDbl(text[depostart + 10 * 10], false));
 							if (VerticalExt < 0.1F) // compatibility to old projects
-								VerticalExt = 3;
-						}
+                            {
+                                VerticalExt = 3;
+                            }
+                        }
 						else
-							VerticalExt = 3; // old standard value = 3 m
-					}
+                        {
+                            VerticalExt = 3; // old standard value = 3 m
+                        }
+                    }
 					catch
 					{
 						VerticalExt = 3; // old standard value = 3 m

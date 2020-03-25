@@ -187,8 +187,11 @@ namespace GralDomain
 			
 			//Other initialisations
 			if (MainForm.GralDomRect.East - MainForm.GralDomRect.West != 0)
-				groupBox5.Visible = true;
-			EditPS.ItemDisplayNr = 0;
+            {
+                groupBox5.Visible = true;
+            }
+
+            EditPS.ItemDisplayNr = 0;
 			EditAS.ItemDisplayNr = 0;
 			EditLS.ItemDisplayNr = 0;
 			EditPortals.ItemDisplayNr = 0;
@@ -369,8 +372,10 @@ namespace GralDomain
 				DirectoryInfo di = new DirectoryInfo(files);
 				FileInfo[] files_conc = di.GetFiles("Mean*.txt");
 				if (files_conc.Length > 1)
-					button33.Visible = true;
-			}
+                {
+                    button33.Visible = true;
+                }
+            }
 			catch
 			{
 			}
@@ -382,21 +387,27 @@ namespace GralDomain
 				DirectoryInfo di = new DirectoryInfo(files);
 				FileInfo[] files_conc = di.GetFiles("*.txt");
 				if (files_conc.Length > 1)
-					button35.Visible = true;
-			}
+                {
+                    button35.Visible = true;
+                }
+            }
 			catch
 			{
 			}
 
 			//enable NEMO line source emission computation when line-sources are defined
 			if (EditLS.ItemData.Count != 0)
-				MainForm.button13.Visible = true;
-			else
-				MainForm.button13.Visible = false;
+            {
+                MainForm.button13.Visible = true;
+            }
+            else
+            {
+                MainForm.button13.Visible = false;
+            }
 
-			
-			// IF transient 3D result is available
-			if (File.Exists(Path.Combine(Gral.Main.ProjectName,"Computation","Vertical_Concentrations.txt")))
+
+            // IF transient 3D result is available
+            if (File.Exists(Path.Combine(Gral.Main.ProjectName,"Computation","Vertical_Concentrations.txt")))
 			{
 				groupBox7.Visible = true;
 				verticalConcentrationProfileToolStripMenuItem.Enabled = true;

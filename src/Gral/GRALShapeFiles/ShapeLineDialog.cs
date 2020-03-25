@@ -33,14 +33,14 @@ namespace GralShape
     {
         private GralDomain.Domain domain = null;
         
-        private string file;
-        private Deposition[] dep = new Deposition[10];
-        private Button[] but1 = new Button[10];                     //Buttons for deposition
+        private readonly string ShapeFileName;
+        private readonly Deposition[] dep = new Deposition[10];
+        private readonly Button[] but1 = new Button[10];                     //Buttons for deposition
         private DataTable dt;
-        private CultureInfo ic = CultureInfo.InvariantCulture;
-        private List<int> SG_Number = new List<int>();
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-        private GralData.DomainArea GralDomRect;        
+        private readonly CultureInfo ic = CultureInfo.InvariantCulture;
+        private readonly List<int> SG_Number = new List<int>();
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+        private readonly GralData.DomainArea GralDomRect;        
         
         /// <summary>
         /// Dialog for the shape import of Line Sources
@@ -53,7 +53,7 @@ namespace GralShape
             InitializeComponent();
             domain = d;
             GralDomRect = GralDomainRectangle;
-            file = Filename;
+            ShapeFileName = Filename;
             button1.DialogResult = DialogResult.OK;
             
             Load_Source_Grp();
@@ -85,8 +85,10 @@ namespace GralShape
 
             //fill the combobox30 with available base years
             for (int i = 0; i < 60; i++)
+            {
                 comboBox30.Items.Add(Convert.ToString(1990 + i));
-            
+            }
+
             comboBox30.SelectedIndex = 25;
             
             // init deposition data
@@ -113,16 +115,26 @@ namespace GralShape
 
                 int x_b = 0;
                 if (x == 0)
+                {
                     x_b = comboBox6.Left;
+                }
                 else if (x == 1)
+                {
                     x_b = comboBox5.Left;
+                }
                 else if (x == 2)
+                {
                     x_b = comboBox7.Left;
+                }
                 else if (x == 3)
+                {
                     x_b = comboBox8.Left;
+                }
                 else
+                {
                     x_b = comboBox9.Left;
-                
+                }
+
                 but1[nr].Location = new System.Drawing.Point(x_b, y);
                 
                 but1[nr].Font = new System.Drawing.Font("Microsoft Sans Serif", 2.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
@@ -153,7 +165,7 @@ namespace GralShape
                 
                 int SHP_Line = 0;
                 ShapeReader shape = new ShapeReader(domain);
-                foreach (object shp in shape.ReadShapeFile(file))
+                foreach (object shp in shape.ReadShapeFile(ShapeFileName))
                 {
                     if (shp is SHPLine)
                     {
@@ -169,7 +181,9 @@ namespace GralShape
                             pt.Add(ptt);
                             
                             if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
+                            {
                                 inside = true;
+                            }
                         }
 
                         if (inside == true && numbpt > 1)
@@ -183,9 +197,13 @@ namespace GralShape
                                 try
                                 {
                                     if (checkBox1.Checked == true) // absolute heights
+                                    {
                                         height = (-1) * Math.Abs(Convert.ToDouble(dataGridView1[Convert.ToString(comboBox2.SelectedItem), SHP_Line].Value, ic));
+                                    }
                                     else
+                                    {
                                         height = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox2.SelectedItem), SHP_Line].Value, ic);
+                                    }
 
                                     height = Math.Round(height, 1);
                                 }
@@ -195,7 +213,9 @@ namespace GralShape
                                 }
                             }
                             else
+                            {
                                 height = 0;
+                            }
 
                             _ls.Height = (float)height;
 
@@ -240,11 +260,15 @@ namespace GralShape
                             {
                                 name = Convert.ToString(dataGridView1[Convert.ToString(comboBox3.SelectedItem), SHP_Line].Value).Trim();
                                 if (name.Length < 1) // a name is needed
+                                {
                                     name = "Line " + Convert.ToString(SHP_Line);
+                                }
                             }
                             else
+                            {
                                 name = "Line " + Convert.ToString(SHP_Line);
-                            
+                            }
+
                             _ls.Name = name;
                             
                             //check for line sections
@@ -254,7 +278,9 @@ namespace GralShape
                                 {
                                     section = Convert.ToString(Convert.ToInt32(dataGridView1[Convert.ToString(comboBox1.SelectedItem), SHP_Line].Value), ic);
                                     if (section == "")
+                                    {
                                         section = "1";
+                                    }
                                 }
                                 catch
                                 {
@@ -262,8 +288,10 @@ namespace GralShape
                                 }
                             }
                             else
+                            {
                                 section = "1";
-                            
+                            }
+
                             _ls.Section = section;
                                                     
                             // check for vertical extension
@@ -276,7 +304,9 @@ namespace GralShape
                                     
                                     vertical_extension = Math.Round(vertical_extension, 1);
                                     if (vertical_extension == 0)
+                                    {
                                         vertical_extension = 3;
+                                    }
                                 }
                                 catch
                                 {
@@ -284,8 +314,10 @@ namespace GralShape
                                 }
                             }
                             else
+                            {
                                 vertical_extension = 3;
-                            
+                            }
+
                             _ls.VerticalExt = (float) vertical_extension;
                             
                             //check for source group
@@ -295,8 +327,10 @@ namespace GralShape
                                 {
                                     string _sgroup = Convert.ToString(Convert.ToInt32(dataGridView1[Convert.ToString(comboBox4.SelectedItem), SHP_Line].Value), ic);
                                     if (_sgroup == "")
+                                    {
                                         _sgroup = "1";
-                                    
+                                    }
+
                                     // Plausibility check for source groups
                                     int s = 0;
                                     if (int.TryParse(_sgroup, out s) == true)
@@ -322,7 +356,9 @@ namespace GralShape
                                 }
                             }
                             else
+                            {
                                 sgroup = 1;
+                            }
 
                             PollutantsData _poll = new PollutantsData
                             {
@@ -338,7 +374,9 @@ namespace GralShape
                                     width = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox25.SelectedItem), SHP_Line].Value, ic);
                                     width = Math.Round(width, 1);
                                     if (width == 0)
+                                    {
                                         width = 7;
+                                    }
                                 }
                                 catch
                                 {
@@ -490,52 +528,82 @@ namespace GralShape
 
                             //check for pollutant1
                             if (comboBox19.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[0] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox19.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[0] = comboBox6.SelectedIndex;
                             
                             //check for pollutant2
                             if (comboBox18.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[1] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox18.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[1] = comboBox5.SelectedIndex;
                             
                             //check for pollutant3
                             if (comboBox17.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[2] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox17.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[2] = comboBox7.SelectedIndex;
                             
                             //check for pollutant4
                             if (comboBox16.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[3] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox16.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[3] = comboBox8.SelectedIndex;
                             
                             //check for pollutant5
                             if (comboBox15.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[4] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox15.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[4] = comboBox9.SelectedIndex;
                             
                             //check for pollutant6
                             if (comboBox24.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[5] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox24.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[5] = comboBox14.SelectedIndex;
                             
                             //check for pollutant7
                             if (comboBox23.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[6] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox23.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[6] = comboBox13.SelectedIndex;
                             
                             //check for pollutant8
                             if (comboBox22.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[7] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox22.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[7] = comboBox12.SelectedIndex;
                             
                             //check for pollutant9
                             if (comboBox21.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[8] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox21.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[8] = comboBox11.SelectedIndex;
                             
                             //check for pollutant10
                             if (comboBox20.SelectedIndex != 0)
+                            {
                                 _poll.EmissionRate[9] = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox20.SelectedItem), SHP_Line].Value) * emission_factor;
+                            }
+
                             _poll.Pollutant[9] = comboBox10.SelectedIndex;
                             
                             _ls.Poll.Add(new PollutantsData(_poll));
@@ -580,14 +648,22 @@ namespace GralShape
                 dt.Clear(); // clear data table
                 
                 if (dt != null)
+                {
                     dt.Dispose();
-                
-                #endif
-                
+                }
+
+#endif
+
                 if (dt != null)
+                {
                     dt.Dispose();
-                
-                if (dataGridView1 != null) dataGridView1.Dispose(); // Kuntner
+                }
+
+                if (dataGridView1 != null)
+                {
+                    dataGridView1.Dispose(); // Kuntner
+                }
+
                 dataGridView1 = null;
                 
                 // set new source groups to the source dialogs
@@ -618,7 +694,7 @@ namespace GralShape
             dbf_reader.StartPosition = FormStartPosition.Manual;
             dbf_reader.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
             dbf_reader.Top = 80;
-            dbf_reader.ReadDBF(file.Replace(".shp", ".dbf"));
+            dbf_reader.ReadDBF(ShapeFileName.Replace(".shp", ".dbf"));
             
             dt = dbf_reader.dt;
             dbf_reader.Close();
@@ -787,7 +863,9 @@ namespace GralShape
                         //fill data grid with fix value
                         string trans = shpimport.textBox2.Text;
                         for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
                             dataGridView1[header, i].Value = trans;
+                        }
                     }
                 }
             }
@@ -855,41 +933,71 @@ namespace GralShape
                     Emission = 0
                 };
                 if (nr == 0)
-                edit.Pollutant = comboBox6.SelectedIndex;
-            else if (nr == 1)
-                edit.Pollutant = comboBox5.SelectedIndex;
-            else if (nr == 2)
-                edit.Pollutant = comboBox7.SelectedIndex;
-            else if (nr == 3)
-                edit.Pollutant = comboBox8.SelectedIndex;
-            else if (nr == 4)
-                edit.Pollutant = comboBox9.SelectedIndex;
-            else if (nr == 5)
-                edit.Pollutant = comboBox14.SelectedIndex;
-            else if (nr == 6)
-                edit.Pollutant = comboBox13.SelectedIndex;
-            else if (nr == 7)
-                edit.Pollutant = comboBox12.SelectedIndex;
-            else if (nr == 8)
-                edit.Pollutant = comboBox11.SelectedIndex;
-            else if (nr == 9)
-                edit.Pollutant = comboBox10.SelectedIndex;
-                
-            if (edit.ShowDialog() == DialogResult.OK) 
-                edit.Hide();
-            
-            edit.Dispose();
+                {
+                    edit.Pollutant = comboBox6.SelectedIndex;
+                }
+                else if (nr == 1)
+                {
+                    edit.Pollutant = comboBox5.SelectedIndex;
+                }
+                else if (nr == 2)
+                {
+                    edit.Pollutant = comboBox7.SelectedIndex;
+                }
+                else if (nr == 3)
+                {
+                    edit.Pollutant = comboBox8.SelectedIndex;
+                }
+                else if (nr == 4)
+                {
+                    edit.Pollutant = comboBox9.SelectedIndex;
+                }
+                else if (nr == 5)
+                {
+                    edit.Pollutant = comboBox14.SelectedIndex;
+                }
+                else if (nr == 6)
+                {
+                    edit.Pollutant = comboBox13.SelectedIndex;
+                }
+                else if (nr == 7)
+                {
+                    edit.Pollutant = comboBox12.SelectedIndex;
+                }
+                else if (nr == 8)
+                {
+                    edit.Pollutant = comboBox11.SelectedIndex;
+                }
+                else if (nr == 9)
+                {
+                    edit.Pollutant = comboBox10.SelectedIndex;
+                }
+
+                if (edit.ShowDialog() == DialogResult.OK)
+                {
+                    edit.Hide();
+                }
+
+                edit.Dispose();
             
             if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
-                but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
-            else
-                but1[nr].BackColor = SystemColors.ButtonFace;
+                {
+                    but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
+                }
+                else
+                {
+                    but1[nr].BackColor = SystemColors.ButtonFace;
+                }
             }
         }
         
         private void comma1(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == ',') e.KeyChar = '.';
+            if (e.KeyChar == ',')
+            {
+                e.KeyChar = '.';
+            }
+
             int asc = (int)e.KeyChar; //get ASCII code
             switch (asc)
             {
@@ -915,7 +1023,9 @@ namespace GralShape
         void Shape_Line_DialogFormClosed(object sender, FormClosedEventArgs e)
         {
               foreach(Button but in but1)
+            {
                 but.Click -= new EventHandler(edit_deposition);
+            }
         }
             
         private void Load_Source_Grp()

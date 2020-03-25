@@ -19,7 +19,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -29,10 +28,10 @@ using GralDomain;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents supports reading/writing the vegetation data
     /// </summary>
-	public class VegetationDataIO
+    public class VegetationDataIO
 	{
 		public bool LoadVegetation(List<VegetationData> _data, string _filename)
 		{

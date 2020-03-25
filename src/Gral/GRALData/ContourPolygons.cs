@@ -48,16 +48,22 @@ namespace GralData
         {
             // A null value means that this object is greater.
             if (comparePart == null)
+            {
                 return 1;
-
+            }
             else
+            {
                 return DrawingOrder.CompareTo(comparePart.DrawingOrder);
+            }
         }
         
         public bool Equals(ContourPolygon other)
         {
-            if (other == null) return false;
-            
+            if (other == null)
+            {
+                return false;
+            }
+
             return (DrawingOrder.Equals(other.DrawingOrder));
         }
     }

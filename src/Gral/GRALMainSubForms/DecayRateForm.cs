@@ -12,15 +12,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
 using System.Data;
-using Gral;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Dialog to set user defined decay rates
     /// </summary>
     public partial class DecayRateForm : Form

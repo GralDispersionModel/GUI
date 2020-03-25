@@ -123,8 +123,10 @@ namespace GralItemForms
 			try
 			{
 				if (VegetationRedraw != null)
-					VegetationRedraw(this, e);
-			}
+                {
+                    VegetationRedraw(this, e);
+                }
+            }
 			catch
 			{}
 		}
@@ -229,9 +231,12 @@ namespace GralItemForms
 					double areapolygon = St_F.CalcArea(_vdata.Pt);
 					textBox3.Text = St_F.DblToIvarTxt(areapolygon);
 					
-					if (number_of_vertices > 0) Domain.EditSourceShape = false;  // block input of new vertices
-					
-					_vdata.VerticalExt = (float)(numericUpDown2.Value);
+					if (number_of_vertices > 0)
+                    {
+                        Domain.EditSourceShape = false;  // block input of new vertices
+                    }
+
+                    _vdata.VerticalExt = (float)(numericUpDown2.Value);
 					_vdata.TrunkZone = (float)(numericUpDown1.Value);
 					_vdata.LADTrunk = (float)(numericUpDown3.Value);
 					_vdata.LADCrown = (float)(numericUpDown5.Value);
@@ -287,15 +292,23 @@ namespace GralItemForms
 			numericUpDown3.Value = St_F.ValueSpan(0, 10, (double) _vdata.LADTrunk);
 			numericUpDown5.Value = St_F.ValueSpan(0, 10, (double) _vdata.LADCrown);
 			numericUpDown4.Value = St_F.ValueSpan(0, 100, (double) _vdata.Coverage);
-			
+
+			if (_vdata.Pt.Count > CornerVegX.Length)
+			{
+				Array.Resize(ref CornerVegX, _vdata.Pt.Count + 1);
+				Array.Resize(ref CornerVegY, _vdata.Pt.Count + 1);
+			}
 			for (int i = 0; i < Math.Min(_vdata.Pt.Count, CornerVegX.Length); i++)
 			{
 				CornerVegX[i] = _vdata.Pt[i].X;
 				CornerVegY[i] = _vdata.Pt[i].Y;
 			}
 			
-			if (Convert.ToInt32(textBox2.Text) > 0) Domain.EditSourceShape = false;  // block input of new vertices
-		}
+			if (Convert.ToInt32(textBox2.Text) > 0)
+            {
+                Domain.EditSourceShape = false;  // block input of new vertices
+            }
+        }
 	
 		//remove actual vegetation
 		private void button2_Click(object sender, EventArgs e)
@@ -313,10 +326,14 @@ namespace GralItemForms
 			if (ask == true)
 			{
 				if (St_F.InputBox("Attention", "Do you really want to delete this vegetation area?", this) == DialogResult.OK)
-					ask = false;
-				else
-					ask = true; // Cancel -> do not delete!
-			}
+                {
+                    ask = false;
+                }
+                else
+                {
+                    ask = true; // Cancel -> do not delete!
+                }
+            }
 			if (ask == false)
 			{
 				textBox1.Text = "";
@@ -327,8 +344,11 @@ namespace GralItemForms
 				try
 				{
 					if (trackBar1.Maximum > 1)
-						trackBar1.Maximum = trackBar1.Maximum - 1;
-					trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
+                    {
+                        trackBar1.Maximum = trackBar1.Maximum - 1;
+                    }
+
+                    trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
 					ItemData.RemoveAt(ItemDisplayNr);
 					ItemDisplayNr = trackBar1.Value - 1;
 					FillValues();
@@ -366,7 +386,11 @@ namespace GralItemForms
 				try
 				{
 					int number_of_vertices = Convert.ToInt32(textBox2.Text);
-					if (number_of_vertices < 2) throw new System.InvalidOperationException("Nothing digitized");
+					if (number_of_vertices < 2)
+                    {
+                        throw new System.InvalidOperationException("Nothing digitized");
+                    }
+
                     VerticesEditDialog vert = new VerticesEditDialog(number_of_vertices, ref CornerVegX, ref CornerVegY)
                     {
                         StartPosition = FormStartPosition.Manual

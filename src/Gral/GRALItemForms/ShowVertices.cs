@@ -179,8 +179,10 @@ namespace GralItemForms
 			try
 			{
 				if (Vertices_redraw != null)
-					Vertices_redraw(this, e);
-			}
+                {
+                    Vertices_redraw(this, e);
+                }
+            }
 			catch
 			{}
 		}

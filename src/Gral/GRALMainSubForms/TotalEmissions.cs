@@ -73,18 +73,26 @@ namespace GralMainForms
 		                {
 		                    sgroup = Convert.ToInt32(selpoll[1]);
 		                    if(sgroup>9)
-		                        snumb="0" + selpoll[1].Trim();
-		                    else
-		                        snumb = "00" + selpoll[1].Trim();
-		                }
+                            {
+                                snumb ="0" + selpoll[1].Trim();
+                            }
+                            else
+                            {
+                                snumb = "00" + selpoll[1].Trim();
+                            }
+                        }
 		                catch
 		                {
 		                    sgroup = Convert.ToInt32(selpoll[0]);
 		                    if(sgroup>9)
-		                        snumb = "0" + selpoll[0].Trim();
-		                    else
-		                        snumb = "00" + selpoll[0].Trim();
-		                }
+                            {
+                                snumb = "0" + selpoll[0].Trim();
+                            }
+                            else
+                            {
+                                snumb = "00" + selpoll[0].Trim();
+                            }
+                        }
 		                
 		                //get variation for source group
 		                newpath = Path.Combine("Computation", "emissions" + snumb + ".dat");
@@ -101,18 +109,25 @@ namespace GralMainForms
 		                                text = myreader.ReadLine().Split(new char[] { ',' });
 		                                moddiurnal[sgroup, j] = Convert.ToDouble(text[1].Replace(".", decsep));
 		                                if(j<12)
-		                                    modseasonal[sgroup, j] = Convert.ToDouble(text[2].Replace(".", decsep));
-		                            }
+                                        {
+                                            modseasonal[sgroup, j] = Convert.ToDouble(text[2].Replace(".", decsep));
+                                        }
+                                    }
 		                        }
 		                    }
 		                    
 		                    //diurnal variation
 		                    for(int j=0;j<24;j++)
-		                        emifac_diurnal = emifac_diurnal + moddiurnal[sgroup, j] / 24;
-		                    //seasonal variation
-		                    for(int j=0;j<12;j++)
-		                        emifac_seasonal = emifac_seasonal + modseasonal[sgroup, j] / 12;
-		                    EmissionFactor[i] = emifac_diurnal * emifac_seasonal;
+                            {
+                                emifac_diurnal = emifac_diurnal + moddiurnal[sgroup, j] / 24;
+                            }
+                            //seasonal variation
+                            for (int j=0;j<12;j++)
+                            {
+                                emifac_seasonal = emifac_seasonal + modseasonal[sgroup, j] / 12;
+                            }
+
+                            EmissionFactor[i] = emifac_diurnal * emifac_seasonal;
 		                }
 		            }
 		        }
@@ -122,9 +137,11 @@ namespace GralMainForms
 		    }
 		    
 			if (form1 != null)
-				Location = new Point(Math.Max(0,form1.Location.X + form1.Width / 2 - Width / 2 - 100),
+            {
+                Location = new Point(Math.Max(0,form1.Location.X + form1.Width / 2 - Width / 2 - 100),
 				                     Math.Max(0, form1.Location.Y + form1.Height / 2 - Height / 2 -100));
-		}
+            }
+        }
 
 		private bool Emission_Timeseries_Read()
 		{
@@ -140,13 +157,19 @@ namespace GralMainForms
 		        try
 		        {
 		            int sgroup = Convert.ToInt32(selpoll[1]);
-		            if (sgroup < 100) sg_Listbox[i] = sgroup;
-		        }
+		            if (sgroup < 100)
+                    {
+                        sg_Listbox[i] = sgroup;
+                    }
+                }
 		        catch
 		        {
 		            int sgroup = Convert.ToInt32(selpoll[0]);
-		            if (sgroup < 100) sg_Listbox[i] = sgroup;
-		        }
+		            if (sgroup < 100)
+                    {
+                        sg_Listbox[i] = sgroup;
+                    }
+                }
 		    }
 		    
 		    
@@ -175,9 +198,12 @@ namespace GralMainForms
 		                		int sg = 0;
 		                		if (Int32.TryParse(sg_temp, out sg))
 		                		{
-		                			if (sg < 100) sg_numbers[i - 2] = sg;
-		                			//MessageBox.Show(sg.ToString());
-		                		}
+		                			if (sg < 100)
+                                    {
+                                        sg_numbers[i - 2] = sg;
+                                    }
+                                    //MessageBox.Show(sg.ToString());
+                                }
 		                	}
 		                }
 		                
@@ -259,11 +285,15 @@ namespace GralMainForms
 			}
 			
 			if(polli == "Odour")
-				tile_string +=  polli + " Emissions within the Model Domain [MOU/a*10-3]";
-			else
-				tile_string +=  polli + " Emissions within the Model Domain [t/a]";
-			
-			Font tile_font = new Font("Arial", 10);
+            {
+                tile_string +=  polli + " Emissions within the Model Domain [MOU/a*10-3]";
+            }
+            else
+            {
+                tile_string +=  polli + " Emissions within the Model Domain [t/a]";
+            }
+
+            Font tile_font = new Font("Arial", 10);
 			SizeF title_size = g.MeasureString(tile_string, tile_font);
 			Font legend = new Font("Arial", 8);
 			
@@ -290,10 +320,14 @@ namespace GralMainForms
 				if (sgroup < totalemissions.GetUpperBound(0))
 				{
 					if(checkBox1.Checked==true)
-						classmax = Math.Max(totalemissions[sgroup]*EmissionFactor[i], classmax);
-					else
-						classmax = Math.Max(totalemissions[sgroup], classmax);
-				}
+                    {
+                        classmax = Math.Max(totalemissions[sgroup]*EmissionFactor[i], classmax);
+                    }
+                    else
+                    {
+                        classmax = Math.Max(totalemissions[sgroup], classmax);
+                    }
+                }
 			}
 			
 			double scale = 400 / classmax * scalefactor;
@@ -322,10 +356,14 @@ namespace GralMainForms
 				if (sgroup < totalemissions.GetUpperBound(0))
 				{
 					if (checkBox1.Checked == true)
-						value = totalemissions[sgroup] * EmissionFactor[i];
-					else
-						value = totalemissions[sgroup];
-				}
+                    {
+                        value = totalemissions[sgroup] * EmissionFactor[i];
+                    }
+                    else
+                    {
+                        value = totalemissions[sgroup];
+                    }
+                }
 				
 				round = get_round(value);
 				
@@ -367,10 +405,15 @@ namespace GralMainForms
 
 				g.DrawString(selpoll[0], legend, black, ecke1 + Convert.ToInt32(chartwidth*scalefactor / 2), Convert.ToInt32((520 + addy) * scalefactor), format1);
 				if (addy == 0)
-					addy = Convert.ToInt32(15*scalefactor);
-				else
-					addy = 0;
-				base.OnPaint(e);
+                {
+                    addy = Convert.ToInt32(15*scalefactor);
+                }
+                else
+                {
+                    addy = 0;
+                }
+
+                base.OnPaint(e);
 			}
 
 			//draw frequency levels
@@ -396,14 +439,26 @@ namespace GralMainForms
 		{
 			int round = 1;
 			if (value < 1)
-				round = 2;
-			if (value < 0.1)
-				round = 3;
-			if (value < 0.01)
-				round = 4;
-			if (value < 0.001)
-				round = 5;
-			return round;
+            {
+                round = 2;
+            }
+
+            if (value < 0.1)
+            {
+                round = 3;
+            }
+
+            if (value < 0.01)
+            {
+                round = 4;
+            }
+
+            if (value < 0.001)
+            {
+                round = 5;
+            }
+
+            return round;
 		}
 		
 		//save image to clipboard

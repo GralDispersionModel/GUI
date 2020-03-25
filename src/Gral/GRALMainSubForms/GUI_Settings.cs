@@ -19,7 +19,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using Gral;
@@ -204,7 +203,10 @@ namespace GralMainForms
                 using (StreamReader read = new StreamReader(Path.Combine(Main.App_Settings_Path, @"DefaultPath")))
                 {
                     a = read.ReadLine();
-                    if (!read.EndOfStream) b = read.ReadLine();
+                    if (!read.EndOfStream)
+                    {
+                        b = read.ReadLine();
+                    }
                 }
 
                 using (StreamWriter write = new StreamWriter(Path.Combine(Main.App_Settings_Path, @"DefaultPath")))

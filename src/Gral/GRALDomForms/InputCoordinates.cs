@@ -53,28 +53,35 @@ namespace GralDomForms
 			if (decimal.TryParse(Input_x.Text, out num))
 			{}
 			else
-				Input_x.Text = S_X;
-			if (decimal.TryParse(Input_y.Text, out num))
+            {
+                Input_x.Text = S_X;
+            }
+
+            if (decimal.TryParse(Input_y.Text, out num))
 			{}
 			else
-				Input_y.Text = S_Y;
-			
-		}
+            {
+                Input_y.Text = S_Y;
+            }
+        }
 		
 		void InputXKeyPress(object sender, KeyPressEventArgs e)
 		{
 			char decsep = Convert.ToChar(NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
 			if (!char.IsDigit(e.KeyChar ) && !char.IsControl(e.KeyChar) && e.KeyChar != decsep && e.KeyChar != '-')
-				e.Handled = true;
-
-		}
+            {
+                e.Handled = true;
+            }
+        }
 		
 		void InputYKeyPress(object sender, KeyPressEventArgs e)
 		{
 			char decsep = Convert.ToChar(NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
 			if (!char.IsDigit(e.KeyChar ) && !char.IsControl(e.KeyChar) && e.KeyChar != decsep && e.KeyChar != '-')
-				e.Handled = true;
-		}
+            {
+                e.Handled = true;
+            }
+        }
 		
 		void InputCoordinatesLoad(object sender, EventArgs e)
 		{

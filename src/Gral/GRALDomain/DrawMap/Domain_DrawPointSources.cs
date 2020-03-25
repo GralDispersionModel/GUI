@@ -54,16 +54,27 @@ namespace GralDomain
                 _drobj.LineColor = Color.Red;
             }
             else
+            {
                 penrec = new Pen(_drobj.LineColors[0]);
+            }
+
             int width = 4;
             if (_drobj.LineWidth <= 1)
+            {
                 if (_drobj.LineWidth == 0)
+                {
                     width = 4;
+                }
                 else
+                {
                     width = Math.Max (1, Math.Min(200, Convert.ToInt32(1.5 / BmpScale / MapSize.SizeX))); // 6 m diameter
-                else
-                    width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 6 * factor_x)));
-            
+                }
+            }
+            else
+            {
+                width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 6 * factor_x)));
+            }
+
             //width = 4;
             penrec.Width = width;
             width *= 2;

@@ -111,7 +111,9 @@ namespace Gral
                             reihe = streamreader.ReadLine();
                             int ret;
                             if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
+                            {
                                 filelength = filelength + 1;
+                            }
                         }
                     }
                     else if (Path.GetExtension(MetfileName).ToLower() == ".akterm")
@@ -126,9 +128,12 @@ namespace Gral
                             {
                                 text = reihe.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 if ((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
+                                {
                                     filelength = filelength + 1;
+                                }
                             }
                             if (text[0] == "+")
+                            {
                                 try
                                 {
                                     text = reihe.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -140,7 +145,7 @@ namespace Gral
                                 catch
                                 {
                                 }
-
+                            }
                         }
                     }
                     else if (Path.GetExtension(MetfileName).ToLower() == ".akt")
@@ -218,17 +223,29 @@ namespace Gral
                     else
                     {
                         if (maxwind <= 6)
+                        {
                             wndclasses = new double[] { 0.5, 1, 2, 3, 4, 5, 6 };
+                        }
                         else if (maxwind <= 7)
+                        {
                             wndclasses = new double[] { 0.5, 1, 2, 3, 4, 5, 7 };
+                        }
                         else if (maxwind <= 8)
+                        {
                             wndclasses = new double[] { 0.5, 1, 2, 3, 4, 6, 8 };
+                        }
                         else if (maxwind <= 10)
+                        {
                             wndclasses = new double[] { 0.5, 1, 2, 3, 4, 7, 10 };
+                        }
                         else if (maxwind <= 14)
+                        {
                             wndclasses = new double[] { 0.5, 1, 2, 4, 7, 10, 14 };
+                        }
                         else if (maxwind <= 20)
+                        {
                             wndclasses = new double[] { 0.5, 1, 2, 4, 8, 12, 20 };
+                        }
 
                         foreach (WindData data in MeteoTimeSeries)
                         {
@@ -242,16 +259,25 @@ namespace Gral
                                 for (int c = 0; c < 6; c++)
                                 {
                                     if (data.Vel > wndclasses[c] && data.Vel <= wndclasses[c + 1])
+                                    {
                                         wklass = c + 1;
+                                    }
                                 }
 
                                 if (data.Vel <= wndclasses[0])
+                                {
                                     wklass = 0;
+                                }
+
                                 if (data.Vel > wndclasses[6])
+                                {
                                     wklass = 7;
+                                }
 
                                 if (sektor > 15)
+                                {
                                     sektor = 0;
+                                }
 
                                 if (biascorrection && sectorWidth > 1)
                                 {
@@ -371,7 +397,9 @@ namespace Gral
                             {
                                 int sektor = Convert.ToInt32(data.Dir / 22.5);
                                 if (sektor > 15)
+                                {
                                     sektor = 0;
+                                }
 
                                 if (biascorrection && sectorWidth > 1)
                                 {
@@ -494,10 +522,14 @@ namespace Gral
                                 {
                                     wklass = 1;
                                     if (data.Vel <= 0.5)
+                                    {
                                         wklass = 0;
+                                    }
                                 }
                                 if (data.Vel > maxwind - 1.0)
+                                {
                                     wklass = maxwind;
+                                }
 
                                 wclassFrequency[wklass] = wclassFrequency[wklass] + 1;
                                 count = count + 1;
@@ -506,7 +538,9 @@ namespace Gral
                         }
                         //compute percent values
                         for (int i = 0; i < (maxwind + 1); i++)
+                        {
                             wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
+                        }
 
                         GralMainForms.Windclasses wclass = new GralMainForms.Windclasses()
                         {
@@ -669,7 +703,9 @@ namespace Gral
                         }
                         //compute percent values
                         for (int i = 0; i < 7; i++)
+                        {
                             sclassFrequency[i] = sclassFrequency[i] / Convert.ToDouble(count);
+                        }
 
                         GralMainForms.Stabilityclasses sclass = new GralMainForms.Stabilityclasses()
                         {
@@ -703,7 +739,10 @@ namespace Gral
             {
                 int hour = data.Hour;
                 if (hour == 24)
+                {
                     hour = 0;
+                }
+
                 meanwind[hour] = meanwind[hour] + data.Vel;
                 anzstunden[hour] += 1;
             }
@@ -715,7 +754,9 @@ namespace Gral
                     meanwind[i] = meanwind[i] / anzstunden[i];
                 }
                 else
+                {
                     meanwind[i] = 0;
+                }
             }
 
             GralMainForms.DiurnalWindspeed mwind = new GralMainForms.DiurnalWindspeed()
@@ -744,10 +785,16 @@ namespace Gral
             {
                 int hour = data.Hour;
                 if (hour == 24)
+                {
                     hour = 0;
+                }
+
                 int sektor = Convert.ToInt32(data.Dir / 22.5);
                 if (sektor > 15)
+                {
                     sektor = 0;
+                }
+
                 meanwinddir[hour, sektor] += 1;
                 anzstunden[hour] += 1;
             }
@@ -760,7 +807,9 @@ namespace Gral
                         meanwinddir[i, n] = meanwinddir[i, n] / anzstunden[i];
                     }
                     else
+                    {
                         meanwinddir[i, n] = 0;
+                    }
                 }
             }
 
@@ -804,7 +853,9 @@ namespace Gral
              */
 
             if (File.Exists(Path.Combine(ProjectName, @"Computation", "meteopgt.all")))
+            {
                 result = MessageBox.Show("Do you really want to overwrite the existing meteorological files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            }
 
             if (result == DialogResult.Yes)
             {
@@ -840,7 +891,9 @@ namespace Gral
                 NumUpDown[3].Value = 3.0M;
 
                 for (int i = 1; i < WindSpeedClasses; i++)
+                {
                     TBox[i].Text = NumUpDown[i - 1].Value.ToString();
+                }
 
                 TBox[WindSpeedClasses - 1].Text = NumUpDown[WindSpeedClasses - 2].Value.ToString();
 
@@ -952,7 +1005,9 @@ namespace Gral
                 for (int i = 0; i < WindSpeedClasses - 1; i++)
                 {
                     if (i == 0)
+                    {
                         NumUpDown[i].Value = 0.5M;
+                    }
                     else
                     {
                         TBox[i].Text = NumUpDown[i - 1].Text;

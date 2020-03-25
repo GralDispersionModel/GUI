@@ -58,8 +58,10 @@ namespace GralBackgroundworkers
 						text = myreader.ReadLine().Split(new char[] { ',' });
 						emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
 						if (j < 12)
-							emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-					}
+                        {
+                            emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
+                        }
+                    }
 					myreader.Close();
 					itm++;
 				}
@@ -91,7 +93,10 @@ namespace GralBackgroundworkers
                         month.Add(text3[1]);
                         hour.Add(text2[1]);
                         if (hour[hour.Count - 1] == "24")
+                        {
                             hourplus = 1;
+                        }
+
                         wgmettime.Add(text2[2]);
                         wrmettime.Add(text2[3]);
                         akmettime.Add(text2[4]);
@@ -152,8 +157,10 @@ namespace GralBackgroundworkers
 	                				{
 	                					emifac_day[j, itm1] = 1;
 	                					if (j < 12)
-	                						emifac_mon[j, itm1] = 1;
-	                				}
+                                        {
+                                            emifac_mon[j, itm1] = 1;
+                                        }
+                                    }
 	                			}
 	                		}
 	                		
@@ -226,13 +233,16 @@ namespace GralBackgroundworkers
 					foreach (string source_group_name in sg_names)
 					{
 						for(int i=0;i<=mydata.CellsGralX;i++)
-							for (int j = 0; j <= mydata.CellsGralY; j++)
+                        {
+                            for (int j = 0; j <= mydata.CellsGralY; j++)
 						{
                             conc[i, j, itm] = 0;
                             concp[i, j, itm] = 0;
                             concm[i, j, itm] = 0;
 						}
-						itm++;
+                        }
+
+                        itm++;
 					}
 
 					//meteopgt.all
@@ -365,7 +375,9 @@ namespace GralBackgroundworkers
                                         {
                                             float emission_modulation = (float)(emifac_day[std - hourplus, n_source] * emifac_mon[mon, n_source] * emifac_timeseries[nnn - 1, n_source]);
                                             if ((ii == 0) && (j == 0))
+                                            {
                                                 fmod[n_source] += emission_modulation;
+                                            }
 
                                             conctot[ii, j] += conc[ii, j, n_source] * emission_modulation;
 
@@ -396,12 +408,16 @@ namespace GralBackgroundworkers
                                                 }
 
                                                 if (conc[ii, j, n_source] * R90 * 0.001 * emission_modulation >= (float)mydata.OdourThreshold)
+                                                {
                                                     concmit[ii, j, n_source]++;
+                                                }
                                             }
                                             else
                                             {
                                                 if (conc[ii, j, n_source] * (float)mydata.Peakmean * 0.001 * emission_modulation >= (float)mydata.OdourThreshold)
+                                                {
                                                     concmit[ii, j, n_source]++;
+                                                }
                                             }
                                             n_source++;
                                         }
@@ -411,7 +427,9 @@ namespace GralBackgroundworkers
                                         else
                                         {
                                             if (conctot[ii, j] * (float)mydata.Peakmean * 0.001 >= (float)mydata.OdourThreshold)
+                                            {
                                                 concmit[ii, j, maxsource]++;
+                                            }
                                         }
                                     }
                                 });
@@ -470,14 +488,17 @@ namespace GralBackgroundworkers
                                                 {
                                                     weight = 0.6447;
                                                     if ((std >= 6) && (std < 18))
+                                                    {
                                                         weight = 1;
-
+                                                    }
                                                 }
                                                 else
                                                 {
                                                     weight = 0.8381;
                                                     if ((std >= 6) && (std < 21))
+                                                    {
                                                         weight = 1.3;
+                                                    }
                                                 }
                                                 concmit[ii, j, maxsource + 4] += (float)(weight);
                                             }
@@ -579,8 +600,11 @@ namespace GralBackgroundworkers
 					name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
 				}
 				else
-					name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-				file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+                {
+                    name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
+                }
+
+                file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
 				Result.Z = itm;
 				Result.Values = concmit;
 				Result.FileName = file;

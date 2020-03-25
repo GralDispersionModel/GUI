@@ -114,12 +114,15 @@ namespace GralItemData
 					
 					int depostart = text.Length;
 					for (int i = 4; i < text.Length; i++)
-						if (text[i] == "Dep@_")
+                    {
+                        if (text[i] == "Dep@_")
 					{
 						depostart = i + 1;
 						break;
 					}
-					if (text.Length > depostart + 2) // read deposition
+                    }
+
+                    if (text.Length > depostart + 2) // read deposition
 					{
 						try
 						{

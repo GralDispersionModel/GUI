@@ -154,12 +154,15 @@ namespace GralBackgroundworkers
                     foreach (string source_group_name in sg_names)
                     {
                         for (int i1 = 0; i1 <= mydata.CellsGralX; i1++)
+                        {
                             for (int j = 0; j <= mydata.CellsGralY; j++)
                             {
                                 conc[i1, j, itm] = 0;
                                 concp[i1, j, itm] = 0;
                                 concm[i1, j, itm] = 0;
                             }
+                        }
+
                         itm++;
                     }
 
@@ -292,12 +295,16 @@ namespace GralBackgroundworkers
                                         }
 
                                         if (conc[ii, j, n_source] * R90 * 0.001 >= (float)mydata.OdourThreshold)
+                                        {
                                             concmit[ii, j, n_source]++;
+                                        }
                                     }
                                     else
                                     {
                                         if (conc[ii, j, n_source] * (float)mydata.Peakmean * 0.001 >= (float)mydata.OdourThreshold)
+                                        {
                                             concmit[ii, j, n_source]++;
+                                        }
                                     }
                                     n_source++;
                                 }
@@ -307,7 +314,9 @@ namespace GralBackgroundworkers
                                 else
                                 {
                                     if (conctot[ii, j] * (float)mydata.Peakmean * 0.001 >= (float)mydata.OdourThreshold)
+                                    {
                                         concmit[ii, j, maxsource]++;
+                                    }
                                 }
                             }
                         });
@@ -366,14 +375,17 @@ namespace GralBackgroundworkers
                                         {
                                             weight = 0.6447;
                                             if ((std >= 6) && (std < 18))
+                                            {
                                                 weight = 1;
-
+                                            }
                                         }
                                         else
                                         {
                                             weight = 0.8381;
                                             if ((std >= 6) && (std < 21))
+                                            {
                                                 weight = 1.3;
+                                            }
                                         }
                                         concmit[ii, j, maxsource + 4] += (float)(weight);
                                     }
@@ -466,8 +478,11 @@ namespace GralBackgroundworkers
 					name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
 				}
 				else
-					name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm1] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-				file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+                {
+                    name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm1] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
+                }
+
+                file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
 				Result.Z = itm1;
 				Result.Values = concmit;
 				Result.FileName = file;

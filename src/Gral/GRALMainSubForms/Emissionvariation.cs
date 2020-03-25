@@ -72,14 +72,20 @@ namespace GralMainForms
                 StreamReader myReader;
                 
                 if (File.Exists(newPath) == true) // already existing diurnal emission data
+                {
                     myReader = new StreamReader(newPath);
+                }
                 else
                 {
                 	newPath = Path.Combine(Main.App_Settings_Path, "Emission_Mod_Diurnal.txt");
                 	if (File.Exists(newPath) == true) // already existing diurnal emission data
-                		myReader = new StreamReader(newPath);
-                   	else
-                    	myReader = new StreamReader(_assembly.GetManifestResourceStream("Gral.Resources.Modulation_diurnal.txt"));
+                    {
+                        myReader = new StreamReader(newPath);
+                    }
+                    else
+                    {
+                        myReader = new StreamReader(_assembly.GetManifestResourceStream("Gral.Resources.Modulation_diurnal.txt"));
+                    }
                 }
                 
                	string text = myReader.ReadLine();
@@ -134,14 +140,20 @@ namespace GralMainForms
                 StreamReader myReader;
                 
                 if (File.Exists(newPath) == true) // Try to read emission modulation
+                {
                     myReader = new StreamReader(newPath);
+                }
                 else 
                 {
                 	newPath = Path.Combine(Main.App_Settings_Path, "Emission_Mod_Seasonal.txt");
                 	if (File.Exists(newPath) == true) // already existing diurnal emission data
-                   		myReader = new StreamReader(newPath);
-                	else
-                    myReader = new StreamReader(_assembly.GetManifestResourceStream("Gral.Resources.Modulation_seasonal.txt"));
+                    {
+                        myReader = new StreamReader(newPath);
+                    }
+                    else
+                    {
+                        myReader = new StreamReader(_assembly.GetManifestResourceStream("Gral.Resources.Modulation_seasonal.txt"));
+                    }
                 }
                 
                 string text = myReader.ReadLine();
@@ -245,7 +257,10 @@ namespace GralMainForms
                 {
                     dummy = _myReader.ReadLine();
                     if (dummy == null)
+                    {
                         break;
+                    }
+
                     text2 = dummy.Split(new char[] { ',' });
                     if (text2[0] == name)
                     {
@@ -277,9 +292,11 @@ namespace GralMainForms
                 _myReader.Dispose();    
                 
                 if (form1 != null)
-                	Location = new Point(Math.Max(0,form1.Location.X + form1.Width / 2 - Width / 2 - 100),
+                {
+                    Location = new Point(Math.Max(0,form1.Location.X + form1.Width / 2 - Width / 2 - 100),
                 	                     Math.Max(0, form1.Location.Y + form1.Height / 2 - Height / 2 -100));
-                
+                }
+
                 changes_saved = true;
             }
             catch
@@ -419,7 +436,9 @@ namespace GralMainForms
                     comboBox2.SelectedIndex = 0;
                 }
                 else
+                {
                     MessageBox.Show(this, "There must remain at least five modulations","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch
             {
@@ -441,7 +460,9 @@ namespace GralMainForms
                     comboBox1.SelectedIndex = 0;
                 }
                 else
+                {
                     MessageBox.Show(this, "There must remain at least five modulations","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch
             {
@@ -548,10 +569,14 @@ namespace GralMainForms
             		for (int i = 1; i < 25; i++)
             		{
             			if (i < 13)
-            				myWriter.WriteLine(Convert.ToInt32(i-1) + "," + St_F.DblToIvarTxt(St_F.TxtToDbl(text1[i],false)) + "," + St_F.DblToIvarTxt(St_F.TxtToDbl(text2[i], false)));
-            			else
-            				myWriter.WriteLine(Convert.ToInt32(i-1) + "," + St_F.DblToIvarTxt(St_F.TxtToDbl(text1[i], false)));
-            		}
+                        {
+                            myWriter.WriteLine(Convert.ToInt32(i-1) + "," + St_F.DblToIvarTxt(St_F.TxtToDbl(text1[i],false)) + "," + St_F.DblToIvarTxt(St_F.TxtToDbl(text2[i], false)));
+                        }
+                        else
+                        {
+                            myWriter.WriteLine(Convert.ToInt32(i-1) + "," + St_F.DblToIvarTxt(St_F.TxtToDbl(text1[i], false)));
+                        }
+                    }
             	}
             }
             catch{}
@@ -573,13 +598,18 @@ namespace GralMainForms
             			if (dummy[i] == null)
             			{
             				if(ind==-1)
-            					ind = Math.Max(i,ind);
-            				break;
+                            {
+                                ind = Math.Max(i,ind);
+                            }
+
+                            break;
             			}
             			text2 = dummy[i].Split(new char[] { ',' });
             			if (text2[0] == (name.Substring(0, 2).Replace("0", "") + name.Substring(2, 1)))
-            				ind = i;
-            		}
+                        {
+                            ind = i;
+                        }
+                    }
             	}
                 
             }
@@ -600,8 +630,10 @@ namespace GralMainForms
             		for (int i = ind+1; i < 101; i++)
             		{
             			if(dummy[i]!=null)
-            				myWriter.WriteLine(dummy[i]);
-            		}
+                        {
+                            myWriter.WriteLine(dummy[i]);
+                        }
+                    }
             	}
             }
             catch{}
@@ -613,7 +645,9 @@ namespace GralMainForms
             for (int i = 0; i < form1.listView1.Items.Count;i++ )
             {
                 if (form1.listView1.Items[i].SubItems[0].BackColor == Color.LightGoldenrodYellow)
+                {
                     check = 0;
+                }
             }
                       
             //fill form1.listbox5 with available pollutants

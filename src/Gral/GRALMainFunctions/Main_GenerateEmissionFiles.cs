@@ -187,10 +187,12 @@ namespace Gral
 			_psList = null;
 			
 			if (file == false)
-				File.Delete(newPath);
+            {
+                File.Delete(newPath);
+            }
 
-			//Area Source__________________________________________________________________
-			List <AreaSourceData> _asList = new List<AreaSourceData>();
+            //Area Source__________________________________________________________________
+            List <AreaSourceData> _asList = new List<AreaSourceData>();
 			AreaSourceDataIO _as = new AreaSourceDataIO();
 			_file = Path.Combine(Main.ProjectName,"Emissions","Asources.txt");
 			_as.LoadAreaData(_asList, _file);
@@ -308,10 +310,12 @@ namespace Gral
 			_asList = null;
 			
 			if (file == false)
-				File.Delete(newPath);
+            {
+                File.Delete(newPath);
+            }
 
-			//Line Source__________________________________________________________________
-			List <LineSourceData> _lsList = new List<LineSourceData>();
+            //Line Source__________________________________________________________________
+            List <LineSourceData> _lsList = new List<LineSourceData>();
 			LineSourceDataIO _ls = new LineSourceDataIO();
 			_file = Path.Combine(Main.ProjectName,"Emissions","Lsources.txt");
 			_ls.LoadLineSources(_lsList, _file);
@@ -427,9 +431,11 @@ namespace Gral
 			_lsList = null;
 			
 			if (file == false)
-				File.Delete(newPath);
+            {
+                File.Delete(newPath);
+            }
 
-			Tunnelportals(SelectedSourceGroups);
+            Tunnelportals(SelectedSourceGroups);
 			
 		}
 		
@@ -1505,22 +1511,42 @@ namespace Gral
 			{
 				angle = Math.Atan((y2 - y1) / (x2 - x1)) * 180 / 3.14;
 				if ((x1 < x2) && (y1 < y2))
-					angle = 360- angle;
-				if ((x1 > x2) && (y1 < y2))
-					angle = 180 - angle;
-				if ((x1 < x2) && (y1 > y2))
-					angle = Math.Abs(angle);
-				if ((x1 > x2) && (y1 > y2))
-					angle = 180-angle;
-			}
+                {
+                    angle = 360- angle;
+                }
+
+                if ((x1 > x2) && (y1 < y2))
+                {
+                    angle = 180 - angle;
+                }
+
+                if ((x1 < x2) && (y1 > y2))
+                {
+                    angle = Math.Abs(angle);
+                }
+
+                if ((x1 > x2) && (y1 > y2))
+                {
+                    angle = 180-angle;
+                }
+            }
 			else
 				if (y1 < y2)
-					angle = 90;
-			if (angle == 0)
-				if (x1 < x2)
-					angle = 0;
-			else if (x1 > x2)
-				angle = 180;
-		}
+            {
+                angle = 90;
+            }
+
+            if (angle == 0)
+            {
+                if (x1 < x2)
+                {
+                    angle = 0;
+                }
+                else if (x1 > x2)
+                {
+                    angle = 180;
+                }
+            }
+        }
 	}
 }

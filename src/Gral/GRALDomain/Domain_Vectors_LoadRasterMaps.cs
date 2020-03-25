@@ -87,15 +87,28 @@ namespace GralDomain
                                     max = Math.Max(max, umean[n, i]);
                                     //compute wind direction
                                     if (v == 0)
+                                    {
                                         udir[n, i] = 90;
+                                    }
                                     else
+                                    {
                                         udir[n, i] = Convert.ToInt32(Math.Abs(Math.Atan(u / v)) * 180 / 3.14);
+                                    }
+
                                     if ((v > 0) && (u <= 0))
+                                    {
                                         udir[n, i] = 180 - udir[n, i];
+                                    }
+
                                     if ((v >= 0) && (u > 0))
+                                    {
                                         udir[n, i] = 180 + udir[n, i];
+                                    }
+
                                     if ((v < 0) && (u >= 0))
+                                    {
                                         udir[n, i] = 360 - udir[n, i];
+                                    }
                                     //define integer field for fill colors
                                     _contcol[n, i] = -1;
 
@@ -125,6 +138,7 @@ namespace GralDomain
                             double anglecor = 3.14 / 180;
 
                             for (int j = ny - 1; j > -1; j--)
+                            {
                                 for (int i = 0; i < nx; i++)
                                 {
                                     //x,y coordinates of the cell center
@@ -183,13 +197,16 @@ namespace GralDomain
                                     yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
                                     _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
                                 }
+                            }
                         }
                     }
                 }
                 catch(Exception ex)
                 {
                     if (GRAMMOnline == false)
+                    {
                         MessageBox.Show(this, "Unable to read vector file: " + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    }
                 }
 
                 Cursor = Cursors.Default;
@@ -225,7 +242,9 @@ namespace GralDomain
             int tkefieldenable = 0;
             files_wind = di.GetFiles("*.tke");
             if (files_wind.Length > 0)
+            {
                 tkefieldenable = 1;
+            }
 
             //check if no wind fields are available
             if (windfieldenable == 0)
@@ -311,11 +330,13 @@ namespace GralDomain
                                         double schnitt = Convert.ToDouble(trans);
                                         //obtain index in the vertical direction
                                         for (int k = 1; k <= NZ; k++)
+                                        {
                                             if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
                                             {
                                                 ischnitt = k;
                                                 break;
                                             }
+                                        }
 
                                         //windfield file Readers
                                         //PSFReader windfield = new PSFReader(form1.GRAMMwindfield, true);

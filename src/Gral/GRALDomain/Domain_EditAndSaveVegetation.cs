@@ -41,13 +41,31 @@ namespace GralDomain
                 
                 if (ShowFirst.Veg) // set the inital position of the form
                 {
-                    if (ShowFirst.Ls == false) EditVegetation.Location = EditLS.Location;
-                    else if (ShowFirst.As == false) EditVegetation.Location = EditAS.Location;
-                    else if (ShowFirst.Ps == false) EditVegetation.Location = EditPS.Location;
-                    else if (ShowFirst.Wa == false) EditVegetation.Location = EditWall.Location;
-                    else if (ShowFirst.Bu == false) EditVegetation.Location = EditB.Location;
+                    if (ShowFirst.Ls == false)
+                    {
+                        EditVegetation.Location = EditLS.Location;
+                    }
+                    else if (ShowFirst.As == false)
+                    {
+                        EditVegetation.Location = EditAS.Location;
+                    }
+                    else if (ShowFirst.Ps == false)
+                    {
+                        EditVegetation.Location = EditPS.Location;
+                    }
+                    else if (ShowFirst.Wa == false)
+                    {
+                        EditVegetation.Location = EditWall.Location;
+                    }
+                    else if (ShowFirst.Bu == false)
+                    {
+                        EditVegetation.Location = EditB.Location;
+                    }
                     else
+                    {
                         EditVegetation.Location = GetScreenPositionForNewDialog();
+                    }
+
                     ShowFirst.Veg = false;
                 }
                 MouseControl = 79;
@@ -115,10 +133,14 @@ namespace GralDomain
             
             //show/hide button to select buildings
             if (EditVegetation.ItemData.Count > 0)
+            {
                 button50.Visible = true;
+            }
             else
+            {
                 button50.Visible = false;
-            
+            }
+
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations

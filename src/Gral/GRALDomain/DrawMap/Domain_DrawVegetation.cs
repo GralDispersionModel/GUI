@@ -77,7 +77,9 @@ namespace GralDomain
                             int x1 = (int)((_points[i].X - form1_west) * factor_x) + TransformX;
                             int y1 = (int)((_points[i].Y - form1_north) * factor_y) + TransformY;
                             if (dismiss && (x1 > 0) && (x1 < pb1_width) && (y1 > 0) && (y1 < pb1_height))
+                            {
                                 dismiss = false;
+                            }
 
                             xmean += x1;
                             ymean += y1;
@@ -151,7 +153,10 @@ namespace GralDomain
                         }
                     }
 
-                    if (CancelDrawing) break;
+                    if (CancelDrawing)
+                    {
+                        break;
+                    }
                 }
                 catch { }
             }

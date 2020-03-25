@@ -100,24 +100,75 @@ namespace GralBackgroundworkers
 		{
 			GralBackgroundworkers.BackgroundworkerData MyData = (GralBackgroundworkers.BackgroundworkerData)e.Argument;
 			
-			if (MyData.Rechenart == 1) GenerateMeteofile(MyData, e);
-			if (MyData.Rechenart == 2) Reorder(MyData, e);
+			if (MyData.Rechenart == 1)
+            {
+                GenerateMeteofile(MyData, e);
+            }
 
-            if (MyData.Rechenart == 23) HighPercentiles(MyData, e);
-            if (MyData.Rechenart == 24) OdourHoursTransient(MyData, e);
-			if (MyData.Rechenart == 25) MeanMaxDaymax(MyData, e);
-			if (MyData.Rechenart == 26) OdourCompost(MyData, e);
-			if (MyData.Rechenart == 27) OdourHours(MyData, e);
-			if (MyData.Rechenart == 28) Mean(MyData, e);
-			if (MyData.Rechenart == 29) OdourAllinAllout(MyData, e);
-			if (MyData.Rechenart == 31) MeanWindVelocity(MyData, e);
-			
-			if (MyData.Rechenart == 37) ReceptorConcentration(MyData, e);
-			if (MyData.Rechenart == 40) HighPercentiles(MyData, e);
+            if (MyData.Rechenart == 2)
+            {
+                Reorder(MyData, e);
+            }
 
-			if (MyData.Rechenart == 50) MathRasterOperation(MyData, e);
+            if (MyData.Rechenart == 23)
+            {
+                HighPercentiles(MyData, e);
+            }
 
-            if (MyData.Rechenart == 60) GRAMMExport(MyData, e);
+            if (MyData.Rechenart == 24)
+            {
+                OdourHoursTransient(MyData, e);
+            }
+
+            if (MyData.Rechenart == 25)
+            {
+                MeanMaxDaymax(MyData, e);
+            }
+
+            if (MyData.Rechenart == 26)
+            {
+                OdourCompost(MyData, e);
+            }
+
+            if (MyData.Rechenart == 27)
+            {
+                OdourHours(MyData, e);
+            }
+
+            if (MyData.Rechenart == 28)
+            {
+                Mean(MyData, e);
+            }
+
+            if (MyData.Rechenart == 29)
+            {
+                OdourAllinAllout(MyData, e);
+            }
+
+            if (MyData.Rechenart == 31)
+            {
+                MeanWindVelocity(MyData, e);
+            }
+
+            if (MyData.Rechenart == 37)
+            {
+                ReceptorConcentration(MyData, e);
+            }
+
+            if (MyData.Rechenart == 40)
+            {
+                HighPercentiles(MyData, e);
+            }
+
+            if (MyData.Rechenart == 50)
+            {
+                MathRasterOperation(MyData, e);
+            }
+
+            if (MyData.Rechenart == 60)
+            {
+                GRAMMExport(MyData, e);
+            }
         }
 
 		private void SetText(string text)
@@ -319,7 +370,9 @@ namespace GralBackgroundworkers
             //			MessageBox.Show(comp_file);
 			
 			if (File.Exists(comp_filepath))
-				compressed = true;
+            {
+                compressed = true;
+            }
 
             bool result = false;
 			try
@@ -366,9 +419,12 @@ namespace GralBackgroundworkers
 			{
 				int indexi, indexj;
 				
-				if (mydata.Horgridsize == 0) return false; // no division by zero
-				
-				bool sequential = true; // sequential file with seperators
+				if (mydata.Horgridsize == 0)
+                {
+                    return false; // no division by zero
+                }
+
+                bool sequential = true; // sequential file with seperators
 				int dummy = reader.ReadInt32(); // read 4 bytes from stream = "Header"
 
                 if (dummy == -1)
@@ -523,7 +579,10 @@ namespace GralBackgroundworkers
 //			MessageBox.Show(comp_file);
 			
 			if (File.Exists(comp_filepath))
-				compressed = true;
+            {
+                compressed = true;
+            }
+
             bool result = false;
 
 			try
@@ -568,9 +627,12 @@ namespace GralBackgroundworkers
 			try
 			{
 				int indexi, indexj;
-				if (mydata.Horgridsize == 0) return false; // no division by zero
+				if (mydata.Horgridsize == 0)
+                {
+                    return false; // no division by zero
+                }
 
-				bool sequential = true; // sequential file with seperators
+                bool sequential = true; // sequential file with seperators
 				int dummy = reader.ReadInt32(); // read 4 bytes from stream = "Header"
 
                 if (dummy == -1)

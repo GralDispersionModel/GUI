@@ -31,7 +31,7 @@ namespace GralDomain
         /// </summary>
      	private void SetNewEdgepointArea()
 		{
-			EditAS.CorneAareaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
+			EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
 			EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
 			
 			EditAS.SaveArray();
@@ -68,8 +68,10 @@ namespace GralDomain
 			Cursor.Clip = Rectangle.Empty;
 			
 			if (MouseControl == 100)
-				MouseControl=10; // reset to linesource-Input
-			else if (MouseControl == 1000)
+            {
+                MouseControl =10; // reset to linesource-Input
+            }
+            else if (MouseControl == 1000)
 			{
 				EditAndSaveLineSourceData(null, null); // save changes
 				MouseControl = 11; //continue line selection
@@ -92,8 +94,10 @@ namespace GralDomain
 			Cursor.Clip = Rectangle.Empty;
 			
 			if (MouseControl == 101)
-				MouseControl=75; // reset to wall-Input
-			else if (MouseControl == 1001)
+            {
+                MouseControl =75; // reset to wall-Input
+            }
+            else if (MouseControl == 1001)
 			{
 				EditAndSaveWallData(this, null); // save changes
 				MouseControl = 76; //continue line selection
@@ -116,8 +120,10 @@ namespace GralDomain
 			Cursor.Clip = Rectangle.Empty;
 			
 			if (MouseControl == 117)
-				MouseControl=17; // reset to building-Input
-			else if (MouseControl == 1170)
+            {
+                MouseControl =17; // reset to building-Input
+            }
+            else if (MouseControl == 1170)
 			{
 				EditAndSaveBuildingsData(null, null); // save changes
 				MouseControl = 19; //continue building selection
@@ -140,9 +146,10 @@ namespace GralDomain
 			Cursor.Clip = Rectangle.Empty;
 			
 			if (MouseControl == 109)
-				MouseControl = 79; // reset to building-Input
-			
-			else if (MouseControl == 1081)
+            {
+                MouseControl = 79; // reset to building-Input
+            }
+            else if (MouseControl == 1081)
 			{
 				EditAndSaveVegetationData(this, null); // save changes
 				MouseControl = 77; //continue vegetation selection

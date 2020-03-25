@@ -47,6 +47,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -262,6 +263,17 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // checkBox3
+            // 
+            this.checkBox3.ForeColor = System.Drawing.Color.Blue;
+            this.checkBox3.Location = new System.Drawing.Point(199, 9);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(236, 21);
+            this.checkBox3.TabIndex = 70;
+            this.checkBox3.Text = "3D Line - ShapeFile PolyLineZ";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.Visible = false;
+            // 
             // ShapeBuildingDialog
             // 
             this.AcceptButton = this.button1;
@@ -269,6 +281,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 490);
             this.ControlBox = false;
+            this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.numericUpDown1);
@@ -321,5 +334,6 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.CheckBox checkBox3;
     }
 }

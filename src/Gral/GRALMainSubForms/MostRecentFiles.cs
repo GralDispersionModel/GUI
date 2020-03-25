@@ -99,9 +99,11 @@ namespace GralMainForms
 			else
 			{
 				if (_folderlist[0] == _newFile) // re-open actual top file -> do nothing & exit
-					return true;
-				
-				_folderlist.Insert(0, _newFile); // insert _newFile at top of the list
+                {
+                    return true;
+                }
+
+                _folderlist.Insert(0, _newFile); // insert _newFile at top of the list
 				
 				for (int i = 1; i < FolderList.Count; i++) //  
 				{
@@ -123,8 +125,11 @@ namespace GralMainForms
 					{
 						mywriter.WriteLine(temp);
 						i++;
-						if (i > 9) break; // save max. 10 files 
-					}
+						if (i > 9)
+                        {
+                            break; // save max. 10 files 
+                        }
+                    }
 				}
 
 			}
@@ -148,8 +153,11 @@ namespace GralMainForms
 		void Button1Click(object sender, EventArgs e)
 		{
 			if (listView1.SelectedIndices.Count > 0)
-				_selectedFile = listView1.SelectedItems[0].Text;
-			Close();
+            {
+                _selectedFile = listView1.SelectedItems[0].Text;
+            }
+
+            Close();
 		}
 		void MostRecentFilesSizeChanged(object sender, EventArgs e)
 		{

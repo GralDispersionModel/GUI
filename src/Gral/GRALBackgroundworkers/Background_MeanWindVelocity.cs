@@ -60,17 +60,22 @@ namespace GralBackgroundworkers
 					ggeom = null;
 				}
 				else
-					throw new FileNotFoundException("Error reading ggeom.asc");
-											
-				double schnitt = mydata.Schnitt;
+                {
+                    throw new FileNotFoundException("Error reading ggeom.asc");
+                }
+
+                double schnitt = mydata.Schnitt;
 				//obtain index in the vertical direction
 				for (int k = 1; k <= NZ; k++)
-					if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
+                {
+                    if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
 				{
 					ischnitt = k;
 					break;
 				}
-				SetText("Reading meteopgt.all");
+                }
+
+                SetText("Reading meteopgt.all");
 				System.Threading.Thread.Sleep(200);
 				
 				// read meteopgt
@@ -142,7 +147,8 @@ namespace GralBackgroundworkers
 					}
 
 					for (int i = 1; i <= NX; i++)
-						for (int j = 1; j <= NY; j++)
+                    {
+                        for (int j = 1; j <= NY; j++)
 					{
 						Uoben = UWI[i, j, ischnitt];
 						Voben = VWI[i, j, ischnitt];
@@ -162,7 +168,9 @@ namespace GralBackgroundworkers
 						}
 						UMEAN[i, j] = UMEAN[i, j] + Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel) * frequ[iiwet] / 1000;
 					}
-					totalfrequ += frequ[iiwet] / 1000;
+                    }
+
+                    totalfrequ += frequ[iiwet] / 1000;
 				}
 				//windfield.Close();
 				//meteopgt.Close();

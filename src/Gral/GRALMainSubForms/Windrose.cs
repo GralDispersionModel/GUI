@@ -12,13 +12,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using System.Linq;
 using GralStaticFunctions;
-using Gral;
 
 namespace GralMainForms
 {
@@ -145,10 +142,13 @@ namespace GralMainForms
 
             Font kleinfont;
             if (St_F.Small_Font != null)
+            {
                 kleinfont = new Font(St_F.Small_Font.FontFamily, (float)(St_F.Small_Font.Size * IniScale / 270), St_F.Small_Font.Style);
+            }
             else
-
+            {
                 kleinfont = new Font("Arial", 8);
+            }
 
             int distance = (int)(g.MeasureString("J", kleinfont, 200).Height * 1.04);
             int y_text = pictureBox1.Height - distance * 7;
@@ -165,7 +165,10 @@ namespace GralMainForms
             //g.DrawString(Convert.ToString(wind.Count), kleinfont, blackbrush, mid_x*2-20, InfoPosition.Y + distance, format1);
             //g.DrawString(wind[0].Date, kleinfont, blackbrush, mid_x*2-85, InfoPosition.Y + 2 * distance, format1);
             if (WindData.Count > 1)
+            {
                 g.DrawString(WindData[0].Date + " - " + WindData[WindData.Count - 1].Date, kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 2 * distance, StringFormatNearFar);
+            }
+
             g.DrawString(Convert.ToString(StartHour) + ":00h-" + Convert.ToString(FinalHour) + ":00h", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 3 * distance, StringFormatNearFar);
             g.DrawString(MetFileName, kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 4 * distance, StringFormatNearFar);
             if (BiasCorrection == 1)
@@ -198,16 +201,24 @@ namespace GralMainForms
 
             //scaling factor to maximise wind rose in window
             if (SektMax <= 0)
+            {
                 return;
+            }
 
             if (St_F.Pin_Wind_Scale > 0.1) // if x-axis is pinned
+            {
                 SektMax = St_F.Pin_Wind_Scale;
+            }
 
             double scale = IniScale / SektMax;
 
             int x_legend = pictureBox1.Width - (int)(g.MeasureString("0.0 - 2.2 m/s", kleinfont).Width) - 30;
 
-            if (x_legend < 0) return;
+            if (x_legend < 0)
+            {
+                return;
+            }
+
             StringFormatNearFar.Alignment = StringAlignment.Near;
             if (LegendPosition.X == 0 && LegendPosition.Y == 0)
             {

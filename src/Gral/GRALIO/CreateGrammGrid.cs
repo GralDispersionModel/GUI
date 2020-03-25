@@ -45,11 +45,15 @@ namespace GralIO
 			string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 			char[] splitchar = null;
 			if (decsep == ",")
-				splitchar = new char[] { ' ', '\t', ';' };
-			else
-				splitchar = new char[] { ' ', '\t', ',', ';' };
-			
-			GralMessage.MessageWindow mw = new GralMessage.MessageWindow();
+            {
+                splitchar = new char[] { ' ', '\t', ';' };
+            }
+            else
+            {
+                splitchar = new char[] { ' ', '\t', ',', ';' };
+            }
+
+            GralMessage.MessageWindow mw = new GralMessage.MessageWindow();
 
 			//reading field sizes from file GRAMM.geb
 			StreamReader reader=new StreamReader(Path.Combine(ProjectName, @"Computation", "GRAMM.geb"));
@@ -251,8 +255,10 @@ namespace GralIO
 					});
 					
 					if (i % 40 == 0)
-						wait.Text =  "Reading GRAMM topography " + ((int)((float)i / (NROW + 2) * 100F)).ToString() +"%";
-				}
+                    {
+                        wait.Text =  "Reading GRAMM topography " + ((int)((float)i / (NROW + 2) * 100F)).ToString() +"%";
+                    }
+                }
 				reader.Close();
 
 				//computation of cell heights
@@ -342,12 +348,16 @@ namespace GralIO
 
 						//minimum of terrain data
 						if (ADH[IP, JP] < AHMIN)
-							AHMIN = ADH[IP, JP];
+                        {
+                            AHMIN = ADH[IP, JP];
+                        }
 
-						//minimum elevation at the border
-						if ((ADH[IP, JP] < AHMIN_BORDER) && ((NI == 1) || (NJ == 1) || (NI == NX + 1) || (NJ == NY + 1)))
-							AHMIN_BORDER = ADH[IP, JP];
-					}
+                        //minimum elevation at the border
+                        if ((ADH[IP, JP] < AHMIN_BORDER) && ((NI == 1) || (NJ == 1) || (NI == NX + 1) || (NJ == NY + 1)))
+                        {
+                            AHMIN_BORDER = ADH[IP, JP];
+                        }
+                    }
 				}
 
 				//flatten topography towards domain borders
@@ -376,17 +386,28 @@ namespace GralIO
 				//coordinates of cells in x-direction
 				int NK = NZ;
 				for (int I = 1; I < NX + 1; I++)
-					DDX[I] = Convert.ToDouble(IMODI);
-				for (int J = 1; J < NY + 1; J++)
-					DDY[J] = Convert.ToDouble(IMODI);
-				X[1] = 0;
-				for (int I = 2; I < NX + 2; I++)
-					X[I] = X[I - 1] + DDX[I - 1];
-				for (int I = 1; I < NX; I++)
-					ZAX[I] = (X[I + 1] + DDX[I + 1] / 2) - (X[I] + DDX[I] / 2);
+                {
+                    DDX[I] = Convert.ToDouble(IMODI);
+                }
 
-				//flatten topography towards domain borders
-				double abstand = 0;
+                for (int J = 1; J < NY + 1; J++)
+                {
+                    DDY[J] = Convert.ToDouble(IMODI);
+                }
+
+                X[1] = 0;
+				for (int I = 2; I < NX + 2; I++)
+                {
+                    X[I] = X[I - 1] + DDX[I - 1];
+                }
+
+                for (int I = 1; I < NX; I++)
+                {
+                    ZAX[I] = (X[I + 1] + DDX[I + 1] / 2) - (X[I] + DDX[I] / 2);
+                }
+
+                //flatten topography towards domain borders
+                double abstand = 0;
 				double totaldistance = 0; //horizontal distance between model boundary and the last cell, which is smoothed, yet
 				for (int smooth = Math.Min(SmoothBorderCellNr, NY); smooth > 0; smooth--)
 				{
@@ -489,10 +510,15 @@ namespace GralIO
 					for (int I = 1; I < NX + 2; I++)
 					{
 						if (AHE[I, J, 1] < AHMIN)
-							AHMIN = AHE[I, J, 1];
-						if (AHE[I, J, 1] > AHMAX)
-							AHMAX = AHE[I, J, 1];
-					}
+                        {
+                            AHMIN = AHE[I, J, 1];
+                        }
+
+                        if (AHE[I, J, 1] > AHMAX)
+                        {
+                            AHMAX = AHE[I, J, 1];
+                        }
+                    }
 				}
 				mw.listBox1.Items.Add("Minimum elevation: " + Convert.ToString(Math.Round(AHMIN, 0)));
 				mw.listBox1.Items.Add("Maximum elevation: " + Convert.ToString(Math.Round(AHMAX, 0)));
@@ -506,11 +532,16 @@ namespace GralIO
 				//coordinates of cells in y-direction
 				Y[1] = 0;
 				for (int J = 2; J < NY + 2; J++)
-					Y[J] = Y[J - 1] + DDY[J - 1];
-				for (int J = 1; J < NY; J++)
-					ZAY[J] = (Y[J + 1] + DDY[J + 1] / 2) - (Y[J] + DDY[J] / 2);
+                {
+                    Y[J] = Y[J - 1] + DDY[J - 1];
+                }
 
-				mw.listBox1.Items.Add("Number of cells in S-N direction: " + Convert.ToString(NY));
+                for (int J = 1; J < NY; J++)
+                {
+                    ZAY[J] = (Y[J + 1] + DDY[J + 1] / 2) - (Y[J] + DDY[J] / 2);
+                }
+
+                mw.listBox1.Items.Add("Number of cells in S-N direction: " + Convert.ToString(NY));
 				mw.listBox1.Items.Add("Cell length in S-N direction: " + Convert.ToString(DDY[1]));
 				mw.listBox1.Items.Add("S-N extents: " + Convert.ToString(Math.Round(Y[NY + 1], 0)));
 				mw.Refresh();
@@ -521,8 +552,11 @@ namespace GralIO
 				mw.listBox1.Items.Add("Z" + Convert.ToString(K) + "= " + Convert.ToString(Math.Round(Z[K], 1)) + " m");
 				mw.Refresh();
 				for (K = 2; K < NZ + 2; K++)
-					Z[K] = Z[K - 1] + DDZ * Math.Pow(ADZ, K - 2);
-				for (K = 1; K < NZ + 1; K++)
+                {
+                    Z[K] = Z[K - 1] + DDZ * Math.Pow(ADZ, K - 2);
+                }
+
+                for (K = 1; K < NZ + 1; K++)
 				{
 					DW[K] = Z[K + 1] - Z[K];
 					mw.listBox1.Items.Add("Z" + Convert.ToString(K + 1) + "= " + Convert.ToString(Math.Round(Z[K + 1], 1)) + " m");
@@ -542,32 +576,55 @@ namespace GralIO
 
 				//computation of the heights of the cell corners
 				for (int I = 1; I < NX + 2; I++)
-					for (int J = 1; J < NY + 2; J++)
-						for (K = 2; K < NZ + 2; K++)
-							AHE[I, J, K] = AHE[I, J, K - 1] + DW[K - 1] / DWMAX * (Z[NZ + 1] - AHE[I, J, 1]);
+                {
+                    for (int J = 1; J < NY + 2; J++)
+                    {
+                        for (K = 2; K < NZ + 2; K++)
+                        {
+                            AHE[I, J, K] = AHE[I, J, K - 1] + DW[K - 1] / DWMAX * (Z[NZ + 1] - AHE[I, J, 1]);
+                        }
+                    }
+                }
 
-				//computation of areas and volumes
-				for (int I = 1; I < NX + 2; I++)
-					for (int J = 1; J < NY + 1; J++)
-						for (K = 1; K < NZ + 1; K++)
-							AREAX[I, J, K] = (AHE[I, J, K + 1] - AHE[I, J, K] + AHE[I, J + 1, K + 1] - AHE[I, J + 1, K]) * 0.5 * DDY[J];
+                //computation of areas and volumes
+                for (int I = 1; I < NX + 2; I++)
+                {
+                    for (int J = 1; J < NY + 1; J++)
+                    {
+                        for (K = 1; K < NZ + 1; K++)
+                        {
+                            AREAX[I, J, K] = (AHE[I, J, K + 1] - AHE[I, J, K] + AHE[I, J + 1, K + 1] - AHE[I, J + 1, K]) * 0.5 * DDY[J];
+                        }
+                    }
+                }
 
-				for (int I = 1; I < NX + 1; I++)
-					for (int J = 1; J < NY + 2; J++)
-						for (K = 1; K < NZ + 1; K++)
-							AREAY[I, J, K] = (AHE[I, J, K + 1] - AHE[I, J, K] + AHE[I + 1, J, K + 1] - AHE[I + 1, J, K]) * 0.5 * DDX[I];
+                for (int I = 1; I < NX + 1; I++)
+                {
+                    for (int J = 1; J < NY + 2; J++)
+                    {
+                        for (K = 1; K < NZ + 1; K++)
+                        {
+                            AREAY[I, J, K] = (AHE[I, J, K + 1] - AHE[I, J, K] + AHE[I + 1, J, K + 1] - AHE[I + 1, J, K]) * 0.5 * DDX[I];
+                        }
+                    }
+                }
 
-				for (int I = 1; I < NX + 1; I++)
-					for (int J = 1; J < NY + 1; J++)
-						for (K = 1; K < NZ + 2; K++)
+                for (int I = 1; I < NX + 1; I++)
+                {
+                    for (int J = 1; J < NY + 1; J++)
+                    {
+                        for (K = 1; K < NZ + 2; K++)
 				{
 					AREAZX[I, J, K] = ((AHE[I, J + 1, K] - AHE[I + 1, J + 1, K]) + (AHE[I, J, K] - AHE[I + 1, J, K])) * 0.5 * DDY[J];
 					AREAZY[I, J, K] = ((AHE[I + 1, J, K] - AHE[I + 1, J + 1, K]) + (AHE[I, J, K] - AHE[I, J + 1, K])) * 0.5 * DDX[I];
 					AREAZ[I, J, K] = Math.Sqrt(DDX[I] * DDX[I] * DDY[J] * DDY[J] + AREAZX[I, J, K] * AREAZX[I, J, K] + AREAZY[I, J, K] * AREAZY[I, J, K]);
 				}
+                    }
+                }
 
-				for (int I = 1; I < NX + 1; I++)
-					for (int J = 1; J < NY + 1; J++)
+                for (int I = 1; I < NX + 1; I++)
+                {
+                    for (int J = 1; J < NY + 1; J++)
 				{
 					for (K = 1; K < NZ + 1; K++)
 					{
@@ -576,6 +633,7 @@ namespace GralIO
 					}
 					AH[I, J] = (AHE[I, J, 1] + AHE[I + 1, J, 1] + AHE[I + 1, J + 1, 1] + AHE[I, J + 1, 1]) / 4.0;
 				}
+                }
 
                 //write ggeom.asc
                 GGeomFileIO ggeom = new GGeomFileIO

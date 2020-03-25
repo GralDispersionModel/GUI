@@ -403,10 +403,13 @@ namespace GralDomain
                 // GRAL topography allowed?
                 if (MainForm.GRALSettings.BuildingMode > 0 && Gral.Main.Project_Locked == false &&
                     MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
+                {
                     originalGRALTopographyToolStripMenuItem.Enabled = true;
+                }
                 else
+                {
                     originalGRALTopographyToolStripMenuItem.Enabled = false;
-                
+                }
             }
             else
             {
@@ -417,11 +420,14 @@ namespace GralDomain
             // show section button if ggeom.asc does exist
             string ggeom_path;
             if (MainForm.GRAMMwindfield != null)
+            {
                 ggeom_path = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), @"ggeom.asc");
+            }
             else
+            {
                 ggeom_path = Path.Combine(Gral.Main.ProjectName, @"Computation", "ggeom.asc");
-            
-            
+            }
+
             if (File.Exists(ggeom_path))
             {
                 groupBox3.Visible = true;
@@ -597,12 +603,20 @@ namespace GralDomain
                                 foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
                                 {
                                     if (shp is GralShape.SHPLine)
+                                    {
                                         _drobj.ShpLines.Add((GralShape.SHPLine) shp);
+                                    }
+
                                     if (shp is GralShape.SHPPolygon)
+                                    {
                                         _drobj.ShpPolygons.Add((GralShape.SHPPolygon) shp);
+                                    }
+
                                     if (shp is PointF)
+                                    {
                                         _drobj.ShpPoints.Add((PointF) shp);
-                                    
+                                    }
+
                                     if (count == 0)
                                     {
                                         _drobj.West = shape.West;
@@ -683,8 +697,12 @@ namespace GralDomain
                     ggeom = null;
                     CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
                     for (int i = 1; i <= AH.GetUpperBound(0); i++)
+                    {
                         for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                        {
                             CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                        }
+                    }
 
                     SetCellHeightsType(1);
                 }
@@ -920,9 +938,13 @@ namespace GralDomain
             if (SelectedItems.Count > 0)
             {
                 if (SelectedItems.Count == 1)
+                {
                     a = Convert.ToString(SelectedItems.Count) + " " + a +"?";
+                }
                 else
+                {
                     a = Convert.ToString(SelectedItems.Count) + " " + a + "s?";
+                }
 
                 if (St_F.InputBoxYesNo("Attention", "Do you really want to delete " + a, St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
                 {
@@ -988,7 +1010,9 @@ namespace GralDomain
             if ((MouseControl == 6) || (MouseControl == 8) || (MouseControl == 17) || (MouseControl == 10)
                 || (MouseControl == 15) || (MouseControl == 24) || (MouseControl == 3) || (MouseControl == 12)
                 || (MouseControl == 75) || (MouseControl == 79))
+            {
                 Activate();
+            }
         }
 
 		/// <summary>
@@ -1124,10 +1148,14 @@ namespace GralDomain
         {
             DrawMap();
             if (picturebox1.Image != null)
+            {
                 picturebox1.Image.Dispose();
-            
+            }
+
             if (PictureBoxBitmap != null)
+            {
                 picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
+            }
         }
 		
 		/// <summary>
@@ -1196,14 +1224,45 @@ namespace GralDomain
             //this.Height = ScreenHeight - 50; Auskommentiert Kuntner
             //prevent parallel editing
             // Kuntner which checkbox should be unchecked?
-            if (checkboxnr != 4) checkBox4.Checked = false;
-            if (checkboxnr != 5) checkBox5.Checked = false;
-            if (checkboxnr != 8) checkBox8.Checked = false;
-            if (checkboxnr != 12) checkBox12.Checked = false;
-            if (checkboxnr != 15) checkBox15.Checked = false;
-            if (checkboxnr != 20) checkBox20.Checked = false;
-            if (checkboxnr != 25) checkBox25.Checked = false;
-            if (checkboxnr != 26) checkBox26.Checked = false;
+            if (checkboxnr != 4)
+            {
+                checkBox4.Checked = false;
+            }
+
+            if (checkboxnr != 5)
+            {
+                checkBox5.Checked = false;
+            }
+
+            if (checkboxnr != 8)
+            {
+                checkBox8.Checked = false;
+            }
+
+            if (checkboxnr != 12)
+            {
+                checkBox12.Checked = false;
+            }
+
+            if (checkboxnr != 15)
+            {
+                checkBox15.Checked = false;
+            }
+
+            if (checkboxnr != 20)
+            {
+                checkBox20.Checked = false;
+            }
+
+            if (checkboxnr != 25)
+            {
+                checkBox25.Checked = false;
+            }
+
+            if (checkboxnr != 26)
+            {
+                checkBox26.Checked = false;
+            }
         }
 
 		/// <summary>
@@ -1258,7 +1317,9 @@ namespace GralDomain
                         DrawingObjects _drobj = new DrawingObjects("BM: " + Path.GetFileNameWithoutExtension(MapFileName));
                         
                         if (header.ReadHeader() == false)
+                        {
                             throw new FileLoadException();
+                        }
                         else
                         {
                             _drobj.PixelMx = header.PixelMx;
@@ -1276,8 +1337,9 @@ namespace GralDomain
                             {
                                 ImageFileName = MapFileName.Remove(MapFileName.Length - 3, 3) + "tif";
                                 if (File.Exists(ImageFileName) == false)
+                                {
                                     ImageFileName = MapFileName.Remove(MapFileName.Length - 3, 3) + "tiff"; // try tiff
-                                
+                                }
                             }
                         }
                         
@@ -1285,15 +1347,25 @@ namespace GralDomain
                         {
                             string testfile;
                             if (MapFileName.EndsWith("jgw") == true)
+                            {
                                 testfile = MapFileName.Replace(".jgw", ".jpg");
+                            }
                             else if (MapFileName.EndsWith("pgw") == true)
+                            {
                                 testfile = MapFileName.Replace(".pgw", ".png");
+                            }
                             else if (MapFileName.EndsWith("jpgw") == true)
+                            {
                                 testfile = MapFileName.Replace(".jpgw", ".jpg");
+                            }
                             else if (MapFileName.EndsWith("gfw") == true)
+                            {
                                 testfile = MapFileName.Replace(".gfw", ".gif");
+                            }
                             else if (MapFileName.EndsWith("bpw") == true)
+                            {
                                 testfile = MapFileName.Replace(".bpw", ".bmp");
+                            }
                             else if (MapFileName.EndsWith("tfw") == true)
                             {
                                 testfile = MapFileName.Replace(".tfw", ".tif");
@@ -1303,11 +1375,15 @@ namespace GralDomain
                                 }
                             }
                             else
+                            {
                                 testfile = MapFileName.Remove(MapFileName.Length - 1, 1);
-                            
+                            }
+
                             // check if file exists
                             if (File.Exists(testfile))
+                            {
                                 ImageFileName = testfile;
+                            }
                             else
                             {
                                 testfile = Path.Combine(Path.GetDirectoryName(MapFileName), Path.GetFileName(ImageFileName));
@@ -1358,12 +1434,20 @@ namespace GralDomain
                         foreach (object shp in shape.ReadShapeFile(dialog.FileName))
                         {
                             if (shp is GralShape.SHPLine)
+                            {
                                 _drobj.ShpLines.Add((GralShape.SHPLine) shp);
+                            }
+
                             if (shp is GralShape.SHPPolygon)
+                            {
                                 _drobj.ShpPolygons.Add((GralShape.SHPPolygon) shp);
+                            }
+
                             if (shp is PointF)
+                            {
                                 _drobj.ShpPoints.Add((PointF) shp);
-                            
+                            }
+
                             if (count == 0)
                             {
                                 _drobj.West = shape.West;
@@ -2061,20 +2145,40 @@ namespace GralDomain
 
                     string extension = Path.GetExtension(dialog.FileName).ToLower();
                     if (extension == ".gif")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Gif);
+                    }
+
                     if (extension == ".jpeg")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+
                     if (extension == ".png")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+
                     if (extension == ".bmp")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+
                     if (extension == ".emf")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Emf);
+                    }
+
                     if (extension == ".tiff")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Tiff);
+                    }
+
                     if (extension == ".wmf")
+                    {
                         bitMap.Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Wmf);
-                    
+                    }
+
                     Picturebox1_Paint();
                 }
             }
@@ -2183,11 +2287,15 @@ namespace GralDomain
                 Ys = YDomain
             };
             if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            {
                 MeteoDialog.Local_Stability = true;
-            
+            }
+
             //check whether receptor points are set in the project
             if (EditR.ItemData.Count > 0)
+            {
                 MeteoDialog.Receptor_Points = true;
+            }
 
             MeteoDialog.Start_computation += new StartCreateMeteoStation(MetTimeSeries);
             //  met_st.Start_computation += new Dialog_CreateMeteoStation.start_create_meteo_station(mettimeseries); // delegate from Dialog -> OK
@@ -2285,19 +2393,33 @@ namespace GralDomain
                             _drobj.ItemValues[i] = Math.Round(i + 1 - 0.1, 1);
                             Color c = Color.Snow;
                             if (i == 0)
+                            {
                                 c = Color.FromArgb(164, 0, 0);
+                            }
                             else if (i == 1)
+                            {
                                 c = Color.FromArgb(164, 116, 0);
+                            }
                             else if (i == 2)
+                            {
                                 c = Color.FromArgb(255, 255, 0);
+                            }
                             else if (i == 3)
+                            {
                                 c = Color.FromArgb(0, 255, 0);
+                            }
                             else if (i == 4)
+                            {
                                 c = Color.FromArgb(0, 112, 0);
+                            }
                             else if (i == 5)
+                            {
                                 c = Color.FromArgb(0, 128, 255);
+                            }
                             else if (i == 6)
+                            {
                                 c = Color.FromArgb(255, 0, 255);
+                            }
 
                             _drobj.FillColors[i] = c;
                             _drobj.LineColors[i] = c;
@@ -2652,8 +2774,10 @@ namespace GralDomain
                         dummy = myreader.ReadLine().Split(new char[] { ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
                         string unit = "";
                         if (dummy.Length > 3) // read unit, if available
+                        {
                             unit = dummy[3].Trim();
-                        
+                        }
+
                         //compute row and column to extract data (no interpolation is applied)
                         int col = Convert.ToInt32(Math.Truncate((XDomain - x11) / cellsize)) + 1;
                         int row = Convert.ToInt32(Math.Truncate((YDomain - y11) / cellsize)) + 1;
@@ -2846,7 +2970,9 @@ namespace GralDomain
                         }
                     }
                     else
+                    {
                         MessageBox.Show(this, "File " + comp_file + " not found", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else // cancel
                 {
@@ -3049,7 +3175,9 @@ namespace GralDomain
                                     try
                                     {
                                         if (GRAL_con[i].Name.Substring(0, 5) == compressed_file.Substring(0, 5))
+                                        {
                                             GRAL_con[i].Delete();
+                                        }
                                     }
                                     catch { }
                                 }
@@ -3063,7 +3191,9 @@ namespace GralDomain
                                     try
                                     {
                                         if (GRAL_con[i].Name.Substring(0, 5) == compressed_file.Substring(0, 5))
+                                        {
                                             GRAL_con[i].Delete();
+                                        }
                                     }
                                     catch { }
                                 }
@@ -3178,21 +3308,38 @@ namespace GralDomain
                     mywriter.WriteLine(" ");
                     mywriter.WriteLine("Match with meteorological observation, started at " + Convert.ToString(DateTime.Now).PadRight(65,'_'));
                     if (MMO.radioButton1.Checked == true)
+                    {
                         mywriter.WriteLine(" Optimization methode: vectorial");
+                    }
+
                     if (MMO.radioButton2.Checked == true)
+                    {
                         mywriter.WriteLine(" Optimization methode: components");
+                    }
+
                     if (MMO.checkBox1.Checked == false)
+                    {
                         mywriter.WriteLine(" Remove outliers: off");
+                    }
                     else
+                    {
                         mywriter.WriteLine(" Remove outliers: on");
+                    }
+
                     if (MMO.checkBox2.Checked == true)
+                    {
                         mywriter.WriteLine(" Use local stability classes");
+                    }
                     else
+                    {
                         mywriter.WriteLine(" Use global stability classes");
-                    
+                    }
+
                     if (MMO.concatenate.Value > 0.0M)
+                    {
                         mywriter.WriteLine(" Concatenation for situations less " + Convert.ToString(MMO.concatenate.Value) + " per mil ");
-                    
+                    }
+
                     for (int i=0; i < MMO.metfiles.Count; i++)
                     {
                         mywriter.WriteLine(MMO.metfiles[i] + "\t  // Used Metfiles");
@@ -3441,7 +3588,11 @@ namespace GralDomain
                 string path = Path.Combine(Gral.Main.ProjectName, @"Settings", "sections.txt");
                 string path2 = Path.Combine(Gral.Main.ProjectName, @"Settings", "view_temp.txt");
                 string [] s = new string[5];
-                if (File.Exists(path2)) File.Delete(path2); // delete old path
+                if (File.Exists(path2))
+                {
+                    File.Delete(path2); // delete old path
+                }
+
                 File.Move(path, path2);
                 
                 using (StreamReader myreader = new StreamReader(path2)) // Open File
@@ -3490,7 +3641,9 @@ namespace GralDomain
             double vert_fac=2;
             bool GRAL_Topo = false;
             if (CellHeightsType == 2) // Show GRAL height -> show GRAL 3D
+            {
                 GRAL_Topo = true;
+            }
 
             using (Dialog_3D dial = new Dialog_3D
                    {
@@ -3526,11 +3679,18 @@ namespace GralDomain
             int IComparer<int>.Compare(int a, int b) //implement Compare
             {
                 if (a > b)
+                {
                     return -1; //normally greater than = 1
+                }
+
                 if (a < b)
+                {
                     return 1; // normally smaller than = -1
+                }
                 else
+                {
                     return 0; // equal
+                }
             }
         }
 
@@ -3684,8 +3844,10 @@ namespace GralDomain
                 EditAndSaveBuildingsData(sender, e);
             }
             else
+            {
                 MessageBox.Show(this, "No items selected","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
+            }
+
             Picturebox1_Paint();
         }
 
@@ -4059,8 +4221,12 @@ namespace GralDomain
             float[,] filter = new float[CellHeights.GetUpperBound(0), CellHeights.GetUpperBound(1)];
 
             for (int x = 0; x < CellHeights.GetUpperBound(0); x++)
+            {
                 for (int y = 0; y < CellHeights.GetUpperBound(1); y++)
+                {
                     filter[x, y] = CellHeights[x, y];
+                }
+            }
 
             // filter
             for (int x = 3; x < CellHeights.GetUpperBound(0) - 3; x++)

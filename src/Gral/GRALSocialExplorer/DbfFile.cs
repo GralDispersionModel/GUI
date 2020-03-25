@@ -101,17 +101,23 @@ namespace SocialExplorer.IO.FastDBF
         public void Open(Stream ofs)
         {
             if (_dbfFile != null)
+            {
                 Close();
+            }
 
             _dbfFile = ofs;
             _dbfFileReader = null;
             _dbfFileWriter = null;
 
             if (_dbfFile.CanRead)
+            {
                 _dbfFileReader = new BinaryReader(_dbfFile, encoding);
+            }
 
             if (_dbfFile.CanWrite)
+            {
                 _dbfFileWriter = new BinaryWriter(_dbfFile, encoding);
+            }
 
             //reset position
             _recordsReadCount = 0;
@@ -199,12 +205,16 @@ namespace SocialExplorer.IO.FastDBF
             //try to update the header if it has changed
             //------------------------------------------
             if (_header.IsDirty)
+            {
                 WriteHeader();
- 			
+            }
+
             //try to update the footer if the file has been udpated
             //------------------------------------------ 
-			if (_footerUpdateNeeded) 
-                WriteFooter(); 
+            if (_footerUpdateNeeded)
+            {
+                WriteFooter();
+            }
 
 
             //Empty header...
@@ -230,7 +240,9 @@ namespace SocialExplorer.IO.FastDBF
             }
 
             if (_dbfFileReader != null)
+            {
                 _dbfFileReader.Close();
+            }
 
             if (_dbfFile != null)
             {
@@ -306,14 +318,18 @@ namespace SocialExplorer.IO.FastDBF
             //check if we can fill this record with data. it must match record size specified by header and number of columns.
             //we are not checking whether it comes from another DBF file or not, we just need the same structure. Allow flexibility but be safe.
             if (oFillRecord.Header != _header && (oFillRecord.Header.ColumnCount != _header.ColumnCount || oFillRecord.Header.RecordLength != _header.RecordLength))
+            {
                 throw new Exception("Record parameter does not have the same size and number of columns as the " +
                                     "header specifies, so we are unable to read a record into oFillRecord. " +
                                     "This is a programming error, have you mixed up DBF file objects?");
+            }
 
             //DBF file reader can be null if stream is not readable...
             if (_dbfFileReader == null)
+            {
                 throw new Exception("Read stream is null, either you have opened a stream that can not be " +
                                     "read from (a write-only stream) or you have not opened a stream at all.");
+            }
 
             //read next record...
             bool bRead = oFillRecord.Read(_dbfFile);
@@ -327,8 +343,9 @@ namespace SocialExplorer.IO.FastDBF
                     _recordsReadCount++;
                 }
                 else
+                {
                     oFillRecord.RecordIndex = ((int)((_dbfFile.Position - _header.HeaderLength) / _header.RecordLength)) - 1;
-
+                }
             }
 
             return bRead;
@@ -367,14 +384,18 @@ namespace SocialExplorer.IO.FastDBF
             //check if we can fill this record with data. it must match record size specified by header and number of columns.
             //we are not checking whether it comes from another DBF file or not, we just need the same structure. Allow flexibility but be safe.
             if (oFillRecord.Header != _header && (oFillRecord.Header.ColumnCount != _header.ColumnCount || oFillRecord.Header.RecordLength != _header.RecordLength))
+            {
                 throw new Exception("Record parameter does not have the same size and number of columns as the " +
                                     "header specifies, so we are unable to read a record into oFillRecord. " +
                                     "This is a programming error, have you mixed up DBF file objects?");
+            }
 
             //DBF file reader can be null if stream is not readable...
             if (_dbfFileReader == null)
+            {
                 throw new Exception("ReadStream is null, either you have opened a stream that can not be " +
                                     "read from (a write-only stream) or you have not opened a stream at all.");
+            }
 
 
             //move to the specified record, note that an exception will be thrown is stream is not seekable! 
@@ -384,7 +405,9 @@ namespace SocialExplorer.IO.FastDBF
             //check whether requested record exists. Subtract 1 from file length (there is a terminating character 1A at the end of the file)
             //so if we hit end of file, there are no more records, so return false;
             if (index < 0 || _dbfFile.Length - 1 <= nSeekToPosition)
+            {
                 return false;
+            }
 
             //move to record and read
             _dbfFile.Seek(nSeekToPosition, SeekOrigin.Begin);
@@ -392,7 +415,9 @@ namespace SocialExplorer.IO.FastDBF
             //read the record
             bool bRead = oFillRecord.Read(_dbfFile);
             if (bRead)
+            {
                 oFillRecord.RecordIndex = index;
+            }
 
             return bRead;
 
@@ -412,7 +437,9 @@ namespace SocialExplorer.IO.FastDBF
             //check whether requested record exists. Subtract 1 from file length (there is a terminating character 1A at the end of the file)
             //so if we hit end of file, there are no more records, so return false;
             if (rowIndex < 0 || _dbfFile.Length - 1 <= nSeekToPosition)
+            {
                 return false;
+            }
 
             //move to position and read
             _dbfFile.Seek(nSeekToPosition, SeekOrigin.Begin);
@@ -451,7 +478,9 @@ namespace SocialExplorer.IO.FastDBF
 
             //if header was never written, write it first, then output the record
             if (!_headerWritten)
+            {
                 WriteHeader();
+            }
 
             //if this is a new record (RecordIndex should be -1 in that case)
             if (orec.RecordIndex < 0)
@@ -463,7 +492,9 @@ namespace SocialExplorer.IO.FastDBF
                     //instead of just cast since cast would just drop decimals.
                     int nNumRecords = (int)Math.Round(((double)(_dbfFile.Length - _header.HeaderLength - 1) / _header.RecordLength));
                     if (nNumRecords < 0)
+                    {
                         nNumRecords = 0;
+                    }
 
                     orec.RecordIndex = nNumRecords;
                     Update(orec);
@@ -478,9 +509,11 @@ namespace SocialExplorer.IO.FastDBF
                 }
             }
             else
+            {
                 Update(orec);
+            }
 
-              _footerUpdateNeeded = true;
+            _footerUpdateNeeded = true;
         }
 
         public void Write(DbfRecord orec, bool bClearRecordAfterWrite)
@@ -489,8 +522,9 @@ namespace SocialExplorer.IO.FastDBF
             Write(orec);
 
             if (bClearRecordAfterWrite)
+            {
                 orec.Clear();
-
+            }
         }
 
         /// <summary>
@@ -504,25 +538,33 @@ namespace SocialExplorer.IO.FastDBF
 
             //if header was never written, write it first, then output the record
             if (!_headerWritten)
+            {
                 WriteHeader();
+            }
 
 
             //Check if record has an index
             if (orec.RecordIndex < 0)
+            {
                 throw new Exception("RecordIndex is not set, unable to update record. Set RecordIndex or call Write() method to add a new record to file.");
+            }
 
 
             //Check if this record matches record size specified by header and number of columns. 
             //Client can pass a record from another DBF that is incompatible with this one and that would corrupt the file.
             if (orec.Header != _header && (orec.Header.ColumnCount != _header.ColumnCount || orec.Header.RecordLength != _header.RecordLength))
+            {
                 throw new Exception("Record parameter does not have the same size and number of columns as the " +
                                     "header specifies. Writing this record would corrupt the DBF file. " +
                                     "This is a programming error, have you mixed up DBF file objects?");
+            }
 
             //DBF file writer can be null if stream is not writable to...
             if (_dbfFileWriter == null)
+            {
                 throw new Exception("Write stream is null. Either you have opened a stream that can not be " +
                                     "writen to (a read-only stream) or you have not opened a stream at all.");
+            }
 
 
             //move to the specified record, note that an exception will be thrown if stream is not seekable! 
@@ -532,7 +574,9 @@ namespace SocialExplorer.IO.FastDBF
             //check whether we can seek to this position. Subtract 1 from file length (there is a terminating character 1A at the end of the file)
             //so if we hit end of file, there are no more records, so return false;
             if (_dbfFile.Length < nSeekToPosition)
+            {
                 throw new Exception("Invalid record position. Unable to save record.");
+            }
 
             //move to record start
             _dbfFile.Seek(nSeekToPosition, SeekOrigin.Begin);
@@ -566,7 +610,9 @@ namespace SocialExplorer.IO.FastDBF
                 {
                     //if stream can not seek, then just write it out and that's it.
                     if (!_headerWritten)
+                    {
                         _header.Write(_dbfFileWriter);
+                    }
 
                     _headerWritten = true;
                     _footerUpdateNeeded = true;

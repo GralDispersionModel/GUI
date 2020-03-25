@@ -41,12 +41,27 @@ namespace GralDomain
                 if (ShowFirst.Bu) // set the inital position of the form
                 {
                     EditB.StartPosition = FormStartPosition.Manual;
-                    if (ShowFirst.Ls == false) EditB.Location = EditLS.Location;
-                    else if (ShowFirst.As == false) EditB.Location = EditAS.Location;
-                    else if (ShowFirst.Ps == false) EditB.Location = EditPS.Location;
-                    else if (ShowFirst.Wa == false) EditB.Location = EditWall.Location;
+                    if (ShowFirst.Ls == false)
+                    {
+                        EditB.Location = EditLS.Location;
+                    }
+                    else if (ShowFirst.As == false)
+                    {
+                        EditB.Location = EditAS.Location;
+                    }
+                    else if (ShowFirst.Ps == false)
+                    {
+                        EditB.Location = EditPS.Location;
+                    }
+                    else if (ShowFirst.Wa == false)
+                    {
+                        EditB.Location = EditWall.Location;
+                    }
                     else
+                    {
                         EditB.Location = GetScreenPositionForNewDialog();
+                    }
+
                     ShowFirst.Bu = false;
                 }
                 MouseControl = 17;
@@ -112,10 +127,14 @@ namespace GralDomain
             }
             //show/hide button to select buildings
             if (EditB.ItemData.Count > 0)
+            {
                 button16.Visible = true;
+            }
             else
+            {
                 button16.Visible = false;
-            
+            }
+
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations

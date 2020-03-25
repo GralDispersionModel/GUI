@@ -81,15 +81,26 @@ namespace GralDomForms
 				//draw diagram
 				int round = 1;
 				if (totalcon < 1)
-					round = 2;
-				if (totalcon < 0.1)
-					round = 3;
-				if (totalcon < 0.01)
-					round = 4;
-				if (totalcon < 0.001)
-					round = 5;
-				
-				base.OnPaint(e);
+                {
+                    round = 2;
+                }
+
+                if (totalcon < 0.1)
+                {
+                    round = 3;
+                }
+
+                if (totalcon < 0.01)
+                {
+                    round = 4;
+                }
+
+                if (totalcon < 0.001)
+                {
+                    round = 5;
+                }
+
+                base.OnPaint(e);
 				int angle;
 				int anglesum=0;
 				int zahl = 0;

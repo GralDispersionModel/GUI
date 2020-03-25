@@ -19,12 +19,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
-using GralIO;
-using GralStaticFunctions;
-using GralMessage;
 using GralDomForms;
 
 namespace GralDomain
@@ -92,7 +88,9 @@ namespace GralDomain
                                         Anemometerheight = EvalMetFileHeader(reihe);
                                     }
                                     if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
+                                    {
                                         MMOData.FileLenght++;
+                                    }
                                 }
                             }
                             else if (MMOData.MetFileExt == ".akterm")
@@ -107,9 +105,12 @@ namespace GralDomain
                                     {
                                         text = reihe.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                         if((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
+                                        {
                                             MMOData.FileLenght++;
+                                        }
                                     }
                                     if (text[0] == "+")
+                                    {
                                         try
                                     {
                                         text = reihe.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -120,6 +121,7 @@ namespace GralDomain
                                     }
                                     catch
                                     {
+                                    }
                                     }
                                 }
                             }

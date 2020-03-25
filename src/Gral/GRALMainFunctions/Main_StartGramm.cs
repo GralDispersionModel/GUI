@@ -58,9 +58,11 @@ namespace Gral
 			if (ReadFile.ReadMeteopgtAllFile() == true)
 			{
 				if (ReadFile.MeteoFrequ > 0)
-					progressBar1.Maximum = Convert.ToInt32(ReadFile.MeteoFrequ);
+                {
+                    progressBar1.Maximum = Convert.ToInt32(ReadFile.MeteoFrequ);
+                }
 
-				DispSituationfrequ = ReadFile.DispsituationFrequ;
+                DispSituationfrequ = ReadFile.DispsituationFrequ;
 			}
 			ReadFile = null;
 
@@ -69,8 +71,10 @@ namespace Gral
 			string[] filePaths = Directory.GetFiles(Project_Computation_Path, "GRAMM*.exe", SearchOption.TopDirectoryOnly);
 			string dir;
 			if (filePaths.Length > 0)
-				dir = Path.GetDirectoryName(filePaths[0]);
-			else
+            {
+                dir = Path.GetDirectoryName(filePaths[0]);
+            }
+            else
 			{
 				#if __MonoCS__
 				filePaths = Directory.GetFiles(Project_Computation_Path, "GRAMM*.dll", SearchOption.TopDirectoryOnly);
@@ -78,10 +82,14 @@ namespace Gral
 				filePaths = Directory.GetFiles(Project_Computation_Path, "GRAMM*.bat", SearchOption.TopDirectoryOnly);
 				#endif
 				if (filePaths.Length > 0)
-					dir = Path.GetDirectoryName(filePaths[0]);
-				else
-					dir = Path.GetDirectoryName(Application.ExecutablePath);
-			}
+                {
+                    dir = Path.GetDirectoryName(filePaths[0]);
+                }
+                else
+                {
+                    dir = Path.GetDirectoryName(Application.ExecutablePath);
+                }
+            }
 
 			OpenFileDialog dialog = new OpenFileDialog();
 			
@@ -123,10 +131,12 @@ namespace Gral
 								batch = "GRAMM*.dll";
 							#else
 							if (Path.GetExtension(dialog.FileName).ToLower() == ".bat")
-								batch = "GRAMM*.bat";
-							#endif
+                            {
+                                batch = "GRAMM*.bat";
+                            }
+#endif
 
-							if (batch != String.Empty)
+                            if (batch != String.Empty)
 							{
 								filePaths = Directory.GetFiles(Path.GetDirectoryName(dialog.FileName),
 								                               Path.GetFileNameWithoutExtension(dialog.FileName) + ".*",
@@ -213,8 +223,11 @@ namespace Gral
 							ProjectName = ProjectName
 						};
 						if (OpenProject.ReadGrammInFile() == true) // get final situation from GRAMMin.dat if sunrise is activated
-							final_sit = OpenProject.GRAMMsunrise;
-						if (final_sit == 0) // try to get final situation from lenght of meteopgt.all
+                        {
+                            final_sit = OpenProject.GRAMMsunrise;
+                        }
+
+                        if (final_sit == 0) // try to get final situation from lenght of meteopgt.all
 						{
 							string filename = Path.Combine(ProjectName, "Computation", "meteopgt.all");
 							final_sit = (int)GralStaticFunctions.St_F.CountLinesInFile(filename) - 2;
@@ -222,10 +235,12 @@ namespace Gral
 						OpenProject = null;
 
 						if (final_sit < first_sit)
-							throw new ArgumentOutOfRangeException("Final situation < Start situation");
+                        {
+                            throw new ArgumentOutOfRangeException("Final situation < Start situation");
+                        }
 
-						// now loop through the GRAMM instances
-						int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) /
+                        // now loop through the GRAMM instances
+                        int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) /
 						                                      (double)numericUpDown33.Value));
 						int instance_start = first_sit;
 						int instance_end;
@@ -234,9 +249,11 @@ namespace Gral
 						{
 							instance_end = instance_start + offset;
 							if (count == (int)numericUpDown33.Value) // avoid rounding errors
-								instance_end = final_sit;
+                            {
+                                instance_end = final_sit;
+                            }
 
-							if (count == 1) // first instance
+                            if (count == 1) // first instance
 							{
 								//start computation routine GRAMM*.exe to compute wind fields
 								#if __MonoCS__

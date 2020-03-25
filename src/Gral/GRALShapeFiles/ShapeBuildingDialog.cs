@@ -13,11 +13,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-
-using Gral;
 using GralDomain;
 using GralItemData;
 using GralStaticFunctions;
@@ -31,13 +28,13 @@ namespace GralShape
     {
         private GralDomain.Domain domain = null;
         
-        private string file;
+        private readonly string ShapeFileName;
         private double areapolygon = 0;
         public bool Wall = false;
         private DataTable dt;
-        private CultureInfo ic = CultureInfo.InvariantCulture;
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
-        private GralData.DomainArea GralDomRect;
+        private readonly CultureInfo ic = CultureInfo.InvariantCulture;
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private readonly GralData.DomainArea GralDomRect;
 
         /// <summary>
         /// Dialog for the shape import of Buildings and Walls
@@ -51,7 +48,7 @@ namespace GralShape
             InitializeComponent();
             domain = d;
             GralDomRect = GralDomainRectangle;
-            file = Filename;
+            ShapeFileName = Filename;
             button1.DialogResult = DialogResult.OK;
         }
 
@@ -75,7 +72,7 @@ namespace GralShape
                 
                 int SHP_Line = 0;
                 ShapeReader shape = new ShapeReader(domain);
-                foreach (object shp in shape.ReadShapeFile(file))
+                foreach (object shp in shape.ReadShapeFile(ShapeFileName))
                 {
                     // Walls
                     if (Wall && shp is SHPLine)
@@ -96,7 +93,9 @@ namespace GralShape
                             pt.Add(ptt);
                             
                             if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
+                            {
                                 inside = true;
+                            }
                         }
                         if (inside == true && numbpt > 1)
                         {
@@ -111,10 +110,14 @@ namespace GralShape
                                 try
                                 {
                                     if (checkBox1.Checked == true) // absolute heights
+                                    {
                                         height = (-1) * Math.Abs(Convert.ToDouble(dataGridView1[Convert.ToString(comboBox1.SelectedItem), SHP_Line].Value, ic));
+                                    }
                                     else
+                                    {
                                         height = Convert.ToDouble(dataGridView1[Convert.ToString(comboBox1.SelectedItem), SHP_Line].Value, ic);
-                                    
+                                    }
+
                                     height = Math.Round(height, 1);
                                 }
                                 catch
@@ -123,13 +126,33 @@ namespace GralShape
                                 }
                             }
                             else
-                                height = 0;
-                            
-                            foreach(PointD _pt in pt)
                             {
-                                _wd.Pt.Add(new GralData.PointD_3d(_pt.X, _pt.Y, (float) (height)));
+                                height = 0;
                             }
-                            
+
+                            if (checkBox3.Checked && lines.PointsZ != null && lines.PointsZ.Length == pt.Count) // 3D Lines
+                            {
+                                // 3D Lines
+                                int abs = 1;
+                                if (checkBox1.Checked == true) // absolute heights
+                                {
+                                    abs = -1;
+                                }
+                                
+                                int i = 0;
+                                foreach (PointD _pt in pt)
+                                {
+                                    _wd.Pt.Add(new GralData.PointD_3d(_pt.X, _pt.Y, lines.PointsZ[i++] * abs));
+                                }
+                            }
+                            else
+                            {
+                                foreach (PointD _pt in pt)
+                                {
+                                    _wd.Pt.Add(new GralData.PointD_3d(_pt.X, _pt.Y, (float)(height)));
+                                }
+                            }
+
                             numbpt = pt.Count;
                             
                             //check for names
@@ -137,11 +160,15 @@ namespace GralShape
                             {
                                 name = Convert.ToString(dataGridView1[Convert.ToString(comboBox3.SelectedItem), SHP_Line].Value).Trim();
                                 if (name.Length < 1) // a name is needed
+                                {
                                     name = "Wall " + Convert.ToString(SHP_Line);
+                                }
                             }
                             else
+                            {
                                 name = "Wall " + Convert.ToString(SHP_Line);
-                            
+                            }
+
                             _wd.Name = name;
                             _wd.Lenght = (float) Math.Round(_wd.CalcLenght(), 1);
                             
@@ -165,7 +192,9 @@ namespace GralShape
                             pt[j].X = Math.Round(polygons.Points[j].X, 1);
                             pt[j].Y = Math.Round(polygons.Points[j].Y, 1);
                             if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
+                            {
                                 inside = true;
+                            }
                         }
                         if (inside == true && numbpt > 2)
                         {
@@ -182,11 +211,15 @@ namespace GralShape
                             {
                                 name = Convert.ToString(dataGridView1[Convert.ToString(comboBox3.SelectedItem), SHP_Line].Value).Trim();
                                 if (name.Length < 1) // a name is needed
+                                {
                                     name = "Building " + Convert.ToString(SHP_Line);
+                                }
                             }
                             else
+                            {
                                 name = "Building " + Convert.ToString(SHP_Line);
-                            
+                            }
+
                             // Check if streets are defined
                             if (comboBox2.SelectedIndex != 0)
                             {
@@ -238,14 +271,22 @@ namespace GralShape
                 dt.Clear(); // clear data table
                 
                 if (dt != null)
+                {
                     dt.Dispose();
-                
-                #endif
-                
+                }
+
+#endif
+
                 if (dt != null)
+                {
                     dt.Dispose();
-                
-                if (dataGridView1 != null) dataGridView1.Dispose(); // Kuntner
+                }
+
+                if (dataGridView1 != null)
+                {
+                    dataGridView1.Dispose(); // Kuntner
+                }
+
                 dataGridView1 = null;
                 
                 wait.Close();
@@ -275,6 +316,7 @@ namespace GralShape
                 label4.Visible = false;
                 comboBox4.Visible = false;
                 label1.Text = "Wall height";
+                checkBox3.Visible = true;
             }
 
             ParseDBF dbf_reader = new ParseDBF
@@ -284,7 +326,7 @@ namespace GralShape
             dbf_reader.StartPosition = FormStartPosition.Manual;
             dbf_reader.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
             dbf_reader.Top = 80;
-            dbf_reader.ReadDBF(file.Replace(".shp", ".dbf"));
+            dbf_reader.ReadDBF(ShapeFileName.Replace(".shp", ".dbf"));
             dt = dbf_reader.dt;
             dbf_reader.Close();
             dbf_reader.Dispose();
@@ -387,7 +429,9 @@ namespace GralShape
                         //fill data grid with fix value
                         string trans = shpimport.textBox2.Text;
                         for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
                             dataGridView1[header, i].Value = trans;
+                        }
                     }
                 }
             }
@@ -451,9 +495,15 @@ namespace GralShape
 #endif
 
             if (dt != null)
+            {
                 dt.Dispose();
+            }
 
-            if (dataGridView1 != null) dataGridView1.Dispose(); // Kuntner
+            if (dataGridView1 != null)
+            {
+                dataGridView1.Dispose(); // Kuntner
+            }
+
             dataGridView1 = null;
         }
 

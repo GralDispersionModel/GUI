@@ -12,13 +12,12 @@
 
 using System;
 using System.Windows.Forms;
-using System.IO;
 
 namespace GralDomForms
 {
-	/// <summary>
-	/// Create animated GIFS dialog
-	/// </summary>
+    /// <summary>
+    /// Create animated GIFS dialog
+    /// </summary>
     public partial class CreateAnimatedGIFs : Form
     {
         public int StartSituation { get; set; }

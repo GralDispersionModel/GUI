@@ -217,13 +217,17 @@ namespace SocialExplorer.IO.FastDBF
 
             //throw exception if the header is locked
             if (_locked)
+            {
                 throw new InvalidOperationException("This header is locked and can not be modified. Modifying the header would result in a corrupt DBF file. You can unlock the header by calling UnLock() method.");
+            }
 
             //since we are breaking the spec rules about max number of fields, we should at least 
             //check that the record length stays within a number that can be recorded in the header!
             //we have 2 unsigned bytes for record length for a maximum of 65535.
             if (_recordLength + oNewCol.Length > 65535)
+            {
                 throw new ArgumentOutOfRangeException("oNewCol", "Unable to add new column. Adding this column puts the record length over the maximum (which is 65535 bytes).");
+            }
 
 
             //add the column
@@ -276,8 +280,9 @@ namespace SocialExplorer.IO.FastDBF
         {
             //throw exception if the header is locked
             if (_locked)
+            {
                 throw new InvalidOperationException("This header is locked and can not be modified. Modifying the header would result in a corrupt DBF file. You can unlock the header by calling UnLock() method.");
-
+            }
 
             DbfColumn oColRemove = _fields[nIndex];
             _fields.RemoveAt(nIndex);
@@ -291,7 +296,9 @@ namespace SocialExplorer.IO.FastDBF
             //following the one removed, we need to update those offsets.
             int nRemovedColLen = oColRemove.Length;
             for (int i = nIndex; i < _fields.Count; i++)
+            {
                 _fields[i]._dataAddress -= nRemovedColLen;
+            }
 
             //clear the empty record
             _emptyRecord = null;
@@ -313,7 +320,9 @@ namespace SocialExplorer.IO.FastDBF
             {
                 int colIndex = FindColumn(sName);
                 if (colIndex > -1)
+                {
                     return _fields[colIndex];
+                }
 
                 return null;
 
@@ -356,7 +365,9 @@ namespace SocialExplorer.IO.FastDBF
 
             int columnIndex;
             if (_columnNameIndex.TryGetValue(sName.ToUpper(), out columnIndex))
+            {
                 return columnIndex;
+            }
 
             return -1;
 
@@ -506,7 +517,9 @@ namespace SocialExplorer.IO.FastDBF
 
                 // write the reserved bytes in the header
                 for (int i = 0; i < 20; i++)
+                {
                     writer.Write((byte)0);
+                }
 
                 // write all of the header records
                 byte[] byteReserved = new byte[14];  //these are initialized to 0 by default.
@@ -571,7 +584,9 @@ namespace SocialExplorer.IO.FastDBF
             int nFileType = reader.ReadByte();
 
             if (nFileType != 0x03)
+            {
                 throw new NotSupportedException("Unsupported DBF reader Type " + nFileType);
+            }
 
             // parse the update date information.
             int year = (int)reader.ReadByte();
@@ -608,7 +623,9 @@ namespace SocialExplorer.IO.FastDBF
                 string sFieldName = new string(buffer);
                 int nullPoint = sFieldName.IndexOf((char)0);
                 if (nullPoint != -1)
+                {
                     sFieldName = sFieldName.Substring(0, nullPoint);
+                }
 
 
                 //read the field type
@@ -661,7 +678,9 @@ namespace SocialExplorer.IO.FastDBF
             //we need to support streams that can not seek like web connections.
             int nExtraReadBytes = _headerLength - (FileDescriptorSize + (ColumnDescriptorSize * _fields.Count));
             if (nExtraReadBytes > 0)
+            {
                 reader.ReadBytes(nExtraReadBytes);
+            }
 
 
 
@@ -675,8 +694,9 @@ namespace SocialExplorer.IO.FastDBF
                 //but some DBF files are incorrectly written without this byte, so we round off to nearest integer.
                 //that gives a correct result with or without ending byte.
                 if (_recordLength > 0)
+                {
                     _numRecords = (uint)Math.Round(((double)(reader.BaseStream.Length - _headerLength - 1) / _recordLength));
-
+                }
             }
 
 

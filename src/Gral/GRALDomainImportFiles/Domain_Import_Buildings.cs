@@ -75,7 +75,8 @@ namespace GralDomain
 						myReader = new StreamReader(file);
 						int trans = Convert.ToInt32(mindist);
 						if (InputBox1("Define raster for gridding buildings", "Suggested raster size:", 0, 10000, ref trans) == DialogResult.OK)
-							for (i = 1; i < 10000000; i++)
+                        {
+                            for (i = 1; i < 10000000; i++)
 						{
 							dummy = myReader.ReadLine();
 							if (dummy != null)
@@ -103,9 +104,13 @@ namespace GralDomain
 								}
 							}
 							else
-								break;
-						}
-						myReader.Close();
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
+                        myReader.Close();
 						EditB.SetTrackBarMaximum();
 						EditAndSaveBuildingsData(sender, e);
 						EditB.FillValues();

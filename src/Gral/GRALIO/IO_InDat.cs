@@ -52,19 +52,25 @@ namespace GralIO
 					myWriter.WriteLine(Convert.ToString(_data.Transientflag)  + " \t ! Steady state GRAL mode = 1, Transient GRAL mode = 0");
 					myWriter.WriteLine("4" + " \t ! Meteorology input: inputzr.dat = 0, meteo.all = 1, elimaeki.prn = 2, SONIC.dat = 3, meteopgt.all = 4");
 					if (Convert.ToInt32(_data.Receptorflag) > 0)
-						myWriter.WriteLine("1 \t ! Receptor points: Yes = 1, No = 0");
-					else 
-						myWriter.WriteLine("0 \t ! Receptor points: Yes = 1, No = 0");
-					
-					myWriter.WriteLine(Convert.ToString(_data.Roughness, ic) + " \t ! Surface Roughness in [m]");
+                    {
+                        myWriter.WriteLine("1 \t ! Receptor points: Yes = 1, No = 0");
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("0 \t ! Receptor points: Yes = 1, No = 0");
+                    }
+
+                    myWriter.WriteLine(Convert.ToString(_data.Roughness, ic) + " \t ! Surface Roughness in [m]");
 					myWriter.WriteLine(Convert.ToString(_data.Latitude, ic) + " \t ! Latitude");
 					myWriter.WriteLine("N" + " \t ! Meandering Effect Off = J, On = N");
 					myWriter.WriteLine(_data.Pollutant + " \t ! Pollutant: not used since version 19.01, new: Pollutant.txt");
 					
 					for (int i = 0; i < _data.NumHorSlices; i++)
-						myWriter.Write(Convert.ToString(_data.HorSlices[i], ic) + ",");
-					
-					myWriter.Write(" \t ! Horizontal slices [m] seperated by a comma (number of slices need to be defined in GRAL.geb!)");
+                    {
+                        myWriter.Write(Convert.ToString(_data.HorSlices[i], ic) + ",");
+                    }
+
+                    myWriter.Write(" \t ! Horizontal slices [m] seperated by a comma (number of slices need to be defined in GRAL.geb!)");
 					myWriter.WriteLine();
 					myWriter.WriteLine(Convert.ToString(_data.Deltaz, ic) + " \t ! Vertical grid spacing in [m]");
 					myWriter.WriteLine(Convert.ToString(_data.DispersionSituation) + " \t ! Start the calculation with this weather number");
@@ -72,9 +78,13 @@ namespace GralIO
                         " \t ! How to take buildings into account? 1 = simple mass conservation, 2 = mass conservation with Poisson equation + advection, Factor for the prognostic sub domain size");
 					
 					if(_data.BuildingHeightsWrite == false)
-						myWriter.WriteLine("0" + " \t ! Stream Output for Soundplan 1 = activated, -2 = write buildings height");
-					else
-						myWriter.WriteLine("-2" + " \t ! Stream Output for Soundplan 1 = activated, -2 = write buildings height");
+                    {
+                        myWriter.WriteLine("0" + " \t ! Stream Output for Soundplan 1 = activated, -2 = write buildings height");
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("-2" + " \t ! Stream Output for Soundplan 1 = activated, -2 = write buildings height");
+                    }
 
                     if (_data.Compressed == 1)
                     {

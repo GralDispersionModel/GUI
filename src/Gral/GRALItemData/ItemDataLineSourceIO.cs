@@ -18,18 +18,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using GralDomain;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents supports reading/writing the line source data
     /// </summary>
-	public class LineSourceDataIO
+    public class LineSourceDataIO
 	{
 				
 		public bool LoadLineSources(List<LineSourceData> _data, string _filename) // overload with 2 parameters only

@@ -95,19 +95,39 @@ namespace GralShape
         void Button1Click(object sender, EventArgs e)
         {
             if (radioButton1.Checked)
+            {
                 encoding = Encoding.UTF8;
+            }
+
             if (radioButton2.Checked)
+            {
                 encoding = Encoding.GetEncoding(1252);
+            }
+
             if (radioButton3.Checked)
+            {
                 encoding = Encoding.ASCII;
+            }
+
             if (radioButton4.Checked)
+            {
                 encoding = Encoding.GetEncoding(28591);
+            }
+
             if (radioButton5.Checked)
+            {
                 encoding = Encoding.UTF7;
+            }
+
             if (radioButton6.Checked)
+            {
                 encoding = Encoding.Unicode;
+            }
+
             if (radioButton7.Checked)
+            {
                 encoding = Encoding.UTF32;
+            }
 
             if (radioButton9.Checked) // use local culture to parse numbers
             {

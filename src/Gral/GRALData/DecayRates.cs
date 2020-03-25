@@ -41,15 +41,22 @@ namespace GralData
         {
             // A null value means that this object is greater.
             if (comparePart == null)
+            {
                 return 1;
-
+            }
             else
+            {
                 return SourceGroup.CompareTo(comparePart.SourceGroup);
+            }
         }
 
         public bool Equals(DecayRates other)
         {
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return (SourceGroup.Equals(other.SourceGroup));
         }
     }

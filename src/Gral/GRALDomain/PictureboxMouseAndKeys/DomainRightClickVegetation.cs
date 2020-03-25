@@ -139,8 +139,11 @@ namespace GralDomain
 				EditAndSaveVegetationData(sender, null); // save changes
 				
 				if (EditVegetation.ItemData.Count > 0)
-					MouseControl = 77;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 77;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 3) // Delete edge point
 			{
@@ -181,8 +184,11 @@ namespace GralDomain
 				EditAndSaveVegetationData(sender, null); // save changes
 				
 				if (EditVegetation.ItemData.Count > 0)
-					MouseControl = 77;
-				Picturebox1_Paint();
+                {
+                    MouseControl = 77;
+                }
+
+                Picturebox1_Paint();
 			}
 			if (mi.Index == 4) // Delete Vegetation
 			{
@@ -194,8 +200,10 @@ namespace GralDomain
 				EditAndSaveVegetationData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditVegetation.ItemData.Count > 0)
-					MouseControl = 77;
-			}
+                {
+                    MouseControl = 77;
+                }
+            }
 			Menu m = sender as Menu;
 			m.Dispose ();
 		} 

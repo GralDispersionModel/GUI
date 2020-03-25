@@ -72,7 +72,9 @@ namespace GralDomain
                     string unit = "";
                     int nodata = Convert.ToInt32(data[1]);
                     if (data.Length > 3) // read unit, if available
+                    {
                         unit = data[3].Trim();
+                    }
 
                     bool Vertical_Concentration = false;
                     if (data.Length > 4) // Read if map is a vertical concentration profile
@@ -121,9 +123,13 @@ namespace GralDomain
                         || Path.GetFileName(file).Contains("TPI_SlopeMin.txt")
                         || Path.GetFileName(file).Contains("TPI_Base.txt")
                         || (nx * ny) > cellsizemax) // set special settings for buildings, steady state files and large contour maps
+                    {
                         _drobj.FillYesNo = true;
+                    }
                     else
+                    {
                         _drobj.FillYesNo = false;
+                    }
 
                     if (Path.GetFileName(file) == "building_heights.txt") // set special settings for buildings
                     {
@@ -170,11 +176,17 @@ namespace GralDomain
                             _drobj.ItemValues[i] = i;
                             Color c = Color.FromArgb(159, 19, 19);
                             if (i == 0)
+                            {
                                 c = Color.FromArgb(0, 255, 255);
+                            }
                             else if (i == 1)
+                            {
                                 c = Color.FromArgb(0, 180, 180);
+                            }
                             else if (i == 2)
+                            {
                                 c = Color.FromArgb(128, 128, 255);
+                            }
                             else if (i == 3)
                             {
                                 c = Color.FromArgb(128, 200, 255);
@@ -186,13 +198,21 @@ namespace GralDomain
                                 c = Color.FromArgb(32, 32, 32);
                             }
                             else if (i == 5)
+                            {
                                 c = Color.FromArgb(255, 128, 64);
+                            }
                             else if (i == 6)
+                            {
                                 c = Color.FromArgb(208, 67, 0);
+                            }
                             else if (i == 7)
+                            {
                                 c = Color.FromArgb(235, 93, 93);
+                            }
                             else if (i == 8)
+                            {
                                 c = Color.FromArgb(219, 26, 26);
+                            }
 
                             _drobj.FillColors[i] = c;
                             _drobj.LineColors[i] = c;
@@ -277,17 +297,29 @@ namespace GralDomain
                         {
                             string temp = Path.GetFileName(file).ToUpper();
                             if (temp.Contains("ODOUR"))
+                            {
                                 _drobj.LegendUnit = "%";
+                            }
                             else if (temp.Contains("WINDSPEED") && temp.Contains("TXT"))
+                            {
                                 _drobj.LegendUnit = "m/s";
+                            }
                             else if (temp.Contains("DEPOSITION"))
+                            {
                                 _drobj.LegendUnit = Gral.Main.mg_p_m2;
+                            }
                             else if (temp.Contains("TPI_Base.txt"))
+                            {
                                 _drobj.LegendUnit = "m";
+                            }
                             else if (temp.Contains("TPI_SlopeMin.txt") || temp.Contains("TPI_SlopeMax.txt"))
+                            {
                                 _drobj.LegendUnit = "°";
+                            }
                             else
+                            {
                                 _drobj.LegendUnit = Gral.Main.My_p_m3;
+                            }
                         }
                         else // unit read from file
                         {

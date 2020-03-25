@@ -165,21 +165,26 @@ namespace GralBackgroundworkers
 
 					//obtain index in the vertical direction
 					for(int k=1;k<=NZ;k++)
-						if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
+                    {
+                        if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
 					{
 						ischnitt = k;
 						break;
 					}
-					
-					if (mydata.LocalStability && local_stability_OK) // use local stability?
+                    }
+
+                    if (mydata.LocalStability && local_stability_OK) // use local stability?
 					{
 						int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
 						if (result > 0) // valid result
-							local_akla[item_number][n] = result;
-						else
-							local_akla[item_number][n] = iakla[n];
-						
-					}
+                        {
+                            local_akla[item_number][n] = result;
+                        }
+                        else
+                        {
+                            local_akla[item_number][n] = iakla[n];
+                        }
+                    }
 					else // use global stability
 					{
 						local_akla[item_number][n] = iakla[n];
@@ -203,16 +208,30 @@ namespace GralBackgroundworkers
 						Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
 					}
 					if (Vmittel == 0)
-						iwr[item_number][n] = 90;
-					else
-						iwr[item_number][n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
-					if ((Vmittel > 0) && (Umittel <= 0))
-						iwr[item_number][n] = 180 - iwr[item_number][n];
-					if ((Vmittel >= 0) && (Umittel > 0))
-						iwr[item_number][n] = 180 + iwr[item_number][n];
-					if ((Vmittel < 0) && (Umittel >= 0))
-						iwr[item_number][n] = 360 - iwr[item_number][n];
-					wgi[item_number][n] = (float) Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
+                    {
+                        iwr[item_number][n] = 90;
+                    }
+                    else
+                    {
+                        iwr[item_number][n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
+                    }
+
+                    if ((Vmittel > 0) && (Umittel <= 0))
+                    {
+                        iwr[item_number][n] = 180 - iwr[item_number][n];
+                    }
+
+                    if ((Vmittel >= 0) && (Umittel > 0))
+                    {
+                        iwr[item_number][n] = 180 + iwr[item_number][n];
+                    }
+
+                    if ((Vmittel < 0) && (Umittel >= 0))
+                    {
+                        iwr[item_number][n] = 360 - iwr[item_number][n];
+                    }
+
+                    wgi[item_number][n] = (float) Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
 					
 					item_number++;
 				}
@@ -265,8 +284,11 @@ namespace GralBackgroundworkers
 							//new year
 							month = text[0].Split(new char[] { '.',':','-' }, StringSplitOptions.RemoveEmptyEntries);
 							if (Convert.ToInt32(month[1]) < monthold)
-								fictiousyear = fictiousyear + 1;
-							monthold = Convert.ToInt32(month[1]);
+                            {
+                                fictiousyear = fictiousyear + 1;
+                            }
+
+                            monthold = Convert.ToInt32(month[1]);
 						}
 						catch
 						{

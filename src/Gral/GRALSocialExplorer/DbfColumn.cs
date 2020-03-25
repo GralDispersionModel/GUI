@@ -169,9 +169,13 @@ namespace SocialExplorer.IO.FastDBF
             _length = nLength;
 
             if (type == DbfColumnType.Number || type == DbfColumnType.Float)
+            {
                 _decimalCount = nDecimals;
+            }
             else
+            {
                 _decimalCount = 0;
+            }
 
 
 
@@ -181,32 +185,48 @@ namespace SocialExplorer.IO.FastDBF
             //decimal precision:
             //we could also fix the length property with a statement like this: mLength = mDecimalCount + 2;
             if (_decimalCount > 0 && _length - _decimalCount <= 1)
+            {
                 throw new Exception("Decimal precision can not be larger than the length of the field.");
+            }
 
             if (_type == DbfColumnType.Integer)
+            {
                 _length = 4;
+            }
 
             if (_type == DbfColumnType.Binary)
+            {
                 _length = 1;
+            }
 
             if (_type == DbfColumnType.Date)
+            {
                 _length = 8;  //Dates are exactly yyyyMMdd
+            }
 
             if (_type == DbfColumnType.Memo)
+            {
                 _length = 10;  //Length: 10 Pointer to ASCII text field in memo file. pointer to a DBT block.
+            }
 
             if (_type == DbfColumnType.Boolean)
+            {
                 _length = 1;
+            }
 
             //field length:
             if (_length <= 0)
+            {
                 throw new Exception("Invalid field length specified. Field length can not be zero or less than zero.");
+            }
             else if (type != DbfColumnType.Character && type != DbfColumnType.Binary && _length > 255)
+            {
                 throw new Exception("Invalid field length specified. For numbers it should be within 20 digits, but we allow up to 255. For Char and binary types, length up to 65,535 is allowed. For maximum compatibility use up to 255.");
+            }
             else if ((type == DbfColumnType.Character || type == DbfColumnType.Binary) && _length > 65535)
+            {
                 throw new Exception("Invalid field length specified. For Char and binary types, length up to 65535 is supported. For maximum compatibility use up to 255.");
-
-
+            }
         }
 
         /// <summary>
@@ -229,8 +249,9 @@ namespace SocialExplorer.IO.FastDBF
             : this(sName, type, 0, 0)
         {
             if (type == DbfColumnType.Number || type == DbfColumnType.Float || type == DbfColumnType.Character)
+            {
                 throw new Exception("For number and character field types you must specify Length and Decimal Precision.");
-
+            }
         }
 
         /// <summary>
@@ -247,10 +268,14 @@ namespace SocialExplorer.IO.FastDBF
             {
                 //name:
                 if (string.IsNullOrEmpty(value))
+                {
                     throw new Exception("Field names must be at least one char long and can not be null.");
+                }
 
                 if (value.Length > 11)
+                {
                     throw new Exception("Field names can not be longer than 11 chars.");
+                }
 
                 _name = value;
 
@@ -354,13 +379,21 @@ namespace SocialExplorer.IO.FastDBF
         {
 
             if (type == typeof(string))
+            {
                 return DbfColumnType.Character;
+            }
             else if (type == typeof(double) || type == typeof(float))
+            {
                 return DbfColumnType.Number;
+            }
             else if (type == typeof(bool))
+            {
                 return DbfColumnType.Boolean;
+            }
             else if (type == typeof(DateTime))
+            {
                 return DbfColumnType.Date;
+            }
 
             throw new NotSupportedException(String.Format("{0} does not have a corresponding dbase type.", type.Name));
 

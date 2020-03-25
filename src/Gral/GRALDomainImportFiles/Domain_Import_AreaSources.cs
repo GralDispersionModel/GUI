@@ -109,7 +109,9 @@ namespace GralDomain
                                     }
                                 }
                                 else
+                                {
                                     break;
+                                }
                             }
                         }
                         

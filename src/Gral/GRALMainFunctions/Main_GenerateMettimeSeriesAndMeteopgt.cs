@@ -23,7 +23,6 @@ using System.IO;
 using System.Windows.Forms;
 using GralMessage;
 using GralStaticFunctions;
-using System.Collections.Generic;
 
 namespace Gral
 {
@@ -45,7 +44,9 @@ namespace Gral
             {
                 DialogResult result = MessageBox.Show("You are using a GRAMM wind field and met-files exist. Would you delete the existing and create new met.files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.No)
+                {
                     return;
+                }
             }
 
             //this.Cursor = Cursors.WaitCursor;
@@ -215,9 +216,13 @@ namespace Gral
                         }
                         //write anemometer height, flag indicating whether dispersion situations are classified or not, sector width for wind direction in the classification
                         if (checkBox19.Checked == false)
+                        {
                             myWriter.WriteLine(Convert.ToString(Anemometerheight, ic) + ",0," + St_F.StrgToICult(textBox1.Text) + ",    !Are dispersion situations classified =0 or not =1");
+                        }
                         else
+                        {
                             myWriter.WriteLine(Convert.ToString(Anemometerheight, ic) + ",1,0,    !Are dispersion situations classified =0 or not =1");
+                        }
 
                         //myWriter.WriteLine(Convert.ToString(anemometerheight, ic));
                         myWriter.WriteLine("Wind direction sector,Wind speed class,stability class, frequency");
@@ -251,7 +256,10 @@ namespace Gral
                         filename = Path.GetFileNameWithoutExtension(MetfileName);
                         newPath = Path.Combine(ProjectName, @"Metfiles" + Path.DirectorySeparatorChar);
                         foreach (string path in Directory.GetFiles(newPath, "*.*", SearchOption.AllDirectories))
+                        {
                             File.Delete(path);
+                        }
+
                         newPath = Path.Combine(ProjectName, @"Metfiles", filename + ".met");
                         using (StreamWriter myWriter = new StreamWriter(newPath))
                         {
@@ -282,12 +290,16 @@ namespace Gral
                         using (FileDeleteMessage fdm = new FileDeleteMessage())
                         {
                             if (files_conc.Length > 0)
+                            {
                                 fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
+                            }
 
                             if (fdm.ShowDialog() == DialogResult.OK)
                             {
                                 for (int i = 0; i < files_conc.Length; i++)
+                                {
                                     files_conc[i].Delete();
+                                }
                             }
                         }
                     }
@@ -297,12 +309,16 @@ namespace Gral
                         using (FileDeleteMessage fdm = new FileDeleteMessage())
                         {
                             if (files_conc.Length > 0)
+                            {
                                 fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
+                            }
 
                             if (fdm.ShowDialog() == DialogResult.OK)
                             {
                                 for (int i = 0; i < files_conc.Length; i++)
+                                {
                                     files_conc[i].Delete();
+                                }
                             }
                         }
                     }
@@ -345,7 +361,9 @@ namespace Gral
                 {
                     DialogResult result = MessageBox.Show(this, "You are using a GRAMM wind field and met-files exist. Would you delete the existing and create new met.files?", "Create new met-files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.No)
+                    {
                         return;
+                    }
                 }
 
                 DateTime _date = dateTimePicker1.Value; // get start date and time

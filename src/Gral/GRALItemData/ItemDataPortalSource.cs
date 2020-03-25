@@ -143,13 +143,15 @@ namespace GralItemData
 					
 					int depostart = text.Length;
 					for (int i = 4; i < text.Length; i++)
-						if (text[i] == "Dep@_")
+                    {
+                        if (text[i] == "Dep@_")
 					{
 						depostart = i + 1;
 						break;
 					}
-					
-					if (text.Length > depostart + 2) // read deposition
+                    }
+
+                    if (text.Length > depostart + 2) // read deposition
 					{
 						try
 						{
@@ -178,8 +180,10 @@ namespace GralItemData
 							BaseHeight = (float) (St_F.TxtToDbl(text[depostart + 10 * 10], false));
 						}
 						else
-							BaseHeight = 0; // old standard value = 0 m
-					}
+                        {
+                            BaseHeight = 0; // old standard value = 0 m
+                        }
+                    }
 					catch
 					{
 						BaseHeight = 0; // old standard value = 0 m
