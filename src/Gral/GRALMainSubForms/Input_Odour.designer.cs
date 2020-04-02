@@ -47,6 +47,7 @@ namespace GralMainForms
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.ID_OK = new System.Windows.Forms.Button();
             this.ID_Cancel = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -55,12 +56,13 @@ namespace GralMainForms
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.numericUpDown1);
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Location = new System.Drawing.Point(18, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(255, 112);
+            this.groupBox1.Size = new System.Drawing.Size(271, 137);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Define, how to compute the R90/Mean ratio";
@@ -68,7 +70,7 @@ namespace GralMainForms
             // numericUpDown1
             // 
             this.numericUpDown1.Enabled = false;
-            this.numericUpDown1.Location = new System.Drawing.Point(128, 61);
+            this.numericUpDown1.Location = new System.Drawing.Point(157, 90);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(90, 20);
             this.numericUpDown1.TabIndex = 2;
@@ -81,7 +83,7 @@ namespace GralMainForms
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(18, 64);
+            this.radioButton2.Location = new System.Drawing.Point(18, 90);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(90, 17);
             this.radioButton2.TabIndex = 1;
@@ -105,7 +107,8 @@ namespace GralMainForms
             // ID_OK
             // 
             this.ID_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ID_OK.Location = new System.Drawing.Point(288, 60);
+            this.ID_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ID_OK.Location = new System.Drawing.Point(18, 166);
             this.ID_OK.Name = "ID_OK";
             this.ID_OK.Size = new System.Drawing.Size(75, 23);
             this.ID_OK.TabIndex = 3;
@@ -117,7 +120,7 @@ namespace GralMainForms
             // 
             this.ID_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ID_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ID_Cancel.Location = new System.Drawing.Point(288, 100);
+            this.ID_Cancel.Location = new System.Drawing.Point(214, 166);
             this.ID_Cancel.Name = "ID_Cancel";
             this.ID_Cancel.Size = new System.Drawing.Size(75, 23);
             this.ID_Cancel.TabIndex = 4;
@@ -125,13 +128,23 @@ namespace GralMainForms
             this.ID_Cancel.UseVisualStyleBackColor = true;
             this.ID_Cancel.Click += new System.EventHandler(this.ID_Cancel_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(30, 53);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(217, 17);
+            this.checkBox1.TabIndex = 3;
+            this.checkBox1.Text = "Write R90, fluctuation and deviation files";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // Input_Odour
             // 
             this.AcceptButton = this.ID_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.ID_Cancel;
-            this.ClientSize = new System.Drawing.Size(375, 136);
+            this.ClientSize = new System.Drawing.Size(311, 206);
             this.Controls.Add(this.ID_Cancel);
             this.Controls.Add(this.ID_OK);
             this.Controls.Add(this.groupBox1);
@@ -150,9 +163,9 @@ namespace GralMainForms
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.Button ID_Cancel;
-        public System.Windows.Forms.NumericUpDown numericUpDown1;
-        public System.Windows.Forms.RadioButton radioButton1;
-        public System.Windows.Forms.Button ID_OK;
-
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Button ID_OK;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

@@ -11,6 +11,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace GralMessage
@@ -21,7 +22,9 @@ namespace GralMessage
     public partial class FileDeleteMessage : Form
     {
     	private bool _gramm;
-		public bool deletegramm {set {_gramm = value;} } // Filename 
+		public bool DeleteGramm {set {_gramm = value;} } // Filename 
+        public string DeleteMessage = string.Empty;
+        public List<string> ListboxEntries;
 		
         public FileDeleteMessage()
         {
@@ -36,6 +39,21 @@ namespace GralMessage
             {
                 label1.Text = "Delete all wind field files at the project folder?";
             }
+            if (!String.IsNullOrEmpty(DeleteMessage))
+            {
+                label1.Text = DeleteMessage;
+            }
+
+            // default text or individual entries?
+            if (ListboxEntries.Count > 0)
+            {
+                foreach (string _entry in ListboxEntries)
+                {
+                    listView1.Items.Add(_entry);
+                }
+            }
+
+            button3.BackgroundImage = System.Drawing.Bitmap.FromHicon(System.Drawing.SystemIcons.Warning.Handle);
         }
 
         //delete files

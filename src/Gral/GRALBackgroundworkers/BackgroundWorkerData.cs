@@ -84,6 +84,7 @@ namespace GralBackgroundworkers
         public List<Point_3D> EvalPoints { get; set; }
         public CellNumbers GRAMMCells { get; set; }
         public CellNumbers GRAMMSubCells { get; set; }
+        public bool WriteDepositionOrOdourData { get; set; }
     }
 
     public class CellNumbers

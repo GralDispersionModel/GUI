@@ -539,7 +539,7 @@ namespace GralBackgroundworkers
 			Result.Write_Result();
              */
                         
-            if (mydata.Peakmean < 0) // use new odour model
+            if (mydata.Peakmean < 0 && mydata.WriteDepositionOrOdourData) // use new odour model and additional odour data
             {
                 if (Rechenknecht.CancellationPending)
                 {

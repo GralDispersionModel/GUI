@@ -541,15 +541,19 @@ namespace GralDomain
 						{
                             using (FileDeleteMessage fdm = new FileDeleteMessage
                             {
-                                deletegramm = true
+                                DeleteGramm = true
                             })
                             {
-                                if (files_wnd.Length > 0)
+								System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
+								
+								if (files_wnd.Length > 0)
                                 {
-                                    fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.wnd");
+									_message.Add("..Computation" + Path.DirectorySeparatorChar + "*.wnd");
                                 }
 
-                                if (fdm.ShowDialog() == DialogResult.OK)
+								fdm.ListboxEntries = _message;
+								
+								if (fdm.ShowDialog() == DialogResult.OK)
                                 {
                                     for (int i = 0; i < files_wnd.Length; i++)
                                     {

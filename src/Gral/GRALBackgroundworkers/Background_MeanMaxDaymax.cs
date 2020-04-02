@@ -407,7 +407,7 @@ namespace GralBackgroundworkers
                                 existdep = false;
                             }
 							
-							if (parallel_existdep)
+							if (parallel_existdep && mydata.WriteDepositionOrOdourData)
 							{
 								//read GRAL deposition files
 								filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itmp]);
@@ -585,7 +585,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 															
-					if (deposition_files_exists)
+					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + "_" +name + ".txt");
 						Result.Unit = Gral.Main.mg_p_m2;
@@ -621,7 +621,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists)
+                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					Result.Unit = Gral.Main.mg_p_m2;
@@ -667,7 +667,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 										
-					if (deposition_files_exists)
+					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Max" + depo_name + ".txt");
 						Result.Unit = Gral.Main.mg_p_m2;
@@ -703,7 +703,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists)
+                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Max" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					Result.Unit = Gral.Main.mg_p_m2;
@@ -749,7 +749,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 										
-					if (deposition_files_exists)
+					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_DayMax_" + depo_name + ".txt");
 						Result.Unit = Gral.Main.mg_p_m2;
@@ -785,7 +785,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists)
+                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Daymax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					Result.Unit = Gral.Main.mg_p_m2;

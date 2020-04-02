@@ -317,19 +317,9 @@ namespace Gral
             //User defineddecimal seperator
             DecimalSep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 
-            //get current DPI of the Windows Display Properties
-            Graphics g = CreateGraphics();
-            float dy = 96;
-            try
-            {
-                dy = g.DpiY;
-            }
-            finally
-            {
-                g.Dispose();
-            }
             //create first text box for input of the height of horizontal slice
-            CreateTextbox1(Convert.ToInt32(209 * dy / 96), 80, 22, 0);
+            int _y0 = label6.Bottom + 5;
+            CreateTextbox1(_y0, 80, 22, 0);
             TBox3[0].Value = 3;
             GRALSettings.HorSlices[0] = 3;
             GRALSettings.BuildingMode = 0;

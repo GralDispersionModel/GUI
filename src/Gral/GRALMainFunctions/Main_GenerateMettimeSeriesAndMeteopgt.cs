@@ -289,10 +289,12 @@ namespace Gral
                     {
                         using (FileDeleteMessage fdm = new FileDeleteMessage())
                         {
+                            System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
                             if (files_conc.Length > 0)
                             {
-                                fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
+                                _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
                             }
+                            fdm.ListboxEntries = _message;
 
                             if (fdm.ShowDialog() == DialogResult.OK)
                             {
@@ -308,10 +310,12 @@ namespace Gral
                     {
                         using (FileDeleteMessage fdm = new FileDeleteMessage())
                         {
+                            System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
                             if (files_conc.Length > 0)
                             {
-                                fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
+                                _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
                             }
+                            fdm.ListboxEntries = _message;
 
                             if (fdm.ShowDialog() == DialogResult.OK)
                             {

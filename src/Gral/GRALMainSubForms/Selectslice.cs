@@ -15,21 +15,21 @@ using System.Windows.Forms;
 using System.IO;
 using GralIO;
 using Gral;
+using System.Collections.Generic;
 
 namespace GralMainForms
 {
 	/// <summary>
-    /// Select a horizontal slice
+    /// Select one or multiple horizontal slices
     /// </summary>
     public partial class Selectslice : Form
     {
-        private Main form1 = null;
+        public List<int> SelectedSlices = new List<int>();
+        public List<string> HorSlices;
 
-        public Selectslice(Main f)
+        public Selectslice()
         {
             InitializeComponent();
-            button1.DialogResult = DialogResult.OK;
-            form1 = f;
         }
 
         private void Selectslice_Load(object sender, EventArgs e)
@@ -41,40 +41,25 @@ namespace GralMainForms
 			double[] horslice = new double[10];
 			data.InDatPath = Path.Combine(Main.ProjectName, @"Computation","in.dat");
 			data.HorSlices = horslice; // initialize array object !
-			ReadInData.Data = data;
-			
-			if (ReadInData.ReadInDat() == true)
-			{
-				data = ReadInData.Data;
-				
-				horslice = data.HorSlices; // hoirizontal slice heights
-				
-				for (int i = 0; i < data.NumHorSlices; i++)
-				{
-					if (i < horslice.Length && horslice[i] > 0)
-                    {
-                        listBox1.Items.Add(horslice[i]+"m");
-                    }
-                }
-			}
-			else // in.dat not available
-			{
-				for (int i = 0; i < form1.GRALSettings.NumHorSlices; i++)
-				{
-					if (i < form1.GRALSettings.HorSlices.Length && form1.GRALSettings.HorSlices[i] > 0)
-                    {
-                        listBox1.Items.Add(form1.GRALSettings.HorSlices[i]+"m");
-                    }
-                }
-			}
-			data = null;
-			ReadInData = null;
-			
+            ReadInData.Data = data;
+
+            for (int i = 0; i < HorSlices.Count; i++)
+            {
+                listBox1.Items.Add(HorSlices[i]);
+            }
+
             listBox1.SelectedIndex = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            for (int i  = 0; i < listBox1.Items.Count; i++)
+            {
+                if (listBox1.GetSelected(i) == true)
+                {
+                    SelectedSlices.Add(i);
+                }
+            }
             Hide();
         }
 

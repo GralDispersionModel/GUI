@@ -20,6 +20,7 @@
  */
 using System;
 using System.IO;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using GralMessage;
 
@@ -51,10 +52,10 @@ namespace Gral
                 {
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
-                        if (files_conc.Length > 0)
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
-                        }
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
+                        _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.con");
+                        fdm.ListboxEntries = _message;
+                        fdm.DeleteMessage = "Delete all GRAL concentration result files?";
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
@@ -75,10 +76,10 @@ namespace Gral
                 {
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
-                        if (files_conc.Length > 0)
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
-                        }
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
+                        _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.grz");
+                        fdm.ListboxEntries = _message;
+                        fdm.DeleteMessage = "Delete all GRAL concentration result files?";
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
@@ -99,10 +100,10 @@ namespace Gral
                 {
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
-                        if (files_conc.Length > 0)
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.odr");
-                        }
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
+                        _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.odr");
+                        fdm.ListboxEntries = _message;
+                        fdm.DeleteMessage = "Delete all GRAL odour result files?";
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
@@ -123,10 +124,10 @@ namespace Gral
                 {
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
-                        if (files_conc.Length > 0)
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.dep");
-                        }
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
+                        _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.dep");
+                        fdm.ListboxEntries = _message;
+                        fdm.DeleteMessage = "Delete all GRAL deposition result files?";
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
@@ -206,13 +207,15 @@ namespace Gral
                 {
                     using (FileDeleteMessage fdm = new FileDeleteMessage
                     {
-                        deletegramm = true
+                        DeleteGramm = true
                     })
                     {
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
                         if (files_wnd.Length > 0)
                         {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "*.wnd");
+                            _message.Add("..Computation" + Path.DirectorySeparatorChar + "*.wnd");
                         }
+                        fdm.ListboxEntries = _message;
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
@@ -338,10 +341,12 @@ namespace Gral
             {
                 using (FileDeleteMessage fdm = new FileDeleteMessage())
                 {
+                    System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
                     if (files_conc.Length > 0)
                     {
-                        fdm.listView1.Items.Add("..." + GffFilePath.Substring(Math.Max(0, GffFilePath.Length - 45)) + "*.gff");
+                        _message.Add("..." + GffFilePath.Substring(Math.Max(0, GffFilePath.Length - 45)) + "*.gff");
                     }
+                    fdm.ListboxEntries = _message;
 
                     if (fdm.ShowDialog() == DialogResult.OK)
                     {

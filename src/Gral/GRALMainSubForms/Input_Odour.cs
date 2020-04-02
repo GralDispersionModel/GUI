@@ -20,6 +20,9 @@ namespace GralMainForms
     /// </summary>
     public partial class Input_Odour : Form
     {
+        public int MeanToPeak;
+        public bool WriteAdditionalFiles;
+
         public Input_Odour()
         {
             InitializeComponent();
@@ -29,7 +32,15 @@ namespace GralMainForms
 
         private void ID_OK_Click(object sender, EventArgs e)
         {
-
+            if (radioButton1.Checked)
+            {
+                MeanToPeak = -1;
+            }
+            else
+            {
+                MeanToPeak = (int) numericUpDown1.Value;
+            }
+            WriteAdditionalFiles = checkBox1.Checked;
         }
 
         private void ID_Cancel_Click(object sender, EventArgs e)
@@ -54,10 +65,13 @@ namespace GralMainForms
             if (radioButton1.Checked == true)
             {
                 numericUpDown1.Enabled = false;
+                checkBox1.Enabled = true;
             }
             else
             {
                 numericUpDown1.Enabled = true;
+                checkBox1.Checked = false;
+                checkBox1.Enabled = false;
             }
         }
     }
