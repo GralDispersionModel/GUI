@@ -22,6 +22,8 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using GralIO;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Gral
 {
@@ -44,11 +46,12 @@ namespace Gral
         private void AnalyseMeanConcentration(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice(this))
+            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
             {
+                sel_slice.HorSlices = CollectSliceHeights();
+
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
-                    int slice = sel_slice.listBox1.SelectedIndex + 1;
                     //select source groups
                     using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0))
                     {
@@ -58,65 +61,70 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
-                            int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
-
-                            // now start the backgroundworker to calculate the percentils
-                            GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
-
-                            foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                            bool depositionOutput = true; // write deposition at the 1st slice but not at other slices
+                            foreach (int slice in sel_slice.SelectedSlices)
                             {
-                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
+
+                                // now start the backgroundworker to calculate the percentils
+                                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
+
+                                foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                {
+                                    DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                }
+                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                                DataCollection.Projectname = ProjectName;
+                                DataCollection.Prefix = sel_sg.Prefix;
+                                if (sel_sg.Prefix.Length > 1)
+                                {
+                                    FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                }
+
+                                DataCollection.Decsep = DecimalSep;
+                                DataCollection.MaxSource = maxsource;
+                                DataCollection.CellsGralX = CellsGralX;
+                                DataCollection.CellsGralY = CellsGralY;
+
+                                DataCollection.Horgridsize = HorGridSize;
+                                DataCollection.DomainWest = GralDomRect.West;
+                                DataCollection.DomainSouth = GralDomRect.South;
+                                DataCollection.Slice = slice + 1;
+                                DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
+                                DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
+                                DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
+                                DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
+                                DataCollection.Slicename = sel_slice.HorSlices[slice];
+
+                                DataCollection.Caption = "Compute Mean concentrations";
+                                DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                    "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine;
+                                if (DataCollection.Checkbox2)
+                                {
+                                    DataCollection.UserText += "Mean concentrations / ";
+                                }
+
+                                if (DataCollection.Checkbox1)
+                                {
+                                    DataCollection.UserText += "Max. concentrations / ";
+                                }
+
+                                WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
+                                DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
+                                DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
+
+                                DataCollection.Rechenart = 28; // 28 = Compute Mean, Max
+                                DataCollection.WriteDepositionOrOdourData = depositionOutput;
+                                depositionOutput = false;
+
+                                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                                {
+                                    Text = DataCollection.Caption
+                                };
+                                BackgroundStart.Show();
+                                // now the backgroundworker works
                             }
-                            DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
-
-                            DataCollection.Projectname = ProjectName;
-                            DataCollection.Prefix = sel_sg.Prefix;
-                            if (sel_sg.Prefix.Length > 1)
-                            {
-                                FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
-                            }
-
-                            DataCollection.Decsep = DecimalSep;
-                            DataCollection.MaxSource = maxsource;
-                            DataCollection.CellsGralX = CellsGralX;
-                            DataCollection.CellsGralY = CellsGralY;
-
-                            DataCollection.Horgridsize = HorGridSize;
-                            DataCollection.DomainWest = GralDomRect.West;
-                            DataCollection.DomainSouth = GralDomRect.South;
-                            DataCollection.Slice = slice;
-                            DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
-                            DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
-                            DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
-                            DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                            DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-
-                            DataCollection.Caption = "Compute Mean concentrations";
-                            DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
-                                "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine;
-                            if (DataCollection.Checkbox2)
-                            {
-                                DataCollection.UserText += "Mean concentrations / ";
-                            }
-
-                            if (DataCollection.Checkbox1)
-                            {
-                                DataCollection.UserText += "Max. concentrations / ";
-                            }
-
-                            WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                            DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
-                            DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
-                            DataCollection.Rechenart = 28; // 28 = Compute Mean, Max
-
-                            GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
-                            {
-                                Text = DataCollection.Caption
-                            };
-                            BackgroundStart.Show();
-                            // now the backgroundworker works
-
                         }
                     }
                 }
@@ -132,12 +140,12 @@ namespace Gral
         private void AnalyseMeanMaxMinConcentration(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice(this))
+            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
             {
+                sel_slice.HorSlices = CollectSliceHeights();
 
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
-                    int slice = sel_slice.listBox1.SelectedIndex + 1;
                     //select source groups
                     using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0))
                     {
@@ -148,70 +156,76 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
-                            int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
-
-                            // now start the backgroundworker to calculate the percentils
-                            GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
-
-                            foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                            bool depositionOutput = true; // write deposition at the 1st slice but not at other slices
+                            foreach (int slice in sel_slice.SelectedSlices)
                             {
-                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
+
+                                // now start the backgroundworker to calculate the percentils
+                                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
+
+                                foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                {
+                                    DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                }
+                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                                DataCollection.Projectname = ProjectName;
+                                DataCollection.Prefix = sel_sg.Prefix;
+                                if (sel_sg.Prefix.Length > 1)
+                                {
+                                    FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                }
+
+                                DataCollection.Decsep = DecimalSep;
+                                DataCollection.MaxSource = maxsource;
+                                DataCollection.CellsGralX = CellsGralX;
+                                DataCollection.CellsGralY = CellsGralY;
+
+                                DataCollection.Horgridsize = HorGridSize;
+                                DataCollection.DomainWest = GralDomRect.West;
+                                DataCollection.DomainSouth = GralDomRect.South;
+                                DataCollection.Slice = slice + 1;
+                                DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
+                                DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
+                                DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
+                                DataCollection.Checkbox19 = checkBox19.Checked;
+                                DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
+                                DataCollection.Slicename = sel_slice.HorSlices[slice];
+
+                                DataCollection.Caption = "Compute Mean, Max, Daily Max.";
+                                DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                    "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine;
+                                if (DataCollection.Checkbox2)
+                                {
+                                    DataCollection.UserText += "Mean concentrations / ";
+                                }
+
+                                if (DataCollection.Checkbox1)
+                                {
+                                    DataCollection.UserText += "Max. concentrations / ";
+                                }
+
+                                if (DataCollection.Checkbox3)
+                                {
+                                    DataCollection.UserText += "Daily max. concentrations ";
+                                }
+
+                                WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
+                                DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
+                                DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
+
+                                DataCollection.Rechenart = 25; // 25 = Compute Mean, Max, DailyMax
+                                DataCollection.WriteDepositionOrOdourData = depositionOutput;
+                                depositionOutput = false;
+
+                                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                                {
+                                    Text = DataCollection.Caption
+                                };
+                                BackgroundStart.Show();
+                                // now the backgroundworker works
                             }
-                            DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
-
-                            DataCollection.Projectname = ProjectName;
-                            DataCollection.Prefix = sel_sg.Prefix;
-                            if (sel_sg.Prefix.Length > 1)
-                            {
-                                FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
-                            }
-
-                            DataCollection.Decsep = DecimalSep;
-                            DataCollection.MaxSource = maxsource;
-                            DataCollection.CellsGralX = CellsGralX;
-                            DataCollection.CellsGralY = CellsGralY;
-
-                            DataCollection.Horgridsize = HorGridSize;
-                            DataCollection.DomainWest = GralDomRect.West;
-                            DataCollection.DomainSouth = GralDomRect.South;
-                            DataCollection.Slice = slice;
-                            DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
-                            DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
-                            DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
-                            DataCollection.Checkbox19 = checkBox19.Checked;
-                            DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                            DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-
-                            DataCollection.Caption = "Compute Mean, Max, Daily Max.";
-                            DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
-                                "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine;
-                            if (DataCollection.Checkbox2)
-                            {
-                                DataCollection.UserText += "Mean concentrations / ";
-                            }
-
-                            if (DataCollection.Checkbox1)
-                            {
-                                DataCollection.UserText += "Max. concentrations / ";
-                            }
-
-                            if (DataCollection.Checkbox3)
-                            {
-                                DataCollection.UserText += "Daily max. concentrations ";
-                            }
-
-                            WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                            DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
-                            DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
-                            DataCollection.Rechenart = 25; // 25 = Compute Mean, Max, DailyMax
-
-                            GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
-                            {
-                                Text = DataCollection.Caption
-                            };
-                            BackgroundStart.Show();
-                            // now the backgroundworker works
                         }
                     }
                 }
@@ -349,11 +363,11 @@ namespace Gral
         private void AnalyseHighPercentiles(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice(this))
+            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
             {
+                sel_slice.HorSlices = CollectSliceHeights();
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
-                    int slice = sel_slice.listBox1.SelectedIndex + 1;
                     //select source groups
                     using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 1))
                     {
@@ -364,61 +378,63 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
-                            int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
-
-                            //select percentile
-                            decimal percentile = (decimal)98.0;
-                            percentile = (decimal)sel_sg.numericUpDown2.Value;
-
-                            // now start the backgroundworker to calculate the percentils
-                            GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
-
-                            foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                            foreach (int slice in sel_slice.SelectedSlices)
                             {
-                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
+
+                                //select percentile
+                                decimal percentile = (decimal)98.0;
+                                percentile = (decimal)sel_sg.numericUpDown2.Value;
+
+                                // now start the backgroundworker to calculate the percentils
+                                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
+
+                                foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                {
+                                    DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                }
+                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                                DataCollection.Projectname = ProjectName;
+                                DataCollection.Prefix = sel_sg.Prefix;
+                                if (sel_sg.Prefix.Length > 1)
+                                {
+                                    FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                }
+
+                                DataCollection.Decsep = DecimalSep;
+                                DataCollection.MaxSource = maxsource;
+                                DataCollection.CellsGralX = CellsGralX;
+                                DataCollection.CellsGralY = CellsGralY;
+                                DataCollection.Percentile = percentile;
+                                DataCollection.Horgridsize = HorGridSize;
+                                DataCollection.DomainWest = GralDomRect.West;
+                                DataCollection.DomainSouth = GralDomRect.South;
+                                DataCollection.Checkbox19 = checkBox19.Checked;
+                                DataCollection.Slice = slice + 1;
+                                DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
+                                DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
+                                DataCollection.Slicename = sel_slice.HorSlices[slice];
+                                DataCollection.Unit = "µg/m³";
+                                DataCollection.EmissionFactor = 1.0F;
+
+                                DataCollection.Caption = "Compute High Percentiles  ";
+                                DataCollection.UserText = "Compute " + Convert.ToString(percentile) + " Percentile " + Environment.NewLine + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                    "Source-Groups: " + DataCollection.Sel_Source_Grp;
+
+                                WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
+                                DataCollection.UserText += Environment.NewLine + "Result file name: " + Convert.ToString(Math.Round(DataCollection.Percentile, 1)).Replace(DecimalSep, "_") + "_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
+                                DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
+
+                                DataCollection.Rechenart = 40; // 40 = compute high percentils
+
+                                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                                {
+                                    Text = DataCollection.Caption
+                                };
+                                BackgroundStart.Show();
+                                // now the backgroundworker works
                             }
-                            DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
-
-                            DataCollection.Projectname = ProjectName;
-                            DataCollection.Prefix = sel_sg.Prefix;
-                            if (sel_sg.Prefix.Length > 1)
-                            {
-                                FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
-                            }
-
-                            DataCollection.Decsep = DecimalSep;
-                            DataCollection.MaxSource = maxsource;
-                            DataCollection.CellsGralX = CellsGralX;
-                            DataCollection.CellsGralY = CellsGralY;
-                            DataCollection.Percentile = percentile;
-                            DataCollection.Horgridsize = HorGridSize;
-                            DataCollection.DomainWest = GralDomRect.West;
-                            DataCollection.DomainSouth = GralDomRect.South;
-                            DataCollection.Checkbox19 = checkBox19.Checked;
-                            DataCollection.Slice = slice;
-                            DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
-                            DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                            DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-                            DataCollection.Unit = "µg/m³";
-                            DataCollection.EmissionFactor = 1.0F;
-
-                            DataCollection.Caption = "Compute High Percentiles  ";
-                            DataCollection.UserText = "Compute " + Convert.ToString(percentile) + " Percentile " + Environment.NewLine + "Slice: " + DataCollection.Slicename + Environment.NewLine +
-                                "Source-Groups: " + DataCollection.Sel_Source_Grp;
-
-                            WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                            DataCollection.UserText += Environment.NewLine + "Result file name: " + Convert.ToString(Math.Round(DataCollection.Percentile, 1)).Replace(DecimalSep, "_") + "_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
-                            DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
-                            DataCollection.Rechenart = 40; // 40 = compute high percentils
-
-                            GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
-                            {
-                                Text = DataCollection.Caption
-                            };
-                            BackgroundStart.Show();
-                            // now the backgroundworker works
-
                         }
                     }
                 }
@@ -433,11 +449,12 @@ namespace Gral
         private void AnalyseOdourMultipleSources(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice(this))
+            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
             {
+                sel_slice.HorSlices = CollectSliceHeights();
+
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
-                    int slice = sel_slice.listBox1.SelectedIndex + 1;
                     //select source groups
                     using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 2))
                     {
@@ -455,6 +472,8 @@ namespace Gral
                             {
                                 //select threshold for odour concentration
                                 decimal odourthreshold = 1;
+                                bool writeAdditionalFiles = false;
+
                                 odourthreshold = (decimal)sel_sg.numericUpDown3.Value;
 
                                 //define 90 percentil to mean ratio
@@ -482,15 +501,8 @@ namespace Gral
                                 	{
                                 		if (inodour.ShowDialog() == DialogResult.OK)
                                 		{
-                                			//select between constant R90 ratio or variance model
-                                			if (inodour.radioButton1.Checked == true)
-                                			{
-                                				peakmean = -1;
-                                			}
-                                			else
-                                			{
-                                				peakmean = (int)inodour.numericUpDown1.Value;
-                                			}
+                                            peakmean = inodour.MeanToPeak;
+                                            writeAdditionalFiles = inodour.WriteAdditionalFiles;
                                 			input_correct = true;
                                 		}
                                 	}
@@ -504,7 +516,87 @@ namespace Gral
                                 }
                                 if (input_correct == true)
                                 {
-                                    // now start the backgroundworker to calculate the percentils
+                                    foreach (int slice in sel_slice.SelectedSlices)
+                                    {
+                                        // now start the backgroundworker to calculate the percentils
+                                        GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
+
+                                        foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                        {
+                                            DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                        }
+                                        DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                                        DataCollection.Projectname = ProjectName;
+                                        DataCollection.Prefix = sel_sg.Prefix;
+                                        if (sel_sg.Prefix.Length > 1)
+                                        {
+                                            FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                        }
+
+                                        DataCollection.Decsep = DecimalSep;
+                                        DataCollection.MaxSource = maxsource;
+                                        DataCollection.CellsGralX = CellsGralX;
+                                        DataCollection.CellsGralY = CellsGralY;
+
+                                        DataCollection.Horgridsize = HorGridSize;
+                                        DataCollection.VertgridSize = (float)numericUpDown8.Value;
+                                        DataCollection.DomainWest = GralDomRect.West;
+                                        DataCollection.DomainSouth = GralDomRect.South;
+                                        DataCollection.Slice = slice + 1;
+                                        DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
+                                        DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
+                                        DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
+                                        DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
+                                        DataCollection.Slicename = sel_slice.HorSlices[slice];
+                                        DataCollection.OdourThreshold = odourthreshold;
+                                        DataCollection.Peakmean = peakmean;
+
+                                        DataCollection.Caption = "Compute Odour hours";
+                                        DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                            "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine +
+                                            "Odour threshold: " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
+                                            "90percentile/mean ratio" + Convert.ToString(peakmean);
+
+                                        WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
+                                        DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
+                                        DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
+
+                                        DataCollection.Rechenart = 27; // 27 = Compute Odour hours
+                                        DataCollection.WriteDepositionOrOdourData = writeAdditionalFiles;
+
+                                        //check if GRAL simulations were carried out in transient mode
+                                        try
+                                        {
+                                            InDatVariables data = new InDatVariables();
+                                            InDatFileIO ReadInData = new InDatFileIO();
+                                            data.InDatPath = Path.Combine(ProjectName, "Computation", "in.dat");
+                                            ReadInData.Data = data;
+                                            if (ReadInData.ReadInDat() == true)
+                                            {
+                                                if (data.Transientflag == 0)
+                                                {
+                                                    DataCollection.Rechenart = 24; // 24 = Compute Odour hours in transient mode
+                                                }
+                                            }
+                                        }
+                                        catch { }
+
+                                        GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                                        {
+                                            Text = DataCollection.Caption
+                                        };
+                                        BackgroundStart.Show();
+                                        // now the backgroundworker works
+                                    }
+                                }
+                            }
+                            //evaluation of odour concentrations
+                            else
+                            {
+                                foreach (int slice in sel_slice.SelectedSlices)
+                                {
+                                    // now start the backgroundworker to calculate the percentils of an odour calculation
                                     GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
 
                                     foreach (int itm in sel_sg.listBox1.SelectedIndices)
@@ -524,32 +616,32 @@ namespace Gral
                                     DataCollection.MaxSource = maxsource;
                                     DataCollection.CellsGralX = CellsGralX;
                                     DataCollection.CellsGralY = CellsGralY;
+                                    DataCollection.Unit = "OU/m³";
+                                    DataCollection.EmissionFactor = 0.001F;
 
                                     DataCollection.Horgridsize = HorGridSize;
                                     DataCollection.VertgridSize = (float)numericUpDown8.Value;
                                     DataCollection.DomainWest = GralDomRect.West;
                                     DataCollection.DomainSouth = GralDomRect.South;
-                                    DataCollection.Slice = slice;
+                                    DataCollection.Slice = slice + 1;
                                     DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
                                     DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
                                     DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
                                     DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                                    DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-                                    DataCollection.OdourThreshold = odourthreshold;
-                                    DataCollection.Peakmean = peakmean;
+                                    DataCollection.Slicename = sel_slice.HorSlices[slice];
+                                    DataCollection.Percentile = (decimal)sel_sg.numericUpDown1.Value;
 
-                                    DataCollection.Caption = "Compute Odour hours";
+                                    DataCollection.Caption = "Compute Odour concentration";
                                     DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                         "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine +
-                                        "Odour threshold: " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
-                                        "90percentile/mean ratio" + Convert.ToString(peakmean);
+                                        "Percentile: " + Convert.ToString(DataCollection.Percentile);
 
                                     WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                                    DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
+                                    DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename;
                                     DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                    DataCollection.Rechenart = 27; // 27 = Compute Odour hours
-                                    
+                                    DataCollection.Rechenart = 23; // 23 = Compute Odour concentration percentiles
+
                                     //check if GRAL simulations were carried out in transient mode
                                     try
                                     {
@@ -561,7 +653,7 @@ namespace Gral
                                         {
                                             if (data.Transientflag == 0)
                                             {
-                                                DataCollection.Rechenart = 24; // 24 = Compute Odour hours in transient mode
+                                                DataCollection.Rechenart = 23; // 23 = Compute Odour concentration percentiles in transient mode
                                             }
                                         }
                                     }
@@ -574,79 +666,6 @@ namespace Gral
                                     BackgroundStart.Show();
                                     // now the backgroundworker works
                                 }
-                            }
-                            //evaluation of odour concentrations
-                            else
-                            {
-                                // now start the backgroundworker to calculate the percentils of an odour calculation
-                                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
-
-                                foreach (int itm in sel_sg.listBox1.SelectedIndices)
-                                {
-                                    DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
-                                }
-                                DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
-
-                                DataCollection.Projectname = ProjectName;
-                                DataCollection.Prefix = sel_sg.Prefix;
-                                if (sel_sg.Prefix.Length > 1)
-                                {
-                                    FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
-                                }
-
-                                DataCollection.Decsep = DecimalSep;
-                                DataCollection.MaxSource = maxsource;
-                                DataCollection.CellsGralX = CellsGralX;
-                                DataCollection.CellsGralY = CellsGralY;
-                                DataCollection.Unit = "OU/m³";
-                                DataCollection.EmissionFactor = 0.001F;
-
-                                DataCollection.Horgridsize = HorGridSize;
-                                DataCollection.VertgridSize = (float)numericUpDown8.Value;
-                                DataCollection.DomainWest = GralDomRect.West;
-                                DataCollection.DomainSouth = GralDomRect.South;
-                                DataCollection.Slice = slice;
-                                DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
-                                DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
-                                DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
-                                DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                                DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-                                DataCollection.Percentile = (decimal)sel_sg.numericUpDown1.Value;
-
-                                DataCollection.Caption = "Compute Odour concentration";
-                                DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
-                                    "Source-Groups: " + DataCollection.Sel_Source_Grp + Environment.NewLine +
-                                    "Percentile: " + Convert.ToString(DataCollection.Percentile);
-
-                                WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                                DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename;
-                                DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
-                                DataCollection.Rechenart = 23; // 23 = Compute Odour concentration percentiles
-
-                                //check if GRAL simulations were carried out in transient mode
-                                try
-                                {
-                                    InDatVariables data = new InDatVariables();
-                                    InDatFileIO ReadInData = new InDatFileIO();
-                                    data.InDatPath = Path.Combine(ProjectName, "Computation", "in.dat");
-                                    ReadInData.Data = data;
-                                    if (ReadInData.ReadInDat() == true)
-                                    {
-                                        if (data.Transientflag == 0)
-                                        {
-                                            DataCollection.Rechenart = 23; // 23 = Compute Odour concentration percentiles in transient mode
-                                        }
-                                    }
-                                }
-                                catch { }
-
-                                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
-                                {
-                                    Text = DataCollection.Caption
-                                };
-                                BackgroundStart.Show();
-                                // now the backgroundworker works
                             }
                         }
                     }
@@ -663,12 +682,12 @@ namespace Gral
         private void AnalyseOdourCompostWorks(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice(this))
+            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
             {
+                sel_slice.HorSlices = CollectSliceHeights();
+
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
-                    int slice = sel_slice.listBox1.SelectedIndex + 1;
-
                     //select source groups
                     using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3))
                     {
@@ -691,6 +710,7 @@ namespace Gral
                             DialogResult dial = new DialogResult();
                             dial = komp.ShowDialog();
                             {
+                                bool writeAdditionalFiles = false;
                                 double[] odemi = new double[3];
                                 double[] odfreq = new double[3];
                                 double scale = 1;
@@ -738,15 +758,9 @@ namespace Gral
                                 	{
                                 		if (inodour.ShowDialog() == DialogResult.OK)
                                 		{
-                                			//select between constant R90 ratio or variance model
-                                			if (inodour.radioButton1.Checked == true)
-                                			{
-                                				peakmean = -1;
-                                			}
-                                			else
-                                			{
-                                				peakmean = (int)inodour.numericUpDown1.Value;
-                                			}
+                                            peakmean = inodour.MeanToPeak;
+                                            writeAdditionalFiles = inodour.WriteAdditionalFiles;
+                                            
                                 			input_correct = true;
                                 		}
                                 	}
@@ -762,64 +776,68 @@ namespace Gral
 
                                 if (input_correct == true)
                                 {
-                                    // now start the backgroundworker to calculate the percentils
-                                    GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
-
-                                    foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                    foreach (int slice in sel_slice.SelectedSlices)
                                     {
-                                        DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                        // now start the backgroundworker to calculate the percentils
+                                        GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
+
+                                        foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                        {
+                                            DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                        }
+                                        DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                                        DataCollection.Projectname = ProjectName;
+                                        DataCollection.Prefix = sel_sg.Prefix;
+                                        if (sel_sg.Prefix.Length > 1)
+                                        {
+                                            FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                        }
+
+                                        DataCollection.Decsep = DecimalSep;
+                                        DataCollection.MaxSource = maxsource;
+                                        DataCollection.CellsGralX = CellsGralX;
+                                        DataCollection.CellsGralY = CellsGralY;
+
+                                        DataCollection.Horgridsize = HorGridSize;
+                                        DataCollection.VertgridSize = (float)numericUpDown8.Value;
+                                        DataCollection.DomainWest = GralDomRect.West;
+                                        DataCollection.DomainSouth = GralDomRect.South;
+                                        DataCollection.Slice = slice + 1;
+                                        DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
+                                        DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
+                                        DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
+                                        DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
+                                        DataCollection.Slicename = sel_slice.HorSlices[slice];
+                                        DataCollection.OdourThreshold = odourthreshold;
+                                        DataCollection.Peakmean = peakmean;
+                                        DataCollection.Odemi = odemi;
+                                        DataCollection.OdFreq = odfreq;
+                                        DataCollection.Scale = scale;
+
+                                        DataCollection.Caption = "Compute Odour hours";
+                                        DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                            "Source-Groups: " + DataCollection.Sel_Source_Grp +
+                                            "  / Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
+                                            "  / 90percentile/mean ratio = " + Convert.ToString(peakmean) + " / Scaling factor = " + Convert.ToString(DataCollection.Scale) + Environment.NewLine;
+                                        for (int i = 0; i < 3; i++)
+                                        {
+                                            DataCollection.UserText += "Process " + Convert.ToString(i + 1) + ": Emission = " + Convert.ToString(DataCollection.Odemi[i]) +
+                                                " MOU/h  Frequency = " + Convert.ToString(DataCollection.OdFreq[i] * 100) + " %" + Environment.NewLine;
+                                        }
+                                        WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
+                                        DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
+
+                                        DataCollection.Rechenart = 26; // 26 = Compute compost
+                                        DataCollection.WriteDepositionOrOdourData = writeAdditionalFiles;
+
+                                        GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                                        {
+                                            Text = DataCollection.Caption
+                                        };
+                                        BackgroundStart.Show();
+                                        // now the backgroundworker works
                                     }
-                                    DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
-
-                                    DataCollection.Projectname = ProjectName;
-                                    DataCollection.Prefix = sel_sg.Prefix;
-                                    if (sel_sg.Prefix.Length > 1)
-                                    {
-                                        FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
-                                    }
-
-                                    DataCollection.Decsep = DecimalSep;
-                                    DataCollection.MaxSource = maxsource;
-                                    DataCollection.CellsGralX = CellsGralX;
-                                    DataCollection.CellsGralY = CellsGralY;
-
-                                    DataCollection.Horgridsize = HorGridSize;
-                                    DataCollection.VertgridSize = (float)numericUpDown8.Value;
-                                    DataCollection.DomainWest = GralDomRect.West;
-                                    DataCollection.DomainSouth = GralDomRect.South;
-                                    DataCollection.Slice = slice;
-                                    DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
-                                    DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
-                                    DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
-                                    DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                                    DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-                                    DataCollection.OdourThreshold = odourthreshold;
-                                    DataCollection.Peakmean = peakmean;
-                                    DataCollection.Odemi = odemi;
-                                    DataCollection.OdFreq = odfreq;
-                                    DataCollection.Scale = scale;
-
-                                    DataCollection.Caption = "Compute Odour hours";
-                                    DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
-                                        "Source-Groups: " + DataCollection.Sel_Source_Grp +
-                                        "  / Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
-                                        "  / 90percentile/mean ratio = " + Convert.ToString(peakmean) + " / Scaling factor = " + Convert.ToString(DataCollection.Scale) + Environment.NewLine;
-                                    for (int i = 0; i < 3; i++)
-                                    {
-                                        DataCollection.UserText += "Process " + Convert.ToString(i + 1) + ": Emission = " + Convert.ToString(DataCollection.Odemi[i]) +
-                                            " MOU/h  Frequency = " + Convert.ToString(DataCollection.OdFreq[i] * 100) + " %" + Environment.NewLine;
-                                    }
-                                    WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                                    DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
-                                    DataCollection.Rechenart = 26; // 26 = Compute compost
-
-                                    GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
-                                    {
-                                        Text = DataCollection.Caption
-                                    };
-                                    BackgroundStart.Show();
-                                    // now the backgroundworker works
                                 }
                             }
                             komp.Dispose();
@@ -838,11 +856,12 @@ namespace Gral
         private void AnalyseOdourAllInAllOut(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice(this))
+            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
             {
+                sel_slice.HorSlices = CollectSliceHeights();
+
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
-                    int slice = sel_slice.listBox1.SelectedIndex + 1;
                     //select source groups
                     using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3))
                     {
@@ -874,6 +893,7 @@ namespace Gral
                             if (dial == DialogResult.OK)
                             {
                                 int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
+                                bool writeAdditionalFiles = false;
                                 //select threshold for odour concentration
                                 decimal odourthreshold = 1;
                                 odourthreshold = (decimal)sel_sg.numericUpDown3.Value;
@@ -903,15 +923,10 @@ namespace Gral
                                 	{
                                 		if (inodour.ShowDialog() == DialogResult.OK)
                                 		{
-                                			//select between constant R90 ratio or variance model
-                                			if (inodour.radioButton1.Checked == true)
-                                			{
-                                				peakmean = -1;
-                                			}
-                                			else
-                                			{
-                                				peakmean = (int)inodour.numericUpDown1.Value;
-                                			}
+                                            //select between constant R90 ratio or variance model
+                                            peakmean = inodour.MeanToPeak;
+                                            writeAdditionalFiles = inodour.WriteAdditionalFiles;
+                                            
                                 			input_correct = true;
                                 		}
                                 	}
@@ -926,62 +941,65 @@ namespace Gral
 
                                 if (input_correct == true)
                                 {
-                                    // now start the backgroundworker to calculate the percentils
-                                    GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
-
-                                    foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                    foreach (int slice in sel_slice.SelectedSlices)
                                     {
-                                        DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                        // now start the backgroundworker to calculate the percentils
+                                        GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
+
+                                        foreach (int itm in sel_sg.listBox1.SelectedIndices)
+                                        {
+                                            DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp + Convert.ToString(sel_sg.listBox1.Items[itm]) + ","; // name of selected source groups
+                                        }
+                                        DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                                        DataCollection.Projectname = ProjectName;
+                                        DataCollection.Prefix = sel_sg.Prefix;
+                                        if (sel_sg.Prefix.Length > 1)
+                                        {
+                                            FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
+                                        }
+
+                                        DataCollection.Decsep = DecimalSep;
+                                        DataCollection.MaxSource = maxsource;
+                                        DataCollection.CellsGralX = CellsGralX;
+                                        DataCollection.CellsGralY = CellsGralY;
+
+                                        DataCollection.Horgridsize = HorGridSize;
+                                        DataCollection.VertgridSize = (float)numericUpDown8.Value;
+                                        DataCollection.DomainWest = GralDomRect.West;
+                                        DataCollection.DomainSouth = GralDomRect.South;
+                                        DataCollection.Slice = slice + 1;
+                                        DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
+                                        DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
+                                        DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
+                                        DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
+                                        DataCollection.Slicename = sel_slice.HorSlices[slice];
+                                        DataCollection.OdourThreshold = odourthreshold;
+                                        DataCollection.Peakmean = peakmean;
+                                        DataCollection.Division = (float)allin.numericUpDown1.Value; //breeding cylce in days
+                                        DataCollection.Emptytimes = (float)allin.numericUpDown2.Value;   //empty times between two breeding cycles in days
+                                        DataCollection.AllInn_Sel_Source_Grp = Convert.ToString(allin.comboBox1.SelectedItem);
+
+                                        DataCollection.Caption = "Compute Odour hours for 'All in all out' stables";
+                                        DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                            "Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
+                                            "    90percentile/mean ratio = " + Convert.ToString(peakmean) + Environment.NewLine +
+                                            "Breeding cycle defined for source group : " + DataCollection.AllInn_Sel_Source_Grp + Environment.NewLine +
+                                            "Breeding cycle duration :" + Convert.ToString(DataCollection.Division) +
+                                            " days   Empty times between breeding cycles: " + Convert.ToString(DataCollection.Emptytimes) + " days" + Environment.NewLine;
+                                        WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
+                                        DataCollection.UserText += "The process may take some minutes";
+
+                                        DataCollection.Rechenart = 29; // 29 = AllInAllOut
+                                        DataCollection.WriteDepositionOrOdourData = writeAdditionalFiles;
+
+                                        GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                                        {
+                                            Text = DataCollection.Caption
+                                        };
+                                        BackgroundStart.Show();
+                                        // now the backgroundworker works
                                     }
-                                    DataCollection.Sel_Source_Grp = DataCollection.Sel_Source_Grp.TrimEnd(new char[] { ',' }); // remove last ','
-
-                                    DataCollection.Projectname = ProjectName;
-                                    DataCollection.Prefix = sel_sg.Prefix;
-                                    if (sel_sg.Prefix.Length > 1)
-                                    {
-                                        FilePrefix = sel_sg.Prefix.Substring(0, sel_sg.Prefix.Length - 1);
-                                    }
-
-                                    DataCollection.Decsep = DecimalSep;
-                                    DataCollection.MaxSource = maxsource;
-                                    DataCollection.CellsGralX = CellsGralX;
-                                    DataCollection.CellsGralY = CellsGralY;
-
-                                    DataCollection.Horgridsize = HorGridSize;
-                                    DataCollection.VertgridSize = (float)numericUpDown8.Value;
-                                    DataCollection.DomainWest = GralDomRect.West;
-                                    DataCollection.DomainSouth = GralDomRect.South;
-                                    DataCollection.Slice = slice;
-                                    DataCollection.Checkbox1 = sel_sg.checkBox1.Checked;
-                                    DataCollection.Checkbox2 = sel_sg.checkBox2.Checked;
-                                    DataCollection.Checkbox3 = sel_sg.checkBox3.Checked;
-                                    DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-                                    DataCollection.Slicename = Convert.ToString(sel_slice.listBox1.SelectedItem);
-                                    DataCollection.OdourThreshold = odourthreshold;
-                                    DataCollection.Peakmean = peakmean;
-                                    DataCollection.Division = (float)allin.numericUpDown1.Value; //breeding cylce in days
-                                    DataCollection.Emptytimes = (float)allin.numericUpDown2.Value;   //empty times between two breeding cycles in days
-                                    DataCollection.AllInn_Sel_Source_Grp = Convert.ToString(allin.comboBox1.SelectedItem);
-
-                                    DataCollection.Caption = "Compute Odour hours for 'All in all out' stables";
-                                    DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
-                                        "Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
-                                        "    90percentile/mean ratio = " + Convert.ToString(peakmean) + Environment.NewLine +
-                                        "Breeding cycle defined for source group : " + DataCollection.AllInn_Sel_Source_Grp + Environment.NewLine +
-                                        "Breeding cycle duration :" + Convert.ToString(DataCollection.Division) +
-                                        " days   Empty times between breeding cycles: " + Convert.ToString(DataCollection.Emptytimes) + " days" + Environment.NewLine;
-                                    WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
-                                    DataCollection.UserText += "The process may take some minutes";
-
-                                    DataCollection.Rechenart = 29; // 29 = AllInAllOut
-
-                                    GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
-                                    {
-                                        Text = DataCollection.Caption
-                                    };
-                                    BackgroundStart.Show();
-                                    // now the backgroundworker works
-
                                 }
                             }
                             allin.Dispose();
@@ -991,6 +1009,18 @@ namespace Gral
                 }
             }
             Cursor = Cursors.Default;
-        }		
+        }
+
+        private List<string> CollectSliceHeights()
+        {
+            List<string> _names = new List<string>();
+
+            for (int i = 0; i < GRALSettings.NumHorSlices; i++)
+            {
+                _names.Add(GRALSettings.HorSlices[i].ToString() + " m");
+            }
+            return _names;
+        }
+
 	}
 }

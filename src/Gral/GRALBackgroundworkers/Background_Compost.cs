@@ -555,7 +555,7 @@ namespace GralBackgroundworkers
 			Result.Write_Result();
              */
             
-            if (mydata.Peakmean < 0) // use new odour model
+            if (mydata.Peakmean < 0 && mydata.WriteDepositionOrOdourData) // use new odour model
             {
             	//write mean total R90
             	string name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";

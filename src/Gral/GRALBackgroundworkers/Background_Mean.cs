@@ -292,13 +292,17 @@ namespace GralBackgroundworkers
                                 nnn += wl_freq;
                             }
 
-                            //read GRAL deposition files
-                            filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itm]);
-                            bool DepFileOK = ReadConFiles(filename, mydata, itm, ref dep);
-                            if (DepFileOK)
-                            {
-                                deposition_files_exists = true;
-                            }
+							//read GRAL deposition files
+							bool DepFileOK = false;
+							if (mydata.WriteDepositionOrOdourData)
+							{
+								filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itm]);
+								DepFileOK = ReadConFiles(filename, mydata, itm, ref dep);
+								if (DepFileOK)
+								{
+									deposition_files_exists = true;
+								}
+							}
 
                             for (int ii = 0; ii <= mydata.CellsGralX; ii++)
                             {
@@ -405,7 +409,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 					
-					if (deposition_files_exists)
+					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + "_" + name + ".txt");
 						
@@ -443,7 +447,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists)
+                if (deposition_files_exists && mydata.WriteDepositionOrOdourData) // write deposition data
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					

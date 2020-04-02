@@ -223,7 +223,8 @@ namespace GralBackgroundworkers
                 if (MyBackData.Rechenart == 25) // Mean, Max, daily Max
                 {
                     MyBackData.Rechenart = 0;
-                    if (Computation_Completed)
+                    // calculation finished and first height slice
+                    if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Contour plots can now be created in the menu Domain", Location);
                         Box.Show();
@@ -234,7 +235,8 @@ namespace GralBackgroundworkers
                 if (MyBackData.Rechenart == 26) // Compost
                 {
                     MyBackData.Rechenart = 0;
-                    if (Computation_Completed)
+                    // calculation finished and first height slice
+                    if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Contour plots can now be created in the menu Domain", Location);
                         Box.Show();
@@ -245,7 +247,8 @@ namespace GralBackgroundworkers
                 if (MyBackData.Rechenart == 27) // Odour hours
                 {
                     MyBackData.Rechenart = 0;
-                    if (Computation_Completed)
+                    // calculation finished and first height slice
+                    if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Contour plots can now be created in the menu Domain", Location);
                         Box.Show();
@@ -256,7 +259,8 @@ namespace GralBackgroundworkers
                 if (MyBackData.Rechenart == 28) // Mean, Max concentrations
                 {
                     MyBackData.Rechenart = 0;
-                    if (Computation_Completed)
+                    // calculation finished and first height slice
+                    if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Contour plots can now be created in the menu Domain", Location);
                         Box.Show();
@@ -267,7 +271,8 @@ namespace GralBackgroundworkers
                 if (MyBackData.Rechenart == 29) // All in all out
                 {
                     MyBackData.Rechenart = 0;
-                    if (Computation_Completed)
+                    // calculation finished and first height slice
+                    if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Contour plots can now be created in the menu Domain", Location);
                         Box.Show();

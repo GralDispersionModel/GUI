@@ -661,7 +661,7 @@ namespace GralBackgroundworkers
 			Result.Write_Result();
              */
                         
-            if (mydata.Peakmean < 0) // use new odour model
+            if (mydata.Peakmean < 0 && mydata.WriteDepositionOrOdourData) // use new odour model and write additional data
             {
                 if (Rechenknecht.CancellationPending)
                 {
@@ -686,7 +686,7 @@ namespace GralBackgroundworkers
                 }
 
                 //write mean total concentration flucutation intensity
-                name5 = mydata.Prefix + mydata.Pollutant + "_total";
+                name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
             	file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
             	Result.TwoDim = CFI;
 				Result.FileName = file5;
@@ -698,7 +698,7 @@ namespace GralBackgroundworkers
                     return;
                 }
                 //write mean total standard deviation of the concentration flucutations
-                name5 = mydata.Prefix + mydata.Pollutant + "_total";
+                name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
             	file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationStandardDeviation_" + name5 + ".txt");
             	Result.Unit =  @"OU/m" + Gral.Main.CubeString;
             	Result.TwoDim = Conc_standard;
