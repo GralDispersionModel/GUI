@@ -73,39 +73,43 @@ namespace Gral
                         File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")) ||
                         File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
                     {
-                        FileDeleteMessage fdm = new FileDeleteMessage();
-                        DialogResult dia = new DialogResult();
-                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMM.geb")))
+                        using (FileDeleteMessage fdm = new FileDeleteMessage())
                         {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "GRAMM.geb");
-                        }
+                            System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
+                            
+                            if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMM.geb")))
+                            {
+                                _message.Add("..Computation" + Path.DirectorySeparatorChar + "GRAMM.geb");
+                            }
 
-                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
-                        }
+                            if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                            {
+                                _message.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                            }
 
-                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.txt")))
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.txt");
-                        }
+                            if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.txt")))
+                            {
+                                _message.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.txt");
+                            }
 
-                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
-                        {
-                            fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
-                        }
+                            if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                            {
+                                _message.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                            }
 
-                        dia = fdm.ShowDialog();
-                        if (dia == DialogResult.OK)
-                        {
-                            string newPath = Path.Combine(ProjectName, @"Computation", "GRAMM.geb");
-                            File.Delete(newPath);
-                            newPath = Path.Combine(ProjectName, @"Computation", "ggeom.asc");
-                            File.Delete(newPath);
-                            newPath = Path.Combine(ProjectName, @"Computation", "ggeom.txt");
-                            File.Delete(newPath);
-                            newPath = Path.Combine(ProjectName, @"Computation", "windfeld.txt");
-                            File.Delete(newPath);
+                            fdm.ListboxEntries = _message;
+
+                            if (fdm.ShowDialog() == DialogResult.OK)
+                            {
+                                string newPath = Path.Combine(ProjectName, @"Computation", "GRAMM.geb");
+                                File.Delete(newPath);
+                                newPath = Path.Combine(ProjectName, @"Computation", "ggeom.asc");
+                                File.Delete(newPath);
+                                newPath = Path.Combine(ProjectName, @"Computation", "ggeom.txt");
+                                File.Delete(newPath);
+                                newPath = Path.Combine(ProjectName, @"Computation", "windfeld.txt");
+                                File.Delete(newPath);
+                            }
                         }
                     }
                 }
@@ -142,25 +146,27 @@ namespace Gral
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")) ||
                     File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
                 {
-                    FileDeleteMessage fdm = new FileDeleteMessage();
-                    DialogResult dia = new DialogResult();
-                    if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                    using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
-                        fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
-                    }
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
 
-                    if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
-                    {
-                        fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
-                    }
+                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                        {
+                            _message.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                        }
 
-                    dia = fdm.ShowDialog();
-                    if (dia == DialogResult.OK)
-                    {
-                        File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
-                        File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
+                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                        {
+                            _message.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                        }
+                        fdm.ListboxEntries = _message;
+
+                        if (fdm.ShowDialog() == DialogResult.OK)
+                        {
+                            File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
+                            File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
+                        }
                     }
-                    fdm.Dispose();
                 }
             }
 
@@ -185,23 +191,26 @@ namespace Gral
                 if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")) ||
                     File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
                 {
-                    FileDeleteMessage fdm = new FileDeleteMessage();
-                    DialogResult dia = new DialogResult();
-                    if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                    using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
-                        fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
-                    }
+                        System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
 
-                    if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
-                    {
-                        fdm.listView1.Items.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
-                    }
+                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                        {
+                            _message.Add("..Computation" + Path.DirectorySeparatorChar + "windfeld.txt");
+                        }
 
-                    dia = fdm.ShowDialog();
-                    if (dia == DialogResult.OK)
-                    {
-                        File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
-                        File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
+                        if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
+                        {
+                            _message.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
+                        }
+                        fdm.ListboxEntries = _message;
+
+                        if (fdm.ShowDialog() == DialogResult.OK)
+                        {
+                            File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
+                            File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
+                        }
                     }
                 }
 

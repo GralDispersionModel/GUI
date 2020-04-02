@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileDeleteMessage));
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -50,9 +49,9 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(15, 210);
+            this.button1.Location = new System.Drawing.Point(15, 232);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(64, 33);
+            this.button1.Size = new System.Drawing.Size(83, 33);
             this.button1.TabIndex = 1;
             this.button1.Text = "&Yes";
             this.button1.UseVisualStyleBackColor = true;
@@ -61,9 +60,9 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(105, 210);
+            this.button2.Location = new System.Drawing.Point(314, 232);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(64, 33);
+            this.button2.Size = new System.Drawing.Size(86, 33);
             this.button2.TabIndex = 2;
             this.button2.Text = "&No";
             this.button2.UseVisualStyleBackColor = true;
@@ -71,10 +70,11 @@
             // 
             // listView1
             // 
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(15, 62);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(384, 143);
+            this.listView1.Size = new System.Drawing.Size(384, 151);
             this.listView1.TabIndex = 3;
             this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -82,12 +82,11 @@
             // 
             // button3
             // 
-            this.button3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button3.BackgroundImage")));
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(15, 10);
+            this.button3.Location = new System.Drawing.Point(15, 6);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(47, 43);
+            this.button3.Size = new System.Drawing.Size(46, 46);
             this.button3.TabIndex = 4;
             this.button3.UseVisualStyleBackColor = true;
             // 
@@ -97,7 +96,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button2;
-            this.ClientSize = new System.Drawing.Size(419, 253);
+            this.ClientSize = new System.Drawing.Size(419, 288);
             this.ControlBox = false;
             this.Controls.Add(this.button3);
             this.Controls.Add(this.listView1);
@@ -121,6 +120,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        public System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listView1;
     }
 }
