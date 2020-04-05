@@ -34,7 +34,7 @@ namespace GralDomain
         private readonly string decsep;                                                // global decimal separator of the system
         private readonly Gral.Main MainForm = null;
         private string MapFileName;
-        private string ImageFileName;
+        private string ImageFileNameFromWorldFile;
         /// <summary>
         /// Scaling factor for the picturebox picture
         /// </summary>
@@ -467,7 +467,7 @@ namespace GralDomain
             TryToLoadCellHeights();
         }
         
-		/// <summary>
+        /// <summary>
         /// Load all settings for the domain window and the background maps
         /// </summary>
         private void LoadSettingsAndMaps()
@@ -718,7 +718,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Check if *.gff wind fields are available
         /// </summary>
         private bool WindfieldsAvailable()
@@ -738,7 +738,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Zoom in using the button in the toolbox
         /// </summary>
         private void Button1_Click(object sender, EventArgs e)
@@ -875,7 +875,7 @@ namespace GralDomain
             HideWindows(0);
         }
         
-		/// <summary>
+        /// <summary>
         /// Delete Buildings ouside the GRAL domain area
         /// </summary>
         void Button44Click(object sender, EventArgs e)
@@ -930,7 +930,7 @@ namespace GralDomain
             }
         }
         
-		/// <summary>
+        /// <summary>
         /// Delete all selected items 
         /// </summary>
         private void ItemsDelete(string a)
@@ -1002,7 +1002,7 @@ namespace GralDomain
             HideWindows(0);
         }
 
-		/// <summary>
+        /// <summary>
         /// Activate domain form
         /// </summary>
         public void Panel1_MouseMove(object sender, MouseEventArgs e)
@@ -1015,7 +1015,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Start a georeferencing with one point and a scale
         /// </summary>
         private void ToolStripButton3_Click(object sender, EventArgs e)
@@ -1111,7 +1111,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Define a new GRAL domain area
         /// </summary>
         private void Button6_Click_1(object sender, EventArgs e)
@@ -1123,7 +1123,7 @@ namespace GralDomain
             HideWindows(0);
         }
 
-		/// <summary>
+        /// <summary>
         /// Define a new GRAMM domain area
         /// </summary>
         private void Button29_Click(object sender, EventArgs e)
@@ -1140,8 +1140,8 @@ namespace GralDomain
         //       Draw map
         //
         //////////////////////////////////////////////////////////////////
-		
-		/// <summary>
+        
+        /// <summary>
         /// Redraw the picturebox
         /// </summary>
         private void Picturebox1_Paint()
@@ -1157,16 +1157,16 @@ namespace GralDomain
                 picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
             }
         }
-		
-		/// <summary>
+        
+        /// <summary>
         /// Catch the event to redraw the picturebox
         /// </summary>
         private void Picturebox_Redraw(object sender, EventArgs e)
         {
             Picturebox1_Paint();
         }
-		
-		/// <summary>
+        
+        /// <summary>
         /// Close the (all) item form(s) 
         /// </summary>
         private void ItemFormHide(object sender, EventArgs e)
@@ -1205,7 +1205,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Hide all other windows
         /// </summary>
         private void HideWindows(int checkboxnr)
@@ -1265,7 +1265,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Force to write the file in.dat
         /// </summary>
         private void WriteInDat()
@@ -1283,7 +1283,7 @@ namespace GralDomain
             write_in_dat = null;          
         }
         
-		/// <summary>
+        /// <summary>
         /// Load an additional base map
         /// </summary>
         private void Button26_Click(object sender, EventArgs e)
@@ -1326,76 +1326,71 @@ namespace GralDomain
                             PixelMy = header.PixelMy;
                             _drobj.West = header.West;
                             _drobj.North = header.North;
-                            ImageFileName = header.Imagefile;
+                            ImageFileNameFromWorldFile = header.Imagefile;
                         }
                         header = null;
                         
-                        //load tiff bitmap
-                        if (Path.GetExtension(MapFileName).ToLower() == ".tfw")
+                        //File name available but does not exist on the folder -> try to load from local folder
+                        if (!string.IsNullOrEmpty(ImageFileNameFromWorldFile) && !File.Exists(ImageFileNameFromWorldFile))
                         {
-                            if (ImageFileName == String.Empty)
+                            string _fn = Path.GetFileName(ImageFileNameFromWorldFile);
+                            string testfile = Path.Combine(Path.GetDirectoryName(MapFileName), _fn);
+                            if (File.Exists(testfile))
                             {
-                                ImageFileName = MapFileName.Remove(MapFileName.Length - 3, 3) + "tif";
-                                if (File.Exists(ImageFileName) == false)
-                                {
-                                    ImageFileName = MapFileName.Remove(MapFileName.Length - 3, 3) + "tiff"; // try tiff
-                                }
+                                ImageFileNameFromWorldFile = testfile;
                             }
                         }
                         
-                        if ((ImageFileName == String.Empty) || (File.Exists(ImageFileName) == false)) // Kuntner try to load in same directory
+                        // ImageFile from world file is not available or does not exist -> try with changed filename from world file in local folder
+                        if ((string.IsNullOrEmpty(ImageFileNameFromWorldFile)) || (File.Exists(ImageFileNameFromWorldFile) == false)) 
                         {
-                            string testfile;
-                            if (MapFileName.EndsWith("jgw") == true)
+                            //check tiff extension
+                            if (Path.GetExtension(MapFileName).ToLower() == ".tfw")
                             {
-                                testfile = MapFileName.Replace(".jgw", ".jpg");
-                            }
-                            else if (MapFileName.EndsWith("pgw") == true)
-                            {
-                                testfile = MapFileName.Replace(".pgw", ".png");
-                            }
-                            else if (MapFileName.EndsWith("jpgw") == true)
-                            {
-                                testfile = MapFileName.Replace(".jpgw", ".jpg");
-                            }
-                            else if (MapFileName.EndsWith("gfw") == true)
-                            {
-                                testfile = MapFileName.Replace(".gfw", ".gif");
-                            }
-                            else if (MapFileName.EndsWith("bpw") == true)
-                            {
-                                testfile = MapFileName.Replace(".bpw", ".bmp");
-                            }
-                            else if (MapFileName.EndsWith("tfw") == true)
-                            {
-                                testfile = MapFileName.Replace(".tfw", ".tif");
-                                if (File.Exists(testfile) == false) // try *.tiff
+
+                                ImageFileNameFromWorldFile = Path.GetFileNameWithoutExtension(ImageFileNameFromWorldFile) + ".tif";
+                                if (File.Exists(ImageFileNameFromWorldFile) == false)
                                 {
-                                    testfile = MapFileName.Replace(".tfw", ".tiff");
+                                    ImageFileNameFromWorldFile = Path.GetFileNameWithoutExtension(ImageFileNameFromWorldFile) + ".tiff"; ; // try tiff
                                 }
+                            }
+
+                            string testfile;
+                            if (Path.GetExtension(MapFileName).ToLower() == ".jgw")
+                            {
+                                testfile = Path.GetFileNameWithoutExtension(MapFileName) + ".jpg";
+                            }
+                            else if (Path.GetExtension(MapFileName).ToLower() == ".pgw")
+                            {
+                                testfile = Path.GetFileNameWithoutExtension(MapFileName) + ".png";
+                            }
+                            else if (Path.GetExtension(MapFileName).ToLower() == ".jpgw" == true)
+                            {
+                                testfile = Path.GetFileNameWithoutExtension(MapFileName) + ".jpg";
+                            }
+                            else if (Path.GetExtension(MapFileName).ToLower() == ".gfw")
+                            {
+                                testfile = Path.GetFileNameWithoutExtension(MapFileName) + ".gif";
+                            }
+                            else if (Path.GetExtension(MapFileName).ToLower() == ".bpw")
+                            {
+                                testfile = Path.GetFileNameWithoutExtension(MapFileName) + ".bmp";
                             }
                             else
                             {
                                 testfile = MapFileName.Remove(MapFileName.Length - 1, 1);
                             }
 
+                            testfile = Path.Combine(Path.GetDirectoryName(MapFileName), testfile);
                             // check if file exists
                             if (File.Exists(testfile))
                             {
-                                ImageFileName = testfile;
-                            }
-                            else
-                            {
-                                testfile = Path.Combine(Path.GetDirectoryName(MapFileName), Path.GetFileName(ImageFileName));
-                                if (File.Exists(testfile))
-                                {
-                                    ImageFileName = testfile;
-                                }
+                                ImageFileNameFromWorldFile = testfile;
                             }
                         }
                         
                         // read the picture
-                        MapFileName = ImageFileName;
+                        MapFileName = ImageFileNameFromWorldFile;
 
                         using (FileStream fs = new FileStream(MapFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
                         {
@@ -1548,7 +1543,7 @@ namespace GralDomain
         //
         //////////////////////////////////////////////////////////////////
 
-		/// <summary>
+        /// <summary>
         /// Start selecting a point source by mouse
         /// </summary>
         private void Button8_Click(object sender, EventArgs e)
@@ -1724,7 +1719,7 @@ namespace GralDomain
             Cursor = Cursors.Arrow;
         }
         
-		/// <summary>
+        /// <summary>
         /// Cancel selecting an item by mouse
         /// </summary>
         private void ResetSelectionChecked()
@@ -1745,7 +1740,7 @@ namespace GralDomain
         //
         //////////////////////////////////////////////////////////////////
 
-		/// <summary>
+        /// <summary>
         /// Import existing GRAL point source data
         /// </summary>
         private void Button9_Click(object sender, EventArgs e)
@@ -1756,7 +1751,7 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
-		/// <summary>
+        /// <summary>
         /// Import existing GRAL receptor points
         /// </summary>
         private void Button24_Click(object sender, EventArgs e)
@@ -1766,8 +1761,8 @@ namespace GralDomain
             Picturebox1_Paint();
             Cursor = Cursors.Default;
         }
-		
-		/// <summary>
+        
+        /// <summary>
         /// Import vegetation data from shape file
         /// </summary>
         void Button51Click(object sender, EventArgs e)
@@ -1792,7 +1787,7 @@ namespace GralDomain
         /// <summary>
         /// Import existing GRAL building data
         /// </summary>
-		private void Button17_Click(object sender, EventArgs e)
+        private void Button17_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
             ImportBuildings(sender,e);
@@ -1800,7 +1795,7 @@ namespace GralDomain
             Cursor = Cursors.Default;
         }
 
-   		/// <summary>
+        /// <summary>
         /// Import existing GRAL line source data
         /// </summary>
         private void Button13_Click(object sender, EventArgs e)
@@ -1811,7 +1806,7 @@ namespace GralDomain
             Cursor = Cursors.Default;
         }
 
-   		/// <summary>
+        /// <summary>
         /// Import existing GRAL portal source data
         /// </summary>
         private void Button15_Click(object sender, EventArgs e)
@@ -1822,7 +1817,7 @@ namespace GralDomain
             Cursor = Cursors.Default;
         }
         
-		/// <summary>
+        /// <summary>
         /// Import wall data
         /// </summary>
         void Button54Click(object sender, EventArgs e)
@@ -1839,7 +1834,7 @@ namespace GralDomain
         //
         //////////////////////////////////////////////////////////////////
 
-		/// <summary>
+        /// <summary>
         /// Write line source data to ESRI-shape file
         /// </summary>
         private void Button36_Click(object sender, EventArgs e)
@@ -1848,7 +1843,7 @@ namespace GralDomain
             ExportShapeLineSource(sender, e);
         }
 
-		/// <summary>
+        /// <summary>
         /// Write area source data to ESRI-shape file
         /// </summary>
         private void Button37_Click(object sender, EventArgs e)
@@ -1860,7 +1855,7 @@ namespace GralDomain
         /// <summary>
         /// Write point source data to ESRI-shape file
         /// </summary>
-		private void Button38_Click(object sender, EventArgs e)
+        private void Button38_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
             ExportShapePointSource(sender, e);
@@ -1875,7 +1870,7 @@ namespace GralDomain
             ExportShapeReceptor(sender, e);
         }
 
-		/// <summary>
+        /// <summary>
         /// Write contour lines to ESRI-shape file
         /// </summary>
         private void Button56_Click(object sender, EventArgs e)
@@ -1941,7 +1936,7 @@ namespace GralDomain
             return dialogResult;
         }
         
-		/// <summary>
+        /// <summary>
         /// Edit and define the size of the north arrow
         /// </summary>
         private void Button18_Click(object sender, EventArgs e)
@@ -1968,7 +1963,7 @@ namespace GralDomain
             Cursor = Cursors.Cross;
         }
 
-		/// <summary>
+        /// <summary>
         /// Show/hide north arrow
         /// </summary>
         private void CheckBox18_CheckedChanged(object sender, EventArgs e)
@@ -1976,7 +1971,7 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
-		/// <summary>
+        /// <summary>
         /// Edit the scale bar
         /// </summary>
         private void Button19_Click(object sender, EventArgs e)
@@ -2009,7 +2004,7 @@ namespace GralDomain
             Cursor = Cursors.Cross;
         }
 
-		/// <summary>
+        /// <summary>
         /// Show/hide the scale bar
         /// </summary>
         private void CheckBox19_CheckedChanged(object sender, EventArgs e)
@@ -2017,7 +2012,7 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
-		/// <summary>
+        /// <summary>
         /// Measure distances
         /// </summary>
         private void Button20_Click(object sender, EventArgs e)
@@ -2036,7 +2031,7 @@ namespace GralDomain
             MouseControl = 23;
             Cursor = Cursors.Cross;
         }
-		
+        
         void Button_section_windMouseClick(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
@@ -2192,7 +2187,7 @@ namespace GralDomain
             Clipboard.SetDataObject(PictureBoxBitmap);
         }
 
-		/// <summary>
+        /// <summary>
         /// Show the object (layer) manager
         /// </summary>
         private void Button25_Click(object sender, EventArgs e)
@@ -2217,7 +2212,7 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Update the object (layer) managers listbox
         /// </summary>
         private void ObjectmanagerUpdateListbox()
@@ -2237,7 +2232,7 @@ namespace GralDomain
             catch{}
         }
         
-		/// <summary>
+        /// <summary>
         /// Create a contour map
         /// </summary>
         private void Button27_Click(object sender, EventArgs e)
@@ -2246,7 +2241,7 @@ namespace GralDomain
             Picturebox1_Paint();
         }
         
-		/// <summary>
+        /// <summary>
         /// mathematical operations for multiple raster sets
         /// </summary>
         private void Button28_Click(object sender, EventArgs e)
@@ -2260,10 +2255,10 @@ namespace GralDomain
         //  GRAMM windfield analysis tools
         //
         /////////////////////////////////////////////////////////////////////////////////
-		
-		/// <summary>
+        
+        /// <summary>
         /// Compute meteorological time series at a specific point
-		/// </summary>
+        /// </summary>
         private void Button30_Click(object sender, EventArgs e)
         {
             MouseControl = 32;
@@ -2303,27 +2298,27 @@ namespace GralDomain
             MeteoDialog.Show();
         }
 
-		/// <summary>
+        /// <summary>
         /// Computes mean wind velocity at a given height for the whole GRAMM model domain
-		/// </summary>
+        /// </summary>
         private void Button31_Click(object sender, EventArgs e)
         {
             ComputeMeanWindVelocity(sender, e);
             Picturebox1_Paint();
         }
 
-		/// <summary>
+        /// <summary>
         /// Computes vector map
-		/// </summary>
+        /// </summary>
         private void Button32_Click(object sender, EventArgs e)
         {
             ComputeVectorMap(sender, e);
             Picturebox1_Paint();
         }
 
-		/// <summary>
+        /// <summary>
         /// Eporting sub-domains of GRAMM windfields
-		/// </summary>
+        /// </summary>
         private void Button48_Click(object sender, EventArgs e)
         {
             //define model domain
@@ -2333,9 +2328,9 @@ namespace GralDomain
             HideWindows(0);
         }
 
-		/// <summary>
+        /// <summary>
         /// Analyze Stability class/MO Lenght/Ustern
-		/// </summary>
+        /// </summary>
         void ButtonstabilityclassClick(object sender, EventArgs e)
         {
             // set mousecontrol for single point checks
@@ -2447,10 +2442,10 @@ namespace GralDomain
             Picturebox1_Paint();
         }
         
-		/// <summary>
+        /// <summary>
         /// Re-order already computed wind fields in order to match them with
         /// new observations at any site in the model domain
-		/// </summary>
+        /// </summary>
         private void Button43_Click(object sender, EventArgs e)
         {
             MouseControl = 66;
@@ -2470,18 +2465,18 @@ namespace GralDomain
             MMO.Show();
         }
 
-		/// <summary>
+        /// <summary>
         /// Re-order wind fields to meet observed wind fields better
-		/// </summary>
+        /// </summary>
         private void Button42_Click(object sender, EventArgs e)
         {
             MouseControl = 65;
             Cursor = Cursors.Cross;
         }
-		
-		/// <summary>
+        
+        /// <summary>
         /// Start the Re-order wind fields function
-		/// </summary>
+        /// </summary>
         private void ReorderGrammWindfields()
         {
             //select height above ground for the windfield analysis
@@ -2519,9 +2514,9 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract vertical profiles of wind fields
-		/// </summary>
+        /// </summary>
         private void Button41_Click(object sender, EventArgs e)
         {
             try
@@ -2577,18 +2572,18 @@ namespace GralDomain
             catch { }
         }
 
-		/// <summary>
+        /// <summary>
         /// Start the source apportionment function
-		/// </summary>
+        /// </summary>
         private void Button33_Click(object sender, EventArgs e)
         {
             MouseControl = 35;
             Cursor = Cursors.Cross;
         }
-		
-		/// <summary>
+        
+        /// <summary>
         /// Computes source apportionment for GRAL results
-		/// </summary>
+        /// </summary>
         private void SourceApportionment(int xdomain, int ydomain)
         {
             Cursor = Cursors.WaitCursor;
@@ -2700,8 +2695,8 @@ namespace GralDomain
         }
 
         /// <summary>
-		/// Extract concentration value at a given location
-		/// </summary>
+        /// Extract concentration value at a given location
+        /// </summary>
         private void Button35_Click(object sender, EventArgs e)
         {
             InfoBoxCloseAllForms();
@@ -2722,9 +2717,9 @@ namespace GralDomain
             dialog.Dispose();
         }
 
-		/// <summary>
-		/// Extract the concentration value at a given location async
-		/// </summary>
+        /// <summary>
+        /// Extract the concentration value at a given location async
+        /// </summary>
         private async void GetConcentrationFromFile(string filename)
         {
             Cursor = Cursors.WaitCursor;
@@ -2737,9 +2732,9 @@ namespace GralDomain
             Cursor = Cursors.Cross;
         }
 
-		/// <summary>
-		/// Extract concentration value at a given location
-		/// </summary>
+        /// <summary>
+        /// Extract concentration value at a given location
+        /// </summary>
         private bool GetConcentration(string filename)
         {
             bool readingOK = false;
@@ -2908,8 +2903,8 @@ namespace GralDomain
         }
 
         /// <summary>
-		/// Remove a map from the opbject manager
-		/// </summary>
+        /// Remove a map from the opbject manager
+        /// </summary>
         public void RemoveMap(int index)
         {
             RemoveItems(index);
@@ -3282,9 +3277,9 @@ namespace GralDomain
             return resultOK;
         }
 
-		/// <summary>
-		/// Write a log file for the GRAMM calculation settings
-		/// </summary>
+        /// <summary>
+        /// Write a log file for the GRAMM calculation settings
+        /// </summary>
         private void WriteGrammLog(int select, string info1, string info2, string info3)
         {
             // Kuntner: writes a log File with Informations about the GRAMM field computation
@@ -3359,10 +3354,10 @@ namespace GralDomain
             }
             
         }
-		
-		/// <summary>
-		/// Set or load a viewframe 
-		/// </summary>
+        
+        /// <summary>
+        /// Set or load a viewframe 
+        /// </summary>
         private void button57_Click(object sender, EventArgs e)
         {
             using (GralDomForms.ViewFrameSaveAndLoad viewframe = new ViewFrameSaveAndLoad())
@@ -3424,9 +3419,9 @@ namespace GralDomain
             
         //}
         
-		/// <summary>
-		/// Load a viewframe 
-		/// </summary>
+        /// <summary>
+        /// Load a viewframe 
+        /// </summary>
         void ViewframeSelectedIndexChanged(object sender, EventArgs e)
         {
             if (sender == toolStripComboBox1)
@@ -3441,9 +3436,9 @@ namespace GralDomain
             //MessageBox.Show(this, "Selektiert", Text);
         }
         
-		/// <summary>
-		/// Set a viewframe 
-		/// </summary>
+        /// <summary>
+        /// Set a viewframe 
+        /// </summary>
         private void ViewFrameSet(string Text)
         {
             // Read View.TXT until Text is found and set new zoom
@@ -3517,9 +3512,9 @@ namespace GralDomain
             }
         }
         
-		/// <summary>
-		/// Set the viewframe names to the combo box
-		/// </summary>
+        /// <summary>
+        /// Set the viewframe names to the combo box
+        /// </summary>
         private void ViewFrameMenuBarLoad()
         {
             // Load all
@@ -3550,9 +3545,9 @@ namespace GralDomain
             {}
         }
 
-		/// <summary>
-		/// Write the viewframes to the file sections.txt 
-		/// </summary>
+        /// <summary>
+        /// Write the viewframes to the file sections.txt 
+        /// </summary>
         private void ViewFrameSave(string Text)
         {
             try
@@ -3578,9 +3573,9 @@ namespace GralDomain
             {}
         }
 
-		/// <summary>
-		/// Deleta a viewframe 
-		/// </summary>
+        /// <summary>
+        /// Deleta a viewframe 
+        /// </summary>
         private void ViewFrameDelete(int index)
         {
             try
@@ -3629,9 +3624,9 @@ namespace GralDomain
             
         }
         
-		/// <summary>
-		/// Start a 3D view 
-		/// </summary>
+        /// <summary>
+        /// Start a 3D view 
+        /// </summary>
         void Button3DClick(object sender, EventArgs e)
         {
             #if __MonoCS__
@@ -3694,9 +3689,9 @@ namespace GralDomain
             }
         }
 
-		/// <summary>
-		/// Show or hide the toolbox panel 
-		/// </summary>
+        /// <summary>
+        /// Show or hide the toolbox panel 
+        /// </summary>
         void ToolBoxToolStripMenuItemClick(object sender, EventArgs e)
         {
             toolBoxToolStripMenuItem.Checked = ! toolBoxToolStripMenuItem.Checked;
@@ -3710,8 +3705,8 @@ namespace GralDomain
             }
             Cursor = Cursors.Arrow;
         }
-		
-		void PointSourcesToolStripMenuItemClick(object sender, EventArgs e)
+        
+        void PointSourcesToolStripMenuItemClick(object sender, EventArgs e)
         {
             checkBox4.Checked =! checkBox4.Checked;
             ResetSelectionChecked();
@@ -3785,8 +3780,8 @@ namespace GralDomain
         }
         
         /// <summary>
-		/// Move toolbar from left to right
-		/// </summary>
+        /// Move toolbar from left to right
+        /// </summary>
         void Button46Click(object sender, EventArgs e)
         {
             #if __MonoCS__
@@ -3913,9 +3908,9 @@ namespace GralDomain
             toolStripMenuItem18.Checked = ShowLenghtLabel;
         }
         
-		/// <summary>
-		/// Read the GRAL geometry from the file GRAL_topofile.txt
-		/// </summary>
+        /// <summary>
+        /// Read the GRAL geometry from the file GRAL_topofile.txt
+        /// </summary>
         bool ReadGralGeometry()
         {
             bool ok = false;
@@ -3959,9 +3954,9 @@ namespace GralDomain
             return ok;
         }
         
-		/// <summary>
-		/// Write the GRAL geometry to the file GRAL_topofile.txt
-		/// </summary>
+        /// <summary>
+        /// Write the GRAL geometry to the file GRAL_topofile.txt
+        /// </summary>
         bool WriteGralGeometry(System.Threading.CancellationToken cts)
         {
             bool ok = false;
@@ -4041,9 +4036,9 @@ namespace GralDomain
             return ok;
         }
         
-		/// <summary>
-		/// Import the original GRAL Topography from ESRI-ASCII file
-		/// </summary>
+        /// <summary>
+        /// Import the original GRAL Topography from ESRI-ASCII file
+        /// </summary>
         void OriginalGRALTopographyToolStripMenuItemClick(object sender, EventArgs e)
         {
             GralIO.CreateGralTopography Topo = new GralIO.CreateGralTopography();
@@ -4083,9 +4078,9 @@ namespace GralDomain
             }
         }
         
-		/// <summary>
-		/// Change icon & Title if the project is locked
-		/// </summary>
+        /// <summary>
+        /// Change icon & Title if the project is locked
+        /// </summary>
         void DomainActivated(object sender, EventArgs e)
         {
             if (GRAMM_Locked != MainForm.GRAMM_Locked || GRAL_Locked != Gral.Main.Project_Locked)
@@ -4137,9 +4132,9 @@ namespace GralDomain
             }
         }
         
-		/// <summary>
-		/// Modify the GRAL topography
-		/// </summary>
+        /// <summary>
+        /// Modify the GRAL topography
+        /// </summary>
         void ModifyTopographyToolStripMenuItemClick(object sender, EventArgs e)
         {
             // restore Modify array
@@ -4170,9 +4165,9 @@ namespace GralDomain
             MouseControl = 9999;
         }
         
-		/// <summary>
-		/// Restore an unsafed GRAL topography to its original values
-		/// </summary>
+        /// <summary>
+        /// Restore an unsafed GRAL topography to its original values
+        /// </summary>
         void RestoreGRALTopographyToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (MessageBox.Show(this, "Restore the GRAL topography?","GRAL GUI", MessageBoxButtons.OKCancel , MessageBoxIcon.Question) == DialogResult.OK)
@@ -4201,9 +4196,9 @@ namespace GralDomain
             }
         }
         
-		/// <summary>
-		/// Low pass to the GRAL topography
-		/// </summary>
+        /// <summary>
+        /// Low pass to the GRAL topography
+        /// </summary>
         async void LowPassGRALTopographyToolStripMenuItemClick(object sender, EventArgs e)
         {
             
