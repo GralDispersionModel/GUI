@@ -389,7 +389,7 @@
             // 
             this.checkBox5.Checked = true;
             this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox5.Location = new System.Drawing.Point(126, 22);
+            this.checkBox5.Location = new System.Drawing.Point(91, 49);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(186, 20);
             this.checkBox5.TabIndex = 32;
@@ -422,7 +422,7 @@
             // 
             // numericUpDown4
             // 
-            this.numericUpDown4.Location = new System.Drawing.Point(11, 52);
+            this.numericUpDown4.Location = new System.Drawing.Point(11, 49);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             15,
             0,
@@ -431,6 +431,7 @@
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(49, 20);
             this.numericUpDown4.TabIndex = 29;
+            this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown4.Value = new decimal(new int[] {
             15,
             0,

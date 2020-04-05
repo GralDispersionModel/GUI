@@ -805,7 +805,7 @@ namespace GralItemForms
 
                 myPen = new Pen(Color.LightGray, 1);
                 myPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                e.Graphics.DrawLine(myPen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+                e.Graphics.DrawLine(myPen, e.Bounds.Left + 4, e.Bounds.Bottom - 1, e.Bounds.Right - 8, e.Bounds.Bottom - 1);
                 myPen.Dispose();
                 //  drawFormat.Dispose();
             }
@@ -1952,8 +1952,8 @@ namespace GralItemForms
         //computes equidistant levels
         private void button2_Click(object sender, EventArgs e)
         {
-            double min = (double)listBox1.Items[1];
-            double max = (double) listBox1.Items[listBox1.Items.Count];
+            double min = (double)listBox1.Items[0];
+            double max = (double) listBox1.Items[listBox1.Items.Count - 1];
             string trans=Convert.ToString((max-min)/10);
             if (St_F.InputBoxValue("Equidistance", "Value:", ref trans, this) == DialogResult.OK)
             {
@@ -1962,69 +1962,70 @@ namespace GralItemForms
                     double distance = 0;
                     if (double.TryParse(trans, out distance))
                     {
-                    int r1 = DrawObject.FillColors[0].R;
-                    int g1 = DrawObject.FillColors[0].G;
-                    int b1 = DrawObject.FillColors[0].B;
-                    int r2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].R;
-                    int g2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].G;
-                    int b2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].B;
+                        distance = Math.Abs(distance);
+                        int r1 = DrawObject.FillColors[0].R;
+                        int g1 = DrawObject.FillColors[0].G;
+                        int b1 = DrawObject.FillColors[0].B;
+                        int r2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].R;
+                        int g2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].G;
+                        int b2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].B;
 
 
-                    int r11 = DrawObject.LineColors[0].R;
-                    int g11 = DrawObject.LineColors[0].G;
-                    int b11 = DrawObject.LineColors[0].B;
-                    int r21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].R;
-                    int g21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].G;
-                    int b21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].B;
+                        int r11 = DrawObject.LineColors[0].R;
+                        int g11 = DrawObject.LineColors[0].G;
+                        int b11 = DrawObject.LineColors[0].B;
+                        int r21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].R;
+                        int g21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].G;
+                        int b21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].B;
 
-                    DrawObject.FillColors.Clear();
-                    DrawObject.LineColors.Clear();
-                    DrawObject.ItemValues.Clear();
+                        DrawObject.FillColors.Clear();
+                        DrawObject.LineColors.Clear();
+                        DrawObject.ItemValues.Clear();
 
-                    DrawObject.FillColors.Add(Color.FromArgb(r1, g1, b1));
-                    DrawObject.LineColors.Add(Color.FromArgb(r11, g11, b11));
-                    DrawObject.ItemValues.Add(min);
-                    
-                    int numblevels = Convert.ToInt32((max - min) / distance)+1;
+                        DrawObject.FillColors.Add(Color.FromArgb(r1, g1, b1));
+                        DrawObject.LineColors.Add(Color.FromArgb(r11, g11, b11));
+                        DrawObject.ItemValues.Add(min);
 
-                    for (int i = 1; i < numblevels - 1; i++)
-                    {
-                        int intr = r1 + (r2 - r1) / numblevels * i;
-                        int intg = g1 + (g2 - g1) / numblevels * i;
-                        int intb = b1 + (b2 - b1) / numblevels * i;
+                        int numblevels = Convert.ToInt32((max - min) / distance) + 1;
 
-                        int intr1 = r11 + (r21 - r11) / numblevels * i;
-                        int intg1 = g11 + (g21 - g11) / numblevels * i;
-                        int intb1 = b11 + (b21 - b11) / numblevels * i;
+                        for (int i = 1; i < numblevels - 1; i++)
+                        {
+                            int intr = r1 + (r2 - r1) / numblevels * i;
+                            int intg = g1 + (g2 - g1) / numblevels * i;
+                            int intb = b1 + (b2 - b1) / numblevels * i;
 
-                        DrawObject.FillColors.Add(Color.FromArgb(intr, intg, intb));
-                        DrawObject.LineColors.Add(Color.FromArgb(intr1, intg1, intb1));
-                        DrawObject.ItemValues.Add(min + i * distance);
-                    }
+                            int intr1 = r11 + (r21 - r11) / numblevels * i;
+                            int intg1 = g11 + (g21 - g11) / numblevels * i;
+                            int intb1 = b11 + (b21 - b11) / numblevels * i;
 
-                    DrawObject.FillColors.Add(Color.FromArgb(r2, g2, b2));
-                    DrawObject.LineColors.Add(Color.FromArgb(r21, g21, b21));
-                    DrawObject.ItemValues.Add(max);
+                            DrawObject.FillColors.Add(Color.FromArgb(intr, intg, intb));
+                            DrawObject.LineColors.Add(Color.FromArgb(intr1, intg1, intb1));
+                            DrawObject.ItemValues.Add(min + i * distance);
+                        }
 
-                    listBox1.Items.Clear();
+                        DrawObject.FillColors.Add(Color.FromArgb(r2, g2, b2));
+                        DrawObject.LineColors.Add(Color.FromArgb(r21, g21, b21));
+                        DrawObject.ItemValues.Add(max);
 
-                    for (int i = 0; i < DrawObject.ItemValues.Count; i++)
-                    {
-                        listBox1.Items.Add(DrawObject.ItemValues[i]);
-                    }
+                        listBox1.Items.Clear();
 
-                    listBox1.Refresh();
+                        for (int i = 0; i < DrawObject.ItemValues.Count; i++)
+                        {
+                            listBox1.Items.Add(DrawObject.ItemValues[i]);
+                        }
 
-                    //enable re-calculation of contours
-                    if (DrawObject.Name.Substring(0, 3) == "CM:")
-                    {
-                        domain.ReDrawContours = true;
-                    }
-                    //enable re-calculation of vectors
-                    if (DrawObject.Name.Substring(0, 3) == "VM:")
-                    {
-                        domain.ReDrawVectors = true;
-                    }
+                        listBox1.Refresh();
+
+                        //enable re-calculation of contours
+                        if (DrawObject.Name.Substring(0, 3) == "CM:")
+                        {
+                            domain.ReDrawContours = true;
+                        }
+                        //enable re-calculation of vectors
+                        if (DrawObject.Name.Substring(0, 3) == "VM:")
+                        {
+                            domain.ReDrawVectors = true;
+                        }
                     }
                     else
                     {
@@ -2331,6 +2332,5 @@ namespace GralItemForms
             numericUpDown9.Value = trackBar1.Value;
         }
 
-    }
-    
+    }  
 }

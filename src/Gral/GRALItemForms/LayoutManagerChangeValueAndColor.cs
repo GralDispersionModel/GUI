@@ -28,6 +28,10 @@ namespace Gral.GRALItemForms
 
         private void LayoutManagerChangeValueAndColor_Load(object sender, EventArgs e)
         {
+#if __MonoCS__
+            numericUpDown1.TextAlign = HorizontalAlignment.Left;
+#else
+#endif
             numericUpDown1.DecimalPlaces = DecimalPlaces;
             if((decimal) Value > numericUpDown1.Maximum)
             {
