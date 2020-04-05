@@ -3479,6 +3479,7 @@ namespace Gral
                 {
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
+                    MSp.LogLevel = GRALSettings.Loglevel;
 
                     if (MSp.ShowDialog() == DialogResult.OK )
                     {
@@ -3488,6 +3489,7 @@ namespace Gral
                             GRALSettings.WaitForKeyStroke = MSp.KeyStrokeWhenExitGRAL;
                             ResetInDat();
                         }
+                        GRALSettings.Loglevel = MSp.LogLevel;
                         SetButton57Bitmap();
                     }
                 }

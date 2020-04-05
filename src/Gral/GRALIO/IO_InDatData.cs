@@ -192,6 +192,10 @@ namespace GralIO
         ///Use Keystroke when exiting the GRAL console
         /// </summary>
         public bool WriteESRIResult { get; set; }
+        /// <summary>
+        ///GRAL log output for debugging 
+        /// </summary>
+        public int Loglevel { get; set; }
 
         public InDatVariables()
         {
@@ -214,6 +218,8 @@ namespace GralIO
             PrognosticSubDomains = 15;
             WaitForKeyStroke = true;
             WriteESRIResult = false;
+            Loglevel = 0;
+            
         }
 
         public InDatVariables(InDatVariables other)
@@ -240,6 +246,7 @@ namespace GralIO
             PrognosticSubDomains = other.PrognosticSubDomains;
             WaitForKeyStroke = other.WaitForKeyStroke;
             WriteESRIResult = other.WriteESRIResult;
+            Loglevel = other.Loglevel;
         }
 
     }

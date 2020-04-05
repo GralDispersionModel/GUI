@@ -8,6 +8,7 @@ namespace GralMainForms
     {
         public bool WriteASCiiOutput = false;
         public bool KeyStrokeWhenExitGRAL = true;
+        public int LogLevel = 0;
 
         public Main_SpecialSettings()
         {
@@ -19,6 +20,7 @@ namespace GralMainForms
             if (Gral.Main.Project_Locked == false)
             {
                 WriteASCiiOutput = checkBox1.Checked;
+                LogLevel = (int) numericUpDown2.Value;
 
                 string KeepTransientPath = Path.Combine(Gral.Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat");
 
@@ -75,11 +77,14 @@ namespace GralMainForms
                 catch { }
             }
 
+            numericUpDown2.Value = LogLevel;
+
             if (Gral.Main.Project_Locked)
             {
                 groupBox1.Enabled = false;
                 groupBox2.Enabled = false;
                 checkBox3.Enabled = false;
+                numericUpDown2.Enabled = false;
             }
         }
 
