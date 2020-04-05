@@ -545,6 +545,11 @@ namespace GralItemForms
 
         private void Objectmanager_Load(object sender, EventArgs e)
         {
+            if (domain.ItemOptions.Count == 0)
+            {
+                return;
+            }
+
             try
             {
             	domain.ObjectManagerForm.Left = domain.Left+40;
@@ -569,20 +574,23 @@ namespace GralItemForms
         //change the color of the font when an object is hided or shown
         private void listBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
-            e.DrawBackground();
-            Brush myBrush = Brushes.Black;
-            if (e.Index < domain.ItemOptions.Count)
+            if (domain.ItemOptions.Count > 0)
             {
-            	if (domain.ItemOptions[e.Index].Show == false)
-            	{
-            		myBrush = Brushes.Gray;
-            		e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds);
-            	}
-            	else
-            	{
-            		myBrush = Brushes.Black;
-            		e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds);
-            	}
+                e.DrawBackground();
+                Brush myBrush = Brushes.Black;
+                if (e.Index < domain.ItemOptions.Count)
+                {
+                    if (domain.ItemOptions[e.Index].Show == false)
+                    {
+                        myBrush = Brushes.Gray;
+                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds);
+                    }
+                    else
+                    {
+                        myBrush = Brushes.Black;
+                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds);
+                    }
+                }
             }
         }
         
