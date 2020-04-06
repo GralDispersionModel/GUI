@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_SpecialSettings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -40,6 +41,7 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -64,6 +66,7 @@
             this.checkBox1.Size = new System.Drawing.Size(71, 17);
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "Activated";
+            this.toolTip1.SetToolTip(this.checkBox1, "Write result files in ASCii format");
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -117,6 +120,8 @@
             this.checkBox2.Size = new System.Drawing.Size(71, 17);
             this.checkBox2.TabIndex = 1;
             this.checkBox2.Text = "Activated";
+            this.toolTip1.SetToolTip(this.checkBox2, "Override the default continuation of a calculation and start a calculation again " +
+        "with\r\nSituation 1 by reusing the temporary concentration ");
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // button1
@@ -151,6 +156,7 @@
             this.checkBox3.Size = new System.Drawing.Size(201, 20);
             this.checkBox3.TabIndex = 60;
             this.checkBox3.Text = "Keystroke when exiting GRAL";
+            this.toolTip1.SetToolTip(this.checkBox3, "Wait for a keystroke at the end of a calculation");
             this.checkBox3.UseVisualStyleBackColor = true;
             this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
@@ -174,6 +180,9 @@
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(46, 20);
             this.numericUpDown2.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.numericUpDown2, "Enables an additional output for troubleshooting or for checking the internal par" +
+        "ticle assignment\r\nand the number of reflections or time loops. This value is not" +
+        " stored.");
             // 
             // Main_SpecialSettings
             // 
@@ -215,5 +224,6 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
