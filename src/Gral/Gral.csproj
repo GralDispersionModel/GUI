@@ -659,6 +659,12 @@
     <Compile Include="GRALItemForms\LayoutManager.Designer.cs">
       <DependentUpon>LayoutManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALItemForms\LayoutManagerChangeValueAndColor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALItemForms\LayoutManagerChangeValueAndColor.Designer.cs">
+      <DependentUpon>LayoutManagerChangeValueAndColor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GRALItemForms\Objectmanager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1128,6 +1134,9 @@
     <EmbeddedResource Include="GRALItemForms\LayoutManager.resx">
       <SubType>Designer</SubType>
       <DependentUpon>LayoutManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GRALItemForms\LayoutManagerChangeValueAndColor.resx">
+      <DependentUpon>LayoutManagerChangeValueAndColor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALItemForms\Objectmanager.resx">
       <SubType>Designer</SubType>
