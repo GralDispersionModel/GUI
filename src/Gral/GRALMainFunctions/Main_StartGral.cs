@@ -319,6 +319,10 @@ namespace Gral
 					{
 						GRALProcess.StartInfo.Arguments = " " + '"' +  GRAL_Project_Path + '"';
 					}
+					if (GRALSettings.Loglevel > 0)
+					{
+						GRALProcess.StartInfo.Arguments += " " + '"' + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + '"';
+					}
 					GRALProcess.Start();
 					
 					#endif
