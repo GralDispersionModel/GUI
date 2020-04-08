@@ -118,6 +118,8 @@
             this.label4.TabIndex = 1;
             this.label4.Text = "http://lampz.tugraz.at/~gral/index.php";
             this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.label4.MouseLeave += new System.EventHandler(this.label5_MouseLeave);
+            this.label4.MouseHover += new System.EventHandler(this.label5_MouseHover);
             // 
             // label5
             // 
