@@ -207,10 +207,9 @@ namespace GralMainForms
 					    ((Convert.ToInt32(date[2]) * 10000 + Convert.ToInt16(date[1]) * 100 + Convert.ToInt16(date[0])) <= (Convert.ToInt32(_enddate[2]) * 10000 + Convert.ToInt16(_enddate[1]) * 100 + Convert.ToInt16(_enddate[0]))))
 					{
 						wd.Date = date[0] + "." + date[1] + "." + date[2];
-						Met_Time_Ser.Add(wd);
-						
+							
 						//check for unplausible values
-						if(wd.Vel > 55 || wd.Vel < 0)
+						if(wd.Vel > 100 || wd.Vel < 0)
 						{
 							if (error_count < 4)
                             {
@@ -228,6 +227,10 @@ namespace GralMainForms
 
                             error_count++;
 						}
+						else if (wd.Dir == 0 && wd.Vel == 0 && wd.StabClass == 0) // invalid line
+						{
+							error_count++;
+						}
 						else if (wd.StabClass > 7 || wd.StabClass < 1)
 						{
 							if (error_count < 4)
@@ -239,7 +242,9 @@ namespace GralMainForms
 						}
 						else
                         {
-                            length++;
+							//add meteo data if no error was found
+							Met_Time_Ser.Add(wd);
+							length++;
                         }
                     }
 					n1++;
@@ -247,7 +252,7 @@ namespace GralMainForms
 				
 				if (error_count > 0)
                 {
-                    MessageBox.Show(this, error_count.ToString() + " errors at the wind file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, error_count.ToString() + " invalid wind data lines", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
 			

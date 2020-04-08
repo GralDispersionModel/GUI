@@ -1668,8 +1668,8 @@ namespace Gral
                 {
                     groupBox13.Visible = true;
                     groupBox14.Visible = false;
-                    string receptorfile = Path.Combine(ProjectName, @"Computation", "zeitreihe.dat");
-                    if (File.Exists(receptorfile))
+                    if (File.Exists(Path.Combine(ProjectName, @"Computation", "zeitreihe.dat")) ||
+                        File.Exists(Path.Combine(ProjectName, @"Computation", "ReceptorConcentrations.dat")))
                     {
                         button37.Visible = true;
                     }
