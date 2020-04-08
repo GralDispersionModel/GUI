@@ -91,5 +91,27 @@ namespace Gral.GRALItemForms
         {
             Value = (double) numericUpDown1.Value;
         }
+
+        /// <summary>
+        /// Copy fill color to line color
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button6_Click(object sender, EventArgs e)
+        {
+            LineColor = FillColor;
+            button1.BackColor = LineColor;
+        }
+
+        /// <summary>
+        /// Copy line color to fill color
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FillColor = LineColor;
+            button2.BackColor = FillColor;
+        }
     }
 }

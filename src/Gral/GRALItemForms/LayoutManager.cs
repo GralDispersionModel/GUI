@@ -1505,18 +1505,23 @@ namespace GralItemForms
             }
         }
 
-        //remove selected label
+        //remove selected labels
         private void RemoveSelectedLabel(object sender, EventArgs e)
         {
-            int index=-1;
-            index = listBox1.SelectedIndex;
-
-            if((index >= 0) && (index < listBox1.Items.Count) && (listBox1.Items.Count > 2))
+            for (int isel = listBox1.SelectedIndices.Count - 1; isel >= 0; isel--)
             {
-                DrawObject.ItemValues.RemoveAt(index);
-                DrawObject.LineColors.RemoveAt(index);
-                DrawObject.FillColors.RemoveAt(index);
-                listBox1.Items.RemoveAt(index);
+                int index = listBox1.SelectedIndices[isel];
+                if ((index >= 0) && (index < listBox1.Items.Count) && (listBox1.Items.Count > 2))
+                {
+                    DrawObject.ItemValues.RemoveAt(index);
+                    DrawObject.LineColors.RemoveAt(index);
+                    DrawObject.FillColors.RemoveAt(index);
+                }
+            }
+            listBox1.Items.Clear();
+            for (int i = 0; i < DrawObject.ItemValues.Count; i++)
+            {
+                listBox1.Items.Add(Math.Round(Convert.ToDouble(DrawObject.ItemValues[i], ic), Convert.ToInt32(numericUpDown4.Value)));
             }
 
             //enable re-calculation of contours

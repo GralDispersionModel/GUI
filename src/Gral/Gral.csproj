@@ -1492,6 +1492,11 @@
     <None Include="Resources\Restore.bmp" />
     <None Include="Resources\Add.bmp" />
     <None Include="Resources\AddSmall.bmp" />
+    <None Include="Resources\ArrowLeft.bmp" />
+    <None Include="Resources\ArrowDown.GIF" />
+    <None Include="Resources\ArrowLeft.gif" />
+    <None Include="Resources\ArrowRight.gif" />
+    <None Include="Resources\ArrowUp.GIF" />
     <Content Include="Resources\Bitmap1.bmp" />
     <None Include="Resources\KonfigButton.bmp" />
     <None Include="Resources\Konfig.bmp" />

@@ -146,7 +146,7 @@
             this.button4.Size = new System.Drawing.Size(59, 23);
             this.button4.TabIndex = 4;
             this.button4.Text = "Remove";
-            this.toolTip1.SetToolTip(this.button4, "Removes the selected\r\ncontour level.");
+            this.toolTip1.SetToolTip(this.button4, "Remove selected\r\ncontour levels");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Visible = false;
             this.button4.Click += new System.EventHandler(this.RemoveSelectedLabel);
@@ -588,6 +588,7 @@
             this.listBox1.ItemHeight = 16;
             this.listBox1.Location = new System.Drawing.Point(11, 116);
             this.listBox1.Name = "listBox1";
+            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox1.Size = new System.Drawing.Size(216, 180);
             this.listBox1.TabIndex = 26;
             this.toolTip1.SetToolTip(this.listBox1, "Double click to change the value or the color");
