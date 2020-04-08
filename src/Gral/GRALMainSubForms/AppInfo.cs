@@ -11,6 +11,7 @@
 #endregion
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace GralMainForms
@@ -43,6 +44,28 @@ namespace GralMainForms
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(label5.Text);
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(label4.Text);
+        }
+
+        private void label5_MouseHover(object sender, EventArgs e)
+        {
+            Label _l = (Label) sender;
+            _l.ForeColor = Color.DarkBlue;
+        }
+
+        private void label5_MouseLeave(object sender, EventArgs e)
+        {
+            Label _l = (Label)sender;
+            _l.ForeColor = Color.Blue;
         }
     }
 
