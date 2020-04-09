@@ -91,10 +91,8 @@ namespace Gral
 									count = count + 1;
 								}
 								if (count == 7)
-                                {
-                                    break;
-                                }
-                            }
+									break;
+							}
 							inputfile = myreader.ReadLine();
 						}
 						myreader.Close();
@@ -832,26 +830,16 @@ namespace Gral
 										{
 											//share of HDV for the two source groups PC and HDV
 											if (k == 0)
-                                            {
-                                                hdv = 0;
-                                            }
-
-                                            if (k == 1)
-                                            {
-                                                hdv = 1;
-                                            }
-                                            //anual average daily traffic
-                                            if (k == 0)
-                                            {
-                                                aadt = _lines.Nemo.AvDailyTraffic - _lines.Nemo.AvDailyTraffic * hdv_share;
-                                            }
-
-                                            if (k == 1)
-                                            {
-                                                aadt = _lines.Nemo.AvDailyTraffic * hdv_share;
-                                            }
-                                            //write line sources to NEMO input file
-                                            myWriter.WriteLine(velo[0] + "," + _lines.Section + "," + Convert.ToString(length, ic) + "," +
+												hdv = 0;
+											if (k == 1)
+												hdv = 1;
+											//anual average daily traffic
+											if (k == 0)
+												aadt = _lines.Nemo.AvDailyTraffic - _lines.Nemo.AvDailyTraffic * hdv_share;
+											if (k == 1)
+												aadt = _lines.Nemo.AvDailyTraffic * hdv_share;
+											//write line sources to NEMO input file
+											myWriter.WriteLine(velo[0] + "," + _lines.Section + "," + Convert.ToString(length, ic) + "," +
                                                                Convert.ToString(_lines.Nemo.Slope) + "," + velo[3] + "," + Convert.ToString(aadt, ic) + "," + Convert.ToString(v1, ic) + "," + Convert.ToString(v1, ic) + "," + Convert.ToString(v3, ic) + "," + Convert.ToString(v3, ic) + "," + Convert.ToString(v5, ic) + "," + Convert.ToString(v6, ic) + "," + Convert.ToString(v7, ic) + "," + Convert.ToString(v7, ic) + "," + Convert.ToString(v9, ic) + ",0," +
 											                   "-1," + Convert.ToString(hdv, ic) + "," + "-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0," + Convert.ToString(sgroups[k]) + "," +
 											                   "0,0," + Convert.ToString(_lines.Height) + "," + "1000,0," + Convert.ToString(_lines.Height) + "," + Convert.ToString(_lines.Width) + ",0," +
@@ -914,6 +902,7 @@ namespace Gral
 				_ls.LoadLineSources(ItemData, _file);
 				_ls = null;
 				
+
 				//read NEMO results
 				string line;
 				string[] text2 = new string[1000];
@@ -939,6 +928,9 @@ namespace Gral
 							//all line sources with a defined traffic situation are updated
 							if (_lines.Nemo.TrafficSit != 0)
 							{
+								//delete all existing entries first to avoid mulitple emission calculations after mulitple NEMO runs
+								_lines.Poll.Clear();
+
 								line = myreader.ReadLine();
 								text2 = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 								if (sep == true)
@@ -952,7 +944,8 @@ namespace Gral
                                         PollutantsData _poll = new PollutantsData
                                         {
                                             SourceGroup = sgroups[0]
-                                        };
+                                        };										
+
                                         _poll.Pollutant[0] = 0; _poll.EmissionRate[0] = St_F.TxtToDbl(text2[14], false);
 										_poll.Pollutant[1] = 1; _poll.EmissionRate[1] = PM10;
 										_poll.Pollutant[2] = 4; _poll.EmissionRate[2] = PM2_5;
