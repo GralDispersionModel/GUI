@@ -405,11 +405,8 @@ namespace GralItemForms
                         _ls.GetDep()[i] = new Deposition(dep[i]);
                     }
 
-                    //listBox1.SelectedIndex = listBox1.TopIndex; // NEMO
-                    if (listBox1.SelectedIndex < 0)
-                    {
-                        listBox1.SelectedIndex = 0;
-                    }
+                    listBox1.SelectedIndex = listBox1.TopIndex; // NEMO
+                    
                     _ls.Name = textBox1.Text;
                     _ls.Section = textBox4.Text;
                     _ls.Height = height;
