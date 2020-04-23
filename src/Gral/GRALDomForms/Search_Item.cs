@@ -726,13 +726,16 @@ namespace GralDomForms
                         for (int i = 0; i < sCells.GetLength(0); ++i)
                         {
                             double test = 0;
-                            if (double.TryParse(sCells[i], out test) == false)
-                            {
-                                sCells[i] = test.ToString("0.0");
-                            }
+                           
                             if (iCol + i < dataGridView1.ColumnCount)
                             {
                                 oCell = dataGridView1[iCol + i, iRow];
+                                //check numeric cells
+                                if (oCell.ValueType != typeof(string) && double.TryParse(sCells[i], out test) == false)
+                                {
+                                    sCells[i] = test.ToString("0.0");
+                                }
+                                
                                 oCell.Value = Convert.ChangeType(sCells[i].Replace("\r", ""), oCell.ValueType);
 
                                 // remember changed item
