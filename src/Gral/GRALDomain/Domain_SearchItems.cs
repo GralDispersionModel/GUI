@@ -44,7 +44,7 @@ namespace GralDomain
 				data.Columns.Add("Type", typeof(string));
 				data.Columns.Add("Height", typeof(double));
 				data.Columns.Add("Vert. ext.", typeof(double));
-				data.Columns.Add("Source_group", typeof(int));
+				data.Columns.Add("Source_group", typeof(string));
 				data.Columns.Add("Exit_velocity", typeof(double));
 				data.Columns.Add("Temperature", typeof(double));
 				data.Columns.Add("Diameter", typeof(double));
@@ -86,7 +86,7 @@ namespace GralDomain
 							workrow[2] = "Point source";
 							workrow[3] =  Math.Round(_psdata.Height, 1);
 							workrow[4] =  0;
-							workrow[5] =  _psdata.Poll.SourceGroup;
+							workrow[5] =  _psdata.Poll.SourceGroup.ToString();
 							workrow[6] =  Math.Round(_psdata.Velocity, 1); // exit velocity
 							workrow[7] =  Math.Round(_psdata.Temperature - 273, 1); // Temperature
 							workrow[8] =  Math.Round(_psdata.Diameter, 1); // Diameter
@@ -123,7 +123,7 @@ namespace GralDomain
 							workrow[2] = "Line source";
 							workrow[3] =  Math.Round(_ls.Height, 1);
 							workrow[4] =  Math.Round(_ls.VerticalExt, 1); // vert extension
-							workrow[5] = _poll.SourceGroup;
+							workrow[5] = _poll.SourceGroup.ToString();
                             workrow[9] = k; // Emission Rate index for multiple SG per source
 
                             for (int j = 0; j < 10; j++)
@@ -158,7 +158,7 @@ namespace GralDomain
 						workrow[2] = "Area source";
 						workrow[3] =  Math.Round(Convert.ToDouble(height), 1);
 						workrow[4] =  Math.Round(vert_ext, 1);
-						workrow[5] = _as.Poll.SourceGroup;
+						workrow[5] = _as.Poll.SourceGroup.ToString();
 						
 						for (int j = 0; j < 10; j++)
 						{
@@ -193,7 +193,7 @@ namespace GralDomain
 							workrow[2] = "Portal source";
 							workrow[3] =  0;
 							workrow[4] =   Math.Round( _po.Height, 1);
-							workrow[5] =  _poll.SourceGroup;
+							workrow[5] =  _poll.SourceGroup.ToString();
 							workrow[6] =  Math.Round(_po.ExitVel, 1); // exit velocity
 							workrow[7] =  Math.Round(_po.DeltaT, 1); // Temperature
                             workrow[9] = k; // Emission Rate index for multiple SG per source
