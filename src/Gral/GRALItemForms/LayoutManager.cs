@@ -897,7 +897,7 @@ namespace GralItemForms
             DrawObject.ItemValues.Clear();
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
-                DrawObject.ItemValues.Add((double)listBox1.Items[i]);
+                DrawObject.ItemValues.Add((double) listBox1.Items[i]);
             }
 
             if (DrawObject.ItemValues.Count == 0)
@@ -967,11 +967,11 @@ namespace GralItemForms
 
                         if (checkBox5.Checked)
                         {
-                            listBox1.Items.Insert(1, normalize(min));
+                            listBox1.Items.Insert(0, normalize(min));
                         }
                         else
                         {
-                            listBox1.Items.Insert(1, min);
+                            listBox1.Items.Insert(0, min);
                         }
 
                         DrawObject.LineColors.Insert(0, Color.LightGreen);
@@ -1021,7 +1021,7 @@ namespace GralItemForms
                         DrawObject.LineColors.Clear();
                         listBox1.Items.Clear();
 
-                        listBox1.Items.Insert(1, 0);
+                        listBox1.Items.Insert(0, 0);
 
                         DrawObject.LineColors.Add(Color.LightGreen);
                         DrawObject.FillColors.Add(Color.LightGreen);
@@ -1066,11 +1066,11 @@ namespace GralItemForms
                     
                     if (checkBox5.Checked)
                     {
-                        listBox1.Items.Insert(1, normalize(min));
+                        listBox1.Items.Insert(0, normalize(min));
                     }
                     else
                     {
-                        listBox1.Items.Insert(1, min);
+                        listBox1.Items.Insert(0, min);
                     }
 
                     DrawObject.LineColors.Insert(0, Color.LightGreen);
@@ -1185,11 +1185,11 @@ namespace GralItemForms
 
                                 if (checkBox5.Checked)
                                 {
-                                    listBox1.Items.Insert(1, normalize(min));
+                                    listBox1.Items.Insert(0, normalize(min));
                                 }
                                 else
                                 {
-                                    listBox1.Items.Insert(1, min);
+                                    listBox1.Items.Insert(0, min);
                                 }
 
                                 DrawObject.LineColors.Insert(0, Color.LightGreen);
@@ -1399,11 +1399,11 @@ namespace GralItemForms
                                 listBox1.Items.Clear();
                                 if (checkBox5.Checked)
                                 {
-                                    listBox1.Items.Insert(1, normalize(min));
+                                    listBox1.Items.Insert(0, normalize(min));
                                 }
                                 else
                                 {
-                                    listBox1.Items.Insert(1, min);
+                                    listBox1.Items.Insert(0, min);
                                 }
 
                                 DrawObject.LineColors.Insert(0, Color.LightGreen);
@@ -1442,7 +1442,7 @@ namespace GralItemForms
                 DrawObject.ItemValues.Clear();
                 for (int i = 0; i < listBox1.Items.Count; i++)
                 {
-                    DrawObject.ItemValues.Add((double) listBox1.Items[i]);
+                    DrawObject.ItemValues.Add(Convert.ToDouble(listBox1.Items[i]));
                 }
 
                 if (DrawObject.ItemValues.Count == 0)
