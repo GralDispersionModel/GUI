@@ -928,13 +928,13 @@ namespace Gral
                             //all line sources with a defined traffic situation are updated
                             if (_lines.Nemo.TrafficSit != 0)
                             {
-                                //delete all existing entries first to avoid mulitple emission calculations after mulitple NEMO runs
-                                _lines.Poll.Clear();
-
                                 line = myreader.ReadLine();
                                 text2 = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                                 if (sep == true)
                                 {
+                                    //delete all existing entries first to avoid mulitple emission calculations after mulitple NEMO runs
+                                    _lines.Poll.Clear();
+
                                     //source group seperation
                                     if ((sgroups[0] == sgroups[2]) && (sgroups[1] == sgroups[3]))
                                     {
