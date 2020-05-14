@@ -1347,11 +1347,10 @@ namespace GralDomain
                             //check tiff extension
                             if (Path.GetExtension(MapFileName).ToLower() == ".tfw")
                             {
-
-                                ImageFileNameFromWorldFile = Path.GetFileNameWithoutExtension(ImageFileNameFromWorldFile) + ".tif";
+                                ImageFileNameFromWorldFile = Path.Combine(Path.GetDirectoryName(MapFileName), Path.GetFileNameWithoutExtension(MapFileName) + ".tif");
                                 if (File.Exists(ImageFileNameFromWorldFile) == false)
                                 {
-                                    ImageFileNameFromWorldFile = Path.GetFileNameWithoutExtension(ImageFileNameFromWorldFile) + ".tiff"; ; // try tiff
+                                    ImageFileNameFromWorldFile = Path.Combine(Path.GetDirectoryName(MapFileName), Path.GetFileNameWithoutExtension(ImageFileNameFromWorldFile) + ".tiff") ; // try tiff
                                 }
                             }
 
@@ -1408,9 +1407,9 @@ namespace GralDomain
                         SaveDomainSettings(1);
                         SwitchMenuGeoreference(); // Kuntner
                     }
-                    catch
+                    catch(Exception ex)
                     {
-                        MessageBox.Show(this, "Error when reading world file","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading world file" + Environment.NewLine + ex.Message.ToString(),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else if (dialog.FileName.EndsWith(".shp"))

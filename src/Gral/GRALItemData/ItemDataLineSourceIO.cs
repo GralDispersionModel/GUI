@@ -124,6 +124,10 @@ namespace GralItemData
 						myWriter.WriteLine();
 						foreach (LineSourceData _dta in _data)
 						{
+							if (_dta.Poll.Count == 0) //if no pollution is defined, might happen when using NEMO
+							{
+								_dta.Poll.Add(new PollutantsData());
+							}
 							myWriter.WriteLine(_dta.ToString(1));
 						}
 					}
