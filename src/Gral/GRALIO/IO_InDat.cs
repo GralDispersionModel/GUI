@@ -60,7 +60,7 @@ namespace GralIO
                         myWriter.WriteLine("0 \t ! Receptor points: Yes = 1, No = 0");
                     }
 
-                    myWriter.WriteLine(Convert.ToString(_data.Roughness, ic) + " \t ! Surface Roughness in [m]");
+                    myWriter.WriteLine(Convert.ToString(_data.Roughness, ic) + " \t ! Surface roughness in [m]");
 					myWriter.WriteLine(Convert.ToString(_data.Latitude, ic) + " \t ! Latitude");
 					myWriter.WriteLine("N" + " \t ! Meandering Effect Off = J, On = N");
 					myWriter.WriteLine(_data.Pollutant + " \t ! Pollutant: not used since version 19.01, new: Pollutant.txt");
@@ -79,11 +79,11 @@ namespace GralIO
 					
 					if(_data.BuildingHeightsWrite == false)
                     {
-                        myWriter.WriteLine("0" + " \t ! Stream Output for Soundplan 1 = activated, -2 = write buildings height");
+                        myWriter.WriteLine("0" + " \t ! Stream output for Soundplan 1 = activated, -2 = write buildings height");
                     }
                     else
                     {
-                        myWriter.WriteLine("-2" + " \t ! Stream Output for Soundplan 1 = activated, -2 = write buildings height");
+                        myWriter.WriteLine("-2" + " \t ! Stream output for Soundplan 1 = activated, -2 = write buildings height");
                     }
 
                     if (_data.Compressed == 1)
@@ -120,6 +120,8 @@ namespace GralIO
                     {
                         myWriter.WriteLine("ASCiiResults 0 \t ! Additional ASCii result files Yes = 1, No = 0");
                     }
+
+                    myWriter.WriteLine(_data.AdaptiveRouhness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
                 }
 				
 			}
@@ -274,6 +276,18 @@ namespace GralIO
                             else
                             {
                                 _data.WriteESRIResult = false;
+                            }
+                        }
+                    }
+
+                    if (myreader.EndOfStream == false) // read compressed value
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (double.TryParse(text[0], NumberStyles.Any, ic, out double _val))
+                            {
+                                _data.AdaptiveRouhness = _val;
                             }
                         }
                     }
