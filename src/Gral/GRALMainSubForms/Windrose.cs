@@ -74,6 +74,7 @@ namespace GralMainForms
         private bool MoveLegend = false;
         private Rectangle InfoPosition = St_F.WindRoseInfo;
         private bool MoveInfo = false;
+        private int CopyToClipboardScale  = 1;
 
         /// <summary>
         /// Show a wind speed or wind SC wind rose
@@ -160,28 +161,31 @@ namespace GralMainForms
                 InfoPosition.X = mid_x * 2 - 20 - InfoPosition.Width; 
                 InfoPosition.Y = y_text;
             }
-          
-            g.DrawString("Data points: " + Convert.ToString(WindData.Count), kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + distance, StringFormatNearFar);
-            //g.DrawString(Convert.ToString(wind.Count), kleinfont, blackbrush, mid_x*2-20, InfoPosition.Y + distance, format1);
-            //g.DrawString(wind[0].Date, kleinfont, blackbrush, mid_x*2-85, InfoPosition.Y + 2 * distance, format1);
-            if (WindData.Count > 1)
-            {
-                g.DrawString(WindData[0].Date + " - " + WindData[WindData.Count - 1].Date, kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 2 * distance, StringFormatNearFar);
-            }
 
-            g.DrawString(Convert.ToString(StartHour) + ":00h-" + Convert.ToString(FinalHour) + ":00h", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 3 * distance, StringFormatNearFar);
-            g.DrawString(MetFileName, kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 4 * distance, StringFormatNearFar);
-            if (BiasCorrection == 1)
             {
-                g.DrawString("Bias correction applied", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 5 * distance, StringFormatNearFar);
-            }
-            else if (BiasCorrection == 2)
-            {
-                g.DrawString("Bias correction not applied", kleinfont, BrushBlack, InfoPosition.X, InfoPosition.Y + 5 * distance, StringFormatNearFar);
-            }
+                int _x0 = InfoPosition.X * CopyToClipboardScale;
+                int _y0 = InfoPosition.Y * CopyToClipboardScale;
+                g.DrawString("Data points: " + Convert.ToString(WindData.Count), kleinfont, BrushBlack, _x0, _y0 + distance, StringFormatNearFar);
+                //g.DrawString(Convert.ToString(wind.Count), kleinfont, blackbrush, mid_x*2-20, _y0 + distance, format1);
+                //g.DrawString(wind[0].Date, kleinfont, blackbrush, mid_x*2-85, _y0 + 2 * distance, format1);
+                if (WindData.Count > 1)
+                {
+                    g.DrawString(WindData[0].Date + " - " + WindData[WindData.Count - 1].Date, kleinfont, BrushBlack, _x0, _y0 + 2 * distance, StringFormatNearFar);
+                }
 
-            g.DrawString("N", new Font("Arial", 15), BrushBlack, mid_x, 2, format2);
+                g.DrawString(Convert.ToString(StartHour) + ":00h-" + Convert.ToString(FinalHour) + ":00h", kleinfont, BrushBlack, _x0, _y0 + 3 * distance, StringFormatNearFar);
+                g.DrawString(MetFileName, kleinfont, BrushBlack, _x0, _y0 + 4 * distance, StringFormatNearFar);
+                if (BiasCorrection == 1)
+                {
+                    g.DrawString("Bias correction applied", kleinfont, BrushBlack, _x0, _y0 + 5 * distance, StringFormatNearFar);
+                }
+                else if (BiasCorrection == 2)
+                {
+                    g.DrawString("Bias correction not applied", kleinfont, BrushBlack, _x0, _y0 + 5 * distance, StringFormatNearFar);
+                }
 
+                g.DrawString("N", new Font("Arial", 15), BrushBlack, mid_x, 2, format2);
+            }
 
 
             //draw windrose
@@ -232,7 +236,7 @@ namespace GralMainForms
             for (int n = 7; n >= 0; n--)
             {
                 int VertDist = (int)Math.Max(20, distance * 1.01F);
-                int y0 = LegendPosition.Y + VertDist * (7 - n);
+                int y0 = LegendPosition.Y * CopyToClipboardScale + VertDist * (7 - n);
 
                 if (DrawingMode == 0)
                 {
@@ -321,7 +325,7 @@ namespace GralMainForms
 
         private void DrawWindSpeedScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
-            int x_legend = LegendPosition.X;
+            int x_legend = LegendPosition.X * CopyToClipboardScale;
 
             switch (n)
             {
@@ -378,7 +382,7 @@ namespace GralMainForms
 
         private void DrawWindSCScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
-            int x_legend = LegendPosition.X;
+            int x_legend = LegendPosition.X * CopyToClipboardScale;
 
             switch (n)
             {
@@ -602,22 +606,23 @@ namespace GralMainForms
         //save image to clipboard
         private void button3_Click(object sender, EventArgs e)
         {
-            int scale = 2;
+            CopyToClipboardScale = 2;
             if (pictureBox1.Width < 500)
             {
-                scale = 4;
+                CopyToClipboardScale = 4;
             }
-            pictureBox1.Width *= scale;
-            pictureBox1.Height *= scale;
-            IniScale *= scale;
+            pictureBox1.Width *= CopyToClipboardScale;
+            pictureBox1.Height *= CopyToClipboardScale;
+            IniScale *= CopyToClipboardScale;
             pictureBox1.Refresh();
             Application.DoEvents();
             Bitmap bitMap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             pictureBox1.DrawToBitmap(bitMap, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
             Clipboard.SetDataObject(bitMap);
-            pictureBox1.Width /= scale;
-            pictureBox1.Height /= scale;
-            IniScale /= scale;
+            pictureBox1.Width /= CopyToClipboardScale;
+            pictureBox1.Height /= CopyToClipboardScale;
+            IniScale /= CopyToClipboardScale;
+            CopyToClipboardScale = 1;
             pictureBox1.Refresh();
         }
 
