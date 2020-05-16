@@ -27,18 +27,19 @@ namespace GralBackgroundworkers
 {
     public partial class ProgressFormBackgroundworker
     {
-		/// <summary>
+        /// <summary>
         /// Mathematical raster operations
         /// </summary>
         private void MathRasterOperation(GralBackgroundworkers.BackgroundworkerData mydata,
                                          System.ComponentModel.DoWorkEventArgs e)
         {
-            double[,] A = new double[1, 1];
-            double[,] B = new double[1, 1];
-            double[,] C = new double[1, 1];
-            double[,] D = new double[1, 1];
-            double[,] E = new double[1, 1];
-            double[,] F = new double[1, 1];
+            double[][] A; 
+            double[][] B;
+            double[][] C;
+            double[][] D;
+            double[][] E;
+            double[][] F;
+
             int nxA = 1;
             int nxB = 1;
             int nxC = 1;
@@ -94,13 +95,13 @@ namespace GralBackgroundworkers
                     data = myReader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                     nodataA = Convert.ToInt32(data[1]);
                     data = new string[nxA];
-                    A = new double[nxA, nyA];
+                    A = CreateArray<double[]>(nxA, () => new double[nyA]);
                     for (int i = nyA - 1; i > -1; i--)
                     {
                         data = myReader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                         for (int j = 0; j < nxA; j++)
                         {
-                            A[j, i] = Convert.ToDouble(data[j], ic);
+                            A[j][i] = Convert.ToDouble(data[j], ic);
                         }
                     }
                 }
@@ -174,15 +175,15 @@ namespace GralBackgroundworkers
                                 MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
                                 
                                 data = new string[nxB];
-                                B = new double[nxB, nyB];
-                                F = new double[nxB, nyB];
+                                B = CreateArray<double[]>(nxB, () => new double [nyB]);
+                                F = CreateArray<double[]>(nxB, () => new double[nyB]);
                                 //double result;
                                 for (int i = nyB - 1; i > -1; i--)
                                 {
                                     data = myReader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                     for (int j = 0; j < nxB; j++)
                                     {
-                                        B[j, i] = Convert.ToDouble(data[j], ic);
+                                        B[j][i] = Convert.ToDouble(data[j], ic);
                                     }
                                 }
                                 //myReader.Close();
@@ -201,8 +202,8 @@ namespace GralBackgroundworkers
                                     string valueA; string valueB;
                                     for (int i = nyB - 1; i > -1; i--)
                                     {
-                                        double a = A[j, i];
-                                        double b = B[j, i];
+                                        double a = A[j][i];
+                                        double b = B[j][i];
 
                                         try
                                         {
@@ -214,7 +215,7 @@ namespace GralBackgroundworkers
 
                                             double result = parser.Parse(mathtext);
 
-                                            F[j, i] = Convert.ToDouble(result);
+                                            F[j][i] = Convert.ToDouble(result);
                                         }
                                         catch
                                         {
@@ -257,7 +258,7 @@ namespace GralBackgroundworkers
                                         {
                                             for (int j = 0; j < nxB; j++)
                                             {
-                                                mywriter.Write(Convert.ToString(Math.Round(F[j, i], 3), ic) + " ");
+                                                mywriter.Write(Convert.ToString(Math.Round(F[j][i], 3), ic) + " ");
                                             }
                                             mywriter.WriteLine();
                                         }
@@ -382,9 +383,9 @@ namespace GralBackgroundworkers
                                     MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
                                     data = new string[nxB];
                                     dataC = new string[nxC];
-                                    B = new double[nxB, nyB];
-                                    C = new double[nxC, nyC];
-                                    F = new double[nxA, nyA];
+                                    B = CreateArray<double[]>(nxB, () => new double[nyB]);
+                                    C = CreateArray<double[]>(nxC, () => new double[nyC]);
+                                    F = CreateArray<double[]>(nxA, () => new double[nyA]);
 
                                     SetText("Reading Raster B");
                                     for (int i = nyB - 1; i > -1; i--)
@@ -392,7 +393,7 @@ namespace GralBackgroundworkers
                                         data = myReaderB.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                         for (int j = 0; j < nxB; j++)
                                         {
-                                            B[j, i] = Convert.ToDouble(data[j], ic);
+                                            B[j][i] = Convert.ToDouble(data[j], ic);
                                         }
                                     }
                                     //myReaderB.Close();
@@ -404,7 +405,7 @@ namespace GralBackgroundworkers
                                         dataC = myReaderC.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                         for (int j = 0; j < nxB; j++)
                                         {
-                                            C[j, i] = Convert.ToDouble(dataC[j], ic);
+                                            C[j][i] = Convert.ToDouble(dataC[j], ic);
                                         }
                                     }
                                     //myReaderC.Close();
@@ -421,9 +422,9 @@ namespace GralBackgroundworkers
                                          string valueA; string valueB; string valueC;
                                          for (int i = nyB - 1; i > -1; i--)
                                          {
-                                             double a = A[j, i];
-                                             double b = B[j, i];
-                                             double c = C[j, i];
+                                             double a = A[j][i];
+                                             double b = B[j][i];
+                                             double c = C[j][i];
                                              try
                                              {
                                                  string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
@@ -433,7 +434,7 @@ namespace GralBackgroundworkers
                                                  valueC = "(" + Convert.ToString(c, ic) + ")";
                                                  mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC);
                                                  double result = parser.Parse(mathtext);
-                                                 F[j, i] = Convert.ToDouble(result);
+                                                 F[j][i] = Convert.ToDouble(result);
                                              }
                                              catch
                                              {
@@ -475,7 +476,7 @@ namespace GralBackgroundworkers
                                             {
                                                 for (int j = 0; j < nxB; j++)
                                                 {
-                                                    mywriter.Write(Convert.ToString(Math.Round(F[j, i], 3), ic) + " ");
+                                                    mywriter.Write(Convert.ToString(Math.Round(F[j][i], 3), ic) + " ");
                                                 }
                                                 mywriter.WriteLine();
                                             }
@@ -644,10 +645,10 @@ namespace GralBackgroundworkers
                                         data = new string[nxB];
                                         dataC = new string[nxC];
                                         dataD = new string[nxD];
-                                        B = new double[nxB, nyB];
-                                        C = new double[nxC, nyC];
-                                        D = new double[nxD, nyD];
-                                        F = new double[nxA, nyA];
+                                        B = CreateArray<double[]>(nxB, () => new double[nyB]);
+                                        C = CreateArray<double[]>(nxC, () => new double[nyC]);
+                                        D = CreateArray<double[]>(nxD, () => new double[nyD]);
+                                        F = CreateArray<double[]>(nxA, () => new double[nyA]);
 
                                         SetText("Reading Raster B");
                                         for (int i = nyB - 1; i > -1; i--)
@@ -655,7 +656,7 @@ namespace GralBackgroundworkers
                                             data = myReaderB.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                             for (int j = 0; j < nxB; j++)
                                             {
-                                                B[j, i] = Convert.ToDouble(data[j], ic);
+                                                B[j][i] = Convert.ToDouble(data[j], ic);
                                             }
                                         }
                                         //myReaderB.Close();
@@ -667,7 +668,7 @@ namespace GralBackgroundworkers
                                             dataC = myReaderC.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                             for (int j = 0; j < nxB; j++)
                                             {
-                                                C[j, i] = Convert.ToDouble(dataC[j], ic);
+                                                C[j][i] = Convert.ToDouble(dataC[j], ic);
                                             }
                                         }
                                         //myReaderC.Close();
@@ -679,7 +680,7 @@ namespace GralBackgroundworkers
                                             dataD = myReaderD.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                             for (int j = 0; j < nxB; j++)
                                             {
-                                                D[j, i] = Convert.ToDouble(dataD[j], ic);
+                                                D[j][i] = Convert.ToDouble(dataD[j], ic);
                                             }
                                         }
                                         //myReaderD.Close();
@@ -696,10 +697,10 @@ namespace GralBackgroundworkers
                                             string valueA; string valueB; string valueC; string valueD;
                                             for (int i = nyB - 1; i > -1; i--)
                                             {
-                                                double a = A[j, i];
-                                                double b = B[j, i];
-                                                double c = C[j, i];
-                                                double d = D[j, i];
+                                                double a = A[j][i];
+                                                double b = B[j][i];
+                                                double c = C[j][i];
+                                                double d = D[j][i];
                                                 try
                                                 {
                                                     string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
@@ -710,7 +711,7 @@ namespace GralBackgroundworkers
                                                     valueD = "(" + Convert.ToString(d, ic) + ")";
                                                     mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC).Replace("D", valueD);
                                                     double result = parser.Parse(mathtext);
-                                                    F[j, i] = Convert.ToDouble(result);
+                                                    F[j][i] = Convert.ToDouble(result);
                                                 }
                                                 catch
                                                 {
@@ -753,7 +754,7 @@ namespace GralBackgroundworkers
                                                 {
                                                     for (int j = 0; j < nxB; j++)
                                                     {
-                                                        mywriter.Write(Convert.ToString(Math.Round(F[j, i], 3), ic) + " ");
+                                                        mywriter.Write(Convert.ToString(Math.Round(F[j][i], 3), ic) + " ");
                                                     }
                                                     mywriter.WriteLine();
                                                 }
@@ -967,11 +968,11 @@ namespace GralBackgroundworkers
                                             dataC = new string[nxC];
                                             dataD = new string[nxD];
                                             dataE = new string[nxE];
-                                            B = new double[nxB, nyB];
-                                            C = new double[nxC, nyC];
-                                            D = new double[nxD, nyD];
-                                            E = new double[nxE, nyE];
-                                            F = new double[nxA, nyA];
+                                            B = CreateArray<double[]>(nxB, () => new double[nyB]);
+                                            C = CreateArray<double[]>(nxC, () => new double[nyC]);
+                                            D = CreateArray<double[]>(nxD, () => new double[nyD]);
+                                            E = CreateArray<double[]>(nxE, () => new double[nyE]);
+                                            F = CreateArray<double[]>(nxA, () => new double[nyA]);
 
                                             SetText("Reading Raster B");
                                             for (int i = nyB - 1; i > -1; i--)
@@ -979,7 +980,7 @@ namespace GralBackgroundworkers
                                                 data = myReaderB.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                                 for (int j = 0; j < nxB; j++)
                                                 {
-                                                    B[j, i] = Convert.ToDouble(data[j], ic);
+                                                    B[j][i] = Convert.ToDouble(data[j], ic);
                                                 }
                                             }
                                             //myReaderB.Close();
@@ -991,7 +992,7 @@ namespace GralBackgroundworkers
                                                 dataC = myReaderC.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                                 for (int j = 0; j < nxB; j++)
                                                 {
-                                                    C[j, i] = Convert.ToDouble(dataC[j], ic);
+                                                    C[j][i] = Convert.ToDouble(dataC[j], ic);
                                                 }
                                             }
                                             //myReaderC.Close();
@@ -1003,7 +1004,7 @@ namespace GralBackgroundworkers
                                                 dataD = myReaderD.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                                 for (int j = 0; j < nxB; j++)
                                                 {
-                                                    D[j, i] = Convert.ToDouble(dataD[j], ic);
+                                                    D[j][i] = Convert.ToDouble(dataD[j], ic);
                                                 }
                                             }
                                             //myReaderD.Close();
@@ -1015,7 +1016,7 @@ namespace GralBackgroundworkers
                                                 dataE = myReaderE.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                                 for (int j = 0; j < nxB; j++)
                                                 {
-                                                    E[j, i] = Convert.ToDouble(dataE[j], ic);
+                                                    E[j][i] = Convert.ToDouble(dataE[j], ic);
                                                 }
                                             }
                                             //myReaderE.Close();
@@ -1032,11 +1033,11 @@ namespace GralBackgroundworkers
                                                  string valueA; string valueB; string valueC; string valueD; string valueE;
                                                  for (int i = nyB - 1; i > -1; i--)
                                                  {
-                                                     double a = A[j, i];
-                                                     double b = B[j, i];
-                                                     double c = C[j, i];
-                                                     double d = D[j, i];
-                                                     double e1 = E[j, i];
+                                                     double a = A[j][i];
+                                                     double b = B[j][i];
+                                                     double c = C[j][i];
+                                                     double d = D[j][i];
+                                                     double e1 = E[j][i];
                                                      try
                                                      {
                                                          string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
@@ -1048,7 +1049,7 @@ namespace GralBackgroundworkers
                                                          valueE = "(" + Convert.ToString(e1, ic) + ")";
                                                          mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC).Replace("D", valueD).Replace("E", valueE);
                                                          double result = parser.Parse(mathtext);
-                                                         F[j, i] = Convert.ToDouble(result);
+                                                         F[j][i] = Convert.ToDouble(result);
                                                      }
                                                      catch
                                                      {
@@ -1089,7 +1090,7 @@ namespace GralBackgroundworkers
                                                     {
                                                         for (int j = 0; j < nxB; j++)
                                                         {
-                                                            mywriter.Write(Convert.ToString(F[j, i], ic) + " ");
+                                                            mywriter.Write(Convert.ToString(F[j][i], ic) + " ");
                                                         }
                                                         mywriter.WriteLine();
                                                     }
@@ -1115,20 +1116,20 @@ namespace GralBackgroundworkers
                     BackgroundThreadMessageBox("Unable to read the data set B, C, D or E");
                     return;
                 }
-				//Cursor = Cursors.Default;
-			}
-			else if ((mydata.RasterB == null) && (mydata.RasterC == null) && (mydata.RasterD == null) && (mydata.RasterE == null))
-			{
-				SetText("Perform calculations");
-				MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
-                F = new double[nxA, nyA];
-				//double result;
+                //Cursor = Cursors.Default;
+            }
+            else if ((mydata.RasterB == null) && (mydata.RasterC == null) && (mydata.RasterD == null) && (mydata.RasterE == null))
+            {
+                SetText("Perform calculations");
+                MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
+                F = CreateArray<double[]>(nxA, () => new double[nyA]);
+                //double result;
 
-				//Stopwatch sw = new Stopwatch();
-				//sw.Start();
-					
-				//parallelization of loop
-				Parallel.For(0, nxA, j =>
+                //Stopwatch sw = new Stopwatch();
+                //sw.Start();
+                    
+                //parallelization of loop
+                Parallel.For(0, nxA, j =>
                  //for (int j = 0; j < nxA; j++)
                  {
                      if (Rechenknecht.CancellationPending)
@@ -1136,59 +1137,59 @@ namespace GralBackgroundworkers
                          e.Cancel = true;
                          return;
                      }
-                 	string valueA;	
-                 	for (int i = nyA - 1; i > -1; i--)
-                 	{
-                 		string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
-                 		mathtext = mathtext.Replace(",", mydata.Decsep);
-                 		double a = A[j, i];
-                 		//mp.Parameters.Clear();
-                 		//mp.Parameters.Add(MathFunctions.Parameters.A, a);
-                 		try
-                 		{
-                 			//result = mp.Calculate(mathtext);
-                 			 //C[j, i] = result;
-                 			mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
-                 			
-                 			valueA = "("+ Convert.ToString(a, ic) +")";
-                 			mathtext = mathtext.Replace("A", valueA);
-                 			//result = Calculator.Calc(mathtext);
-                 			double result = parser.Parse(mathtext);
-                 		           			
-                 			F[j, i] = Convert.ToDouble(result);
-                 		}
-                 		catch
-                 		{
-                 		}
-                 	}
+                    string valueA;	
+                    for (int i = nyA - 1; i > -1; i--)
+                    {
+                        string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+                        mathtext = mathtext.Replace(",", mydata.Decsep);
+                        double a = A[j][i];
+                        //mp.Parameters.Clear();
+                        //mp.Parameters.Add(MathFunctions.Parameters.A, a);
+                        try
+                        {
+                            //result = mp.Calculate(mathtext);
+                             //C[j, i] = result;
+                            mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+                            
+                            valueA = "("+ Convert.ToString(a, ic) +")";
+                            mathtext = mathtext.Replace("A", valueA);
+                            //result = Calculator.Calc(mathtext);
+                            double result = parser.Parse(mathtext);
+                                            
+                            F[j][i] = Convert.ToDouble(result);
+                        }
+                        catch
+                        {
+                        }
+                    }
                  });
-				//sw.Stop();
-				//MessageBox.Show(Convert.ToString(sw.Elapsed));
+                //sw.Stop();
+                //MessageBox.Show(Convert.ToString(sw.Elapsed));
 
-				
-				SetText("Final output");
-				//write result to output raster F
-				if (mydata.RasterF != null)
-				{
-					string file = mydata.RasterF;
-					if (File.Exists(file))
-					{
-						try
-						{
-							File.Delete(file);
-						}
-						catch{}
-					}
-					
-					CultureInfo ic = CultureInfo.InvariantCulture;
-					using (StreamWriter mywriter = new StreamWriter (file)) 
-					{
-						mywriter.WriteLine ("ncols             " + Convert.ToString (nxA));
-						mywriter.WriteLine ("nrows             " + Convert.ToString (nyA));
-						mywriter.WriteLine ("xllcorner         " + Convert.ToString (x11A, ic));
-						mywriter.WriteLine ("yllcorner         " + Convert.ToString (y11A, ic));
-						mywriter.WriteLine ("cellsize          " + Convert.ToString (dxA, ic));
-						if (mydata.Unit.Length > 0)
+                
+                SetText("Final output");
+                //write result to output raster F
+                if (mydata.RasterF != null)
+                {
+                    string file = mydata.RasterF;
+                    if (File.Exists(file))
+                    {
+                        try
+                        {
+                            File.Delete(file);
+                        }
+                        catch{}
+                    }
+                    
+                    CultureInfo ic = CultureInfo.InvariantCulture;
+                    using (StreamWriter mywriter = new StreamWriter (file)) 
+                    {
+                        mywriter.WriteLine ("ncols             " + Convert.ToString (nxA));
+                        mywriter.WriteLine ("nrows             " + Convert.ToString (nyA));
+                        mywriter.WriteLine ("xllcorner         " + Convert.ToString (x11A, ic));
+                        mywriter.WriteLine ("yllcorner         " + Convert.ToString (y11A, ic));
+                        mywriter.WriteLine ("cellsize          " + Convert.ToString (dxA, ic));
+                        if (mydata.Unit.Length > 0)
                         {
                             mywriter.WriteLine ("NODATA_value      " + Convert.ToString (nodataA) + "\t" + "UNIT \t" + mydata.Unit);
                         }
@@ -1198,25 +1199,25 @@ namespace GralBackgroundworkers
                         }
 
                         for (int i = nyA - 1; i > -1; i--) {
-							for (int j = 0; j < nxA; j++) 
-							{
-								if (Double.IsNaN(F[j, i]) || Double.IsInfinity(F[j, i]))
-								{
-									F[j, i] = 0;
-								}
-								mywriter.Write (Convert.ToString (F [j, i], ic) + " ");
-							}
-							mywriter.WriteLine ();
-						}
-					}
-				}
-				else
-				{
-					BackgroundThreadMessageBox ("No output raster has been defined");
-					return;
-				}
-			}
-			Computation_Completed = true; // set flag, that computation was successful
-		}
-	}
+                            for (int j = 0; j < nxA; j++) 
+                            {
+                                if (Double.IsNaN(F[j][i]) || Double.IsInfinity(F[j][i]))
+                                {
+                                    F[j][i] = 0;
+                                }
+                                mywriter.Write (Convert.ToString (F [j][i], ic) + " ");
+                            }
+                            mywriter.WriteLine ();
+                        }
+                    }
+                }
+                else
+                {
+                    BackgroundThreadMessageBox ("No output raster has been defined");
+                    return;
+                }
+            }
+            Computation_Completed = true; // set flag, that computation was successful
+        }
+    }
 }

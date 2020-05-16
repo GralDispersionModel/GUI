@@ -3230,7 +3230,8 @@ namespace GralDomain
                 bwd.DomainSouth = MainForm.GralDomRect.South;
                 bwd.CellsGralX = MainForm.CellsGralX;
                 bwd.CellsGralY = MainForm.CellsGralY;
-                float[,,] conc = new float[bwd.CellsGralX + 1, bwd.CellsGralY + 1, 1];
+                float[][][] conc = Landuse.CreateArray<float[][]>(bwd.CellsGralX + 1, () => 
+                                   Landuse.CreateArray<float[]>(bwd.CellsGralY + 1, () => new float[1]));
 
                 bool ReadingOK = false;
 

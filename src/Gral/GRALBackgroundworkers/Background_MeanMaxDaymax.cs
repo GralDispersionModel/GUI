@@ -93,18 +93,20 @@ namespace GralBackgroundworkers
 			int nnn = 0;
 			//int indexi = 0;
 			//int indexj = 0;
-			float[, ,] conc = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource];
-			float[, ,] dep = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource];
-			float[, ,] concmit = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[, ,] depmit = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[, ,] concmax = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[, ,] depmax = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
+
+			float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+			float[][][] dep = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+			float[][][] concmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] depmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] concmax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] depmax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] concdaymax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] depdaymax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] concdaymaxdummy = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+			float[][][] depdaymaxdummy = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+
 			float[,] concmaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
 			float[,] depmaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
-			float[, ,] concdaymax = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[, ,] depdaymax = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[, ,] concdaymaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[, ,] depdaymaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
 			double[] fmod = new double[maxsource];
 
 			//read meteopgt.all
@@ -140,7 +142,7 @@ namespace GralBackgroundworkers
 					//text2 = sr.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 					while (sr.EndOfStream == false)
 					{
-						mettimefilelength = mettimefilelength + 1;
+						mettimefilelength += 1;
 						sr.ReadLine();
 					}
 				}
@@ -387,16 +389,10 @@ namespace GralBackgroundworkers
 								} 
 								// break;
 							}
-							
+
 							//set variables to zero
-							for (int i = 0; i <= mydata.CellsGralX; i++)
-							{
-								for (int j = 0; j <= mydata.CellsGralY; j++)
-								{
-									conc[i, j, itmp] = 0;
-									dep[i, j, itmp] = 0;
-								}
-							}
+							RestoreJaggedArray(conc);
+							RestoreJaggedArray(dep);
 							
 							//read GRAL concentration files
 							string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
@@ -431,9 +427,9 @@ namespace GralBackgroundworkers
 						{
 							
 							//number of dispersion situation
-							nnn = nnn + 1;
+							nnn += 1;
 							//number of hours of specific day
-							numhour = numhour + 1;
+							numhour += 1;
 							int std = Convert.ToInt32(hour);
 							int mon = Convert.ToInt32(month) - 1;
 							for (int ii = 0; ii <= mydata.CellsGralX; ii++)
@@ -446,23 +442,23 @@ namespace GralBackgroundworkers
 								{}
 								else
 								{
-									concdaymax[ii, j, maxsource] = Math.Max(concdaymax[ii, j, maxsource], concdaymaxdummy[ii, j, maxsource] / (float)numhour);
-									depdaymax[ii, j, maxsource] = Math.Max(depdaymax[ii, j, maxsource], depdaymaxdummy[ii, j, maxsource] / (float)numhour);
+									concdaymax[ii][j][maxsource] = Math.Max(concdaymax[ii][j][maxsource], concdaymaxdummy[ii][j][maxsource] / (float)numhour);
+									depdaymax[ii][j][maxsource] = Math.Max(depdaymax[ii][j][maxsource], depdaymaxdummy[ii][j][maxsource] / (float)numhour);
 									itm = 0;
 									foreach (string source_group_name in sg_names)
 									{
-										concdaymax[ii, j, itm] = Math.Max(concdaymax[ii, j, itm], concdaymaxdummy[ii, j, itm] / (float)numhour);
-										depdaymax[ii, j, itm] = Math.Max(depdaymax[ii, j, itm], depdaymaxdummy[ii, j, itm] / (float)numhour);
+										concdaymax[ii][j][itm] = Math.Max(concdaymax[ii][j][itm], concdaymaxdummy[ii][j][itm] / (float)numhour);
+										depdaymax[ii][j][itm] = Math.Max(depdaymax[ii][j][itm], depdaymaxdummy[ii][j][itm] / (float)numhour);
 										itm++;
 									}
 
-									concdaymaxdummy[ii, j, maxsource] = 0;
-									depdaymaxdummy[ii, j, maxsource] = 0;
+									concdaymaxdummy[ii][j][maxsource] = 0;
+									depdaymaxdummy[ii][j][maxsource] = 0;
 									itm = 0;
 									foreach (string source_group_name in sg_names)
 									{
-										concdaymaxdummy[ii, j, itm] = 0;
-										depdaymaxdummy[ii, j, itm] = 0;
+										concdaymaxdummy[ii][j][itm] = 0;
+										depdaymaxdummy[ii][j][itm] = 0;
 										itm++;
 									}
 
@@ -481,27 +477,27 @@ namespace GralBackgroundworkers
                                             fmod[itm] = fmod[itm] + emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
                                         }
 
-                                        float fac = conc[ii, j, itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
-									float facdep = dep[ii, j, itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
+                                        float fac = conc[ii][j][itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
+									float facdep = dep[ii][j][itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
 									//compute mean concentrations for each source group and in total
-									concmit[ii, j, itm] = concmit[ii, j, itm] + fac;
-									concmit[ii, j, maxsource] = concmit[ii, j, maxsource] + fac;
-									depmit[ii, j, itm] = depmit[ii, j, itm] + facdep;
-									depmit[ii, j, maxsource] = depmit[ii, j, maxsource] + facdep;
+									concmit[ii][j][itm] = concmit[ii][j][itm] + fac;
+									concmit[ii][j][maxsource] = concmit[ii][j][maxsource] + fac;
+									depmit[ii][j][itm] = depmit[ii][j][itm] + facdep;
+									depmit[ii][j][maxsource] = depmit[ii][j][maxsource] + facdep;
 									//compute max concentrations for each source group and in total
-									concmax[ii, j, itm] = Math.Max(concmax[ii, j, itm], fac);
+									concmax[ii][j][itm] = Math.Max(concmax[ii][j][itm], fac);
 									concmaxdummy[ii, j] = concmaxdummy[ii, j] + fac;
-									depmax[ii, j, itm] = Math.Max(depmax[ii, j, itm], facdep);
+									depmax[ii][j][itm] = Math.Max(depmax[ii][j][itm], facdep);
 									depmaxdummy[ii, j] = depmaxdummy[ii, j] + facdep;
 									//compute max. daily concentrations for each source group
-									concdaymaxdummy[ii, j, itm] = concdaymaxdummy[ii, j, itm] + fac;
-									concdaymaxdummy[ii, j, maxsource] = concdaymaxdummy[ii, j, maxsource] + fac;
-									depdaymaxdummy[ii, j, itm] = depdaymaxdummy[ii, j, itm] + facdep;
-									depdaymaxdummy[ii, j, maxsource] = depdaymaxdummy[ii, j, maxsource] + facdep;
+									concdaymaxdummy[ii][j][itm] = concdaymaxdummy[ii][j][itm] + fac;
+									concdaymaxdummy[ii][j][maxsource] = concdaymaxdummy[ii][j][maxsource] + fac;
+									depdaymaxdummy[ii][j][itm] = depdaymaxdummy[ii][j][itm] + facdep;
+									depdaymaxdummy[ii][j][maxsource] = depdaymaxdummy[ii][j][maxsource] + facdep;
 									itm++;
 								}
-								concmax[ii, j, maxsource] = Math.Max(concmax[ii, j, maxsource], concmaxdummy[ii, j]);
-								depmax[ii, j, maxsource] = Math.Max(depmax[ii, j, maxsource], depmaxdummy[ii, j]);
+								concmax[ii][j][maxsource] = Math.Max(concmax[ii][j][maxsource], concmaxdummy[ii, j]);
+								depmax[ii][j][maxsource] = Math.Max(depmax[ii][j][maxsource], depmaxdummy[ii, j]);
 							}
                             }
                         }
@@ -525,8 +521,8 @@ namespace GralBackgroundworkers
 					{
 						for (int j = 0; j <= mydata.CellsGralY; j++)
 						{
-							concmit[i, j, itm] = concmit[i, j, itm] / (float)nnn;
-							depmit[i, j, itm] = depmit[i, j, itm] / (float)nnn;
+							concmit[i][j][itm] = concmit[i][j][itm] / (float)nnn;
+							depmit[i][j][itm] = depmit[i][j][itm] / (float)nnn;
 						}
 					}
 					itm++;
@@ -536,8 +532,8 @@ namespace GralBackgroundworkers
                 {
                     for (int j = 0; j <= mydata.CellsGralY; j++)
 				{
-					concmit[i, j, maxsource] = concmit[i, j, maxsource] / (float)nnn;
-					depmit[i, j, maxsource] = depmit[i, j, maxsource] / (float)nnn;
+					concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
+					depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
 				}
                 }
             }

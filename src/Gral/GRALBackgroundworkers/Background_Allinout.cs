@@ -27,34 +27,34 @@ using GralIO;
 namespace GralBackgroundworkers
 {
     public partial class ProgressFormBackgroundworker
-	{
-		/// <summary>
+    {
+        /// <summary>
         /// Calculate odour hours based on an All-In All-Out stable
         /// </summary>
-		private void OdourAllinAllout(GralBackgroundworkers.BackgroundworkerData mydata,
+        private void OdourAllinAllout(GralBackgroundworkers.BackgroundworkerData mydata,
                                       System.ComponentModel.DoWorkEventArgs e)
         {
-        	//reading emission variations
-        	int maxsource = mydata.MaxSource;
-        	string decsep = mydata.Decsep;
-        	double[,] emifac_day = new double[24, maxsource];
-        	double[,] emifac_mon = new double[12, maxsource];
-        	string[] text = new string[5];
-        	string newpath;
-        	string[] sg_numbers = new string[maxsource];
-        	string[] sg_names = mydata.Sel_Source_Grp.Split(',');
-			
-        	// int allin_index=0; // Kuntner never used 
-        	float[] freq = new float[maxsource];
+            //reading emission variations
+            int maxsource = mydata.MaxSource;
+            string decsep = mydata.Decsep;
+            double[,] emifac_day = new double[24, maxsource];
+            double[,] emifac_mon = new double[12, maxsource];
+            string[] text = new string[5];
+            string newpath;
+            string[] sg_numbers = new string[maxsource];
+            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
+            
+            // int allin_index=0; // Kuntner never used 
+            float[] freq = new float[maxsource];
 
-        	//get variation for source group
-        	int itm=0;
-			try
-			{
-	        	foreach (string source_group_name in sg_names)
-	        	{
-	        		sg_numbers[itm] = GetSgNumbers(source_group_name);
-	        		newpath = Path.Combine("Computation","emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
+            //get variation for source group
+            int itm=0;
+            try
+            {
+                foreach (string source_group_name in sg_names)
+                {
+                    sg_numbers[itm] = GetSgNumbers(source_group_name);
+                    newpath = Path.Combine("Computation","emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
 
                     using (StreamReader myreader = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
                     {
@@ -68,14 +68,14 @@ namespace GralBackgroundworkers
                             }
                         }
                     }
-	        		itm++;
-	        	}
-			}
-			catch(Exception ex)
-			{
-				BackgroundThreadMessageBox (ex.Message);
-				return;
-			}
+                    itm++;
+                }
+            }
+            catch(Exception ex)
+            {
+                BackgroundThreadMessageBox (ex.Message);
+                return;
+            }
 
             //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
             try
@@ -104,23 +104,23 @@ namespace GralBackgroundworkers
                 BackgroundThreadMessageBox(ex.Message);
                 return;
             }
-        	
-        	//read mettimeseries.dat
-        	List<string> wgmettime = new List<string>();
-        	List<string> wrmettime = new List<string>();
-        	List<string> akmettime = new List<string>();
-        	List<string> hour = new List<string>();
-        	List<string> month = new List<string>();
-        	string[] text2 = new string[5];
-        	string[] text3 = new string[2];
-        	int hourplus = 0;
-        	string day="0";
-        	float division = 24;
-        	float emptytimes = 0;
-        	
-        	newpath = Path.Combine("Computation","mettimeseries.dat");
-			try
-			{
+            
+            //read mettimeseries.dat
+            List<string> wgmettime = new List<string>();
+            List<string> wrmettime = new List<string>();
+            List<string> akmettime = new List<string>();
+            List<string> hour = new List<string>();
+            List<string> month = new List<string>();
+            string[] text2 = new string[5];
+            string[] text3 = new string[2];
+            int hourplus = 0;
+            string day="0";
+            float division = 24;
+            float emptytimes = 0;
+            
+            newpath = Path.Combine("Computation","mettimeseries.dat");
+            try
+            {
                 using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
                 {
                     text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -158,121 +158,111 @@ namespace GralBackgroundworkers
                         }
                     }
                 }
-			}
-			catch(Exception ex)
-			{
-				BackgroundThreadMessageBox (ex.Message);
-				return;
-			}
+            }
+            catch(Exception ex)
+            {
+                BackgroundThreadMessageBox (ex.Message);
+                return;
+            }
 
-        	//breeding cylce in days
-        	division = mydata.Division;
+            //breeding cylce in days
+            division = mydata.Division;
 
-        	//empty times between two breeding cycles in days
-        	emptytimes = mydata.Emptytimes;
+            //empty times between two breeding cycles in days
+            emptytimes = mydata.Emptytimes;
 
-        	//source group specifications for all in all out systems
-        	itm = 0;
-        	foreach (string source_group_name in sg_names)
-        	{
-        		//define frequencies for odour emissions for each source group
-        		freq[itm] = 1;
+            //source group specifications for all in all out systems
+            itm = 0;
+            foreach (string source_group_name in sg_names)
+            {
+                //define frequencies for odour emissions for each source group
+                freq[itm] = 1;
 
-        		//save index of the source group for which a breeding cycle has been defined
-        		if (sg_names[itm] == mydata.AllInn_Sel_Source_Grp)
-        		{
-        			//allin_index = itm; //Remark Kuntner: never used
-        			freq[itm] = 1 / (division+emptytimes);
-        		}
-        		itm++;
-        	}
+                //save index of the source group for which a breeding cycle has been defined
+                if (sg_names[itm] == mydata.AllInn_Sel_Source_Grp)
+                {
+                    //allin_index = itm; //Remark Kuntner: never used
+                    freq[itm] = 1 / (division+emptytimes);
+                }
+                itm++;
+            }
 
-        	
-        	//read meteopgt.all
-			List<string> data_meteopgt = new List<string>();
-			ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
-			if (data_meteopgt.Count == 0) // no data available
-			{ 
-				BackgroundThreadMessageBox ("Error reading meteopgt.all");
-			}
+            
+            //read meteopgt.all
+            List<string> data_meteopgt = new List<string>();
+            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
+            if (data_meteopgt.Count == 0) // no data available
+            { 
+                BackgroundThreadMessageBox ("Error reading meteopgt.all");
+            }
 
-			string wgmet;
-        	string wrmet;
-        	string akmet;
-        	double frequency;
-        	int wl = 0;
+            string wgmet;
+            string wrmet;
+            string akmet;
+            double frequency;
+            int wl = 0;
             int nnn = 0;
             int n_daytime = 0;
             int n_nighttime = 0;
             int n_evening = 0;
-        	double ntot = 0;
+            double ntot = 0;
 //        	int indexi = 0;
 //        	int indexj = 0;
-            float[, ,] conc = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
-            float[, ,] concp = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
-            float[, ,] concm = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
-            float[, ,] Q_cv0 = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
-            float[, ,] td = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
-            float[, ,] concmit = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 6];
-            float[, ,] concmitp = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
-            float[, ,] concmitm = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 2];
+            float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+            float[][][] concp = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+            float[][][] concm = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+            float[][][] Q_cv0 = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+            float[][][] td = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+            float[][][] concmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 6]));
+            float[][][] concmitp = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+            float[][][] concmitm = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 2]));
+
             float[,] conctot = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
             float[,] conctotp = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
             float[,] conctotm = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
             float[,] R90_array = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
             float[,] CFI = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
             float[,] counter = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
-        	double[] fmod = new double[maxsource];
-        	float normemission;
+            double[] fmod = new double[maxsource];
+            float normemission;
 
-        	foreach(string line_meteopgt in data_meteopgt)
-        	{
-        		try
-        		{
-        			//set variables to zero
-        			itm = 0;
-        			foreach (string source_group_name in sg_names)
-        			{
-        				for (int i = 0; i <= mydata.CellsGralX; i++)
-                        {
-                            for (int j = 0; j <= mydata.CellsGralY; j++)
-        				{
-                            conc[i, j, itm] = 0;
-                            concp[i, j, itm] = 0;
-                            concm[i, j, itm] = 0;
-        				}
-                        }
-
-                        itm++;
-        			}
-
-        			//meteopgt.all
-        			wl = wl + 1;
-        			
-        			if (Rechenknecht.CancellationPending)
-					{
+            foreach(string line_meteopgt in data_meteopgt)
+            {
+                try
+                {
+                    //set variables to zero
+                    itm = 0;
+                    RestoreJaggedArray(conc);
+                    RestoreJaggedArray(concp);
+                    RestoreJaggedArray(concm);
+                    
+                    //meteopgt.all
+                    wl += 1;
+                    
+                    if (Rechenknecht.CancellationPending)
+                    {
                         e.Cancel = true;
                         return;
-					}
-        			if (wl % 4 == 0)
-        			{
-					   Rechenknecht.ReportProgress((int) (wl / (double) data_meteopgt.Count * 100D));
-        			}
-        			
-        			bool exist = true;
+                    }
+                    if (wl % 4 == 0)
+                    {
+                       Rechenknecht.ReportProgress((int) (wl / (double) data_meteopgt.Count * 100D));
+                    }
+                    
+                    bool exist = true;
                     bool exist_conp = false;
-        			text = line_meteopgt.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-        			wrmet = text[0];
-        			wgmet = text[1];
-        			akmet = text[2];
-        			frequency = Convert.ToDouble(text[3].Replace(".", decsep));
-        			//GRAL filenames
+                    text = line_meteopgt.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                    wrmet = text[0];
+                    wgmet = text[1];
+                    akmet = text[2];
+                    frequency = Convert.ToDouble(text[3].Replace(".", decsep));
+                    //GRAL filenames
                     string[] con_files = new string[100];
                     string[] odr_files = new string[100];
-        			string[] concdata = new string[3];
-        			itm = 0;
-        			foreach (string source_group_name in sg_names)
-        			{
+                    string[] concdata = new string[3];
+                    itm = 0;
+                    foreach (string source_group_name in sg_names)
+                    {
                         if (sg_names.Length > 0)
                         {
                             con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".con";
@@ -284,11 +274,11 @@ namespace GralBackgroundworkers
                             con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".odr";
                         }
 
-        				if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itm])) == false &&
+                        if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itm])) == false &&
                             File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
-        				{
-        					exist = false;
-        					break;
+                        {
+                            exist = false;
+                            break;
                         }
 
                         //check if vertical adjecent files to compute concentration variance exist
@@ -297,9 +287,9 @@ namespace GralBackgroundworkers
                         {
                             exist_conp = true;
                         }
-        				
-        				//read GRAL concentration files
-        				string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itm]);
+                        
+                        //read GRAL concentration files
+                        string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itm]);
                         if (!ReadConFiles(filename, mydata, itm, ref conc))
                         {
                             // Error reading one *.con file
@@ -317,19 +307,19 @@ namespace GralBackgroundworkers
                                 exist = false;
                             }
                         }
-        				
-        				itm++;
-        			}
-        			if (exist == true)
-        			{
-        				ntot = ntot + frequency / 10;
+                        
+                        itm++;
+                    }
+                    if (exist == true)
+                    {
+                        ntot += frequency / 10;
 
-        				for (int i = 0; i < hour.Count; i++)
-        				{
-        					if ((wgmet == wgmettime[i]) && (wrmet == wrmettime[i]) && (akmet == akmettime[i]))
-        					{
-        						nnn = nnn + 1;
-        						int std = Convert.ToInt16(hour[i]);
+                        for (int i = 0; i < hour.Count; i++)
+                        {
+                            if ((wgmet == wgmettime[i]) && (wrmet == wrmettime[i]) && (akmet == akmettime[i]))
+                            {
+                                nnn += 1;
+                                int std = Convert.ToInt16(hour[i]);
                                 int mon = Convert.ToInt32(month[i]) - 1;
 
                                 //daytime odour-hour frequency
@@ -347,99 +337,99 @@ namespace GralBackgroundworkers
                                 {
                                     n_nighttime++;
                                 }
-								
-        						SetText("Dispersion situation " + Convert.ToString(wl) + ": " + Convert.ToString(Math.Round(ntot, 1)) +
+                                
+                                SetText("Dispersion situation " + Convert.ToString(wl) + ": " + Convert.ToString(Math.Round(ntot, 1)) +
                                          "%    " + "Month: " + month[i] + "- Hour: " + hour[i] + ":00h");
-        						
+                                
                                 itm = 0;
-        						foreach (string source_group_name in sg_names)
-        						{
-        							for (int ii = 0; ii <= mydata.CellsGralX; ii++)
-        							{
-        								for (int j = 0; j <= mydata.CellsGralY; j++)
+                                foreach (string source_group_name in sg_names)
+                                {
+                                    for (int ii = 0; ii <= mydata.CellsGralX; ii++)
+                                    {
+                                        for (int j = 0; j <= mydata.CellsGralY; j++)
                                         {
                                             float emission_modulation = (float)(emifac_day[std - hourplus, itm] * emifac_mon[mon, itm]);
-        									if ((ii == 0) && (j == 0))
+                                            if ((ii == 0) && (j == 0))
                                             {
                                                 fmod[itm] += emission_modulation;
                                             }
 
                                             if (freq[itm] == 1)
-        									{
+                                            {
                                                 if (mydata.Peakmean < 0)
                                                 {
                                                     //compute spatially dependent R90 for each sourcegroup
-                                                    conctot[ii, j] += conc[ii, j, itm] * emission_modulation;
-                                                    conctotp[ii, j] += concp[ii, j, itm] * emission_modulation;
-                                                    conctotm[ii, j] += concm[ii, j, itm] * emission_modulation;
-                                                    Q_cv0[ii, j, maxsource] = Math.Max(Q_cv0[ii, j, maxsource], Q_cv0[ii, j, itm]);
-                                                    td[ii, j, maxsource] = Math.Max(td[ii, j, maxsource], td[ii, j, itm]);
+                                                    conctot[ii, j] += conc[ii][j][itm] * emission_modulation;
+                                                    conctotp[ii, j] += concp[ii][j][itm] * emission_modulation;
+                                                    conctotm[ii, j] += concm[ii][j][itm] * emission_modulation;
+                                                    Q_cv0[ii][j][maxsource] = Math.Max(Q_cv0[ii][j][maxsource], Q_cv0[ii][j][itm]);
+                                                    td[ii][j][maxsource] = Math.Max(td[ii][j][maxsource], td[ii][j][itm]);
 
                                                     float R90 = 4;
                                                     float Q_cv = 0;
                                                     //compute spatially dependent R90 for each plume
                                                     //note that the quantities Q_cv0 and td are flow properties and thus equal for all source groups
-                                                    if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii, j, itm] != 0))
+                                                    if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii][j][itm] != 0))
                                                     {
-                                                        float conc_centre = conc[ii, j, itm] * emission_modulation;
-                                                        float conc_zplus = concp[ii, j, itm] * emission_modulation;
-                                                        float conc_zminus = concm[ii, j, itm] * emission_modulation;
-                                                        float conc_xplus = conc[ii + 1, j, itm] * emission_modulation;
-                                                        float conc_xminus = conc[ii - 1, j, itm] * emission_modulation;
-                                                        float conc_yplus = conc[ii, j + 1, itm] * emission_modulation;
-                                                        float conc_yminus = conc[ii, j - 1, itm] * emission_modulation;
+                                                        float conc_centre = conc[ii][j][itm] * emission_modulation;
+                                                        float conc_zplus = concp[ii][j][itm] * emission_modulation;
+                                                        float conc_zminus = concm[ii][j][itm] * emission_modulation;
+                                                        float conc_xplus = conc[ii + 1][j][itm] * emission_modulation;
+                                                        float conc_xminus = conc[ii - 1][j][itm] * emission_modulation;
+                                                        float conc_yplus = conc[ii][j + 1][itm] * emission_modulation;
+                                                        float conc_yminus = conc[ii][j - 1][itm] * emission_modulation;
                                                         GralConcentrationVarianceModel.Concentration_Variance_Model.R90_calculate(ii, j, conc_xplus, conc_xminus,
                                                             conc_yplus, conc_yminus, conc_zplus, conc_zminus, conc_centre,
-                                                            Q_cv0[ii, j, itm], td[ii, j, itm], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
+                                                            Q_cv0[ii][j][itm], td[ii][j][itm], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
                                                     }
 
-                                                    if (conc[ii, j, itm] * R90 * 0.001 * emission_modulation >= (float)mydata.OdourThreshold)
+                                                    if (conc[ii][j][itm] * R90 * 0.001 * emission_modulation >= (float)mydata.OdourThreshold)
                                                     {
-                                                        concmit[ii, j, itm]++;
+                                                        concmit[ii][j][itm]++;
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    conctot[ii, j] += conc[ii, j, itm] * emission_modulation;
-                                                    if (conc[ii, j, itm] * (float)(mydata.Peakmean) * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
+                                                    conctot[ii, j] += conc[ii][j][itm] * emission_modulation;
+                                                    if (conc[ii][j][itm] * (float)(mydata.Peakmean) * 0.001 * emission_modulation >= (float)(mydata.OdourThreshold))
                                                     {
-                                                        concmit[ii, j, itm]++;
+                                                        concmit[ii][j][itm]++;
                                                     }
                                                 }                                                
-        									}
-        									else
-        									{
+                                            }
+                                            else
+                                            {
                                                 if (mydata.Peakmean < 0)
                                                 {
                                                     for (int zyklus = 0; zyklus <= Convert.ToInt32(division + emptytimes); zyklus++)
                                                     {
                                                         normemission = freq[itm] * Math.Max((float)zyklus - emptytimes, 0);
-                                                        concmit[ii, j, maxsource + 1] = conc[ii, j, itm] * emission_modulation;
-                                                        concmitp[ii, j, maxsource + 1] = concp[ii, j, itm] * emission_modulation;
-                                                        concmitm[ii, j, maxsource + 1] = concm[ii, j, itm] * emission_modulation;
+                                                        concmit[ii][j][maxsource + 1] = conc[ii][j][itm] * emission_modulation;
+                                                        concmitp[ii][j][maxsource + 1] = concp[ii][j][itm] * emission_modulation;
+                                                        concmitm[ii][j][maxsource + 1] = concm[ii][j][itm] * emission_modulation;
 
                                                         float R90 = 4;
                                                         float Q_cv = 0;
                                                         //compute spatially dependent R90 for each plume
                                                         //note that the quantities Q_cv0 and td are flow properties and thus equal for all source groups
-                                                        if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii, j, maxsource] != 0))
+                                                        if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii][j][maxsource] != 0))
                                                         {
-                                                            float conc_centre = conc[ii, j, itm] * emission_modulation * normemission;
-                                                            float conc_zplus = concp[ii, j, itm] * emission_modulation * normemission;
-                                                            float conc_zminus = concm[ii, j, itm] * emission_modulation * normemission;
-                                                            float conc_xplus = conc[ii + 1, j, itm] * emission_modulation * normemission;
-                                                            float conc_xminus = conc[ii - 1, j, itm] * emission_modulation * normemission;
-                                                            float conc_yplus = conc[ii, j + 1, itm] * emission_modulation * normemission;
-                                                            float conc_yminus = conc[ii, j - 1, itm] * emission_modulation * normemission;
+                                                            float conc_centre = conc[ii][j][itm] * emission_modulation * normemission;
+                                                            float conc_zplus = concp[ii][j][itm] * emission_modulation * normemission;
+                                                            float conc_zminus = concm[ii][j][itm] * emission_modulation * normemission;
+                                                            float conc_xplus = conc[ii + 1][j][itm] * emission_modulation * normemission;
+                                                            float conc_xminus = conc[ii - 1][j][itm] * emission_modulation * normemission;
+                                                            float conc_yplus = conc[ii][j + 1][itm] * emission_modulation * normemission;
+                                                            float conc_yminus = conc[ii][j - 1][itm] * emission_modulation * normemission;
 
                                                             GralConcentrationVarianceModel.Concentration_Variance_Model.R90_calculate(ii, j, conc_xplus, conc_xminus,
                                                                 conc_yplus, conc_yminus, conc_zplus, conc_zminus, conc_centre,
-                                                                Q_cv0[ii, j, maxsource], td[ii, j, maxsource], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
+                                                                Q_cv0[ii][j][maxsource], td[ii][j][maxsource], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
                                                         }
 
-                                                        if (conc[ii, j, itm] * R90 * 0.001 * emission_modulation * normemission >= (float)(mydata.OdourThreshold))
+                                                        if (conc[ii][j][itm] * R90 * 0.001 * emission_modulation * normemission >= (float)(mydata.OdourThreshold))
                                                         {
-                                                            concmit[ii, j, itm] += freq[itm];
+                                                            concmit[ii][j][itm] += freq[itm];
                                                         }
                                                     }
                                                 }
@@ -448,18 +438,18 @@ namespace GralBackgroundworkers
                                                     for (int zyklus = 0; zyklus <= Convert.ToInt32(division + emptytimes); zyklus++)
                                                     {
                                                         normemission = freq[itm] * Math.Max((float)zyklus - emptytimes, 0);
-                                                        concmit[ii, j, maxsource + 1] = conc[ii, j, itm] * emission_modulation;
-                                                        if (conc[ii, j, itm] * (float)(mydata.Peakmean) * 0.001 * emission_modulation * normemission >= (float)(mydata.OdourThreshold))
+                                                        concmit[ii][j][maxsource + 1] = conc[ii][j][itm] * emission_modulation;
+                                                        if (conc[ii][j][itm] * (float)(mydata.Peakmean) * 0.001 * emission_modulation * normemission >= (float)(mydata.OdourThreshold))
                                                         {
-                                                            concmit[ii, j, itm] += freq[itm];
+                                                            concmit[ii][j][itm] += freq[itm];
                                                         }
                                                     }
                                                 }
-        									}
-        								}
-        							}
-        							itm++;
-        						}
+                                            }
+                                        }
+                                    }
+                                    itm++;
+                                }
 
                                 Parallel.For(0, mydata.CellsGralX + 1, ii =>
                                 {
@@ -472,11 +462,11 @@ namespace GralBackgroundworkers
                                             float Q_cv = 0;
                                             //compute spatially dependent R90 for all plumes
                                             //note that the quantities Q_cv0 and td are flow properties and thus equal for all source groups
-                                            if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii, j, 0] != 0))
+                                            if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii][j][0] != 0))
                                             {
                                                 GralConcentrationVarianceModel.Concentration_Variance_Model.R90_calculate(ii, j, conctot[ii + 1, j], conctot[ii - 1, j],
                                                     conctot[ii, j + 1], conctot[ii, j - 1], conctotp[ii, j], conctotm[ii, j], conctot[ii, j],
-                                                    Q_cv0[ii, j, 0], td[ii, j, 0], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
+                                                    Q_cv0[ii][j][0], td[ii][j][0], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
 
                                                 CFI[ii, j] += Q_cv;
                                                 R90_array[ii, j] += R90;
@@ -484,27 +474,27 @@ namespace GralBackgroundworkers
                                             }
 
                                             //reset arrays to zero
-                                            Q_cv0[ii, j, maxsource] = 0;
-                                            td[ii, j, maxsource] = 0;
+                                            Q_cv0[ii][j][maxsource] = 0;
+                                            td[ii][j][maxsource] = 0;
 
                                             if (conctot[ii, j] * R90 * 0.001 >= (float)(mydata.OdourThreshold))
                                             {
-                                                concmit[ii, j, maxsource]++;
+                                                concmit[ii][j][maxsource]++;
 
                                                 //daytime odour-hour frequency
                                                 if ((std >= 6) && (std < 19))
                                                 {
-                                                    concmit[ii, j, maxsource + 2]++;
+                                                    concmit[ii][j][maxsource + 2]++;
                                                 }
                                                 //evening odour-hour frequency
                                                 if ((std >= 19) && (std < 22))
                                                 {
-                                                    concmit[ii, j, maxsource + 3]++;
+                                                    concmit[ii][j][maxsource + 3]++;
                                                 }
                                                 //nightime odour-hour frequency
                                                 if ((std >= 22) || (std < 6))
                                                 {
-                                                    concmit[ii, j, maxsource + 4]++;
+                                                    concmit[ii][j][maxsource + 4]++;
                                                 }
                                             }
                                             else
@@ -521,39 +511,39 @@ namespace GralBackgroundworkers
                                                             
                                                             //compute spatially dependent R90 for each plume
                                                             //note that the quantities Q_cv0 and td are flow properties and thus equal for all source groups
-                                                            if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii, j, 0] != 0))
+                                                            if ((ii != 0) && (j != 0) && (ii < mydata.CellsGralX) && (j < mydata.CellsGralY) && (conctot[ii, j] != 0) && (td[ii][j][0] != 0))
                                                             {
-                                                                float conc_centre = (conctot[ii, j] + concmit[ii, j, maxsource + 1] * normemission);
-                                                                float conc_zplus = (conctotp[ii, j] + concmitp[ii, j, maxsource + 1] * normemission);
-                                                                float conc_zminus = (conctotm[ii, j] + concmitm[ii, j, maxsource + 1] * normemission);
-                                                                float conc_xplus = (conctot[ii + 1, j] + concmit[ii + 1, j, maxsource + 1] * normemission);
-                                                                float conc_xminus = (conctot[ii - 1, j] + concmit[ii - 1, j, maxsource + 1] * normemission);
-                                                                float conc_yplus = (conctot[ii, j + 1] + concmit[ii, j + 1, maxsource + 1] * normemission);
-                                                                float conc_yminus = (conctot[ii, j - 1] + concmit[ii, j - 1, maxsource + 1] * normemission);
+                                                                float conc_centre = (conctot[ii, j] + concmit[ii][j][maxsource + 1] * normemission);
+                                                                float conc_zplus = (conctotp[ii, j] + concmitp[ii][j][maxsource + 1] * normemission);
+                                                                float conc_zminus = (conctotm[ii, j] + concmitm[ii][j][maxsource + 1] * normemission);
+                                                                float conc_xplus = (conctot[ii + 1, j] + concmit[ii + 1][j][maxsource + 1] * normemission);
+                                                                float conc_xminus = (conctot[ii - 1, j] + concmit[ii - 1][j][maxsource + 1] * normemission);
+                                                                float conc_yplus = (conctot[ii, j + 1] + concmit[ii][j + 1][maxsource + 1] * normemission);
+                                                                float conc_yminus = (conctot[ii, j - 1] + concmit[ii][j - 1][maxsource + 1] * normemission);
 
                                                                 GralConcentrationVarianceModel.Concentration_Variance_Model.R90_calculate(ii, j, conc_xplus, conc_xminus,
                                                                     conc_yplus, conc_yminus, conc_zplus, conc_zminus, conc_centre,
-                                                                    Q_cv0[ii, j, 0], td[ii, j, 0], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
+                                                                    Q_cv0[ii][j][0], td[ii][j][0], (float)mydata.Horgridsize, (float)mydata.VertgridSize, ref R90, ref Q_cv);
                                                             }
 
-                                                            if ((conctot[ii, j] + concmit[ii, j, maxsource + 1] * normemission) * R90 * 0.001 >= (float)(mydata.OdourThreshold))
+                                                            if ((conctot[ii, j] + concmit[ii][j][maxsource + 1] * normemission) * R90 * 0.001 >= (float)(mydata.OdourThreshold))
                                                             {
-                                                                concmit[ii, j, maxsource] += freq[itm1];
+                                                                concmit[ii][j][maxsource] += freq[itm1];
 
                                                                 //daytime odour-hour frequency
                                                                 if ((std >= 6) && (std < 19))
                                                                 {
-                                                                    concmit[ii, j, maxsource + 2] += freq[itm1];
+                                                                    concmit[ii][j][maxsource + 2] += freq[itm1];
                                                                 }
                                                                 //evening odour-hour frequency
                                                                 if ((std >= 19) && (std < 22))
                                                                 {
-                                                                    concmit[ii, j, maxsource + 3] += freq[itm1];
+                                                                    concmit[ii][j][maxsource + 3] += freq[itm1];
                                                                 }
                                                                 //nightime odour-hour frequency
                                                                 if ((std >= 22) || (std < 6))
                                                                 {
-                                                                    concmit[ii, j, maxsource + 4] += freq[itm1];
+                                                                    concmit[ii][j][maxsource + 4] += freq[itm1];
                                                                 }
                                                                 //annual weighted odour hours
                                                                 float weight = 1f;
@@ -573,7 +563,7 @@ namespace GralBackgroundworkers
                                                                         weight = 1.3f;
                                                                     }
                                                                 }
-                                                                concmit[ii, j, maxsource + 5] += freq[itm1] * weight;
+                                                                concmit[ii][j][maxsource + 5] += freq[itm1] * weight;
                                                             }
                                                         }
                                                     }
@@ -585,7 +575,7 @@ namespace GralBackgroundworkers
                                         {
                                             if (conctot[ii, j] * (float)(mydata.Peakmean) * 0.001 >= (float)(mydata.OdourThreshold))
                                             {
-                                                concmit[ii, j, maxsource]++;
+                                                concmit[ii][j][maxsource]++;
                                             }
                                             else
                                             {
@@ -597,24 +587,24 @@ namespace GralBackgroundworkers
                                                         for (int zyklus = 0; zyklus <= Convert.ToInt32(division + emptytimes); zyklus++)
                                                         {
                                                             normemission = freq[itm1] * Math.Max((float)zyklus - emptytimes, 0);
-                                                            if ((conctot[ii, j] + concmit[ii, j, maxsource + 1] * normemission) * (float)(mydata.Peakmean) * 0.001 >= (float)(mydata.OdourThreshold))
+                                                            if ((conctot[ii, j] + concmit[ii][j][maxsource + 1] * normemission) * (float)(mydata.Peakmean) * 0.001 >= (float)(mydata.OdourThreshold))
                                                             {
-                                                                concmit[ii, j, maxsource] += freq[itm1];
+                                                                concmit[ii][j][maxsource] += freq[itm1];
 
                                                                 //daytime odour-hour frequency
                                                                 if ((std >= 6) && (std < 19))
                                                                 {
-                                                                    concmit[ii, j, maxsource + 2] += freq[itm1];
+                                                                    concmit[ii][j][maxsource + 2] += freq[itm1];
                                                                 }
                                                                 //evening odour-hour frequency
                                                                 if ((std >= 19) && (std < 22))
                                                                 {
-                                                                    concmit[ii, j, maxsource + 3] += freq[itm1];
+                                                                    concmit[ii][j][maxsource + 3] += freq[itm1];
                                                                 }
                                                                 //nightime odour-hour frequency
                                                                 if ((std >= 22) || (std < 6))
                                                                 {
-                                                                    concmit[ii, j, maxsource + 4] += freq[itm1];
+                                                                    concmit[ii][j][maxsource + 4] += freq[itm1];
                                                                 }
                                                                 //annual weighted odour hours
                                                                 float weight = 1f;
@@ -634,7 +624,7 @@ namespace GralBackgroundworkers
                                                                         weight = 1.3f;
                                                                     }
                                                                 }
-                                                                concmit[ii, j, maxsource + 5] += freq[itm1] * weight;
+                                                                concmit[ii][j][maxsource + 5] += freq[itm1] * weight;
                                                             }
                                                         }
                                                     }
@@ -648,48 +638,48 @@ namespace GralBackgroundworkers
                                     }
                                 });
 
-        						hour.RemoveAt(i);
-        						month.RemoveAt(i);
-        						wgmettime.RemoveAt(i);
-        						wrmettime.RemoveAt(i);
-        						akmettime.RemoveAt(i);
-        						i = i - 1;
-        					}
-        				}
-        			}
-        		}
-        		catch
-        		{}
-        	}
-        	
-        	//final computations
-        	if (nnn > 0)
-        	{
-        		itm = 0;
-        		foreach (string source_group_name in sg_names)
-        		{
-        			fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
-        			for (int i = 0; i <= mydata.CellsGralX; i++)
+                                hour.RemoveAt(i);
+                                month.RemoveAt(i);
+                                wgmettime.RemoveAt(i);
+                                wrmettime.RemoveAt(i);
+                                akmettime.RemoveAt(i);
+                                i -= 1;
+                            }
+                        }
+                    }
+                }
+                catch
+                {}
+            }
+            
+            //final computations
+            if (nnn > 0)
+            {
+                itm = 0;
+                foreach (string source_group_name in sg_names)
+                {
+                    fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
+                    for (int i = 0; i <= mydata.CellsGralX; i++)
                     {
                         for (int j = 0; j <= mydata.CellsGralY; j++)
-        			{
-        				concmit[i, j, itm] = concmit[i, j, itm] / (float)nnn * 100;
-        			}
+                    {
+                        concmit[i][j][itm] = concmit[i][j][itm] / (float)nnn * 100;
+                    }
                     }
 
                     itm++;
-        		}
+                }
 
                 //total concentration
                 Parallel.For(0, mydata.CellsGralX + 1, i =>
                 {
                     for (int j = 0; j <= mydata.CellsGralY; j++)
                     {
-                        concmit[i, j, maxsource] = concmit[i, j, maxsource] / (float)nnn * 100;
-                        concmit[i, j, maxsource + 2] = concmit[i, j, maxsource + 2] / (float)n_daytime * 100;
-                        concmit[i, j, maxsource + 3] = concmit[i, j, maxsource + 3] / (float)n_evening * 100;
-                        concmit[i, j, maxsource + 4] = concmit[i, j, maxsource + 4] / (float)n_nighttime * 100;
-                        concmit[i, j, maxsource + 5] = concmit[i, j, maxsource + 5] / (float)nnn * 100;
+                        concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn * 100;
+                        concmit[i][j][maxsource + 2] = concmit[i][j][maxsource + 2] / (float)n_daytime * 100;
+                        concmit[i][j][maxsource + 3] = concmit[i][j][maxsource + 3] / (float)n_evening * 100;
+                        concmit[i][j][maxsource + 4] = concmit[i][j][maxsource + 4] / (float)n_nighttime * 100;
+                        concmit[i][j][maxsource + 5] = concmit[i][j][maxsource + 5] / (float)nnn * 100;
 
                         if (counter[i, j] > 0)
                         {
@@ -699,10 +689,10 @@ namespace GralBackgroundworkers
                     }
                 });
 
-        	}
-        	//write mean odour hour files for each source group
-        	string file;
-        	string name;
+            }
+            //write mean odour hour files for each source group
+            string file;
+            string name;
             GralIO.WriteESRIFile Result = new GralIO.WriteESRIFile
             {
                 NCols = mydata.CellsGralX,
@@ -715,8 +705,8 @@ namespace GralBackgroundworkers
             };
 
             itm = 0;
-        	foreach (string source_group_name in sg_names)
-        	{
+            foreach (string source_group_name in sg_names)
+            {
                 if (Rechenknecht.CancellationPending)
                 {
                     e.Cancel = true;
@@ -724,24 +714,24 @@ namespace GralBackgroundworkers
                 }
 
                 if (sg_names.Length > 0)
-        		{
-        			string[] text1a = new string[2];
-        			text1a = Convert.ToString(sg_names[itm]).Split(new char[] { ':' });
-        			name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-        		}
-        		else
+                {
+                    string[] text1a = new string[2];
+                    text1a = Convert.ToString(sg_names[itm]).Split(new char[] { ':' });
+                    name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
+                }
+                else
                 {
                     name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
                 }
 
                 file = Path.Combine(mydata.Projectname, @"Maps","Mean_All_in_All_out_" + name + ".txt");
-    		    Result.Z = itm;
-				Result.Values = concmit;
-				Result.FileName = file;
-				Result.WriteFloatResult();
-        		
-        		itm++;
-        	}
+                Result.Z = itm;
+                Result.Values = concmit;
+                Result.FileName = file;
+                Result.WriteFloatResult();
+                
+                itm++;
+            }
 
             if (Rechenknecht.CancellationPending)
             {
@@ -751,44 +741,44 @@ namespace GralBackgroundworkers
 
             //write mean total odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-        	file = Path.Combine(mydata.Projectname, @"Maps", "Mean_All_in_All_out_" + name + ".txt");
-        	Result.Z = maxsource;
-			Result.Values = concmit;
-			Result.FileName = file;
-			Result.WriteFloatResult();
+            file = Path.Combine(mydata.Projectname, @"Maps", "Mean_All_in_All_out_" + name + ".txt");
+            Result.Z = maxsource;
+            Result.Values = concmit;
+            Result.FileName = file;
+            Result.WriteFloatResult();
 
             //write mean total daytime odour hour file
             /*
             name = mydata.Prefix + mydata.Pollutant + "_total_6-18h" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
             file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
             Result.Z = maxsource + 2;
-			Result.Values = concmit;
-			Result.FileName = file;
-			Result.Write_Result();
-          	
+            Result.Values = concmit;
+            Result.FileName = file;
+            Result.Write_Result();
+            
             //write mean total evening odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total_19-21h" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
             file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
             Result.Z = maxsource + 3;
-			Result.Values = concmit;
-			Result.FileName = file;
-			Result.Write_Result();
+            Result.Values = concmit;
+            Result.FileName = file;
+            Result.Write_Result();
             
             //write mean total nighttime odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total_22-5h" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
             file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
             Result.Z = maxsource + 4;
-			Result.Values = concmit;
-			Result.FileName = file;
-			Result.Write_Result();
+            Result.Values = concmit;
+            Result.FileName = file;
+            Result.Write_Result();
             
             //write mean total weighted odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total_weighted" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
             file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
             Result.Z = maxsource + 5;
-			Result.Values = concmit;
-			Result.FileName = file;
-			Result.Write_Result();
+            Result.Values = concmit;
+            Result.FileName = file;
+            Result.Write_Result();
              */
 
             if (Rechenknecht.CancellationPending)
@@ -799,24 +789,24 @@ namespace GralBackgroundworkers
 
             if (mydata.Peakmean < 0 && mydata.WriteDepositionOrOdourData) // use new odour model
             {
-            	//write mean total R90
-            	string name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-            	string file5 = Path.Combine(mydata.Projectname, @"Maps", "R90_" + name5 + ".txt");
-            	Result.Z = -1;
-            	Result.Round = 2;
+                //write mean total R90
+                string name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
+                string file5 = Path.Combine(mydata.Projectname, @"Maps", "R90_" + name5 + ".txt");
+                Result.Z = -1;
+                Result.Round = 2;
                 Result.Unit = "-";
-				Result.TwoDim = R90_array;
-				Result.FileName = file5;
-				Result.WriteFloatResult();
-				
-            	//write mean total concentration flucutation intensity
-            	name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-            	file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
-            	Result.TwoDim = CFI;
-				Result.FileName = file5;
-				Result.WriteFloatResult();
-			}
-        	Computation_Completed = true; // set flag, that computation was successful
+                Result.TwoDim = R90_array;
+                Result.FileName = file5;
+                Result.WriteFloatResult();
+                
+                //write mean total concentration flucutation intensity
+                name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
+                file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
+                Result.TwoDim = CFI;
+                Result.FileName = file5;
+                Result.WriteFloatResult();
+            }
+            Computation_Completed = true; // set flag, that computation was successful
         }	
-	}
+    }
 }
