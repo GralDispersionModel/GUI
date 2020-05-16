@@ -921,7 +921,8 @@ namespace GralBackgroundworkers
         /// </summary>
         private void RestoreJaggedArray(float[][][] T)
         {
-            for (int i = 0; i < T.Length; i++)
+            System.Threading.Tasks.Parallel.For(0, T.Length, i =>
+            //for (int i = 0; i < T.Length; i++)
             {
                 for (int j = 0; j < T[i].Length; j++)
                 {
@@ -931,7 +932,7 @@ namespace GralBackgroundworkers
                         _t[k] = 0;
                     }
                 }
-            }
+            });
         }
 
     }
