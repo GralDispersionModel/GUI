@@ -1,4 +1,7 @@
 theme: jekyll-theme-modernist
-title: welcome to the GRAL Graphical-User-Interface (GUI) homepage!
-description: The GUI is a powerful user interface for creating and analyzing GRAL and GRAMM projects and meteorological data
+title: Welcome to the GRAL homepage!
+description: GRAL includes three programs: 
+the lagrangian dispersion model GRAL, the mesoscale wind field model GRAMM and the graphical user interface GUI.
+The programs are running on Windows and LINUX (the calculation kernels on .Net Core, the GUI on Windows Forms or MONO WinForms). 
+The MONO- WinForms support of the GUI for LINUX is unfortunately not as stable as the Windows version.
 
