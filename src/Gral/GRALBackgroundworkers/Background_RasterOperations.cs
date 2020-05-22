@@ -22,6 +22,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace GralBackgroundworkers
 {
@@ -172,8 +174,6 @@ namespace GralBackgroundworkers
                         switch (caseswitch)
                         {
                             case 0:
-                                MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
-                                
                                 data = new string[nxB];
                                 B = CreateArray<double[]>(nxB, () => new double [nyB]);
                                 F = CreateArray<double[]>(nxB, () => new double[nyB]);
@@ -191,37 +191,46 @@ namespace GralBackgroundworkers
 
                                 SetText("Performing calculations");
 
-                                Parallel.For(0, nxB, j =>
-                                //for (int j = 0; j < nxB; j++)
+                                for (int j = 0; j < nxB; j++)
                                 {
                                     if (Rechenknecht.CancellationPending)
                                     {
                                         e.Cancel = true;
                                         return;
                                     }
-                                    string valueA; string valueB;
-                                    for (int i = nyB - 1; i > -1; i--)
+                                    if (j % 50 == 0)
                                     {
-                                        double a = A[j][i];
-                                        double b = B[j][i];
-
-                                        try
-                                        {
-                                            string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
-
-                                            valueA = "(" + Convert.ToString(a, ic) + ")";
-                                            valueB = "(" + Convert.ToString(b, ic) + ")";
-                                            mathtext = mathtext.Replace("A", valueA).Replace("B", valueB);
-
-                                            double result = parser.Parse(mathtext);
-
-                                            F[j][i] = Convert.ToDouble(result);
-                                        }
-                                        catch
-                                        {
-                                        }
+                                        Rechenknecht.ReportProgress((int)(j / (double)nxB * 100D));
                                     }
-                                });
+                                    string valueA; string valueB;
+                                    //Parallel.For(0, nyB, i =>
+                                    //for (int i = nyB - 1; i > -1; i--)
+                                    Parallel.ForEach(Partitioner.Create(0, nyB, Math.Max(4, (int)(nyB / Environment.ProcessorCount))), range =>
+                                    {
+                                        MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
+                                        for (int i = range.Item1; i < range.Item2; i++)
+                                        {
+                                            double a = A[j][i];
+                                            double b = B[j][i];
+
+                                            try
+                                            {
+                                                string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+
+                                                valueA = "(" + Convert.ToString(a, ic) + ")";
+                                                valueB = "(" + Convert.ToString(b, ic) + ")";
+                                                mathtext = mathtext.Replace("A", valueA).Replace("B", valueB);
+
+                                                double result = parser.Parse(mathtext);
+
+                                                F[j][i] = Convert.ToDouble(result);
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                    });
+                                }
 
 
                                 SetText("Writing output file");
@@ -380,7 +389,6 @@ namespace GralBackgroundworkers
                             switch (caseswitch)
                             {
                                 case 0:
-                                    MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
                                     data = new string[nxB];
                                     dataC = new string[nxC];
                                     B = CreateArray<double[]>(nxB, () => new double[nyB]);
@@ -412,35 +420,46 @@ namespace GralBackgroundworkers
                                     //myReaderC.Dispose();
 
                                     SetText("Performing calculations");
-                                    Parallel.For(0, nxB, j =>
-                                     {
-                                         if (Rechenknecht.CancellationPending)
-                                         {
-                                             e.Cancel = true;
-                                             return;
-                                         }
-                                         string valueA; string valueB; string valueC;
-                                         for (int i = nyB - 1; i > -1; i--)
-                                         {
-                                             double a = A[j][i];
-                                             double b = B[j][i];
-                                             double c = C[j][i];
-                                             try
-                                             {
-                                                 string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+                                    //Parallel.For(0, nxB, j =>
+                                    for (int j = 0; j < nxB; j++)
+                                    {
+                                        if (Rechenknecht.CancellationPending)
+                                        {
+                                            e.Cancel = true;
+                                            return;
+                                        }
+                                        if (j % 50 == 0)
+                                        {
+                                            Rechenknecht.ReportProgress((int)(j / (double)nxB * 100D));
+                                        }
+                                        string valueA; string valueB; string valueC;
+                                        //for (int i = nyB - 1; i > -1; i--)
+                                        //Parallel.For(0, nyB, i =>
+                                        Parallel.ForEach(Partitioner.Create(0, nyB, Math.Max(4, (int)(nyB / Environment.ProcessorCount))), range =>
+                                        {
+                                            MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
+                                            for (int i = range.Item1; i < range.Item2; i++)
+                                            {
+                                                double a = A[j][i];
+                                                double b = B[j][i];
+                                                double c = C[j][i];
+                                                try
+                                                {
+                                                    string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
 
-                                                 valueA = "(" + Convert.ToString(a, ic) + ")";
-                                                 valueB = "(" + Convert.ToString(b, ic) + ")";
-                                                 valueC = "(" + Convert.ToString(c, ic) + ")";
-                                                 mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC);
-                                                 double result = parser.Parse(mathtext);
-                                                 F[j][i] = Convert.ToDouble(result);
-                                             }
-                                             catch
-                                             {
-                                             }
-                                         }
-                                     });
+                                                    valueA = "(" + Convert.ToString(a, ic) + ")";
+                                                    valueB = "(" + Convert.ToString(b, ic) + ")";
+                                                    valueC = "(" + Convert.ToString(c, ic) + ")";
+                                                    mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC);
+                                                    double result = parser.Parse(mathtext);
+                                                    F[j][i] = Convert.ToDouble(result);
+                                                }
+                                                catch
+                                                {
+                                                }
+                                            }
+                                        });
+                                    }
 
                                     SetText("Writing output file");
                                     //write result to output raster F
@@ -641,7 +660,6 @@ namespace GralBackgroundworkers
                                 switch (caseswitch)
                                 {
                                     case 0:
-                                        MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
                                         data = new string[nxB];
                                         dataC = new string[nxC];
                                         dataD = new string[nxD];
@@ -687,37 +705,48 @@ namespace GralBackgroundworkers
                                         //myReaderD.Dispose();
 
                                         SetText("Performing calculations");
-                                        Parallel.For(0, nxB, j =>
+                                        //Parallel.For(0, nxB, j =>
+                                        for (int j = 0; j < nxB; j++)
                                         {
                                             if (Rechenknecht.CancellationPending)
                                             {
                                                 e.Cancel = true;
                                                 return;
                                             }
-                                            string valueA; string valueB; string valueC; string valueD;
-                                            for (int i = nyB - 1; i > -1; i--)
+                                            if (j % 50 == 0)
                                             {
-                                                double a = A[j][i];
-                                                double b = B[j][i];
-                                                double c = C[j][i];
-                                                double d = D[j][i];
-                                                try
-                                                {
-                                                    string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
-                                                    
-                                                    valueA = "(" + Convert.ToString(a, ic) + ")";
-                                                    valueB = "(" + Convert.ToString(b, ic) + ")";
-                                                    valueC = "(" + Convert.ToString(c, ic) + ")";
-                                                    valueD = "(" + Convert.ToString(d, ic) + ")";
-                                                    mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC).Replace("D", valueD);
-                                                    double result = parser.Parse(mathtext);
-                                                    F[j][i] = Convert.ToDouble(result);
-                                                }
-                                                catch
-                                                {
-                                                }
+                                                Rechenknecht.ReportProgress((int)(j / (double)nxB * 100D));
                                             }
-                                        });
+                                            string valueA; string valueB; string valueC; string valueD;
+                                            //for (int i = nyB - 1; i > -1; i--)    
+                                            //Parallel.For(0, nyB, i =>
+                                            Parallel.ForEach(Partitioner.Create(0, nyB, Math.Max(4, (int) (nyB / Environment.ProcessorCount))), range =>
+                                            {
+                                                MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
+                                                for (int i = range.Item1; i < range.Item2; i++)
+                                                {
+                                                    double a = A[j][i];
+                                                    double b = B[j][i];
+                                                    double c = C[j][i];
+                                                    double d = D[j][i];
+                                                    try
+                                                    {
+                                                        string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+
+                                                        valueA = "(" + Convert.ToString(a, ic) + ")";
+                                                        valueB = "(" + Convert.ToString(b, ic) + ")";
+                                                        valueC = "(" + Convert.ToString(c, ic) + ")";
+                                                        valueD = "(" + Convert.ToString(d, ic) + ")";
+                                                        mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC).Replace("D", valueD);
+                                                        double result = parser.Parse(mathtext);
+                                                        F[j][i] = Convert.ToDouble(result);
+                                                    }
+                                                    catch
+                                                    {
+                                                    }
+                                                }
+                                            });
+                                        }
 
                                         SetText("Writing output file");
                                         //write result to output raster F
@@ -963,7 +992,6 @@ namespace GralBackgroundworkers
                                     switch (caseswitch)
                                     {
                                         case 0:
-                                            MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
                                             data = new string[nxB];
                                             dataC = new string[nxC];
                                             dataD = new string[nxD];
@@ -1023,39 +1051,50 @@ namespace GralBackgroundworkers
                                             //myReaderE.Dispose();
 
                                             SetText("Performing calculations");
-                                            Parallel.For(0, nxB, j =>
-                                             {
-                                                 if (Rechenknecht.CancellationPending)
-                                                 {
-                                                     e.Cancel = true;
-                                                     return;
-                                                 }
-                                                 string valueA; string valueB; string valueC; string valueD; string valueE;
-                                                 for (int i = nyB - 1; i > -1; i--)
-                                                 {
-                                                     double a = A[j][i];
-                                                     double b = B[j][i];
-                                                     double c = C[j][i];
-                                                     double d = D[j][i];
-                                                     double e1 = E[j][i];
-                                                     try
-                                                     {
-                                                         string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
-                                                         
-                                                         valueA = "(" + Convert.ToString(a, ic) + ")";
-                                                         valueB = "(" + Convert.ToString(b, ic) + ")";
-                                                         valueC = "(" + Convert.ToString(c, ic) + ")";
-                                                         valueD = "(" + Convert.ToString(d, ic) + ")";
-                                                         valueE = "(" + Convert.ToString(e1, ic) + ")";
-                                                         mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC).Replace("D", valueD).Replace("E", valueE);
-                                                         double result = parser.Parse(mathtext);
-                                                         F[j][i] = Convert.ToDouble(result);
-                                                     }
-                                                     catch
-                                                     {
-                                                     }
-                                                 }
-                                             });
+                                            //Parallel.For(0, nxB, j =>
+                                            for (int j = 0; j < nxB; j++)
+                                            {
+                                                if (Rechenknecht.CancellationPending)
+                                                {
+                                                    e.Cancel = true;
+                                                    return;
+                                                }
+                                                if (j % 50 == 0)
+                                                {
+                                                    Rechenknecht.ReportProgress((int)(j / (double)nxB * 100D));
+                                                }
+                                                string valueA; string valueB; string valueC; string valueD; string valueE;
+                                                //for (int i = nyB - 1; i > -1; i--)
+                                                //Parallel.For(0, nyB, i =>
+                                                Parallel.ForEach(Partitioner.Create(0, nyB, Math.Max(4, (int)(nyB / Environment.ProcessorCount))), range =>
+                                                {
+                                                    MathParserMathos.MathParserMathos parser = new MathParserMathos.MathParserMathos(true, true, true, false);
+                                                    for (int i = range.Item1; i < range.Item2; i++)
+                                                    {
+                                                        double a = A[j][i];
+                                                        double b = B[j][i];
+                                                        double c = C[j][i];
+                                                        double d = D[j][i];
+                                                        double e1 = E[j][i];
+                                                        try
+                                                        {
+                                                            string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+
+                                                            valueA = "(" + Convert.ToString(a, ic) + ")";
+                                                            valueB = "(" + Convert.ToString(b, ic) + ")";
+                                                            valueC = "(" + Convert.ToString(c, ic) + ")";
+                                                            valueD = "(" + Convert.ToString(d, ic) + ")";
+                                                            valueE = "(" + Convert.ToString(e1, ic) + ")";
+                                                            mathtext = mathtext.Replace("A", valueA).Replace("B", valueB).Replace("C", valueC).Replace("D", valueD).Replace("E", valueE);
+                                                            double result = parser.Parse(mathtext);
+                                                            F[j][i] = Convert.ToDouble(result);
+                                                        }
+                                                        catch
+                                                        {
+                                                        }
+                                                    }
+                                                });
+                                            }
 
                                             //write result to output raster F
                                             if (mydata.RasterF != null)
@@ -1127,18 +1166,23 @@ namespace GralBackgroundworkers
 
                 //Stopwatch sw = new Stopwatch();
                 //sw.Start();
-                    
+
                 //parallelization of loop
-                Parallel.For(0, nxA, j =>
-                 //for (int j = 0; j < nxA; j++)
-                 {
-                     if (Rechenknecht.CancellationPending)
-                     {
-                         e.Cancel = true;
-                         return;
-                     }
-                    string valueA;	
-                    for (int i = nyA - 1; i > -1; i--)
+                //Parallel.For(0, nxA, j =>
+                for (int j = 0; j < nxA; j++)
+                {
+                    if (Rechenknecht.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                    if (j % 50 == 0)
+                    {
+                        Rechenknecht.ReportProgress((int)(j / (double)nxA * 100D));
+                    }
+                    string valueA;
+                    //for (int i = nyA - 1; i > -1; i--)
+                    Parallel.For(0, nyA, i =>
                     {
                         string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
                         mathtext = mathtext.Replace(",", mydata.Decsep);
@@ -1148,25 +1192,25 @@ namespace GralBackgroundworkers
                         try
                         {
                             //result = mp.Calculate(mathtext);
-                             //C[j, i] = result;
+                            //C[j, i] = result;
                             mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
-                            
-                            valueA = "("+ Convert.ToString(a, ic) +")";
+
+                            valueA = "(" + Convert.ToString(a, ic) + ")";
                             mathtext = mathtext.Replace("A", valueA);
                             //result = Calculator.Calc(mathtext);
                             double result = parser.Parse(mathtext);
-                                            
+
                             F[j][i] = Convert.ToDouble(result);
                         }
                         catch
                         {
                         }
-                    }
-                 });
+                    });
+                }
                 //sw.Stop();
                 //MessageBox.Show(Convert.ToString(sw.Elapsed));
 
-                
+
                 SetText("Final output");
                 //write result to output raster F
                 if (mydata.RasterF != null)
