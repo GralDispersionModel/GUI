@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using GralIO;
+using System.Threading.Tasks;
 
 namespace GralBackgroundworkers
 {
@@ -61,9 +62,7 @@ namespace GralBackgroundworkers
                             text = myreader.ReadLine().Split(new char[] { ',' });
                             emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
                             if (j < 12)
-                            {
                                 emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-                            }
                         }
                     }
 					itm++;
@@ -91,30 +90,27 @@ namespace GralBackgroundworkers
 			string hour;
 			int numhour = 1;
 			int nnn = 0;
-			//int indexi = 0;
-			//int indexj = 0;
-
-			float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
-			float[][][] dep = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
-			float[][][] concmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] depmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] concmax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] depmax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] concdaymax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] depdaymax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] concdaymaxdummy = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-			float[][][] depdaymaxdummy = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
-
-			float[,] concmaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
-			float[,] depmaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
-			double[] fmod = new double[maxsource];
+            //int indexi = 0;
+            //int indexj = 0;
+            float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+            float[][][] dep = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+            float[][][] concmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] depmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] concmax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] depmax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] concdaymax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] depdaymax = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] concdaymaxdummy = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] depdaymaxdummy = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[,] concmaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
+            float[,] depmaxdummy = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1];
 
 			//read meteopgt.all
 			List<string> data_meteopgt = new List<string>();
 			ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
 			if (data_meteopgt.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Error reading meteopgt.all");
+				BackgroundThreadMessageBox ("Can't read meteopgt.all");
 			}
 
 			foreach(string line_meteopgt in data_meteopgt)
@@ -142,7 +138,7 @@ namespace GralBackgroundworkers
 					//text2 = sr.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 					while (sr.EndOfStream == false)
 					{
-						mettimefilelength += 1;
+						mettimefilelength = mettimefilelength + 1;
 						sr.ReadLine();
 					}
 				}
@@ -198,10 +194,8 @@ namespace GralBackgroundworkers
 									{
 										emifac_day[j, itm1] = 1;
 										if (j < 12)
-                                        {
-                                            emifac_mon[j, itm1] = 1;
-                                        }
-                                    }
+											emifac_mon[j, itm1] = 1;
+									}
 								}
 							}
 
@@ -252,9 +246,7 @@ namespace GralBackgroundworkers
                             {
                                 emifac_day[j, n] = 1;
                                 if (j < 12)
-                                {
                                     emifac_mon[j, n] = 1;
-                                }
                             }
                         }
                         for (int i = 0; i < mettimefilelength; i++)
@@ -278,7 +270,7 @@ namespace GralBackgroundworkers
 			ReadMettimeseries(Path.Combine(mydata.Projectname, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
 			if (data_mettimeseries.Count == 0) // no data available
 			{ 
-				BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
+				BackgroundThreadMessageBox ("Can't read mettimeseries.dat");
 			}
 
 			int count_ws = -1;
@@ -305,11 +297,8 @@ namespace GralBackgroundworkers
 				day=text3[0];
 				hour=text2[1];
 				if (hour == "24")
-                {
-                    hourplus = 1;
-                }
-
-                wgmettime =text2[2];
+					hourplus = 1;
+				wgmettime=text2[2];
 				wrmettime=text2[3];
 				akmettime=text2[4];
 
@@ -332,9 +321,7 @@ namespace GralBackgroundworkers
                     else
                     {
                         if ((wgmet[n] == wgmettime) && (wrmet[n] == wrmettime) && (akmet[n] == akmettime))
-                        {
                             meteo_situation_found = true;
-                        }
                     }
 
                     if (meteo_situation_found == true)
@@ -389,10 +376,16 @@ namespace GralBackgroundworkers
 								} 
 								// break;
 							}
-
+							
 							//set variables to zero
-							RestoreJaggedArray(conc);
-							RestoreJaggedArray(dep);
+							for (int i = 0; i <= mydata.CellsGralX; i++)
+							{
+								for (int j = 0; j <= mydata.CellsGralY; j++)
+								{
+									conc[i][j][itmp] = 0;
+									dep[i][j][itmp] = 0;
+								}
+							}
 							
 							//read GRAL concentration files
 							string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
@@ -403,7 +396,7 @@ namespace GralBackgroundworkers
                                 existdep = false;
                             }
 							
-							if (parallel_existdep && mydata.WriteDepositionOrOdourData)
+							if (parallel_existdep)
 							{
 								//read GRAL deposition files
 								filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itmp]);
@@ -427,82 +420,80 @@ namespace GralBackgroundworkers
 						{
 							
 							//number of dispersion situation
-							nnn += 1;
+							nnn = nnn + 1;
 							//number of hours of specific day
-							numhour += 1;
+							numhour = numhour + 1;
 							int std = Convert.ToInt32(hour);
 							int mon = Convert.ToInt32(month) - 1;
-							for (int ii = 0; ii <= mydata.CellsGralX; ii++)
+
+                            //for (int ii = 0; ii <= mydata.CellsGralX; ii++)
+                            Parallel.For(0, mydata.CellsGralX, ii =>
                             {
                                 for (int j = 0; j <= mydata.CellsGralY; j++)
-							{
-								//reset max. daily concentrations for each source group
-								concmaxdummy[ii, j] = 0;
-								if (((dayold == day) && (monthold == month)) || (nnn == 1))
-								{}
-								else
-								{
-									concdaymax[ii][j][maxsource] = Math.Max(concdaymax[ii][j][maxsource], concdaymaxdummy[ii][j][maxsource] / (float)numhour);
-									depdaymax[ii][j][maxsource] = Math.Max(depdaymax[ii][j][maxsource], depdaymaxdummy[ii][j][maxsource] / (float)numhour);
-									itm = 0;
-									foreach (string source_group_name in sg_names)
-									{
-										concdaymax[ii][j][itm] = Math.Max(concdaymax[ii][j][itm], concdaymaxdummy[ii][j][itm] / (float)numhour);
-										depdaymax[ii][j][itm] = Math.Max(depdaymax[ii][j][itm], depdaymaxdummy[ii][j][itm] / (float)numhour);
-										itm++;
-									}
+                                {
+                                    int _itm = 0;
+                                    //reset max. daily concentrations for each source group
+                                    concmaxdummy[ii, j] = 0;
+                                    if (((dayold == day) && (monthold == month)) || (nnn == 1))
+                                    { }
+                                    else
+                                    {
+                                        concdaymax[ii][j][maxsource] = Math.Max(concdaymax[ii][j][maxsource], concdaymaxdummy[ii][j][maxsource] / (float)numhour);
+                                        depdaymax[ii][j][maxsource] = Math.Max(depdaymax[ii][j][maxsource], depdaymaxdummy[ii][j][maxsource] / (float)numhour);
+                                        
+                                        foreach (string source_group_name in sg_names)
+                                        {
+                                            concdaymax[ii][j][_itm] = Math.Max(concdaymax[ii][j][_itm], concdaymaxdummy[ii][j][_itm] / (float)numhour);
+                                            depdaymax[ii][j][_itm] = Math.Max(depdaymax[ii][j][_itm], depdaymaxdummy[ii][j][_itm] / (float)numhour);
+                                            _itm++;
+                                        }
 
-									concdaymaxdummy[ii][j][maxsource] = 0;
-									depdaymaxdummy[ii][j][maxsource] = 0;
-									itm = 0;
-									foreach (string source_group_name in sg_names)
-									{
-										concdaymaxdummy[ii][j][itm] = 0;
-										depdaymaxdummy[ii][j][itm] = 0;
-										itm++;
-									}
+                                        concdaymaxdummy[ii][j][maxsource] = 0;
+                                        depdaymaxdummy[ii][j][maxsource] = 0;
+                                        _itm = 0;
+                                        foreach (string source_group_name in sg_names)
+                                        {
+                                            concdaymaxdummy[ii][j][_itm] = 0;
+                                            depdaymaxdummy[ii][j][_itm] = 0;
+                                            _itm++;
+                                        }
 
-									if ((ii >= mydata.CellsGralX) && (j >= mydata.CellsGralY)) // Kuntner: changed from == to >=
+                                        if ((ii >= mydata.CellsGralX) && (j >= mydata.CellsGralY)) // Kuntner: changed from == to >=
                                         {
                                             numhour = 1;
                                         }
                                     }
-								
-								itm = 0;
-								foreach (string source_group_name in sg_names)
-								{
-									//compute mean emission modulation factor
-									if ((ii == 0) && (j == 0))
-                                        {
-                                            fmod[itm] = fmod[itm] + emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];
-                                        }
 
-                                        float fac = conc[ii][j][itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
-									float facdep = dep[ii][j][itm] * (float)emifac_day[std - hourplus, itm] * (float)emifac_mon[mon, itm] * (float)emifac_timeseries[count_ws, itm];
-									//compute mean concentrations for each source group and in total
-									concmit[ii][j][itm] = concmit[ii][j][itm] + fac;
-									concmit[ii][j][maxsource] = concmit[ii][j][maxsource] + fac;
-									depmit[ii][j][itm] = depmit[ii][j][itm] + facdep;
-									depmit[ii][j][maxsource] = depmit[ii][j][maxsource] + facdep;
-									//compute max concentrations for each source group and in total
-									concmax[ii][j][itm] = Math.Max(concmax[ii][j][itm], fac);
-									concmaxdummy[ii, j] = concmaxdummy[ii, j] + fac;
-									depmax[ii][j][itm] = Math.Max(depmax[ii][j][itm], facdep);
-									depmaxdummy[ii, j] = depmaxdummy[ii, j] + facdep;
-									//compute max. daily concentrations for each source group
-									concdaymaxdummy[ii][j][itm] = concdaymaxdummy[ii][j][itm] + fac;
-									concdaymaxdummy[ii][j][maxsource] = concdaymaxdummy[ii][j][maxsource] + fac;
-									depdaymaxdummy[ii][j][itm] = depdaymaxdummy[ii][j][itm] + facdep;
-									depdaymaxdummy[ii][j][maxsource] = depdaymaxdummy[ii][j][maxsource] + facdep;
-									itm++;
-								}
-								concmax[ii][j][maxsource] = Math.Max(concmax[ii][j][maxsource], concmaxdummy[ii, j]);
-								depmax[ii][j][maxsource] = Math.Max(depmax[ii][j][maxsource], depmaxdummy[ii, j]);
-							}
-                            }
+                                    _itm = 0;
+                                    foreach (string source_group_name in sg_names)
+                                    {
+                                        //compute mean emission modulation factor
+                                        float fac = conc[ii][j][_itm] * (float)emifac_day[std - hourplus, _itm] * (float)emifac_mon[mon, _itm] * (float)emifac_timeseries[count_ws, _itm];
+                                        float facdep = dep[ii][j][_itm] * (float)emifac_day[std - hourplus, _itm] * (float)emifac_mon[mon, _itm] * (float)emifac_timeseries[count_ws, _itm];
+                                        //compute mean concentrations for each source group and in total
+                                        concmit[ii][j][_itm] = concmit[ii][j][_itm] + fac;
+                                        concmit[ii][j][maxsource] = concmit[ii][j][maxsource] + fac;
+                                        depmit[ii][j][_itm] = depmit[ii][j][_itm] + facdep;
+                                        depmit[ii][j][maxsource] = depmit[ii][j][maxsource] + facdep;
+                                        //compute max concentrations for each source group and in total
+                                        concmax[ii][j][_itm] = Math.Max(concmax[ii][j][_itm], fac);
+                                        concmaxdummy[ii, j] = concmaxdummy[ii, j] + fac;
+                                        depmax[ii][j][_itm] = Math.Max(depmax[ii][j][_itm], facdep);
+                                        depmaxdummy[ii, j] = depmaxdummy[ii, j] + facdep;
+                                        //compute max. daily concentrations for each source group
+                                        concdaymaxdummy[ii][j][_itm] = concdaymaxdummy[ii][j][_itm] + fac;
+                                        concdaymaxdummy[ii][j][maxsource] = concdaymaxdummy[ii][j][maxsource] + fac;
+                                        depdaymaxdummy[ii][j][_itm] = depdaymaxdummy[ii][j][_itm] + facdep;
+                                        depdaymaxdummy[ii][j][maxsource] = depdaymaxdummy[ii][j][maxsource] + facdep;
+                                        _itm++;
+                                    }
+                                    concmax[ii][j][maxsource] = Math.Max(concmax[ii][j][maxsource], concmaxdummy[ii, j]);
+                                    depmax[ii][j][maxsource] = Math.Max(depmax[ii][j][maxsource], depmaxdummy[ii, j]);
+                                }
+                            });
                         }
-					}
-				}
+                    }
+                }
 				
 				dayold = day;
 				monthold = month;
@@ -515,8 +506,6 @@ namespace GralBackgroundworkers
 				itm = 0;
 				foreach (string source_group_name in sg_names)
 				{
-					fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
-					
 					for (int i = 0; i <= mydata.CellsGralX; i++)
 					{
 						for (int j = 0; j <= mydata.CellsGralY; j++)
@@ -529,14 +518,13 @@ namespace GralBackgroundworkers
 				}
 				//total concentration
 				for (int i = 0; i <= mydata.CellsGralX; i++)
-                {
-                    for (int j = 0; j <= mydata.CellsGralY; j++)
+					for (int j = 0; j <= mydata.CellsGralY; j++)
 				{
 					concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
 					depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
 				}
-                }
-            }
+
+			}
 
 			string file;
 			string name;
@@ -568,11 +556,9 @@ namespace GralBackgroundworkers
 						name = mydata.Prefix + mydata.Pollutant + "_" + text1a[0];
 					}
 					else
-                    {
-                        name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
-                    }
-
-                    file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+						name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
+					
+					file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
 					
 					Result.Unit = Gral.Main.My_p_m3;
 					Result.Round = 5;
@@ -581,7 +567,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 															
-					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
+					if (deposition_files_exists)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + "_" +name + ".txt");
 						Result.Unit = Gral.Main.mg_p_m2;
@@ -617,7 +603,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
+                if (deposition_files_exists)
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					Result.Unit = Gral.Main.mg_p_m2;
@@ -663,7 +649,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 										
-					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
+					if (deposition_files_exists)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Max" + depo_name + ".txt");
 						Result.Unit = Gral.Main.mg_p_m2;
@@ -699,7 +685,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
+                if (deposition_files_exists)
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Max" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					Result.Unit = Gral.Main.mg_p_m2;
@@ -745,7 +731,7 @@ namespace GralBackgroundworkers
 					Result.FileName = file;
 					Result.WriteFloatResult();
 										
-					if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
+					if (deposition_files_exists)
 					{
 						file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_DayMax_" + depo_name + ".txt");
 						Result.Unit = Gral.Main.mg_p_m2;
@@ -781,7 +767,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
+                if (deposition_files_exists)
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Daymax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					Result.Unit = Gral.Main.mg_p_m2;

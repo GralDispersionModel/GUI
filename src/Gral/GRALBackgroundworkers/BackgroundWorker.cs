@@ -367,18 +367,22 @@ namespace GralBackgroundworkers
         public bool ReadConFiles(string filename, GralBackgroundworkers.BackgroundworkerData mydata, int itm, ref float[][][] conc)
         {
             bool compressed = false;
-            string comp_file = Path.GetFileName(filename).Substring(0,5) + ".grz";   // filename of a compressed file
+            string comp_file = Path.GetFileName(filename).Substring(0, 5) + ".grz";   // filename of a compressed file
             string comp_filepath = Path.Combine(Path.GetDirectoryName(filename), comp_file);    // compressed file with path
-            string con_file  = Path.GetFileName(filename);	// original *.con filename
-            //			MessageBox.Show(comp_filepath);
-            //			MessageBox.Show(comp_file);
-            
+            string con_file = Path.GetFileName(filename);  // original *.con filename
+                                                           //			MessageBox.Show(comp_filepath);
+                                                           //			MessageBox.Show(comp_file);
+
+            bool result = false;
             if (File.Exists(comp_filepath))
             {
                 compressed = true;
             }
+            else if (!File.Exists(filename)) // no file available
+            {
+                return result;
+            }
 
-            bool result = false;
             try
             {
                 if (compressed)
@@ -578,16 +582,18 @@ namespace GralBackgroundworkers
             bool compressed = false;
             string comp_file = Path.GetFileName(filename).Substring(0,5) + ".grz";   // filename of a compressed file
             string comp_filepath = Path.Combine(Path.GetDirectoryName(filename), comp_file);    // compressed file with path
-            string con_file  = Path.GetFileName(filename);	// original *.con filename
-//			MessageBox.Show(comp_filepath);
-//			MessageBox.Show(comp_file);
-            
+            string con_file  = Path.GetFileName(filename);  // original *.con filename
+                                                            //			MessageBox.Show(comp_filepath);
+                                                            //			MessageBox.Show(comp_file);
+            bool result = false;
             if (File.Exists(comp_filepath))
             {
                 compressed = true;
             }
-
-            bool result = false;
+            else if (!File.Exists(filename)) // no file available
+            {
+                return result;
+            }
 
             try
             {
@@ -616,8 +622,7 @@ namespace GralBackgroundworkers
                     {
                         result = ReadOdr(reader, mydata, itm, ref concp, ref concm, ref Q_cv0, ref td);
                     }
-                }
-                
+                }               
             }
             catch
             {
