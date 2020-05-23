@@ -75,8 +75,12 @@ namespace Gral
                             {
                                 mywriter.WriteLine(numericUpDown38.Value.ToString().PadLeft(10) + "\t  // Surface roughness");
                             }
+							if (GRALSettings.AdaptiveRoughness > 0.01)
+							{
+								mywriter.WriteLine(numericUpDown45.Value.ToString().PadLeft(10) + "\t  // Adaptive surface roughness");
+							}
 
-                            mywriter.WriteLine(" ");
+							mywriter.WriteLine(" ");
 							mywriter.WriteLine("Concentration grids".PadRight(40,'='));
 							mywriter.WriteLine(Convert.ToString(numericUpDown8.Value).PadLeft(10) + "  \t  // Vertical thickness of concentration layers");
 							mywriter.WriteLine(Convert.ToString(numericUpDown9.Value).PadLeft(10) + "  \t  // Horizontal grid resolution");

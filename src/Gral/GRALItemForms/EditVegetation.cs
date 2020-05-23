@@ -228,7 +228,7 @@ namespace GralItemForms
 					{
 						_vdata.Pt.Add(new PointD(CornerVegX[i], CornerVegY[i]));
 					}
-					double areapolygon = St_F.CalcArea(_vdata.Pt);
+					double areapolygon = St_F.CalcArea(_vdata.Pt, false);
 					textBox3.Text = St_F.DblToIvarTxt(areapolygon);
 					
 					if (number_of_vertices > 0)

@@ -495,7 +495,7 @@ namespace GralDomain
         }
 
         /// <summary>
-    	/// Compute the area and the orientation of a polygon
+    	/// Compute the area and the orientation (clockwise < 0, counter clockwise > 0) of a polygon
     	/// </summary>
     	/// <param name="polypoints">List for polygon points</param> 
 		private double CalcOrientation(List<GralDomain.PointD> polypoints)

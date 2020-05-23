@@ -295,13 +295,14 @@ namespace GralStaticFunctions
             //MessageBox.Show(this, "Number of vertices is below 3\t\nNo area could be computed");
             return area;
         }
-        
+
         //compute area of a polygon
         /// <summary>
-    	/// Compute the area of a polygon
-    	/// </summary>
-    	/// <param name="polypoints">List PointD with polygon points</param> 
-        public static double CalcArea(List<GralDomain.PointD> polypoints)
+        /// Compute the area of a polygon; if Direction == true, the direction is calculated: (clockwise Area < 0, counter clockwise Area > 0)
+        /// </summary>
+        /// <param name="polypoints">List PointD with polygon points</param> 
+        /// /// <param name="Direction">Analyze direction of the polygon?</param>
+        public static double CalcArea(List<GralDomain.PointD> polypoints, bool Direction)
         {
             double area = 0;
 			if (polypoints.Count > 2)
@@ -313,7 +314,10 @@ namespace GralStaticFunctions
                         (Convert.ToDouble(polypoints[i + 1].X) - Convert.ToDouble(polypoints[i].X)) * (Convert.ToDouble(polypoints[i + 1].Y) - Convert.ToDouble(polypoints[i].Y)) / 2;
                 }
                 polypoints.RemoveAt(polypoints.Count - 1);
-                area = Math.Round(Math.Abs(area), 1);
+                if (!Direction)
+                {
+                    area = Math.Round(Math.Abs(area), 1);
+                }
             }
             //else
             //MessageBox.Show(this, "Number of vertices is below 3\t\nNo area could be computed");

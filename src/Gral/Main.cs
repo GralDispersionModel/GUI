@@ -630,6 +630,7 @@ namespace Gral
         {
             int ok = 0;
             //check input in textbox for roughness length
+            GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
             try
             {
                 if (numericUpDown38.Value <= 0)
@@ -1012,6 +1013,11 @@ namespace Gral
         private void TextBox3_TextChanged(object sender, EventArgs e)
         {
             St_F.CheckInput(sender, e);
+
+            if (sender == numericUpDown45) // optional adaptive roughness lenght
+            {
+                GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
+            }
             ResetInDat();
         }
         //change the latitude
@@ -2358,7 +2364,8 @@ namespace Gral
             numericUpDown30.Enabled = !locked;
             numericUpDown31.Enabled = !locked;
             numericUpDown34.Enabled = !locked; // GRAL transient
-            numericUpDown38.Enabled = !locked; // Roughness lenght
+            numericUpDown38.Enabled = !locked; // Surface roughness lenght
+            numericUpDown45.Enabled = !locked; // Adaptive surface roughness
             numericUpDown39.Enabled = !locked; // Latidude
             numericUpDown43.Enabled = !locked; // Compressed mode for GRAL output
             
@@ -2514,7 +2521,15 @@ namespace Gral
             if (tabControl1.SelectedIndex == 1) // GRAL Settings
             {
                 SetButton12Bitmap();
-                SetButton57Bitmap();           
+                SetButton57Bitmap();   
+                if (GRALSettings.AdaptiveRoughness < 0.01)
+                {
+                    label104.ForeColor = Color.Gray;
+                }
+                else
+                {
+                    label104.ForeColor = Color.WhiteSmoke;
+                }
             }
             if (tabControl1.SelectedIndex == 2) // Domain
             {

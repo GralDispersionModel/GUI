@@ -269,7 +269,7 @@ namespace Gral
 				{
 				    numericUpDown38.Value = Convert.ToDecimal(OpenProject.Roughness, ic);
                     GRALSettings.Roughness = (double) numericUpDown38.Value;
-				    
+
 					if (OpenProject.GRAMMstartsituation > 0 && OpenProject.GRAMMstartsituation <= numericUpDown24.Maximum)
                     {
                         numericUpDown24.Value = OpenProject.GRAMMstartsituation;
@@ -542,6 +542,7 @@ namespace Gral
 					numericUpDown6.Value = Convert.ToDecimal(GRALSettings.ParticleNumber);
 					numericUpDown4.Value = Convert.ToDecimal(GRALSettings.DispersionTime);
 					numericUpDown38.Value = Convert.ToDecimal(GRALSettings.Roughness);
+					numericUpDown45.Value = Convert.ToDecimal(GRALSettings.AdaptiveRoughness);
 					numericUpDown39.Value = Convert.ToDecimal(GRALSettings.Latitude.ToString());
                     numericUpDown42.Value = (decimal)GRALSettings.PrognosticSubDomains;
 					GRALSettings.NumHorSlices = GRALSettings.NumHorSlices; // number of slices
