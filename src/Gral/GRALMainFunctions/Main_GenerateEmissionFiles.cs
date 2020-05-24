@@ -1234,7 +1234,7 @@ namespace Gral
                                     {
                                         ++pointsInside;
                                     }
-                                    if (pointsInside < 5 && pointsInside > 0) // otherwise the cell is inside the polygon for the most part or the cell can't reach 5 hits
+                                    if (pointsInside < BuildingCellCoverageThreshold && pointsInside > 0) // otherwise the cell is inside the polygon for the most part or the cell can't reach BuildingCellCoverageThreshold hits
                                     {
                                         if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.3, yraster + flow_field_grid * 0.3), _bd.Pt))
                                         {
@@ -1248,7 +1248,7 @@ namespace Gral
                                         {
                                             ++pointsInside;
                                         }
-                                        if (pointsInside == 4) // otherwise 5 is already reached or can't be reached
+                                        if (pointsInside == BuildingCellCoverageThreshold - 1) // otherwise BuildingCellCoverageThreshold is already reached or can't be reached
                                         {
                                             if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.3, yraster), _bd.Pt))
                                             {
@@ -1263,7 +1263,7 @@ namespace Gral
                                         Array.Resize(ref ycell, ycell.GetUpperBound(0) + 1000);
                                     }
 
-                                    if (pointsInside > 4) // the cell is inside for the most part
+                                    if (pointsInside > BuildingCellCoverageThreshold - 1) // the cell is inside for the most part
                                     {
                                         xcell[count] = xraster;
                                         ycell[count] = yraster;
