@@ -135,7 +135,7 @@ namespace Gral
 						write.WriteLine(CopyCorestoProject.ToString());
 						write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                         write.WriteLine(Main.CalculationCoresPath);
-                    }
+					}
 				}
 				catch
 				{
@@ -542,7 +542,16 @@ namespace Gral
 					numericUpDown6.Value = Convert.ToDecimal(GRALSettings.ParticleNumber);
 					numericUpDown4.Value = Convert.ToDecimal(GRALSettings.DispersionTime);
 					numericUpDown38.Value = Convert.ToDecimal(GRALSettings.Roughness);
+					if (GRALSettings.AdaptiveRoughness > 0)
+					{
+						checkBox29.Checked = true;
+					}
+					else
+					{
+						checkBox29.Checked = false;
+					}
 					numericUpDown45.Value = Convert.ToDecimal(GRALSettings.AdaptiveRoughness);
+
 					numericUpDown39.Value = Convert.ToDecimal(GRALSettings.Latitude.ToString());
                     numericUpDown42.Value = (decimal)GRALSettings.PrognosticSubDomains;
 					GRALSettings.NumHorSlices = GRALSettings.NumHorSlices; // number of slices
@@ -979,7 +988,10 @@ namespace Gral
 					listBox5.Items.Add(text);
 					listBox5.SelectedIndex = 0;
 				}
-				
+
+				//Read Building Coverage Threshold
+				ReadBuildingCoverageThreshold();
+
 				//set index in listbox5 to the selected pollutant
 				string newpath = Path.Combine(ProjectName, @"Computation","Pollutant.txt");
 				if (File.Exists(newpath) ==false)
