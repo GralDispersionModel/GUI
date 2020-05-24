@@ -45,13 +45,15 @@
             this.Comments = new System.Windows.Forms.TabPage();
             this.button101 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.checkBox29 = new System.Windows.Forms.CheckBox();
             this.numericUpDown45 = new System.Windows.Forms.NumericUpDown();
             this.label103 = new System.Windows.Forms.Label();
-            this.label104 = new System.Windows.Forms.Label();
             this.button57 = new System.Windows.Forms.Button();
             this.numericUpDown43 = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown46 = new System.Windows.Forms.NumericUpDown();
+            this.label104 = new System.Windows.Forms.Label();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.label65 = new System.Windows.Forms.Label();
             this.numericUpDown42 = new System.Windows.Forms.NumericUpDown();
@@ -364,6 +366,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown45)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown43)).BeginInit();
             this.groupBox29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown42)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown39)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).BeginInit();
@@ -632,9 +635,9 @@
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.Color.Blue;
+            this.groupBox4.Controls.Add(this.checkBox29);
             this.groupBox4.Controls.Add(this.numericUpDown45);
             this.groupBox4.Controls.Add(this.label103);
-            this.groupBox4.Controls.Add(this.label104);
             this.groupBox4.Controls.Add(this.button57);
             this.groupBox4.Controls.Add(this.numericUpDown43);
             this.groupBox4.Controls.Add(this.label15);
@@ -663,6 +666,20 @@
             this.groupBox4.Text = "GRAL - General";
             this.groupBox4.Visible = false;
             // 
+            // checkBox29
+            // 
+            this.checkBox29.AutoSize = true;
+            this.checkBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
+            this.checkBox29.Location = new System.Drawing.Point(20, 120);
+            this.checkBox29.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox29.Name = "checkBox29";
+            this.checkBox29.Size = new System.Drawing.Size(105, 20);
+            this.checkBox29.TabIndex = 64;
+            this.checkBox29.Text = "adapt. rough.";
+            this.toolTip1.SetToolTip(this.checkBox29, "Enable the transient GRAL mode");
+            this.checkBox29.UseVisualStyleBackColor = true;
+            this.checkBox29.CheckStateChanged += new System.EventHandler(this.checkBox29_CheckStateChanged);
+            // 
             // numericUpDown45
             // 
             this.numericUpDown45.DecimalPlaces = 3;
@@ -679,6 +696,11 @@
             this.numericUpDown45.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown45, "0: adaptive roughness off\r\n> surface roughness: adaptive roughness at objects and" +
         " vegetation");
+            this.numericUpDown45.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             this.numericUpDown45.ValueChanged += new System.EventHandler(this.TextBox3_TextChanged);
             // 
             // label103
@@ -690,16 +712,6 @@
             this.label103.Size = new System.Drawing.Size(19, 16);
             this.label103.TabIndex = 63;
             this.label103.Text = "m";
-            // 
-            // label104
-            // 
-            this.label104.AutoSize = true;
-            this.label104.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label104.Location = new System.Drawing.Point(11, 121);
-            this.label104.Name = "label104";
-            this.label104.Size = new System.Drawing.Size(128, 16);
-            this.label104.TabIndex = 62;
-            this.label104.Text = "Opt. adaptive rough.";
             // 
             // button57
             // 
@@ -750,6 +762,8 @@
             // 
             // groupBox29
             // 
+            this.groupBox29.Controls.Add(this.numericUpDown46);
+            this.groupBox29.Controls.Add(this.label104);
             this.groupBox29.Controls.Add(this.radioButton5);
             this.groupBox29.Controls.Add(this.label65);
             this.groupBox29.Controls.Add(this.numericUpDown42);
@@ -757,12 +771,47 @@
             this.groupBox29.Controls.Add(this.radioButton3);
             this.groupBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox29.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox29.Location = new System.Drawing.Point(5, 264);
+            this.groupBox29.Location = new System.Drawing.Point(5, 256);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(240, 120);
+            this.groupBox29.Size = new System.Drawing.Size(240, 132);
             this.groupBox29.TabIndex = 5;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "GRAL Buildings";
+            // 
+            // numericUpDown46
+            // 
+            this.numericUpDown46.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown46.Location = new System.Drawing.Point(183, 104);
+            this.numericUpDown46.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numericUpDown46.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown46.Name = "numericUpDown46";
+            this.numericUpDown46.Size = new System.Drawing.Size(48, 21);
+            this.numericUpDown46.TabIndex = 57;
+            this.numericUpDown46.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown46, "1: just a small fraction, 9: almost the whole cell\r\ndefault: 5");
+            this.numericUpDown46.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label104
+            // 
+            this.label104.AutoSize = true;
+            this.label104.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label104.Location = new System.Drawing.Point(13, 106);
+            this.label104.Name = "label104";
+            this.label104.Size = new System.Drawing.Size(141, 16);
+            this.label104.TabIndex = 56;
+            this.label104.Text = "Building cell coverage";
             // 
             // radioButton5
             // 
@@ -781,7 +830,7 @@
             // 
             this.label65.AutoSize = true;
             this.label65.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label65.Location = new System.Drawing.Point(13, 90);
+            this.label65.Location = new System.Drawing.Point(13, 86);
             this.label65.Name = "label65";
             this.label65.Size = new System.Drawing.Size(116, 16);
             this.label65.TabIndex = 55;
@@ -790,7 +839,7 @@
             // numericUpDown42
             // 
             this.numericUpDown42.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown42.Location = new System.Drawing.Point(183, 85);
+            this.numericUpDown42.Location = new System.Drawing.Point(183, 81);
             this.numericUpDown42.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -2111,7 +2160,7 @@
             this.groupBox7.ForeColor = System.Drawing.Color.Black;
             this.groupBox7.Location = new System.Drawing.Point(505, 8);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(275, 241);
+            this.groupBox7.Size = new System.Drawing.Size(275, 271);
             this.groupBox7.TabIndex = 3;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "GRAL domain";
@@ -2129,7 +2178,6 @@
             // 
             // label24
             // 
-            this.label24.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(3, 90);
             this.label24.Name = "label24";
@@ -2149,7 +2197,7 @@
             // 
             // label23
             // 
-            this.label23.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(252, 90);
             this.label23.Name = "label23";
@@ -2159,7 +2207,7 @@
             // 
             // label22
             // 
-            this.label22.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label22.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(129, 168);
             this.label22.Name = "label22";
@@ -2179,7 +2227,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.textBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox7.Enabled = false;
             this.textBox7.Location = new System.Drawing.Point(151, 87);
             this.textBox7.Name = "textBox7";
@@ -2190,7 +2238,6 @@
             // 
             // textBox6
             // 
-            this.textBox6.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBox6.Enabled = false;
             this.textBox6.Location = new System.Drawing.Point(29, 87);
             this.textBox6.Name = "textBox6";
@@ -2201,7 +2248,7 @@
             // 
             // textBox5
             // 
-            this.textBox5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.textBox5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox5.Enabled = false;
             this.textBox5.Location = new System.Drawing.Point(88, 128);
             this.textBox5.Name = "textBox5";
@@ -4748,7 +4795,7 @@
             // 
             // label20
             // 
-            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.Location = new System.Drawing.Point(13, 216);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(105, 20);
@@ -5145,6 +5192,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown43)).EndInit();
             this.groupBox29.ResumeLayout(false);
             this.groupBox29.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown42)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown39)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).EndInit();
@@ -5258,7 +5306,6 @@
         private System.Windows.Forms.Button button49;
         private System.Windows.Forms.GroupBox groupBox27;
         private System.Windows.Forms.NumericUpDown numericUpDown39;
-        private System.Windows.Forms.NumericUpDown numericUpDown38;
         private System.Windows.Forms.GroupBox groupBox24;
         public System.Windows.Forms.GroupBox groupBox23;
         private System.Windows.Forms.CheckBox checkBox34;
@@ -5338,8 +5385,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown4;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown numericUpDown5;
@@ -5579,7 +5624,12 @@
         private System.Windows.Forms.Button button56;
         private System.Windows.Forms.Button button57;
         private System.Windows.Forms.NumericUpDown numericUpDown45;
+        private System.Windows.Forms.CheckBox checkBox29;
         private System.Windows.Forms.Label label103;
+        private System.Windows.Forms.NumericUpDown numericUpDown38;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown numericUpDown46;
         private System.Windows.Forms.Label label104;
     }
 }
