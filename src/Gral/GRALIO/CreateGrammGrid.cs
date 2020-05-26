@@ -27,8 +27,7 @@ namespace GralIO
     /// </summary>
     public class CreateGrammGrid
 	{
-		public float[,] ADH = new float[1,1];
-		private bool _writeCompressedFile = false;
+        private bool _writeCompressedFile = false;
 		public bool WriteCompressedFile {set {_writeCompressedFile = value;} }
 		public int SmoothBorderCellNr;
 		public string ProjectName;
@@ -38,7 +37,9 @@ namespace GralIO
     	/// </summary> 
 		public bool GenerateGgeomFile()
 		{
-			GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("Reading GRAMM topography" + "0 %");
+            float[][] ADH;
+
+            GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("Reading GRAMM topography" + "0 %");
 			wait.Show();
 			
 			//User defined column seperator and decimal seperator
@@ -73,6 +74,7 @@ namespace GralIO
 			text = reader.ReadLine().Split(splitchar, StringSplitOptions.RemoveEmptyEntries);
 			double etamax=Convert.ToDouble(text[0].Replace(".",decsep)); //northern boarder
 			reader.Close();
+            reader.Dispose();
 
 			//reading the filename, the height of the lowest cell height, and the vertical streching factor
 			reader=new StreamReader(Path.Combine(ProjectName, @"Computation", "geom.in"));
@@ -82,6 +84,7 @@ namespace GralIO
 			text = reader.ReadLine().Split(splitchar, StringSplitOptions.RemoveEmptyEntries);
 			double ADZ=Convert.ToDouble(text[0].Replace(".",decsep)); //vertical streching factor
 			reader.Close();
+            reader.Dispose();
 
 			double winkel=0;  //angle between domain orientation and north
 			int NX1=NX+1;
@@ -230,11 +233,12 @@ namespace GralIO
 			bool sizeOK = true;
 			try
 			{
-				ADH = new float[NCOL + 2, NROW + 2];
+                 ADH = Landuse.CreateArray<float[]>(NCOL + 2, () => new float[NROW + 2]);
 			}
 			catch
 			{
 				reader.Close();
+                reader.Dispose();
 				sizeOK = false;
 				MessageBox.Show("Topography file is too large. Exeeding available memory space of this computer", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				wait.Close();
@@ -243,15 +247,16 @@ namespace GralIO
 			}
 			if (sizeOK == true)
 			{
-				//read topography data only for the area of interest
-				for (int i = 1; i < NROW + 1; i++)
+                //read topography data only for the area of interest
+                char[] splitChar = new char[] { ' ', '\t', ';' };
+                for (int i = 1; i < NROW + 1; i++)
 				{
 					Application.DoEvents(); // Kuntner
-					text = reader.ReadLine().Split(new char[] { ' ', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+					text = reader.ReadLine().Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
 					//for (int j = 1; j < NCOL + 1; j++)
 					Parallel.For(1, NCOL + 1, j =>
 					{
-						ADH[j, i] = (float)Convert.ToDouble(text[j - 1].Replace(".", decsep));
+						ADH[j][i] = Convert.ToSingle(text[j - 1], CultureInfo.InvariantCulture);
 					});
 					
 					if (i % 40 == 0)
@@ -260,6 +265,7 @@ namespace GralIO
                     }
                 }
 				reader.Close();
+                reader.Dispose();
 
 				//computation of cell heights
 				for (int NJ = 1; NJ < NY + 2; NJ++)
@@ -270,13 +276,16 @@ namespace GralIO
 						//non-transformed coordinates
 						double X1 = (NI - 1) * IMODI;
 						double Y1 = (NJ - 1) * IMODI;
+
 						//transformed coordinates
 						double X2 = X1 * cosinus - Y1 * sinus + I1;
 						double Y2 = X1 * sinus + Y1 * cosinus + J1;
-						//computation of indices
+						
+                        //computation of indices for the Topography file date
 						int IP = Convert.ToInt32(((X2 - ILIUN) / ICSIZE) + 1);
 						int JP = -Convert.ToInt32(((Y2 - JLIUN) / ICSIZE) - NROW);
-						//computation of coordinates
+						
+                        //computation of coordinates
 						int JKOO = Convert.ToInt32(JLIUN + (NROW - JP + 1) * ICSIZE);
 						int IKOO = Convert.ToInt32(ILIUN + (IP - 1) * ICSIZE);
 						double gewges = 0;
@@ -288,7 +297,7 @@ namespace GralIO
 						{
 							for (int JPP = JP; JPP < JP + 2; JPP++)
 							{
-								if (ADH[IPP, JPP] == NODDATA)
+								if (ADH[IPP][JPP] == NODDATA)
 								{
 									gewges = 0;
 									gew = 0;
@@ -296,66 +305,66 @@ namespace GralIO
 									//seeking north/south
 									for (int NS = JPP + 1; NS < NROW + 1; NS++)
 									{
-										if (ADH[IPP, NS] != NODDATA)
+										if (ADH[IPP][NS] != NODDATA)
 										{
 											gew = Math.Abs(1 / ((NS - JPP) * Convert.ToDouble(ICSIZE)));
 											gewges = gewges + gew;
-											wert = ADH[IPP, NS] * gew + wert;
+											wert = ADH[IPP][NS] * gew + wert;
 											break;
 										}
 									}
 									//seeking north/south
 									for (int NS = JPP - 1; NS > 0; NS--)
 									{
-										if (ADH[IPP, NS] != NODDATA)
+										if (ADH[IPP][NS] != NODDATA)
 										{
 											gew = Math.Abs(1 / ((NS - JPP) * Convert.ToDouble(ICSIZE)));
 											gewges = gewges + gew;
-											wert = ADH[IPP, NS] * gew + wert;
+											wert = ADH[IPP][NS] * gew + wert;
 											break;
 										}
 									}
 									//seeking west/east
 									for (int NS = IPP + 1; NS < NCOL + 1; NS++)
 									{
-										if (ADH[NS, JPP] != NODDATA)
+										if (ADH[NS][JPP] != NODDATA)
 										{
 											gew = Math.Abs(1 / ((NS - IPP) * Convert.ToDouble(ICSIZE)));
 											gewges = gewges + gew;
-											wert = ADH[NS, JPP] * gew + wert;
+											wert = ADH[NS][JPP] * gew + wert;
 											break;
 										}
 									}
 									//seeking west/east
 									for (int NS = IPP - 1; NS > 0; NS--)
 									{
-										if (ADH[NS, JPP] != NODDATA)
+										if (ADH[NS][JPP] != NODDATA)
 										{
 											gew = Math.Abs(1 / ((NS - IPP) * Convert.ToDouble(ICSIZE)));
 											gewges = gewges + gew;
-											wert = ADH[NS, JPP] * gew + wert;
+											wert = ADH[NS][JPP] * gew + wert;
 											break;
 										}
 									}
 									//calculating total weight
-									ADH[IPP, JPP] = (float)Math.Max(wert / gewges, 0);
+									ADH[IPP][JPP] = (float)Math.Max(wert / gewges, 0);
 								}
 							}
 						}
-						double H12 = ADH[IP, JP] + (ADH[IP, JP + 1] - ADH[IP, JP]) / ICSIZE * (Y2 - JKOO);
-						double H34 = ADH[IP + 1, JP] + (ADH[IP + 1, JP + 1] - ADH[IP + 1, JP]) / ICSIZE * (Y2 - JKOO);
+						double H12 = ADH[IP][JP] + (ADH[IP][JP + 1] - ADH[IP][JP]) / ICSIZE * (Y2 - JKOO);
+						double H34 = ADH[IP + 1][JP] + (ADH[IP + 1][JP + 1] - ADH[IP + 1][JP]) / ICSIZE * (Y2 - JKOO);
 						AHE[NI, NJ, 1] = Math.Max(H12 + (H34 - H12) / ICSIZE * (X2 - IKOO), 0);
 
 						//minimum of terrain data
-						if (ADH[IP, JP] < AHMIN)
+						if (ADH[IP][JP] < AHMIN)
                         {
-                            AHMIN = ADH[IP, JP];
+                            AHMIN = ADH[IP][JP];
                         }
 
                         //minimum elevation at the border
-                        if ((ADH[IP, JP] < AHMIN_BORDER) && ((NI == 1) || (NJ == 1) || (NI == NX + 1) || (NJ == NY + 1)))
+                        if ((ADH[IP][JP] < AHMIN_BORDER) && ((NI == 1) || (NJ == 1) || (NI == NX + 1) || (NJ == NY + 1)))
                         {
-                            AHMIN_BORDER = ADH[IP, JP];
+                            AHMIN_BORDER = ADH[IP][JP];
                         }
                     }
 				}
