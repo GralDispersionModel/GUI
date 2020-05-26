@@ -45,7 +45,7 @@ namespace Gral
 		{
 			if (GRALSettings.BuildingMode == 3)
 			{
-				//generate flat topography file when GRAMM is used to compute flow around buildings
+				//Special mode: generate flat topography file when GRAMM is used to compute flow around buildings
 				Topofile = Path.Combine(ProjectName, @"Maps", "Flat_topo.txt");
 				using (StreamWriter myWriter = new StreamWriter(Topofile))
 				{
@@ -70,6 +70,7 @@ namespace Gral
 			}
 			else
 			{
+                // Default mode: load topography and use Topo Data
 				OpenFileDialog dialog = new OpenFileDialog
 				{
 					Filter = "Topo files (*.txt;*.dat)|*.txt;*.dat",
@@ -81,19 +82,28 @@ namespace Gral
 
 					//check whether defined GRAMM domain is within the selected topography file
 					string[] data = new string[100];
-					StreamReader myreader = new StreamReader(Topofile);
-					data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-					int nx = Convert.ToInt32(data[1]);
-					data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-					int ny = Convert.ToInt32(data[1]);
-					data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-					double x11 = Convert.ToDouble(data[1].Replace(".", DecimalSep));
-					data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-					double y11 = Convert.ToDouble(data[1].Replace(".", DecimalSep));
-					data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-					double dx = Convert.ToDouble(data[1].Replace(".", DecimalSep));
-					myreader.Close();
-					myreader.Dispose();
+                    int nx = 0, ny = 0;
+                    double x11 = 0, y11 = 0, dx = 1;
+                    try
+                    {
+                        using (StreamReader myreader = new StreamReader(Topofile))
+                        {
+                            data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            nx = Convert.ToInt32(data[1]);
+                            data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            ny = Convert.ToInt32(data[1]);
+                            data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            x11 = Convert.ToDouble(data[1].Replace(".", DecimalSep));
+                            data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            y11 = Convert.ToDouble(data[1].Replace(".", DecimalSep));
+                            data = myreader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            dx = Convert.ToDouble(data[1].Replace(".", DecimalSep));
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Error reading " + Path.GetFileName(Topofile) + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
 
 					if ((GrammDomRect.West < x11) || (GrammDomRect.East > x11 + dx * nx) || (GrammDomRect.South < y11) || (GrammDomRect.North > y11 + dx * ny))
                     {
@@ -176,10 +186,10 @@ namespace Gral
 				//save GRAMM control file "GRAMMin.dat"
 				GRAMMin(true);
 			}
-			catch
+			catch(Exception ex)
 			{
 				Cursor = Cursors.Default;
-				MessageBox.Show("Unable to generate GRAMM grid", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Unable to generate GRAMM grid" + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 
 			//enable/disable GRAMM simulations
