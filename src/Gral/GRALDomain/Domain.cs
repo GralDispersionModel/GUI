@@ -1051,9 +1051,8 @@ namespace GralDomain
                 // search top base map at object manager
                 DrawingObjects _drobj = null;
                 foreach (DrawingObjects _dr in ItemOptions)
-                {
-                    
-                    if ((_drobj.Name.Substring(0, 3) == "SM:"))
+                {        
+                    if ((_dr.Name.Substring(0, 3) == "SM:"))
                     {
                         _drobj = _dr;
                         break;
