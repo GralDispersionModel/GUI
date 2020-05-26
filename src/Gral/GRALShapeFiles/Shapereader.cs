@@ -50,14 +50,15 @@ namespace GralShape
         public IEnumerable<object> ReadShapeFile(string filename)
         {
             //read file
-            FileStream fs = new FileStream(filename, FileMode.Open);
-            long fileLength = fs.Length;
-            
-            Byte[] data = new Byte[fileLength];
-            fs.Read(data, 0, (int)fileLength);
-            fs.Close();
-            fs.Dispose();
-            
+            Byte[] data;
+            long fileLength;
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            {
+                fileLength = fs.Length;
+                data = new Byte[fileLength];
+                fs.Read(data, 0, (int)fileLength);
+            }
+
             filecode = readIntBig(data, 0);
             filelength = readIntBig(data, 24);
             version = readIntLittle(data, 28);

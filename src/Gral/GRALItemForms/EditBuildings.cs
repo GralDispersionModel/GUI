@@ -148,7 +148,7 @@ namespace GralItemForms
                 		PointD _pt = new PointD(CornerBuildingX[i], CornerBuildingY[i]);
                 		_bdata.Pt.Add(_pt);
                     }
-                	double areapolygon = St_F.CalcArea(_bdata.Pt);
+                	double areapolygon = St_F.CalcArea(_bdata.Pt, false);
                 	textBox3.Text = St_F.DblToIvarTxt(areapolygon);
                 	
                 	if (number_of_vertices > 0)

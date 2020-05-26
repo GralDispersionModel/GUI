@@ -272,6 +272,10 @@ namespace Gral
         /// Path and name of the meteo data folder
         /// </summary>
         private string MeteoDirectory = String.Empty;
+        /// <summary>
+        /// Number of checkpoints to detect, if a building covers a cell
+        /// </summary>
+        private int BuildingCellCoverageThreshold = 5;
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -630,6 +634,15 @@ namespace Gral
         {
             int ok = 0;
             //check input in textbox for roughness length
+            if (checkBox29.Checked)
+            {
+                GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
+            }
+            else
+            {
+                GRALSettings.AdaptiveRoughness = 0;
+            }
+
             try
             {
                 if (numericUpDown38.Value <= 0)
@@ -1012,6 +1025,15 @@ namespace Gral
         private void TextBox3_TextChanged(object sender, EventArgs e)
         {
             St_F.CheckInput(sender, e);
+
+            if (sender == numericUpDown45 && checkBox29.Checked) // optional adaptive roughness lenght
+            {
+                GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
+            }
+            else
+            {
+                GRALSettings.AdaptiveRoughness = 0;
+            }
             ResetInDat();
         }
         //change the latitude
@@ -2358,7 +2380,11 @@ namespace Gral
             numericUpDown30.Enabled = !locked;
             numericUpDown31.Enabled = !locked;
             numericUpDown34.Enabled = !locked; // GRAL transient
-            numericUpDown38.Enabled = !locked; // Roughness lenght
+            numericUpDown38.Enabled = !locked; // Surface roughness lenght
+            checkBox29.Enabled = !locked;      // Surface roughness lenght
+            numericUpDown45.Enabled = !locked; // Adaptive surface roughness
+            numericUpDown46.Enabled = !locked; // Building raster checkpoints
+            
             numericUpDown39.Enabled = !locked; // Latidude
             numericUpDown43.Enabled = !locked; // Compressed mode for GRAL output
             
@@ -2514,7 +2540,7 @@ namespace Gral
             if (tabControl1.SelectedIndex == 1) // GRAL Settings
             {
                 SetButton12Bitmap();
-                SetButton57Bitmap();           
+                SetButton57Bitmap();   
             }
             if (tabControl1.SelectedIndex == 2) // Domain
             {
@@ -3494,6 +3520,58 @@ namespace Gral
                     }
                 }
             }
+        }
+
+        private void checkBox29_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (IndatReset)
+            {
+                if (checkBox29.Checked && GRALSettings.AdaptiveRoughness < 0.01)
+                {
+                    numericUpDown45.Value = 0.5M;
+                }
+                else
+                {
+                    numericUpDown45.Value = 0;
+                }
+                ResetInDat();
+            }
+        }
+
+        private void numericUpDown46_ValueChanged(object sender, EventArgs e)
+        {
+            BuildingCellCoverageThreshold = Convert.ToInt32(numericUpDown46.Value);
+            WriteBuildingCoverageThreshold();
+        }
+
+        private void WriteBuildingCoverageThreshold()
+        {
+            try
+            {
+                using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "BuildCovThreshold.txt")))
+                {
+                    mywriter.WriteLine(BuildingCellCoverageThreshold.ToString(ic));
+                }
+            }
+            catch
+            { }
+        }
+        private void ReadBuildingCoverageThreshold()
+        {
+            try
+            {
+                using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Settings", "BuildCovThreshold.txt")))
+                {
+                    BuildingCellCoverageThreshold = Convert.ToInt32(myreader.ReadLine(), ic);
+                }
+            }
+            catch
+            {
+                BuildingCellCoverageThreshold = 5;
+            }
+            numericUpDown46.ValueChanged -= new System.EventHandler(this.numericUpDown46_ValueChanged);
+            numericUpDown46.Value = BuildingCellCoverageThreshold;
+            numericUpDown46.ValueChanged += new System.EventHandler(this.numericUpDown46_ValueChanged);
         }
     }
 }

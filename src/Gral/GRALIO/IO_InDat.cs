@@ -121,7 +121,7 @@ namespace GralIO
                         myWriter.WriteLine("ASCiiResults 0 \t ! Additional ASCii result files Yes = 1, No = 0");
                     }
 
-                    myWriter.WriteLine(_data.AdaptiveRouhness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
+                    myWriter.WriteLine(_data.AdaptiveRoughness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
                 }
 				
 			}
@@ -287,7 +287,7 @@ namespace GralIO
                         {
                             if (double.TryParse(text[0], NumberStyles.Any, ic, out double _val))
                             {
-                                _data.AdaptiveRouhness = _val;
+                                _data.AdaptiveRoughness = _val;
                             }
                         }
                     }

@@ -199,7 +199,7 @@ namespace GralIO
         /// <summary>
         ///GRAL log output for debugging 
         /// </summary>
-        public double AdaptiveRouhness { get; set; }
+        public double AdaptiveRoughness { get; set; }
 
         public InDatVariables()
         {
@@ -223,7 +223,7 @@ namespace GralIO
             WaitForKeyStroke = true;
             WriteESRIResult = false;
             Loglevel = 0;
-            AdaptiveRouhness = 0;
+            AdaptiveRoughness = 0;
         }
 
         public InDatVariables(InDatVariables other)
@@ -251,7 +251,7 @@ namespace GralIO
             WaitForKeyStroke = other.WaitForKeyStroke;
             WriteESRIResult = other.WriteESRIResult;
             Loglevel = other.Loglevel;
-            AdaptiveRouhness = other.AdaptiveRouhness;
+            AdaptiveRoughness = other.AdaptiveRoughness;
         }
 
     }

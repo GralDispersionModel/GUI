@@ -51,7 +51,7 @@ namespace GralIO
 		private int _z;
 		public int Z {set {_z = value;}}
 		
-		public float[,,] Values;
+		public float[][][] Values;
 		public float[,] TwoDim;
 		public double [,] DblArr; 
 		
@@ -103,7 +103,7 @@ namespace GralIO
                             }
                             else
                             {
-                                SB.Append(Math.Round(Values[i, j, _z], _round).ToString(ic));
+                                SB.Append(Math.Round(Values[i][j][_z], _round).ToString(ic));
                                 SB.Append(" ");
                                 //myWriter.Write(Convert.ToString(Math.Round(Values[i, j, _z], _round), ic) + " ");
                             }

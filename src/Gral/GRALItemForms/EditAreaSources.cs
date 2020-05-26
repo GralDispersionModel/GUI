@@ -318,7 +318,7 @@ namespace GralItemForms
 						_as.Pt.Add(new PointD(CornerAreaX[i], CornerAreaY[i]));
                     }
 					
-					double areapolygon = Math.Round(St_F.CalcArea(_as.Pt), 1);
+					double areapolygon = Math.Round(St_F.CalcArea(_as.Pt, false), 1);
                 	textBox3.Text = St_F.DblToIvarTxt(areapolygon);
                 	_as.Area = (float) areapolygon;
 					

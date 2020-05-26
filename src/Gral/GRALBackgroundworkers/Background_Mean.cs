@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.IO.Compression;
 using GralIO;
 
 namespace GralBackgroundworkers
@@ -60,9 +61,7 @@ namespace GralBackgroundworkers
                             text = myreader.ReadLine().Split(new char[] { ',' });
                             emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
                             if (j < 12)
-                            {
                                 emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-                            }
                         }
                     }
 					itm++;
@@ -89,9 +88,7 @@ namespace GralBackgroundworkers
                         {
                             emifac_day[j, itm] = 1;
                             if (j < 12)
-                            {
                                 emifac_mon[j, itm] = 1;
-                            }
                         }
                     }
                 }
@@ -125,10 +122,7 @@ namespace GralBackgroundworkers
                         month.Add(text3[1]);
                         hour.Add(text2[1]);
                         if (hour[hour.Count - 1] == "24")
-                        {
                             hourplus = 1;
-                        }
-
                         wgmettime.Add(text2[2]);
                         wrmettime.Add(text2[3]);
                         akmettime.Add(text2[4]);
@@ -167,12 +161,12 @@ namespace GralBackgroundworkers
 			int nnn = 0;
 			double ntot = 0;
 			
-            float[,,] conc = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource];
-            float[,,] dep = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource];
-            float[,,] concmit = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			float[,,] depmit = new float[mydata.CellsGralX + 1, mydata.CellsGralY + 1, maxsource + 1];
-			
-			double[] emmit = new double[maxsource];
+            float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+            float[][][] dep = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+            float[][][] concmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+            float[][][] depmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
+
+            double[] emmit = new double[maxsource];
 			double[] fmod = new double[maxsource];
 
 			foreach(string line_meteopgt in data_meteopgt)
@@ -279,9 +273,9 @@ namespace GralBackgroundworkers
 						itm = 0;
                         foreach (string source_group_name in sg_names)
                         {
-                            Array.Clear(conc, 0, conc.Length);
-                            Array.Clear(dep, 0, dep.Length);
-
+                            RestoreJaggedArray(conc);
+                            RestoreJaggedArray(dep);
+                            
                             //read GRAL concentration files
                             string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itm]);
                             bool ConFileOK = ReadConFiles(filename, mydata, itm, ref conc);
@@ -292,17 +286,13 @@ namespace GralBackgroundworkers
                                 nnn += wl_freq;
                             }
 
-							//read GRAL deposition files
-							bool DepFileOK = false;
-							if (mydata.WriteDepositionOrOdourData)
-							{
-								filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itm]);
-								DepFileOK = ReadConFiles(filename, mydata, itm, ref dep);
-								if (DepFileOK)
-								{
-									deposition_files_exists = true;
-								}
-							}
+                            //read GRAL deposition files
+                            filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itm]);
+                            bool DepFileOK = ReadConFiles(filename, mydata, itm, ref dep);
+                            if (DepFileOK)
+                            {
+                                deposition_files_exists = true;
+                            }
 
                             for (int ii = 0; ii <= mydata.CellsGralX; ii++)
                             {
@@ -310,13 +300,13 @@ namespace GralBackgroundworkers
                                 {
                                     if (ConFileOK)
                                     {
-                                        concmit[ii, jj, itm] += (float)(emmit[itm] * conc[ii, jj, itm]);
-                                        concmit[ii, jj, maxsource] += (float)(emmit[itm] * conc[ii, jj, itm]);
+                                        concmit[ii][jj][itm] += (float)(emmit[itm] * conc[ii][jj][itm]);
+                                        concmit[ii][jj][maxsource] += (float)(emmit[itm] * conc[ii][jj][itm]);
                                     }
                                     if (DepFileOK)
                                     {
-                                        depmit[ii, jj, itm] += (float)(emmit[itm] * dep[ii, jj, itm]);
-                                        depmit[ii, jj, maxsource] += (float)(emmit[itm] * dep[ii, jj, itm]);
+                                        depmit[ii][jj][itm] += (float)(emmit[itm] * dep[ii][jj][itm]);
+                                        depmit[ii][jj][maxsource] += (float)(emmit[itm] * dep[ii][jj][itm]);
                                     }
                                 }
                             }
@@ -343,28 +333,24 @@ namespace GralBackgroundworkers
 					if (mydata.Checkbox2 == true)
 					{
 						for (int i = 0; i <= mydata.CellsGralX; i++)
-                        {
-                            for (int j = 0; j <= mydata.CellsGralY; j++)
+							for (int j = 0; j <= mydata.CellsGralY; j++)
 						{
-							concmit[i, j, itm] = concmit[i, j, itm] / (float)nnn;
-							depmit[i, j, itm] = depmit[i, j, itm] / (float)nnn;
+							concmit[i][j][itm] = concmit[i][j][itm] / (float)nnn;
+							depmit[i][j][itm] = depmit[i][j][itm] / (float)nnn;
 						}
-                        }
-                    }
+					}
 					itm++;
 				}
 				if (mydata.Checkbox2 == true)
 				{
 					//total concentration
 					for (int i = 0; i <= mydata.CellsGralX; i++)
-                    {
-                        for (int j = 0; j <= mydata.CellsGralY; j++)
+						for (int j = 0; j <= mydata.CellsGralY; j++)
 					{
-						concmit[i, j, maxsource] = concmit[i, j, maxsource] / (float)nnn;
-						depmit[i, j, maxsource] = depmit[i, j, maxsource] / (float)nnn;
+						concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
+						depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
 					}
-                    }
-                }
+				}
 			}
 
             GralIO.WriteESRIFile Result = new GralIO.WriteESRIFile
@@ -447,7 +433,7 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists && mydata.WriteDepositionOrOdourData) // write deposition data
+                if (deposition_files_exists && mydata.WriteDepositionOrOdourData) 
 				{
 					file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
 					
