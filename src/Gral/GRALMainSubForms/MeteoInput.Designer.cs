@@ -146,7 +146,6 @@
             // 
             // button1
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(28, 151);
             this.button1.Name = "button1";
@@ -219,11 +218,9 @@
             // 
             // MeteoInput
             // 
-            this.AcceptButton = this.button2;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(362, 558);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
