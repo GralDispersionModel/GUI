@@ -109,11 +109,21 @@ namespace GralDomain
 				{
 					try
 					{
+                        char _rowSep;
+                        if (f[2].Equals("Tab"))
+                        {
+                            _rowSep = '\t';
+                        }
+                        else
+                        {
+                            _rowSep = Convert.ToChar(f[2]);
+                        }
+
                         WindFileData _wdata = new WindFileData
                         {
                             Filename = f[0],
                             DecSep = f[1],
-                            RowSep = Convert.ToChar(f[2]),
+                            RowSep = _rowSep,
                             X0 = Convert.ToDouble(f[3], ic),
                             Y0 = Convert.ToDouble(f[4], ic),
                             Z0 = Convert.ToDouble(f[5], ic)
