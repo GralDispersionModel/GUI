@@ -86,6 +86,10 @@ namespace GralDomain
                                     if (reihe.ToUpper().Contains("Z="))
                                     {
                                         Anemometerheight = EvalMetFileHeader(reihe);
+                                        if (Anemometerheight == double.MaxValue)
+                                        {
+                                            Anemometerheight = 10;
+                                        }
                                     }
                                     if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
                                     {
@@ -147,7 +151,7 @@ namespace GralDomain
                     }
                     
                     // coordinate-Info available
-                    if (x0 < (double.MaxValue - 1))
+                    if (x0 < (double.MaxValue - 1) && y0 < (double.MaxValue - 1))
                     {
                         MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(x0);
                         MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(y0);
