@@ -282,8 +282,8 @@ namespace Gral
                                 if (biascorrection && sectorWidth > 1)
                                 {
                                     double start = data.Dir - sectorWidth * 0.5F;
-                                    double ende  = data.Dir + sectorWidth * 0.5F;
-                                    
+                                    double ende = data.Dir + sectorWidth * 0.5F;
+
                                     for (double subsect = start; subsect < ende; subsect += 0.5)
                                     {
                                         double _sect = subsect;
@@ -302,14 +302,13 @@ namespace Gral
                                         }
                                         count++;
                                         sectFrequency[sektor, wklass]++;
-                                    }                               
+                                    }
                                 }
                                 else
                                 {
                                     count++;
                                     sectFrequency[sektor, wklass]++;
                                 }
-
                                 wind.Add(data);
                             }
                         }
@@ -342,7 +341,15 @@ namespace Gral
                                 windrose.BiasCorrection = 1;
                             }
                         }
-                        windrose.Show();
+
+                        if (wind.Count > 1)
+                        {
+                            windrose.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
             }
@@ -464,7 +471,14 @@ namespace Gral
                                 windrose.BiasCorrection = 1;
                             }
                         }
-                        windrose.Show();
+                        if (wind.Count > 1)
+                        {
+                            windrose.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
             }
@@ -552,7 +566,14 @@ namespace Gral
                             StartHour = startstunde,
                             FinalHour = endstunden
                         };
-                        wclass.Show();
+                        if (wind.Count > 1)
+                        {
+                            wclass.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                        }
                     }
                 }
             }
@@ -642,7 +663,12 @@ namespace Gral
                                 StartDate = MeteoTimeSeries[0].Date,
                                 EndDate = MeteoTimeSeries[MeteoTimeSeries.Count - 1].Date
                             };
+
                             wDistr.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
@@ -715,7 +741,14 @@ namespace Gral
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind
                         };
-                        sclass.Show();
+                        if (MeteoTimeSeries.Count > 1)
+                        {
+                            sclass.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
             }
@@ -767,7 +800,14 @@ namespace Gral
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
             };
-            mwind.Show();
+            if (MeteoTimeSeries.Count > 1)
+            {
+                mwind.Show();
+            }
+            else
+            {
+                MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         /// <summary>
@@ -821,7 +861,14 @@ namespace Gral
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
             };
-            mwinddir.Show();
+            if (MeteoTimeSeries.Count > 1)
+            {
+                mwinddir.Show();
+            }
+            else
+            {
+                MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         /// <summary>

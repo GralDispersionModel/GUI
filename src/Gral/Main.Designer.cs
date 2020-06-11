@@ -1606,7 +1606,7 @@
             this.numericUpDown41.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown41.Location = new System.Drawing.Point(146, 45);
             this.numericUpDown41.Maximum = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -1614,7 +1614,8 @@
             this.numericUpDown41.Size = new System.Drawing.Size(45, 21);
             this.numericUpDown41.TabIndex = 44;
             this.numericUpDown41.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown41, "0: lower compression rate 1: higher compression rate");
+            this.toolTip1.SetToolTip(this.numericUpDown41, "0: lower compression rate 1: higher compression rate 2: faster for huge projects " +
+        "with terrain or many buildings");
             this.numericUpDown41.ValueChanged += new System.EventHandler(this.numericUpDown41_ValueChanged);
             // 
             // checkBox26

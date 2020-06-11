@@ -164,6 +164,60 @@ namespace GralIO
                         }
                     }
                 }
+                else if (header == -3)
+                {
+                    Int16[,] _KKART = new Int16[_NII + 2, _NJJ + 2];
+                    for (int i = 1; i < _NII + 1; i++)
+                    {
+                        cts.ThrowIfCancellationRequested();
+
+                        for (int j = 1; j < _NJJ + 1; j++)
+                        {
+                            _KKART[i, j] = reader.ReadInt16();
+                        }
+                    }
+
+                    byte[] readData;
+
+                    for (int i = 1; i <= _NII + 1; i++)
+                    {
+                        cts.ThrowIfCancellationRequested();
+
+                        for (int j = 1; j <= _NJJ + 1; j++)
+                        {
+                            int KKART = _KKART[i, j];
+                            if (KKART < 1)
+                            {
+                                KKART = 1;
+                            }
+                            readData = reader.ReadBytes((_NKK + 2 - KKART) * 6); // read all vertical bytes of one point
+                            int index = 0;
+
+                            for (int k = 1; k < KKART; k++)
+                            {
+                                _uk[i][j][k - 1] = 0;
+                                _vk[i][j][k - 1] = 0;
+                                _wk[i][j][k] = 0;
+                            }
+                            for (int k = KKART; k <= _NKK + 1; k++)
+                            {
+                                _uk[i][j][k - 1] = (float)(BitConverter.ToInt16(readData, index) * 0.01F); // 2 Bytes  = word integer value
+                                index += 2;
+                            }
+                            for (int k = KKART; k <= _NKK + 1; k++)
+                            {
+                                _vk[i][j][k - 1] = (float)(BitConverter.ToInt16(readData, index) * 0.01F);
+                                index += 2;
+                            }
+                            for (int k = KKART; k <= _NKK + 1; k++)
+                            {
+                                _wk[i][j][k] = (float)(BitConverter.ToInt16(readData, index) * 0.01F);
+                                index += 2;
+                            }
+                        }
+                    }
+                }
+
                 return true;
             }
             catch

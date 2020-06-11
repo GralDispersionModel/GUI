@@ -764,7 +764,7 @@ namespace Gral
                     }
                     catch { }
 					checkBox26.Checked = true;
-                    numericUpDown41.Value = (decimal)_compression;
+                    numericUpDown41.Value = (decimal) Math.Max(Math.Min(_compression, numericUpDown41.Maximum), 0);
                 }
 				else
 				{

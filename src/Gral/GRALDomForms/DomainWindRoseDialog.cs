@@ -64,18 +64,31 @@ namespace GralDomForms
 				{
 					try
 					{
+                        char _rowSep;
+                        if (f[2].Equals("Tab"))
+                        {
+                            _rowSep = '\t';
+                        }
+                        else
+                        {
+                            _rowSep = Convert.ToChar(f[2]);
+                        }
 						WindFileData _wdata = new WindFileData
 						{
 							Filename = f[0],
 							DecSep = f[1],
-							RowSep = Convert.ToChar(f[2]),
+							RowSep = _rowSep,
 							X0 = Convert.ToDouble(f[3], ic),
 							Y0 = Convert.ToDouble(f[4], ic),
 							Z0 = Convert.ToDouble(f[5], ic)
 						};
+
 						Windfiles.Add(_wdata);
 					}
-					catch{}
+					catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
 				}
 			}
 			FillListBox();
@@ -211,35 +224,35 @@ namespace GralDomForms
 									}
 								}
 
-								using (GralMainForms.MeteoInput FormatMetFile = new GralMainForms.MeteoInput(null)
-								       {
-								       	MetFile1 = metfile,
-								       	FfileLength1 = filelength,
-								       	DecSep1 = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator,
-								       	Met_Time_Ser = MeteoTimeSeries,
-								       	Owner = this
-								       })
-								{
-									FormatMetFile.ShowDialog();
+                                using (GralMainForms.MeteoInput FormatMetFile = new GralMainForms.MeteoInput(null)
+                                {
+                                    MetFile1 = metfile,
+                                    FfileLength1 = filelength,
+                                    DecSep1 = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator,
+                                    Met_Time_Ser = MeteoTimeSeries,
+                                    Owner = this
+                                })
+                                {
+                                    FormatMetFile.ShowDialog();
 
-									WindFileData _wdata = new WindFileData
-									{
-										Filename = metfile,
-										DecSep = FormatMetFile.DecSepUser,
-										RowSep = FormatMetFile.RowSep,
-										X0 = x0,
-										Y0 = y0,
-										Z0 = Anemometerheight
-									};
-									Windfiles.Add(_wdata);
+                                    WindFileData _wdata = new WindFileData
+                                    {
+                                        Filename = metfile,
+                                        DecSep = FormatMetFile.DecSepUser,
+                                        RowSep = FormatMetFile.RowSep,
+                                        X0 = x0,
+                                        Y0 = y0,
+                                        Z0 = Anemometerheight
+                                    };
+                                    Windfiles.Add(_wdata);
 
-									listBox1.Items.Add(Path.GetFileName(metfile));
-								}
-								
-							}
-							
-						}
-						catch{}
+                                    listBox1.Items.Add(Path.GetFileName(metfile));
+                                }
+
+                            }
+
+                        }
+                        catch {}
 					}
 				}
 			}
@@ -318,12 +331,18 @@ namespace GralDomForms
 					{
 						DrawingObject.ContourFilename += "\t";
 					}
-					
-					string txt = _wdata.Filename + "?" +_wdata.DecSep + "?" + Convert.ToString(_wdata.RowSep) + "?"
+
+                    string _rowSep = Convert.ToString(_wdata.RowSep);
+                    if (_wdata.RowSep == '\t')
+                    {
+                        _rowSep = "Tab";
+                    }
+
+                    string txt = _wdata.Filename + "?" +_wdata.DecSep + "?" + _rowSep + "?"
 						+ _wdata.X0.ToString(ic) + "?" + _wdata.Y0.ToString(ic) + "?" + _wdata.Z0.ToString(ic);
 					
 					DrawingObject.ContourFilename += txt;
-				}
+                }
 			}
 		}
 		

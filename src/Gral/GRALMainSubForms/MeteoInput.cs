@@ -169,7 +169,7 @@ namespace GralMainForms
 
             if (readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser) == false)
 			{
-				MessageBox.Show(this, "Error when reading Meteo-File in line" + readwindfile.WindData.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, "Error when reading Meteo-File in data line " + readwindfile.WindData.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				if (winddata.Count == 0)
                 {
                     met = false;
@@ -213,7 +213,7 @@ namespace GralMainForms
 						{
 							if (error_count < 4)
                             {
-                                MessageBox.Show(this, "Wind speed implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(this, "Wind speed implausible - check data line number " + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
                             error_count++;
@@ -222,7 +222,7 @@ namespace GralMainForms
 						{
 							if (error_count < 4)
                             {
-                                MessageBox.Show(this, "Wind direction implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(this, "Wind direction implausible - check data line number " + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
                             error_count++;
@@ -235,7 +235,7 @@ namespace GralMainForms
 						{
 							if (error_count < 4)
                             {
-                                MessageBox.Show(this, "Stability class implausible - check line number" + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(this, "Stability class implausible - check data line number " + Convert.ToString(n1 + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
                             error_count++;
