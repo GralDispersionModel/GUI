@@ -1175,7 +1175,7 @@ namespace Gral
                 {
                     foreach (BuildingData _bd in _bdList)
                     {
-                        //show the acutal building which is rastered
+                        //show the acutal building
                         message.listBox1.Items.Clear();
                         message.listBox1.Items.Add(_bd.Name);
                         message.Refresh();
@@ -1344,7 +1344,7 @@ namespace Gral
             }
             catch(Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Rastering buildings " + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             if (_vdList.Count > 0)
@@ -1369,106 +1369,115 @@ namespace Gral
 
                         foreach (VegetationData _vd in _vdList)
                         {
-                            //show the acutal building which is rastered
-                            message.listBox1.Items.Clear();
-                            message.listBox1.Items.Add(_vd.Name);
-                            message.Refresh();
-                            Application.DoEvents();
-
-                            //filter domain
-                            double xmin = double.MaxValue;
-                            double xmax = double.MinValue;
-                            double ymin = double.MaxValue;
-                            double ymax = double.MinValue;
-
-                            int vertices = _vd.Pt.Count; // number of vertices
-
-                            foreach (PointD _pt in _vd.Pt)
+                            if (_vd.Pt.Count > 2)
                             {
-                                xmin = Math.Min(xmin, _pt.X);
-                                xmax = Math.Max(xmax, _pt.X);
-                                ymin = Math.Min(ymin, _pt.Y);
-                                ymax = Math.Max(ymax, _pt.Y);
-                            }
+                                //show the acutal vegetation 
+                                message.listBox1.Items.Clear();
+                                message.listBox1.Items.Add(_vd.Name);
+                                message.Refresh();
+                                Application.DoEvents();
 
-                            //raster vegetation
-                            int indexX = Convert.ToInt32((xmin - GRAL_West) / flow_field_grid);
-                            int indexY = Convert.ToInt32((ymax - GRAL_South) / flow_field_grid);
+                                //filter domain
+                                double xmin = double.MaxValue;
+                                double xmax = double.MinValue;
+                                double ymin = double.MaxValue;
+                                double ymax = double.MinValue;
 
-                            double maxy = GRAL_South + (indexY) * flow_field_grid;
-                            double minx = GRAL_West + (indexX) * flow_field_grid;
+                                int vertices = _vd.Pt.Count; // number of vertices
 
-                            //evaluate number of raster cells
-                            double yraster = maxy - flow_field_grid * 0.5;
-                            int count = 0;
-                            while (yraster >= ymin)
-                            {
-                                double xraster = minx + flow_field_grid * 0.5;
-                                while (xraster <= xmax)
+                                foreach (PointD _pt in _vd.Pt)
                                 {
-                                    int pointsInside = 0;
-                                    if (St_F.PointInPolygonD(new PointD(xraster, yraster), _vd.Pt))
-                                    {
-                                        ++pointsInside;
-                                    }
-                                    //if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.45, yraster - flow_field_grid * 0.45), _vd.Pt))
-                                    //{
-                                    //    ++pointsInside;
-                                    //}
-                                    //if (St_F.PointInPolygonD(new PointD(xraster + flow_field_grid * 0.45, yraster + flow_field_grid * 0.45), _vd.Pt))
-                                    //{
-                                    //    ++pointsInside;
-                                    //}
-                                    //if (St_F.PointInPolygonD(new PointD(xraster, yraster + flow_field_grid * 0.45), _vd.Pt))
-                                    //{
-                                    //    ++pointsInside;
-                                    //}
-                                    //if (St_F.PointInPolygonD(new PointD(xraster, yraster - flow_field_grid * 0.45), _vd.Pt))
-                                    //{
-                                    //    ++pointsInside;
-                                    //}
-                                    //if (pointsInside < 5) // otherwise the cell is inside for the most part
-                                    //{
-                                    //    if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.45, yraster + flow_field_grid * 0.45), _vd.Pt))
-                                    //    {
-                                    //        ++pointsInside;
-                                    //    }
-                                    //    if (St_F.PointInPolygonD(new PointD(xraster + flow_field_grid * 0.45, yraster - flow_field_grid * 0.45), _vd.Pt))
-                                    //    {
-                                    //        ++pointsInside;
-                                    //    }
-                                    //    if (St_F.PointInPolygonD(new PointD(xraster + flow_field_grid * 0.45, yraster), _vd.Pt))
-                                    //    {
-                                    //        ++pointsInside;
-                                    //    }
-                                    //    if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.45, yraster), _vd.Pt))
-                                    //    {
-                                    //        ++pointsInside;
-                                    //    }
-                                    //}
-
-                                    if (pointsInside > 0) // the cell is inside for the most part
-                                    {
-                                        xcell[count] = xraster;
-                                        ycell[count] = yraster;
-                                        count++;
-                                    }
-                                    xraster += flow_field_grid;
+                                    xmin = Math.Min(xmin, _pt.X);
+                                    xmax = Math.Max(xmax, _pt.X);
+                                    ymin = Math.Min(ymin, _pt.Y);
+                                    ymax = Math.Max(ymax, _pt.Y);
                                 }
-                                yraster -= flow_field_grid;
-                            }
 
-                            if (count > 0)
-                            {
-                                //write file vegetation.dat
-                                // D(ata)	Height	TrunkZone	Trunk	Crown	Coverage
-                                myWriter.WriteLine("D\t" + _vd.VerticalExt.ToString(ic) + "\t" + _vd.TrunkZone.ToString(ic) +
-                                                   "\t" + _vd.LADTrunk.ToString(ic) + "\t" + _vd.LADCrown.ToString(ic) + "\t" + _vd.Coverage.ToString(ic));
+                                //raster vegetation
+                                int indexX = Convert.ToInt32((xmin - GRAL_West) / flow_field_grid);
+                                int indexY = Convert.ToInt32((ymax - GRAL_South) / flow_field_grid);
 
-                                for (int l = 0; l < count; l++)
+                                double maxy = GRAL_South + (indexY) * flow_field_grid;
+                                double minx = GRAL_West + (indexX) * flow_field_grid;
+
+                                //evaluate number of raster cells
+                                double yraster = maxy - flow_field_grid * 0.5;
+                                int count = 0;
+                                while (yraster >= ymin)
                                 {
-                                    myWriter.WriteLine(Math.Round(xcell[l], 1).ToString(ic) + "," + Math.Round(ycell[l], 1).ToString(ic));
-                                    file = true;
+                                    double xraster = minx + flow_field_grid * 0.5;
+                                    while (xraster <= xmax)
+                                    {
+                                        int pointsInside = 0;
+                                        if (St_F.PointInPolygonD(new PointD(xraster, yraster), _vd.Pt))
+                                        {
+                                            ++pointsInside;
+                                        }
+                                        //if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.45, yraster - flow_field_grid * 0.45), _vd.Pt))
+                                        //{
+                                        //    ++pointsInside;
+                                        //}
+                                        //if (St_F.PointInPolygonD(new PointD(xraster + flow_field_grid * 0.45, yraster + flow_field_grid * 0.45), _vd.Pt))
+                                        //{
+                                        //    ++pointsInside;
+                                        //}
+                                        //if (St_F.PointInPolygonD(new PointD(xraster, yraster + flow_field_grid * 0.45), _vd.Pt))
+                                        //{
+                                        //    ++pointsInside;
+                                        //}
+                                        //if (St_F.PointInPolygonD(new PointD(xraster, yraster - flow_field_grid * 0.45), _vd.Pt))
+                                        //{
+                                        //    ++pointsInside;
+                                        //}
+                                        //if (pointsInside < 5) // otherwise the cell is inside for the most part
+                                        //{
+                                        //    if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.45, yraster + flow_field_grid * 0.45), _vd.Pt))
+                                        //    {
+                                        //        ++pointsInside;
+                                        //    }
+                                        //    if (St_F.PointInPolygonD(new PointD(xraster + flow_field_grid * 0.45, yraster - flow_field_grid * 0.45), _vd.Pt))
+                                        //    {
+                                        //        ++pointsInside;
+                                        //    }
+                                        //    if (St_F.PointInPolygonD(new PointD(xraster + flow_field_grid * 0.45, yraster), _vd.Pt))
+                                        //    {
+                                        //        ++pointsInside;
+                                        //    }
+                                        //    if (St_F.PointInPolygonD(new PointD(xraster - flow_field_grid * 0.45, yraster), _vd.Pt))
+                                        //    {
+                                        //        ++pointsInside;
+                                        //    }
+                                        //}
+
+                                        if (count >= xcell.GetUpperBound(0))
+                                        {
+                                            Array.Resize(ref xcell, xcell.GetUpperBound(0) + 1000);
+                                            Array.Resize(ref ycell, ycell.GetUpperBound(0) + 1000);
+                                        }
+
+                                        if (pointsInside > 0) // the cell is inside for the most part
+                                        {
+                                            xcell[count] = xraster;
+                                            ycell[count] = yraster;
+                                            count++;
+                                        }
+                                        xraster += flow_field_grid;
+                                    }
+                                    yraster -= flow_field_grid;
+                                }
+
+                                if (count > 0)
+                                {
+                                    //write file vegetation.dat
+                                    // D(ata)	Height	TrunkZone	Trunk	Crown	Coverage
+                                    myWriter.WriteLine("D\t" + _vd.VerticalExt.ToString(ic) + "\t" + _vd.TrunkZone.ToString(ic) +
+                                                       "\t" + _vd.LADTrunk.ToString(ic) + "\t" + _vd.LADCrown.ToString(ic) + "\t" + _vd.Coverage.ToString(ic));
+
+                                    for (int l = 0; l < count; l++)
+                                    {
+                                        myWriter.WriteLine(Math.Round(xcell[l], 1).ToString(ic) + "," + Math.Round(ycell[l], 1).ToString(ic));
+                                        file = true;
+                                    }
                                 }
                             }
                         }
@@ -1476,7 +1485,7 @@ namespace Gral
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Rastering vegetation " + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -1484,25 +1493,25 @@ namespace Gral
             message.Dispose();
             
             Change_Label(3, 2); // Building label green
-            
+
             if (file == false) // problem at writing buildings.dat
             {
                 File.Delete(newPath);
                 Change_Label(3, 0); // Building label red & delete buildings.dat
-                
-                if(_bdList.Count == 0 && _vdList.Count == 0 && _wdList.Count == 0)
+
+                if (_bdList.Count == 0 && _vdList.Count == 0 && _wdList.Count == 0)
                 {
                     Change_Label(3, -1); // Building label invisible
-                    MessageBox.Show(this, "No buildings, walls or vegetation areas \n inside the GRAL domain area","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, "No buildings, walls or vegetation areas \n inside the GRAL domain area", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-//			}
-//			catch(Exception ex)
-//			{
-//				Change_Label(3, -1); // Building label invisible
-//				MessageBox.Show(this, ex.Message,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-//			}
-            
+            //			}
+            //			catch(Exception ex)
+            //			{
+            //				Change_Label(3, -1); // Building label invisible
+            //				MessageBox.Show(this, ex.Message,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //			}
+
             _bdList.Clear();
             _bdList.TrimExcess();
             _vdList.Clear();
