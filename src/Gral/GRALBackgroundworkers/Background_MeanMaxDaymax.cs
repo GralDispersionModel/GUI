@@ -138,7 +138,7 @@ namespace GralBackgroundworkers
 					//text2 = sr.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 					while (sr.EndOfStream == false)
 					{
-						mettimefilelength = mettimefilelength + 1;
+						mettimefilelength += 1;
 						sr.ReadLine();
 					}
 				}
@@ -420,9 +420,9 @@ namespace GralBackgroundworkers
 						{
 							
 							//number of dispersion situation
-							nnn = nnn + 1;
+							nnn += 1;
 							//number of hours of specific day
-							numhour = numhour + 1;
+							numhour += 1;
 							int std = Convert.ToInt32(hour);
 							int mon = Convert.ToInt32(month) - 1;
 

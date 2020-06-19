@@ -66,7 +66,7 @@
             this.button20.TabIndex = 20;
             this.button20.Text = "Add diurnal";
             this.button20.UseVisualStyleBackColor = true;
-            this.button20.Click += new System.EventHandler(this.button20_Click);
+            this.button20.Click += new System.EventHandler(this.Button20_Click);
             // 
             // button19
             // 
@@ -77,7 +77,7 @@
             this.button19.TabIndex = 19;
             this.button19.Text = "Add seasonal";
             this.button19.UseVisualStyleBackColor = true;
-            this.button19.Click += new System.EventHandler(this.button19_Click);
+            this.button19.Click += new System.EventHandler(this.Button19_Click);
             // 
             // label33
             // 
@@ -107,7 +107,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(152, 21);
             this.comboBox2.TabIndex = 15;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
             // comboBox1
             // 
@@ -117,7 +117,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(152, 21);
             this.comboBox1.TabIndex = 14;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // panel1
             // 
@@ -126,7 +126,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(549, 300);
             this.panel1.TabIndex = 21;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1_Paint);
             // 
             // panel2
             // 
@@ -135,7 +135,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(549, 300);
             this.panel2.TabIndex = 22;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel2_Paint);
             // 
             // button1
             // 
@@ -146,7 +146,7 @@
             this.button1.TabIndex = 23;
             this.button1.Text = "&OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // columnHeader1
             // 
@@ -203,7 +203,7 @@
             this.button2.TabIndex = 30;
             this.button2.Text = "Remove diurnal";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // button3
             // 
@@ -214,7 +214,7 @@
             this.button3.TabIndex = 31;
             this.button3.Text = "Remove seasonal";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // button4
             // 
@@ -226,7 +226,7 @@
             this.button4.TabIndex = 0;
             this.toolTip1.SetToolTip(this.button4, "Copy figure to clipboard");
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button5
             // 
@@ -238,7 +238,7 @@
             this.button5.TabIndex = 32;
             this.toolTip1.SetToolTip(this.button5, "Copy figure to clipboard.");
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            this.button5.Click += new System.EventHandler(this.Button5_Click_1);
             // 
             // button6
             // 
@@ -250,7 +250,7 @@
             this.button6.Text = "Save";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Visible = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
             // dataGridView1
             // 
@@ -266,7 +266,7 @@
             this.dataGridView1.Size = new System.Drawing.Size(139, 297);
             this.dataGridView1.TabIndex = 34;
             this.dataGridView1.Visible = false;
-            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
+            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellEndEdit);
             this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridView1DataError);
             this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView1KeyDown);
             // 
@@ -284,7 +284,7 @@
             this.dataGridView2.Size = new System.Drawing.Size(139, 397);
             this.dataGridView2.TabIndex = 35;
             this.dataGridView2.Visible = false;
-            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
+            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellEndEdit);
             this.dataGridView2.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridView2DataError);
             this.dataGridView2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView2KeyDown);
             // 

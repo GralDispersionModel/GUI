@@ -368,7 +368,7 @@ namespace GralDomain
                     fac1 = Convert.ToDouble(picturebox1.Width) / Convert.ToDouble(PanelZoom.Width);
                     fac2 = Convert.ToDouble(picturebox1.Height) / Convert.ToDouble(PanelZoom.Height);
                     fac1 = Math.Min(fac1, fac2);
-                    XFac = XFac * fac1;
+                    XFac *= fac1;
                     BmpScale = 1 / XFac;
                     TransformX = Convert.ToInt32((TransformX * fac1 + (picturebox1.Width / 2 - (PanelZoom.X + PanelZoom.Width / 2) * fac1)));
                     TransformY = Convert.ToInt32((TransformY * fac1 + (picturebox1.Height / 2 - (PanelZoom.Y + PanelZoom.Height / 2) * fac1)));
@@ -451,7 +451,7 @@ namespace GralDomain
 
             try // Kuntner: catch 1/0 and convert.ToInt32 Overflow
             {
-                XFac = XFac * faktor;
+                XFac *= faktor;
                 BmpScale = 1 / XFac;
                 TransformX = Convert.ToInt32((TransformX * faktor + (picturebox1.Width / 2 - e.X * faktor)));
                 TransformY = Convert.ToInt32((TransformY * faktor + (picturebox1.Height / 2 - e.Y * faktor)));

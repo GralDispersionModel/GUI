@@ -107,13 +107,13 @@ namespace GralMainForms
                     {
                         prozent = Math.Round(SectFrequency[i, n] * 100, 1);
                         sum_classes[n] += prozent;
-                        summe = summe + SectFrequency[i, n];
+                        summe += SectFrequency[i, n];
                     }
                     else if (Mode == 1)
                     {
                         prozent = Math.Round(SectFrequency[i, n + 1] * 100, 1);
                         sum_classes[n] += prozent;
-                        summe = summe + SectFrequency[i, n + 1];
+                        summe += SectFrequency[i, n + 1];
                     }
                 workrow[n + 1] = prozent.ToString();
             }

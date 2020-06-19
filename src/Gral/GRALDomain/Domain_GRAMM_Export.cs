@@ -157,7 +157,7 @@ namespace GralDomain
 							GRAMMoriginal = GRAMMori.ReadLine();
 							if(GRAMMoriginal.Length > 1 && GRAMMoriginal[GRAMMoriginal.Length -1] != Path.DirectorySeparatorChar)
 							{
-								GRAMMoriginal = GRAMMoriginal + Path.DirectorySeparatorChar;
+								GRAMMoriginal += Path.DirectorySeparatorChar;
 							}
 						}
 					}

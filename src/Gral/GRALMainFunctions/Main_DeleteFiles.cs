@@ -38,7 +38,7 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALDeleteConcentrationFiles(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }
@@ -192,7 +192,7 @@ namespace Gral
         /// <param name="e"></param>
         void GRAMMDeleteWindFields(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }
@@ -290,7 +290,7 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALDeleteFlowFieldFiles(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }

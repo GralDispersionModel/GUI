@@ -27,11 +27,11 @@ using GralItemForms;
 namespace GralDomain
 {
     public partial class Domain
-	{
-		/// <summary>
-		/// Close the domain form and release all objects, like bitmaps and list
-		/// </summary>
-	    public void DomainFormClosed(object sender, FormClosedEventArgs e) // Kuntner Hauptfenster wird geschlossen
+    {
+        /// <summary>
+        /// Close the domain form and release all objects, like bitmaps and list
+        /// </summary>
+        public void DomainFormClosed(object sender, FormClosedEventArgs e) // Kuntner Hauptfenster wird geschlossen
         {
             this.FormClosed -= new System.Windows.Forms.FormClosedEventHandler(this.DomainFormClosed); // avoid a 2nd call to this close function
             
@@ -85,8 +85,8 @@ namespace GralDomain
             
             if (ObjectManagerForm != null) // Kuntner: close objectmanager
             {
-                ObjectManagerForm.button5_Click(null, null); // close objectmanager
-                ObjectManagerForm.object_redraw -= DomainRedrawDelegate;
+                ObjectManagerForm.Button5_Click(null, null); // close objectmanager
+                ObjectManagerForm.Object_redraw -= DomainRedrawDelegate;
                 ObjectManagerForm.Close();
             }
             
@@ -284,11 +284,11 @@ namespace GralDomain
             catch
             {}
         }
-	    
-		/// <summary>
-		/// Prevent closing the domain form when a match process or a gif recoring is running
-		/// </summary>
-	    void DomainFormClosing(object sender, FormClosingEventArgs e)
+        
+        /// <summary>
+        /// Prevent closing the domain form when a match process or a gif recoring is running
+        /// </summary>
+        void DomainFormClosing(object sender, FormClosingEventArgs e)
         {
             //if match process is running
             if (MMO != null)
@@ -310,9 +310,9 @@ namespace GralDomain
             }
         }
         
-		/// <summary>
-		/// Release all file system watchers
-		/// </summary>
+        /// <summary>
+        /// Release all file system watchers
+        /// </summary>
         private void ReleaseFileSystemWatchers()
         {
             if (FileWatch.UVGramm != null)

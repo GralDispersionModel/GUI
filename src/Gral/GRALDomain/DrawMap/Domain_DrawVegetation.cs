@@ -146,8 +146,8 @@ namespace GralDomain
                         {
                             if (vertices > 1)
                             {
-                                xmean = xmean / vertices;
-                                ymean = ymean / vertices;
+                                xmean /= vertices;
+                                ymean /= vertices;
                             }
                             g.DrawString(_vdata.Name, LabelFont, LabelBrush, xmean, ymean, StringFormat1);
                         }

@@ -174,7 +174,7 @@ namespace GralBackgroundworkers
 				try
 				{
 					//meteopgt.all
-					wl = wl + 1;
+					wl += 1;
 					
 					if (Rechenknecht.CancellationPending)
 					{
@@ -260,11 +260,11 @@ namespace GralBackgroundworkers
 								wgmettime.RemoveAt(i);
 								wrmettime.RemoveAt(i);
 								akmettime.RemoveAt(i);
-								i = i - 1;
+								i -= 1;
 							}
 						}
 
-						ntot = ntot + frequency / 10;
+						ntot += frequency / 10;
                         SetText("Dispersion situation " + Convert.ToString(wl) + ": " + Convert.ToString(Math.Round(ntot, 1) + "%"));
 						
 						string[] concdata = new string[3];

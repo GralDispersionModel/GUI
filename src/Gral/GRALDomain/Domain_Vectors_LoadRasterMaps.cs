@@ -78,9 +78,9 @@ namespace GralDomain
                                 for (int j = 0; j < 2 * nx; j++)
                                 {
                                     double u = Convert.ToDouble(data[j].Replace(".", decsep));
-                                    j = j + 1;
+                                    j += 1;
                                     double v = Convert.ToDouble(data[j].Replace(".", decsep));
-                                    n = n + 1;
+                                    n += 1;
                                     umean[n, i] = Math.Sqrt(u * u + v * v);
                                     //compute maximum and minimum
                                     min = Math.Min(min, umean[n, i]);
@@ -598,7 +598,7 @@ namespace GralDomain
 
                                     if (stretch > 0.99)
                                     {
-                                        DZKdummy = DZKdummy * stretch;
+                                        DZKdummy *= stretch;
                                     }
                                     else
                                     {
@@ -611,7 +611,7 @@ namespace GralDomain
                                                 flexstretchindex++;
                                             }
                                         }
-                                        DZKdummy = DZKdummy * stretching;
+                                        DZKdummy *= stretching;
                                     }
                                 }
 

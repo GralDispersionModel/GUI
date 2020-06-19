@@ -189,7 +189,7 @@ namespace Gral
                             }
 #endif
 
-                            if (batch != String.Empty)
+                            if (!string.IsNullOrEmpty(batch))
 							{
 								filePaths = Directory.GetFiles(Path.GetDirectoryName(dialog.FileName),
 								                               Path.GetFileNameWithoutExtension(dialog.FileName) + ".*",

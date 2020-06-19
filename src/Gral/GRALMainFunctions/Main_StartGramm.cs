@@ -281,7 +281,7 @@ namespace Gral
                                 GRAMMProcess.StartInfo.FileName = GRAMM_Program_Path;
                                 GRAMMProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                                 GRAMMProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
-                                if (GRAMM_Project_Path == String.Empty)
+                                if (string.IsNullOrEmpty(GRAMM_Project_Path))
                                 {
                                     GRAMMProcess.StartInfo.Arguments = " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }

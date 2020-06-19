@@ -887,7 +887,7 @@ namespace GralDomain
                     
                     if (stretch > 0.99)
                     {
-                        DZKdummy = DZKdummy * stretch;
+                        DZKdummy *= stretch;
                     }
                     else
                     {
@@ -900,7 +900,7 @@ namespace GralDomain
                                 flexstretchindex++;
                             }
                         }
-                        DZKdummy = DZKdummy * stretching;
+                        DZKdummy *= stretching;
                     }                  
                 }
 
@@ -1024,7 +1024,7 @@ namespace GralDomain
                 buttonCancel.SetBounds(309, 72, 75, 23);
 
                 label.AutoSize = true;
-                combo.Anchor = combo.Anchor | AnchorStyles.Right;
+                combo.Anchor |= AnchorStyles.Right;
                 buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 

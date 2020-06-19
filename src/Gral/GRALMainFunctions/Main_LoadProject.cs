@@ -362,7 +362,7 @@ namespace Gral
                         frequency = 0;
                         for (int i = 0; i < trackbar; i++)
                         {
-                            frequency = frequency + DispSituationfrequ[i];
+                            frequency += DispSituationfrequ[i];
                         }
 
                         if (frequency <= progressBar4.Maximum)
@@ -407,7 +407,7 @@ namespace Gral
 					frequency = 0;
 					for (int i = 0; i < trackbar-1; i++)
                     {
-                        frequency = frequency + DispSituationfrequ[i];
+                        frequency += DispSituationfrequ[i];
                     }
 
                     if (frequency <= progressBar1.Maximum)
@@ -680,7 +680,7 @@ namespace Gral
 									exist = true;
 									break;
 								}
-								count = count + 1;
+								count += 1;
 							}
 							if (exist == false)
 							{
@@ -1070,7 +1070,7 @@ namespace Gral
 						{
 							listBox5.SelectedIndex = j;
 						}
-						j=j+1;
+						j+=1;
 					}
 				}
 				catch
@@ -1402,7 +1402,7 @@ namespace Gral
 						GRAMMwindfield = sr.ReadLine ();
 						if (GRAMMwindfield.Length > 1 && GRAMMwindfield [GRAMMwindfield.Length - 1] != Path.DirectorySeparatorChar)
 						{
-							GRAMMwindfield = GRAMMwindfield + Path.DirectorySeparatorChar;
+							GRAMMwindfield += Path.DirectorySeparatorChar;
 							missing = true;
 						}
 					}

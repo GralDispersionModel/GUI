@@ -171,7 +171,7 @@ namespace GralDomForms
                         {
                             if (text.Length > 3)
                             {
-                                count = count + 1;
+                                count += 1;
 
                                 // select existing situations
                                 if (showSituations.Checked || selectentries == 0 ||
@@ -230,7 +230,7 @@ namespace GralDomForms
                         {
                             if (text.Length > 3)
                             {
-                                count = count + 1;
+                                count += 1;
 
                                 // select existing situations
                                 if (showSituations.Checked || selectentries == 0 || 

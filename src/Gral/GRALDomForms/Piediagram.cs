@@ -73,7 +73,7 @@ namespace GralDomForms
 						if(snumb[snumb.GetUpperBound(0) - 1]!="total")
 						{
 							//MessageBox.Show(snumb[snumb.GetUpperBound(0) - 1]);
-							totalcon = totalcon + Concentration[i];
+							totalcon += Concentration[i];
 						}
 					}
 				}
@@ -128,7 +128,7 @@ namespace GralDomForms
 							angle = Convert.ToInt32(360 * Concentration[i] / totalcon);
 							g.FillPie(new SolidBrush(aColors[i % 20]), new Rectangle(10, 35, _y-10, _y-10), anglesum, angle + 0.2F);
 							g.DrawPie(black, new Rectangle(10, 35, _y-10, _y-10), anglesum, angle);
-							anglesum = anglesum + angle;
+							anglesum += angle;
 							//draw legend
 							g.FillRectangle(new SolidBrush(aColors[i % 20]), new Rectangle(_x - 160, 40 + zahl * 20, 20, 20));
 							g.DrawRectangle(black, new Rectangle(_x - 160, 40 + zahl * 20, 20, 20));
@@ -137,7 +137,7 @@ namespace GralDomForms
 							{
 								g.DrawString(Math.Round(Concentration[i] / totalcon * 100, 1).ToString("0.0").PadLeft(5) + "% : " + snumb[snumb.GetUpperBound(0) - 1], smallFont, blackbrush, _x - 135, 42 + zahl * 20);
 							}
-							zahl = zahl + 1;
+							zahl += 1;
 						}
 					}
 				}
@@ -149,7 +149,7 @@ namespace GralDomForms
 					angle = Convert.ToInt32(360 * Concentration[FilesConc.Length + 1] / totalcon);
 					g.FillPie(new SolidBrush(aColors[FilesConc.Length % 20]), new Rectangle(10, 25, _y-10, _y-10), anglesum, angle);
 					//g.FillPie(new SolidBrush(aColors[files_conc.Length]), new Rectangle(10, 20, 300, 300), anglesum, angle);
-					anglesum = anglesum + angle;
+					anglesum += angle;
 					
 					//draw legend
 					g.FillRectangle(new SolidBrush(aColors[FilesConc.Length % 20]), new Rectangle(_x - 160, 30 + zahl * 20, 20, 20));

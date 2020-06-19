@@ -63,7 +63,7 @@ namespace GralDomain
 					item.Y = EditR.ItemData[i].Pt.Y;
 					if ((item.X < MainForm.GrammDomRect.West) || (item.X > MainForm.GrammDomRect.East) || (item.Y < MainForm.GrammDomRect.South) || (item.Y > MainForm.GrammDomRect.North))
                     {
-                        a = a + "";
+                        a += "";
                     }
                     else
                     {
@@ -85,7 +85,7 @@ namespace GralDomain
                 
 				if ((item.X < MainForm.GrammDomRect.West) || (item.X > MainForm.GrammDomRect.East) || (item.Y < MainForm.GrammDomRect.South) || (item.Y > MainForm.GrammDomRect.North))
                 {
-                    a = a + "";
+                    a += "";
                 }
                 else
                 {

@@ -63,7 +63,7 @@ namespace GralItemForms
         public double[] CornerWallZ  = new double[1000];   
         
         private int vertices;                              //number of maximum corner points
-        private CultureInfo ic = CultureInfo.InvariantCulture;
+        private readonly CultureInfo ic = CultureInfo.InvariantCulture;
         
         // delegate to send a message, that redraw is needed!
 		public event ForceDomainRedraw WallRedraw;
@@ -101,7 +101,7 @@ namespace GralItemForms
 		  if ((textBox1.Text != "") && (textBox2.Text != ""))
             {
                 SaveArray();
-                trackBar1.Maximum = trackBar1.Maximum + 1;
+                trackBar1.Maximum += 1;
                 trackBar1.Value = trackBar1.Maximum;
                 ItemDisplayNr = trackBar1.Maximum - 1;
                 Domain.EditSourceShape = true;  // allow input of new vertices
@@ -162,7 +162,7 @@ namespace GralItemForms
         			}
         			
         			// get recent edgepoint height
-        			get_edgepoint_height();
+        			Get_edgepoint_height();
         			
         			_wdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
         			_wdata.Lenght = (float) (lenght);
@@ -182,7 +182,7 @@ namespace GralItemForms
 
         void TextBox2TextChanged(object sender, EventArgs e)
 		{
-			get_edgepoint_height(); // get recent edgepoint height
+			Get_edgepoint_height(); // get recent edgepoint height
 			vertices = Convert.ToInt32(textBox2.Text);
             if ( vertices <= 1)
             {
@@ -194,7 +194,7 @@ namespace GralItemForms
         
         void NumericUpDown1ValueChanged(object sender, EventArgs e)
 		{
-			get_edgepoint_height(); // get recent edgepoint height	
+			Get_edgepoint_height(); // get recent edgepoint height	
 		}
         
         void TrackBar2Scroll(object sender, EventArgs e)
@@ -231,7 +231,7 @@ namespace GralItemForms
         	}
 		}
 
-        private void get_edgepoint_height()
+        private void Get_edgepoint_height()
         {
             int edge = trackBar2.Value - 1;
             if (edge < Convert.ToInt32(textBox2.Text))
@@ -354,7 +354,7 @@ namespace GralItemForms
                     {
                         if (trackBar1.Maximum > 1)
                         {
-                            trackBar1.Maximum = trackBar1.Maximum - 1;
+                            trackBar1.Maximum -= 1;
                         }
 
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
@@ -601,7 +601,7 @@ namespace GralItemForms
 			return checkBox1.Checked;
 		}
 
-        private void button6_Click(object sender, EventArgs e)
+        private void Button6_Click(object sender, EventArgs e)
         {
             this.Close(); // does not close the form, because closing hides the form
         }

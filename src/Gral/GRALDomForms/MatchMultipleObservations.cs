@@ -298,7 +298,7 @@ namespace GralDomForms
                             sektor = 0;
                         }
 
-                        count = count + 1;
+                        count += 1;
                         
                         sectFrequency[sektor, wklass] ++;
 

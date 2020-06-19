@@ -119,12 +119,12 @@ namespace GralMainForms
 		                    //diurnal variation
 		                    for(int j=0;j<24;j++)
                             {
-                                emifac_diurnal = emifac_diurnal + moddiurnal[sgroup, j] / 24;
+                                emifac_diurnal += moddiurnal[sgroup, j] / 24;
                             }
                             //seasonal variation
                             for (int j=0;j<12;j++)
                             {
-                                emifac_seasonal = emifac_seasonal + modseasonal[sgroup, j] / 12;
+                                emifac_seasonal += modseasonal[sgroup, j] / 12;
                             }
 
                             EmissionFactor[i] = emifac_diurnal * emifac_seasonal;
@@ -479,14 +479,14 @@ namespace GralMainForms
 		//increase image
 		private void button2_Click(object sender, EventArgs e)
 		{
-			scalefactor = scalefactor * 1.1;
+			scalefactor *= 1.1;
 			Refresh();
 		}
 
 		//decrease image
 		private void button3_Click(object sender, EventArgs e)
 		{
-			scalefactor = scalefactor * 0.9;
+			scalefactor *= 0.9;
 			Refresh();
 		}
 		

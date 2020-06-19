@@ -51,7 +51,7 @@
             this.button1.TabIndex = 6;
             this.toolTip1.SetToolTip(this.button1, "increase the display order of the selected item");
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // button2
             // 
@@ -63,7 +63,7 @@
             this.button2.TabIndex = 7;
             this.toolTip1.SetToolTip(this.button2, "decrease the display order of the selected item");
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // checkBox1
             // 
@@ -74,7 +74,7 @@
             this.checkBox1.TabIndex = 5;
             this.checkBox1.Text = "Show/hide";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
             // button5
             // 
@@ -86,7 +86,7 @@
             this.button5.TabIndex = 4;
             this.button5.Text = "&Close";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // button3
             // 
@@ -98,7 +98,7 @@
             this.button3.Text = "&Apply";
             this.toolTip1.SetToolTip(this.button3, "Apply the new drawing options");
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // listBox1
             // 
@@ -117,10 +117,10 @@
             this.listBox1.TabIndex = 1;
             this.toolTip1.SetToolTip(this.listBox1, "Double click for layout settings\r\nDelete key to remove an item\r\nSpace key to togg" +
         "le show/hide");
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1_SelectedIndexChanged);
+            this.listBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
             this.listBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox1KeyDown);
-            this.listBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.listBox1_PreviewKeyDown);
+            this.listBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ListBox1_PreviewKeyDown);
             // 
             // button4
             // 
@@ -134,7 +134,7 @@
             this.toolTip1.SetToolTip(this.button4, "Remove the selected items");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button6
             // 

@@ -77,7 +77,7 @@ namespace MathFunctions
                 string currentCharacter = operation.Substring(i, 1);
                 if (OperationOrder.IndexOf(currentCharacter) > -1)
                 {
-                    if (s != "")
+                    if (!string.IsNullOrEmpty(s))
                     {
                         arr.Add(s);
                     }

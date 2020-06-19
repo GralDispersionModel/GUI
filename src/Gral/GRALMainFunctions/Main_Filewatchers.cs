@@ -121,7 +121,7 @@ namespace Gral
                     {
                         for (int i = 0; i < trackbar; i++)
                         {
-                            frequency = frequency + DispSituationfrequ[i];
+                            frequency += DispSituationfrequ[i];
                         }
                         if (Convert.ToInt32(frequency) < progressBar4.Maximum)
                         {
@@ -283,7 +283,7 @@ namespace Gral
                 {
                     for (int i = 0; i < trackbar - 1; i++)
                     {
-                        frequency = frequency + DispSituationfrequ[i];
+                        frequency += DispSituationfrequ[i];
                     }
                     if (Convert.ToInt32(frequency) < progressBar1.Maximum)
                     {

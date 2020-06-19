@@ -110,7 +110,7 @@ namespace GralBackgroundworkers
 			text = meteopgt.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
 			for (int n = 1; n < 100000; n++)
 			{				
-				iiwet = iiwet + 1;
+				iiwet += 1;
 				SetText("Reading windfields: "+ Convert.ToString(iiwet));
 				
 				if (Rechenknecht.CancellationPending)
@@ -199,7 +199,7 @@ namespace GralBackgroundworkers
 				v_GRAMM[n] = Vmittel;
 			}
 			meteopgt.Close();
-			iiwet = iiwet - 1;
+			iiwet -= 1;
 
 			//loop over all computed dispersion situations
 			double diffwind1 = 0;

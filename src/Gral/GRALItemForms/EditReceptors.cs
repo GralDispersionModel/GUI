@@ -100,7 +100,7 @@ namespace GralItemForms
                 /*
                 numericUpDown1.Value = 3; // set standard value for a new Receptor point
                 */
-                trackBar1.Maximum = trackBar1.Maximum + 1;
+                trackBar1.Maximum += 1;
                 trackBar1.Value = trackBar1.Maximum;
                 ItemDisplayNr = trackBar1.Maximum - 1;
                 RedrawDomain(this, null);
@@ -232,7 +232,7 @@ namespace GralItemForms
                     {
                         if (trackBar1.Maximum > 1)
                         {
-                            trackBar1.Maximum = trackBar1.Maximum - 1;
+                            trackBar1.Maximum -= 1;
                         }
 
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);

@@ -139,7 +139,7 @@ namespace Gral
                             WindSectorAngle = 0;
                             for (int j = 0; j < Convert.ToInt32(numericUpDown1.Value) + 1; j++)
                             {
-                                WindSectorAngle = WindSectorAngle + 360 / Convert.ToInt32(numericUpDown1.Value);
+                                WindSectorAngle += 360 / Convert.ToInt32(numericUpDown1.Value);
                                 if (Math.Min(data.Dir, 359) < WindSectorAngle)
                                 {
                                     avwindri = Math.Round((WindSectorAngle - 0.5 * 360 / Convert.ToInt32(numericUpDown1.Value)) / 10, 1, MidpointRounding.AwayFromZero);
@@ -182,7 +182,7 @@ namespace Gral
                             WindSectorAngle = 0;
                             for (iwr = 0; iwr < Convert.ToInt32(numericUpDown1.Value); iwr++)
                             {
-                                WindSectorAngle = WindSectorAngle + 360 / Convert.ToInt32(numericUpDown1.Value);
+                                WindSectorAngle += 360 / Convert.ToInt32(numericUpDown1.Value);
                                 for (int i = 1; i < 8; i++)
                                 {
                                     if (Math.Round(frequmet[iwg, iwr, i - 1] / filelength * 1000, 1, MidpointRounding.AwayFromZero) > 0)
@@ -209,7 +209,7 @@ namespace Gral
                                                 break;
                                             }
                                         }
-                                        n = n + 1;
+                                        n += 1;
                                     }
                                 }
                             }

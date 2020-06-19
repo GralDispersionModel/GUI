@@ -186,7 +186,7 @@ namespace GralDomain
         /// </summary>
         public bool ReDrawVectors = true;   
            
-        private FileWatcherCollection FileWatch = new FileWatcherCollection(); // Contains all FileSystemWatchers
+        private readonly FileWatcherCollection FileWatch = new FileWatcherCollection(); // Contains all FileSystemWatchers
         
         public List<Point> sectionpoints = new List<Point>(); // List of section points for the redraw
         /// <summary>
@@ -243,7 +243,7 @@ namespace GralDomain
         /// <summary>
         /// Save the BaseMapData when shifting or zooming a map for reset (ESC key)
         /// </summary>
-        private GralData.BaseMapData BaseMapOldValues = new GralData.BaseMapData();
+        private readonly GralData.BaseMapData BaseMapOldValues = new GralData.BaseMapData();
         
         private GralData.TopoModifyClass TopoModify = new GralData.TopoModifyClass();
         private bool[,] TopoModifyBlocked = new bool[1,1];
@@ -1914,7 +1914,7 @@ namespace GralDomain
                 buttonCancel.SetBounds(309, 72, 75, 23);
 
                 label.AutoSize = true;
-                numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
+                numdown.Anchor |= AnchorStyles.Right;
                 buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
@@ -2079,7 +2079,7 @@ namespace GralDomain
                         MessageBox.Show(this, "Invalid resolution. Image saved with " + dotsperinch + " dpi resolution","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     //set resolution
-                    XFac = XFac * dpifactor;
+                    XFac *= dpifactor;
                     BmpScale = 1 / XFac;
                     BmppbXSave = 1 / dpifactor;
                     TransformX = Convert.ToInt32(TransformX * dpifactor);
@@ -2118,7 +2118,7 @@ namespace GralDomain
                     //set resolution and picturebox dock style back
                     picturebox1.Dock = DockStyle.Fill;
                     picturebox1.Anchor = (AnchorStyles.Top | AnchorStyles.Left);
-                    XFac = XFac / dpifactor;
+                    XFac /= dpifactor;
                     BmpScale = 1 / XFac;
                     BmppbXSave = 1;
                     TransformX = Convert.ToInt32(TransformX / dpifactor);
@@ -2195,7 +2195,7 @@ namespace GralDomain
             if (ObjectManagerForm == null) // Kuntner: if no objectmanager was created, create an new one
             {
                 ObjectManagerForm = new Objectmanager(this);
-                ObjectManagerForm.object_redraw += DomainRedrawDelegate; // Redraw from Edit Point Sources
+                ObjectManagerForm.Object_redraw += DomainRedrawDelegate; // Redraw from Edit Point Sources
                 
                 foreach(DrawingObjects _dr in ItemOptions)
                 {
@@ -3248,7 +3248,7 @@ namespace GralDomain
                 //write ESRI-ASCII File
                 string name = Path.GetFileNameWithoutExtension(filename);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Maps", name + ".txt");
-                if (filenameESRI != string.Empty)
+                if (!string.IsNullOrEmpty(filenameESRI))
                 {
                     file = filenameESRI;
                 }

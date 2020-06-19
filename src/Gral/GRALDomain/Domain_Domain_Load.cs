@@ -44,7 +44,7 @@ namespace GralDomain
 				
 				foreach (DrawingObjects _dr in ItemOptions)
 				{
-					k = k + 1;
+					k += 1;
 					if ((_dr.Name.Substring(0, 3) == "BM:") || (_dr.Name.Substring(0, 3) == "SM:"))
 					{
 						existbasemap = true;

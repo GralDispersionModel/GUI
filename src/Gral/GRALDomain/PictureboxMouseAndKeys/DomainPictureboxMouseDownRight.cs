@@ -385,7 +385,7 @@ namespace GralDomain
                                 m.Show(picturebox1, new Point(e.X, e.Y));
                                 stop = true;
                             }
-                            i = i + 1;
+                            i += 1;
                             if (stop)
                             {
                                 break;
@@ -706,7 +706,7 @@ namespace GralDomain
                         double DistanceMeasurement = 0;
                         for (int i = 0; i < EditLS.CornerLineSource; i++)
                         {
-                            DistanceMeasurement = DistanceMeasurement + Math.Sqrt(Math.Pow(EditLS.CornerLineX[i + 1] - EditLS.CornerLineX[i], 2) +
+                            DistanceMeasurement += Math.Sqrt(Math.Pow(EditLS.CornerLineX[i + 1] - EditLS.CornerLineX[i], 2) +
                                                   Math.Pow(EditLS.CornerLineY[i + 1] - EditLS.CornerLineY[i], 2));
                         }
                         for (int i = 0; i <= EditLS.CornerLineSource; i++)

@@ -853,7 +853,7 @@ namespace GralIO
                                 wd.StabClass = 8 - Convert.ToInt32(text[12]);
                                 if (wd.StabClass < 6)
                                 {
-                                    wd.StabClass = wd.StabClass - 1;
+                                    wd.StabClass -= 1;
                                 }
 
                                 _winddata.Add(wd);
@@ -873,7 +873,7 @@ namespace GralIO
                                 wd.StabClass = 8 - Convert.ToInt32(readline.Substring(20, 1));
                                 if (wd.StabClass < 6)
                                 {
-                                    wd.StabClass = wd.StabClass - 1;
+                                    wd.StabClass -= 1;
                                 }
 
                                 _winddata.Add(wd);

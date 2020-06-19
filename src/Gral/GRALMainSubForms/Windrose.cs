@@ -201,7 +201,7 @@ namespace GralMainForms
                 SektMax = Math.Max(sektsum[i], SektMax);
             }
 
-            SektMax = SektMax + XScale;
+            SektMax += XScale;
 
             //scaling factor to maximise wind rose in window
             if (SektMax <= 0)
@@ -277,7 +277,7 @@ namespace GralMainForms
                     WindRosePoints[i + l + 1] = new Point(mid_x + x2, mid_y - y2);
                     WindRosePoints[i + l + 2] = new Point(mid_x, mid_y);
                     sektsum[i] = sektsum[i] - SectFrequ[i, n];
-                    l = l + 2;
+                    l += 2;
                 }
 
                 if (DrawingMode == 0)
@@ -629,14 +629,14 @@ namespace GralMainForms
         //increase the scale of the x-axis by one
         private void button5_Click(object sender, EventArgs e)
         {
-            XScale = XScale + 0.01;
+            XScale += 0.01;
             Refresh();
         }
 
         //decrease the scale of the x-axis by one
         private void button4_Click(object sender, EventArgs e)
         {
-            XScale = XScale - 0.01;
+            XScale -= 0.01;
             Refresh();
         }
 

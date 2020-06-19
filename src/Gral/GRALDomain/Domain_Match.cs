@@ -216,7 +216,7 @@ namespace GralDomain
                 // Read original Meteo-Data
                 for (int n = 1; n < 100000; n++) // n = loop over all meteopgt.all lines
                 {
-                    iiwet = iiwet + 1;
+                    iiwet += 1;
                     wait.Text = "Match - Reading GRAMM flow field " + Convert.ToString(iiwet);
                     try
                     {
@@ -461,7 +461,7 @@ namespace GralDomain
                         MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
-                    iiwet = iiwet - 1; // the maximum of weather situations in the original meteopgt.all
+                    iiwet -= 1; // the maximum of weather situations in the original meteopgt.all
 
                     wait.Hide();
                     wait.Text = "Matching GRAMM flow fields";
@@ -749,7 +749,7 @@ namespace GralDomain
 
                                     if (match_station > 0)
                                     {
-                                        err = err / match_station; // norm to the count of matches stations
+                                        err /= match_station; // norm to the count of matches stations
                                     }
                                     else
                                     {

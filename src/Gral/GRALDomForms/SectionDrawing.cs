@@ -1493,11 +1493,11 @@ namespace GralDomForms
                 for (int k = 1; k <= nkk + 1; k++)
 				{
 					halt = h;
-					h = h + DZKdummy;
+					h += DZKdummy;
 					GRAL_HoKart.Add(myData.AHmin + h - (h-halt)/2); // GRAL_HoKart contains all interpolated middle slice heights
                     if (myData.Stretch > 0.99)
                     {
-                        DZKdummy = DZKdummy * myData.Stretch;
+                        DZKdummy *= myData.Stretch;
                     }
                     else
                     {
@@ -1510,7 +1510,7 @@ namespace GralDomForms
                                 flexstretchindex++;
                             }
                         }
-                        DZKdummy = DZKdummy * stretching;
+                        DZKdummy *= stretching;
                     }
 				}
 
