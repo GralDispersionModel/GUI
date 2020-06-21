@@ -79,11 +79,11 @@ namespace GralIO
 					
 					if(_data.BuildingHeightsWrite == false)
                     {
-                        myWriter.WriteLine("0" + " \t ! Stream output for Soundplan 1 = activated, 2 = write buildings height");
+                        myWriter.WriteLine("0" + " \t ! Stream output for Soundplan 1 = activated, -2 = write buildings height");
                     }
                     else
                     {
-                        myWriter.WriteLine("2" + " \t ! Stream output for Soundplan 1 = activated, 2 = write buildings height");
+                        myWriter.WriteLine("-2" + " \t ! Stream output for Soundplan 1 = activated, -2 = write buildings height");
                     }
 
                     if (_data.Compressed == 1)
