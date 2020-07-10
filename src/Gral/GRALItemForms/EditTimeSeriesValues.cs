@@ -322,7 +322,7 @@ namespace GralItemForms
 				return;
 			}
 			
-			string newName = textBox1.Text;
+			string newName = GralStaticFunctions.St_F.RemoveinvalidChars(textBox1.Text);
 			
 			while(EntryNames.Contains(newName))
 			{
