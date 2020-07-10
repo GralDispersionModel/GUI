@@ -26,7 +26,7 @@ namespace GralBackgroundworkers
 {
     public partial class ProgressFormBackgroundworker
     {
-		/// <summary>
+        /// <summary>
         /// Export a sub domain of a GRAMM wind field
         /// </summary>
         private void GRAMMExport(GralBackgroundworkers.BackgroundworkerData mydata,
