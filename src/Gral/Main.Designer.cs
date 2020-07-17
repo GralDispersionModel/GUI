@@ -205,6 +205,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.OpenMetFile = new System.Windows.Forms.Button();
             this.Topography = new System.Windows.Forms.TabPage();
+            this.checkBox36 = new System.Windows.Forms.CheckBox();
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.numericUpDown44 = new System.Windows.Forms.NumericUpDown();
             this.label99 = new System.Windows.Forms.Label();
@@ -359,7 +360,6 @@
             this.label48 = new System.Windows.Forms.Label();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.checkBox36 = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.Project.SuspendLayout();
             this.Comments.SuspendLayout();
@@ -1999,7 +1999,7 @@
             // 
             // SG_Name_List
             // 
-            this.SG_Name_List.Text = "SG Name";
+            this.SG_Name_List.Text = "Source group name";
             this.SG_Name_List.Width = 220;
             // 
             // button15
@@ -2050,8 +2050,6 @@
             // 
             // label40
             // 
-            this.label40.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label40.AutoSize = true;
             this.label40.Location = new System.Drawing.Point(3, 89);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(24, 20);
@@ -2060,8 +2058,6 @@
             // 
             // label41
             // 
-            this.label41.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label41.AutoSize = true;
             this.label41.Location = new System.Drawing.Point(252, 90);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(20, 20);
@@ -2070,8 +2066,6 @@
             // 
             // label42
             // 
-            this.label42.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label42.AutoSize = true;
             this.label42.Location = new System.Drawing.Point(126, 153);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(20, 20);
@@ -2080,8 +2074,6 @@
             // 
             // label43
             // 
-            this.label43.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label43.AutoSize = true;
             this.label43.Location = new System.Drawing.Point(126, 21);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(20, 20);
@@ -2090,9 +2082,8 @@
             // 
             // textBox12
             // 
-            this.textBox12.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.textBox12.Enabled = false;
-            this.textBox12.Location = new System.Drawing.Point(148, 87);
+            this.textBox12.Location = new System.Drawing.Point(151, 87);
             this.textBox12.Name = "textBox12";
             this.textBox12.ReadOnly = true;
             this.textBox12.Size = new System.Drawing.Size(100, 25);
@@ -2101,9 +2092,8 @@
             // 
             // textBox13
             // 
-            this.textBox13.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBox13.Enabled = false;
-            this.textBox13.Location = new System.Drawing.Point(26, 87);
+            this.textBox13.Location = new System.Drawing.Point(29, 87);
             this.textBox13.Name = "textBox13";
             this.textBox13.ReadOnly = true;
             this.textBox13.Size = new System.Drawing.Size(100, 25);
@@ -2112,9 +2102,8 @@
             // 
             // textBox14
             // 
-            this.textBox14.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.textBox14.Enabled = false;
-            this.textBox14.Location = new System.Drawing.Point(85, 125);
+            this.textBox14.Location = new System.Drawing.Point(88, 125);
             this.textBox14.Name = "textBox14";
             this.textBox14.ReadOnly = true;
             this.textBox14.Size = new System.Drawing.Size(100, 25);
@@ -2123,9 +2112,8 @@
             // 
             // textBox15
             // 
-            this.textBox15.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox15.Enabled = false;
-            this.textBox15.Location = new System.Drawing.Point(85, 51);
+            this.textBox15.Location = new System.Drawing.Point(88, 51);
             this.textBox15.Name = "textBox15";
             this.textBox15.ReadOnly = true;
             this.textBox15.Size = new System.Drawing.Size(100, 25);
@@ -2180,7 +2168,6 @@
             // 
             // label24
             // 
-            this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(3, 90);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(24, 20);
@@ -2199,8 +2186,6 @@
             // 
             // label23
             // 
-            this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(252, 90);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(20, 20);
@@ -2209,9 +2194,7 @@
             // 
             // label22
             // 
-            this.label22.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(129, 168);
+            this.label22.Location = new System.Drawing.Point(129, 158);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(20, 20);
             this.label22.TabIndex = 5;
@@ -2219,8 +2202,6 @@
             // 
             // label21
             // 
-            this.label21.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(126, 21);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(20, 20);
@@ -2229,7 +2210,6 @@
             // 
             // textBox7
             // 
-            this.textBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox7.Enabled = false;
             this.textBox7.Location = new System.Drawing.Point(151, 87);
             this.textBox7.Name = "textBox7";
@@ -2250,7 +2230,6 @@
             // 
             // textBox5
             // 
-            this.textBox5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox5.Enabled = false;
             this.textBox5.Location = new System.Drawing.Point(88, 128);
             this.textBox5.Name = "textBox5";
@@ -2261,7 +2240,6 @@
             // 
             // textBox2
             // 
-            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(88, 44);
             this.textBox2.Name = "textBox2";
@@ -3033,6 +3011,16 @@
             this.Topography.Size = new System.Drawing.Size(814, 539);
             this.Topography.TabIndex = 4;
             this.Topography.Text = "TOPOGRAPHY";
+            // 
+            // checkBox36
+            // 
+            this.checkBox36.AutoSize = true;
+            this.checkBox36.Location = new System.Drawing.Point(297, 306);
+            this.checkBox36.Name = "checkBox36";
+            this.checkBox36.Size = new System.Drawing.Size(315, 17);
+            this.checkBox36.TabIndex = 61;
+            this.checkBox36.Text = "Use landuse presets for GRAMM V19.01 or previous versions";
+            this.checkBox36.UseVisualStyleBackColor = true;
             // 
             // groupBox25
             // 
@@ -5169,16 +5157,6 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 120000;
             this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
-            // 
-            // checkBox36
-            // 
-            this.checkBox36.AutoSize = true;
-            this.checkBox36.Location = new System.Drawing.Point(297, 306);
-            this.checkBox36.Name = "checkBox36";
-            this.checkBox36.Size = new System.Drawing.Size(315, 17);
-            this.checkBox36.TabIndex = 61;
-            this.checkBox36.Text = "Use landuse presets for GRAMM V19.01 or previous versions";
-            this.checkBox36.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
