@@ -55,7 +55,7 @@ namespace Gral
         /// <summary>
         /// Copy the computation cores to the project folder?
         /// </summary>
-        public static bool CopyCorestoProject = true;
+        public static bool CopyCorestoProject = false;
         /// <summary>
         /// Keep compatibility to version 19.01 (file paths)?
         /// </summary>
