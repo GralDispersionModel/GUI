@@ -94,7 +94,7 @@ namespace Gral
             OpenFileDialog dialog = new OpenFileDialog();
             
             #if __MonoCS__
-            dialog.Filter = "GRAMM executable (GRAMM*.exe;GRAMM*.dll)|GRAMM*.exe;GRAMM*.dll";
+            dialog.Filter = "GRAMM executable (GRAMM*.dll)|GRAMM*.dll";
             #else
             dialog.Filter = "GRAMM executable (GRAMM*.exe;GRAMM*.bat)|GRAMM*.exe;GRAMM*.bat";
             #endif
@@ -134,7 +134,7 @@ namespace Gral
                             {
                                 batch = "GRAMM*.bat";
                             }
-#endif
+                            #endif
 
                             if (batch != String.Empty)
                             {
@@ -178,7 +178,7 @@ namespace Gral
                             string command = String.Empty;
                             if (Path.GetExtension(GRAMM_Program_Path).ToLower() == ".dll") // .sh file -> call sh file
                             {
-                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; dotnet " + Path.GetFileName(GRAMM_Program_Path) + " ; bash'";
+                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; dotnet " + Path.GetFileName(GRAMM_Program_Path) + " " + '"' + GRAMM_Project_Path + '"' + " ; bash'";
                             }
                             else // .exe file
                             {
