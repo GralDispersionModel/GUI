@@ -4521,6 +4521,7 @@
             // 
             this.progressBar2.Location = new System.Drawing.Point(3, 122);
             this.progressBar2.Margin = new System.Windows.Forms.Padding(2);
+            this.progressBar2.Maximum = 101;
             this.progressBar2.Name = "progressBar2";
             this.progressBar2.Size = new System.Drawing.Size(165, 18);
             this.progressBar2.Step = 1;
@@ -4542,6 +4543,7 @@
             // 
             this.progressBar1.Location = new System.Drawing.Point(4, 78);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
+            this.progressBar1.Maximum = 101;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(165, 18);
             this.progressBar1.Step = 1;
