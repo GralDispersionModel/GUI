@@ -437,7 +437,7 @@ namespace Gral3DFunctions
         				Vector3D over = new Vector3D(1,0,0);
         				Vector3D up = new Vector3D(0,1,0);
         				Point3D center = new Point3D(4,z,4);
-        				z = z - 0.22;
+        				z -= 0.22;
         				
         				Point3D p0 = center - width / 2 * over - height / 2 * up;
         				Point3D p1 = p0 + up * 1 * height;

@@ -191,7 +191,7 @@ namespace MathParserMathos
                    	{
                    		sum += (double)Math.Pow(10, 0.1 * (double)input[i]);
                    	}
-                   	sum = sum / ((double) input.Length);
+                   	sum /= ((double) input.Length);
                     return (double) 10 * Math.Log10(sum);
                 });
                 
@@ -306,7 +306,7 @@ namespace MathParserMathos
                         ch = '?';
                     }
                 }
-        		a = a + ch;
+        		a += ch;
         	}
         	mathExpression = a;
         	mathExpression = Correction(mathExpression); // correct different valid writings
@@ -472,12 +472,12 @@ namespace MathParserMathos
                         tokens.Add("*");
                     }
 
-                    vector = vector + ch;
+                    vector += ch;
                     
                     while ((i + 1) < expr.Length && Char.IsLetterOrDigit(expr[i + 1])) // here is it is possible to choose whether you want variables that only contain letters with or without digits.
                     {
                         i++;
-                        vector = vector + expr[i];
+                        vector += expr[i];
                     }
                     
                     tokens.Add(vector);
@@ -485,12 +485,12 @@ namespace MathParserMathos
                 }
                 else if (Char.IsDigit(ch))
                 {
-                    vector = vector + ch;
+                    vector += ch;
                     
                     while ((i + 1) < expr.Length && (Char.IsDigit(expr[i + 1]) || expr[i + 1] == '.')) // removed || _expr[i + 1] == ','
                     {
                         i++;
-                        vector = vector + expr[i];
+                        vector += expr[i];
                     }
                     
                     tokens.Add(vector);
@@ -502,12 +502,12 @@ namespace MathParserMathos
                     // to sum up, the above will be true if the minus sign is in front of the number, but
                     // at the beginning, for example, -1+2, or, when it is inside the brakets (-1).
                     // NOTE: this works for + sign as well!
-                    vector = vector + ch;
+                    vector += ch;
 
                     while ((i + 1) < expr.Length && (Char.IsDigit(expr[i + 1]) || expr[i + 1] == '.')) // removed || _expr[i + 1] == ','
                     {
                         i++;
-                        vector = vector + expr[i];
+                        vector += expr[i];
                     }
 
                     tokens.Add(vector);

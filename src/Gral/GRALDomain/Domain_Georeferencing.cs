@@ -123,7 +123,7 @@ namespace GralDomain
 					int k = -1;
 					foreach (DrawingObjects _drobj in ItemOptions)
 					{
-						k = k + 1;
+						k += 1;
 						if ((_drobj.Name.Substring(0, 3) == "BM:") || (_drobj.Name.Substring(0, 3) == "SM:"))
 						{
 							_drobj.DestRec = new Rectangle(TransformX + Convert.ToInt32((_drobj.West - MapSize.West) / BmpScale / MapSize.SizeX),

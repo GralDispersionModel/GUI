@@ -121,7 +121,7 @@ namespace GralMainForms
                     p4.StartCap = LineCap.RoundAnchor;
                     g.DrawLine(p4, 700, 50 + Convert.ToInt32(j * 15.25), 720, 50 + Convert.ToInt32(j * 15.25));
                     g.DrawString(wrnamen[n], _smallFont, _blackBrush, 725, 43 + Convert.ToInt32(j * 15.25));
-                    j = j + 1;
+                    j += 1;
                     for (int i = 0; i < 24; i++)
                     {
                         int hoehe = Convert.ToInt32(meanwinddir[i, n] * scale);

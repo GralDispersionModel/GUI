@@ -30,9 +30,7 @@ namespace GralIO
     /// </summary>
     public class GGeomFileIO
 	{
-		private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-		
-		
+		private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 		private string _pathwindfield;
         public string PathWindfield { set { _pathwindfield = value; } }
         private string _projectname;
@@ -351,7 +349,7 @@ namespace GralIO
 				while (count < 3)
 				{
 					text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-					count = count + text.Length;
+					count += text.Length;
 				}
 				//obtain array size in x,y,z direction
 				_NX = Convert.ToInt32(text[0]);
@@ -371,18 +369,18 @@ namespace GralIO
 					{
 						Application.DoEvents(); // Kuntner
 						text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-						count = count + text.Length;
+						count += text.Length;
 						if ((count >= (_NX + _NY + _NZ + 6)) && (count - text.Length < (_NX * _NY + _NX + _NY + _NZ + 6)))
 						{
 							for (int i = 1; i <= text.Length; i++)
 							{
 								if (((count - text.Length + i) > (_NX + _NY + _NZ + 6)) && ((count - text.Length + i) <= (_NX * _NY + _NX + _NY + _NZ + 6)))
 								{
-									ix = ix + 1;
+									ix += 1;
 									if (ix == _NX + 1)
 									{
 										ix = 1;
-										iy = iy + 1;
+										iy += 1;
 									}
 									_AH[ix, iy] = Convert.ToDouble(text[i - 1].Replace(".", decsep));
 									_AHmin = Math.Min(_AHmin, _AH[ix, iy]);
@@ -404,7 +402,7 @@ namespace GralIO
 						{
 							Application.DoEvents(); // Kuntner
 							text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-							count = count + text.Length;
+							count += text.Length;
 							if ((count >= (begin)) && (count - text.Length < (begin + _NX * _NY * _NZ)))
 							{
 								for (int i = 1; i <= text.Length; i++)
@@ -412,16 +410,16 @@ namespace GralIO
 									if (((count - text.Length + i) > (begin)) && ((count - text.Length + i) <= (begin + _NX * _NY * _NZ)))
 									{
 
-										ix = ix + 1;
+										ix += 1;
 										if (ix == _NX + 1)
 										{
 											ix = 1;
-											iy = iy + 1;
+											iy += 1;
 										}
 										if (iy == _NY + 1)
 										{
 											iy = 1;
-											iz = iz + 1;
+											iz += 1;
 										}
 										_ZSP[ix, iy, iz] = Convert.ToDouble(text[i - 1].Replace(".", decsep));
 									}

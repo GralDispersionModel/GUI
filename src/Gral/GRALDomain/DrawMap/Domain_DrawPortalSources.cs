@@ -105,7 +105,7 @@ namespace GralDomain
 
                             if ((x1 > x2) && (y1 > y2))
                             {
-                                angle = angle - 90;
+                                angle -= 90;
                             }
                         }
                         else

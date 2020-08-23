@@ -182,7 +182,7 @@ namespace GralDomain
                             CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
                             EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                             EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                            EditAS.CornerAreaCount = EditAS.CornerAreaCount + 1;
+                            EditAS.CornerAreaCount += 1;
                             EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount));
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
@@ -251,7 +251,7 @@ namespace GralDomain
                             CornerAreaSource[EditVegetation.CornerVegetation] = new Point(e.X, e.Y);
                             EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                             EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                            EditVegetation.CornerVegetation = EditVegetation.CornerVegetation + 1;
+                            EditVegetation.CornerVegetation += 1;
                             EditVegetation.SetNumberOfVerticesText(Convert.ToString(EditVegetation.CornerVegetation));
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
@@ -286,7 +286,7 @@ namespace GralDomain
                             EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                             EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
 
-                            EditLS.CornerLineSource = EditLS.CornerLineSource + 1;
+                            EditLS.CornerLineSource += 1;
                             EditLS.SetNumberOfVerticesText(Convert.ToString(EditLS.CornerLineSource));
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
@@ -326,7 +326,7 @@ namespace GralDomain
                                     EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
                                 }
 
-                                EditWall.CornerWallCount = EditWall.CornerWallCount + 1;
+                                EditWall.CornerWallCount += 1;
                                 EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount));
                                 // Reset Rubber-Line Drawing
                                 Cursor.Clip = Bounds;
@@ -431,7 +431,7 @@ namespace GralDomain
                                 stop = true;
                                 break;
                             }
-                            i = i + 1;
+                            i += 1;
                         }
                         Focus();
                     }
@@ -572,7 +572,7 @@ namespace GralDomain
                                             
                                         }
                                     }
-                                    i = i + 1;
+                                    i += 1;
                                 }
                             }
                         }
@@ -622,7 +622,7 @@ namespace GralDomain
                                 stop = true;
                                 break;
                             }
-                            i = i + 1;
+                            i += 1;
                         }
                         Focus();
                     }
@@ -677,7 +677,7 @@ namespace GralDomain
                                 stop = true;
                                 break;
                             }
-                            i = i + 1;
+                            i += 1;
                         }
                         Focus();
                     }
@@ -787,7 +787,7 @@ namespace GralDomain
                                     break;
                                 }
                             }
-                            i = i + 1;
+                            i += 1;
                         }
                         Focus();
                     }
@@ -874,7 +874,7 @@ namespace GralDomain
                                 stop = true;
                                 break;
                             }
-                            i = i + 1;
+                            i += 1;
                         }
                         Focus();
                     }
@@ -931,7 +931,7 @@ namespace GralDomain
                                     break;
                                 }
                             }
-                            i = i + 1;
+                            i += 1;
                         }
                         Picturebox1_Paint(); // 
                         Focus();
@@ -1014,7 +1014,7 @@ namespace GralDomain
                         EditPortals.CornerPortalY[0] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
 
                         CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
-                        EditLS.CornerLineSource = EditLS.CornerLineSource + 1;
+                        EditLS.CornerLineSource += 1;
                         Graphics g = picturebox1.CreateGraphics();
                         if (EditLS.CornerLineSource > 1)
                         {
@@ -1034,7 +1034,7 @@ namespace GralDomain
                         CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
                         EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                        EditLS.CornerLineSource = EditLS.CornerLineSource + 1;
+                        EditLS.CornerLineSource += 1;
                         // Reset Rubber-Line Drawing
                         Cursor.Clip = Bounds;
                         RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
@@ -1068,7 +1068,7 @@ namespace GralDomain
                         CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
                         EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                        EditAS.CornerAreaCount = EditAS.CornerAreaCount + 1;
+                        EditAS.CornerAreaCount += 1;
                         // Reset Rubber-Line Drawing
                         Cursor.Clip = Bounds;
                         RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;

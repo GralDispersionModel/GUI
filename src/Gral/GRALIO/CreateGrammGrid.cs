@@ -308,7 +308,7 @@ namespace GralIO
                                         if (ADH[IPP][NS] != NODDATA)
                                         {
                                             gew = Math.Abs(1 / ((NS - JPP) * Convert.ToDouble(ICSIZE)));
-                                            gewges = gewges + gew;
+                                            gewges += gew;
                                             wert = ADH[IPP][NS] * gew + wert;
                                             break;
                                         }
@@ -319,7 +319,7 @@ namespace GralIO
                                         if (ADH[IPP][NS] != NODDATA)
                                         {
                                             gew = Math.Abs(1 / ((NS - JPP) * Convert.ToDouble(ICSIZE)));
-                                            gewges = gewges + gew;
+                                            gewges += gew;
                                             wert = ADH[IPP][NS] * gew + wert;
                                             break;
                                         }
@@ -330,7 +330,7 @@ namespace GralIO
                                         if (ADH[NS][JPP] != NODDATA)
                                         {
                                             gew = Math.Abs(1 / ((NS - IPP) * Convert.ToDouble(ICSIZE)));
-                                            gewges = gewges + gew;
+                                            gewges += gew;
                                             wert = ADH[NS][JPP] * gew + wert;
                                             break;
                                         }
@@ -341,7 +341,7 @@ namespace GralIO
                                         if (ADH[NS][JPP] != NODDATA)
                                         {
                                             gew = Math.Abs(1 / ((NS - IPP) * Convert.ToDouble(ICSIZE)));
-                                            gewges = gewges + gew;
+                                            gewges += gew;
                                             wert = ADH[NS][JPP] * gew + wert;
                                             break;
                                         }
@@ -420,7 +420,7 @@ namespace GralIO
                 double totaldistance = 0; //horizontal distance between model boundary and the last cell, which is smoothed, yet
                 for (int smooth = Math.Min(SmoothBorderCellNr, NY); smooth > 0; smooth--)
                 {
-                    totaldistance = totaldistance + DDY[smooth];
+                    totaldistance += DDY[smooth];
                 }
 
                 for (int I = 1; I < NX + 2; I++)
@@ -432,7 +432,7 @@ namespace GralIO
                         //AHE[I, smooth, 1] = AHE[I, smooth + 1, 1] - (AHE[I, smooth + 1, 1] - AHMIN) / 4;
 
                         //lineare Interpolation zum Rand hin
-                        abstand = abstand + DDY[smooth];
+                        abstand += DDY[smooth];
                         AHE[I, smooth, 1] = AHE[I, SmoothBorderCellNr + 1, 1] - (AHE[I, SmoothBorderCellNr + 1, 1] - AHMIN_BORDER) * abstand / totaldistance;
                     }
                     /*
@@ -450,7 +450,7 @@ namespace GralIO
                         //AHE[I, NY - smooth + 2, 1] = AHE[I, NY - smooth + 1, 1] - (AHE[I, NY - smooth + 1, 1] - AHMIN) / 4;
 
                         //lineare Interpolation zum Rand hin
-                        abstand = abstand + DDY[NY - smooth + 1];
+                        abstand += DDY[NY - smooth + 1];
                         AHE[I, NY - smooth + 2, 1] = AHE[I, NY - SmoothBorderCellNr + 1, 1] - (AHE[I, NY - SmoothBorderCellNr + 1, 1] - AHMIN_BORDER) * abstand / totaldistance;
                     }
 
@@ -467,7 +467,7 @@ namespace GralIO
                 totaldistance = 0;
                 for (int smooth = Math.Min(SmoothBorderCellNr, NX); smooth > 0; smooth--)
                 {
-                    totaldistance = totaldistance + DDX[smooth];
+                    totaldistance += DDX[smooth];
                 }
 
                 for (int J = 1; J < NY + 2; J++)
@@ -479,7 +479,7 @@ namespace GralIO
                         //AHE[smooth, J, 1] = AHE[smooth + 1, J, 1] - (AHE[smooth + 1, J, 1] - AHMIN) / 4;
 
                         //lineare Interpolation zum Rand hin
-                        abstand = abstand + DDX[smooth];
+                        abstand += DDX[smooth];
                         AHE[smooth, J, 1] = AHE[SmoothBorderCellNr + 1, J, 1] - (AHE[SmoothBorderCellNr + 1, J, 1] - AHMIN_BORDER) * abstand / totaldistance;
                     }
 
@@ -498,7 +498,7 @@ namespace GralIO
                         //AHE[NX - smooth + 2, J, 1] = AHE[NX - smooth + 1, J, 1] - (AHE[NX - smooth + 1, J, 1] - AHMIN) / 4;
 
                         //lineare Interpolation zum Rand hin
-                        abstand = abstand + DDY[NY - smooth + 1];
+                        abstand += DDY[NY - smooth + 1];
                         AHE[NX - smooth + 2, J, 1] = AHE[NX - SmoothBorderCellNr + 1, J, 1] - (AHE[NX - SmoothBorderCellNr + 1, J, 1] - AHMIN_BORDER) * abstand / totaldistance;
                     }
 

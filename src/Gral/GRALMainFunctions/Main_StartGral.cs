@@ -141,7 +141,7 @@ namespace Gral
 
 			OpenFileDialog dialog = new OpenFileDialog();
 			#if __MonoCS__
-			dialog.Filter = "GRAL executables (GRAL*.exe;GRAL*.dll)|GRAL*.exe;GRAL*.dll";
+			dialog.Filter = "GRAL executables (GRAL*.dll)|GRAL*.dll";
 			#else
 			dialog.Filter = "GRAL executables (GRAL*.exe;GRAL*.bat)|GRAL*.exe;GRAL*.bat";
 			#endif
@@ -286,7 +286,7 @@ namespace Gral
 						string command = String.Empty;
 						if (Path.GetExtension(GRAL_Program_Path).ToLower() == ".dll") // .sh file -> dotnet version
 						{
-							command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; dotnet " + Path.GetFileName(GRAL_Program_Path) + " ; bash'";
+							command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; dotnet " + Path.GetFileName(GRAL_Program_Path) + " " + '"' + GRAL_Project_Path + '"' + " ; bash'";
 						}
 						else // .exe file
 						{

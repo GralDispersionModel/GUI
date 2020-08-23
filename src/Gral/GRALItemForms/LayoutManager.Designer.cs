@@ -125,7 +125,7 @@
             this.button1.TabIndex = 23;
             this.button1.Text = "&Close";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // button3
             // 
@@ -203,7 +203,7 @@
             this.button8.TabIndex = 34;
             this.button8.Text = "Style";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
             // button7
             // 
@@ -213,7 +213,7 @@
             this.button7.TabIndex = 33;
             this.button7.Text = "Color";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
             // button9
             // 
@@ -226,7 +226,7 @@
             this.toolTip1.SetToolTip(this.button9, "Create a color gradient");
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Visible = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.button9.Click += new System.EventHandler(this.Button9_Click);
             // 
             // trackBar1
             // 
@@ -250,7 +250,7 @@
             this.checkBox1.Text = "Fill";
             this.toolTip1.SetToolTip(this.checkBox1, "Fill the contour lines");
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
             // label4
             // 
@@ -317,7 +317,7 @@
             this.toolTip1.SetToolTip(this.button11, "Sets the width of contour lines.\r\nNote: 0 = no contour lines, which\r\nspeeds up ma" +
         "p drawing.");
             this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
+            this.button11.Click += new System.EventHandler(this.Button11_Click);
             // 
             // button10
             // 
@@ -327,7 +327,7 @@
             this.button10.TabIndex = 35;
             this.button10.Text = "Color";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.button10.Click += new System.EventHandler(this.Button10_Click);
             // 
             // groupBox3
             // 
@@ -406,7 +406,7 @@
             this.toolTip1.SetToolTip(this.button12, "Sets contour levels\r\nto default values.");
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Visible = false;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
+            this.button12.Click += new System.EventHandler(this.Button12_Click);
             // 
             // button2
             // 
@@ -418,7 +418,7 @@
             this.toolTip1.SetToolTip(this.button2, "Computes contour levels\r\nwith equal distances.");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // numericUpDown4
             // 
@@ -437,7 +437,7 @@
             0,
             0,
             0});
-            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
+            this.numericUpDown4.ValueChanged += new System.EventHandler(this.NumericUpDown4_ValueChanged);
             // 
             // label9
             // 
@@ -471,7 +471,7 @@
             0,
             0});
             this.numericUpDown3.Visible = false;
-            this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.NumericUpDown3_ValueChanged);
             // 
             // label8
             // 
@@ -528,7 +528,7 @@
             0,
             0,
             0});
-            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.NumericUpDown2_ValueChanged);
             // 
             // label7
             // 
@@ -544,7 +544,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(76, 20);
             this.textBox2.TabIndex = 26;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // textBox1
             // 
@@ -552,7 +552,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(76, 20);
             this.textBox1.TabIndex = 25;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // label6
             // 
@@ -570,7 +570,7 @@
             this.checkBox2.TabIndex = 27;
             this.checkBox2.Text = "Color scale";
             this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
             // 
             // label5
             // 
@@ -592,7 +592,7 @@
             this.listBox1.Size = new System.Drawing.Size(216, 180);
             this.listBox1.TabIndex = 26;
             this.toolTip1.SetToolTip(this.listBox1, "Double click to change the value or the color");
-            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+            this.listBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
             // 
             // button13
             // 
@@ -605,7 +605,7 @@
             this.toolTip1.SetToolTip(this.button13, "Create a color gradient");
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Visible = false;
-            this.button13.Click += new System.EventHandler(this.button9_Click);
+            this.button13.Click += new System.EventHandler(this.Button9_Click);
             // 
             // button14
             // 
@@ -628,7 +628,7 @@
             this.checkBox4.Text = "LP-Filter    ";
             this.toolTip1.SetToolTip(this.checkBox4, "Low-pass-filtering of data.");
             this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.CheckBox4_CheckedChanged);
             // 
             // label2
             // 
@@ -646,7 +646,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(158, 21);
             this.comboBox1.TabIndex = 37;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // comboBox2
             // 
@@ -655,7 +655,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(158, 21);
             this.comboBox2.TabIndex = 38;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
             // openFileDialog1
             // 

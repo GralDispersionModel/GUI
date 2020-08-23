@@ -27,7 +27,7 @@ namespace GralStaticFunctions
 	/// <summary>
 	/// Class for the bresenham algorithm
 	/// </summary>
-	public class Bresenham
+	public static class Bresenham
 	{
 		/// <summary>
 		/// Return raster points along a line between two points x0/y0 and x1/y1

@@ -150,7 +150,7 @@ namespace GralItemForms
             this.button3.TabIndex = 12;
             this.toolTip1.SetToolTip(this.button3, "Remove all vegetation areas");
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // button2
             // 
@@ -161,7 +161,7 @@ namespace GralItemForms
             this.button2.TabIndex = 11;
             this.toolTip1.SetToolTip(this.button2, "Remove this vegetation area");
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // button1
             // 
@@ -172,7 +172,7 @@ namespace GralItemForms
             this.button1.TabIndex = 10;
             this.toolTip1.SetToolTip(this.button1, "Add a new vegetation area");
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // trackBar1
             // 
@@ -184,7 +184,7 @@ namespace GralItemForms
             this.trackBar1.Size = new System.Drawing.Size(217, 19);
             this.trackBar1.TabIndex = 1;
             this.trackBar1.Value = 1;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.trackBar1.Scroll += new System.EventHandler(this.TrackBar1_Scroll);
             // 
             // textBox1
             // 
@@ -316,7 +316,7 @@ namespace GralItemForms
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(176, 21);
             this.comboBox1.TabIndex = 3;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // button5
             // 
@@ -351,7 +351,7 @@ namespace GralItemForms
             this.button6.TabIndex = 76;
             this.button6.Text = "&OK";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
             // EditVegetation
             // 

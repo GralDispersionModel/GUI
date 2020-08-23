@@ -26,7 +26,7 @@ namespace GralStaticFunctions
     /// <summary>
     /// Analyze if there is a binned Meteo Time Series
     /// </summary>
-    public class GetMetFileSectionWidth
+    public static class GetMetFileSectionWidth
 	{
 		/// <summary>
 		/// Returns the section width of a MettimeSeries

@@ -141,7 +141,7 @@ namespace GralShape
                 //offset and index to .shx file
                 foreach (LineSourceData _ls in domain.EditLS.ItemData)
                 {
-                    recordNumber = recordNumber + 1;
+                    recordNumber += 1;
                     int sourcegroups = _ls.Poll.Count;
                     //record number
                     data = WriteIntBig(recordNumber);
@@ -309,7 +309,7 @@ namespace GralShape
                 //write records: header and record
                 foreach (AreaSourceData _as in domain.EditAS.ItemData)
                 {
-                    recordNumber = recordNumber + 1;
+                    recordNumber += 1;
                     //record number
                     data = WriteIntBig(recordNumber);
                     fs.Write(data, 0, 4);
@@ -563,7 +563,7 @@ namespace GralShape
                 //write records: header and record
                 foreach (PointSourceData _psdata in domain.EditPS.ItemData)
                 {
-                    recordNumber = recordNumber + 1;
+                    recordNumber += 1;
                     
                     //record number
                     data = WriteIntBig(recordNumber);
@@ -835,7 +835,7 @@ namespace GralShape
                 {
                     GralDomain.PointD[] _pts = _drobj.ContourPolygons[j].EdgePoints;
 
-                    recordNumber = recordNumber + 1;
+                    recordNumber += 1;
 
                     //record number
                     data = WriteIntBig(recordNumber);

@@ -702,11 +702,11 @@ vertex 0 +-------------------+ vertex 1
 		}
 
 		//sub routine needed for contour mapping
-		Func<int, int, double[], double[], double> xsect = (int p1, int p2, double[] h, double[] xh) =>
+		readonly Func<int, int, double[], double[], double> xsect = (int p1, int p2, double[] h, double[] xh) =>
 			(h[p2] * xh[p1] - h[p1] * xh[p2]) / (h[p2] - h[p1]);
 
 		//sub routine needed for contour mapping
-		Func<int, int, double[], double[], double> ysect = (int p1, int p2, double[] h, double[] yh) =>
+		readonly Func<int, int, double[], double[], double> ysect = (int p1, int p2, double[] h, double[] yh) =>
 			(h[p2] * yh[p1] - h[p1] * yh[p2]) / (h[p2] - h[p1]);
 
         /// <summary>

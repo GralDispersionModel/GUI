@@ -55,7 +55,7 @@ namespace Gral
         /// <summary>
         /// Copy the computation cores to the project folder?
         /// </summary>
-        public static bool CopyCorestoProject = true;
+        public static bool CopyCorestoProject = false;
         /// <summary>
         /// Keep compatibility to version 19.01 (file paths)?
         /// </summary>
@@ -1067,13 +1067,13 @@ namespace Gral
             ResetInDat();
         }
         //change the factor for prognostic sub domains
-        private void numericUpDown42_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown42_ValueChanged(object sender, EventArgs e)
         {
             GRALSettings.PrognosticSubDomains = (int)numericUpDown42.Value;
             ResetInDat();
         }
         // No buildings
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton3_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton3.Checked)
             {
@@ -1084,7 +1084,7 @@ namespace Gral
             ResetInDat();
         }
         // Diagnostic buildings
-        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton4_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton4.Checked)
             {
@@ -1095,7 +1095,7 @@ namespace Gral
             ResetInDat();
         }
         // Prognostic buildings
-        private void radioButton5_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton5_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton5.Checked)
             {
@@ -1357,27 +1357,27 @@ namespace Gral
             GRAMMSetFlatTerrainOption(sender, e);
         }
         //enable ERA5 transient forcing for GRAMM
-        public void checkBox35_CheckedChanged(object sender, EventArgs e)
+        public void CheckBox35_CheckedChanged(object sender, EventArgs e)
         {
             GRAMMSetERA5Forcing(sender, e);
         }
         //sets the start time for transient GRAMM simulations using ERA5
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             GRAMMSetERA5SetStartTime(sender, e);
         }
         //set the coordinate system used in the GRAMM simulations
-        private void numericUpDown40_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown40_ValueChanged(object sender, EventArgs e)
         {
             GRAMMSetERA5SetCoordinateSystem(sender, e);
         }
         //set the time interval for re-initialzing the GRAMM simulations, when driven by ERA5 data in hours
-        private void numericUpDown44_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown44_ValueChanged(object sender, EventArgs e)
         {
             GRAMMReInitializingERA5(sender, e);
         }
         //set the time interval for updating boundary conditions in the GRAMM simulations, when driven by ERA5 data in hours
-        private void numericUpDown37_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown37_ValueChanged(object sender, EventArgs e)
         {
             GRAMMBoundaryConditionsERA5(sender, e);
         }
@@ -1514,7 +1514,7 @@ namespace Gral
             #else
             try
             {
-                Nemo NemoWork = new Main.Nemo();
+                Main_NEMO NemoWork = new Main.Main_NEMO();
                 //source group seperation
                 GralMainForms.Nemostartwindow nemo = new GralMainForms.Nemostartwindow(this);
                 DialogResult dr = new DialogResult();
@@ -1615,7 +1615,7 @@ namespace Gral
                 buttonOk.SetBounds(228, 72, 75, 23);
                 buttonCancel.SetBounds(309, 72, 75, 23);
                 label.AutoSize = true;
-                numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
+                numdown.Anchor |= AnchorStyles.Right;
                 buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 form.ClientSize = new Size(396, 107);
@@ -1661,7 +1661,7 @@ namespace Gral
                 buttonOk.SetBounds(228, 72, 75, 23);
                 buttonCancel.SetBounds(309, 72, 75, 23);
                 label.AutoSize = true;
-                numdown.Anchor = numdown.Anchor | AnchorStyles.Right;
+                numdown.Anchor |= AnchorStyles.Right;
                 buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                 form.ClientSize = new Size(396, 107);
@@ -1943,7 +1943,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button38_Click(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }
@@ -2056,7 +2056,7 @@ namespace Gral
                 long file_size = 0;
                 for (int i = 0; i < files_conc.Length; i++)
                 {
-                    file_size = file_size + files_conc[i].Length;
+                    file_size += files_conc[i].Length;
                 }
                 if (file_size < 1000000000)
                 {
@@ -2077,7 +2077,7 @@ namespace Gral
                 long file_size = 0;
                 for (int i = 0; i < files_gff.Length; i++)
                 {
-                    file_size = file_size + files_gff[i].Length;
+                    file_size += files_gff[i].Length;
                 }
                 if (file_size < 1000000000)
                 {
@@ -2969,7 +2969,7 @@ namespace Gral
         /// </summary>
         private void Button38_Click_1(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }
@@ -2988,7 +2988,7 @@ namespace Gral
         /// <summary>
         /// Set the compression mode for GRAL result files
         /// </summary>
-        private void numericUpDown43_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown43_ValueChanged(object sender, EventArgs e)
         {
             GRALSettings.Compressed = (int)numericUpDown43.Value;
             ResetInDat();
@@ -3374,7 +3374,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void numericUpDown41_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown41_ValueChanged(object sender, EventArgs e)
         {
             if (EmifileReset == true)
             {
@@ -3387,7 +3387,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button12_Click(object sender, EventArgs e)
+        private void Button12_Click(object sender, EventArgs e)
         {
             using (GralMainForms.FlexibleStretchingFactors FStF = new GralMainForms.FlexibleStretchingFactors()
             {
@@ -3422,7 +3422,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button54_Click(object sender, EventArgs e)
+        private void Button54_Click(object sender, EventArgs e)
         {
             using (GralMainForms.DecayRateForm DRF = new GralMainForms.DecayRateForm()
             {
@@ -3447,7 +3447,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button53_Click(object sender, EventArgs e)
+        private void Button53_Click(object sender, EventArgs e)
         {
             using (GralMainForms.VerticalLayerHeights VLH = new GralMainForms.VerticalLayerHeights()
             {
@@ -3468,7 +3468,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button55_Click(object sender, EventArgs e)
+        private void Button55_Click(object sender, EventArgs e)
         {
             bool open = false;
             foreach(Form f in Application.OpenForms)
@@ -3497,7 +3497,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button57_Click(object sender, EventArgs e)
+        private void Button57_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(this, "These special settings are only intended for a few applications. Do not proceed if you cannot assess the effects", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
@@ -3522,7 +3522,7 @@ namespace Gral
             }
         }
 
-        private void checkBox29_CheckStateChanged(object sender, EventArgs e)
+        private void CheckBox29_CheckStateChanged(object sender, EventArgs e)
         {
             if (IndatReset)
             {
@@ -3538,7 +3538,7 @@ namespace Gral
             }
         }
 
-        private void numericUpDown46_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown46_ValueChanged(object sender, EventArgs e)
         {
             BuildingCellCoverageThreshold = Convert.ToInt32(numericUpDown46.Value);
             WriteBuildingCoverageThreshold();
@@ -3569,9 +3569,9 @@ namespace Gral
             {
                 BuildingCellCoverageThreshold = 5;
             }
-            numericUpDown46.ValueChanged -= new System.EventHandler(this.numericUpDown46_ValueChanged);
+            numericUpDown46.ValueChanged -= new System.EventHandler(this.NumericUpDown46_ValueChanged);
             numericUpDown46.Value = BuildingCellCoverageThreshold;
-            numericUpDown46.ValueChanged += new System.EventHandler(this.numericUpDown46_ValueChanged);
+            numericUpDown46.ValueChanged += new System.EventHandler(this.NumericUpDown46_ValueChanged);
         }
     }
 }

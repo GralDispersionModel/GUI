@@ -75,7 +75,7 @@ namespace GralDomForms
                         {
                             zlevels_userdefined = i;
                         }
-                        i = i + 1;
+                        i += 1;
                     }
 
                     zlevels = i;

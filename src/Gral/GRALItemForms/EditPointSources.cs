@@ -281,7 +281,7 @@ namespace GralItemForms
 				SaveArray();
 				textBox2.Text = "";
 				textBox3.Text = "";
-				trackBar1.Maximum = trackBar1.Maximum + 1;
+				trackBar1.Maximum += 1;
 				trackBar1.Value = trackBar1.Maximum;
 				ItemDisplayNr = trackBar1.Maximum - 1;
 			}
@@ -531,7 +531,7 @@ namespace GralItemForms
 					{
 						if (trackBar1.Maximum > 1)
                         {
-                            trackBar1.Maximum = trackBar1.Maximum - 1;
+                            trackBar1.Maximum -= 1;
                         }
 
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);

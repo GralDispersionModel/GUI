@@ -174,7 +174,7 @@ namespace GralItemForms
 		}
 		
 		//increase the number of area sources by one
-		private void button1_Click(object sender, EventArgs e)
+		private void Button1_Click(object sender, EventArgs e)
 		{
 			if ((textBox1.Text != "") && (textBox2.Text != ""))
 			{
@@ -183,7 +183,7 @@ namespace GralItemForms
 				textBox2.Text = "0";
 				textBox2.Text = "";
 				
-				trackBar1.Maximum = trackBar1.Maximum + 1;
+				trackBar1.Maximum += 1;
 				trackBar1.Value = trackBar1.Maximum;
 				ItemDisplayNr = trackBar1.Maximum - 1;
 				Domain.EditSourceShape = true;  // allow input of new vertices
@@ -191,7 +191,7 @@ namespace GralItemForms
 		}
 		
 		//scroll between the area sources
-		private void trackBar1_Scroll(object sender, EventArgs e)
+		private void TrackBar1_Scroll(object sender, EventArgs e)
 		{
 			SaveArray();
 			ItemDisplayNr = trackBar1.Value - 1;
@@ -311,7 +311,7 @@ namespace GralItemForms
         }
 	
 		//remove actual vegetation
-		private void button2_Click(object sender, EventArgs e)
+		private void Button2_Click(object sender, EventArgs e)
 		{
 			RemoveOne(true);
 			RedrawDomain(this, null);
@@ -345,7 +345,7 @@ namespace GralItemForms
 				{
 					if (trackBar1.Maximum > 1)
                     {
-                        trackBar1.Maximum = trackBar1.Maximum - 1;
+                        trackBar1.Maximum -= 1;
                     }
 
                     trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
@@ -360,7 +360,7 @@ namespace GralItemForms
 		}
 
 		//remove all forests
-		private void button3_Click(object sender, EventArgs e)
+		private void Button3_Click(object sender, EventArgs e)
 		{
 			if (St_F.InputBox("Attention", "Delete all vegetation areas??", this) == DialogResult.OK)
 			{
@@ -437,7 +437,7 @@ namespace GralItemForms
 		}
 
 		//select vegetation type
-		public void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		public void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			CultureInfo ic = CultureInfo.InvariantCulture;
 			string[] text = new string[5];
@@ -520,7 +520,7 @@ namespace GralItemForms
 			trackBar1.Maximum = Math.Max(ItemData.Count, 1);
 		}
 
-        private void button6_Click(object sender, EventArgs e)
+        private void Button6_Click(object sender, EventArgs e)
         {
             this.Close(); // does not close the form, because closing hides the form
         }

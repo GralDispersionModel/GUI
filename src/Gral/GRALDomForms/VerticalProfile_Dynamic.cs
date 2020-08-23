@@ -81,7 +81,7 @@ namespace GralDomForms
                         val[i] = Convert.ToDouble(text[1].Replace(".", decsep));
                         if (i < zsp.Length)
                         {
-                            i = i + 1;
+                            i += 1;
                         }
                     }
                     zlevels = i;

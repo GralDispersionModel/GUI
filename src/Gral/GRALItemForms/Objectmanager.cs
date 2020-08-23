@@ -24,23 +24,23 @@ namespace GralItemForms
 {
     public partial class Objectmanager : Form
     {
-        private GralDomain.Domain domain = null;
-        private String decsep;
+        private readonly GralDomain.Domain domain = null;
+        private readonly String decsep;
 		// delegate to send Message, that redraw is needed!
-		public event ForceDomainRedraw object_redraw;   
+		public event ForceDomainRedraw Object_redraw;   
 
         public Objectmanager(GralDomain.Domain f)
         {
             InitializeComponent();
             domain = f;
             listBox1.DrawItem +=
-                 new System.Windows.Forms.DrawItemEventHandler(listBox1_DrawItem);
+                 new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
             listBox1.ItemHeight = listBox1.Font.Height;
             decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
      	}
 
         //OK button
-        public void button5_Click(object sender, EventArgs e)
+        public void Button5_Click(object sender, EventArgs e)
         {
             domain.SaveDomainSettings(0);
             domain.Refresh();
@@ -53,7 +53,7 @@ namespace GralItemForms
         }
 	
         //move selected object and all corresponding properties up
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace GralItemForms
         }
 
         //move selected object and all corresponding properties down
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace GralItemForms
         }
 
         //apply button
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             domain.button8.Visible = false;
             domain.button10.Visible = false;
@@ -176,12 +176,12 @@ namespace GralItemForms
         {
         	if (listBox1.SelectedIndex > -1)
             {
-                listBox1_DoubleClick(null, null);
+                ListBox1_DoubleClick(null, null);
             }
         }
 
         //open layout manager
-        private void listBox1_DoubleClick(object sender, EventArgs e)
+        private void ListBox1_DoubleClick(object sender, EventArgs e)
         {
         	if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
         	{
@@ -212,7 +212,7 @@ namespace GralItemForms
                 
                 foreach (AreaSourceData _as in domain.EditAS.ItemData)
                 {
-                    updatecombobox1(_as.Poll.SourceGroup, layout);
+                    Updatecombobox1(_as.Poll.SourceGroup, layout);
 
                     string poll = "";
                     bool exist = false;
@@ -304,7 +304,7 @@ namespace GralItemForms
                 {
                     for (int j = 0; j < _ls.Poll.Count; j++)
                     {
-                    	updatecombobox1(_ls.Poll[j].SourceGroup, layout);
+                    	Updatecombobox1(_ls.Poll[j].SourceGroup, layout);
                     }
                     
                     string poll = "";
@@ -329,7 +329,7 @@ namespace GralItemForms
                                                 break;
                                             }
                                         }
-                                        if ((exist == false) && (poll != ""))
+                                        if ((exist == false) && (!string.IsNullOrEmpty(poll)))
                                         {
                                             layout.comboBox2.Items.Add(poll);
                                             break;
@@ -435,7 +435,7 @@ namespace GralItemForms
         }
 
         //show/hide selected layer
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             try
             {
@@ -460,7 +460,7 @@ namespace GralItemForms
         }
 
         //select layer
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
@@ -572,7 +572,7 @@ namespace GralItemForms
         }
 
         //change the color of the font when an object is hided or shown
-        private void listBox1_DrawItem(object sender, DrawItemEventArgs e)
+        private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (domain.ItemOptions.Count > 0)
             {
@@ -595,7 +595,7 @@ namespace GralItemForms
         }
         
         //update source groups within the model domain
-        public void updatecombobox1(int SGNumber, Layout layout)
+        public void Updatecombobox1(int SGNumber, Layout layout)
         {
             bool exist = false;
             string[] text = new string[2];
@@ -626,7 +626,7 @@ namespace GralItemForms
             if (exist == false)
             {
                 int index = -1;
-                combo(SGNumber, ref index);
+                Combo(SGNumber, ref index);
                 if (index > -1)
                 {
                     layout.comboBox1.Items.Add(Main.DefinedSourceGroups[index].SG_Name + ": " + Main.DefinedSourceGroups[index].SG_Number.ToString());
@@ -639,7 +639,7 @@ namespace GralItemForms
         }
         
         //search for the correct source group within the defined source groups
-        private void combo(int SGNumber, ref int index)
+        private void Combo(int SGNumber, ref int index)
         {
             int i = 0;
             foreach (SG_Class _sg in Main.DefinedSourceGroups)
@@ -650,7 +650,7 @@ namespace GralItemForms
                     index = i;
                     break;
                 }
-                i = i + 1;
+                i += 1;
             }
         }
 
@@ -660,7 +660,7 @@ namespace GralItemForms
         	{
         		if (MessageBox.Show(this, "Remove selected items?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    button4_Click(null, null);
+                    Button4_Click(null, null);
                 }
             }
             if (e.KeyCode == Keys.Space)
@@ -672,12 +672,12 @@ namespace GralItemForms
             }
             if (e.KeyCode == Keys.Enter)
             {
-                listBox1_DoubleClick(null, null);
+                ListBox1_DoubleClick(null, null);
             }
 
         }
 
-        private void listBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void ListBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -687,7 +687,7 @@ namespace GralItemForms
             }
         }
         //remove selected maps
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
         	//int index = listBox1.SelectedIndex;
         	int index = listBox1.Items.Count;
@@ -754,7 +754,7 @@ namespace GralItemForms
         	// Close all Layout-Forms
 			Layout_Close_Forms();
 			listBox1.DrawItem -=
-                 new System.Windows.Forms.DrawItemEventHandler(listBox1_DrawItem);
+                 new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
 			listBox1.Items.Clear();
 			listBox1.Dispose();
 			toolTip1.Dispose();
@@ -777,9 +777,9 @@ namespace GralItemForms
 			// send Message to domain Form, that redraw is necessary
 			try
 			{
-				if (object_redraw != null)
+				if (Object_redraw != null)
                 {
-                    object_redraw(this, e);
+                    Object_redraw(this, e);
                 }
             }
 			catch

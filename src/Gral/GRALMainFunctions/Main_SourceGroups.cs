@@ -368,7 +368,7 @@ namespace Gral
                             }
                         }
 
-                        a = a +  "                !cell-size for cartesian wind field in GRAL in z-direction, streching factor for increasing cells heights with height";
+                        a += "                !cell-size for cartesian wind field in GRAL in z-direction, streching factor for increasing cells heights with height";
                         myWriter1.WriteLine(a);
 
 
@@ -430,7 +430,7 @@ namespace Gral
         /// <param name="e"></param>
         private void RemoveSourceGroups(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }
@@ -462,7 +462,7 @@ namespace Gral
                     {
                     }
                     listView1.Items.RemoveAt(index);
-                    index = index - 1;
+                    index -= 1;
                 }
             }
             WriteGralGebFile();

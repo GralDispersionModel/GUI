@@ -38,7 +38,7 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMSetReferenceToExitingWindfields(object sender, EventArgs e)
         {
-            if (ProjectName == "")
+            if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded
             }

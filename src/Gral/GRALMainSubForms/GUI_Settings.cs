@@ -54,15 +54,9 @@ namespace GralMainForms
             }
 
             // Copy GRAL/GRAMM.exe
-            #if __MonoCS__
-            Main.CopyCorestoProject = true;
-            radioButton5.Checked = false; // No
-            radioButton6.Checked = true; // Yes
-            #else
             radioButton5.Checked =! Main.CopyCorestoProject; // No
             radioButton6.Checked = Main.CopyCorestoProject; // Yes
-            #endif
-            
+                        
             checkBox1.Checked = Main.CompatibilityToVersion1901;
             
             radioButton3.CheckedChanged += new EventHandler(RadioButton3Click);

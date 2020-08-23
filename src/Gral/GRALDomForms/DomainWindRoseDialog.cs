@@ -169,7 +169,7 @@ namespace GralDomForms
 										}
 										if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
                                         {
-                                            filelength = filelength + 1;
+                                            filelength += 1;
                                         }
                                     }
 								}
@@ -186,7 +186,7 @@ namespace GralDomForms
 											text = reihe.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 											if ((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
                                             {
-                                                filelength = filelength + 1;
+                                                filelength += 1;
                                             }
                                         }
 										if (text[0] == "+")
@@ -205,7 +205,7 @@ namespace GralDomForms
 									while (streamreader.EndOfStream == false)
 									{
 										reihe = streamreader.ReadLine();
-										filelength = filelength + 1;
+										filelength += 1;
 									}
 									//at this stage it is not allowed to delete existing meteoinput-data
 									//numericUpDown7.Value = 10; // Anemometer height

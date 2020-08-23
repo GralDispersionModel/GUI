@@ -48,7 +48,7 @@ namespace GralDomain
 				double xcoor0 = Math.Round((0-TransformX) * BmpScale * MapSize.SizeX + MapSize.West, 1, MidpointRounding.AwayFromZero);
 				double ycoor0 = Math.Round((0-TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
 				double x0 = Math.Floor(xcoor0 / Convert.ToDouble(_drobj.ContourLabelDist));
-				x0 = x0 *  Convert.ToDouble(_drobj.ContourLabelDist);
+				x0 *= Convert.ToDouble(_drobj.ContourLabelDist);
 				int  x0string = (int) x0;
 				x0 = Convert.ToInt32((x0 - form1_west) * factor_x) + TransformX;
 				int st = _drobj.ContourLabelDist;
@@ -81,7 +81,7 @@ namespace GralDomain
                     }
 
                     x0 = Math.Floor(ycoor0 / Convert.ToDouble(_drobj.ContourLabelDist));
-					x0 = x0 *  Convert.ToDouble(_drobj.ContourLabelDist);
+					x0 *= Convert.ToDouble(_drobj.ContourLabelDist);
 					int  y0string = (int) x0;
 					x0 = Convert.ToInt32((x0 - form1_north) * factor_y) + TransformY;
 					

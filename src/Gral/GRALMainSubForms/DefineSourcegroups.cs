@@ -25,8 +25,7 @@ namespace GralMainForms
     /// </summary>
     public partial class Sourcegroups : Form
     {
-        private List<string> sourcegroups = new List<string>();
-        private Main form1 = null;
+        private readonly Main form1 = null;
 
         public Sourcegroups(Main f)
         {
@@ -100,7 +99,7 @@ namespace GralMainForms
             
             for (int i = 1; i < 100; i++)
             {
-                if (_sgname[i] == string.Empty)
+                if (string.IsNullOrEmpty(_sgname[i]))
                 {
                     dataGridView1.Rows[i - 1].DefaultCellStyle.BackColor = Color.Beige;
                 }
@@ -108,7 +107,7 @@ namespace GralMainForms
         }
 
         //close the form and save source group definitions
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             //check for invalid names
             for (int i = 0; i < 99; i++)
@@ -137,14 +136,14 @@ namespace GralMainForms
                     string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
                     string _check_if_empty =  a.Replace(" ", string.Empty);
                     
-                    if (_check_if_empty != string.Empty)
+                    if (!string.IsNullOrEmpty(_check_if_empty))
                     {
                         for (int j = i + 1; j < 99; j++)
                         {
                             if (dataGridView1.Rows[j].Cells[1].Value != null)
                             {
                                 string b = Convert.ToString(dataGridView1.Rows[j].Cells[1].Value);
-                                if (b != string.Empty && a == b) // Change SG Name
+                                if (!string.IsNullOrEmpty(b) && a == b) // Change SG Name
                                 {
                                     dataGridView1.Rows[j].Cells[1].Value = b + "-";
                                 }
@@ -173,7 +172,7 @@ namespace GralMainForms
                             string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
                             string _check_if_empty =  a.Replace(" ", string.Empty);
                             
-                            if (_check_if_empty != string.Empty)
+                            if (!string.IsNullOrEmpty(_check_if_empty))
                             {
                                 myWriter.WriteLine(Convert.ToString(a) + "," + Convert.ToString(i + 1));
                                 Main.DefinedSourceGroups.Add(new SG_Class() {SG_Name = Convert.ToString(a), SG_Number = i + 1});

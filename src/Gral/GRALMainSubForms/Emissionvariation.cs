@@ -30,13 +30,13 @@ namespace GralMainForms
     /// </summary>
     public partial class Emissionvariation : Form
     {
-        private Main form1 = null; 
-        private List<string> moddiurnal = new List<string>(); //collection of diurnal emission modulation data
-        private List<string> modseasonal = new List<string>(); //collection of seasonal emission modulation data
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+        private readonly Main form1 = null; 
+        private readonly List<string> moddiurnal = new List<string>(); //collection of diurnal emission modulation data
+        private readonly List<string> modseasonal = new List<string>(); //collection of seasonal emission modulation data
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private float pixel = 1;
         private int index;
-        private string[] months = new string[12]{"Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+        private readonly string[] months = new string[12]{"Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
         private bool changes_saved = true;		
         
         //private bool _set_GRAL_Files_Only = false;
@@ -203,7 +203,7 @@ namespace GralMainForms
         {
         	index = ind;
         	Emissionvariation_Load(null, null);
-        	button1_Click(null, null);
+        	Button1_Click(null, null);
         }
 
         private void Emissionvariation_Load(object sender, EventArgs e)
@@ -273,7 +273,7 @@ namespace GralMainForms
                                 comboBox2.SelectedIndex = j;
                                 break;
                             }
-                            j = j + 1;
+                            j += 1;
                         }
                         //find the seasonal modulation
                         j = 0;
@@ -284,7 +284,7 @@ namespace GralMainForms
                                 comboBox1.SelectedIndex = j;
                                 break;
                             }
-                            j = j + 1;
+                            j += 1;
                         }
                     }
                 }
@@ -305,7 +305,7 @@ namespace GralMainForms
         }
 
         //show listview for input of a new diurnal emission modulation and add new data
-        private void button20_Click(object sender, EventArgs e)
+        private void Button20_Click(object sender, EventArgs e)
         {
             label2.Show();
             textBox1.Show();
@@ -316,7 +316,7 @@ namespace GralMainForms
             bool ok = true;
             if (textBox1.Text != "")
             {
-                text = text + textBox1.Text;
+                text += textBox1.Text;
                 for (int i = 0; i < 24; i++)
                 {
                     try
@@ -348,14 +348,14 @@ namespace GralMainForms
         		text1 = text.Split(new char[] { '\t', ',' });
         		if (text1.Length > 0 && String.CompareOrdinal(newText, text1[0]) == 0)
         		{
-        			newText = newText + "_";
+        			newText += "_";
         		}
         	}       	
         	return newText;
         }
         
         //add new data for emission modulation SAVE Button
-        private void button6_Click(object sender, EventArgs e)
+        private void Button6_Click(object sender, EventArgs e)
         {
         	if (textBox1.Text == String.Empty && textBox2.Text == String.Empty)
         	{
@@ -366,11 +366,11 @@ namespace GralMainForms
         	
             string text = "";
             bool ok = true;
-            if (textBox1.Text != "")
+            if (!string.IsNullOrEmpty(textBox1.Text))
             {
             	textBox1.Text = Check_Modulation_Name(textBox1.Text, moddiurnal);
             	
-            	text = text + textBox1.Text;
+            	text += textBox1.Text;
                 for (int i = 0; i < 24; i++)
                 {
                     try
@@ -398,7 +398,7 @@ namespace GralMainForms
             {
             	textBox2.Text = Check_Modulation_Name(textBox2.Text, modseasonal);
             	
-                text = text + textBox2.Text;
+                text += textBox2.Text;
                 for (int i = 0; i < 12; i++)
                 {
                     try
@@ -423,7 +423,7 @@ namespace GralMainForms
         }
 
         //remove selected diurnal emission modulation
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -446,7 +446,7 @@ namespace GralMainForms
         }
 
         //remove selected seasonal emission modulation
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
 
             try
@@ -470,7 +470,7 @@ namespace GralMainForms
         }
 
         //show listview for input of a new seasonal emission modulation
-        private void button19_Click(object sender, EventArgs e)
+        private void Button19_Click(object sender, EventArgs e)
         {
             label1.Show();
             textBox2.Show();
@@ -482,7 +482,7 @@ namespace GralMainForms
             bool ok = true;
             if (textBox2.Text != "")
             {
-                text = text + textBox2.Text;
+                text += textBox2.Text;
                 for (int i = 0; i < 12; i++)
                 {
                     try
@@ -507,7 +507,7 @@ namespace GralMainForms
 		}
 
         //close form and save all entries
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
         	string newPath = String.Empty;
         	//write emission variations to files
@@ -675,7 +675,7 @@ namespace GralMainForms
         }
 
 		//select diurnal emission variation
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             string[] text1 = new string[30];
             //listView1.Items.Clear();
@@ -704,7 +704,7 @@ namespace GralMainForms
         }
 
         //select seasonal emission variation
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string[] text1 = new string[30];
             //listView2.Items.Clear();
@@ -733,7 +733,7 @@ namespace GralMainForms
         }
 
         //draw selected seasonal emission modulation
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void Panel1_Paint(object sender, PaintEventArgs e)
         {
         	Pen p = new Pen(Color.Black, 2);
         	Pen p1 = new Pen(Color.Black, 1);
@@ -782,7 +782,7 @@ namespace GralMainForms
         }
 
         //draw selected diurnal emission modulation
-        private void panel2_Paint(object sender, PaintEventArgs e)
+        private void Panel2_Paint(object sender, PaintEventArgs e)
         {
         	Pen p = new Pen(Color.Black, 2);
         	Pen p1 = new Pen(Color.Black, 1);
@@ -820,7 +820,7 @@ namespace GralMainForms
                     e.Graphics.DrawString(Convert.ToString(i) + ":00h", _smallFont,  _blackBrush, Convert.ToInt32(42 * pixel) + Convert.ToInt32(21 * pixel) * i, Convert.ToInt32(290 * pixel), format2);
                     counter = 0;
                 }
-                counter = counter + 1;
+                counter += 1;
             }
             for (int i = 0; i < 5; i++)
             {
@@ -837,14 +837,14 @@ namespace GralMainForms
         }
 
         //copy figure to clipboard
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
             Bitmap bitMap = new Bitmap(panel1.Width, panel1.Height);
             panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Clipboard.SetDataObject(bitMap);
         }
 
-        private void button5_Click_1(object sender, EventArgs e)
+        private void Button5_Click_1(object sender, EventArgs e)
         {
             Bitmap bitMap = new Bitmap(panel2.Width, panel2.Height);
             panel2.DrawToBitmap(bitMap, new Rectangle(0, 0, panel2.Width, panel2.Height));
@@ -869,7 +869,7 @@ namespace GralMainForms
         	{
         		if(MessageBox.Show(this, "The settings are not saved. Do you like to save the new settings?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
         		{
-        			button1_Click(null, null);
+        			Button1_Click(null, null);
         		}
         	}
         	
@@ -921,7 +921,7 @@ namespace GralMainForms
         }
 
         //input of values
-        void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView dataGrid = sender as DataGridView;
             int col = e.ColumnIndex;

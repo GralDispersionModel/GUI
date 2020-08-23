@@ -121,7 +121,7 @@ namespace Gral
                     {
                         for (int i = 0; i < trackbar; i++)
                         {
-                            frequency = frequency + DispSituationfrequ[i];
+                            frequency += DispSituationfrequ[i];
                         }
                         if (Convert.ToInt32(frequency) < progressBar4.Maximum)
                         {
@@ -226,8 +226,8 @@ namespace Gral
         //read the file PercentGramm.txt when it is changed by GRAMM.exe
         void PercentGrammChanged(object sender, FileSystemEventArgs e)
         {
-            progressBar2.Minimum = 0;
-            progressBar2.Maximum = 101;
+            //progressBar2.Minimum = 0;
+            //progressBar2.Maximum = 101;
 
             double trackbar = -1;
             string text;
@@ -283,7 +283,7 @@ namespace Gral
                 {
                     for (int i = 0; i < trackbar - 1; i++)
                     {
-                        frequency = frequency + DispSituationfrequ[i];
+                        frequency += DispSituationfrequ[i];
                     }
                     if (Convert.ToInt32(frequency) < progressBar1.Maximum)
                     {

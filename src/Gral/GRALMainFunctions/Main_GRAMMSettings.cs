@@ -131,7 +131,7 @@ namespace Gral
         {
             if (EmifileReset == true)
             {
-                if (textBox12.Text != "")
+                if (!string.IsNullOrEmpty(textBox12.Text))
                 {
                     WriteGrammGebFile();
                 }

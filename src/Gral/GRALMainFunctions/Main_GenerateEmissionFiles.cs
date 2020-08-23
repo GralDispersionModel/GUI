@@ -1075,7 +1075,7 @@ namespace Gral
                     {
                         if (PollutantList[_poll.Pollutant[i]].Equals(Pollmod[listBox5.SelectedIndex]))
                         {
-                            if (sg < totalemissions.GetUpperBound(0))
+                            if (sg <= totalemissions.GetUpperBound(0))
                             {
                                 totalemissions[sg] += _poll.EmissionRate[i] * 0.365 * 24;
                             }

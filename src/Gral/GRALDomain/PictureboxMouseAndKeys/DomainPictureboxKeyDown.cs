@@ -216,8 +216,8 @@ namespace GralDomain
                 movey = Convert.ToInt32(100);
             }
 
-            TransformX = TransformX + movex;
-            TransformY = TransformY + movey;
+            TransformX += movex;
+            TransformY += movey;
 
             // Rotate a copied item
             if (keyData == Keys.L || keyData == (Keys.L | Keys.Shift))
@@ -246,7 +246,7 @@ namespace GralDomain
             //zoom in
             if (keyData == Keys.Oemplus || keyData == Keys.Add)
             {
-                XFac = XFac * 1.5;
+                XFac *= 1.5;
                 BmpScale = 1 / XFac;
                 TransformX = Convert.ToInt32((TransformX * 1.5 + (picturebox1.Width / 2 - (picturebox1.Width / 2) * 1.5)));
                 TransformY = Convert.ToInt32((TransformY * 1.5 + (picturebox1.Height / 2 - (picturebox1.Height / 2) * 1.5)));
@@ -268,7 +268,7 @@ namespace GralDomain
             //zoom out
             if (keyData == Keys.OemMinus || keyData == Keys.Subtract)
             {
-                XFac = XFac / 1.5;
+                XFac /= 1.5;
                 BmpScale = 1 / XFac;
                 TransformX = Convert.ToInt32((TransformX / 1.5 + (picturebox1.Width / 2 - (picturebox1.Width / 2) / 1.5)));
                 TransformY = Convert.ToInt32((TransformY / 1.5 + (picturebox1.Height / 2 - (picturebox1.Height / 2) / 1.5)));

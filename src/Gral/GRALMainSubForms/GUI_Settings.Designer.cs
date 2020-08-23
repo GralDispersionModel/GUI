@@ -95,7 +95,7 @@ namespace GralMainForms
             this.radioButton5.Name = "radioButton5";
             this.radioButton5.Size = new System.Drawing.Size(450, 24);
             this.radioButton5.TabIndex = 3;
-            this.radioButton5.Text = "No, start the core in the program folder (no  effect at LINUX)";
+            this.radioButton5.Text = "No, start the core in the program folder  (default)";
             this.radioButton5.UseVisualStyleBackColor = true;
             // 
             // radioButton6
@@ -104,7 +104,7 @@ namespace GralMainForms
             this.radioButton6.Name = "radioButton6";
             this.radioButton6.Size = new System.Drawing.Size(275, 24);
             this.radioButton6.TabIndex = 2;
-            this.radioButton6.Text = "Yes (default)";
+            this.radioButton6.Text = "Yes";
             this.radioButton6.UseVisualStyleBackColor = true;
             // 
             // button1

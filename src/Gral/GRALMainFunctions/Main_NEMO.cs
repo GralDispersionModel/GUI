@@ -33,7 +33,7 @@ namespace Gral
 {
     public partial class Main
     {
-        public class Nemo
+        public class Main_NEMO
         {
             //////////////////////////////////////////////////////////////////////////
             //
@@ -42,8 +42,8 @@ namespace Gral
             //////////////////////////////////////////////////////////////////////////
             private bool sep;                                     //flag determining if line source emissions computed by NEMO are split into several source groups
             private int[] sgroups = { 1, 1, 1, 1 };               //source groups road emissions splitting after NEMO computations
-            private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;    //decimal separator of the system
-            private CultureInfo ic = CultureInfo.InvariantCulture;
+            private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;    //decimal separator of the system
+            private readonly CultureInfo ic = CultureInfo.InvariantCulture;
             
             public void NemoInput(bool seperation,int sg1,int sg2,int sg3,int sg4)
             {
@@ -88,7 +88,7 @@ namespace Gral
                             {
                                 if ((inputfile.Substring(0, 2) != "c ") && (inputfile.Substring(0, 2) != "C "))
                                 {
-                                    count = count + 1;
+                                    count += 1;
                                 }
                                 if (count == 7)
                                     break;
@@ -851,7 +851,7 @@ namespace Gral
                                         }
                                     }
                                 }
-                                linenumber=linenumber+1;
+                                linenumber+=1;
                             }
                             //myWriter.WriteLine("e");
                         }

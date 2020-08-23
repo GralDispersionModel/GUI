@@ -23,7 +23,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 
 namespace GralBackgroundworkers
 {

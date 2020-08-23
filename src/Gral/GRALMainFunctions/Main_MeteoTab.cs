@@ -112,7 +112,7 @@ namespace Gral
                             int ret;
                             if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
                             {
-                                filelength = filelength + 1;
+                                filelength += 1;
                             }
                         }
                     }
@@ -129,7 +129,7 @@ namespace Gral
                                 text = reihe.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 if ((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
                                 {
-                                    filelength = filelength + 1;
+                                    filelength += 1;
                                 }
                             }
                             if (text[0] == "+")
@@ -153,7 +153,7 @@ namespace Gral
                         while (streamreader.EndOfStream == false)
                         {
                             reihe = streamreader.ReadLine();
-                            filelength = filelength + 1;
+                            filelength += 1;
                         }
                         //at this stage it is not allowed to delete existing meteoinput-data
                         //numericUpDown7.Value = 10; // Anemometer height
@@ -546,7 +546,7 @@ namespace Gral
                                 }
 
                                 wclassFrequency[wklass] = wclassFrequency[wklass] + 1;
-                                count = count + 1;
+                                count += 1;
                                 wind.Add(data);
                             }
                         }
@@ -637,7 +637,7 @@ namespace Gral
                                     j++;
                                 }
                                 meanwind += data.Vel;
-                                count = count + 1;
+                                count += 1;
                             }
                         }
 
@@ -723,7 +723,7 @@ namespace Gral
                                 //compute stability classes frequency
                                 int index = data.StabClass - 1;
                                 sclassFrequency[index] = sclassFrequency[index] + 1;
-                                count = count + 1;
+                                count += 1;
                                 wind.Add(data);
                             }
                         }

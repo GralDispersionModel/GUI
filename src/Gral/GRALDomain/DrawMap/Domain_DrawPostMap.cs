@@ -105,12 +105,12 @@ namespace GralDomain
                             addonex = 0;
                             if (ix > ixold + recwidth)
                             {
-                                ix = ix - 1;
+                                ix -= 1;
                                 addonex = 1;
                             }
                             else if (ix < ixold + recwidth)
                             {
-                                ix = ix + 1;
+                                ix += 1;
                                 addonex = -1;
                             }
                             ixold = ix + addonex;

@@ -31,7 +31,7 @@ namespace GralShape
     /// </summary>
     public partial class ShapeLineDialog : Form
     {
-        private GralDomain.Domain domain = null;
+        private readonly GralDomain.Domain domain = null;
         
         private readonly string ShapeFileName;
         private readonly Deposition[] dep = new Deposition[10];
@@ -141,13 +141,13 @@ namespace GralShape
                 but1[nr].Text = "Gral.Deposition " + (nr + 1).ToString();
                 Controls.Add(but1[nr]);
                 toolTip1.SetToolTip(but1[nr], "Click to set deposition - green: deposition set");
-                but1[nr].Click += new EventHandler(edit_deposition);
+                but1[nr].Click += new EventHandler(Edit_deposition);
                 x++;
             }
         }
 
         //add line data
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             if (comboBox4.SelectedIndex != 0 && comboBox25.SelectedIndex != 0 &&
                 comboBox4.SelectedItem != null && comboBox25.SelectedItem != null)
@@ -326,7 +326,7 @@ namespace GralShape
                                 try
                                 {
                                     string _sgroup = Convert.ToString(Convert.ToInt32(dataGridView1[Convert.ToString(comboBox4.SelectedItem), SHP_Line].Value), ic);
-                                    if (_sgroup == "")
+                                    if (string.IsNullOrEmpty(_sgroup))
                                     {
                                         _sgroup = "1";
                                     }
@@ -783,7 +783,7 @@ namespace GralShape
         }
 
         //add column
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             using (ShapeImport_AddColumn shpimport = new ShapeImport_AddColumn())
             {
@@ -878,7 +878,7 @@ namespace GralShape
         }
 
         //delete column
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             string header = "Height";
             if (St_F.InputBoxValue("Remove column", "Name:", ref header, this) == DialogResult.OK)
@@ -912,10 +912,10 @@ namespace GralShape
         void LabelMouseDoubleClick(object sender, MouseEventArgs e)
         {
             //MessageBox.Show(this, sender.ToString());
-            edit_deposition(sender, e);
+            Edit_deposition(sender, e);
         }
         
-        private void edit_deposition(object sender, EventArgs e)
+        private void Edit_deposition(object sender, EventArgs e)
         {
             int nr = -1;
             for (int i = 0; i < 10; i++)
@@ -991,7 +991,7 @@ namespace GralShape
             }
         }
         
-        private void comma1(object sender, KeyPressEventArgs e)
+        private void Comma1(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == ',')
             {
@@ -1024,7 +1024,7 @@ namespace GralShape
         {
               foreach(Button but in but1)
             {
-                but.Click -= new EventHandler(edit_deposition);
+                but.Click -= new EventHandler(Edit_deposition);
             }
         }
             
@@ -1128,7 +1128,7 @@ namespace GralShape
             sg.Clear();
          }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
             Close();
         }

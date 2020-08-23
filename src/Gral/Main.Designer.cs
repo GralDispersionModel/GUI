@@ -205,6 +205,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.OpenMetFile = new System.Windows.Forms.Button();
             this.Topography = new System.Windows.Forms.TabPage();
+            this.checkBox36 = new System.Windows.Forms.CheckBox();
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.numericUpDown44 = new System.Windows.Forms.NumericUpDown();
             this.label99 = new System.Windows.Forms.Label();
@@ -500,7 +501,7 @@
             this.button55.TabIndex = 47;
             this.toolTip1.SetToolTip(this.button55, "Info");
             this.button55.UseVisualStyleBackColor = true;
-            this.button55.Click += new System.EventHandler(this.button55_Click);
+            this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
             // button52
             // 
@@ -678,7 +679,7 @@
             this.checkBox29.Text = "adapt. rough.";
             this.toolTip1.SetToolTip(this.checkBox29, "Enable the transient GRAL mode");
             this.checkBox29.UseVisualStyleBackColor = true;
-            this.checkBox29.CheckStateChanged += new System.EventHandler(this.checkBox29_CheckStateChanged);
+            this.checkBox29.CheckStateChanged += new System.EventHandler(this.CheckBox29_CheckStateChanged);
             // 
             // numericUpDown45
             // 
@@ -725,7 +726,7 @@
             this.button57.TabIndex = 60;
             this.toolTip1.SetToolTip(this.button57, "Special settings");
             this.button57.UseVisualStyleBackColor = true;
-            this.button57.Click += new System.EventHandler(this.button57_Click);
+            this.button57.Click += new System.EventHandler(this.Button57_Click);
             // 
             // numericUpDown43
             // 
@@ -748,7 +749,7 @@
             0,
             0,
             0});
-            this.numericUpDown43.ValueChanged += new System.EventHandler(this.numericUpDown43_ValueChanged);
+            this.numericUpDown43.ValueChanged += new System.EventHandler(this.NumericUpDown43_ValueChanged);
             // 
             // label15
             // 
@@ -824,7 +825,7 @@
             this.radioButton5.Text = "Prognostic approach";
             this.toolTip1.SetToolTip(this.radioButton5, resources.GetString("radioButton5.ToolTip"));
             this.radioButton5.UseVisualStyleBackColor = true;
-            this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton5_CheckedChanged);
+            this.radioButton5.CheckedChanged += new System.EventHandler(this.RadioButton5_CheckedChanged);
             // 
             // label65
             // 
@@ -861,7 +862,7 @@
             0,
             0,
             0});
-            this.numericUpDown42.ValueChanged += new System.EventHandler(this.numericUpDown42_ValueChanged);
+            this.numericUpDown42.ValueChanged += new System.EventHandler(this.NumericUpDown42_ValueChanged);
             // 
             // radioButton4
             // 
@@ -874,7 +875,7 @@
             this.radioButton4.Text = "Diagnostic approach";
             this.toolTip1.SetToolTip(this.radioButton4, resources.GetString("radioButton4.ToolTip"));
             this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.RadioButton4_CheckedChanged);
             // 
             // radioButton3
             // 
@@ -887,7 +888,7 @@
             this.radioButton3.Text = "None";
             this.toolTip1.SetToolTip(this.radioButton3, "No buildings");
             this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.RadioButton3_CheckedChanged);
             // 
             // numericUpDown39
             // 
@@ -1411,7 +1412,7 @@
             this.button53.TabIndex = 26;
             this.toolTip1.SetToolTip(this.button53, "Show the vertical layer heights");
             this.button53.UseVisualStyleBackColor = true;
-            this.button53.Click += new System.EventHandler(this.button53_Click);
+            this.button53.Click += new System.EventHandler(this.Button53_Click);
             // 
             // button12
             // 
@@ -1423,7 +1424,7 @@
             this.button12.TabIndex = 24;
             this.toolTip1.SetToolTip(this.button12, "Set height depending stretching factors");
             this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
+            this.button12.Click += new System.EventHandler(this.Button12_Click);
             // 
             // label75
             // 
@@ -1616,7 +1617,7 @@
             this.numericUpDown41.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown41, "0: lower compression rate 1: higher compression rate 2: faster for huge projects " +
         "with terrain or many buildings");
-            this.numericUpDown41.ValueChanged += new System.EventHandler(this.numericUpDown41_ValueChanged);
+            this.numericUpDown41.ValueChanged += new System.EventHandler(this.NumericUpDown41_ValueChanged);
             // 
             // checkBox26
             // 
@@ -1998,7 +1999,7 @@
             // 
             // SG_Name_List
             // 
-            this.SG_Name_List.Text = "SG Name";
+            this.SG_Name_List.Text = "Source group name";
             this.SG_Name_List.Width = 220;
             // 
             // button15
@@ -2049,8 +2050,6 @@
             // 
             // label40
             // 
-            this.label40.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label40.AutoSize = true;
             this.label40.Location = new System.Drawing.Point(3, 89);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(24, 20);
@@ -2059,8 +2058,6 @@
             // 
             // label41
             // 
-            this.label41.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label41.AutoSize = true;
             this.label41.Location = new System.Drawing.Point(252, 90);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(20, 20);
@@ -2069,8 +2066,6 @@
             // 
             // label42
             // 
-            this.label42.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label42.AutoSize = true;
             this.label42.Location = new System.Drawing.Point(126, 153);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(20, 20);
@@ -2079,8 +2074,6 @@
             // 
             // label43
             // 
-            this.label43.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label43.AutoSize = true;
             this.label43.Location = new System.Drawing.Point(126, 21);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(20, 20);
@@ -2089,9 +2082,8 @@
             // 
             // textBox12
             // 
-            this.textBox12.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.textBox12.Enabled = false;
-            this.textBox12.Location = new System.Drawing.Point(148, 87);
+            this.textBox12.Location = new System.Drawing.Point(151, 87);
             this.textBox12.Name = "textBox12";
             this.textBox12.ReadOnly = true;
             this.textBox12.Size = new System.Drawing.Size(100, 25);
@@ -2100,9 +2092,8 @@
             // 
             // textBox13
             // 
-            this.textBox13.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBox13.Enabled = false;
-            this.textBox13.Location = new System.Drawing.Point(26, 87);
+            this.textBox13.Location = new System.Drawing.Point(29, 87);
             this.textBox13.Name = "textBox13";
             this.textBox13.ReadOnly = true;
             this.textBox13.Size = new System.Drawing.Size(100, 25);
@@ -2111,9 +2102,8 @@
             // 
             // textBox14
             // 
-            this.textBox14.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.textBox14.Enabled = false;
-            this.textBox14.Location = new System.Drawing.Point(85, 125);
+            this.textBox14.Location = new System.Drawing.Point(88, 125);
             this.textBox14.Name = "textBox14";
             this.textBox14.ReadOnly = true;
             this.textBox14.Size = new System.Drawing.Size(100, 25);
@@ -2122,9 +2112,8 @@
             // 
             // textBox15
             // 
-            this.textBox15.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox15.Enabled = false;
-            this.textBox15.Location = new System.Drawing.Point(85, 51);
+            this.textBox15.Location = new System.Drawing.Point(88, 51);
             this.textBox15.Name = "textBox15";
             this.textBox15.ReadOnly = true;
             this.textBox15.Size = new System.Drawing.Size(100, 25);
@@ -2179,7 +2168,6 @@
             // 
             // label24
             // 
-            this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(3, 90);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(24, 20);
@@ -2198,8 +2186,6 @@
             // 
             // label23
             // 
-            this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(252, 90);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(20, 20);
@@ -2208,9 +2194,7 @@
             // 
             // label22
             // 
-            this.label22.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(129, 168);
+            this.label22.Location = new System.Drawing.Point(129, 158);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(20, 20);
             this.label22.TabIndex = 5;
@@ -2218,8 +2202,6 @@
             // 
             // label21
             // 
-            this.label21.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(126, 21);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(20, 20);
@@ -2228,7 +2210,6 @@
             // 
             // textBox7
             // 
-            this.textBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox7.Enabled = false;
             this.textBox7.Location = new System.Drawing.Point(151, 87);
             this.textBox7.Name = "textBox7";
@@ -2249,7 +2230,6 @@
             // 
             // textBox5
             // 
-            this.textBox5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox5.Enabled = false;
             this.textBox5.Location = new System.Drawing.Point(88, 128);
             this.textBox5.Name = "textBox5";
@@ -2260,7 +2240,6 @@
             // 
             // textBox2
             // 
-            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(88, 44);
             this.textBox2.Name = "textBox2";
@@ -2369,7 +2348,7 @@
             this.button54.Text = "Edit";
             this.toolTip1.SetToolTip(this.button54, "Set decay rates for each source group");
             this.button54.UseVisualStyleBackColor = true;
-            this.button54.Click += new System.EventHandler(this.button54_Click);
+            this.button54.Click += new System.EventHandler(this.Button54_Click);
             // 
             // groupBox21
             // 
@@ -3011,6 +2990,7 @@
             // Topography
             // 
             this.Topography.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.Topography.Controls.Add(this.checkBox36);
             this.Topography.Controls.Add(this.groupBox25);
             this.Topography.Controls.Add(this.label95);
             this.Topography.Controls.Add(this.button105);
@@ -3031,6 +3011,16 @@
             this.Topography.Size = new System.Drawing.Size(814, 539);
             this.Topography.TabIndex = 4;
             this.Topography.Text = "TOPOGRAPHY";
+            // 
+            // checkBox36
+            // 
+            this.checkBox36.AutoSize = true;
+            this.checkBox36.Location = new System.Drawing.Point(297, 306);
+            this.checkBox36.Name = "checkBox36";
+            this.checkBox36.Size = new System.Drawing.Size(315, 17);
+            this.checkBox36.TabIndex = 61;
+            this.checkBox36.Text = "Use landuse presets for GRAMM V19.01 or previous versions";
+            this.checkBox36.UseVisualStyleBackColor = true;
             // 
             // groupBox25
             // 
@@ -3076,7 +3066,7 @@
             0,
             0,
             0});
-            this.numericUpDown44.ValueChanged += new System.EventHandler(this.numericUpDown44_ValueChanged);
+            this.numericUpDown44.ValueChanged += new System.EventHandler(this.NumericUpDown44_ValueChanged);
             // 
             // label99
             // 
@@ -3111,7 +3101,7 @@
             0,
             0,
             0});
-            this.numericUpDown37.ValueChanged += new System.EventHandler(this.numericUpDown37_ValueChanged);
+            this.numericUpDown37.ValueChanged += new System.EventHandler(this.NumericUpDown37_ValueChanged);
             // 
             // label5
             // 
@@ -3142,7 +3132,7 @@
             this.dateTimePicker1.Size = new System.Drawing.Size(246, 25);
             this.dateTimePicker1.TabIndex = 63;
             this.toolTip1.SetToolTip(this.dateTimePicker1, "Set the beginning date and time of the transient GRAMM simulation");
-            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.DateTimePicker1_ValueChanged);
             // 
             // numericUpDown40
             // 
@@ -3162,7 +3152,7 @@
             0,
             0,
             0});
-            this.numericUpDown40.ValueChanged += new System.EventHandler(this.numericUpDown40_ValueChanged);
+            this.numericUpDown40.ValueChanged += new System.EventHandler(this.NumericUpDown40_ValueChanged);
             // 
             // label62
             // 
@@ -3196,7 +3186,7 @@
             this.toolTip1.SetToolTip(this.checkBox35, "ERA5 are global meteorological  reanalysis data\r\nprovided by ECMWF with a horizon" +
         "tal resolution\r\n of appr. 30km.");
             this.checkBox35.UseVisualStyleBackColor = true;
-            this.checkBox35.CheckedChanged += new System.EventHandler(this.checkBox35_CheckedChanged);
+            this.checkBox35.CheckedChanged += new System.EventHandler(this.CheckBox35_CheckedChanged);
             // 
             // label95
             // 
@@ -4531,6 +4521,7 @@
             // 
             this.progressBar2.Location = new System.Drawing.Point(3, 122);
             this.progressBar2.Margin = new System.Windows.Forms.Padding(2);
+            this.progressBar2.Maximum = 101;
             this.progressBar2.Name = "progressBar2";
             this.progressBar2.Size = new System.Drawing.Size(165, 18);
             this.progressBar2.Step = 1;
@@ -4552,6 +4543,7 @@
             // 
             this.progressBar1.Location = new System.Drawing.Point(4, 78);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
+            this.progressBar1.Maximum = 101;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(165, 18);
             this.progressBar1.Step = 1;
@@ -5632,6 +5624,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown numericUpDown46;
         private System.Windows.Forms.Label label104;
+        private System.Windows.Forms.CheckBox checkBox36;
     }
 }
 
