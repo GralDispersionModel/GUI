@@ -78,7 +78,7 @@ namespace GralBackgroundworkers
             }
             catch(Exception ex)
             {
-                BackgroundThreadMessageBox (ex.Message);
+                BackgroundThreadMessageBox ("Reading emissionsxxx.dat " + ex.Message);
                 return;
             }
 
@@ -100,8 +100,7 @@ namespace GralBackgroundworkers
             //int indexi = 0;
             //int indexj = 0;
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
-            double[] fmod = new double[maxsource];
-            
+           
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
             ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
@@ -121,7 +120,7 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    BackgroundThreadMessageBox ("Can´t read meteopgt.all");
+                    BackgroundThreadMessageBox ("Error when reading meteopgt.all");
                 }
             }
             
@@ -141,7 +140,7 @@ namespace GralBackgroundworkers
             }
             if (mettimefilelength == 0) // File-lenght must > 0
             {
-                BackgroundThreadMessageBox ("Can´t read mettimeseries.dat");
+                BackgroundThreadMessageBox ("Error when reading mettimeseries.dat");
                 return; // leave method
             }
             //mettimefilelength--;
@@ -215,7 +214,7 @@ namespace GralBackgroundworkers
                 }
                 catch(Exception ex)
                 {
-                    BackgroundThreadMessageBox (ex.Message + " Can´t read emissions_timeseries.txt - evaluation stopped");
+                    BackgroundThreadMessageBox (ex.Message + " Error when reading emissions_timeseries.txt - evaluation stopped");
                     return;
                 }
             }
@@ -256,12 +255,12 @@ namespace GralBackgroundworkers
             }
             catch (Exception ex)
             {
-                BackgroundThreadMessageBox(ex.Message);
+                BackgroundThreadMessageBox("Reset emission factors for transient calculation " + ex.Message);
                 return;
             }
             
             
-            int arraylength = Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100);   
+            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100));   
             float[][][][] concpercentile = CreateArray<float[][][]>(mydata.CellsGralX + 1, () => CreateArray<float[][]>(mydata.CellsGralY + 1, () => CreateArray<float[]>(maxsource + 1, () => new float[arraylength])));
 
             
@@ -386,7 +385,7 @@ namespace GralBackgroundworkers
                             }
                             //itm++;
                         });
-                        thisLock = null;
+                        thisLock = null; 
 
                         SetText("Day.Month: " + day + "." + month);
                         
@@ -399,7 +398,7 @@ namespace GralBackgroundworkers
                             numhour += 1;
                             int std = Convert.ToInt32(hour);
                             int mon = Convert.ToInt32(month) - 1;		
-                            Object thisLock2 = new Object();							
+                            
                             //for (int ii = 0; ii <= mydata.CellsGralX; ii++)
                             Parallel.For(0, mydata.CellsGralX, ii =>
                             {
@@ -407,78 +406,46 @@ namespace GralBackgroundworkers
                                 {
                                     float fac = 0;
                                     float fac_total = 0;
-                                    
+                                    float[] _ConcCell = conc[ii][j];
+                                    float[][] _ConcPerc = concpercentile[ii][j];
+
                                     int itmi = 0;
                                     foreach (string source_group_name in sg_names)
                                     {
-                                        //compute mean emission modulation factor
-                                        if ((ii == 0) && (j == 0))
-                                        {
-                                            lock(thisLock2)
-                                            {
-                                                fmod[itmi] = fmod[itmi] + emifac_day[std - hourplus, itmi] * emifac_mon[mon, itmi] * emifac_timeseries[count_ws, itmi];
-                                            }
-                                        }
-                                        
-                                        fac = mydata.EmissionFactor * conc[ii][j][itmi] * (float)emifac_day[std - hourplus, itmi] * (float)emifac_mon[mon, itmi] * (float)emifac_timeseries[count_ws, itmi];
+                                        fac = mydata.EmissionFactor * _ConcCell[itmi] * (float)emifac_day[std - hourplus, itmi] * (float)emifac_mon[mon, itmi] * (float)emifac_timeseries[count_ws, itmi];
                                         fac_total += fac;
 
                                         //compute percentile concentrations for each source group and in total
-                                        float[] _conc = concpercentile[ii][j][itmi];
-                                        for (int p = arraylength-1; p >= 0; p--)
+                                        float[] _conc = _ConcPerc[itmi];
+                                        //check whether actual concentration is higher than already stored concentrations
+                                        int pcomp = BinarySearch(_conc, fac);
+                                        if (pcomp >= 0)
                                         {
-                                            //check whether actual concentration is higher than already stored concentrations
-                                            if (fac > _conc[p])
-                                            {
-                                                //re-order all concentrations from that point on
-                                                for (int l = 0; l < p;l++ )
-                                                {
-                                                    _conc[l] = _conc[l+1];
-                                                }
-                                                _conc[p] = fac;
-                                                break;
-                                            }
+                                            Array.Copy(_conc, 1, _conc, 0, pcomp);
+                                            _conc[pcomp] = fac;
                                         }
                                         itmi++;
                                     }
 
                                     //compute total percentile over all source groups
-                                    for (int p = arraylength - 1; p >= 0; p--)
-                                    {
-                                        float[] _conc = concpercentile[ii][j][maxsource];
+                                    { 
+                                        float[] _conc = _ConcPerc[maxsource];
                                         //check whether actual concentration is higher than already stored concentrations
-                                        if (fac_total > _conc[p])
+                                        int pcomp = BinarySearch(_conc, fac_total);
+                                        if (pcomp >= 0)
                                         {
-                                            //re-order all concentrations from that point on
-                                            for (int l = 0; l < p; l++)
-                                            {
-                                                _conc[l] = _conc[l+1];
-                                            }
-                                            _conc[p] = fac_total;
-                                            break;
+                                            Array.Copy(_conc, 1, _conc, 0, pcomp);
+                                            _conc[pcomp] = fac_total;
                                         }
                                     }
                                 }
                             });
-                            thisLock2 = null;
                         }
                     }
                 }
                 
             }
             
-            
-            //final computations for mean modulation factors
-            if (nnn > 0)
-            {
-                itm=0;
-                foreach (string source_group_name in sg_names)
-                {
-                    fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
-                    itm++;
-                }
-            }
-
             string file;
             string name;
             //write mean concentration hour files for each source group
@@ -532,7 +499,7 @@ namespace GralBackgroundworkers
                     }
                     catch(Exception ex)
                     {
-                        BackgroundThreadMessageBox (ex.Message);
+                        BackgroundThreadMessageBox ("Write results for source groups " + ex.Message);
                     }
                     
                     itm++;
@@ -574,10 +541,53 @@ namespace GralBackgroundworkers
                 }
                 catch(Exception ex)
                 {
-                    BackgroundThreadMessageBox (ex.Message);
+                    BackgroundThreadMessageBox ("Write total result file " + ex.Message);
                 }
             }
             Computation_Completed = true; // set flag, that computation was successful
+        }
+
+        /// <summary>
+        /// Find the index of a value in Perc[] that exceeds the value Conc
+        /// </summary>
+        /// <param name="Perc">Percentile array</param> 
+        /// <param name="Conc">Concentration to compare with Perc[]</param> 
+        private int BinarySearch(float[] Perc, float Conc)
+        {
+            int low = 0;
+            
+            if (Conc < Perc[0])
+            {
+                low = -1; // return -1 if below Perc[0]
+            }
+            else if (Conc > Perc[Perc.Length - 1])
+            {
+                low = Perc.Length - 1;
+            }
+            else
+            {
+                int high = Perc.Length - 1;
+                int mid = 0;
+                while (low <= high)
+                {
+                    mid = (low + high) >> 1;
+                    if (Perc[mid] >= Conc)
+                    {
+                        high = mid - 1;
+                    }
+                    else
+                    {
+                        low = mid + 1;
+                    }
+                }
+
+                low--;
+                if (low >= Perc.Length)
+                {
+                    low = Perc.Length - 1;
+                }
+            }
+            return low;
         }
     }
 }
