@@ -111,6 +111,7 @@
             // 
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.listBox2);
+            this.groupBox2.Enabled = false;
             this.groupBox2.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(12, 75);
             this.groupBox2.Name = "groupBox2";
@@ -145,13 +146,14 @@
             // 
             this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.listBox3);
+            this.groupBox3.Enabled = false;
             this.groupBox3.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(13, 326);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(562, 56);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Output Raster File F";
+            this.groupBox3.Text = "Output Raster File F (size inherited from Raster File A)";
             // 
             // button3
             // 
@@ -230,7 +232,6 @@
             this.textBox1.Size = new System.Drawing.Size(367, 21);
             this.textBox1.TabIndex = 16;
             this.textBox1.Text = "A+B";
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // button6
             // 
@@ -297,6 +298,7 @@
             // 
             this.groupBox5.Controls.Add(this.button7);
             this.groupBox5.Controls.Add(this.listBox4);
+            this.groupBox5.Enabled = false;
             this.groupBox5.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.Location = new System.Drawing.Point(13, 137);
             this.groupBox5.Name = "groupBox5";
@@ -331,6 +333,7 @@
             // 
             this.groupBox6.Controls.Add(this.button8);
             this.groupBox6.Controls.Add(this.listBox5);
+            this.groupBox6.Enabled = false;
             this.groupBox6.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox6.Location = new System.Drawing.Point(13, 200);
             this.groupBox6.Name = "groupBox6";
@@ -365,6 +368,7 @@
             // 
             this.groupBox7.Controls.Add(this.button9);
             this.groupBox7.Controls.Add(this.listBox6);
+            this.groupBox7.Enabled = false;
             this.groupBox7.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox7.Location = new System.Drawing.Point(13, 263);
             this.groupBox7.Name = "groupBox7";
@@ -416,7 +420,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button5;
-            this.ClientSize = new System.Drawing.Size(587, 537);
+            this.ClientSize = new System.Drawing.Size(604, 537);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox7);
