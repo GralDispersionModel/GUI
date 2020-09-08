@@ -196,8 +196,7 @@
             this.label2.Size = new System.Drawing.Size(530, 32);
             this.label2.TabIndex = 5;
             this.label2.Text = "Enter a function of the form C = f(A,B). Allowed operators are: +, -, *, /, ( ), " +
-    "^, sqrt(), sin(x), \r\ncos(x), tg(x), ctg(x), sh(x), ch(x), th(x), exp(x), e^x, ln" +
-    "(x), lg(x), (a)log(b), abs(x), pi, e";
+    "^, sqrt(), sin(x), \r\ncos(x), tan(x),  abs(x), exp(x), e^x, log(x), ln(x), pi, e";
             // 
             // openFileDialog1
             // 
@@ -375,7 +374,7 @@
             this.groupBox7.Size = new System.Drawing.Size(562, 56);
             this.groupBox7.TabIndex = 3;
             this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Input Raster File E";
+            this.groupBox7.Text = "Input Raster File G";
             // 
             // button9
             // 

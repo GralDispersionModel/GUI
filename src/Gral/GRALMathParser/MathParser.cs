@@ -232,6 +232,7 @@ namespace MathParserMathos
                 LocalVariables.Add("b", (double)0);
                 LocalVariables.Add("c", (double)0);
                 LocalVariables.Add("d", (double)0);
+                LocalVariables.Add("g", (double)0);
                 LocalVariables.Add("e", (double)2.71828182845904523536028747135266249);
             }
         }
@@ -296,7 +297,7 @@ namespace MathParserMathos
         /// <returns></returns>
         public double Parse(string mathExpression, double[] VariablesAtoE)
         {
-            string[] varName = new string[5] { "a", "b", "c", "d", "e" };
+            string[] varName = new string[5] { "a", "b", "c", "d", "g" };
 
             // set variable values
             for (int i = 0; i < Math.Min(varName.Length, VariablesAtoE.Length); i++)

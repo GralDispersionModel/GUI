@@ -38,7 +38,7 @@ namespace GralBackgroundworkers
             double[][] B = null;
             double[][] C = null;
             double[][] D = null;
-            double[][] E = null;
+            double[][] G = null;
             double[][] F = null;
             ESRIHeader[] _fileHeader = new ESRIHeader[5]; // Header for File A to E
             string[] FileName = new string[5] { mydata.RasterA, mydata.RasterB, mydata.RasterC, mydata.RasterD, mydata.RasterE };
@@ -88,10 +88,10 @@ namespace GralBackgroundworkers
                     }
                     else if (i == 4)
                     {
-                        SetText("Reading Raster E");
-                        E = ReadESRIFile(FileName[i], ref _fileHeader[i]);
-                        if (E == null)
-                            BackgroundThreadMessageBox("Error when reading raster E");
+                        SetText("Reading Raster G");
+                        G = ReadESRIFile(FileName[i], ref _fileHeader[i]);
+                        if (G == null)
+                            BackgroundThreadMessageBox("Error when reading raster G");
                     }
                 }
             }
@@ -162,13 +162,13 @@ namespace GralBackgroundworkers
                                         variables[3] = D[PointIndex.X][PointIndex.Y];
                                     }
                                 }
-                                if (E != null && inside)
+                                if (G != null && inside)
                                 {
                                     PointIndex = ESRIGetIndex(PointCoors, _fileHeader[4]);
                                     inside = CheckIndexInArray(PointIndex, _fileHeader[4]);
                                     if (inside)
                                     {
-                                        variables[4] = E[PointIndex.X][PointIndex.Y];
+                                        variables[4] = G[PointIndex.X][PointIndex.Y];
                                     }
                                 }
                             }

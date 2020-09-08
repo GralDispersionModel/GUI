@@ -31,7 +31,7 @@ namespace GralDomForms
         public string RasterB;
         public string RasterC;
         public string RasterD;
-        public string RasterE;
+        public string RasterG;
         public string RasterF;
 
  		private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
@@ -135,7 +135,7 @@ namespace GralDomForms
         //open raster data set E
         private void button9_Click(object sender, EventArgs e)
         {
-        	RasterE = OpenFileDialogRaster(listBox6);
+        	RasterG = OpenFileDialogRaster(listBox6);
         }
 
         //define raster data set F
@@ -173,7 +173,7 @@ namespace GralDomForms
                     RasterB = RasterB,
                     RasterC = RasterC,
                     RasterD = RasterD,
-                    RasterE = RasterE,
+                    RasterE = RasterG,
                     RasterF = RasterF,
                     Decsep = decsep,
                     TextBox1 = textBox1.Text,
