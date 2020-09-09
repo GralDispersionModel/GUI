@@ -31,46 +31,11 @@ namespace GralDomForms
         public string RasterB;
         public string RasterC;
         public string RasterD;
-        public string RasterE;
+        public string RasterG;
         public string RasterF;
-        public decimal[,] A = new decimal[1, 1];
-        public decimal[,] B = new decimal[1, 1];
-        public decimal[,] C = new decimal[1, 1];
-        public decimal[,] D = new decimal[1, 1];
-        public decimal[,] E = new decimal[1, 1];
-        public decimal[,] F = new decimal[1, 1];
+
  		private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
-//        int nxA;
-//        int nxB;
-//        int nxC;
-//        int nxD;
-//        int nxE;
-//        int nyA;
-//        int nyB;
-//        int nyC;
-//        int nyD;
-//        int nyE;
-//        double dxA;
-//        double dxB;
-//        double dxC;
-//        double dxD;
-//        double dxE;
-//        double x11A;
-//        double x11B;
-//        double x11C;
-//        double x11D;
-//        double x11E;
-//        double y11A;
-//        double y11B;
-//        double y11C;
-//        double y11D;
-//        double y11E;
-//        int nodataA;
-//        int nodataB;
-//        int nodataC;
-//        int nodataD;
-//        int nodataE;
-//        int caseswitch=0;
+
 
         public Mathrasteroperation(Gral.Main f, GralDomain.Domain f1)
         {
@@ -96,17 +61,7 @@ namespace GralDomForms
 #endif
 
         }
-        MathFunctions.MathParser mp = new MathFunctions.MathParser();
-        //private void btnCalculateBasicFormula_Click(object sender, EventArgs e)
-        //{
-        //    lblBasicFormulaResult.Text = mp.Calculate(txtBasicFormula.Text).ToString();
-        //}
-
-        private void btnCalculateParametricFormula_Click(object sender, EventArgs e)
-        {
-            
-        }
-
+        
         private string OpenFileDialogRaster(ListBox listbox)
         {
         	string raster = string.Empty;
@@ -152,6 +107,11 @@ namespace GralDomForms
 
             read_unit =  null;
         	textBox2.Text = unit;
+            groupBox2.Enabled = true;
+            groupBox3.Enabled = true;
+            groupBox5.Enabled = true;
+            groupBox6.Enabled = true;
+            groupBox7.Enabled = true;
         }
 
         //open raster data set B
@@ -160,7 +120,6 @@ namespace GralDomForms
         	RasterB = OpenFileDialogRaster(listBox2);
         }
 
-        
         //open raster data set C
         private void button7_Click(object sender, EventArgs e)
         {
@@ -176,7 +135,7 @@ namespace GralDomForms
         //open raster data set E
         private void button9_Click(object sender, EventArgs e)
         {
-        	RasterE = OpenFileDialogRaster(listBox6);
+        	RasterG = OpenFileDialogRaster(listBox6);
         }
 
         //define raster data set F
@@ -207,14 +166,14 @@ namespace GralDomForms
         {
             if (RasterF != null && RasterF != String.Empty)
             {
-                // OETTL: call backgroundworker
+                // call backgroundworker
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
                     RasterA = RasterA,
                     RasterB = RasterB,
                     RasterC = RasterC,
                     RasterD = RasterD,
-                    RasterE = RasterE,
+                    RasterE = RasterG,
                     RasterF = RasterF,
                     Decsep = decsep,
                     TextBox1 = textBox1.Text,
@@ -260,11 +219,6 @@ namespace GralDomForms
             }
 
             int asc = (int)e.KeyChar; //get ASCII code
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

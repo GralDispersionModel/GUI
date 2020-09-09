@@ -180,9 +180,68 @@ namespace GralIO
 			{
 				{MessageBox.Show(e.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);}
 				return false;
-			}
-			
+			}	
 		}
-		
-	}
+
+        // Write double result files to disc
+        /// <summary>
+        /// Write an ESRII ASCII File for a 2 dimensional array DblArr with header and unit 
+        /// </summary>
+        public bool WriteJaggedDblArrResult(double[][] Res)
+        {
+            CultureInfo ic = CultureInfo.InvariantCulture;
+
+            try
+            {
+                if (File.Exists(_filename))
+                {
+                    try
+                    {
+                        File.Delete(_filename);
+                    }
+                    catch { }
+                }
+
+                using (StreamWriter myWriter = new StreamWriter(_filename))
+                {
+                    // Header
+                    myWriter.WriteLine("ncols         " + Convert.ToString(_ncols, ic));
+                    myWriter.WriteLine("nrows         " + Convert.ToString(_nrows, ic));
+                    myWriter.WriteLine("xllcorner     " + Convert.ToString(_xllcorner, ic));
+                    myWriter.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
+                    myWriter.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
+                    if (_unit.Length > 0)
+                    {
+                        myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                    }
+
+                    StringBuilder SB = new StringBuilder();
+                    for (int j = 0; j < _nrows; j++)
+                    {
+                        SB.Clear();
+                        for (int i = 0; i < _ncols; i++)
+                        {
+                            SB.Append(Math.Round(Res[i][j], _round).ToString(ic));
+                            SB.Append(" ");
+                            //myWriter.Write(Convert.ToString(Math.Round(DblArr[i, j], _round), ic) + " ");
+                        }
+                        myWriter.WriteLine(SB.ToString());
+                        SB.Clear();
+                    }
+                    SB = null;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+    }
 }
