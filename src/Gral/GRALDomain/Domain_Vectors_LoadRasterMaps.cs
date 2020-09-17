@@ -38,8 +38,10 @@ namespace GralDomain
                     {
                         using (StreamReader myReader = new StreamReader(file))
                         {
-                            Cursor = Cursors.WaitCursor;
-
+                            if (!GRAMMOnline)
+                            {
+                                Cursor = Cursors.WaitCursor;
+                            }
                             //clear actual vectorpoints
                             _drobj.ContourPoints.Clear();
                             _drobj.ContourPoints.Add(new List<PointF>());
@@ -201,7 +203,7 @@ namespace GralDomain
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     if (GRAMMOnline == false)
                     {
@@ -209,7 +211,10 @@ namespace GralDomain
                     }
                 }
 
-                Cursor = Cursors.Default;
+                if (!GRAMMOnline)
+                {
+                    Cursor = Cursors.Default;
+                }
             }
             ReDrawVectors = false;
         }
@@ -299,8 +304,11 @@ namespace GralDomain
                             if (windfieldenable == 1) // GRAMM
                             {
                                 // compute GRAMM vector map
-                                Cursor = Cursors.WaitCursor;
-
+                                if (!GRAMMOnline)
+                                {
+                                    Cursor = Cursors.WaitCursor;
+                                }
+                                
                                 MessageWindow message = new MessageWindow();
                                 message.Show();
                                 message.listBox1.Items.Add("Compute vector map...");
@@ -476,18 +484,24 @@ namespace GralDomain
                                     catch
                                     {
                                         MessageBox.Show(this, "Error reading windfields", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        Cursor = Cursors.Default;
+                                        if (!GRAMMOnline)
+                                        {
+                                            Cursor = Cursors.Default;
+                                        }
                                         return;
                                     }
                                 }
                             }
-                            Cursor = Cursors.Default;
+                            //Cursor = Cursors.Default;
 
                             //compute GRAL vector map
                             if (windfieldenable == 2) // GRAL
                             {
-                                Cursor = Cursors.WaitCursor;
-
+                                if (!GRAMMOnline)
+                                {
+                                    Cursor = Cursors.WaitCursor;
+                                }
+                               
                                 //obtain surface heights
                                 Single[,] AH = new Single[1, 1];
                                 Single[,] Building_heights = new Single[1, 1];
@@ -582,7 +596,10 @@ namespace GralDomain
                                         return;
                                     }
                                     MessageBox.Show(this, "Error reading windfields", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    Cursor = Cursors.Default;
+                                    if (!GRAMMOnline)
+                                    {
+                                        Cursor = Cursors.Default;
+                                    }
                                     return;
                                 }
 
@@ -776,7 +793,10 @@ namespace GralDomain
                                                     return;
                                                 }
                                                 MessageBox.Show(this, "Error reading tke-fields", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                                Cursor = Cursors.Default;
+                                                if (!GRAMMOnline)
+                                                {
+                                                    Cursor = Cursors.Default;
+                                                }
                                                 uk = null; vk = null; wk = null; tke = null;
                                                 return;
                                             }
@@ -787,7 +807,10 @@ namespace GralDomain
                                 catch
                                 {
                                     MessageBox.Show(this, "Error reading windfields", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    Cursor = Cursors.Default;
+                                    if (!GRAMMOnline)
+                                    {
+                                        Cursor = Cursors.Default;
+                                    }
                                     uk = null; vk = null; wk = null; tke = null;
                                     return;
                                 }
@@ -841,7 +864,10 @@ namespace GralDomain
                                 Picturebox1_Paint();
                                 uk = null; vk = null; wk = null; tke = null;
                             }
-                            Cursor = Cursors.Default;
+                            if (!GRAMMOnline)
+                            {
+                                Cursor = Cursors.Default;
+                            }
                         }
                         disp.Dispose();
                     }
