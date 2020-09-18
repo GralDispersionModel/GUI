@@ -28,7 +28,7 @@ using GralStaticFunctions;
 namespace GralDomain
 {
     public delegate void DomainformClosed(object sender, EventArgs e);
-    
+
     public partial class Domain : Form
     {
         private readonly string decsep;                                                // global decimal separator of the system
@@ -196,8 +196,16 @@ namespace GralDomain
         /// <summary>
         /// Online or Domain mode?
         /// </summary>
-        private readonly bool GRAMMOnline;             
-        
+        private readonly bool GRAMMOnline;
+        /// <summary>
+        /// Event to redraw online GRAL and GRAMM
+        /// </summary>
+        public event ForceDomainRedraw OnlineRedraw;
+        /// <summary>
+        /// Lock the redraw 
+        /// </summary>
+        private int LockOnlineRedraw = 0;
+
         /// <summary>
         /// Objectmanager form: it is possible to close the objectmanager if domain is closed
         /// </summary>
@@ -349,12 +357,13 @@ namespace GralDomain
             
             EditPS.PointSourceRedraw += DomainRedrawDelegate; // Redraw from Edit Point Sources
             EditAS.AreaSourceRedraw += DomainRedrawDelegate; // Redraw from areaedit
-            EditB.BuildingRedraw += DomainRedrawDelegate; // Redrasw from editbuilding
+            EditB.BuildingRedraw += DomainRedrawDelegate; // Redraw from editbuilding
             EditLS.LinesourceRedraw += DomainRedrawDelegate; // Redraw from editls
             EditPortals.PortalSourceRedraw += DomainRedrawDelegate; // Redraw from portal
             EditR.ReceptorRedraw += DomainRedrawDelegate; // Redraw from editreceptors
             EditWall.WallRedraw += DomainRedrawDelegate;  // Redraw from editwalls
             EditVegetation.VegetationRedraw += DomainRedrawDelegate; // Redraw from editforests
+            OnlineRedraw += DomainRedrawDelegate; // Redraw from Online GRAL/GRAMM
 
             EditPS.ItemFormHide += DomainItemFormHide; // Hide form 
             EditAS.ItemFormHide += DomainItemFormHide; // Hide form 
@@ -1145,15 +1154,23 @@ namespace GralDomain
         /// </summary>
         private void Picturebox1_Paint()
         {
-            DrawMap();
-            if (picturebox1.Image != null)
+            //Avoid multiple redraw events from different threads
+            if (System.Threading.Interlocked.CompareExchange(ref LockOnlineRedraw, 1, 0) == 0)
             {
-                picturebox1.Image.Dispose();
-            }
+                DrawMap();
 
-            if (PictureBoxBitmap != null)
-            {
-                picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
+                if (picturebox1.Image != null)
+                {
+                    picturebox1.Image.Dispose();
+                }
+
+                if (PictureBoxBitmap != null)
+                {
+                    picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
+                }
+
+                //Release drawing lock
+                System.Threading.Interlocked.Exchange(ref LockOnlineRedraw, 0);
             }
         }
         
