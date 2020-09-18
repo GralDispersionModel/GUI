@@ -25,7 +25,6 @@ using System.IO;
 using GralIO;
 using GralDomForms;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GralDomain
 {
@@ -40,14 +39,18 @@ namespace GralDomain
         /// </summary>
         private void DrawOnlineMap()
         {
-            if (RubberRedrawAllowed == 0)
+            try
             {
-                RubberRedrawAllowed = 1; // redraw - flag
-                Picturebox1_Paint();
-                RubberRedrawAllowed = 0;
+                if (OnlineRedraw != null)
+                {
+                    EventArgs e = new EventArgs();
+                    OnlineRedraw(this, e);
+                }
             }
+            catch
+            { }
         }
-        
+
         private async void AsyncUVGrammChanged(object sender, FileSystemEventArgs e)
         {
             await System.Threading.Tasks.Task.Run(() => UVGrammChanged(sender, e));
@@ -57,10 +60,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute vectors
                     ReDrawVectors = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -86,10 +89,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -115,10 +118,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -144,10 +147,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -173,10 +176,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -202,10 +205,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -231,10 +234,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -260,10 +263,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -289,10 +292,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -318,10 +321,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -347,10 +350,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -376,10 +379,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -405,10 +408,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -434,10 +437,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -463,10 +466,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -492,10 +495,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -521,10 +524,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -550,10 +553,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -579,10 +582,10 @@ namespace GralDomain
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
