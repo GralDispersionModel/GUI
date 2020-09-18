@@ -140,6 +140,7 @@ namespace GralDomain
             EditR.ReceptorRedraw -= DomainRedrawDelegate; // Redraw from editreceptors
             EditWall.WallRedraw -= DomainRedrawDelegate; // Redraw from editwalls
             EditVegetation.VegetationRedraw -= DomainRedrawDelegate; // Redraw from vegetation
+            OnlineRedraw -= DomainRedrawDelegate; // Redraw from Online GRAL/GRAMM
 
             EditPS.ItemFormHide -= DomainItemFormHide; // Hide form 
             EditAS.ItemFormHide -= DomainItemFormHide; // Hide form 
