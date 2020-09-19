@@ -49,10 +49,9 @@ namespace GralDomain
                     Filter = "uv_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.UVGramm.Changed += new FileSystemEventHandler(UVGrammChanged);
-                //FileWatch.uvGRAMM.SynchronizingObject = this;
+                FileWatch.UVGramm.Changed += new FileSystemEventHandler(AsyncUVGrammChanged);
                 FileWatch.UVGramm.EnableRaisingEvents = true;
-
+                FileWatch.UVGramm.Error += new ErrorEventHandler(FileWatcherError);
 
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "uv_GRAMM.txt");
 
@@ -114,9 +113,9 @@ namespace GralDomain
                     Filter = "u_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.UGramm.Changed += new FileSystemEventHandler(UGrammChanged);
-                //FileWatch.uGRAMM.SynchronizingObject = this;
+                FileWatch.UGramm.Changed += new FileSystemEventHandler(AsyncUGrammChanged);
                 FileWatch.UGramm.EnableRaisingEvents = true;
+                FileWatch.UGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "u_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -137,9 +136,9 @@ namespace GralDomain
                     Filter = "speed_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.SpeedGramm.Changed += new FileSystemEventHandler(SpeedGrammChanged);
-                //FileWatch.speedGRAMM.SynchronizingObject = this;
+                FileWatch.SpeedGramm.Changed += new FileSystemEventHandler(AsyncSpeedGrammChanged);
                 FileWatch.SpeedGramm.EnableRaisingEvents = true;
+                FileWatch.SpeedGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "speed_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -156,9 +155,9 @@ namespace GralDomain
                     Filter = "v_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.VGramm.Changed += new FileSystemEventHandler(VGrammChanged);
-                //vGRAMM.SynchronizingObject = this;
+                FileWatch.VGramm.Changed += new FileSystemEventHandler(AsyncVGrammChanged);
                 FileWatch.VGramm.EnableRaisingEvents = true;
+                FileWatch.VGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "v_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -179,9 +178,9 @@ namespace GralDomain
                     Filter = "w_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.WGramm.Changed += new FileSystemEventHandler(WGrammChanged);
-                //wGRAMM.SynchronizingObject = this;
+                FileWatch.WGramm.Changed += new FileSystemEventHandler(AsyncWGrammChanged);
                 FileWatch.WGramm.EnableRaisingEvents = true;
+                FileWatch.WGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "w_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -202,9 +201,9 @@ namespace GralDomain
                     Filter = "tabs_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.TAbsGramm.Changed += new FileSystemEventHandler(TabsGrammChanged);
-                //tabsGRAMM.SynchronizingObject = this;
+                FileWatch.TAbsGramm.Changed += new FileSystemEventHandler(AsyncTabsGrammChanged);
                 FileWatch.TAbsGramm.EnableRaisingEvents = true;
+                FileWatch.TAbsGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "tabs_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -225,9 +224,9 @@ namespace GralDomain
                     Filter = "tpot_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.TPotGramm.Changed += new FileSystemEventHandler(TpotGrammChanged);
-                //tpotGRAMM.SynchronizingObject = this;
+                FileWatch.TPotGramm.Changed += new FileSystemEventHandler(AsyncTpotGrammChanged);
                 FileWatch.TPotGramm.EnableRaisingEvents = true;
+                FileWatch.TPotGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "tpot_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -248,9 +247,9 @@ namespace GralDomain
                     Filter = "hum_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.HumGramm.Changed += new FileSystemEventHandler(HumGrammChanged);
-                //humGRAMM.SynchronizingObject = this;
+                FileWatch.HumGramm.Changed += new FileSystemEventHandler(AsyncHumGrammChanged);
                 FileWatch.HumGramm.EnableRaisingEvents = true;
+                FileWatch.HumGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "hum_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -271,9 +270,9 @@ namespace GralDomain
                     Filter = "nhp_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.NhpGramm.Changed += new FileSystemEventHandler(NhpGrammChanged);
-                //nhpGRAMM.SynchronizingObject = this;
+                FileWatch.NhpGramm.Changed += new FileSystemEventHandler(AsyncNhpGrammChanged);
                 FileWatch.NhpGramm.EnableRaisingEvents = true;
+                FileWatch.NhpGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "nhp_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -294,9 +293,9 @@ namespace GralDomain
                     Filter = "glob_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.GlobGramm.Changed += new FileSystemEventHandler(GlobGrammChanged);
-                //globGRAMM.SynchronizingObject = this;
+                FileWatch.GlobGramm.Changed += new FileSystemEventHandler(AsyncGlobGrammChanged);
                 FileWatch.GlobGramm.EnableRaisingEvents = true;
+                FileWatch.GlobGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "glob_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -317,9 +316,9 @@ namespace GralDomain
                     Filter = "terr_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.TerrGramm.Changed += new FileSystemEventHandler(TerrGrammChanged);
-                //terrGRAMM.SynchronizingObject = this;
+                FileWatch.TerrGramm.Changed += new FileSystemEventHandler(AsyncTerrGrammChanged);
                 FileWatch.TerrGramm.EnableRaisingEvents = true;
+                FileWatch.TerrGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "terr_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -340,9 +339,9 @@ namespace GralDomain
                     Filter = "sensheat_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.SensHeatGramm.Changed += new FileSystemEventHandler(SensheatGrammChanged);
-                //sensheatGRAMM.SynchronizingObject = this;
+                FileWatch.SensHeatGramm.Changed += new FileSystemEventHandler(AsyncSensheatGrammChanged);
                 FileWatch.SensHeatGramm.EnableRaisingEvents = true;
+                FileWatch.SensHeatGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "sensheat_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -363,9 +362,9 @@ namespace GralDomain
                     Filter = "latheat_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.LatHeatGramm.Changed += new FileSystemEventHandler(LatheatGrammChanged);
-                //latheatGRAMM.SynchronizingObject = this;
+                FileWatch.LatHeatGramm.Changed += new FileSystemEventHandler(AsyncLatheatGrammChanged);
                 FileWatch.LatHeatGramm.EnableRaisingEvents = true;
+                FileWatch.LatHeatGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "latheat_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -386,9 +385,9 @@ namespace GralDomain
                     Filter = "fricvel_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.VricVelGramm.Changed += new FileSystemEventHandler(FricvelGrammChanged);
-                //fricvelGRAMM.SynchronizingObject = this;
+                FileWatch.VricVelGramm.Changed += new FileSystemEventHandler(AsyncFricvelGrammChanged);
                 FileWatch.VricVelGramm.EnableRaisingEvents = true;
+                FileWatch.VricVelGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "fricvel_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -409,9 +408,9 @@ namespace GralDomain
                     Filter = "inverseMO_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.InverseMOGramm.Changed += new FileSystemEventHandler(InverseMOGrammChanged);
-                //inverseMOGRAMM.SynchronizingObject = this;
+                FileWatch.InverseMOGramm.Changed += new FileSystemEventHandler(AsyncInverseMOGrammChanged);
                 FileWatch.InverseMOGramm.EnableRaisingEvents = true;
+                FileWatch.InverseMOGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "inverseMO_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -432,9 +431,9 @@ namespace GralDomain
                     Filter = "surfTemp_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.SurfTempGramm.Changed += new FileSystemEventHandler(SurfTempGrammChanged);
-                //surfTempGRAMM.SynchronizingObject = this;
+                FileWatch.SurfTempGramm.Changed += new FileSystemEventHandler(AsyncSurfTempGrammChanged);
                 FileWatch.SurfTempGramm.EnableRaisingEvents = true;
+                FileWatch.SurfTempGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "surfTemp_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -455,8 +454,9 @@ namespace GralDomain
                     Filter = "stabilityclass_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.StabClassGramm.Changed += new FileSystemEventHandler(StabilityclassGrammChanged);
+                FileWatch.StabClassGramm.Changed += new FileSystemEventHandler(AsyncStabilityclassGrammChanged);
                 FileWatch.StabClassGramm.EnableRaisingEvents = true;
+                FileWatch.StabClassGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "stabilityclass_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -477,9 +477,9 @@ namespace GralDomain
                     Filter = "tke_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.TkeGramm.Changed += new FileSystemEventHandler(TkeGrammChanged);
-                //tkeGRAMM.SynchronizingObject = this;
+                FileWatch.TkeGramm.Changed += new FileSystemEventHandler(AsyncTKEGrammChanged);
                 FileWatch.TkeGramm.EnableRaisingEvents = true;
+                FileWatch.TkeGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "tke_GRAMM.txt");
                 AddPostMap(file);
             }
@@ -500,9 +500,9 @@ namespace GralDomain
                     Filter = "dis_GRAMM.txt",
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                FileWatch.DisGramm.Changed += new FileSystemEventHandler(DisGrammChanged);
-                //disGRAMM.SynchronizingObject = this;
+                FileWatch.DisGramm.Changed += new FileSystemEventHandler(AsyncDisGrammChanged);
                 FileWatch.DisGramm.EnableRaisingEvents = true;
+                FileWatch.DisGramm.Error += new ErrorEventHandler(FileWatcherError);
                 string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "dis_GRAMM.txt");
                 AddPostMap(file);
             }

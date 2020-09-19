@@ -125,7 +125,10 @@ namespace GralDomain
                         MessageBox.Show(this, "Unable to open, read or process the data","GRAL GUI",MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     }
                 }
-				Cursor = Cursors.Default;
+                if (!GRAMMOnline)
+                {
+                    Cursor = Cursors.Default;
+                }
 			}
 			ReDrawContours = false;
 		}
