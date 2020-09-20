@@ -33,9 +33,10 @@ namespace GralDomain
         /// </summary>
         public void DomainFormClosed(object sender, FormClosedEventArgs e) // Kuntner Hauptfenster wird geschlossen
         {
+
             this.FormClosed -= new System.Windows.Forms.FormClosedEventHandler(this.DomainFormClosed); // avoid a 2nd call to this close function
-            
-            // Kuntner clean up open forms, picturebox, release memory to avoid memory lag
+
+            // Kuntner clean up open forms, picturebox, release memory to avoid memory lags
             HideWindows(0);
             
             MMO.StartMatchProcess -= new StartMatchingProcess(StartMatchingProcess);
@@ -60,7 +61,7 @@ namespace GralDomain
                 MMO = null;
             }
             
-            for(int i = Application.OpenForms.Count-1; i >=0; i--)
+            for(int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
                 if(Application.OpenForms[i] != MainForm && (Application.OpenForms[i].Text == "Match GRAMM flow fields with multiple meteorological observations"
                                                          || Application.OpenForms[i].Text == "Mathrasteroperation"
@@ -104,6 +105,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.Close();
             }
 
+
             if (picturebox1 != null)
             {
                 picturebox1.Dispose();
@@ -131,7 +133,7 @@ namespace GralDomain
             CornerAreaSource = null;
             
             CellHeights = null;
-            
+
             EditPS.PointSourceRedraw -= DomainRedrawDelegate; // Redraw from Edit Point Sources
             EditAS.AreaSourceRedraw -= DomainRedrawDelegate; // Redraw from areaedit
             EditB.BuildingRedraw -= DomainRedrawDelegate; // Redraw from editbuilding
@@ -229,19 +231,24 @@ namespace GralDomain
                     Application.OpenForms[i].Close();
                 }
             }
-            
+
+
             MouseWheel -= new MouseEventHandler(form1_MouseWheel); // Kuntner
+
             ToolTipMousePosition.Dispose();
+
             if (toolTip1 != null)
             {
                 toolTip1.Dispose();
             }
 
+#if __MonoCS__
+#else
             if (menuStrip1 != null)
             {
                 menuStrip1.Dispose();
             }
-
+#endif
             if (panel1 != null)
             {
                 panel1.Dispose();
@@ -273,7 +280,7 @@ namespace GralDomain
             }
             ItemOptions.Clear();
             ItemOptions.TrimExcess();
-            Application.DoEvents();
+            //Application.DoEvents();
             
             try
             {
@@ -318,98 +325,194 @@ namespace GralDomain
         {
             if (FileWatch.UVGramm != null)
             {
-                FileWatch.UVGramm.Changed -= new FileSystemEventHandler(UVGrammChanged);
+                FileWatch.UVGramm.EnableRaisingEvents = false;
+                FileWatch.UVGramm.Changed -= new FileSystemEventHandler(AsyncUVGrammChanged);
+                FileWatch.UVGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.UVGramm.Dispose();  //control changes in the file uv_Gramm.txt, containing the actual GRAMM windfield online
+#endif
             }
             if (FileWatch.UGramm != null)
             {
-                FileWatch.UGramm.Changed -= new FileSystemEventHandler(UGrammChanged);
+                FileWatch.UGramm.EnableRaisingEvents = false;
+                FileWatch.UGramm.Changed -= new FileSystemEventHandler(AsyncUGrammChanged);
+                FileWatch.UGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.UGramm.Dispose();  //control changes in the file u_Gramm.txt, containing the actual GRAMM windcomponent u online
+#endif
             }
             if (FileWatch.SpeedGramm != null)
             {
-                FileWatch.SpeedGramm.Changed -= new FileSystemEventHandler(SpeedGrammChanged);
+                FileWatch.SpeedGramm.EnableRaisingEvents = false;
+                FileWatch.SpeedGramm.Changed -= new FileSystemEventHandler(AsyncSpeedGrammChanged);
+                FileWatch.SpeedGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.SpeedGramm.Dispose();  //control changes in the file speed_Gramm.txt, containing the actual GRAMM horizontal windspeed online
+#endif
             }
             if (FileWatch.VGramm != null)
             {
-                FileWatch.VGramm.Changed -= new FileSystemEventHandler(VGrammChanged);
+                FileWatch.VGramm.EnableRaisingEvents = false;
+                FileWatch.VGramm.Changed -= new FileSystemEventHandler(AsyncVGrammChanged);
+                FileWatch.VGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.VGramm.Dispose();  //control changes in the file v_Gramm.txt, containing the actual GRAMM windcomponent v online
+#endif
             }
             if (FileWatch.WGramm != null)
             {
-                FileWatch.WGramm.Changed -= new FileSystemEventHandler(WGrammChanged);
+                FileWatch.WGramm.EnableRaisingEvents = false;
+                FileWatch.WGramm.Changed -= new FileSystemEventHandler(AsyncWGrammChanged);
+                FileWatch.WGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.WGramm.Dispose();  //control changes in the file w_Gramm.txt, containing the actual GRAMM windcomponent w online
+#endif
             }
             if (FileWatch.TAbsGramm != null)
             {
-                FileWatch.TAbsGramm.Changed -= new FileSystemEventHandler(TabsGrammChanged);
+                FileWatch.TAbsGramm.EnableRaisingEvents = false;
+                FileWatch.TAbsGramm.Changed -= new FileSystemEventHandler(AsyncTabsGrammChanged);
+                FileWatch.TAbsGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.TAbsGramm.Dispose();  //control changes in the file tabs_Gramm.txt, containing the actual GRAMM absolut temperature online
+#endif
             }
             if (FileWatch.TPotGramm != null)
             {
-                FileWatch.TPotGramm.Changed -= new FileSystemEventHandler(TpotGrammChanged);
+                FileWatch.TPotGramm.EnableRaisingEvents = false;
+                FileWatch.TPotGramm.Changed -= new FileSystemEventHandler(AsyncTpotGrammChanged);
+                FileWatch.TPotGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.TPotGramm.Dispose();  //control changes in the file tpot_Gramm.txt, containing the actual GRAMM potential temperature online
+#endif
             }
             if (FileWatch.HumGramm != null)
             {
-                FileWatch.HumGramm.Changed -= new FileSystemEventHandler(HumGrammChanged);
+                FileWatch.HumGramm.EnableRaisingEvents = false;
+                FileWatch.HumGramm.Changed -= new FileSystemEventHandler(AsyncHumGrammChanged);
+                FileWatch.HumGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.HumGramm.Dispose();  //control changes in the file hum_Gramm.txt, containing the actual GRAMM humidity online
+#endif
             }
             if (FileWatch.NhpGramm != null)
             {
-                FileWatch.NhpGramm.Changed -= new FileSystemEventHandler(NhpGrammChanged);
+                FileWatch.NhpGramm.EnableRaisingEvents = false;
+                FileWatch.NhpGramm.Changed -= new FileSystemEventHandler(AsyncNhpGrammChanged);
+                FileWatch.NhpGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.NhpGramm.Dispose();  //control changes in the file nhp_Gramm.txt, containing the actual GRAMM non-hydrostatic pressure online
+#endif
             }
             if (FileWatch.GlobGramm != null)
             {
-                FileWatch.GlobGramm.Changed -= new FileSystemEventHandler(GlobGrammChanged);
+                FileWatch.GlobGramm.EnableRaisingEvents = false;
+                FileWatch.GlobGramm.Changed -= new FileSystemEventHandler(AsyncGlobGrammChanged);
+                FileWatch.GlobGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.GlobGramm.Dispose();  //control changes in the file glob_Gramm.txt, containing the actual GRAMM global radiation online
+#endif
             }
             if (FileWatch.TerrGramm != null)
             {
-                FileWatch.TerrGramm.Changed -= new FileSystemEventHandler(TerrGrammChanged);
+                FileWatch.TerrGramm.EnableRaisingEvents = false;
+                FileWatch.TerrGramm.Changed -= new FileSystemEventHandler(AsyncTerrGrammChanged);
+                FileWatch.TerrGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.TerrGramm.Dispose();  //control changes in the file terr_Gramm.txt, containing the actual GRAMM terrestrial radiation online
+#endif
             }
             if (FileWatch.SensHeatGramm != null)
             {
-                FileWatch.SensHeatGramm.Changed -= new FileSystemEventHandler(SensheatGrammChanged);
+                FileWatch.SensHeatGramm.EnableRaisingEvents = false;
+                FileWatch.SensHeatGramm.Changed -= new FileSystemEventHandler(AsyncSensheatGrammChanged);
+                FileWatch.SensHeatGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.SensHeatGramm.Dispose();  //control changes in the file sensheat_Gramm.txt, containing the actual GRAMM sensible heat flux online
+#endif
             }
             if (FileWatch.LatHeatGramm != null)
             {
-                FileWatch.LatHeatGramm.Changed -= new FileSystemEventHandler(LatheatGrammChanged);
+                FileWatch.LatHeatGramm.EnableRaisingEvents = false;
+                FileWatch.LatHeatGramm.Changed -= new FileSystemEventHandler(AsyncLatheatGrammChanged);
+                FileWatch.LatHeatGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.LatHeatGramm.Dispose();  //control changes in the file latheat_Gramm.txt, containing the actual GRAMM sensible latent flux online
+#endif
             }
             if (FileWatch.VricVelGramm != null)
             {
-                FileWatch.VricVelGramm.Changed -= new FileSystemEventHandler(FricvelGrammChanged);
+                FileWatch.VricVelGramm.EnableRaisingEvents = false;
+                FileWatch.VricVelGramm.Changed -= new FileSystemEventHandler(AsyncFricvelGrammChanged);
+                FileWatch.VricVelGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.VricVelGramm.Dispose();  //control changes in the file fricvel_Gramm.txt, containing the actual GRAMM friction velocity online
+#endif
             }
             if (FileWatch.InverseMOGramm != null)
             {
-                FileWatch.InverseMOGramm.Changed -= new FileSystemEventHandler(InverseMOGrammChanged);
+                FileWatch.InverseMOGramm.EnableRaisingEvents = false;
+                FileWatch.InverseMOGramm.Changed -= new FileSystemEventHandler(AsyncInverseMOGrammChanged);
+                FileWatch.InverseMOGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.InverseMOGramm.Dispose();  //control changes in the file inverseMO_Gramm.txt, containing the actual GRAMM inverse MO-length online
+#endif
             }
             if (FileWatch.SurfTempGramm != null)
             {
-                FileWatch.SurfTempGramm.Changed -= new FileSystemEventHandler(SurfTempGrammChanged);
+                FileWatch.SurfTempGramm.EnableRaisingEvents = false;
+                FileWatch.SurfTempGramm.Changed -= new FileSystemEventHandler(AsyncSurfTempGrammChanged);
+                FileWatch.SurfTempGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.SurfTempGramm.Dispose();  //control changes in the file surfTemp_Gramm.txt, containing the actual GRAMM surface temperature online
+#endif
             }
             if (FileWatch.StabClassGramm != null)
             {
-                FileWatch.StabClassGramm.Changed -= new FileSystemEventHandler(StabilityclassGrammChanged);
+                FileWatch.StabClassGramm.EnableRaisingEvents = false;
+                FileWatch.StabClassGramm.Changed -= new FileSystemEventHandler(AsyncStabilityclassGrammChanged);
+                FileWatch.StabClassGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.StabClassGramm.Dispose();  //control changes in the file stabilityclass_Gramm.txt, containing the actual GRAMM stabilty classes (1-7) online
+#endif
             }
             if (FileWatch.TkeGramm != null)
             {
-                FileWatch.TkeGramm.Changed -= new FileSystemEventHandler(TkeGrammChanged);
+                FileWatch.TkeGramm.EnableRaisingEvents = false;
+                FileWatch.TkeGramm.Changed -= new FileSystemEventHandler(AsyncTKEGrammChanged);
+                FileWatch.TkeGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
                 FileWatch.TkeGramm.Dispose();  //control changes in the file tke_Gramm.txt, containing the actual GRAMM turbulent kinetic energy online
+#endif
             }
             if (FileWatch.DisGramm != null)
             {
-                FileWatch.DisGramm.Changed -= new FileSystemEventHandler(DisGrammChanged);
+                FileWatch.DisGramm.EnableRaisingEvents = false;
+                FileWatch.DisGramm.Changed -= new FileSystemEventHandler(AsyncDisGrammChanged);
+                FileWatch.DisGramm.Error -= new ErrorEventHandler(FileWatcherError);
+#if __MonoCS__
+#else
+
                 FileWatch.DisGramm.Dispose();  //control changes in the file dis_Gramm.txt, containing the actual GRAMM dissipation online
+#endif
             }
         }
 

@@ -20,6 +20,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace GralDomain
 {
@@ -32,6 +33,7 @@ namespace GralDomain
         {
             if (ReDrawVectors == true)
             {
+                CultureInfo ic = CultureInfo.InvariantCulture;
                 try
                 {
                     if (File.Exists(file))
@@ -42,11 +44,13 @@ namespace GralDomain
                             {
                                 Cursor = Cursors.WaitCursor;
                             }
-                            //clear actual vectorpoints
-                            _drobj.ContourPoints.Clear();
-                            _drobj.ContourPoints.Add(new List<PointF>());
-                            _drobj.ContourPoints[0].Clear();
-
+                            lock (_drobj)
+                            {
+                                //clear actual vectorpoints
+                                _drobj.ContourPoints.Clear();
+                                _drobj.ContourPoints.Add(new List<PointF>());
+                                _drobj.ContourPoints[0].Clear();
+                            }
                             string[] data = new string[100];
                             //open vector file
                             data = myReader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -68,7 +72,10 @@ namespace GralDomain
                             // create new index if array == null or array dimension != nx or ny
                             if (_drobj.ContourColor == null || _drobj.ContourColor.GetUpperBound(0) != (nx - 1) || _drobj.ContourColor.GetUpperBound(1) != (ny - 1))
                             {
-                                _drobj.ContourColor = new int[nx, ny];
+                                lock (_drobj)
+                                {
+                                    _drobj.ContourColor = new int[nx, ny];
+                                }
                             }
                             int[,] _contcol = _drobj.ContourColor;
                             double min = 1000;
@@ -79,16 +86,16 @@ namespace GralDomain
                                 int n = -1;
                                 for (int j = 0; j < 2 * nx; j++)
                                 {
-                                    double u = Convert.ToDouble(data[j].Replace(".", decsep));
+                                    double u = Convert.ToDouble(data[j], ic);
                                     j += 1;
-                                    double v = Convert.ToDouble(data[j].Replace(".", decsep));
+                                    double v = Convert.ToDouble(data[j], ic);
                                     n += 1;
                                     umean[n, i] = Math.Sqrt(u * u + v * v);
                                     //compute maximum and minimum
                                     min = Math.Min(min, umean[n, i]);
                                     max = Math.Max(max, umean[n, i]);
                                     //compute wind direction
-                                    if (v == 0)
+                                    if (Math.Abs(v) < 0.00000001)
                                     {
                                         udir[n, i] = 90;
                                     }
@@ -139,65 +146,71 @@ namespace GralDomain
                             double length = 1;
                             double anglecor = 3.14 / 180;
 
-                            for (int j = ny - 1; j > -1; j--)
+                            lock (_drobj)
                             {
-                                for (int i = 0; i < nx; i++)
+                                for (int j = ny - 1; j > -1; j--)
                                 {
-                                    //x,y coordinates of the cell center
-                                    xcenter = x11 + Convert.ToDouble(dx * (i + 1) - dx * 0.5);
-                                    ycenter = y11 + Convert.ToDouble(dx * (j + 1) - dx * 0.5);
-                                    double skalierung1 = _drobj.VectorScale;
-                                    length = scale * (umean[i, j] + 1) * skalierung1;
+                                    for (int i = 0; i < nx; i++)
+                                    {
+                                        //x,y coordinates of the cell center
+                                        xcenter = x11 + (dx * (i + 1) - dx * 0.5);
+                                        ycenter = y11 + (dx * (j + 1) - dx * 0.5);
+                                        double skalierung1 = _drobj.VectorScale;
+                                        length = scale * (umean[i, j] + 1) * skalierung1;
 
-                                    //point 1 of arrow
-                                    x1 = xcenter - length * 0.5;
-                                    y1 = ycenter - length * 0.1;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
-                                    //point 2 of arrow
-                                    x1 = xcenter - length * 0.5;
-                                    y1 = ycenter + length * 0.1;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
-                                    //point 3 of arrow
-                                    x1 = xcenter + length * 0.05;
-                                    y1 = ycenter + length * 0.1;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
-                                    //point 4 of arrow
-                                    x1 = xcenter + length * 0.05;
-                                    y1 = ycenter + length * 0.35;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
-                                    //point 5 of arrow
-                                    x1 = xcenter + length * 0.5;
-                                    y1 = ycenter;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
-                                    //point 6 of arrow
-                                    x1 = xcenter + length * 0.05;
-                                    y1 = ycenter - length * 0.35;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
-                                    //point 7 of arrow
-                                    x1 = xcenter + length * 0.05;
-                                    y1 = ycenter - length * 0.1;
-                                    //rotation
-                                    xrot = xcenter + (x1 - xcenter) * Math.Cos((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Sin((udir[i, j] - 270) * anglecor);
-                                    yrot = ycenter - (x1 - xcenter) * Math.Sin((udir[i, j] - 270) * anglecor) + (y1 - ycenter) * Math.Cos((udir[i, j] - 270) * anglecor);
-                                    _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 1 of arrow
+                                        x1 = xcenter - length * 0.5;
+                                        y1 = ycenter - length * 0.1;
+                                        double dircos = Math.Cos((udir[i, j] - 270) * anglecor);
+                                        double dirsin = Math.Sin((udir[i, j] - 270) * anglecor);
+
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 2 of arrow
+                                        x1 = xcenter - length * 0.5;
+                                        y1 = ycenter + length * 0.1;
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 3 of arrow
+                                        x1 = xcenter + length * 0.05;
+                                        y1 = ycenter + length * 0.1;
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 4 of arrow
+                                        x1 = xcenter + length * 0.05;
+                                        y1 = ycenter + length * 0.35;
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 5 of arrow
+                                        x1 = xcenter + length * 0.5;
+                                        y1 = ycenter;
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 6 of arrow
+                                        x1 = xcenter + length * 0.05;
+                                        y1 = ycenter - length * 0.35;
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                        //point 7 of arrow
+                                        x1 = xcenter + length * 0.05;
+                                        y1 = ycenter - length * 0.1;
+                                        //rotation
+                                        xrot = xcenter + (x1 - xcenter) * dircos + (y1 - ycenter) * dirsin;
+                                        yrot = ycenter - (x1 - xcenter) * dirsin + (y1 - ycenter) * dircos;
+                                        _drobj.ContourPoints[0].Add(new PointF((float)xrot, (float)yrot));
+                                    }
                                 }
                             }
                         }
