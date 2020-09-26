@@ -39,23 +39,31 @@ namespace GralDomain
         /// </summary>
         private void DrawOnlineMap()
         {
-            if (RubberRedrawAllowed == 0)
+            try
             {
-                RubberRedrawAllowed = 1; // redraw - flag
-                Picturebox1_Paint();
-                RubberRedrawAllowed = 0;
+                if (OnlineRedraw != null)
+                {
+                    EventArgs e = new EventArgs();
+                    OnlineRedraw(this, e);
+                }
             }
+            catch
+            { }
         }
 
+        private async void AsyncUVGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => UVGrammChanged(sender, e));
+        }
         //read the file uv_Gramm.txt when it is changed by GRAMM.exe and compute vector plot
-        void UVGrammChanged(object sender, FileSystemEventArgs e)
+        public void UVGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute vectors
                     ReDrawVectors = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -71,15 +79,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncUGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => UGrammChanged(sender, e));
+        }
         //read the file u_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void UGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -95,15 +108,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncSpeedGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => SpeedGrammChanged(sender, e));
+        }
         //read the file speed_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void SpeedGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -119,15 +137,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncVGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => VGrammChanged(sender, e));
+        }
         //read the file v_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void VGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -143,16 +166,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncWGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => WGrammChanged(sender, e));
+        }
         //read the file w_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void WGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
-                    
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -168,16 +195,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncTabsGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => TabsGrammChanged(sender, e));
+        }
         //read the file tabs_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void TabsGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
-                    
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -193,15 +224,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncTpotGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => TpotGrammChanged(sender, e));
+        }
         //read the file tpot_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void TpotGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -217,15 +253,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncHumGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => HumGrammChanged(sender, e));
+        }
         //read the file hum_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void HumGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -241,15 +282,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncNhpGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => NhpGrammChanged(sender, e));
+        }
         //read the file nhp_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void NhpGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -265,15 +311,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncGlobGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => GlobGrammChanged(sender, e));
+        }
         //read the file glob_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void GlobGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -289,15 +340,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncTerrGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => TerrGrammChanged(sender, e));
+        }
         //read the file terr_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void TerrGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -313,15 +369,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncSensheatGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => SensheatGrammChanged(sender, e));
+        }
         //read the file sensheat_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void SensheatGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -337,15 +398,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncLatheatGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => LatheatGrammChanged(sender, e));
+        }
         //read the file latheat_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void LatheatGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -361,15 +427,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncFricvelGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => FricvelGrammChanged(sender, e));
+        }
         //read the file fricvel_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void FricvelGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -385,15 +456,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncInverseMOGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => InverseMOGrammChanged(sender, e));
+        }
         //read the file inverseMO_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void InverseMOGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -409,15 +485,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncSurfTempGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => SurfTempGrammChanged(sender, e));
+        }
         //read the file surfTemp_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void SurfTempGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -433,15 +514,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncStabilityclassGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => StabilityclassGrammChanged(sender, e));
+        }
         //read the file stabilityclass_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void StabilityclassGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -457,15 +543,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncTKEGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => TkeGrammChanged(sender, e));
+        }
         //read the file tke_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void TkeGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -481,15 +572,20 @@ namespace GralDomain
             catch
             { }
         }
+
+        private async void AsyncDisGrammChanged(object sender, FileSystemEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() => DisGrammChanged(sender, e));
+        }
         //read the file dis_Gramm.txt when it is changed by GRAMM.exe and compute postmap
         void DisGrammChanged(object sender, FileSystemEventArgs e)
         {
             try
             {
-                OnlineCounter++;
+                System.Threading.Interlocked.Increment(ref OnlineCounter);
                 if (OnlineCounter >= MainForm.OnlineRefreshInterval)
                 {
-                    OnlineCounter = 0;
+                    System.Threading.Interlocked.Exchange(ref OnlineCounter, 0);
                     //compute pixel map
                     ReDrawContours = true;
                     foreach (DrawingObjects _drobj in ItemOptions)
@@ -512,7 +608,7 @@ namespace GralDomain
             MouseControl = 40;
             Cursor = Cursors.Cross;
         }
-        
+
         // show vertical profile of a 3D concentraion
         private void Button52_Click(object sender, EventArgs e)
         {
@@ -527,7 +623,7 @@ namespace GralDomain
             string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "vp_speed.txt");
             if (InputBox2("Vertical profile, GRAMM online", "Select field:", ref file) == DialogResult.OK)
             {
-                file = Path.Combine(Gral.Main.ProjectName, @"Computation", "vp_"+file+".txt");
+                file = Path.Combine(Gral.Main.ProjectName, @"Computation", "vp_" + file + ".txt");
                 int x1 = 1;
                 int y1 = 1;
                 if (MainForm.textBox13.Text != "")
@@ -546,15 +642,15 @@ namespace GralDomain
                     writer.WriteLine(Convert.ToString(x1));
                     writer.WriteLine(Convert.ToString(y1));
                 }
-                
+
                 //show vertical profile
                 VerticalProfile_Dynamic vertprof = new VerticalProfile_Dynamic();
-                string filename = "GRAMM-"+Path.GetFileName(file);
-                vertprof.file = Path.Combine(Path.GetDirectoryName(file),filename);
+                string filename = "GRAMM-" + Path.GetFileName(file);
+                vertprof.file = Path.Combine(Path.GetDirectoryName(file), filename);
                 vertprof.Show();
             }
         }
-        
+
         //show vertical profile of a quantity of GRAMM online
         private void Vert3DConcentration()
         {
@@ -564,14 +660,14 @@ namespace GralDomain
             }
             if (VerticalProfileForm != null)
             {
-                VerticalProfileForm.filename = Path.Combine(Gral.Main.ProjectName,"Computation","Vertical_Concentrations.txt");
+                VerticalProfileForm.filename = Path.Combine(Gral.Main.ProjectName, "Computation", "Vertical_Concentrations.txt");
                 VerticalProfileForm.X = XDomain;
                 VerticalProfileForm.Y = YDomain;
                 VerticalProfileForm.Init();
                 VerticalProfileForm.Show();
             }
         }
-        
+
         //show vertical profile of GRAMM windfields
         /// <summary>
         /// This method is used to start the vertical wind profile window
@@ -594,7 +690,7 @@ namespace GralDomain
             }
             catch { }
         }
-        
+
         /// <summary>
         /// Start the vertical wind profile GRAMM window
         /// </summary>
@@ -605,7 +701,7 @@ namespace GralDomain
                 //get cell indices of GRAMM grid
                 string file1 = Path.Combine(Gral.Main.ProjectName, @"Maps", "Vertical_Profile_Velocity.txt");
                 string file2 = Path.Combine(Gral.Main.ProjectName, @"Maps", "Vertical_Profile_Direction.txt");
-                
+
                 int x1 = 1;
                 int y1 = 1;
                 if (MainForm.textBox13.Text != "")
@@ -618,7 +714,7 @@ namespace GralDomain
                     x1 = (Convert.ToInt32(XDomain) - Convert.ToInt32(MainForm.textBox6.Text)) / Convert.ToInt32(MainForm.numericUpDown10.Value) + 1;
                     y1 = (Convert.ToInt32(YDomain) - Convert.ToInt32(MainForm.textBox5.Text)) / Convert.ToInt32(MainForm.numericUpDown10.Value) + 1;
                 }
-                
+
                 //Cursor = Cursors.WaitCursor;
                 GralMessage.MessageWindow message = new GralMessage.MessageWindow();
                 message.Show();
@@ -631,7 +727,7 @@ namespace GralDomain
                     PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
                 };
                 double[,] AH = new double[1, 1];
-                double[, ,] ZSP = new double[1, 1, 1];
+                double[,,] ZSP = new double[1, 1, 1];
                 int NX = 1;
                 int NY = 1;
                 int NZ = 1;
@@ -655,9 +751,9 @@ namespace GralDomain
                 //read wind fields
                 message.listBox1.Items.Add("Reading wind field data...");
                 message.Refresh();
-                float[, ,] UWI = new float[NX + 1, NY + 1, NZ + 1];
-                float[, ,] VWI = new float[NX + 1, NY + 1, NZ + 1];
-                float[, ,] WWI = new float[NX + 1, NY + 1, NZ + 1];
+                float[,,] UWI = new float[NX + 1, NY + 1, NZ + 1];
+                float[,,] VWI = new float[NX + 1, NY + 1, NZ + 1];
+                float[,,] WWI = new float[NX + 1, NY + 1, NZ + 1];
                 try
                 {
                     string wndfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
@@ -672,20 +768,20 @@ namespace GralDomain
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Unable to read wind field","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Unable to read wind field", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
+
                 message.Close();
                 //write text files with vertical profiles
                 using (StreamWriter write = new StreamWriter(file1))
                 {
                     for (int k = 1; k <= NZ; k++)
                     {
-                        text[0] = Convert.ToString(Math.Round(ZSP[x1, y1, k] - AH[x1, y1], 1), ic) + " " + Convert.ToString(Math.Round(Math.Pow(Math.Pow(UWI[x1, y1, k], 2) + Math.Pow(VWI[x1, y1, k], 2), 0.5), 2), ic);;
+                        text[0] = Convert.ToString(Math.Round(ZSP[x1, y1, k] - AH[x1, y1], 1), ic) + " " + Convert.ToString(Math.Round(Math.Pow(Math.Pow(UWI[x1, y1, k], 2) + Math.Pow(VWI[x1, y1, k], 2), 0.5), 2), ic); ;
                         write.WriteLine(text[0]);
                     }
                 }
-                
+
                 //show vertical profile
                 if (ProfileConcentration.VertProfileVelocity != null)
                 {
@@ -697,7 +793,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileVelocity.Location = new Point(this.Left + 50, this.Top + 100);
                 ProfileConcentration.VertProfileVelocity.Show();
-                
+
                 //write text files with vertical profiles
                 double windrichtung;
                 using (StreamWriter write = new StreamWriter(file2))
@@ -739,15 +835,15 @@ namespace GralDomain
                     ProfileConcentration.VertProfileDirection.Close();
                 }
                 ProfileConcentration.VertProfileDirection = new VerticalProfile_Static();
-                ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing );
+                ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.file = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileDirection.Location = new Point(this.Left + 350, this.Top + 100);
                 ProfileConcentration.VertProfileDirection.Show();
             }
-            catch{}
+            catch { }
         }
-        
+
         private void VertProfileVelocityClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ProfileConcentration.VertProfileVelocity = null;
@@ -756,7 +852,7 @@ namespace GralDomain
         {
             ProfileConcentration.VertProfileVelocity = null;
         }
-        
+
         /// <summary>
         /// Start the vertical wind profile GRAL window
         /// </summary>
@@ -767,10 +863,10 @@ namespace GralDomain
                 //get cell indices of GRAL grid
                 string file1 = Path.Combine(Gral.Main.ProjectName, @"Maps", "Vertical_Profile_Velocity.txt");
                 string file2 = Path.Combine(Gral.Main.ProjectName, @"Maps", "Vertical_Profile_Direction.txt");
-                
+
                 string[] text = new string[1];
                 float flowfieldraster = Convert.ToSingle(MainForm.numericUpDown10.Value);
-                int x1 = Convert.ToInt32(Math.Truncate((XDomain - MainForm.GralDomRect.West)  / flowfieldraster)) + 1;
+                int x1 = Convert.ToInt32(Math.Truncate((XDomain - MainForm.GralDomRect.West) / flowfieldraster)) + 1;
                 int y1 = Convert.ToInt32(Math.Truncate((YDomain - MainForm.GralDomRect.South) / flowfieldraster)) + 1;
 
                 //Cursor = Cursors.WaitCursor;
@@ -784,7 +880,7 @@ namespace GralDomain
                 Int32 nii = 0;
                 int GRALwest = 0;
                 int GRALsued = 0;
-                Single DZK=1;
+                Single DZK = 1;
                 Single stretch = 1;
                 Single AHMIN = 0;
                 List<float[]> StretchFlexible = new List<float[]>();
@@ -834,7 +930,7 @@ namespace GralDomain
                         }
                     }
                 }
-                
+
                 catch
                 {
                     MessageBox.Show("Error reading GRAL geometries.txt");
@@ -844,7 +940,7 @@ namespace GralDomain
                 float[][][] uk;
                 float[][][] vk;
                 //float[][][] wk;
-                Single GRAL_cellsize_ff=0;
+                Single GRAL_cellsize_ff = 0;
 
                 //reading *.gff-file
                 ReadFlowFieldFiles gff = new ReadFlowFieldFiles
@@ -870,28 +966,28 @@ namespace GralDomain
                     {
                         return;
                     }
-                    MessageBox.Show("Error reading windfields","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error reading windfields", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Cursor = Cursors.Default;
                     return;
                 }
-               
+
                 //computation of slice
                 Single[] HOKART = new Single[nkk + 1];  //height of vertical layers starting from zero
                 Single DZKdummy = DZK;
                 int flexstretchindex = 0;
                 float stretching = 1;
-                
+
                 for (int k = 1; k <= nkk; k++)
                 {
                     HOKART[k] = HOKART[k - 1] + DZKdummy;
-                    
+
                     if (stretch > 0.99)
                     {
                         DZKdummy *= stretch;
                     }
                     else
                     {
-                        if (flexstretchindex <StretchFlexible.Count - 1)
+                        if (flexstretchindex < StretchFlexible.Count - 1)
                         {
                             if (StretchFlexible[flexstretchindex + 1][1] > 0.99 &&
                                 HOKART[k - 1] > StretchFlexible[flexstretchindex + 1][0])
@@ -901,7 +997,7 @@ namespace GralDomain
                             }
                         }
                         DZKdummy *= stretching;
-                    }                  
+                    }
                 }
 
                 AHMIN = Math.Abs(AHMIN);
@@ -914,13 +1010,13 @@ namespace GralDomain
                         if (HOKART[k] + AHMIN >= AH[x1, y1] - Building_heights[x1, y1]) //check if point is above ground level
                         {
                             text[0] = Convert.ToString(Math.Round(HOKART[k] + AHMIN - AH[x1, y1] + Building_heights[x1, y1], 1), ic)
-                                +  " " + Convert.ToString(Math.Round(Math.Pow(Math.Pow(uk[x1][y1][k], 2) + Math.Pow(vk[x1][y1][k], 2), 0.5), 2), ic);
+                                + " " + Convert.ToString(Math.Round(Math.Pow(Math.Pow(uk[x1][y1][k], 2) + Math.Pow(vk[x1][y1][k], 2), 0.5), 2), ic);
                             write.WriteLine(text[0]);
                         }
                     }
                 }
 
-                 //show vertical profile
+                //show vertical profile
                 if (ProfileConcentration.VertProfileVelocity != null)
                 {
                     ProfileConcentration.VertProfileVelocity.Close();
@@ -972,19 +1068,19 @@ namespace GralDomain
                 }
 
                 //show vertical profile
-                 if (ProfileConcentration.VertProfileDirection != null)
+                if (ProfileConcentration.VertProfileDirection != null)
                 {
                     ProfileConcentration.VertProfileDirection.Close();
                 }
                 ProfileConcentration.VertProfileDirection = new VerticalProfile_Static();
-                ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing );
+                ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.file = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileDirection.Location = new Point(this.Left + 350, this.Top + 100);
                 ProfileConcentration.VertProfileDirection.Show();
-                
+
             }
-            catch{}
+            catch { }
         }
 
         //input box to select quantity for vertical profile of GRAMM online analysis
@@ -1043,6 +1139,11 @@ namespace GralDomain
                 file = Convert.ToString(combo.Items[combo.SelectedIndex]);
             }
             return dialogResult;
+        }
+        
+        private void FileWatcherError(object source, ErrorEventArgs e)
+        {
+            OnlineCounter = -1;
         }
     }
 }

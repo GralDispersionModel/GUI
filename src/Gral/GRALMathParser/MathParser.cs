@@ -224,10 +224,16 @@ namespace MathParserMathos
 //                LocalVariables.Add("pitograd", (double)57.2957795130823208767981548141051704);
 //                LocalVariables.Add("piofgrad", (double)0.01745329251994329576923690768488612);
 
+                // LocalVariables.Add("e", (double)2.71828182845904523536028747135266249);
+                //                LocalVariables.Add("phi", (double)1.61803398874989484820458683436563811);
+                //                LocalVariables.Add("major", (double)0.61803398874989484820458683436563811);
+                //                LocalVariables.Add("minor", (double)0.38196601125010515179541316563436189);
+                LocalVariables.Add("a", (double) 0);
+                LocalVariables.Add("b", (double)0);
+                LocalVariables.Add("c", (double)0);
+                LocalVariables.Add("d", (double)0);
+                LocalVariables.Add("g", (double)0);
                 LocalVariables.Add("e", (double)2.71828182845904523536028747135266249);
-//                LocalVariables.Add("phi", (double)1.61803398874989484820458683436563811);
-//                LocalVariables.Add("major", (double)0.61803398874989484820458683436563811);
-//                LocalVariables.Add("minor", (double)0.38196601125010515179541316563436189);
             }
         }
 
@@ -282,6 +288,31 @@ namespace MathParserMathos
             get { return _cultureInfo; }
         }
 
+        /* PARSER FUNCTIONS, PUBLIC */
+        /// <summary>
+        /// Enter the math expression in form of a string.
+        /// </summary>
+        /// <param name="mathExpression"></param>
+        /// <param name="VariablesAtoE">Values for variables A to E</param>
+        /// <returns></returns>
+        public double Parse(string mathExpression, double[] VariablesAtoE)
+        {
+            string[] varName = new string[5] { "a", "b", "c", "d", "g" };
+
+            // set variable values
+            for (int i = 0; i < Math.Min(varName.Length, VariablesAtoE.Length); i++)
+            {
+                if (LocalVariables.ContainsKey(varName[i]))
+                {
+                    LocalVariables[varName[i]] = VariablesAtoE[i];
+                }
+                else
+                {
+                    LocalVariables.Add(varName[i], VariablesAtoE[i]);
+                }
+            }
+            return Parse(mathExpression);
+        }
 
         /* PARSER FUNCTIONS, PUBLIC */
         /// <summary>
@@ -291,26 +322,26 @@ namespace MathParserMathos
         /// <returns></returns>
         public double Parse(string mathExpression)
         {
-        	// first look, if an "xEy" exists and change "E" to "?" 
-        	string a = "";
-        	for (int i = 0; i < mathExpression.Length; i++)
-        	{
-        		var ch = mathExpression[i];
-        		
-        		
-        		if (i > 0 && ch == 'E')
-        		{
-        			var ch1 = mathExpression[i-1];
-        			if (Char.IsDigit(ch1))
+            // first look, if an "xEy" exists and change "E" to "?" 
+            string a = "";
+            for (int i = 0; i < mathExpression.Length; i++)
+            {
+                var ch = mathExpression[i];
+
+
+                if (i > 0 && ch == 'E')
+                {
+                    var ch1 = mathExpression[i - 1];
+                    if (Char.IsDigit(ch1))
                     {
                         ch = '?';
                     }
                 }
-        		a += ch;
-        	}
-        	mathExpression = a;
-        	mathExpression = Correction(mathExpression); // correct different valid writings
-        	mathExpression = mathExpression.ToLower();   // uppercase to lower 
+                a += ch;
+            }
+            mathExpression = a;
+            mathExpression = Correction(mathExpression); // correct different valid writings
+            mathExpression = mathExpression.ToLower();   // uppercase to lower 
             return MathParserLogic(Scanner(mathExpression)); // parse
         }
 

@@ -64,32 +64,34 @@ namespace GralDomain
 					myReader.Close();
 					myReader.Dispose();
 
-					//clear actual contourpoints
-					_drobj.ContourPoints.Clear();
-					_drobj.ContourPolygons.Clear();
+                    //clear actual contourpoints
+                    lock (_drobj)
+                    {
+                        _drobj.ContourPoints.Clear();
+                        _drobj.ContourPolygons.Clear();
+                        //save geometry information of the raster grid
+                        _drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
+                        //define postmap levels
+                        _drobj.ItemValues[0] = min;
+                        _drobj.ItemValues[9] = max;
 
-					//save geometry information of the raster grid
-					_drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
-
-                    //define postmap levels
-                    _drobj.ItemValues[0] = min;
-					_drobj.ItemValues[9] = max;
-					//apply color gradient between light green and red
-					int r1 = _drobj.FillColors[0].R;
-					int g1 = _drobj.FillColors[0].G;
-					int b1 = _drobj.FillColors[0].B;
-					int r2 = _drobj.FillColors[9].R;
-					int g2 = _drobj.FillColors[9].G;
-					int b2 = _drobj.FillColors[9].B;
-					for (int i = 0; i < 8; i++)
-					{
-						_drobj.ItemValues[i + 1] = min + (i + 1) * (max - min) / 9;
-						int intr = r1 + (r2 - r1) / 9 * (i + 1);
-						int intg = g1 + (g2 - g1) / 9 * (i + 1);
-						int intb = b1 + (b2 - b1) / 9 * (i + 1);
-						_drobj.FillColors[i + 1] = Color.FromArgb(intr, intg, intb);
-						_drobj.LineColors[i + 1] = Color.FromArgb(intr, intg, intb);
-					}
+                        //apply color gradient between light green and red
+                        int r1 = _drobj.FillColors[0].R;
+                        int g1 = _drobj.FillColors[0].G;
+                        int b1 = _drobj.FillColors[0].B;
+                        int r2 = _drobj.FillColors[9].R;
+                        int g2 = _drobj.FillColors[9].G;
+                        int b2 = _drobj.FillColors[9].B;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            _drobj.ItemValues[i + 1] = min + (i + 1) * (max - min) / 9;
+                            int intr = r1 + (r2 - r1) / 9 * (i + 1);
+                            int intg = g1 + (g2 - g1) / 9 * (i + 1);
+                            int intb = b1 + (b2 - b1) / 9 * (i + 1);
+                            _drobj.FillColors[i + 1] = Color.FromArgb(intr, intg, intb);
+                            _drobj.LineColors[i + 1] = Color.FromArgb(intr, intg, intb);
+                        }
+                    }
 
 					//define integer field for fill colors
 					if (_drobj.Fill == true)
@@ -97,19 +99,28 @@ namespace GralDomain
 						// create new index if array == null or array dimension != nx or ny
 						if (_drobj.ContourColor == null || _drobj.ContourColor.GetUpperBound(0) != (nx - 1) || _drobj.ContourColor.GetUpperBound(1) != (ny - 1))
 						{
-							_drobj.ContourColor = new int[nx, ny];
+                            lock (_drobj)
+                            {
+                                _drobj.ContourColor = new int[nx, ny];
+                            }
 						}
 						int[,] _contcol = _drobj.ContourColor;
 						Parallel.For(0, nx, i =>
 			             {
 			             	for (int j = 0; j < ny; j++)
 			             	{
-			             		_drobj.ContourColor[i, j] = -1;
+                                lock (_drobj)
+                                {
+                                   _drobj.ContourColor[i, j] = -1;
+                                }
 			             		for (int k = _drobj.ItemValues.Count - 1; k > -1; k--)
 			             		{
 			             			if (zlevel[i, j] > _drobj.ItemValues[k])
 			             			{
-			             				_contcol[i, j] = k;
+                                        lock (_contcol)
+                                        {
+                                            _contcol[i, j] = k;
+                                        }
 			             				break;
 			             			}
 			             		}
@@ -125,7 +136,10 @@ namespace GralDomain
                         MessageBox.Show(this, "Unable to open, read or process the data","GRAL GUI",MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     }
                 }
-				Cursor = Cursors.Default;
+                if (!GRAMMOnline)
+                {
+                    Cursor = Cursors.Default;
+                }
 			}
 			ReDrawContours = false;
 		}
