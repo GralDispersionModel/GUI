@@ -88,24 +88,24 @@ namespace GralShape
                 int recordNumber = readIntBig(data, recordStart);
                 int contentLength = readIntBig(data, recordStart + 4);
                 int recordContentStart = recordStart + 8;
-
+                shapetype = readIntLittle(data, recordContentStart);
+                
                 //Shape-Type: Point
                 if (shapetype == 1)
                 {
                     GralDomain.PointD point = new GralDomain.PointD();
-                    int recordShapeType = readIntLittle(data, recordContentStart);
+                    //int recordShapeType = readIntLittle(data, recordContentStart);
                     point.X = readDoubleLittle(data, recordContentStart + 4);
                     point.Y = readDoubleLittle(data, recordContentStart + 12);
                     //domain.shppoints[index].Add(point);
                     yield return point;
-                        
                 }
 
                 //Shape-Type: PointZ
                 if (shapetype == 11)
                 {
                     GralData.PointD_3d point = new GralData.PointD_3d();
-                    int recordShapeType = readIntLittle(data, recordContentStart);
+                    //int recordShapeType = readIntLittle(data, recordContentStart);
                     point.X = readDoubleLittle(data, recordContentStart + 4);
                     point.Y = readDoubleLittle(data, recordContentStart + 12);
                     point.Z = readDoubleLittle(data, recordContentStart + 20);
@@ -117,7 +117,7 @@ namespace GralShape
                 if (shapetype == 3)
                 {
                     SHPLine line = new SHPLine();
-                    int recordShapeType = readIntLittle(data, recordContentStart);
+                    //int recordShapeType = readIntLittle(data, recordContentStart);
                     line.Box = new Double[4];
                     line.Box[0] = readDoubleLittle(data, recordContentStart + 4);
                     line.Box[1] = readDoubleLittle(data, recordContentStart + 12);
@@ -147,7 +147,7 @@ namespace GralShape
                 if (shapetype == 13) 
                 {
                     SHPLine line = new SHPLine();
-                    int recordShapeType = readIntLittle(data, recordContentStart);
+                    //int recordShapeType = readIntLittle(data, recordContentStart);
                     line.Box = new Double[4];
                     line.Box[0] = readDoubleLittle(data, recordContentStart + 4);
                     line.Box[1] = readDoubleLittle(data, recordContentStart + 12);
@@ -182,7 +182,7 @@ namespace GralShape
                 if (shapetype == 23)
                 {
                     GralShape.SHPLine line = new GralShape.SHPLine();
-                    int recordShapeType = readIntLittle(data, recordContentStart);
+                    //int recordShapeType = readIntLittle(data, recordContentStart);
                     line.Box = new Double[4];
                     line.Box[0] = readDoubleLittle(data, recordContentStart + 4);
                     line.Box[1] = readDoubleLittle(data, recordContentStart + 12);
@@ -212,7 +212,7 @@ namespace GralShape
                 if (shapetype == 5)
                 {
                     SHPPolygon polygon = new SHPPolygon();
-                    int recordShapeType = readIntLittle(data, recordContentStart);
+                    //int recordShapeType = readIntLittle(data, recordContentStart);
                     polygon.Box = new Double[4];
                     polygon.Box[0] = readDoubleLittle(data, recordContentStart + 4);
                     polygon.Box[1] = readDoubleLittle(data, recordContentStart + 12);
