@@ -265,7 +265,6 @@ namespace GralItemForms
                 numericUpDown2.Enabled = false;
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
-                label5.Enabled = false;
                 label6.Enabled = false;
                 label7.Enabled = false;
             }
@@ -389,7 +388,6 @@ namespace GralItemForms
                     textBox1.Visible = true;
                     textBox2.Visible = true;
                     label4.Visible = true;
-                    label5.Visible = true;
                     label6.Visible = true;
                     checkBox2.Enabled = false;
                     checkBox7.Visible = true;
@@ -1824,8 +1822,7 @@ namespace GralItemForms
             {
                 if (checkBox2.Checked == true)
                 {
-                    DrawObject.ColorScale = Convert.ToString(Math.Max(10, domain.picturebox1.Width - 150)) + "," + Convert.ToString(Math.Max(10, domain.picturebox1.Height - 200)) + "," + "1";
-                    label5.Enabled = true;
+                    DrawObject.ColorScale = Convert.ToString(Math.Max(10, domain.picturebox1.Width - 350)) + "," + Convert.ToString(Math.Max(10, domain.picturebox1.Height - 300)) + "," + "1";
                     label6.Enabled = true;
                     label7.Enabled = true;
                     numericUpDown2.Enabled = true;
@@ -1838,7 +1835,6 @@ namespace GralItemForms
                 else
                 {
                     DrawObject.ColorScale = "-999,-999,-999";
-                    label5.Enabled = false;
                     label6.Enabled = false;
                     label7.Enabled = false;
                     numericUpDown2.Enabled = false;

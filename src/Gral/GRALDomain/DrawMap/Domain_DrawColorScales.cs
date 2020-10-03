@@ -32,14 +32,18 @@ namespace GralDomain
         {
             StringFormat format1 = new StringFormat()  //format for names of sources
             {
-                LineAlignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Near,
                 Alignment = StringAlignment.Center,
             };
             StringFormat string_Format = new StringFormat()
             {
-                Alignment = StringAlignment.Far, //Horizontale Orientieren
-                LineAlignment = StringAlignment.Center,  //Vertikale Orientierung
+                Alignment = StringAlignment.Far, 
+                LineAlignment = StringAlignment.Center,  
             };
+            Brush blackBrush = new SolidBrush(Color.Black);
+            Brush whiteBrush = new SolidBrush(Color.White);
+            Pen blackPen = new Pen(Color.Black, 1);
+
             for (int name = ItemOptions.Count - 1; name > -1; name--)
             {
                 DrawingObjects _drobj = ItemOptions[name];
@@ -48,40 +52,51 @@ namespace GralDomain
                 {
                     try
                     {
-                        string[] dummy1 = new string[3];
-                        Font font = new Font(_drobj.LabelFont.Name, _drobj.LabelFont.Size * Convert.ToInt32(Math.Min(32000, 1 / _bmppbx_save)));
-                        dummy1 = _drobj.ColorScale.Split(new char[] { ',' });
+                        Font font = new Font(_drobj.LabelFont.Name, _drobj.LabelFont.Size);
+                        string[] dummy1 = _drobj.ColorScale.Split(new char[] { ',' });
+
+                        int xpos1 = 100;
+                        int ypos1 = 100;
+                        float scale = 1;
+                        if (dummy1.Length > 2)
+                        {
+                            scale = Math.Max(0.01F, Convert.ToSingle(dummy1[2].Replace(".", decsep)) / _bmppbx_save);
+                            xpos1 = Convert.ToInt32(Math.Min(32000, Convert.ToDouble(dummy1[0]) / _bmppbx_save / scale));
+                            ypos1 = Convert.ToInt32(Math.Min(32000, Convert.ToDouble(dummy1[1]) / _bmppbx_save / scale));
+                        }
+
+                        g.ScaleTransform(scale, scale);
+
+                        int ydist1 = Math.Max(15, Convert.ToInt32(Math.Min(32000, 170 / _drobj.FillColors.Count)));
                         
-                        int xpos1 = Convert.ToInt32(Math.Min(32000, Convert.ToDouble(dummy1[0]) / _bmppbx_save));
-                        int ypos1 = Convert.ToInt32(Convert.ToDouble(dummy1[1]) / _bmppbx_save);
-                        double skalierung1 = Convert.ToDouble(dummy1[2].Replace(".", decsep)) / _bmppbx_save;
-                        
-                        int ydist1 = Convert.ToInt32(Math.Min(32000, 170 / _drobj.FillColors.Count * skalierung1));
-                        
-                        int lenght_of_string = (int) g.MeasureString(_drobj.LegendTitle, font).Width;
+                        int titleWidth = (int) g.MeasureString(_drobj.LegendTitle, font).Width;
+                        int titleHeight = (int) g.MeasureString(_drobj.LegendTitle, font).Height;
+                        int rectHeight = _drobj.FillColors.Count * ydist1 + titleHeight + 20;
+
                         SizeF size_of_string = new SizeF(0, 0);
                         
                         for (int h = 0; h < _drobj.FillColors.Count; h++)
                         {
                             string s = Convert.ToString(Math.Round(_drobj.ItemValues[h], _drobj.DecimalPlaces)) + "  " + _drobj.LegendUnit;
                             size_of_string = g.MeasureString(s, font);
-                            lenght_of_string = (int) Math.Max(lenght_of_string, size_of_string.Width);
+                            titleWidth = (int) Math.Max(titleWidth, size_of_string.Width);
                         }
                         
-                        int width_rect = (int) (lenght_of_string + 50 * skalierung1);
-                        Brush black = new SolidBrush(Color.Black);
+                        int width_rect = titleWidth + 50;
                         
-                        g.FillRectangle(new SolidBrush(Color.White), xpos1 + 2, ypos1 + 2, width_rect, Convert.ToInt32(200 * skalierung1));
-                        g.DrawRectangle(new Pen(Color.Black, 1), xpos1 + 2, ypos1 + 2, width_rect, Convert.ToInt32(200 * skalierung1));
-                        g.DrawString(_drobj.LegendTitle, font, black, (int) (xpos1 + width_rect * 0.5), ypos1 + 5 + Convert.ToInt32(_drobj.LabelFont.Height * 0.5 * skalierung1), format1);
-                        
+                        g.FillRectangle(whiteBrush, xpos1 + 2, ypos1 + 2, width_rect, rectHeight);
+                        g.DrawRectangle(blackPen, xpos1 + 2, ypos1 + 2, width_rect, rectHeight);
+                        g.DrawString(_drobj.LegendTitle, font, blackBrush, (int) (xpos1 + width_rect * 0.5), ypos1 + 5, format1);
+
+                        ypos1 += titleHeight + 15;
+
                         for (int h = 0; h < _drobj.FillColors.Count; h++)
                         {
                             string s = Convert.ToString(Math.Round(_drobj.ItemValues[h], _drobj.DecimalPlaces)) + "  " + _drobj.LegendUnit;
-                            g.DrawString(s, font, new SolidBrush(Color.Black), xpos1 + width_rect - 4, ypos1 + ydist1 * h + Convert.ToInt32(30 * skalierung1), string_Format);
+                            g.DrawString(s, font, blackBrush, xpos1 + width_rect - 4, ypos1 + ydist1 * h, string_Format);
                         }
                         
-                        width_rect = (int) Math.Max(10, width_rect - lenght_of_string - 20 * skalierung1);
+                        width_rect = Math.Max(10, width_rect - titleWidth - 20);
                         
                         int transparency = _drobj.Transparancy;
                         if (_drobj.DrawSimpleContour == false)
@@ -93,16 +108,16 @@ namespace GralDomain
                         {
                             using (Brush br1 = new SolidBrush(Color2Transparent(transparency, _drobj.FillColors[h]))) // Fill Color
                             {
-                                int x0 = xpos1 + 3 + Convert.ToInt32(5 * skalierung1);
-                                int y0 = ypos1 + ydist1 * h + Convert.ToInt32(30 * skalierung1);
+                                int x0 = xpos1 + 8;
+                                int y0 = ypos1 + ydist1 * h;
                                 
 //                                if (_drobj.DrawSimpleContour)
-//								{
+//								  {
 //                                	g.FillRectangle(br1, x0, y0, width_rect, (int) (ydist1 * (_drobj.FillColors.Count - h)/ skalierung1));
 //                                }
 //                                else
 //                                {
-                                	g.FillRectangle(br1, x0, y0, width_rect, (int) (ydist1));
+                                	g.FillRectangle(br1, x0, y0, width_rect, ydist1);
 //                                }
                                 
                                 if (h < _drobj.LineColors.Count) // Line Color
@@ -114,8 +129,6 @@ namespace GralDomain
                                 }
                             }
                         }
-                        
-                        black.Dispose();
                         font.Dispose();
                     }
                     catch
@@ -123,6 +136,10 @@ namespace GralDomain
                     }
                 }
             }
+            g.ResetTransform();
+            blackBrush.Dispose();
+            whiteBrush.Dispose();
+            blackPen.Dispose();
             string_Format.Dispose();
             format1.Dispose();
         }

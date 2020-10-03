@@ -68,7 +68,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button13 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
@@ -490,10 +489,9 @@
             this.groupBox4.Controls.Add(this.textBox1);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.checkBox2);
-            this.groupBox4.Controls.Add(this.label5);
-            this.groupBox4.Location = new System.Drawing.Point(9, 315);
+            this.groupBox4.Location = new System.Drawing.Point(9, 302);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(224, 80);
+            this.groupBox4.Size = new System.Drawing.Size(224, 93);
             this.groupBox4.TabIndex = 28;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Color scale";
@@ -508,7 +506,7 @@
             0,
             0,
             65536});
-            this.numericUpDown2.Location = new System.Drawing.Point(169, 45);
+            this.numericUpDown2.Location = new System.Drawing.Point(169, 63);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             4,
             0,
@@ -532,31 +530,34 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(117, 48);
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(174, 44);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(49, 17);
+            this.label7.Size = new System.Drawing.Size(32, 13);
             this.label7.TabIndex = 31;
             this.label7.Text = "scale";
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(34, 45);
+            this.textBox2.Location = new System.Drawing.Point(59, 63);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(76, 20);
+            this.textBox2.Size = new System.Drawing.Size(93, 20);
             this.textBox2.TabIndex = 26;
             this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(34, 16);
+            this.textBox1.Location = new System.Drawing.Point(9, 16);
+            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(76, 20);
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(143, 41);
             this.textBox1.TabIndex = 25;
             this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(6, 47);
+            this.label6.Location = new System.Drawing.Point(6, 65);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(26, 13);
             this.label6.TabIndex = 28;
@@ -564,21 +565,14 @@
             // 
             // checkBox2
             // 
-            this.checkBox2.Location = new System.Drawing.Point(117, 19);
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(165, 14);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(101, 20);
+            this.checkBox2.Size = new System.Drawing.Size(53, 17);
             this.checkBox2.TabIndex = 27;
-            this.checkBox2.Text = "Color scale";
+            this.checkBox2.Text = "Show";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(6, 18);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(27, 13);
-            this.label5.TabIndex = 27;
-            this.label5.Text = "Title";
             // 
             // listBox1
             // 
@@ -926,7 +920,6 @@
             // 
             // Layout
             // 
-            this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(462, 626);
@@ -1036,7 +1029,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ToolTip toolTip1;
