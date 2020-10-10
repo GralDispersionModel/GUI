@@ -125,7 +125,7 @@ namespace GralDomain
                                     myWriter.WriteLine(_drobj.Item);
                                     myWriter.WriteLine(_drobj.SourceGroup);
                                     myWriter.WriteLine(_drobj.ColorScale);
-                                    myWriter.WriteLine(_drobj.LegendTitle);
+                                    myWriter.WriteLine(_drobj.LegendTitle.Replace("\n", "@__NL").Replace("\r", "@__NR"));
                                     myWriter.WriteLine(_drobj.LegendUnit);
                                     myWriter.WriteLine(_drobj.ContourFilename);
                                     
@@ -385,7 +385,7 @@ namespace GralDomain
                 _drobj.Item = Convert.ToInt32(myReader.ReadLine());
                 _drobj.SourceGroup = Convert.ToInt32(myReader.ReadLine());
                 _drobj.ColorScale = myReader.ReadLine();
-                _drobj.LegendTitle = myReader.ReadLine();
+                _drobj.LegendTitle = myReader.ReadLine().Replace("@__NL", "\n").Replace("@__NR", "\r");
                 _drobj.LegendUnit = myReader.ReadLine();
                 _drobj.ContourFilename = myReader.ReadLine();
                 

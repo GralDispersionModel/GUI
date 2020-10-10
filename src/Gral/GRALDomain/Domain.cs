@@ -1447,15 +1447,21 @@ namespace GralDomain
                             {
                                 _drobj.ShpLines.Add((GralShape.SHPLine) shp);
                             }
-
-                            if (shp is GralShape.SHPPolygon)
+                            else if (shp is GralShape.SHPPolygon)
                             {
                                 _drobj.ShpPolygons.Add((GralShape.SHPPolygon) shp);
                             }
-
-                            if (shp is PointF)
+                            else if (shp is PointF _ptF)
                             {
-                                _drobj.ShpPoints.Add((PointF) shp);
+                                _drobj.ShpPoints.Add(_ptF);
+                            }
+                            else if (shp is GralData.PointD_3d _pt3D)
+                            {
+                                _drobj.ShpPoints.Add(_pt3D.ToPointF());
+                            }
+                            else if (shp is PointD _ptD)
+                            {
+                                _drobj.ShpPoints.Add(_ptD.ToPointF());
                             }
 
                             if (count == 0)

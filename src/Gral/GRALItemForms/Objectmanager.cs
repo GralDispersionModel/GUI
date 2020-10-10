@@ -188,6 +188,12 @@ namespace GralItemForms
         		MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                	return;
         	}
+            
+            // catch invalid index
+            if (listBox1.SelectedIndex > domain.ItemOptions.Count || listBox1.SelectedIndex < 0)
+            {
+                return;
+            }
                 
             Layout layout = new Layout(domain);
             //fill combobox1 with source groups and combobox2 with items
