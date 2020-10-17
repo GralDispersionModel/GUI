@@ -110,6 +110,11 @@ namespace GralBackgroundworkers
                 Reorder(MyData, e);
             }
 
+            if (MyData.Rechenart == 3)
+            {
+                GenerateGRALMeteofile(MyData, e);
+            }
+
             if (MyData.Rechenart == 23)
             {
                 HighPercentiles(MyData, e);
@@ -210,14 +215,18 @@ namespace GralBackgroundworkers
                     MyBackData.Rechenart = 0;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".", Location);
                     Box.Show();
-                    //MessageBox.Show("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".");
                 }
                 if (MyBackData.Rechenart == 2) // Re-Order
                 {
                     MyBackData.Rechenart = 0;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Re-ordering finished!", Location);
                     Box.Show();
-                    //MessageBox.Show("Re-ordering finished!");
+                }
+                if (MyBackData.Rechenart == 3) // GRAL Meteo Files
+                {
+                    MyBackData.Rechenart = 0;
+                    MessageBoxTemporary Box = new MessageBoxTemporary("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".", Location);
+                    Box.Show();
                 }
 
                 if (MyBackData.Rechenart == 25) // Mean, Max, daily Max

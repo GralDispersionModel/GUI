@@ -634,9 +634,9 @@ namespace GralBackgroundworkers
                                 try
                                 {
                                     recwrite.WriteLine(recname[k]);
-                                    recwrite.WriteLine(@"\\X=" + recX[k]);
-                                    recwrite.WriteLine(@"\\Y=" + recY[k]);
-                                    recwrite.WriteLine(@"\\Z=" + recZ[k]);
+                                    recwrite.WriteLine(@"//X=" + recX[k]);
+                                    recwrite.WriteLine(@"//Y=" + recY[k]);
+                                    recwrite.WriteLine(@"//Z=" + recZ[k]);
                                 }
                                 catch { }
                             }

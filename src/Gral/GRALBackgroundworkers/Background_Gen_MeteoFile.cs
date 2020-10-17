@@ -161,78 +161,81 @@ namespace GralBackgroundworkers
                     //obtain indices of selected point
                     int ix = Convert.ToInt32(Math.Floor(xsi/mydata.GRAMMhorgridsize)) + 1;
                     int iy = Convert.ToInt32(Math.Floor(eta / mydata.GRAMMhorgridsize)) + 1;
-                    double schnittZ = item.Z;
 
-                    //obtain index in the vertical direction
-                    for(int k=1;k<=NZ;k++)
+                    if (ix > 0 && iy > 0 && ix < NX && iy < NY)
                     {
-                        if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
-                    {
-                        ischnitt = k;
-                        break;
-                    }
-                    }
+                        double schnittZ = item.Z;
 
-                    if (mydata.LocalStability && local_stability_OK) // use local stability?
-                    {
-                        int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
-                        if (result > 0) // valid result
+                        //obtain index in the vertical direction
+                        for (int k = 1; k <= NZ; k++)
                         {
-                            local_akla[item_number][n] = result;
+                            if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
+                            {
+                                ischnitt = k;
+                                break;
+                            }
                         }
-                        else
+
+                        if (mydata.LocalStability && local_stability_OK) // use local stability?
+                        {
+                            int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
+                            if (result > 0) // valid result
+                            {
+                                local_akla[item_number][n] = result;
+                            }
+                            else
+                            {
+                                local_akla[item_number][n] = iakla[n];
+                            }
+                        }
+                        else // use global stability
                         {
                             local_akla[item_number][n] = iakla[n];
                         }
-                    }
-                    else // use global stability
-                    {
-                        local_akla[item_number][n] = iakla[n];
-                    }
-                    
-                    
-                    Uoben = UWI[ix, iy, ischnitt];
-                    Voben = VWI[ix, iy, ischnitt];
-                    if (ischnitt > 1)
-                    {
-                        Uunten = UWI[ix, iy, ischnitt - 1];
-                        Vunten = VWI[ix, iy, ischnitt - 1];
-                        Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
-                            (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
-                        Vmittel = Vunten + ((Voben - Vunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
-                            (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]));
-                    }
-                    else
-                    {
-                        Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
-                        Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
-                    }
-                    if (Vmittel == 0)
-                    {
-                        iwr[item_number][n] = 90;
-                    }
-                    else
-                    {
-                        iwr[item_number][n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
-                    }
 
-                    if ((Vmittel > 0) && (Umittel <= 0))
-                    {
-                        iwr[item_number][n] = 180 - iwr[item_number][n];
-                    }
 
-                    if ((Vmittel >= 0) && (Umittel > 0))
-                    {
-                        iwr[item_number][n] = 180 + iwr[item_number][n];
-                    }
+                        Uoben = UWI[ix, iy, ischnitt];
+                        Voben = VWI[ix, iy, ischnitt];
+                        if (ischnitt > 1)
+                        {
+                            Uunten = UWI[ix, iy, ischnitt - 1];
+                            Vunten = VWI[ix, iy, ischnitt - 1];
+                            Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
+                                (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
+                            Vmittel = Vunten + ((Voben - Vunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
+                                (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]));
+                        }
+                        else
+                        {
+                            Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
+                            Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
+                        }
+                        if (Vmittel == 0)
+                        {
+                            iwr[item_number][n] = 90;
+                        }
+                        else
+                        {
+                            iwr[item_number][n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
+                        }
 
-                    if ((Vmittel < 0) && (Umittel >= 0))
-                    {
-                        iwr[item_number][n] = 360 - iwr[item_number][n];
-                    }
+                        if ((Vmittel > 0) && (Umittel <= 0))
+                        {
+                            iwr[item_number][n] = 180 - iwr[item_number][n];
+                        }
 
-                    wgi[item_number][n] = (float) Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
-                    
+                        if ((Vmittel >= 0) && (Umittel > 0))
+                        {
+                            iwr[item_number][n] = 180 + iwr[item_number][n];
+                        }
+
+                        if ((Vmittel < 0) && (Umittel >= 0))
+                        {
+                            iwr[item_number][n] = 360 - iwr[item_number][n];
+                        }
+
+                        wgi[item_number][n] = (float)Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
+                    }
                     item_number++;
                 }
                 
@@ -268,10 +271,10 @@ namespace GralBackgroundworkers
                 using (StreamWriter mywriter = new StreamWriter(file, false))
                 {
                     // write header lines
-                    mywriter.WriteLine("//"+Path.GetFileName(file));
-                    mywriter.WriteLine("//X=" + item.X.ToString(ic));
-                    mywriter.WriteLine("//Y=" + item.Y.ToString(ic));
-                    mywriter.WriteLine("//Z=" + item.Z.ToString(ic));
+                    mywriter.WriteLine(@"//"+Path.GetFileName(file));
+                    mywriter.WriteLine(@"//X=" + item.X.ToString(ic));
+                    mywriter.WriteLine(@"//Y=" + item.Y.ToString(ic));
+                    mywriter.WriteLine(@"//Z=" + item.Z.ToString(ic));
                     
                     foreach(string mettimeseries in data_mettimeseries)
                     {

@@ -85,6 +85,7 @@ namespace GralBackgroundworkers
         public CellNumbers GRAMMCells { get; set; }
         public CellNumbers GRAMMSubCells { get; set; }
         public bool WriteDepositionOrOdourData { get; set; }
+        public double GFFGridSize { get; set; }
     }
 
     public class CellNumbers
