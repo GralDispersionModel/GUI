@@ -67,6 +67,17 @@ namespace GralDomain
                 FirstPointLenght.Y = (float)St_F.TxtToDbl(textBox2.Text, false);
             }
 #endif
+            // send Message to all forms registered to the SendClickedCoordinates event
+            try
+            {
+                if (SendCoors != null)
+                {
+                    PointD _pt = new PointD(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
+                    SendCoors(_pt, e);
+                }
+            }
+            catch
+            { }
 
             switch (MouseControl)
             {
@@ -1153,17 +1164,17 @@ namespace GralDomain
                     break;
 
                 case 32:
-                    //get sample point for computing meteorological time series from GRAMM windfield
-                    {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
-                        {
-                            MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        MeteoDialog.X_Coor.Text = XDomain.ToString();
-                        MeteoDialog.Y_Coor.Text = YDomain.ToString();
-                    }
+                    ////get sample point for computing meteorological time series from GRAMM windfield
+                    //{
+                    //    XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                    //    YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                    //    if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
+                    //    {
+                    //        MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //    }
+                    //    MeteoDialog.X_Coor.Text = XDomain.ToString();
+                    //    MeteoDialog.Y_Coor.Text = YDomain.ToString();
+                    //}
                     break;
 
                 case 65:
