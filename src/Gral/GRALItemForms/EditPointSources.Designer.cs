@@ -57,6 +57,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -348,20 +349,33 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(47, 302);
+            this.button7.Location = new System.Drawing.Point(2, 302);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(85, 24);
+            this.button7.Size = new System.Drawing.Size(75, 24);
             this.button7.TabIndex = 55;
             this.button7.Text = "&OK";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button8.Location = new System.Drawing.Point(104, 302);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 24);
+            this.button8.TabIndex = 55;
+            this.button8.Text = "&Cancel";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.cancelButtonClick);
             // 
             // EditPointSources
             // 
             this.AcceptButton = this.button7;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.button8;
             this.ClientSize = new System.Drawing.Size(191, 645);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -439,5 +453,6 @@
         private System.Windows.Forms.Button button3;
         public System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
     }
 }

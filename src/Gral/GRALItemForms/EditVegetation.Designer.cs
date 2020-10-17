@@ -64,6 +64,7 @@ namespace GralItemForms
             this.button5 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button6 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -322,6 +323,7 @@ namespace GralItemForms
             // 
             this.button5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button5.BackgroundImage")));
             this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button5.Location = new System.Drawing.Point(139, 311);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(24, 24);
@@ -345,20 +347,32 @@ namespace GralItemForms
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(78, 371);
+            this.button6.Location = new System.Drawing.Point(8, 371);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(85, 24);
+            this.button6.Size = new System.Drawing.Size(75, 24);
             this.button6.TabIndex = 76;
             this.button6.Text = "&OK";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.Button6_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(150, 371);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 24);
+            this.button4.TabIndex = 76;
+            this.button4.Text = "&Cancel";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.cancelButtonClick);
             // 
             // EditVegetation
             // 
             this.AcceptButton = this.button6;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.button4;
             this.ClientSize = new System.Drawing.Size(239, 407);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.groupBox1);
@@ -429,5 +443,6 @@ namespace GralItemForms
         private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.NumericUpDown numericUpDown5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button4;
     }
 }

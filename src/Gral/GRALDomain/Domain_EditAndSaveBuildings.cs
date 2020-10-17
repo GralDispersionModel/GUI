@@ -28,13 +28,13 @@ namespace GralDomain
     public partial class Domain
     {
         /// <summary>
-        /// Start the building dialog (checkbox15 = checked) or save the building data (checkbox15 = unchecked)
+        /// Show the building dialog (checkbox15 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox15.checked == false and sender == null -> EditB.SaveArray not called</param>
-        private void EditAndSaveBuildingsData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowBuildingDialog(object sender, EventArgs e)
         {
             buildingsToolStripMenuItem.Checked = checkBox15.Checked;
-            
+
             if (checkBox15.Checked == true)
             {
                 HideWindows(15); // Kuntner
@@ -70,61 +70,69 @@ namespace GralDomain
                 EditB.TopMost = true; // Kuntner
                 EditB.ShowForm();
                 Cursor = Cursors.Cross;
-                
-                CheckForExistingDrawingObject("BUILDINGS");   
+
+                CheckForExistingDrawingObject("BUILDINGS");
             }
             else
             {
-                EditB.Hide(); // Kuntner first hide form to save actual sourcedata
-                if (Gral.Main.Project_Locked == true)
+                EditB.Hide();
+                MouseControl = 0;
+                Picturebox1_Paint();
+            }
+        }
+        /// <summary>
+        /// Save the building data 
+        /// </summary>
+        /// <param name="sender"></param>
+        private void EditAndSaveBuildingsData(object sender, EventArgs e)
+        {
+            checkBox15.Checked = false;
+            buildingsToolStripMenuItem.Checked = checkBox15.Checked;
+            MouseControl = 0;
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else if (MainForm.DeleteGralGffFile() == DialogResult.OK) // Warningmessage if gff Files exist!
+            {
+                //save buildings input to file
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
+                    EditB.SaveArray();
                 }
-                else if (MainForm.DeleteGralGffFile() == DialogResult.OK) // Warningmessage if gff Files exist!
+                BuildingDataIO _bui = new BuildingDataIO();
+                _bui.SaveBuildings(EditB.ItemData, Gral.Main.ProjectName, Gral.Main.CompatibilityToVersion1901);
+                _bui = null;
+
+                Cursor = Cursors.Default;
+                for (int i = 0; i <= EditB.CornerBuilding; i++)
                 {
-                    //save buildings input to file
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
+                    CornerAreaSource[EditB.CornerBuilding] = new Point();
+                }
+                EditB.CornerBuilding = 0;
+                
+                MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+
+                if (MainForm.GRALSettings.BuildingMode != 0)
+                {
+                    if (EditB.ItemData.Count > 0)
                     {
-                        EditB.SaveArray();
+                        MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+                        MainForm.button9.Visible = true;
                     }
-                    BuildingDataIO _bui = new BuildingDataIO();
-                    _bui.SaveBuildings(EditB.ItemData, Gral.Main.ProjectName, Gral.Main.CompatibilityToVersion1901);
-                    _bui = null;
-                    
-                    Cursor = Cursors.Default;
-                    MouseControl = 0;
-                    //this.Width = ScreenWidth;
-                    //this.Height = ScreenHeight - 50;
-                    for (int i = 0; i <= EditB.CornerBuilding; i++)
+                    else
                     {
-                        CornerAreaSource[EditB.CornerBuilding] = new Point();
+                        MainForm.Change_Label(3, -1); // Building label - no buildings
                     }
-                    EditB.CornerBuilding = 0;
-                    Picturebox1_Paint();
-                    MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
-                    
-                    if (MainForm.GRALSettings.BuildingMode != 0)
-                    {
-                        if (EditB.ItemData.Count > 0)
-                        {
-                            MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
-                            MainForm.button9.Visible = true;
-                        }
-                        else
-                        {
-                            MainForm.Change_Label(3, -1); // Building label - no buildings
-                        }
-                    }
-                    //add/delete buildings in object list
-                    if (EditB.ItemData.Count == 0)
-                    {
-                        RemoveItemFromItemOptions("BUILDINGS");
-                    }
-                    
+                }
+                //add/delete buildings in object list
+                if (EditB.ItemData.Count == 0)
+                {
+                    RemoveItemFromItemOptions("BUILDINGS");
                 }
             }
+
             //show/hide button to select buildings
             if (EditB.ItemData.Count > 0)
             {
@@ -134,12 +142,13 @@ namespace GralDomain
             {
                 button16.Visible = false;
             }
-
+            EditB.Hide();
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations
             MainForm.Enable_GRAMM();
+            Picturebox1_Paint();
         }
-        
+
     }
 }

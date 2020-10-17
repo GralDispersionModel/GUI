@@ -27,18 +27,18 @@ namespace GralDomain
     public partial class Domain
     {
         /// <summary>
-        /// Start the portalsource dialog (checkbox12 = checked) or save the portal source data (checkbox12 = unchecked)
+        /// Show the portal source dialog (checkbox12 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox12.checked == false and sender == null -> EditPortals.SaveArray not called</param>
-        private void EditAndSavePortalSourceData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowPortalSourceDialog(object sender, EventArgs e)
         {
             tunnelPortalsToolStripMenuItem.Checked = checkBox12.Checked;
-            
+
             if (checkBox12.Checked == true)
             {
                 //show editing form for tunnel portal
                 HideWindows(12); // Kuntner
-                
+
                 if (ShowFirst.Ts) // set the inital position of the form
                 {
                     EditPortals.Height = 750;
@@ -75,63 +75,69 @@ namespace GralDomain
                 EditPortals.TopMost = true; // Kuntner
                 EditPortals.ShowForm();
                 Cursor = Cursors.Cross;
-                
-                CheckForExistingDrawingObject("TUNNEL PORTALS");   
+
+                CheckForExistingDrawingObject("TUNNEL PORTALS");
             }
             else
             {
-                EditPortals.Hide(); // Kuntner first hide form to save actual sourcedata
-                if (Gral.Main.Project_Locked == true)
+                MouseControl = 0;
+                EditPortals.Hide();
+            }
+        }
+        /// <summary>
+        /// Save the portal source data (checkbox12 = unchecked)
+        /// </summary>
+        /// <param name="sender">if checkbox12.checked == false and sender == null -> EditPortals.SaveArray not called</param>
+        private void EditAndSavePortalSourceData(object sender, EventArgs e)
+        {
+            checkBox12.Checked = false;
+            tunnelPortalsToolStripMenuItem.Checked = checkBox12.Checked;
+            MouseControl = 0;
+            Cursor = Cursors.Default;
+            EditPortals.Hide(); // Kuntner first hide form to save actual sourcedata
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else
+            {
+                //save tunnel portal input to file
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
+                    EditPortals.SaveArray();
                 }
-                else
-                {
-                    //save tunnel portal input to file
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
-                    {
-                        EditPortals.SaveArray();
-                    }
-                    PortalsDataIO _ps = new PortalsDataIO();
-                    _ps.SavePortalSources(EditPortals.ItemData, Gral.Main.ProjectName);
-                    _ps = null;
-                    
-                    MainForm.SelectAllUsedSourceGroups();
-                    MainForm.listBox5.Items.Clear();
-                    MainForm.Pollmod.Clear();
-                    MainForm.SetEmissionFilesInvalid();                   
-                    MainForm.button18.Visible = false;
-                    MainForm.Change_Label(2, -1); // Emission button not visible
-                    MainForm.button21.Visible = false; //Show Emissions
-                    MainForm.button13.Visible = false; //Nemo
-                    
-                    Cursor = Cursors.Default;
-                    MouseControl = 0;
-                    //this.Width = ScreenWidth;
-                    //this.Height = ScreenHeight - 50;
+                PortalsDataIO _ps = new PortalsDataIO();
+                _ps.SavePortalSources(EditPortals.ItemData, Gral.Main.ProjectName);
+                _ps = null;
 
-                    //add/delete tunnel portal sources in object list
-                    if (EditPortals.ItemData.Count == 0)
-                    {
-                        RemoveItemFromItemOptions("TUNNEL PORTALS");
-                    }
-                }
+                MainForm.SelectAllUsedSourceGroups();
+                MainForm.listBox5.Items.Clear();
+                MainForm.Pollmod.Clear();
+                MainForm.SetEmissionFilesInvalid();
+                MainForm.button18.Visible = false;
+                MainForm.Change_Label(2, -1); // Emission button not visible
+                MainForm.button21.Visible = false; //Show Emissions
+                MainForm.button13.Visible = false; //Nemo
 
-                //show/hide button to select tunnel sources
-                if (EditPortals.ItemData.Count > 0)
+                //add/delete tunnel portal sources in object list
+                if (EditPortals.ItemData.Count == 0)
                 {
-                    button14.Visible = true;
-                    button47.Visible = true;
-                }
-                else
-                {
-                    button14.Visible = false;
+                    RemoveItemFromItemOptions("TUNNEL PORTALS");
                 }
             }
 
-            
+            //show/hide button to select tunnel sources
+            if (EditPortals.ItemData.Count > 0)
+            {
+                button14.Visible = true;
+                button47.Visible = true;
+            }
+            else
+            {
+                button14.Visible = false;
+            }
+            Picturebox1_Paint();
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
         }

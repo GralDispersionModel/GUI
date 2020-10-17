@@ -1244,7 +1244,7 @@
             this.checkBox26.TabIndex = 39;
             this.checkBox26.Text = "Vegetation";
             this.checkBox26.UseVisualStyleBackColor = true;
-            this.checkBox26.CheckedChanged += new System.EventHandler(this.EditAndSaveVegetationData);
+            this.checkBox26.CheckedChanged += new System.EventHandler(this.checkBox26_CheckedChanged);
             // 
             // checkBox25
             // 
@@ -1257,7 +1257,7 @@
             this.checkBox25.TabIndex = 38;
             this.checkBox25.Text = "Walls";
             this.checkBox25.UseVisualStyleBackColor = true;
-            this.checkBox25.CheckedChanged += new System.EventHandler(this.EditAndSaveWallData);
+            this.checkBox25.CheckedChanged += new System.EventHandler(this.checkBox25_CheckedChanged);
             // 
             // checkBox20
             // 
@@ -1270,7 +1270,7 @@
             this.checkBox20.TabIndex = 37;
             this.checkBox20.Text = "Receptors";
             this.checkBox20.UseVisualStyleBackColor = true;
-            this.checkBox20.CheckedChanged += new System.EventHandler(this.EditAndSaveReceptorData);
+            this.checkBox20.CheckedChanged += new System.EventHandler(this.checkBox20_CheckedChanged);
             // 
             // checkBox15
             // 
@@ -1283,7 +1283,7 @@
             this.checkBox15.TabIndex = 36;
             this.checkBox15.Text = "Buildings";
             this.checkBox15.UseVisualStyleBackColor = true;
-            this.checkBox15.CheckedChanged += new System.EventHandler(this.EditAndSaveBuildingsData);
+            this.checkBox15.CheckedChanged += new System.EventHandler(this.checkBox15_CheckedChanged);
             // 
             // checkBox12
             // 
@@ -1296,7 +1296,7 @@
             this.checkBox12.TabIndex = 35;
             this.checkBox12.Text = "Tunnel portals";
             this.checkBox12.UseVisualStyleBackColor = true;
-            this.checkBox12.CheckedChanged += new System.EventHandler(this.EditAndSavePortalSourceData);
+            this.checkBox12.CheckedChanged += new System.EventHandler(this.checkBox12_CheckedChanged);
             // 
             // checkBox8
             // 
@@ -1309,7 +1309,7 @@
             this.checkBox8.TabIndex = 34;
             this.checkBox8.Text = "Line sources";
             this.checkBox8.UseVisualStyleBackColor = true;
-            this.checkBox8.CheckedChanged += new System.EventHandler(this.EditAndSaveLineSourceData);
+            this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
             // 
             // checkBox5
             // 
@@ -1322,7 +1322,7 @@
             this.checkBox5.TabIndex = 33;
             this.checkBox5.Text = "Area sources";
             this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.CheckedChanged += new System.EventHandler(this.EditAndSaveAreaSourceData);
+            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
             // 
             // checkBox4
             // 
@@ -1335,7 +1335,7 @@
             this.checkBox4.TabIndex = 32;
             this.checkBox4.Text = "Point sources";
             this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.EditAndSavePointSourceData);
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // groupBox4
             // 
@@ -1654,14 +1654,14 @@
             // MenuEntryCellHeightsGramm
             // 
             this.MenuEntryCellHeightsGramm.Name = "MenuEntryCellHeightsGramm";
-            this.MenuEntryCellHeightsGramm.Size = new System.Drawing.Size(180, 22);
+            this.MenuEntryCellHeightsGramm.Size = new System.Drawing.Size(143, 22);
             this.MenuEntryCellHeightsGramm.Text = "GRAMM grid";
             this.MenuEntryCellHeightsGramm.Click += new System.EventHandler(this.MenuCellHeightsGramm);
             // 
             // MenuEntryCellHeightsGral
             // 
             this.MenuEntryCellHeightsGral.Name = "MenuEntryCellHeightsGral";
-            this.MenuEntryCellHeightsGral.Size = new System.Drawing.Size(180, 22);
+            this.MenuEntryCellHeightsGral.Size = new System.Drawing.Size(143, 22);
             this.MenuEntryCellHeightsGral.Text = "GRAL grid";
             this.MenuEntryCellHeightsGral.Click += new System.EventHandler(this.MenuCellHeightsGral);
             // 
@@ -2132,7 +2132,7 @@
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.ShortcutKeyDisplayString = "T";
             this.toolsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 21);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // measureLenghtToolStripMenuItem
@@ -2402,7 +2402,7 @@
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.ShortcutKeyDisplayString = "E";
             this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 21);
             this.exportToolStripMenuItem.Text = "E&xport";
             // 
             // saveMapToDiscToolStripMenuItem

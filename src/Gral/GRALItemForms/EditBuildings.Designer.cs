@@ -52,6 +52,7 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -174,6 +175,7 @@
             // 
             this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
             this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button8.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button8.Location = new System.Drawing.Point(78, 169);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(24, 24);
@@ -276,13 +278,23 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(45, 299);
+            this.button6.Location = new System.Drawing.Point(7, 299);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(85, 24);
+            this.button6.Size = new System.Drawing.Size(75, 24);
             this.button6.TabIndex = 77;
             this.button6.Text = "&OK";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(90, 299);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 24);
+            this.button4.TabIndex = 77;
+            this.button4.Text = "&Cancel";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.cancelButtonClick);
             // 
             // EditBuildings
             // 
@@ -290,8 +302,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.CancelButton = this.button4;
             this.ClientSize = new System.Drawing.Size(174, 335);
             this.Controls.Add(this.button8);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label7);
@@ -356,5 +370,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button4;
     }
 }

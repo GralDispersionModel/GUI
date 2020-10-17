@@ -10,14 +10,6 @@
 ///</remarks>
 #endregion
 
-/*
- * Created by SharpDevelop.
- * User: U0178969
- * Date: 24.01.2019
- * Time: 14:53
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
 using System.IO;
 using System.Windows.Forms;
 
@@ -144,14 +136,22 @@ namespace GralDomain
             EditVegetation.VegetationRedraw -= DomainRedrawDelegate; // Redraw from vegetation
             OnlineRedraw -= DomainRedrawDelegate; // Redraw from Online GRAL/GRAMM
 
-            EditPS.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditAS.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditB.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditLS.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditPortals.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditR.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditWall.ItemFormHide -= DomainItemFormHide; // Hide form
-            EditVegetation.ItemFormHide -= DomainItemFormHide; // Hide form 
+            EditPS.ItemFormOK -= EditAndSavePointSourceData; // Save PS data
+            EditPS.ItemFormCancel -= CancelItemForms; // Cancel PS Dialog
+            EditAS.ItemFormOK -= EditAndSaveAreaSourceData; // Hide form 
+            EditAS.ItemFormCancel -= CancelItemForms;
+            EditB.ItemFormOK -= EditAndSaveBuildingsData;
+            EditB.ItemFormCancel -= CancelItemForms;
+            EditLS.ItemFormOK -= EditAndSaveLineSourceData;
+            EditLS.ItemFormCancel -= CancelItemForms;
+            EditPortals.ItemFormOK -= EditAndSavePortalSourceData; // Hide form 
+            EditPortals.ItemFormCancel -= CancelItemForms;
+            EditR.ItemFormOK -= EditAndSaveReceptorData;
+            EditR.ItemFormCancel -= CancelItemForms;
+            EditWall.ItemFormOK -= EditAndSaveWallData;
+            EditWall.ItemFormCancel -= CancelItemForms;
+            EditVegetation.ItemFormOK -= EditAndSaveVegetationData;
+            EditVegetation.ItemFormCancel -= CancelItemForms;
 
             GeoReferenceOne.Form_Georef1_Closed -= new Georeference1_Closed(CloseGeoRef1); // Message, that georef1 is closed
             GeoReferenceTwo.Form_Georef2_Closed -= new Georeference2_Closed(CloseGeoRef2); // Message, that georef2 is closed

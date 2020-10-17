@@ -76,6 +76,7 @@
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -668,20 +669,33 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(62, 395);
+            this.button10.Location = new System.Drawing.Point(7, 395);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(85, 24);
+            this.button10.Size = new System.Drawing.Size(75, 24);
             this.button10.TabIndex = 77;
             this.button10.Text = "&OK";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button11
+            // 
+            this.button11.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button11.Location = new System.Drawing.Point(140, 395);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(75, 24);
+            this.button11.TabIndex = 77;
+            this.button11.Text = "&Cancel";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.cancelButtonClick);
             // 
             // EditPortalSources
             // 
             this.AcceptButton = this.button10;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.button11;
             this.ClientSize = new System.Drawing.Size(227, 744);
+            this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.numericUpDown5);
@@ -787,5 +801,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
     }
 }

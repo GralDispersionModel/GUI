@@ -76,6 +76,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button9 = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.button10 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -656,9 +657,9 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(52, 403);
+            this.button9.Location = new System.Drawing.Point(5, 403);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(85, 24);
+            this.button9.Size = new System.Drawing.Size(75, 24);
             this.button9.TabIndex = 77;
             this.button9.Text = "&OK";
             this.button9.UseVisualStyleBackColor = true;
@@ -674,13 +675,26 @@
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
+            // button10
+            // 
+            this.button10.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button10.Location = new System.Drawing.Point(122, 403);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 24);
+            this.button10.TabIndex = 77;
+            this.button10.Text = "&Cancel";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
             // EditLinesources
             // 
             this.AcceptButton = this.button9;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.button10;
             this.ClientSize = new System.Drawing.Size(206, 761);
             this.Controls.Add(this.trackBar2);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.groupBox2);
@@ -785,5 +799,6 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Button button10;
     }
 }

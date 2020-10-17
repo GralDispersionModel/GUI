@@ -55,6 +55,7 @@ namespace GralItemForms
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -233,20 +234,33 @@ namespace GralItemForms
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(49, 270);
+            this.button6.Location = new System.Drawing.Point(10, 270);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(85, 24);
+            this.button6.Size = new System.Drawing.Size(75, 24);
             this.button6.TabIndex = 77;
             this.button6.Text = "&OK";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.Button6_Click);
+            // 
+            // button4
+            // 
+            this.button4.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button4.Location = new System.Drawing.Point(94, 270);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 24);
+            this.button4.TabIndex = 77;
+            this.button4.Text = "&Cancel";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.cancelButtonClick);
             // 
             // EditWalls
             // 
             this.AcceptButton = this.button6;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.button4;
             this.ClientSize = new System.Drawing.Size(188, 306);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.trackBar2);
@@ -298,5 +312,6 @@ namespace GralItemForms
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button4;
     }
 }

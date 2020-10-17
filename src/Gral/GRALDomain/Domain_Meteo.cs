@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using GralDomForms;
+using System.Data;
 
 namespace GralDomain
 {
@@ -31,75 +32,43 @@ namespace GralDomain
         /// </summary>
 		private void MetTimeSeries(object sender, EventArgs e)
 		{
-			
-			GRAMMmeteofile = MeteoDialog.Meteo_Init; //value + ".met";
-			int trans = MeteoDialog.Meteo_Height;
-			
-			//select height above ground for the windfield analysis
-//				int trans = Convert.ToInt16(10);
-//				if (InputBox1("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
-			
-			//generate the meteo-file
-			// Kuntner: call backgroundworker
+            List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
+            int meteoModel = 0;
+            bool localSCL = false;
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+                localSCL = _sl.LocalStability;
+                GRAMMmeteofile = _sl.MeteoInit; //value + ".met";
+                meteoModel = _sl.MeteoModel;
 
-			//Oettl: check whether multiple statistics at all receptor points were selected and set the loop
-			
-			List <GralBackgroundworkers.Point_3D> receptor_points = new List <GralBackgroundworkers.Point_3D>();
-			
-			if (MeteoDialog.Receptor_Points == true) // Receptor points
-			{
-				for (int i = 0; i < EditR.ItemData.Count; i++)
-				{
-                    GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
+                foreach (DataRow row in _sl.PointCoorData.Rows)
+                {
+                    if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
                     {
+                        string a = _sl.MeteoInit + "_" + Convert.ToString(row[0]) + ".met";
+                        a = string.Join("_", a.Split(Path.GetInvalidFileNameChars())); // remove invalid characters
 
-                        // get data from editr
-                        Z = EditR.ItemData[i].Height
-                    };
-                    string a = MeteoDialog.Meteo_Init + "_" + EditR.ItemData[i].Name + ".met";
-					a =string.Join("_", a.Split(Path.GetInvalidFileNameChars())); // remove invalid characters
-					item.filename = a;
-					item.X = EditR.ItemData[i].Pt.X;
-					item.Y = EditR.ItemData[i].Pt.Y;
-					if ((item.X < MainForm.GrammDomRect.West) || (item.X > MainForm.GrammDomRect.East) || (item.Y < MainForm.GrammDomRect.South) || (item.Y > MainForm.GrammDomRect.North))
-                    {
-                        a += "";
-                    }
-                    else
-                    {
+                        GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
+                        {
+                            filename = a,
+                            X = Convert.ToDouble(row[1]),
+                            Y = Convert.ToDouble(row[2]),
+                            Z = Convert.ToDouble(row[3])
+                        };
                         receptor_points.Add(item);
                     }
                 }
-			}
-			else // Single point
-			{
-			    string a = GRAMMmeteofile;
-				a =string.Join("_", a.Split(Path.GetInvalidFileNameChars())); // remove invalid characters
-                GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
-                {
-                    X = XDomain,
-                    Y = YDomain,
-                    Z = Convert.ToDouble(trans),
-                    filename = a    
-                };
-                
-				if ((item.X < MainForm.GrammDomRect.West) || (item.X > MainForm.GrammDomRect.East) || (item.Y < MainForm.GrammDomRect.South) || (item.Y > MainForm.GrammDomRect.North))
-                {
-                    a += "";
-                }
-                else
-                {
-                    receptor_points.Add(item);
-                }
+                _sl.Close();
             }
 			
 			if (receptor_points.Count == 0)
             {
-                MessageBox.Show(this, "No points inside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "No points defined", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
+            else if (meteoModel == 1) // GRAMM
 			{
-
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
@@ -111,7 +80,7 @@ namespace GralDomain
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
                     Caption = "Compute Wind-Statistics ", // + DataCollection.Meteofilename;
                     Rechenart = 1, // ; 1 = analyse the GRAMM_Windfield
-                    LocalStability = MeteoDialog.Local_Stability, // use local stability?
+                    LocalStability = localSCL, // use local stability?
                     EvalPoints = receptor_points // evaluation points
                 };
 
@@ -121,22 +90,46 @@ namespace GralDomain
                 };
                 BackgroundStart.Show();
 			}
-			// now the backgroundworker works
-			//gen_meteofile(Convert.ToDouble(trans), GRAMMmeteofile);
-			// Reset mousecontrol
-			MouseControl = 0;
-            MeteoDialog.Start_computation -= new StartCreateMeteoStation(MetTimeSeries);
-            MeteoDialog.Close();
-			MeteoDialog.Dispose();
-		}
+            else if (meteoModel == 2) // GRAL
+            {
+                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
+                {
+                    Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
+                    Projectname = Gral.Main.ProjectName,
+                    GrammWest = MainForm.GrammDomRect.West,
+                    GrammSouth = MainForm.GrammDomRect.South,
+                    GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
+                    GFFGridSize = (double)MainForm.numericUpDown10.Value,
+                    Decsep = decsep,
+                    UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
+                    Caption = "Compute GRAL Wind-Statistics ", // + DataCollection.Meteofilename;
+                    Rechenart = 3, // ; 3 = analyse the GRAL Windfield
+                    LocalStability = localSCL, // use local stability?
+                    EvalPoints = receptor_points // evaluation points
+                };
+
+                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                {
+                    Text = DataCollection.Caption
+                };
+                BackgroundStart.Show();
+            }
+            // now the backgroundworker works
+            // gen_meteofile(Convert.ToDouble(trans), GRAMMmeteofile);
+            // Reset mousecontrol
+            MouseControl = 0;
+        }
 		
 		// Cancel the Mettime Dialog
 		private void CancelMetTimeSeries(object sender, EventArgs e)
 		{
-			MouseControl = 0;	
-			MeteoDialog.Cancel_computation -= new CancelCreateMeteoStation(CancelMetTimeSeries);			
-			MeteoDialog.Close();
-			MeteoDialog.Dispose();
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+                _sl.Close();
+            }
+            MouseControl = 0;	
 		}
 
         private void ComputeMeanWindVelocity(object sender, EventArgs e)
@@ -180,7 +173,7 @@ namespace GralDomain
                             Rechenart = 31, // ; 31
                             Filename = file
                         };
-
+                        
                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                         {
                             Text = DataCollection.Caption

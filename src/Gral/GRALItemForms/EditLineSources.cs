@@ -81,8 +81,9 @@ namespace GralItemForms
         public event ForceDomainRedraw LinesourceRedraw;
 
         public bool AllowClosing = false;
-        //delegate to send a message, that user tries to close the form
-        public event ForceItemFormHide ItemFormHide;
+        //delegates to send a message, that user uses OK or Cancel button
+        public event ForceItemOK ItemFormOK;
+        public event ForceItemCancel ItemFormCancel;
 
         public EditLinesources()
         {
@@ -91,11 +92,11 @@ namespace GralItemForms
                                             //User defined column seperator and decimal seperator
 
 #if __MonoCS__
-			var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
-			foreach (NumericUpDown nu in allNumUpDowns)
-			{
-				nu.TextAlign = HorizontalAlignment.Left;
-			}
+            var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
+            foreach (NumericUpDown nu in allNumUpDowns)
+            {
+                nu.TextAlign = HorizontalAlignment.Left;
+            }
 #endif
 
             int y_act = groupBox1.Top + groupBox1.Height + 5;
@@ -152,8 +153,8 @@ namespace GralItemForms
             EditlinesourcesResizeEnd(null, null);
 
 #if __MonoCS__
-			listBox1.Height = 25;
-			trackBar1.Height = 12;
+            listBox1.Height = 25;
+            trackBar1.Height = 12;
 #endif
         }
 
@@ -735,7 +736,6 @@ namespace GralItemForms
             }
 
             UpdateNewSourcegroupEmission();
-
             SaveArray();
         }
 
@@ -901,7 +901,7 @@ namespace GralItemForms
                 element_width = TBWidth;
             }
 
-            button9.Left = (int)((dialog_width - button9.Width) * 0.5);
+            button10.Left = Math.Max(100, this.Width - 100);
 
             for (int nr = 0; nr < 10; nr++)
             {
@@ -917,7 +917,6 @@ namespace GralItemForms
         {
             if (!Visible)
             {
-                SaveArray(); // save sourcedata
                 GralDomain.Domain.MarkerPoint.X = 0;
                 GralDomain.Domain.MarkerPoint.Y = 0;
             }
@@ -1217,19 +1216,14 @@ namespace GralItemForms
             }
             else
             {
+                if (((sender as Form).ActiveControl is Button) == false)
+                {
+                    // cancel if x has been pressed = restore old values!
+                    cancelButtonClick(null, null);
+                }
                 // Hide form and send message to caller when user tries to close this form
                 if (!AllowClosing)
                 {
-                    // send Message to domain Form, that redraw is necessary
-                    try
-                    {
-                        if (ItemFormHide != null)
-                        {
-                            ItemFormHide(this, e);
-                        }
-                    }
-                    catch
-                    { }
                     this.Hide();
                     e.Cancel = true;
                 }
@@ -1396,11 +1390,6 @@ namespace GralItemForms
             textBox2.Text = _s;
         }
 
-        private void button9_Click(object sender, EventArgs e)
-        {
-            this.Close(); // does not close the form, because closing hides the form
-        }
-
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
             int edge = Math.Max(0, trackBar2.Value - 1);
@@ -1484,6 +1473,60 @@ namespace GralItemForms
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             get_edgepoint_height(); // get recent edgepoint height	
+        }
+
+        /// <summary>
+        /// OK Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button9_Click(object sender, EventArgs e)
+        {
+            button4_Click(sender, e);
+            FillValues();
+            // send Message to domain Form, that OK button has been pressed
+            try
+            {
+                if (ItemFormOK != null)
+                {
+                    ItemFormOK(this, e);
+                }
+            }
+            catch
+            { }
+        }
+        /// <summary>
+        /// Cancel button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cancelButtonClick(object sender, EventArgs e)
+        {
+            ReloadItemData();
+            // send Message to domain Form, that Cancel button has been pressed
+            try
+            {
+                if (ItemFormCancel != null)
+                {
+                    ItemFormCancel(this, e);
+                }
+            }
+            catch
+            { }
+        }
+        /// <summary>
+        /// Reset item data when cancelling the dialog
+        /// </summary>
+        public void ReloadItemData()
+        {
+            ItemData.Clear();
+            ItemData.TrimExcess();
+            LineSourceDataIO _ls = new LineSourceDataIO();
+            string _file = Path.Combine(Gral.Main.ProjectName, "Emissions", "Lsources.txt");
+            _ls.LoadLineSources(ItemData, _file);
+            _ls = null;
+            SetTrackBarMaximum();
+            FillValues();
         }
     }
 }

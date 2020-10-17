@@ -29,6 +29,11 @@ namespace GralDomain
 {
     public delegate void DomainformClosed(object sender, EventArgs e);
 
+    /// <summary>
+    /// delegate to send Message, that function should start
+    /// </summary>
+    public delegate void SendCoordinates(object sender, EventArgs e);
+
     public partial class Domain : Form
     {
         private readonly string decsep;                                                // global decimal separator of the system
@@ -277,6 +282,11 @@ namespace GralDomain
         System.Threading.CancellationTokenSource CancellationTokenSource = new System.Threading.CancellationTokenSource();
 
         /// <summary>
+        /// Send a event with clicked coordinates to all registered forms
+        /// </summary>
+        private event SendCoordinates SendCoors;
+
+        /// <summary>
         /// Start the Domain (GIS) Form of this application
         /// </summary>
         /// <param name="f">reference to the Gral.Main form</param>
@@ -365,14 +375,22 @@ namespace GralDomain
             EditVegetation.VegetationRedraw += DomainRedrawDelegate; // Redraw from editforests
             OnlineRedraw += DomainRedrawDelegate; // Redraw from Online GRAL/GRAMM
 
-            EditPS.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditAS.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditB.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditLS.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditPortals.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditR.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditWall.ItemFormHide += DomainItemFormHide; // Hide form
-            EditVegetation.ItemFormHide += DomainItemFormHide; // Hide form 
+            EditPS.ItemFormOK += EditAndSavePointSourceData; // OK button from dialog 
+            EditPS.ItemFormCancel += CancelItemForms;
+            EditAS.ItemFormOK += EditAndSaveAreaSourceData; // OK button from dialog
+            EditAS.ItemFormCancel += CancelItemForms;
+            EditB.ItemFormOK += EditAndSaveBuildingsData; // OK button from dialog
+            EditB.ItemFormCancel += CancelItemForms;
+            EditLS.ItemFormOK += EditAndSaveLineSourceData; // OK button from dialog 
+            EditLS.ItemFormCancel += CancelItemForms;
+            EditPortals.ItemFormOK += EditAndSavePortalSourceData; // OK button from dialog 
+            EditPortals.ItemFormCancel += CancelItemForms;
+            EditR.ItemFormOK += EditAndSaveReceptorData; // OK button from dialog 
+            EditR.ItemFormCancel += CancelItemForms;
+            EditWall.ItemFormOK += EditAndSaveWallData; // OK button from dialog
+            EditWall.ItemFormCancel += CancelItemForms;
+            EditVegetation.ItemFormOK += EditAndSaveVegetationData; // OK button from dialog 
+            EditVegetation.ItemFormCancel += CancelItemForms;
 
             EditPS.StartPosition = FormStartPosition.Manual;
             EditAS.StartPosition = FormStartPosition.Manual;
@@ -1228,14 +1246,42 @@ namespace GralDomain
         {
             GeoReferenceOne.Hide();
             GeoReferenceTwo.Hide();
-            EditPS.Hide();
-            EditAS.Hide();
+            if (EditPS.Visible)
+            {
+                EditPS.Hide();
+                EditPS.ReloadItemData();
+            }
+            if (EditAS.Visible)
+            {
+                EditAS.Hide();
+                EditAS.ReloadItemData();
+            }
             EditPortals.Hide();
-            EditB.Hide();
-            EditLS.Hide();
-            EditR.Hide(); // Kuntner
-            EditWall.Hide();
-            EditVegetation.Hide();
+            if (EditB.Visible)
+            {
+                EditB.Hide();
+                EditB.ReloadItemData();
+            }
+            if (EditLS.Visible)
+            {
+                EditLS.Hide();
+                EditLS.ReloadItemData();
+            }
+            if (EditR.Visible)
+            {
+                EditR.Hide();
+                EditR.ResetItemData();
+            }
+            if (EditWall.Visible)
+            {
+                EditWall.Hide();
+                EditWall.ReloadItemData();
+            }
+            if (EditVegetation.Visible)
+            {
+                EditVegetation.Hide();
+                EditVegetation.ReloadItemData();
+            }
             //this.Width = ScreenWidth; Auskommentiert Kuntner
             //this.Height = ScreenHeight - 50; Auskommentiert Kuntner
             //prevent parallel editing
@@ -1556,6 +1602,27 @@ namespace GralDomain
                 catch{}
             }
             Picturebox1_Paint();
+        }
+
+        private void _selmp_StartComputation(object sender, EventArgs e)
+        {
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+
+                _sl.Close();
+            }
+        }
+
+        private void _selmp_CancelComputation(object sender, EventArgs e)
+        {
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+                _sl.Close();
+            }
         }
 
         //////////////////////////////////////////////////////////////////
@@ -2284,39 +2351,63 @@ namespace GralDomain
         {
             MouseControl = 32;
             Cursor = Cursors.Cross;
-            // open & show meteo station
-            if (MeteoDialog != null) // close possible open Dialog
-            {
-                MeteoDialog.Close();
-                MeteoDialog.Dispose();
-            }
-            MeteoDialog = new DialogCreateMeteoStation
-            {
-                Meteo_Title = "GRAL GUI Compute wind statistics",
-                Meteo_Init = "Meteo",
-                Meteo_Ext = ".met",
-                Meteo_Height = 10,
-                Meteo_Model = 0, // Receptors & Coors visible
-                X1 = Left + 70,
-                Y1 = Top + 50,
-                Xs = XDomain,
-                Ys = YDomain
-            };
+
+            GralDomForms.SelectMultiplePoints _selmp = new SelectMultiplePoints();
+            SendCoors += _selmp.ReceiveClickedCoordinates;
+            _selmp.CancelComputation += CancelMetTimeSeries;
+            _selmp.StartComputation += MetTimeSeries;
             if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
-                MeteoDialog.Local_Stability = true;
+                _selmp.LocalStability = true;
             }
-
-            //check whether receptor points are set in the project
-            if (EditR.ItemData.Count > 0)
+            _selmp.MeteoModel = 0;
+            if (MainForm.GRAMMwindfield != null)
             {
-                MeteoDialog.Receptor_Points = true;
+                _selmp.MeteoModel = 1;
+            }
+            if (WindfieldsAvailable())
+            {
+                _selmp.MeteoModel += 2;
             }
 
-            MeteoDialog.Start_computation += new StartCreateMeteoStation(MetTimeSeries);
-            //  met_st.Start_computation += new Dialog_CreateMeteoStation.start_create_meteo_station(mettimeseries); // delegate from Dialog -> OK
-            MeteoDialog.Cancel_computation += new CancelCreateMeteoStation(CancelMetTimeSeries);
-            MeteoDialog.Show();
+            _selmp.StartPosition = FormStartPosition.Manual;
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Owner = this;
+            _selmp.Show();
+
+            //// open & show meteo station
+            //if (MeteoDialog != null) // close possible open Dialog
+            //{
+            //    MeteoDialog.Close();
+            //    MeteoDialog.Dispose();
+            //}
+            //MeteoDialog = new DialogCreateMeteoStation
+            //{
+            //    Meteo_Title = "GRAL GUI Compute wind statistics",
+            //    Meteo_Init = "Meteo",
+            //    Meteo_Ext = ".met",
+            //    Meteo_Height = 10,
+            //    Meteo_Model = 0, // Receptors & Coors visible
+            //    X1 = Left + 70,
+            //    Y1 = Top + 50,
+            //    Xs = XDomain,
+            //    Ys = YDomain
+            //};
+            //if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            //{
+            //    MeteoDialog.Local_Stability = true;
+            //}
+
+            ////check whether receptor points are set in the project
+            //if (EditR.ItemData.Count > 0)
+            //{
+            //    MeteoDialog.Receptor_Points = true;
+            //}
+
+            //MeteoDialog.Start_computation += new StartCreateMeteoStation(MetTimeSeries);
+            ////  met_st.Start_computation += new Dialog_CreateMeteoStation.start_create_meteo_station(mettimeseries); // delegate from Dialog -> OK
+            //MeteoDialog.Cancel_computation += new CancelCreateMeteoStation(CancelMetTimeSeries);
+            //MeteoDialog.Show();
         }
 
         /// <summary>
@@ -4349,6 +4440,39 @@ namespace GralDomain
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = true;
             }
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowPointSourceDialog(sender, e);
+        }
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowAreaSourceDialog(sender, e);
+        }
+        private void checkBox15_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowBuildingDialog(sender, e);
+        }
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowLineSourceDialog(sender, e);
+        }
+        private void checkBox12_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowPortalSourceDialog(sender, e);
+        }
+        private void checkBox20_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowReceptorDialog(sender, e);
+        }
+        private void checkBox25_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowWallDialog(sender, e);
+        }
+        private void checkBox26_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowVegetationDialog(sender, e);
         }
     }
 }
