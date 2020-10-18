@@ -21,7 +21,7 @@ namespace GralBackgroundworkers
     public partial class ProgressFormBackgroundworker
     {
         /// <summary>
-        /// Generate one or multiple meteo-file(s) from GRAMM windfields
+        /// Generate one or multiple meteo-file(s) from GRAL windfields
         /// </summary>
         private void GenerateGRALMeteofile(GralBackgroundworkers.BackgroundworkerData mydata,
                                        System.ComponentModel.DoWorkEventArgs e)
