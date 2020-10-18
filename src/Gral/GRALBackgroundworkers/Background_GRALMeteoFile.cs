@@ -111,18 +111,6 @@ namespace GralBackgroundworkers
             gff = null;
             ReadStability = null;
 
-            //Debug output
-            //using (StreamWriter mywriter = new StreamWriter(Path.Combine(mydata.Projectname, "Debug.txt"), false))
-            //{
-            //    int ptc = 0;
-            //    foreach (EvalPointsIndices _pt in evalPoints)
-            //    {
-            //        mywriter.WriteLine(_pt.Height + "/" + _pt.IxGRAL + "/" + _pt.IyGRAL + "/" + _pt.IzGRAL + 
-            //            "/" + _pt.IxGRAMM + "/" + _pt.IyGRAMM + "/" + windVel[ptc][1] + "/" + windDir[ptc][1]+ "/" + locSCL[ptc][1]);
-            //        ptc++;
-            //    }
-            //}
-
             //write result files
             int ptNumber = 0;
             foreach (Point_3D item in mydata.EvalPoints)
@@ -167,7 +155,7 @@ namespace GralBackgroundworkers
                         }
                         string result = text[0] + "." + Convert.ToString(fictiousyear, ic) + "," + text[1] + ":00,";
 
-                        int cmpSit = SerachCorrespondingMeteopgtAllSituation(meteoTimeSeries, meteoPGTALL, sitCount - 1);
+                        int cmpSit = SearchCorrespondingMeteopgtAllSituation(meteoTimeSeries, meteoPGTALL, sitCount - 1);
                         result += Convert.ToString(Math.Round(windVel[ptNumber][cmpSit], 2), ic) + "," + Convert.ToString(windDir[ptNumber][cmpSit], ic) + "," + Convert.ToString(locSCL[ptNumber][cmpSit], ic);
                         
                         mywriter.WriteLine(result);
@@ -178,7 +166,14 @@ namespace GralBackgroundworkers
             }
         }
 
-        private int SerachCorrespondingMeteopgtAllSituation(List<string> MetTimeSeries, List<string> MeteoPgtALL, int MetTimeSeriesIndex)
+        /// <summary>
+        /// Search a corresponding meteopgt.all situation for an index in the mettime series
+        /// </summary>
+        /// <param name="MetTimeSeries">Mettime series</param>
+        /// <param name="MeteoPgtALL">Meteopgt.all data</param>
+        /// <param name="MetTimeSeriesIndex">Index in the mettime series</param>
+        /// <returns>Index in meteopgt.all matching the mettime series at the index MetTimeSeriesIndex</returns>
+        private int SearchCorrespondingMeteopgtAllSituation(List<string> MetTimeSeries, List<string> MeteoPgtALL, int MetTimeSeriesIndex)
         {
             int MeteopgtIndex = 0;
             string[] text;
@@ -215,6 +210,11 @@ namespace GralBackgroundworkers
             return MeteopgtIndex;
         }
 
+        /// <summary>
+        /// Check if the calculation was in steady state or transient mode
+        /// </summary>
+        /// <param name="ProjectPath"></param>
+        /// <returns>true in transient mode</returns>
         private bool CheckForTransientMode(string ProjectPath)
         {
             bool transient = false;
@@ -239,6 +239,13 @@ namespace GralBackgroundworkers
             return transient;
         }
 
+        /// <summary>
+        /// Read the GRAL geometry and get the horizontal and vertical indices for all evaluation points
+        /// </summary>
+        /// <param name="Geom">GRAL geometry basic data</param>
+        /// <param name="EvalPoints">Coordinates of all evalution points</param>
+        /// <param name="mydata">Data with GFF grid size</param>
+        /// <returns>List with grid data for all evaluation points</returns>
         private List<EvalPointsIndices> ReadGRALGeometries(GRALGeometry Geom, List<Point_3D> EvalPoints, BackgroundworkerData mydata)
         {
             List<EvalPointsIndices> EvalPointIndices = new List<EvalPointsIndices>();
@@ -330,6 +337,11 @@ namespace GralBackgroundworkers
             return EvalPointIndices;
         }
 
+        /// <summary>
+        /// Calulate the vertical height slices for the flexible vertical GRAL grid
+        /// </summary>
+        /// <param name="Geom">GRAL geometry basic data</param>
+        /// <returns>Array with the height slices for the flow field grid</returns>
         private float[] CalculateVerticalHeightSlices(GRALGeometry Geom)
         {
             //computation of slice
@@ -363,6 +375,11 @@ namespace GralBackgroundworkers
             return HOKART;
         }
 
+        /// <summary>
+        /// Read the GRAMM geometry
+        /// </summary>
+        /// <param name="GgeomPath"></param>
+        /// <returns>Number of cells in the GRAMM grid</returns>
         private GRALGeometry ReadGRAMMGeometry(string GgeomPath)
         {
             GRALGeometry GRAMMGeom = null;
@@ -372,14 +389,7 @@ namespace GralBackgroundworkers
             {
                 PathWindfield = GgeomPath
             };
-
-            double[,] AH = new double[1, 1];
-            double[,,] ZSP = new double[1, 1, 1];
-            string[] text = new string[1];
-            int NX = 1;
-            int NY = 1;
-            int NZ = 1;
-            
+           
             if (ggeom.ReadGGeomAsc(0) == true)
             {
                 GRAMMGeom = new GRALGeometry();
@@ -391,6 +401,12 @@ namespace GralBackgroundworkers
             return GRAMMGeom;
         }
 
+        /// <summary>
+        /// Calculate the wind direction
+        /// </summary>
+        /// <param name="Umittel">Wind U component</param>
+        /// <param name="Vmittel">Wind V component</param>
+        /// <returns>Wind direction in degrees</returns>
         private float WindDirection(float Umittel, float Vmittel)
         {
             float wr = 0;
@@ -420,6 +436,16 @@ namespace GralBackgroundworkers
             return wr;
         }
 
+        /// <summary>
+        /// Read the local GRAMM stability class
+        /// </summary>
+        /// <param name="X">X cell of the GRAMM grid</param>
+        /// <param name="Y">Y cell of the GRAMM grid</param>
+        /// <param name="Situation">Number of the weather situation</param>
+        /// <param name="SCL">Stability class preset</param>
+        /// <param name="GRAMMPath">Path to the GRAMM wind field data</param>
+        /// <param name="ReadStability">Stability class reader</param>
+        /// <returns>Local stability class at (x,y)</returns>
         private int ReadGRAMMStability(int X, int Y, int Situation, int SCL, string GRAMMPath, ReadSclUstOblClasses ReadStability)
         {
             string stabilityfilename = Path.Combine(GRAMMPath, Convert.ToString(Situation).PadLeft(5, '0') + ".scl");
@@ -435,24 +461,69 @@ namespace GralBackgroundworkers
             return SCL;
         }
 
+        /// <summary>
+        /// Stores the indices for an evaluation point
+        /// </summary>
         private class EvalPointsIndices
         {
+            /// <summary>
+            /// x index in the flow field grid
+            /// </summary>
             public int IxGRAL { get; set; }
+            /// <summary>
+            /// y index in the flow field grid
+            /// </summary>
             public int IyGRAL { get; set; }
+            /// <summary>
+            /// z index in the flow field grid
+            /// </summary>
             public int IzGRAL { get; set; }
+            /// <summary>
+            /// x index in the GRAMM grid
+            /// </summary>
             public int IxGRAMM { get; set; }
+            /// <summary>
+            /// y index in the GRAMM grid
+            /// </summary>
             public int IyGRAMM { get; set; }
+            /// <summary>
+            /// Relative height above ground
+            /// </summary>
             public double Height { get; set; }
         }
 
+        /// <summary>
+        /// Stores the basic GRAL geometry
+        /// </summary>
         private class GRALGeometry
         {
+            /// <summary>
+            /// Number of cells in x direction
+            /// </summary>
             public int NX { get; set; }
+            /// <summary>
+            /// Number of cells in y direction
+            /// </summary>
             public int NY { get; set; }
+            /// <summary>
+            /// Number of cells in z direction
+            /// </summary>
             public int NZ { get; set; }
+            /// <summary>
+            /// Minimum terrain height inside the domain area
+            /// </summary>
             public float AHMin { get; set; }
+            /// <summary>
+            /// Height of the 1st vertical cell
+            /// </summary>
             public float DZK { get; set; }
+            /// <summary>
+            /// Stretching factor for vertical cells
+            /// </summary>
             public float Stretch { get; set; }
+            /// <summary>
+            /// Flexible stretching factors for vertical cells
+            /// </summary>
             public List<float[]> StretchFlexible { get; set; }
 
         }
