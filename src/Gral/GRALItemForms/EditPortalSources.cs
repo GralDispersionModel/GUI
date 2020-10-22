@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -462,7 +463,7 @@ namespace GralItemForms
                         
                         for (int i = 0; i < 10; i++)
                         {
-                            if (portalpollutant[i].SelectedIndex < 0)
+                            if (portalpollutant[i].SelectedIndex < 0 && portalpollutant[i].Items.Count > 0)
                             {
                                 portalpollutant[i].SelectedIndex = 0;
                             }
@@ -573,10 +574,13 @@ namespace GralItemForms
                 
                 SourceGroupEmission.Clear();
                 SourceGroupEmission.TrimExcess();
-                
+
                 for (int i = 0; i < 10; i++)
                 {
-                    portalpollutant[i].SelectedIndex = 0;
+                    if (portalpollutant[i].Items.Count > 0)
+                    {
+                        portalpollutant[i].SelectedIndex = 0;
+                    }
                     portalemission[i].Text = "0";
                     but1[i].BackColor = SystemColors.ButtonFace;
                     dep[i].init();
