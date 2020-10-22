@@ -31,7 +31,9 @@ namespace GralDomain
             // Kuntner clean up open forms, picturebox, release memory to avoid memory lags
             HideWindows(0);
             
-            MMO.StartMatchProcess -= new StartMatchingProcess(StartMatchingProcess);
+            MMO.StartMatchProcess -= new StartMatchingDelegate(StartMatchingProcess);
+            MMO.CancelMatchProcess -= new CancelMatchingDelegate(MatchCancel);
+            MMO.FinishMatchProcess -= new FinishMatchingDelegate(MatchFinish);
             MMO.LoadWindData -= new LoadWindFileData(LoadWindFileForMatching);
             
             if (MMO != null)

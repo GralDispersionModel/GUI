@@ -313,7 +313,9 @@ namespace GralDomain
             MouseWheel += new MouseEventHandler(form1_MouseWheel); // Kuntner
             
             //event when matching process should start
-            MMO.StartMatchProcess += new StartMatchingProcess(StartMatchingProcess);
+            MMO.StartMatchProcess += new StartMatchingDelegate(StartMatchingProcess);
+            MMO.CancelMatchProcess += new CancelMatchingDelegate(MatchCancel);
+            MMO.FinishMatchProcess += new FinishMatchingDelegate(MatchFinish);
             MMO.LoadWindData += new LoadWindFileData(LoadWindFileForMatching);
             
             //GRAMM Online options
@@ -2571,9 +2573,9 @@ namespace GralDomain
                 MMO.Local_Stability = false;
             }
 
-            MMO.Settings_Path = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
+            MMO.SettingsPath = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
+            MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
-            MMO.Match_Methode = 1; // vectorial method
             MMO.Show();
         }
 
