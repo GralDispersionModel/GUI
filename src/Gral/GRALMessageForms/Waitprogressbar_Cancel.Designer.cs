@@ -8,7 +8,7 @@
  */
 namespace GralMessage
 {
-	partial class Waitprogressbar_Cancel
+	partial class WaitProgressbarCancel
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.

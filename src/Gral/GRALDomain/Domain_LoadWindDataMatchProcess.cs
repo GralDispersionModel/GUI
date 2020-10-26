@@ -174,30 +174,30 @@ namespace GralDomain
                     MMOData.Meteo = true;
 
                     //add met data
-                    MMO.wind_speeds.Add(new double[MMOData.FileLenght]);
-                    MMO.wind_direction.Add(new double[MMOData.FileLenght]);
-                    MMO.filelength.Add(0);
-                    MMO.metfiles.Add("");
-                    MMO.zeit.Add(new string[MMOData.FileLenght]);
-                    MMO.datum.Add(new string[MMOData.FileLenght]);
-                    MMO.stunde.Add(new int[MMOData.FileLenght]);
+                    MMO.WindVelocityObs.Add(new double[MMOData.FileLenght]);
+                    MMO.WindDirectionObs.Add(new double[MMOData.FileLenght]);
+                    MMO.MetFileLenght.Add(0);
+                    MMO.MetFileNames.Add("");
+                    MMO.TimeStapmsMetTimeSeries.Add(new string[MMOData.FileLenght]);
+                    MMO.DateObsMetFile.Add(new string[MMOData.FileLenght]);
+                    MMO.HourObsMetFile.Add(new int[MMOData.FileLenght]);
                     MMO.DecsepUser.Add(0);
                     MMO.RowsepUser.Add(0);
-                    MMO.stability.Add(new int[MMOData.FileLenght]);
+                    MMO.StabilityClassObs.Add(new int[MMOData.FileLenght]);
                     
                     int MMOdatagridindex = zeilenindex;
                     
-                    MMO.filelength[MMOdatagridindex] = MMOData.FileLenght;
-                    MMO.metfiles[MMOdatagridindex] =metfile;
+                    MMO.MetFileLenght[MMOdatagridindex] = MMOData.FileLenght;
+                    MMO.MetFileNames[MMOdatagridindex] =metfile;
                     
                     for (int length = 0; length < MMOData.FileLenght; length++)
                     {
-                        MMO.stunde[MMOdatagridindex][length] = MMOData.GetHour()[length];
-                        MMO.wind_speeds[MMOdatagridindex][length] = MMOData.GetWindVel()[length];
-                        MMO.wind_direction[MMOdatagridindex][length] = MMOData.GetWindDir()[length];
-                        MMO.datum[MMOdatagridindex][length] = MMOData.GetDate()[length];
-                        MMO.zeit[MMOdatagridindex][length] = MMOData.GetTime()[length];
-                        MMO.stability[MMOdatagridindex][length] = MMOData.GetSC()[length];
+                        MMO.HourObsMetFile[MMOdatagridindex][length] = MMOData.GetHour()[length];
+                        MMO.WindVelocityObs[MMOdatagridindex][length] = MMOData.GetWindVel()[length];
+                        MMO.WindDirectionObs[MMOdatagridindex][length] = MMOData.GetWindDir()[length];
+                        MMO.DateObsMetFile[MMOdatagridindex][length] = MMOData.GetDate()[length];
+                        MMO.TimeStapmsMetTimeSeries[MMOdatagridindex][length] = MMOData.GetTime()[length];
+                        MMO.StabilityClassObs[MMOdatagridindex][length] = MMOData.GetSC()[length];
                     }
                     
                     char temp = char.Parse(FormatMetFile.DecSepUser);
@@ -221,16 +221,16 @@ namespace GralDomain
                     if (MMO.dataGridView1.RowCount <= zeilenindex)
                     {
                         MMO.dataGridView1.Rows.Remove(MMO.dataGridView1.Rows[zeilenindex]);
-                        MMO.wind_speeds.RemoveAt(zeilenindex);
-                        MMO.wind_direction.RemoveAt(zeilenindex);
-                        MMO.filelength.RemoveAt(zeilenindex);
-                        MMO.metfiles.RemoveAt(zeilenindex);
-                        MMO.zeit.RemoveAt(zeilenindex);
-                        MMO.datum.RemoveAt(zeilenindex);
-                        MMO.stunde.RemoveAt(zeilenindex);
+                        MMO.WindVelocityObs.RemoveAt(zeilenindex);
+                        MMO.WindDirectionObs.RemoveAt(zeilenindex);
+                        MMO.MetFileLenght.RemoveAt(zeilenindex);
+                        MMO.MetFileNames.RemoveAt(zeilenindex);
+                        MMO.TimeStapmsMetTimeSeries.RemoveAt(zeilenindex);
+                        MMO.DateObsMetFile.RemoveAt(zeilenindex);
+                        MMO.HourObsMetFile.RemoveAt(zeilenindex);
                         MMO.DecsepUser.RemoveAt(zeilenindex);
                         MMO.RowsepUser.RemoveAt(zeilenindex);
-                        MMO.stability.RemoveAt(zeilenindex);
+                        MMO.StabilityClassObs.RemoveAt(zeilenindex);
                     }
                     MessageBox.Show(this, "Problems when reading selected met-file.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

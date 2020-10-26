@@ -316,6 +316,9 @@
     <Compile Include="GRALDomForms\MatchMultipleObservations.Designer.cs">
       <DependentUpon>MatchMultipleObservations.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALDomForms\MatchMultipleObservationsAutoTune.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GRALDomForms\MatchMultipleObservationsData.cs" />
     <Compile Include="GRALDomForms\MatchMultipleObservationsTuning.cs">
       <SubType>Form</SubType>

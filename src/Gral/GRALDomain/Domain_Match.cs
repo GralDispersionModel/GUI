@@ -1,7 +1,7 @@
 #region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
-/// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
+/// Copyright (C) [2019-2020]  [Dietmar Oettl, Markus Kuntner]
 /// This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
 /// the Free Software Foundation version 3 of the License
 /// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,11 +31,11 @@ namespace GralDomain
             //copy all selected meteo files to the project and get weighting factors
             try
             {
-                for (int i = 0; i < MMO.metfiles.Count; i++)
+                for (int i = 0; i < MMO.MetFileNames.Count; i++)
                 {
                     try
                     {
-                        File.Copy(MMO.metfiles[i], Path.Combine(Gral.Main.ProjectName, "Metfiles", Path.GetFileName(MMO.metfiles[i])), true);
+                        File.Copy(MMO.MetFileNames[i], Path.Combine(Gral.Main.ProjectName, "Metfiles", Path.GetFileName(MMO.MetFileNames[i])), true);
                     }
                     catch
                     { }
@@ -63,12 +63,12 @@ namespace GralDomain
             {
                 File.Delete(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat"));
             }
-            Waitprogressbar wait = new Waitprogressbar(""); // Kuntner: create wait just one times, so wait can be deleted at the end of the method, also if an error occures
+
+            WaitProgressbarCancel wait = new WaitProgressbarCancel("Copying GRAMM flow fields");
 #if __MonoCS__
             wait.Width = 350;
 #endif
-            Waitprogressbar_Cancel wait1 = new Waitprogressbar_Cancel("Copying GRAMM flow fields");
-
+            
             //copy and reading geometry file "ggeom.asc"
             wait.Text = "Reading geometry file ggeom.asc";
             wait.Show();
@@ -104,26 +104,26 @@ namespace GralDomain
                     throw new FileNotFoundException("Error reading ggeom.asc");
                 }
 
-                int[] ix = new int[MMO.metfiles.Count];
-                int[] iy = new int[MMO.metfiles.Count];
-                int[] ischnitt = new int[MMO.metfiles.Count];
+                int[] ix = new int[MMO.MetFileNames.Count];
+                int[] iy = new int[MMO.MetFileNames.Count];
+                int[] ischnitt = new int[MMO.MetFileNames.Count];
                 ix[0] = 0;
                 iy[0] = 0;
                 ischnitt[0] = 1;
 
                 // Calculate Grid Positions of Met-Stations
-                double[] xsi = new double[MMO.metfiles.Count];
-                double[] eta = new double[MMO.metfiles.Count];
-                for (int i = 0; i < MMO.metfiles.Count; i++)
+                double[] xsi = new double[MMO.MetFileNames.Count];
+                double[] eta = new double[MMO.MetFileNames.Count];
+                for (int i = 0; i < MMO.MetFileNames.Count; i++)
                 {
                     xsi[i] = Convert.ToDouble(MMO.dataGridView1.Rows[i].Cells[1].Value) - MainForm.GrammDomRect.West;
                     eta[i] = Convert.ToDouble(MMO.dataGridView1.Rows[i].Cells[2].Value) - MainForm.GrammDomRect.South;
                 }
 
                 //obtain indices of selected point
-                MMO.MeteoStationHeight = new double[MMO.metfiles.Count];
+                MMO.MeteoStationHeight = new double[MMO.MetFileNames.Count];
 
-                for (int met = 0; met < MMO.metfiles.Count; met++) // loop over all met-Stations
+                for (int met = 0; met < MMO.MetFileNames.Count; met++) // loop over all met-Stations
                 {
                     MMO.MeteoStationHeight[met] = St_F.TxtToDbl(MMO.dataGridView1.Rows[met].Cells[3].Value.ToString(), false);
                     ix[met] = Convert.ToInt32(Math.Floor(xsi[met] / MainForm.GRAMMHorGridSize)) + 1;  //achtung in x-richtung erst ab index 1 werte gespeichert
@@ -160,11 +160,11 @@ namespace GralDomain
                 MMO.WindDirMeteoPGT = new double[NumberofWeatherSituations + 2];
                 MMO.WindVelMeteoPGT = new double[NumberofWeatherSituations + 2];
                 MMO.StabClassMeteoPGT = new int[NumberofWeatherSituations + 2];
-                MMO.LocalStabilityClass = new int[MMO.metfiles.Count, NumberofWeatherSituations + 2];
-                MMO.WindDir = new int[MMO.metfiles.Count, NumberofWeatherSituations + 2];
-                MMO.UGramm = new double[MMO.metfiles.Count, NumberofWeatherSituations + 2];
-                MMO.VGramm = new double[MMO.metfiles.Count, NumberofWeatherSituations + 2];
-                MMO.WGramm = new double[MMO.metfiles.Count, NumberofWeatherSituations + 2];
+                MMO.LocalStabilityClass = new int[MMO.MetFileNames.Count, NumberofWeatherSituations + 2];
+                MMO.WindDir = new int[MMO.MetFileNames.Count, NumberofWeatherSituations + 2];
+                MMO.UGramm = new double[MMO.MetFileNames.Count, NumberofWeatherSituations + 2];
+                MMO.VGramm = new double[MMO.MetFileNames.Count, NumberofWeatherSituations + 2];
+                MMO.WGramm = new double[MMO.MetFileNames.Count, NumberofWeatherSituations + 2];
 
                 int iiwet = 0;
 
@@ -178,95 +178,101 @@ namespace GralDomain
                 // Remember the original Header
                 MMO.MeteoOriginalHeader[0] = meteopgt_ori.ReadLine();
                 MMO.MeteoOriginalHeader[1] = meteopgt_ori.ReadLine();
+                wait.ProgressbarUpdate(this, (int) NumberofWeatherSituations + 1);
 
                 // Read original Meteo-Data
                 //loop over all weather situations
                 for (int n = 1; n < NumberofWeatherSituations + 1; n++) // n = loop over all meteopgt.all lines
                 {
                     iiwet += 1;
+                    bool windfield_OK = false;
                     wait.Text = "Match - Reading GRAMM flow field " + Convert.ToString(iiwet);
-                    try
+                    wait.ProgressbarUpdate(this, 0);
+
+                    if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
                     {
-                        text = meteopgt_ori.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                        MMO.WindDirMeteoPGT[n] = Convert.ToDouble(text[0].Replace(".", decsep));
-                        MMO.WindVelMeteoPGT[n] = Convert.ToDouble(text[1].Replace(".", decsep));
-                        MMO.StabClassMeteoPGT[n] = Convert.ToInt32(text[2]); // global stability class
-
-                        for (int met = 0; met < MMO.metfiles.Count; met++) // loop over all met-Stations
+                        try
                         {
-                            MMO.LocalStabilityClass[met, n] = MMO.StabClassMeteoPGT[n];        // local stability class
-                        }
+                            text = meteopgt_ori.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            MMO.WindDirMeteoPGT[n] = Convert.ToDouble(text[0].Replace(".", decsep));
+                            MMO.WindVelMeteoPGT[n] = Convert.ToDouble(text[1].Replace(".", decsep));
+                            MMO.StabClassMeteoPGT[n] = Convert.ToInt32(text[2]); // global stability class
 
-                        string a = text[0] + "," + text[1] + "," + text[2]; // Remember the text-part of original meteopgt.all
-                        MatchSettings.PGT.Add(new GralData.PGTAll() { PGTString = a, PGTFrq = -1 }); // negative Frequ is a marker for unused situations
-                    }
-                    catch
-                    {
-                        //						mess.listBox1.Items.Add("Error reading meteopgt.all number " + Convert.ToString(iiwet)); // Kuntner
-                        //						mess.Show();
-                        break;
-                    }
-
-                    bool windfield_OK = true;
-                    try
-                    {
-                        //read wind fields
-                        string wndfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".wnd");
-                        Windfield_Reader Reader = new Windfield_Reader();
-                        if (Reader.Windfield_read(wndfilename, NX, NY, NZ, ref UWI, ref VWI, ref WWI) == false)
-                        {
-                            throw new IOException();
-                        }
-
-                        // read stability class and set MMO.LocalStabilityClass[n] to a local value
-                        if (MMO.Local_Stability)
-                        {
-                            double[,] zlevel = new double[1, 1];
-                            //wait.Text = "Match - Reading GRAMM stability field " + Convert.ToString(iiwet);
-                            string stabilityfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
-                            ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses
+                            for (int met = 0; met < MMO.MetFileNames.Count; met++) // loop over all met-Stations
                             {
-                                FileName = stabilityfilename,
-                                Stabclasses = zlevel
-                            };
-
-                            if (ReadStablity.ReadSclFile()) // true => reader = OK
-                            {
-                                zlevel = ReadStablity.Stabclasses;
-                                //								mess.listBox1.Items.Add(Convert.ToString(MMO.LocalStabilityClass[n]) + "/" + Convert.ToString(result));
-                                //								mess.Show();
-                                //								Application.DoEvents();
-                                for (int met = 0; met < MMO.metfiles.Count; met++) // loop over all met-Stations
-                                {
-                                    if (ix[met] > 0 && iy[met] > 0 && ix[met] < NX && iy[met] < NY)
-                                    {
-                                        //int result = (int) zlevel[ix[met] - 1, iy[met] - 1]; // use coordinates of the 1st station
-                                        int result = ReadStablity.SclMean(ix[met] - 1, iy[met] - 1);
-                                        MMO.LocalStabilityClass[met, n] = result;
-                                    }
-                                }
-
+                                MMO.LocalStabilityClass[met, n] = MMO.StabClassMeteoPGT[n];        // local stability class
                             }
-                        }
 
-                    }
-                    catch
-                    {
-                        if (MessageInfoForm == null)
+                            string a = text[0] + "," + text[1] + "," + text[2]; // Remember the text-part of original meteopgt.all
+                            MatchSettings.PGT.Add(new GralData.PGTAll() { PGTString = a, PGTFrq = -1 }); // negative Frequ is a marker for unused situations
+                        }
+                        catch
                         {
-                            MessageInfoForm = new MessageWindow
-                            {
-                                Text = "GRAMM matching error",
-                                ShowInTaskbar = false
-                            }; // Kuntner
-                            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                            //						mess.listBox1.Items.Add("Error reading meteopgt.all number " + Convert.ToString(iiwet)); // Kuntner
+                            //						mess.Show();
+                            break;
                         }
-                        MessageInfoForm.listBox1.Items.Add("Unable to read wind field nr. " + Convert.ToString(iiwet));
-                        MessageInfoForm.Show();
 
-                        Application.DoEvents(); // Kuntner
-                        windfield_OK = false;
-                        //break;
+                        try
+                        {
+                            //read wind fields
+                            string wndfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".wnd");
+                            Windfield_Reader Reader = new Windfield_Reader();
+                            if (Reader.Windfield_read(wndfilename, NX, NY, NZ, ref UWI, ref VWI, ref WWI) == false)
+                            {
+                                throw new IOException();
+                            }
+
+                            // read stability class and set MMO.LocalStabilityClass[n] to a local value
+                            if (MMO.LocalStabilityUsed)
+                            {
+                                double[,] zlevel = new double[1, 1];
+                                //wait.Text = "Match - Reading GRAMM stability field " + Convert.ToString(iiwet);
+                                string stabilityfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
+                                ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses
+                                {
+                                    FileName = stabilityfilename,
+                                    Stabclasses = zlevel
+                                };
+
+                                if (ReadStablity.ReadSclFile()) // true => reader = OK
+                                {
+                                    zlevel = ReadStablity.Stabclasses;
+                                    //								mess.listBox1.Items.Add(Convert.ToString(MMO.LocalStabilityClass[n]) + "/" + Convert.ToString(result));
+                                    //								mess.Show();
+                                    //								Application.DoEvents();
+                                    for (int met = 0; met < MMO.MetFileNames.Count; met++) // loop over all met-Stations
+                                    {
+                                        if (ix[met] > 0 && iy[met] > 0 && ix[met] < NX && iy[met] < NY)
+                                        {
+                                            //int result = (int) zlevel[ix[met] - 1, iy[met] - 1]; // use coordinates of the 1st station
+                                            int result = ReadStablity.SclMean(ix[met] - 1, iy[met] - 1);
+                                            MMO.LocalStabilityClass[met, n] = result;
+                                        }
+                                    }
+
+                                }
+                            }
+                            windfield_OK = true;
+                        }
+                        catch
+                        {
+                            if (MessageInfoForm == null)
+                            {
+                                MessageInfoForm = new MessageWindow
+                                {
+                                    Text = "GRAMM matching error",
+                                    ShowInTaskbar = false
+                                }; // Kuntner
+                                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                            }
+                            MessageInfoForm.listBox1.Items.Add("Unable to read wind field nr. " + Convert.ToString(iiwet));
+                            MessageInfoForm.Show();
+
+                            Application.DoEvents(); // Kuntner
+                            windfield_OK = false;
+                            //break;
+                        }
                     }
 
                     //extract wind speeds from GRAMM wind field at the meteo-station locations
@@ -274,7 +280,7 @@ namespace GralDomain
                     {
                         try
                         {
-                            for (int met = 0; met < MMO.metfiles.Count; met++) // loop over all met-Stations
+                            for (int met = 0; met < MMO.MetFileNames.Count; met++) // loop over all met-Stations
                             {
                                 double Uoben = 0; double Voben = 0; double Uunten = 0; double Vunten = 0; double Umittel = 0; double Vmittel = 0;
                                 int _ix = 0; int _iy = 0; int _counter = 0; int _countNumber = 0;
@@ -365,7 +371,7 @@ namespace GralDomain
                     } // windfield not available
                     else
                     {
-                        for (int met = 0; met < MMO.metfiles.Count; met++)
+                        for (int met = 0; met < MMO.MetFileNames.Count; met++)
                         {
                             MMO.WGramm[met, n] = 1000;
                             MMO.UGramm[met, n] = -1000;
@@ -380,8 +386,14 @@ namespace GralDomain
             catch
             { }
 
-            wait1.Close(); // Kuntner now wait and wait 1 are closed
             wait.Close();
+            GralDomain.Domain.CancellationTokenSource.Dispose();
+            GralDomain.Domain.CancellationTokenSource = null;
+            if (GralDomain.Domain.CancellationTokenSource == null)
+            {
+                GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
+            }
+
             if (MessageInfoForm != null)
             {
                 MessageInfoForm.Close();
@@ -400,7 +412,7 @@ namespace GralDomain
 #if __MonoCS__
             wait.Width = 350;
 #endif
-                Waitprogressbar_Cancel wait1 = new Waitprogressbar_Cancel("Copying GRAMM flow fields");
+                WaitProgressbarCancel wait1 = new WaitProgressbarCancel("Copying GRAMM flow fields");
 
                 try
                 {
@@ -600,7 +612,7 @@ namespace GralDomain
                                 if (wait1 != null && wait1.Visible) // Kuntner form does exist and is visible
                                 {
                                     wait1.Text = "Copying GRAMM flow field nr. " + Convert.ToString(a_Line.PGTNumber);
-                                    wait1.Progressbar_Change_Method(this, 0);
+                                    wait1.ProgressbarUpdate(this, 0);
 
                                 }
                                 else // Cancel button
@@ -635,16 +647,16 @@ namespace GralDomain
                     Gral.Main.MeteoTimeSeries.TrimExcess();
 
                     //copy meteorological input file to the project
-                    for (int n1 = 0; n1 < MMO.filelength[0]; n1++)
+                    for (int n1 = 0; n1 < MMO.MetFileLenght[0]; n1++)
                     {
                         GralData.WindData data = new GralData.WindData
                         {
-                            Hour = MMO.stunde[0][n1],
-                            Vel = MMO.wind_speeds[0][n1],
-                            Dir = MMO.wind_direction[0][n1],
-                            StabClass = MMO.stability[0][n1],
-                            Date = MMO.datum[0][n1],
-                            Time = MMO.zeit[0][n1]
+                            Hour = MMO.HourObsMetFile[0][n1],
+                            Vel = MMO.WindVelocityObs[0][n1],
+                            Dir = MMO.WindDirectionObs[0][n1],
+                            StabClass = MMO.StabilityClassObs[0][n1],
+                            Date = MMO.DateObsMetFile[0][n1],
+                            Time = MMO.TimeStapmsMetTimeSeries[0][n1]
                         };
                         ;
                         Gral.Main.MeteoTimeSeries.Add(data);
@@ -674,7 +686,7 @@ namespace GralDomain
                     }
 
 
-                    string metfile = Path.Combine(Gral.Main.ProjectName, "Metfiles", Path.GetFileName(MMO.metfiles[0]));
+                    string metfile = Path.Combine(Gral.Main.ProjectName, "Metfiles", Path.GetFileName(MMO.MetFileNames[0]));
 
                     try
                     {
@@ -846,14 +858,14 @@ namespace GralDomain
                         if (MMO != null)
                         {
                             MMO.dataGridView1.Rows.Clear();
-                            MMO.wind_speeds.Clear();
-                            MMO.wind_direction.Clear();
-                            MMO.filelength.Clear();
-                            MMO.metfiles.Clear();
-                            MMO.zeit.Clear();
-                            MMO.datum.Clear();
-                            MMO.stunde.Clear();
-                            MMO.stability.Clear();
+                            MMO.WindVelocityObs.Clear();
+                            MMO.WindDirectionObs.Clear();
+                            MMO.MetFileLenght.Clear();
+                            MMO.MetFileNames.Clear();
+                            MMO.TimeStapmsMetTimeSeries.Clear();
+                            MMO.DateObsMetFile.Clear();
+                            MMO.HourObsMetFile.Clear();
+                            MMO.StabilityClassObs.Clear();
                         }
                     }
                     catch { }

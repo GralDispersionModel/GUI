@@ -279,7 +279,7 @@ namespace GralDomain
         /// <summary>
         ///Cancel Token for all created await tasks
         /// </summary>
-        System.Threading.CancellationTokenSource CancellationTokenSource = new System.Threading.CancellationTokenSource();
+        public static System.Threading.CancellationTokenSource CancellationTokenSource = new System.Threading.CancellationTokenSource();
 
         /// <summary>
         /// Send a event with clicked coordinates to all registered forms
@@ -2566,11 +2566,11 @@ namespace GralDomain
             Cursor = Cursors.Cross;
             if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
-                MMO.Local_Stability = true;
+                MMO.LocalStabilityUsed = true;
             }
             else
             {
-                MMO.Local_Stability = false;
+                MMO.LocalStabilityUsed = false;
             }
 
             MMO.SettingsPath = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
@@ -3450,9 +3450,9 @@ namespace GralDomain
                         mywriter.WriteLine(" Concatenation for situations less " + Convert.ToString(MMO.concatenate.Value) + " per mil ");
                     }
 
-                    for (int i=0; i < MMO.metfiles.Count; i++)
+                    for (int i=0; i < MMO.MetFileNames.Count; i++)
                     {
-                        mywriter.WriteLine(MMO.metfiles[i] + "\t  // Used Metfiles");
+                        mywriter.WriteLine(MMO.MetFileNames[i] + "\t  // Used Metfiles");
                         mywriter.WriteLine(Convert.ToString(MMO.dataGridView1.Rows[i].Cells[1].Value).PadLeft(10) + "\t  // X-coordinate of met. station");
                         mywriter.WriteLine(Convert.ToString(MMO.dataGridView1.Rows[i].Cells[2].Value).PadLeft(10) + "\t  // Y-coordinate of met. station");
                         mywriter.WriteLine(Convert.ToString(MMO.dataGridView1.Rows[i].Cells[3].Value).PadLeft(10) + "\t  // Z-coordinate of met. station");

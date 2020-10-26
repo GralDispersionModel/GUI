@@ -38,17 +38,17 @@ namespace GralDomain
             
             if (MMO != null)
             {
-                MMO.close_allowed = true; // allow closing of the MMO form, otherwise MMO.Close() is locked
-                MMO.wind_speeds = null;
-                MMO.wind_direction = null;
-                MMO.stability  = null;
-                MMO.metfiles = null;
-                MMO.filelength = null;
-                MMO.datum = null;
-                MMO.stunde = null;
+                MMO.CloseMatchDialogAllowed = true; // allow closing of the MMO form, otherwise MMO.Close() is locked
+                MMO.WindVelocityObs = null;
+                MMO.WindDirectionObs = null;
+                MMO.StabilityClassObs  = null;
+                MMO.MetFileNames = null;
+                MMO.MetFileLenght = null;
+                MMO.DateObsMetFile = null;
+                MMO.HourObsMetFile = null;
                 MMO.DecsepUser = null;
                 MMO.RowsepUser = null;
-                MMO.zeit = null;
+                MMO.TimeStapmsMetTimeSeries = null;
                 
                 MMO.Close();
                 MMO.Dispose();

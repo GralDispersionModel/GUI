@@ -1,7 +1,7 @@
 #region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
-/// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
+/// Copyright (C) [2019-2020]  [Dietmar Oettl, Markus Kuntner]
 /// This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
 /// the Free Software Foundation version 3 of the License
 /// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,7 +12,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
@@ -41,18 +40,48 @@ namespace GralDomForms
         public string SettingsPath { set { _settings_path = value; } }
         public string GRAMMPath;
 
-        public List<double[]> wind_speeds = new List<double[]>();      //wind speed observations for all meteo-stations used for matching GRAMM wind fields
-        public List<double[]> wind_direction = new List<double[]>();      //wind direction observations for all meteo-stations used for matching GRAMM wind fields
-        public List<int[]> stability = new List<int[]>();      //stability for all meteo-stations used for matching GRAMM wind fields
-        public List<string> metfiles = new List<string>();      //names of meteo-stations used for matching GRAMM wind fields
-        public List<int> filelength = new List<int>();      //number of data points for all meteo-stations used for matching GRAMM wind fields
-        public List<string[]> datum = new List<string[]>();      //datum of meteo-stations used for matching GRAMM wind fields
-        public List<int[]> stunde = new List<int[]>();      //hours of meteo-stations used for matching GRAMM wind fields
-        public List<int> DecsepUser = new List<int>();      //Dec separator of meteo-stations used for matching GRAMM wind fields
-        public List<int> RowsepUser = new List<int>();      //Row separator of meteo-stations used for matching GRAMM wind fields
-        public List<string[]> zeit = new List<string[]>();      //time stamps of meteo-stations used for matching GRAMM wind fields
+        /// <summary>
+        /// wind speed observations for all meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<double[]> WindVelocityObs = new List<double[]>();
+        /// <summary>
+        /// wind direction observations for all meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<double[]> WindDirectionObs = new List<double[]>();      //
+        /// <summary>
+        /// stability for all meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<int[]> StabilityClassObs = new List<int[]>();      //
+        /// <summary>
+        /// names of meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<string> MetFileNames = new List<string>();      //
+        /// <summary>
+        /// number of data points for all meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<int> MetFileLenght = new List<int>();      //
+        /// <summary>
+        /// date of meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<string[]> DateObsMetFile = new List<string[]>();      //
+        /// <summary>
+        /// hours of meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<int[]> HourObsMetFile = new List<int[]>();      //
+        /// <summary>
+        /// Decimal separator of meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<int> DecsepUser = new List<int>();      //
+        /// <summary>
+        /// Row separator of meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<int> RowsepUser = new List<int>();      //
+        /// <summary>
+        /// time stamps of meteo-stations used for matching GRAMM wind fields
+        /// </summary>
+        public List<string[]> TimeStapmsMetTimeSeries = new List<string[]>();      //
 
-        public bool Local_Stability = false;
+        public bool LocalStabilityUsed = false;
         public int Match_Mode; // mode 0 = start matching process, 1 = tune match process, -2 cancel
 
         public bool Remove_Outliers;
@@ -63,7 +92,7 @@ namespace GralDomForms
 
         public event LoadWindFileData LoadWindData;
 
-        public bool close_allowed = false;
+        public bool CloseMatchDialogAllowed = false;
 
         /// <summary>
         /// u component for each meteo station and meteo situation
@@ -218,19 +247,19 @@ namespace GralDomForms
                         int removeline_temp = RemoveLine; // removeline is changed by Rows.Remove() 18.12.2017
                         dataGridView1.Rows.Remove(dataGridView1.Rows[RemoveLine]);
 
-                        if (removeline_temp < filelength.Count) // Kuntner 18.12.2017
+                        if (removeline_temp < MetFileLenght.Count) // Kuntner 18.12.2017
                         {
                             //löschen der Daten der meteo-station
-                            wind_speeds.RemoveAt(removeline_temp);
-                            wind_direction.RemoveAt(removeline_temp);
-                            filelength.RemoveAt(removeline_temp);
-                            metfiles.RemoveAt(removeline_temp);
-                            zeit.RemoveAt(removeline_temp);
-                            datum.RemoveAt(removeline_temp);
-                            stunde.RemoveAt(removeline_temp);
+                            WindVelocityObs.RemoveAt(removeline_temp);
+                            WindDirectionObs.RemoveAt(removeline_temp);
+                            MetFileLenght.RemoveAt(removeline_temp);
+                            MetFileNames.RemoveAt(removeline_temp);
+                            TimeStapmsMetTimeSeries.RemoveAt(removeline_temp);
+                            DateObsMetFile.RemoveAt(removeline_temp);
+                            HourObsMetFile.RemoveAt(removeline_temp);
                             DecsepUser.RemoveAt(removeline_temp);
                             RowsepUser.RemoveAt(removeline_temp);
-                            stability.RemoveAt(removeline_temp);
+                            StabilityClassObs.RemoveAt(removeline_temp);
                         }
                         //if (dataGridView1.RowCount < 1) // Kuntner: check if just one line does exist!
                         //{
@@ -254,7 +283,7 @@ namespace GralDomForms
             if (dataGridView1.RowCount > 0) // if a meteo line exist
             {
                 StartMatch = true;
-                Local_Stability = checkBox2.Checked;
+                LocalStabilityUsed = checkBox2.Checked;
                 Hide();
                 Cursor = Cursors.WaitCursor;
 
@@ -298,14 +327,14 @@ namespace GralDomForms
             StartMatch = false;
             Cursor = Cursors.Default;
             Match_Mode = 0;
-            stability.Clear();
-            metfiles.Clear();
-            filelength.Clear();
-            datum.Clear();
-            stunde.Clear();
+            StabilityClassObs.Clear();
+            MetFileNames.Clear();
+            MetFileLenght.Clear();
+            DateObsMetFile.Clear();
+            HourObsMetFile.Clear();
             DecsepUser.Clear();
             RowsepUser.Clear();
-            zeit.Clear();
+            TimeStapmsMetTimeSeries.Clear();
             dataGridView1.Rows.Clear();
             groupBox2.Enabled = false;
             
@@ -333,6 +362,11 @@ namespace GralDomForms
             {
                 radioButton1.Checked = true;
             }
+
+            if (GralDomain.Domain.CancellationTokenSource == null)
+            {
+                GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
+            }
         }
 
         //show windrose of selected meteo-file
@@ -348,14 +382,14 @@ namespace GralDomForms
 
                 double[] wndclasses = new double[7] { 0.5, 1, 2, 3, 4, 5, 6 };
 
-                if (RemoveLine < filelength.Count) // Kuntner 18.12.2017
+                if (RemoveLine < MetFileLenght.Count) // Kuntner 18.12.2017
                 {
-                    for (int i = 0; i <= filelength[RemoveLine] - 1; i++)
+                    for (int i = 0; i <= MetFileLenght[RemoveLine] - 1; i++)
                     {
                         //wind rose for a certain time interval within a day
-                        int sektor = Convert.ToInt32(Math.Round(wind_direction[RemoveLine][i] / 22.5, 0));
+                        int sektor = Convert.ToInt32(Math.Round(WindDirectionObs[RemoveLine][i] / 22.5, 0));
                         int wklass = 0; //Convert.ToInt32(Math.Truncate(wind_speeds[removeline][i])) + 1;
-                        double vel = wind_speeds[RemoveLine][i];
+                        double vel = WindVelocityObs[RemoveLine][i];
 
                         for (int c = 0; c < 6; c++)
                         {
@@ -386,17 +420,17 @@ namespace GralDomForms
 
                         WindData date = new WindData
                         {
-                            Date = datum[RemoveLine][i],
-                            Vel = wind_speeds[RemoveLine][i],
-                            Dir = wind_direction[RemoveLine][i],
-                            Hour = stunde[RemoveLine][i]
+                            Date = DateObsMetFile[RemoveLine][i],
+                            Vel = WindVelocityObs[RemoveLine][i],
+                            Dir = WindDirectionObs[RemoveLine][i],
+                            Hour = HourObsMetFile[RemoveLine][i]
                         };
                         if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
                         {
                             date.Hour = 0;
                         }
 
-                        date.StabClass = stability[RemoveLine][i];
+                        date.StabClass = StabilityClassObs[RemoveLine][i];
                         wind.Add(date);
                     }
 
@@ -411,7 +445,7 @@ namespace GralDomForms
                     GralMainForms.Windrose windrose = new GralMainForms.Windrose
                     {
                         SectFrequ = sectFrequency,
-                        MetFileName = Path.GetFileName(metfiles[RemoveLine]),
+                        MetFileName = Path.GetFileName(MetFileNames[RemoveLine]),
                         WindData = wind,
                         StartHour = startstunde,
                         FinalHour = endstunden,
@@ -435,7 +469,7 @@ namespace GralDomForms
         void Match_Multiple_ObservationsVisibleChanged(object sender, EventArgs e)
         {
 
-            if (Local_Stability)
+            if (LocalStabilityUsed)
             {
                 checkBox2.Checked = true;
                 checkBox2.Enabled = true;
@@ -540,7 +574,7 @@ namespace GralDomForms
                                     }
                                     i++;
                                 }
-                                sr.Write(metfiles[row.Index] + "\t");
+                                sr.Write(MetFileNames[row.Index] + "\t");
                                 sr.Write(DecsepUser[row.Index].ToString() + "\t");
                                 sr.WriteLine(RowsepUser[row.Index].ToString() + "\t");
                             }
@@ -618,16 +652,16 @@ namespace GralDomForms
 
                             spaltenbezeichnungen.Clear();
                             create_table(0, 0, spaltenbezeichnungen);// delete all data from the datagridview
-                            wind_speeds.Clear();
-                            wind_direction.Clear();
-                            filelength.Clear();
-                            metfiles.Clear();
-                            zeit.Clear();
-                            datum.Clear();
-                            stunde.Clear();
+                            WindVelocityObs.Clear();
+                            WindDirectionObs.Clear();
+                            MetFileLenght.Clear();
+                            MetFileNames.Clear();
+                            TimeStapmsMetTimeSeries.Clear();
+                            DateObsMetFile.Clear();
+                            HourObsMetFile.Clear();
                             RowsepUser.Clear();
                             DecsepUser.Clear();
-                            stability.Clear();
+                            StabilityClassObs.Clear();
 
                             while (sr.EndOfStream == false)
                             {
@@ -718,17 +752,17 @@ namespace GralDomForms
                                         if (ok && wind_length > 0) // wind data ok
                                         {
                                             //add met data
-                                            wind_speeds.Add(new double[wind_length]);
-                                            wind_direction.Add(new double[wind_length]);
-                                            filelength.Add(0);
-                                            metfiles.Add(windfilename);
-                                            zeit.Add(new string[wind_length]);
-                                            datum.Add(new string[wind_length]);
-                                            stunde.Add(new int[wind_length]);
+                                            WindVelocityObs.Add(new double[wind_length]);
+                                            WindDirectionObs.Add(new double[wind_length]);
+                                            MetFileLenght.Add(0);
+                                            MetFileNames.Add(windfilename);
+                                            TimeStapmsMetTimeSeries.Add(new string[wind_length]);
+                                            DateObsMetFile.Add(new string[wind_length]);
+                                            HourObsMetFile.Add(new int[wind_length]);
                                             DecsepUser.Add(0);
                                             RowsepUser.Add(0);
-                                            stability.Add(new int[wind_length]);
-                                            filelength[zeilenindex] = wind_length;
+                                            StabilityClassObs.Add(new int[wind_length]);
+                                            MetFileLenght[zeilenindex] = wind_length;
 
                                             char tempchar = char.Parse(decsepuser);
                                             DecsepUser[zeilenindex] = (int)tempchar;
@@ -737,12 +771,12 @@ namespace GralDomForms
                                             int length = 0;
                                             foreach (WindData wd in winddata)
                                             {
-                                                stunde[zeilenindex][length] = wd.Hour;
-                                                wind_speeds[zeilenindex][length] = wd.Vel;
-                                                wind_direction[zeilenindex][length] = wd.Dir;
-                                                datum[zeilenindex][length] = wd.Date;
-                                                zeit[zeilenindex][length] = wd.Time;
-                                                stability[zeilenindex][length] = wd.StabClass;
+                                                HourObsMetFile[zeilenindex][length] = wd.Hour;
+                                                WindVelocityObs[zeilenindex][length] = wd.Vel;
+                                                WindDirectionObs[zeilenindex][length] = wd.Dir;
+                                                DateObsMetFile[zeilenindex][length] = wd.Date;
+                                                TimeStapmsMetTimeSeries[zeilenindex][length] = wd.Time;
+                                                StabilityClassObs[zeilenindex][length] = wd.StabClass;
                                                 length++;
                                             }
                                             data_loaded = true;
@@ -777,28 +811,28 @@ namespace GralDomForms
             {
                 spaltenbezeichnungen.Clear();
                 spaltenbezeichnungen.TrimExcess();
-                wind_speeds.Clear();
-                wind_speeds.TrimExcess();
-                wind_direction.Clear();
-                wind_direction.TrimExcess();
+                WindVelocityObs.Clear();
+                WindVelocityObs.TrimExcess();
+                WindDirectionObs.Clear();
+                WindDirectionObs.TrimExcess();
 
-                stability.Clear();
-                stability.TrimExcess();
+                StabilityClassObs.Clear();
+                StabilityClassObs.TrimExcess();
 
-                metfiles.Clear();
-                metfiles.TrimExcess();
-                filelength.Clear();
-                filelength.TrimExcess();
-                datum.Clear();
-                datum.TrimExcess();
-                stunde.Clear();
-                stunde.TrimExcess();
+                MetFileNames.Clear();
+                MetFileNames.TrimExcess();
+                MetFileLenght.Clear();
+                MetFileLenght.TrimExcess();
+                DateObsMetFile.Clear();
+                DateObsMetFile.TrimExcess();
+                HourObsMetFile.Clear();
+                HourObsMetFile.TrimExcess();
                 DecsepUser.Clear();
                 DecsepUser.TrimExcess();
                 RowsepUser.Clear();
                 RowsepUser.TrimExcess();
-                zeit.Clear();
-                zeit.TrimExcess();
+                TimeStapmsMetTimeSeries.Clear();
+                TimeStapmsMetTimeSeries.TrimExcess();
                 dataGridView1.Columns.Clear();
                 dataGridView1.Dispose();
             }
@@ -812,7 +846,7 @@ namespace GralDomForms
         {
             // do not allow to close this form as long Domain() is open!
             // close_allowed is set to true at DomainFormClosed()
-            if (close_allowed == false)
+            if (CloseMatchDialogAllowed == false)
             {
                 e.Cancel = true;
             }
@@ -885,12 +919,12 @@ namespace GralDomForms
                 _dta.StrongerWeightedSC1AndSC7 = true;
             }
 
-            _dta.WeightingFactor = new double[metfiles.Count + 1];
-            _dta.WeightingDirection = new double[metfiles.Count + 1];
-            _dta.VectorErrorSum = new int[metfiles.Count, 4];
-            _dta.SCErrorSum = new int[metfiles.Count, 2];
+            _dta.WeightingFactor = new double[MetFileNames.Count + 1];
+            _dta.WeightingDirection = new double[MetFileNames.Count + 1];
+            _dta.VectorErrorSum = new int[MetFileNames.Count, 4];
+            _dta.SCErrorSum = new int[MetFileNames.Count, 2];
 
-            for (int i = 0; i < metfiles.Count; i++)
+            for (int i = 0; i < MetFileNames.Count; i++)
             {
                 _dta.WeightingFactor[i] = 1;
                 _dta.WeightingDirection[i] = 1;
@@ -898,7 +932,7 @@ namespace GralDomForms
 
             try
             {
-                for (int i = 0; i < metfiles.Count; i++)
+                for (int i = 0; i < MetFileNames.Count; i++)
                 {
                     _dta.WeightingFactor[i] = GralStaticFunctions.St_F.TxtToDbl(dataGridView1.Rows[i].Cells[6].Value.ToString(), false);
                     _dta.WeightingFactor[i] = Math.Max(_dta.WeightingFactor[i], 0.0);
@@ -917,20 +951,30 @@ namespace GralDomForms
         /// Write a mettime series based on the tuning results
         /// </summary>
         /// <param name="MetTimeSeries"></param>
-        private void WriteMetTimeSeries(List<string> MetTimeSeries)
+        private bool WriteMetTimeSeries(List<string> MetTimeSeries)
         {
-            try
+            if (MetTimeSeries != null)
             {
-                using (StreamWriter writeMetTimeSeries = File.CreateText(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat")))
+                try
                 {
-                    foreach (string _dta in MetTimeSeries)
+                    using (StreamWriter writeMetTimeSeries = File.CreateText(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat")))
                     {
-                        writeMetTimeSeries.WriteLine(_dta);
+                        foreach (string _dta in MetTimeSeries)
+                        {
+                            writeMetTimeSeries.WriteLine(_dta);
+                        }
                     }
                 }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            { }
+            else
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -939,16 +983,16 @@ namespace GralDomForms
         /// <param name="MatchingSettings"></param>
         private void SetTuningResults(MatchMultipleObservationsData MatchingSettings)
         {
-            for (int j = 0; j < metfiles.Count; j++) // write error values to datagrid
+            for (int j = 0; j < MetFileNames.Count; j++) // write error values to datagrid
             {
                 for (int i = 0; i < 4; i++) // 4 values
                 {
-                    dataGridView1.Rows[j].Cells[8 + i].Value = (100 * MatchingSettings.VectorErrorSum[j, i] / filelength[0]).ToString();
+                    dataGridView1.Rows[j].Cells[8 + i].Value = (100 * MatchingSettings.VectorErrorSum[j, i] / MetFileLenght[0]).ToString();
                 }
 
                 // error values for SC
-                dataGridView1.Rows[j].Cells[12].Value = (100 * MatchingSettings.SCErrorSum[j, 0] / filelength[0]).ToString();
-                dataGridView1.Rows[j].Cells[13].Value = (100 * MatchingSettings.SCErrorSum[j, 1] / filelength[0]).ToString();
+                dataGridView1.Rows[j].Cells[12].Value = (100 * MatchingSettings.SCErrorSum[j, 0] / MetFileLenght[0]).ToString();
+                dataGridView1.Rows[j].Cells[13].Value = (100 * MatchingSettings.SCErrorSum[j, 1] / MetFileLenght[0]).ToString();
                 dataGridView1.Rows[j].Cells[6].Value = MatchingSettings.WeightingFactor[j];
                 dataGridView1.Rows[j].Cells[7].Value = MatchingSettings.WeightingDirection[j];
                 if (MatchingSettings.Optimization == 1)
@@ -970,7 +1014,7 @@ namespace GralDomForms
         private async void StartUserMatchTuning()
         {
             //MessageBox.Show(MatchingData.PGT[1].PGTFrq.ToString() + "/" + MatchingData.WeightingFactor[0].ToString());
-            List<string> mettimeseries = await Task.Run(() => { return MatchTuning(MatchingData); });
+            List<string> mettimeseries = await Task.Run(() => { return MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token); });
             WriteMetTimeSeries(mettimeseries);
             SetTuningResults(MatchingData);
             Show();
@@ -983,211 +1027,7 @@ namespace GralDomForms
         /// <param name="e"></param>
         private void button8_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            double[] testValuesVector = new double[9] { 0.01, 0.1, 0.5, 1, 5, 10, 20, 40, 60};
-            double[] testValuesDirecetion = new double[6] { 0.01, 0.1, 0.5, 1, 5, 10 };
-            double[] Error = new double[metfiles.Count];
-            double[] BestMatchFactor = new double[metfiles.Count];
-            double[] BestMatchDirection = new double[metfiles.Count];
-            int[] BestMatchMode = new int[metfiles.Count];
-            object lockobj = new object();
-
-            for (int i = 0; i < metfiles.Count; i++)
-            {
-                Error[i] = 20000000;
-            }
-
-            GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("");
-#if __MonoCS__
-            wait.Width = 350;
-#endif
-            wait.Text = "Automatical Tuning - Pass 1/3";
-            wait.Show();
-
-            // 1st guess: brute force test for all meteo stations
-            // Mode 1
-            Parallel.ForEach(testValuesVector, (fact) =>
-            {
-                //local copy of Matching data
-                MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
-                _m.AutomaticMode = true;
-                _m.Optimization = 1;
-                // Set all factors
-                for (int j = 0; j < metfiles.Count; j++)
-                {
-                    _m.WeightingFactor[j] = fact;
-                }
-                Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
-                Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
-               
-                MatchTuning(_m);
-                double err = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum);
-                lock (lockobj)
-                {
-                    for (int i = 0; i < metfiles.Count; i++)
-                    {
-                        if (err < Error[i])
-                        {
-                            Error[i] = err;
-                            BestMatchDirection[i] = _m.WeightingDirection[i];
-                            BestMatchFactor[i] = _m.WeightingFactor[i];
-                            BestMatchMode[i] = _m.Optimization;
-                        }
-                    }
-                }
-            });
-
-            wait.Text = "Automatical Tuning - Pass 2/3";
-            // 2nd guess: check Mode 2
-            Parallel.ForEach(testValuesVector, (fact) =>
-            {
-                //local copy of Matching data
-                MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
-                _m.AutomaticMode = true;
-                _m.Optimization = 2;
-                
-                foreach (double dirfact in testValuesDirecetion)
-                {
-                    Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
-                    Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
-                    // Set all factors
-                    for (int j = 0; j < metfiles.Count; j++)
-                    {
-                        _m.WeightingFactor[j] = fact;
-                        _m.WeightingDirection[j] = dirfact;
-                    }
-                    
-                    MatchTuning(_m);
-                    double err = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum);
-                    lock (lockobj)
-                    {
-                        for (int i = 0; i < metfiles.Count; i++)
-                        {
-                            if (err < Error[i])
-                            {
-                                Error[i] = err;
-                                BestMatchDirection[i] = _m.WeightingDirection[i];
-                                BestMatchFactor[i] = _m.WeightingFactor[i];
-                                BestMatchMode[i] = _m.Optimization;
-                            }
-                        }
-                    }
-                }
-            });
-
-            wait.Text = "Automatical Tuning - Pass 3/3";
-            //Iterative fine tuning for all stations
-            {
-                List<int> MetfileList = new List<int>();
-                for (int j = 0; j < metfiles.Count; j++)
-                {
-                    MetfileList.Add(j);
-                }
-
-                for (int iterations = 0; iterations < 5; iterations++)
-                {
-                    MetfileList.Reverse();
-
-                    foreach (int i in MetfileList)
-                    {
-                        //local copy of Matching data
-                        MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
-                        _m.AutomaticMode = true;
-                        _m.Optimization = BestMatchMode[0];
-                        Array.Copy(BestMatchFactor, _m.WeightingFactor, BestMatchFactor.Length);
-                        Array.Copy(BestMatchDirection, _m.WeightingDirection, BestMatchDirection.Length);
-
-                        int direction = 1;
-                        if (iterations % 2 == 0)
-                        {
-                            direction *= -1;
-                        }
-
-                        double _fac = 1.1;
-                        if (BestMatchFactor[i] < 1)
-                        {
-                            _fac = 1.2;
-                        }
-                        for (int j = 0; j < 3; j++)
-                        {
-                            Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
-                            Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
-                            if (direction > 0)
-                            {
-                                _m.WeightingFactor[i] *= _fac;
-                            }
-                            else
-                            {
-                                _m.WeightingFactor[i] /= _fac;
-                            }
-                            MatchTuning(_m);
-                            double err = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum);
-                            if (err < Error[i])
-                            {
-                                Error[i] = err;
-                                BestMatchDirection[i] = Math.Round(_m.WeightingDirection[i], 2);
-                                BestMatchFactor[i] = Math.Round(_m.WeightingFactor[i], 2);
-                                BestMatchMode[i] = _m.Optimization;
-                            }
-                            else if (j > 0) // not improved -> try to reduce the factor
-                            {
-                                _m.WeightingFactor[i] = BestMatchFactor[i];
-                                direction *= -1;
-                            }
-                            if (_m.WeightingFactor[i] > 100)
-                            {
-                                j = 1000; // cancel
-                            }
-                        }
-                    }
-                }
-            }
-            
-            Array.Clear(MatchingData.SCErrorSum, 0, MatchingData.SCErrorSum.Length);
-            Array.Clear(MatchingData.VectorErrorSum, 0, MatchingData.VectorErrorSum.Length);
-            Array.Copy(BestMatchDirection, MatchingData.WeightingDirection, BestMatchDirection.Length);
-            Array.Copy(BestMatchFactor, MatchingData.WeightingFactor, BestMatchFactor.Length);
-
-            MatchingData.Optimization = BestMatchMode[0];
-            MatchTuning(MatchingData);
-            SetTuningResults(MatchingData);
-
-            lockobj = null;
-            wait.Close();
-            wait.Dispose();
-            Show();
+            AutoTuning();
         }
-
-        /// <summary>
-        /// Calculate the weighted error sum for the meteo station Index 
-        /// </summary>
-        /// <param name="VectorErrorSum">Vector error values</param>
-        /// <param name="SCErrorSum">SC error values</param>
-        /// <param name="Index">Number of the meteo station</param>
-        /// <returns></returns>
-        private double AutoTuningError(int[,] VectorErrorSum, int[,] SCErrorSum, int Index)
-        {
-            double meteopgtlen = Math.Max(1, filelength[0]); //avoid integer division
-            double err = ((1.0 - VectorErrorSum[Index, 2] / meteopgtlen) * (100 - hScrollBar1.Value) + (1.0 - SCErrorSum[Index, 1] / meteopgtlen) * hScrollBar1.Value) / 100;
-            return err;
-        }
-        /// <summary>
-        /// Calculate the weighted error sum for all meteo stations 
-        /// </summary>
-        /// <param name="VectorErrorSum">Vector error values</param>
-        /// <param name="SCErrorSum">SC error values</param>
-        /// <returns></returns>
-        private double AutoTuningError(int[,] VectorErrorSum, int[,] SCErrorSum)
-        {
-            double err = 0;
-            double meteopgtlen = Math.Max(1, filelength[0]);  //avoid integer division
-            for (int i = 0; i < metfiles.Count; i++)
-            {
-                err += ((1.0 - VectorErrorSum[i, 2] / meteopgtlen)  * (100 - hScrollBar1.Value) + (1.0 - SCErrorSum[i, 1] / meteopgtlen) * hScrollBar1.Value) / 100;
-            }
-            err /= metfiles.Count;
-            return err;
-        }
-
     }
 }
