@@ -31,7 +31,7 @@ namespace GralDomForms
             double[] BestMatchFactor = new double[MetFileNames.Count];
             double[] BestMatchDirection = new double[MetFileNames.Count];
             int[] BestMatchMode = new int[MetFileNames.Count];
-            
+           
             for (int i = 0; i < MetFileNames.Count; i++)
             {
                 Error[i] = 20000000;
@@ -41,70 +41,32 @@ namespace GralDomForms
 #if __MonoCS__
             wait.Width = 350;
 #endif
+            // Check, if all weighting factors are 1 -> otherwise only iterative solution
             wait.Text = "Automatic Tuning - Pass 1/3";
             wait.Show();
-            wait.BeginInvoke(wait.UpdateProgressDelegate, this, testValuesVector.Count());
-            // 1st guess: brute force test for all meteo stations
-            // Mode 1
-            foreach(double fact in testValuesVector)
+
+            if (!OnlyIterativeTuning)
             {
-                if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
+                wait.BeginInvoke(wait.UpdateProgressDelegate, this, testValuesVector.Count());
+                // 1st guess: brute force test for all meteo stations
+                // Mode 1
+                foreach (double fact in testValuesVector)
                 {
-                    wait.BeginInvoke(wait.UpdateProgressDelegate, this, 0);
-                    Application.DoEvents();
-                    //local copy of Matching data
-                    MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
-                    _m.AutomaticMode = true;
-                    _m.Optimization = 1;
-                    // Set all factors
-                    for (int j = 0; j < MetFileNames.Count; j++)
-                    {
-                        _m.WeightingFactor[j] = fact;
-                    }
-                    Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
-                    Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
-
-                    MatchTuning(_m, GralDomain.Domain.CancellationTokenSource.Token);
-                    double err = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum);
-
-                    for (int i = 0; i < MetFileNames.Count; i++)
-                    {
-                        if (err < Error[i])
-                        {
-                            Error[i] = err;
-                            BestMatchDirection[i] = _m.WeightingDirection[i];
-                            BestMatchFactor[i] = _m.WeightingFactor[i];
-                            BestMatchMode[i] = _m.Optimization;
-                        }
-                    }
-
-                }
-            }
-
-            wait.Text = "Automatic Tuning - Pass 2/3";
-            wait.BeginInvoke(wait.UpdateProgressDelegate, this, testValuesDirection.Count() * testValuesVector.Count());
-            // 2nd guess: check Mode 2
-            foreach (double fact in testValuesVector)
-            {
-                if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
-                {
-                    //local copy of Matching data
-                    MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
-                    _m.AutomaticMode = true;
-                    _m.Optimization = 2;
-
-                    foreach (double dirfact in testValuesDirection)
+                    if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
                     {
                         wait.BeginInvoke(wait.UpdateProgressDelegate, this, 0);
                         Application.DoEvents();
-                        Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
-                        Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
+                        //local copy of Matching data
+                        MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
+                        _m.AutomaticMode = true;
+                        _m.Optimization = 1;
                         // Set all factors
                         for (int j = 0; j < MetFileNames.Count; j++)
                         {
                             _m.WeightingFactor[j] = fact;
-                            _m.WeightingDirection[j] = dirfact;
                         }
+                        Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
+                        Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
 
                         MatchTuning(_m, GralDomain.Domain.CancellationTokenSource.Token);
                         double err = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum);
@@ -121,6 +83,58 @@ namespace GralDomForms
                         }
 
                     }
+                }
+
+                wait.Text = "Automatic Tuning - Pass 2/3";
+                wait.BeginInvoke(wait.UpdateProgressDelegate, this, testValuesDirection.Count() * testValuesVector.Count());
+                // 2nd guess: check Mode 2
+                foreach (double fact in testValuesVector)
+                {
+                    if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
+                    {
+                        //local copy of Matching data
+                        MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
+                        _m.AutomaticMode = true;
+                        _m.Optimization = 2;
+
+                        foreach (double dirfact in testValuesDirection)
+                        {
+                            wait.BeginInvoke(wait.UpdateProgressDelegate, this, 0);
+                            Application.DoEvents();
+                            Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
+                            Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
+                            // Set all factors
+                            for (int j = 0; j < MetFileNames.Count; j++)
+                            {
+                                _m.WeightingFactor[j] = fact;
+                                _m.WeightingDirection[j] = dirfact;
+                            }
+
+                            MatchTuning(_m, GralDomain.Domain.CancellationTokenSource.Token);
+                            double err = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum);
+
+                            for (int i = 0; i < MetFileNames.Count; i++)
+                            {
+                                if (err < Error[i])
+                                {
+                                    Error[i] = err;
+                                    BestMatchDirection[i] = _m.WeightingDirection[i];
+                                    BestMatchFactor[i] = _m.WeightingFactor[i];
+                                    BestMatchMode[i] = _m.Optimization;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            } // only iterative tuning
+            else
+            {
+                for (int i = 0; i < MetFileNames.Count; i++)
+                {
+                    BestMatchDirection[i] = MatchingData.WeightingDirection[i];
+                    BestMatchFactor[i] = MatchingData.WeightingFactor[i];
+                    BestMatchMode[i] = MatchingData.Optimization;
                 }
             }
 
@@ -249,7 +263,7 @@ namespace GralDomForms
             double meteopgtlen = Math.Max(1, MetFileLenght[0]);  //avoid integer division
             for (int i = 0; i < MetFileNames.Count; i++)
             {
-                err += ((1.0 - VectorErrorSum[i, 2] / meteopgtlen) * (100 - hScrollBar1.Value) + (1.0 - SCErrorSum[i, 1] / meteopgtlen) * hScrollBar1.Value) / 100;
+               err += ((1.0 - VectorErrorSum[i, 2] / meteopgtlen) * 1.2 * (100 - hScrollBar1.Value) + (1.0 - SCErrorSum[i, 1] / meteopgtlen) * hScrollBar1.Value) / 100;
             }
             err /= MetFileNames.Count;
             return err;

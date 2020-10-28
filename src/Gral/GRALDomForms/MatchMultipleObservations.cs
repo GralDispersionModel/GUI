@@ -18,6 +18,7 @@ using System.Globalization;
 using GralIO;
 using GralData;
 using System.Threading.Tasks;
+using System.Diagnostics.Eventing.Reader;
 
 namespace GralDomForms
 {
@@ -35,6 +36,7 @@ namespace GralDomForms
         private List<string> spaltenbezeichnungen = new List<string>(); //liste mit spaltenbezeichnungen
         private int RemoveLine = -999;
         public bool StartMatch = false;
+        bool OnlyIterativeTuning = false;
 
         private string _settings_path;
         public string SettingsPath { set { _settings_path = value; } }
@@ -379,80 +381,166 @@ namespace GralDomForms
                 int count = 0;
                 int startstunde = 0;
                 int endstunden = 23;
+                string metFileName = string.Empty;
 
                 double[] wndclasses = new double[7] { 0.5, 1, 2, 3, 4, 5, 6 };
 
                 if (RemoveLine < MetFileLenght.Count) // Kuntner 18.12.2017
                 {
-                    for (int i = 0; i <= MetFileLenght[RemoveLine] - 1; i++)
+                    // October 2020: Kuntner: analyze and show matched wind rose
+                    Button _btn = (Button)sender;
+                    if (_btn == button9)
                     {
-                        //wind rose for a certain time interval within a day
-                        int sektor = Convert.ToInt32(Math.Round(WindDirectionObs[RemoveLine][i] / 22.5, 0));
-                        int wklass = 0; //Convert.ToInt32(Math.Truncate(wind_speeds[removeline][i])) + 1;
-                        double vel = WindVelocityObs[RemoveLine][i];
-
-                        for (int c = 0; c < 6; c++)
+                        metFileName = "Matched: " + Path.GetFileName(MetFileNames[RemoveLine]);
+                        GralBackgroundworkers.BackgroundworkerData _bwdata = new GralBackgroundworkers.BackgroundworkerData();
+                        GralBackgroundworkers.ProgressFormBackgroundworker bgw = new GralBackgroundworkers.ProgressFormBackgroundworker(_bwdata);
+                        //load mettime series
+                        List<string> _mettimeSeries = new List<string>();
+                        if (File.Exists(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat")))
                         {
-                            if (vel > wndclasses[c] && vel <= wndclasses[c + 1])
+                            if (bgw.ReadMettimeseries(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat"), ref _mettimeSeries))
                             {
-                                wklass = c + 1;
+                                List<string> _meteopgt = new List<string>();
+                                foreach (GralData.PGTAll a_Line in  MatchingData.PGT)
+                                {
+                                    string a = a_Line.ToString(); // + ", orig "+Convert.ToString(a_Line.PGT_Number);
+                                    _meteopgt.Add(a);
+                                }
+
+                                for (int i = 0; i < _mettimeSeries.Count; i++)
+                                {
+                                    int index = bgw.SearchCorrespondingMeteopgtAllSituation(_mettimeSeries, _meteopgt, i);
+                                    double uGramm = UGramm[RemoveLine, index];
+                                    double vGramm = VGramm[RemoveLine, index];
+                                    if (uGramm > -999 && vGramm > -999)
+                                    {
+                                        double vel = Math.Sqrt(uGramm * uGramm + vGramm * vGramm);
+                                        float dir = bgw.WindDirection((float)uGramm, (float)vGramm);
+                                        int sektor = Convert.ToInt32(Math.Round(dir / 22.5, 0));
+                                        int wklass = 0;
+
+                                        for (int c = 0; c < 6; c++)
+                                        {
+                                            if (vel > wndclasses[c] && vel <= wndclasses[c + 1])
+                                            {
+                                                wklass = c + 1;
+                                            }
+                                        }
+
+                                        if (vel <= wndclasses[0])
+                                        {
+                                            wklass = 0;
+                                        }
+
+                                        if (vel > wndclasses[6])
+                                        {
+                                            wklass = 7;
+                                        }
+
+                                        if (sektor > 15)
+                                        {
+                                            sektor = 0;
+                                        }
+
+                                        count += 1;
+
+                                        sectFrequency[sektor, wklass]++;
+                                        
+                                        WindData date = new WindData
+                                        {
+                                            Date = DateObsMetFile[0][i],
+                                            Vel = vel,
+                                            Dir = dir,
+                                            Hour = HourObsMetFile[0][i]
+                                        };
+                                        if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
+                                        {
+                                            date.Hour = 0;
+                                        }
+
+                                        date.StabClass = LocalStabilityClass[RemoveLine, index];
+                                        wind.Add(date);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        metFileName = Path.GetFileName(MetFileNames[RemoveLine]);
+                        for (int i = 0; i <= MetFileLenght[RemoveLine] - 1; i++)
+                        {
+                            //wind rose for a certain time interval within a day
+                            int sektor = Convert.ToInt32(Math.Round(WindDirectionObs[RemoveLine][i] / 22.5, 0));
+                            int wklass = 0; //Convert.ToInt32(Math.Truncate(wind_speeds[removeline][i])) + 1;
+                            double vel = WindVelocityObs[RemoveLine][i];
+
+                            for (int c = 0; c < 6; c++)
+                            {
+                                if (vel > wndclasses[c] && vel <= wndclasses[c + 1])
+                                {
+                                    wklass = c + 1;
+                                }
+                            }
+
+                            if (vel <= wndclasses[0])
+                            {
+                                wklass = 0;
+                            }
+
+                            if (vel > wndclasses[6])
+                            {
+                                wklass = 7;
+                            }
+
+                            if (sektor > 15)
+                            {
+                                sektor = 0;
+                            }
+
+                            count += 1;
+
+                            sectFrequency[sektor, wklass]++;
+
+                            WindData date = new WindData
+                            {
+                                Date = DateObsMetFile[RemoveLine][i],
+                                Vel = WindVelocityObs[RemoveLine][i],
+                                Dir = WindDirectionObs[RemoveLine][i],
+                                Hour = HourObsMetFile[RemoveLine][i]
+                            };
+                            if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
+                            {
+                                date.Hour = 0;
+                            }
+
+                            date.StabClass = StabilityClassObs[RemoveLine][i];
+                            wind.Add(date);
+                        }
+                    }
+
+                    if (count > 0)
+                    {
+                        for (int sektor = 0; sektor < 16; sektor++)
+                        {
+                            for (int wklass = 0; wklass < 8; wklass++)
+                            {
+                                sectFrequency[sektor, wklass] = sectFrequency[sektor, wklass] / Convert.ToDouble(count);
                             }
                         }
 
-                        if (vel <= wndclasses[0])
+                        GralMainForms.Windrose windrose = new GralMainForms.Windrose
                         {
-                            wklass = 0;
-                        }
-
-                        if (vel > wndclasses[6])
-                        {
-                            wklass = 7;
-                        }
-
-                        if (sektor > 15)
-                        {
-                            sektor = 0;
-                        }
-
-                        count += 1;
-
-                        sectFrequency[sektor, wklass]++;
-
-                        WindData date = new WindData
-                        {
-                            Date = DateObsMetFile[RemoveLine][i],
-                            Vel = WindVelocityObs[RemoveLine][i],
-                            Dir = WindDirectionObs[RemoveLine][i],
-                            Hour = HourObsMetFile[RemoveLine][i]
+                            SectFrequ = sectFrequency,
+                            MetFileName = metFileName,
+                            WindData = wind,
+                            StartHour = startstunde,
+                            FinalHour = endstunden,
+                            WndClasses = wndclasses,
+                            DrawingMode = 0
                         };
-                        if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
-                        {
-                            date.Hour = 0;
-                        }
-
-                        date.StabClass = StabilityClassObs[RemoveLine][i];
-                        wind.Add(date);
+                        windrose.Show();
                     }
-
-                    for (int sektor = 0; sektor < 16; sektor++)
-                    {
-                        for (int wklass = 0; wklass < 8; wklass++)
-                        {
-                            sectFrequency[sektor, wklass] = sectFrequency[sektor, wklass] / Convert.ToDouble(count);
-                        }
-                    }
-
-                    GralMainForms.Windrose windrose = new GralMainForms.Windrose
-                    {
-                        SectFrequ = sectFrequency,
-                        MetFileName = Path.GetFileName(MetFileNames[RemoveLine]),
-                        WindData = wind,
-                        StartHour = startstunde,
-                        FinalHour = endstunden,
-                        WndClasses = wndclasses,
-                        DrawingMode = 0
-                    };
-                    windrose.Show();
                 }
                 else
                 {
@@ -1027,7 +1115,20 @@ namespace GralDomForms
         /// <param name="e"></param>
         private void button8_Click(object sender, EventArgs e)
         {
+            MatchingData = FillUserMatchingData(MatchingData);
             AutoTuning();
+            OnlyIterativeTuning = true;
+        }
+
+        /// <summary>
+        /// Change the scrollbar for tuning setting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            // Reset just iterative tuning
+            OnlyIterativeTuning = false;
         }
     }
 }

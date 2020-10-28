@@ -173,7 +173,7 @@ namespace GralBackgroundworkers
         /// <param name="MeteoPgtALL">Meteopgt.all data</param>
         /// <param name="MetTimeSeriesIndex">Index in the mettime series</param>
         /// <returns>Index in meteopgt.all matching the mettime series at the index MetTimeSeriesIndex</returns>
-        private int SearchCorrespondingMeteopgtAllSituation(List<string> MetTimeSeries, List<string> MeteoPgtALL, int MetTimeSeriesIndex)
+        public int SearchCorrespondingMeteopgtAllSituation(List<string> MetTimeSeries, List<string> MeteoPgtALL, int MetTimeSeriesIndex)
         {
             int MeteopgtIndex = 0;
             string[] text;
@@ -407,7 +407,7 @@ namespace GralBackgroundworkers
         /// <param name="Umittel">Wind U component</param>
         /// <param name="Vmittel">Wind V component</param>
         /// <returns>Wind direction in degrees</returns>
-        private float WindDirection(float Umittel, float Vmittel)
+        public float WindDirection(float Umittel, float Vmittel)
         {
             float wr = 0;
             if (Vmittel == 0)

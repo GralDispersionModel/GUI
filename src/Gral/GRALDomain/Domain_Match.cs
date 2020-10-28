@@ -408,19 +408,12 @@ namespace GralDomain
             if (MMO.StartMatch) // otherwise cancel matching process
             {
                 decimal concatenation = MMO.concatenate.Value;
-                Waitprogressbar wait = new Waitprogressbar(""); // Kuntner: create wait just one times, so wait can be deleted at the end of the method, also if an error occures
-#if __MonoCS__
-            wait.Width = 350;
-#endif
                 WaitProgressbarCancel wait1 = new WaitProgressbarCancel("Copying GRAMM flow fields");
 
                 try
                 {
 
                     //________________________________________________________________________________________________________________
-                    wait.Hide();
-                    wait.Text = "Writing meteopgt.all";
-                    wait.Show();
                     Application.DoEvents(); // Kuntner
 
                     // now create a new meteopgt.all
@@ -567,8 +560,8 @@ namespace GralDomain
                             MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
 
-                        wait.Hide();
                         wait1.Show();
+                        wait1.ProgressbarUpdate(this, MatchData.PGT.Count);
 
                         int i = 0;
                         foreach (GralData.PGTAll a_Line in MatchData.PGT)
@@ -639,9 +632,7 @@ namespace GralDomain
                         MessageInfoForm.Show();
                     }
 
-                    wait.Hide();
                     wait1.Hide();
-
 
                     Gral.Main.MeteoTimeSeries.Clear();
                     Gral.Main.MeteoTimeSeries.TrimExcess();
@@ -835,8 +826,7 @@ namespace GralDomain
 
                     Cursor = Cursors.Default;
                     wait1.Close(); // Kuntner now wait and wait 1 are closed
-                    wait.Close();
-
+                   
                     string error = "";
                     if (MessageInfoForm != null)
                     {
@@ -885,11 +875,7 @@ namespace GralDomain
                         MessageInfoForm.Close();
                         MessageInfoForm = null;
                     }
-                    if (wait != null)
-                    {
-                        wait.Close();
-                    }
-
+                   
                     if (wait1 != null)
                     {
                         wait1.Close();

@@ -872,7 +872,7 @@ namespace GralBackgroundworkers
             return ok;
         }
         
-        private bool ReadMettimeseries(string filename, ref List<string> data)
+        public bool ReadMettimeseries(string filename, ref List<string> data)
         {
             bool ok = true;
             data.Clear();
