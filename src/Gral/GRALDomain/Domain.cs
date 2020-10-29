@@ -2576,6 +2576,8 @@ namespace GralDomain
             MMO.SettingsPath = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
             MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
+            MMO.StartPosition = FormStartPosition.Manual;
+            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog().X - 1200);
             MMO.Show();
         }
 
