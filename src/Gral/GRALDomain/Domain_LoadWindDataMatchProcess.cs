@@ -237,7 +237,7 @@ namespace GralDomain
                 
             }
             dialog.Dispose();
-            MMO.TopMost = true;
+            MMO.TopMost = false;
         }
         
         private double EvalMetFileHeader(string s)

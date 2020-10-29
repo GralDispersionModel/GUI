@@ -1198,22 +1198,26 @@ namespace GralDomain
                 case 66:
                     //get sample point for re-ordering GRAMM windfield to meet newly observed wind and stability data at any location within the model domain
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
+                        if (MMO != null)
                         {
-                            MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            //set new coordinates manually
-                            if (MMO.dataGridView1.CurrentCell != null) // Kuntner: check if line does exist!
+                            XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                            YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                            if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
                             {
-                                int zeilenindex = MMO.dataGridView1.CurrentCell.RowIndex;
-                                MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(XDomain);
-                                MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(YDomain);
+                                MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
+                            else
+                            {
+                                //set new coordinates manually
+                                if (MMO.dataGridView1.CurrentCell != null) // Kuntner: check if line does exist!
+                                {
+                                    int zeilenindex = MMO.dataGridView1.CurrentCell.RowIndex;
+                                    MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(XDomain);
+                                    MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(YDomain);
+                                    MMO.BringToFront();
+                                }
 
+                            }
                         }
                     }
                     break;
