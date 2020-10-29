@@ -210,30 +210,8 @@ namespace GralBackgroundworkers
                             Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
                             Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
                         }
-                        if (Vmittel == 0)
-                        {
-                            iwr[item_number][n] = 90;
-                        }
-                        else
-                        {
-                            iwr[item_number][n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
-                        }
 
-                        if ((Vmittel > 0) && (Umittel <= 0))
-                        {
-                            iwr[item_number][n] = 180 - iwr[item_number][n];
-                        }
-
-                        if ((Vmittel >= 0) && (Umittel > 0))
-                        {
-                            iwr[item_number][n] = 180 + iwr[item_number][n];
-                        }
-
-                        if ((Vmittel < 0) && (Umittel >= 0))
-                        {
-                            iwr[item_number][n] = 360 - iwr[item_number][n];
-                        }
-
+                        iwr[item_number][n] = WindDirection(Umittel, Vmittel);
                         wgi[item_number][n] = (float)Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
                     }
                     item_number++;
