@@ -256,7 +256,13 @@ namespace GralMainForms
                 
         protected override void OnPaint(PaintEventArgs e)
         {
-
+            int anz_sources = form1.listView1.Items.Count;
+            // no more sources available -> close the form
+            if (anz_sources == 0)
+            {
+                this.Close();
+                return;
+            }
             Graphics g = e.Graphics;
             g.ScaleTransform((float) Width / 1000f,(float) Width / 1000f);
             g.Clear(Color.White);
@@ -301,7 +307,7 @@ namespace GralMainForms
             
             //scaling factor
             double classmax = 0;
-            int anz_sources = form1.listView1.Items.Count;
+            
             string[] selpoll = new string[2];
             int sgroup = 0;
                 
