@@ -407,9 +407,9 @@ namespace GralBackgroundworkers
         /// <param name="Umittel">Wind U component</param>
         /// <param name="Vmittel">Wind V component</param>
         /// <returns>Wind direction in degrees</returns>
-        public float WindDirection(float Umittel, float Vmittel)
+        public int WindDirection(double Umittel, double Vmittel)
         {
-            float wr = 0;
+            int wr = 0;
             if (Vmittel == 0)
             {
                 wr = 90;
