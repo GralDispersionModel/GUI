@@ -181,11 +181,17 @@ namespace GralDomain
                     {
                         if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                         {
-                            if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (EditAS.ItemDisplayNr < EditAS.ItemData.Count && EditAS.ItemData[EditAS.ItemDisplayNr].Pt.Count > 0)
+                            {
+                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    EditSourceShape = true;
+                                }
+                            }
+                            else // new item
                             {
                                 EditSourceShape = true;
                             }
-
                         }
                         if (EditSourceShape)
                         {
@@ -199,6 +205,10 @@ namespace GralDomain
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
+                        }
+                        else
+                        {
+                            ToolTipMousePosition.Active = false;
                         }
                     }
                     break;
@@ -216,12 +226,19 @@ namespace GralDomain
                         {
                             if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                             {
-                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (EditB.ItemDisplayNr < EditB.ItemData.Count && EditB.ItemData[EditB.ItemDisplayNr].Pt.Count > 0)
+                                {
+                                    if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                    {
+                                        EditSourceShape = true;
+                                    }
+                                }
+                                else // new item
                                 {
                                     EditSourceShape = true;
                                 }
-
                             }
+
                             if (EditSourceShape)
                             {
                                 //set new building - get x,y coordinates
@@ -234,6 +251,10 @@ namespace GralDomain
                                 Cursor.Clip = Bounds;
                                 RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                                 Picturebox1_Paint(); // 
+                            }
+                            else
+                            {
+                                ToolTipMousePosition.Active = false;
                             }
                         }
                     }
@@ -250,11 +271,17 @@ namespace GralDomain
                     {
                         if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                         {
-                            if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (EditVegetation.ItemDisplayNr < EditVegetation.ItemData.Count && EditVegetation.ItemData[EditVegetation.ItemDisplayNr].Pt.Count > 0)
+                            {
+                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    EditSourceShape = true;
+                                }
+                            }
+                            else // new item
                             {
                                 EditSourceShape = true;
                             }
-
                         }
                         if (EditSourceShape)
                         {
@@ -269,12 +296,15 @@ namespace GralDomain
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
                         }
+                        else
+                        {
+                            ToolTipMousePosition.Active = false;
+                        }
                     }
                     break;
 
                 case 10:
                     //digitize position of the corner points of line sources
-
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditLS.CornerLineX.Length > 1) // Kuntner: change point of line source
                     {
                         // Change one edge of the line source
@@ -284,11 +314,17 @@ namespace GralDomain
                     {
                         if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                         {
-                            if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (EditLS.ItemDisplayNr < EditLS.ItemData.Count && EditLS.ItemData[EditLS.ItemDisplayNr].Pt.Count > 0)
+                            {
+                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    EditSourceShape = true;
+                                }
+                            }
+                            else // new item
                             {
                                 EditSourceShape = true;
                             }
-
                         }
                         if (EditSourceShape)
                         {
@@ -303,6 +339,10 @@ namespace GralDomain
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
+                        }
+                        else
+                        {
+                            ToolTipMousePosition.Active = false;
                         }
                     }
                     break;
@@ -320,7 +360,14 @@ namespace GralDomain
                         {
                             if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                             {
-                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (EditWall.ItemDisplayNr < EditWall.ItemData.Count && EditWall.ItemData[EditWall.ItemDisplayNr].Pt.Count > 0)
+                                {
+                                    if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                    {
+                                        EditSourceShape = true;
+                                    }
+                                }
+                                else // new item
                                 {
                                     EditSourceShape = true;
                                 }
@@ -343,6 +390,10 @@ namespace GralDomain
                                 Cursor.Clip = Bounds;
                                 RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                                 Picturebox1_Paint(); // 
+                            }
+                            else
+                            {
+                                ToolTipMousePosition.Active = false;
                             }
                         }
                     }
