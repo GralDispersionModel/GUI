@@ -35,6 +35,7 @@ namespace GralDomForms
         public string SCLPath = string.Empty;
         public string GRZPath = string.Empty;
         public string GFFPath = string.Empty;
+        public bool ShowConcentrationFiles = false;
         private bool transient = false;
 
         public SelectDispersionSituation (GralDomain.Domain d, Main f)
@@ -80,7 +81,7 @@ namespace GralDomForms
                 InDatFileIO ReadInData = new InDatFileIO ();
                 data.InDatPath = Path.Combine (Main.ProjectName, "Computation", "in.dat");
                 ReadInData.Data = data;
-                if (ReadInData.ReadInDat () == true && form1.checkBox19.Checked == true) // Transient mode & no classification 
+                if (ReadInData.ReadInDat () == true && (form1.checkBox19.Checked == true || ShowConcentrationFiles)) // Transient mode & no classification or Concentration files in transient mode 
                 {
                     if (data.Transientflag == 0) 
                     {
@@ -161,13 +162,12 @@ namespace GralDomForms
                 {
                     using (StreamReader myreader = new StreamReader(ggeom_file))
                     {
-                        string[] text = new string[5];
                         int count = 0;
-                        text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
+                        string[] text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
                         text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
                         text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
 
-                        while (text[0] != "")
+                        while (text.Length > 0 && !string.IsNullOrEmpty(text[0]))
                         {
                             if (text.Length > 3)
                             {
@@ -211,7 +211,7 @@ namespace GralDomForms
                 }
                 catch { }
             }
-            else
+            else // transient mode
             {
                 string ggeom_file = Path.Combine(Main.ProjectName, @"Computation", "mettimeseries.dat");
                 if (File.Exists(ggeom_file) == false)
@@ -223,10 +223,9 @@ namespace GralDomForms
                 {
                     using (StreamReader myreader = new StreamReader(ggeom_file))
                     {
-                        string[] text = new string[5];
                         int count = 0;
-                        text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
-                        while (text[0] != "")
+                        string[] text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
+                        while (text.Length > 0 && !string.IsNullOrEmpty(text[0]))
                         {
                             if (text.Length > 3)
                             {
