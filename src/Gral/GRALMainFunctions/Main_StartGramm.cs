@@ -94,7 +94,7 @@ namespace Gral
             OpenFileDialog dialog = new OpenFileDialog();
             
             #if __MonoCS__
-            dialog.Filter = "GRAMM executable (GRAMM*.dll)|GRAMM*.dll";
+            dialog.Filter = "GRAMM executable (GRAMM*.dll;GRAMM)|GRAMM*.dll;GRAMM";
             #else
             dialog.Filter = "GRAMM executable (GRAMM*.exe;GRAMM*.bat)|GRAMM*.exe;GRAMM*.bat";
             #endif
@@ -176,22 +176,36 @@ namespace Gral
                         try
                         {
                             string command = String.Empty;
-                            if (Path.GetExtension(GRAMM_Program_Path).ToLower() == ".dll") // .sh file -> call sh file
+                            if (Path.GetFileName(GRAMM_Program_Path).Equals("GRAMM")) // new GRAMM version from .NET5
                             {
-                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; dotnet " + Path.GetFileName(GRAMM_Program_Path) + " " + '"' + GRAMM_Project_Path + '"' + " ; bash'";
+                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; ./" + Path.GetFileName(GRAMM_Program_Path) + " " + '"' + GRAMM_Project_Path + '"' + " ; bash'";
+                                GRAMMProcess = new Process();
+                                GRAMMProcess.StartInfo.FileName = "/bin/bash";
+                                GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+                                GRAMMProcess.StartInfo.UseShellExecute = false;
+                                GRAMMProcess.StartInfo.RedirectStandardOutput = true;
+                                GRAMMProcess.Start();
+                                Thread.Sleep(500);
                             }
-                            else // .exe file
+                            else
                             {
-                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; mono " + Path.GetFileName(GRAMM_Program_Path) + " ; bash'";
+                                if (Path.GetExtension(GRAMM_Program_Path).ToLower() == ".dll") // .sh file -> call sh file
+                                {
+                                    command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; dotnet " + Path.GetFileName(GRAMM_Program_Path) + " " + '"' + GRAMM_Project_Path + '"' + " ; bash'";
+                                }
+                                else // .exe file
+                                {
+                                    command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; mono " + Path.GetFileName(GRAMM_Program_Path) + " ; bash'";
+                                }
+                                //start routine GRAMM*.exe to compute wind fields
+                                GRAMMProcess = new Process();
+                                GRAMMProcess.StartInfo.FileName = "/bin/bash";
+                                GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+                                GRAMMProcess.StartInfo.UseShellExecute = false;
+                                GRAMMProcess.StartInfo.RedirectStandardOutput = true;
+                                GRAMMProcess.Start();
+                                Thread.Sleep(500);
                             }
-                            //start routine GRAMM*.exe to compute wind fields
-                            GRAMMProcess = new Process();
-                            GRAMMProcess.StartInfo.FileName = "/bin/bash";
-                            GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
-                            GRAMMProcess.StartInfo.UseShellExecute = false;
-                            GRAMMProcess.StartInfo.RedirectStandardOutput = true;
-                            GRAMMProcess.Start();
-                            Thread.Sleep(500);
                         }
 
                         catch (Exception ex)
@@ -259,14 +273,29 @@ namespace Gral
                                 #if __MonoCS__
                                 try
                                 {
-                                    string gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
-                                    string command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; mono " + Path.GetFileName(GRAMM_Program_Path) + " " + gramm_start + " ; bash'";
-                                    GRAMMProcess = new Process();
-                                    GRAMMProcess.StartInfo.FileName = "/bin/bash";
-                                    GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
-                                    GRAMMProcess.StartInfo.UseShellExecute = false;
-                                    GRAMMProcess.StartInfo.RedirectStandardOutput = true;
-                                    GRAMMProcess.Start();
+                                    if (Path.GetFileName(GRAMM_Program_Path).Equals("GRAMM")) // new GRAMM version from .NET5
+                                    {
+                                        string gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                        string command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; ./" + Path.GetFileName(GRAMM_Program_Path) + " " + '"' + GRAMM_Project_Path + '"' + gramm_start + " ; bash'";
+                                        GRAMMProcess = new Process();
+                                        GRAMMProcess.StartInfo.FileName = "/bin/bash";
+                                        GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+                                        GRAMMProcess.StartInfo.UseShellExecute = false;
+                                        GRAMMProcess.StartInfo.RedirectStandardOutput = true;
+                                        GRAMMProcess.Start();
+                                    }
+                                    else
+                                    {
+
+                                        string gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                        string command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; mono " + Path.GetFileName(GRAMM_Program_Path) + " " + gramm_start + " ; bash'";
+                                        GRAMMProcess = new Process();
+                                        GRAMMProcess.StartInfo.FileName = "/bin/bash";
+                                        GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+                                        GRAMMProcess.StartInfo.UseShellExecute = false;
+                                        GRAMMProcess.StartInfo.RedirectStandardOutput = true;
+                                        GRAMMProcess.Start();
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -297,25 +326,38 @@ namespace Gral
                             else // further instances
                             {
                                 //start computation routine GRAMM*.exe to compute
-                                #if __MonoCS__
+#if __MonoCS__
                                 try
                                 {
                                     Process gramm_local;
                                     string gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
-                                    string command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; mono " + Path.GetFileName(GRAMM_Program_Path) + " " + gramm_start + " ; bash'";
-                                    gramm_local = new Process();
-                                    gramm_local.StartInfo.FileName = "/bin/bash";
-                                    gramm_local.StartInfo.Arguments = "-c \" " + command + " \"";
-                                    gramm_local.StartInfo.UseShellExecute = false;
-                                    gramm_local.StartInfo.RedirectStandardOutput = true;
-                                    gramm_local.Start();
+                                    if (Path.GetFileName(GRAMM_Program_Path).Equals("GRAMM")) // new GRAMM version from .NET5
+                                    {
+                                        string command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; ./" + Path.GetFileName(GRAMM_Program_Path) + " " + '"' + GRAMM_Project_Path + '"' + gramm_start + " ; bash'";
+                                        GRAMMProcess = new Process();
+                                        GRAMMProcess.StartInfo.FileName = "/bin/bash";
+                                        GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+                                        GRAMMProcess.StartInfo.UseShellExecute = false;
+                                        GRAMMProcess.StartInfo.RedirectStandardOutput = true;
+                                        GRAMMProcess.Start();
+                                    }
+                                    else
+                                    {
+                                        string command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAMM_Program_Path) + "'; mono " + Path.GetFileName(GRAMM_Program_Path) + " " + gramm_start + " ; bash'";
+                                        gramm_local = new Process();
+                                        gramm_local.StartInfo.FileName = "/bin/bash";
+                                        gramm_local.StartInfo.Arguments = "-c \" " + command + " \"";
+                                        gramm_local.StartInfo.UseShellExecute = false;
+                                        gramm_local.StartInfo.RedirectStandardOutput = true;
+                                        gramm_local.Start();
+                                    }
                                     Thread.Sleep(800);
                                 }
                                 catch (Exception ex)
                                 {
                                     MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
-                                #else
+#else
                                 Process gramm_local;
                                 gramm_local = new Process();
                                 gramm_local.StartInfo.FileName = GRAMM_Program_Path;
@@ -369,7 +411,7 @@ namespace Gral
                             { }
 
                             // create bash files at Linux
-                            #if __MonoCS__
+#if __MonoCS__
                             filename_batch = Path.Combine(Path.GetDirectoryName(GRAMM_Program_Path), "GRAMM_instance_" + count.ToString() + ".sh");
                             try
                             {
@@ -377,13 +419,19 @@ namespace Gral
                                 {
                                     batchfile.WriteLine("#!/bin/bash");
                                     string gramm_start = " " + instance_start.ToString() + " " + instance_end.ToString();
-                                    batchfile.WriteLine("dotnet " + Path.GetFileName(GRAMM_Program_Path) + gramm_start);
+                                    if (Path.GetFileName(GRAMM_Program_Path).Equals("GRAMM")) // new GRAMM version from .NET5
+                                    {
+                                        batchfile.WriteLine(Path.GetFileName(GRAMM_Program_Path) + gramm_start);
+                                    }
+                                    else
+                                    {
+                                        batchfile.WriteLine("dotnet " + Path.GetFileName(GRAMM_Program_Path) + gramm_start);
+                                    }
                                 }
                             }
                             catch
                             { }
-                            #endif
-
+#endif
                             // new start value, new instance
                             instance_start = instance_end + 1;
                             count++;

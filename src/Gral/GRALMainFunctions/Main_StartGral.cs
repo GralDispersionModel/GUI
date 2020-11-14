@@ -123,9 +123,13 @@ namespace Gral
             }
             else
 			{
-				#if __MonoCS__
+#if __MonoCS__
 				filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL*.dll", SearchOption.TopDirectoryOnly);
-				#else
+				if (filePaths.Length == 0)
+                {
+				    filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL", SearchOption.TopDirectoryOnly);
+				}
+#else
 				filePaths = Directory.GetFiles(Path.Combine (ProjectName, "Computation"), "GRAL*.bat", SearchOption.TopDirectoryOnly);
 				#endif
 
@@ -141,7 +145,7 @@ namespace Gral
 
 			OpenFileDialog dialog = new OpenFileDialog();
 			#if __MonoCS__
-			dialog.Filter = "GRAL executables (GRAL*.dll)|GRAL*.dll";
+			dialog.Filter = "GRAL executables (GRAL*.dll;GRAL)|GRAL*.dll;GRAL";
 			#else
 			dialog.Filter = "GRAL executables (GRAL*.exe;GRAL*.bat)|GRAL*.exe;GRAL*.bat";
 			#endif
@@ -170,7 +174,8 @@ namespace Gral
 						try
 						{
 							File.Copy(dialog.FileName, GRAL_Program_Path, true);
-
+							
+							//copy System.Numerics.Vectors.dll for GRAL Version 19.01
 							string numerics_dll = Path.Combine(Path.GetDirectoryName(dialog.FileName), "System.Numerics.Vectors.dll");
 							if (Path.GetExtension(dialog.FileName) == ".exe" && File.Exists(numerics_dll))
 							{
@@ -284,22 +289,35 @@ namespace Gral
 					try
 					{
 						string command = String.Empty;
-						if (Path.GetExtension(GRAL_Program_Path).ToLower() == ".dll") // .sh file -> dotnet version
+						if (Path.GetFileName(GRAL_Program_Path).Equals("GRAL")) // new GRAL version from .NET5
 						{
-							command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; dotnet " + Path.GetFileName(GRAL_Program_Path) + " " + '"' + GRAL_Project_Path + '"' + " ; bash'";
-						}
-						else // .exe file
+                            command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; ./'" + Path.GetFileName(GRAL_Program_Path) + "'; bash'";
+                            GRALProcess = new Process();
+							GRALProcess.Exited += new System.EventHandler(GralExited);
+                            GRALProcess.StartInfo.FileName = "/bin/bash";
+                            GRALProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+                            GRALProcess.StartInfo.UseShellExecute = false;
+                            GRALProcess.StartInfo.RedirectStandardOutput = true;
+                            GRALProcess.Start();
+                        }
+						else
 						{
-							command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; mono '" + Path.GetFileName(GRAL_Program_Path) + "'; bash'";
+							if (Path.GetExtension(GRAL_Program_Path).ToLower() == ".dll") // .sh file -> dotnet version
+							{
+								command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; dotnet " + Path.GetFileName(GRAL_Program_Path) + " " + '"' + GRAL_Project_Path + '"' + " ; bash'";
+							}
+							else // .exe file
+							{
+								command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; mono '" + Path.GetFileName(GRAL_Program_Path) + "'; bash'";
+							}
+							//start routine GRAL*.exe to compute concentrations
+							GRALProcess = new Process();
+							GRALProcess.StartInfo.FileName = "/bin/bash";
+							GRALProcess.StartInfo.Arguments = "-c \" " + command + " \"";
+							GRALProcess.StartInfo.UseShellExecute = false;
+							GRALProcess.StartInfo.RedirectStandardOutput = true;
+							GRALProcess.Start();
 						}
-						//start routine GRAL*.exe to compute concentrations
-						GRALProcess = new Process();
-						GRALProcess.StartInfo.FileName = "/bin/bash";
-						GRALProcess.StartInfo.Arguments = "-c \" " + command + " \"";
-						GRALProcess.StartInfo.UseShellExecute = false;
-						GRALProcess.StartInfo.RedirectStandardOutput = true;
-						GRALProcess.Start();
-						
 					}
 					catch (Exception ex)
 					{
