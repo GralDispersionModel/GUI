@@ -56,6 +56,7 @@ namespace GralBackgroundworkers
         public double DomainSouth { get; set; }
         public string Pollutant { get; set; }
         public int Slice { get; set; }
+        public double[] SliceHeights { get; set; }
         public bool Checkbox3 { get; set; }
         public bool Checkbox19 { get; set; }
         public bool Checkbox2 { get; set; }
