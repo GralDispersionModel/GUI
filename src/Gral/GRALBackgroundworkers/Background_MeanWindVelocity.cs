@@ -43,13 +43,13 @@ namespace GralBackgroundworkers
                 };
 
                 double[,] AH = new double[1, 1];
-                double[, ,] ZSP = new double[1, 1, 1];
+                double[,,] ZSP = new double[1, 1, 1];
                 int NX = 1;
                 int NY = 1;
                 int NZ = 1;
                 string[] text = new string[1];
                 int ischnitt = 1;
-                
+
                 if (ggeom.ReadGGeomAsc(0) == true)
                 {
                     NX = ggeom.NX;
@@ -69,23 +69,23 @@ namespace GralBackgroundworkers
                 for (int k = 1; k <= NZ; k++)
                 {
                     if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
-                {
-                    ischnitt = k;
-                    break;
-                }
+                    {
+                        ischnitt = k;
+                        break;
+                    }
                 }
 
                 SetText("Reading meteopgt.all");
                 System.Threading.Thread.Sleep(200);
-                
+
                 // read meteopgt
                 List<string> data_meteopgt = new List<string>();
                 ReadMeteopgtAll(Path.Combine(mydata.Path_GRAMMwindfield, @"meteopgt.all"), ref data_meteopgt);
                 if (data_meteopgt.Count == 0) // no data available
                 {
-                    BackgroundThreadMessageBox ("Can't read meteopgt.all");
+                    BackgroundThreadMessageBox("Can't read meteopgt.all");
                 }
-                
+
                 //windfield file Readers
                 //PSFReader windfield = new PSFReader(form1.GRAMMwindfield, true);
                 //StreamReader meteopgt = new StreamReader(Path.Combine(Path.GetDirectoryName(mydata.Path_GRAMMwindfield), @"meteopgt.all"));
@@ -97,18 +97,18 @@ namespace GralBackgroundworkers
                 double Umittel = 0;
                 double Vmittel = 0;
                 double[] frequ = new double[data_meteopgt.Count + 2];
-                
-                float[, ,] UWI = new float[NX + 1, NY + 1, NZ + 1];
-                float[, ,] VWI = new float[NX + 1, NY + 1, NZ + 1];
-                float[, ,] WWI = new float[NX + 1, NY + 1, NZ + 1];
+
+                float[,,] UWI = new float[NX + 1, NY + 1, NZ + 1];
+                float[,,] VWI = new float[NX + 1, NY + 1, NZ + 1];
+                float[,,] WWI = new float[NX + 1, NY + 1, NZ + 1];
                 double[,] UMEAN = new double[NX + 1, NY + 1];
-                
+
                 double totalfrequ = 0;
                 int iiwet = 0;
-                foreach(string line_meteopgt in data_meteopgt)
+                foreach (string line_meteopgt in data_meteopgt)
                 {
                     iiwet++;
-                    
+
                     if (Rechenknecht.CancellationPending)
                     {
                         e.Cancel = true;
@@ -116,9 +116,9 @@ namespace GralBackgroundworkers
                     }
                     if (iiwet % 4 == 0)
                     {
-                       Rechenknecht.ReportProgress((int) (iiwet / (double) data_meteopgt.Count * 100D));
+                        Rechenknecht.ReportProgress((int)(iiwet / (double)data_meteopgt.Count * 100D));
                     }
-                    
+
                     try
                     {
                         text = line_meteopgt.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -128,7 +128,7 @@ namespace GralBackgroundworkers
                     {
                         break;
                     }
-                    
+
                     try
                     {
                         //read wind fields
@@ -139,7 +139,7 @@ namespace GralBackgroundworkers
                         {
                             throw new IOException();
                         }
-                        
+
                     }
                     catch
                     {
@@ -149,32 +149,32 @@ namespace GralBackgroundworkers
                     for (int i = 1; i <= NX; i++)
                     {
                         for (int j = 1; j <= NY; j++)
-                    {
-                        Uoben = UWI[i, j, ischnitt];
-                        Voben = VWI[i, j, ischnitt];
-                        if (ischnitt > 1)
                         {
-                            Uunten = UWI[i, j, ischnitt - 1];
-                            Vunten = VWI[i, j, ischnitt - 1];
-                            Umittel = Uunten + (Uoben - Uunten) / (ZSP[i, j, ischnitt] - ZSP[i, j, ischnitt - 1]) *
-                                (schnitt + AH[i, j] - ZSP[i, j, ischnitt - 1]);
-                            Vmittel = Vunten + (Voben - Vunten) / (ZSP[i, j, ischnitt] - ZSP[i, j, ischnitt - 1]) *
-                                (schnitt + AH[i, j] - ZSP[i, j, ischnitt - 1]);
+                            Uoben = UWI[i, j, ischnitt];
+                            Voben = VWI[i, j, ischnitt];
+                            if (ischnitt > 1)
+                            {
+                                Uunten = UWI[i, j, ischnitt - 1];
+                                Vunten = VWI[i, j, ischnitt - 1];
+                                Umittel = Uunten + (Uoben - Uunten) / (ZSP[i, j, ischnitt] - ZSP[i, j, ischnitt - 1]) *
+                                    (schnitt + AH[i, j] - ZSP[i, j, ischnitt - 1]);
+                                Vmittel = Vunten + (Voben - Vunten) / (ZSP[i, j, ischnitt] - ZSP[i, j, ischnitt - 1]) *
+                                    (schnitt + AH[i, j] - ZSP[i, j, ischnitt - 1]);
+                            }
+                            else
+                            {
+                                Umittel = Uoben / (ZSP[i, j, ischnitt] - AH[i, j]) * schnitt;
+                                Vmittel = Voben / (ZSP[i, j, ischnitt] - AH[i, j]) * schnitt;
+                            }
+                            UMEAN[i, j] = UMEAN[i, j] + Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel) * frequ[iiwet] / 1000;
                         }
-                        else
-                        {
-                            Umittel = Uoben / (ZSP[i, j, ischnitt] - AH[i, j]) * schnitt;
-                            Vmittel = Voben / (ZSP[i, j, ischnitt] - AH[i, j]) * schnitt;
-                        }
-                        UMEAN[i, j] = UMEAN[i, j] + Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel) * frequ[iiwet] / 1000;
-                    }
                     }
 
                     totalfrequ += frequ[iiwet] / 1000;
                 }
                 //windfield.Close();
                 //meteopgt.Close();
-                
+
                 //save result to file
                 SetText("SaveFileDialog results");
 
@@ -185,7 +185,7 @@ namespace GralBackgroundworkers
                     {
                         File.Delete(file);
                     }
-                    catch{}
+                    catch { }
                 }
                 using (StreamWriter myWriter = new StreamWriter(file))
                 {
@@ -201,7 +201,7 @@ namespace GralBackgroundworkers
                     {
                         for (int i = 1; i <= NX; i++)
                         {
-                            myWriter.Write(Convert.ToString(Math.Round(UMEAN[i, j]/totalfrequ, 3), ic) + ",");
+                            myWriter.Write(Convert.ToString(Math.Round(UMEAN[i, j] / totalfrequ, 3), ic) + ",");
                             min = Math.Min(min, UMEAN[i, j]);
                             max = Math.Max(max, UMEAN[i, j]);
                         }
@@ -211,7 +211,7 @@ namespace GralBackgroundworkers
             }
             catch
             {
-                BackgroundThreadMessageBox ("Compute Mean Wind Velocity IO Error");
+                BackgroundThreadMessageBox("Compute Mean Wind Velocity IO Error");
                 return;
             }
             Computation_Completed = true; // set flag, that computation was successful
