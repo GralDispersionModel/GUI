@@ -21,13 +21,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Text;
 
 namespace GralDomain
 {
     public partial class Domain
     {
         /// <summary>
-        /// Routine computing vectors of a vector data set
+        /// Routine loading vectors of a vector data set from file
         /// </summary>
         public void LoadVectors(string file, DrawingObjects _drobj)
         {
@@ -133,7 +134,12 @@ namespace GralDomain
                             }
 
                             //save geometry information of the vector map
-                            _drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
+                            lock (_drobj)
+                            {
+                                _drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
+                            }
+
+                            max = Math.Max(15, max); // set default scale -> make it easier to compare vector maps
 
                             //compute arrow-polygons
                             double xcenter = 0.0;
@@ -233,7 +239,7 @@ namespace GralDomain
         }
 
         /// <summary>
-        /// Routine computing a vector map for wind field data
+        /// Routine computing a vector map for GRAMM or GRAL wind field data
         /// </summary>
         private async void ComputeVectorMap(object sender, EventArgs e)
         {
@@ -281,14 +287,16 @@ namespace GralDomain
                     X1 = Left + 70,
                     Y1 = Top + 50,
                     Xs = 0,
-                    Ys = 0
+                    Ys = 0,
+                    ShowAbsHeightBox = true
                 };
 
                 if (met_st.ShowDialog() == DialogResult.OK)
                 {
-                    string file = met_st.Meteo_Init;
                     int trans = met_st.Meteo_Height;
-                    file = Path.Combine(Gral.Main.ProjectName, @"Maps", file);
+                    bool AbsoluteHeight = met_st.AbsoluteHeight;
+                    string file = Path.Combine(Gral.Main.ProjectName, @"Maps", met_st.Meteo_Init);
+
                     windfieldenable = met_st.Meteo_Model;
                     {
                         //select dispersion situation
@@ -342,20 +350,50 @@ namespace GralDomain
                                     int NX = ggeom.NX;
                                     int NY = ggeom.NY;
                                     int NZ = ggeom.NZ;
-                                    int ischnitt = 0;
+                                    int ischnitt = 0; // Height index in the GRAMM wind field above ground/above sea
                                     AH = ggeom.AH;
                                     ZSP = ggeom.ZSP;
                                     ggeom = null;
                                     try
                                     {
-                                        double schnitt = Convert.ToDouble(trans);
-                                        //obtain index in the vertical direction
-                                        for (int k = 1; k <= NZ; k++)
+                                        double schnitt = Math.Abs(Convert.ToDouble(trans));
+                                        int[,] vertIndexArray = null;
+
+                                        //obtain index in the vertical direction for relative height above ground
+                                        if (!AbsoluteHeight)
                                         {
-                                            if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
+                                            for (int k = 1; k <= NZ; k++)
                                             {
-                                                ischnitt = k;
-                                                break;
+                                                if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
+                                                {
+                                                    ischnitt = k;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else //create the height index for each point when using absolute heights
+                                        {
+                                            vertIndexArray = new int[NX + 1, NY + 1];
+                                            for (int j = 1; j <= NY; j++)
+                                            {
+                                                for (int i = 1; i <= NX; i++)
+                                                {
+                                                    if (schnitt < ZSP[i, j, 1]) // below terrain
+                                                    {
+                                                        vertIndexArray[i, j] = -1;
+                                                    }
+                                                    else
+                                                    {
+                                                        for (int k = 1; k <= NZ; k++)
+                                                        {
+                                                            if (ZSP[i, j, k] >= schnitt)
+                                                            {
+                                                                vertIndexArray[i, j] = k;
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
 
@@ -383,6 +421,8 @@ namespace GralDomain
                                         double max = -1;
                                         double umean;
 
+                                        StringBuilder sb = new StringBuilder();
+
                                         //write vector file
                                         using (StreamWriter myWriter = new StreamWriter(file))
                                         {
@@ -394,15 +434,29 @@ namespace GralDomain
                                             myWriter.WriteLine("NODATA_value  " + "-9999");
                                             for (int j = NY; j > 0; j--)
                                             {
+                                                sb.Clear();
                                                 for (int i = 1; i <= NX; i++)
                                                 {
-                                                    myWriter.Write(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + "," + Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
-                                                    umean = Math.Sqrt(UWI[i, j, ischnitt] * UWI[i, j, ischnitt] + VWI[i, j, ischnitt] * VWI[i, j, ischnitt]);
+                                                    if (AbsoluteHeight)
+                                                    {
+                                                        ischnitt = vertIndexArray[i, j];
+                                                    }
+                                                    
+                                                    if (ischnitt >= 0)
+                                                    {
+                                                        sb.Append(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + "," + Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
+                                                        umean = Math.Sqrt(UWI[i, j, ischnitt] * UWI[i, j, ischnitt] + VWI[i, j, ischnitt] * VWI[i, j, ischnitt]);
+                                                    }
+                                                    else
+                                                    {
+                                                        sb.Append("0,0,");
+                                                        umean = 0;
+                                                    }
                                                     //compute maximum and minimum
                                                     min = Math.Min(min, umean);
                                                     max = Math.Max(max, umean);
                                                 }
-                                                myWriter.WriteLine();
+                                                myWriter.WriteLine(sb.ToString());
                                             }
                                         }
 
@@ -419,11 +473,23 @@ namespace GralDomain
                                             myWriter.WriteLine("NODATA_value  " + "-9999");
                                             for (int j = NY; j > 0; j--)
                                             {
+                                                sb.Clear();
                                                 for (int i = 1; i <= NX; i++)
                                                 {
-                                                    myWriter.Write(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + ",");
+                                                    if (AbsoluteHeight)
+                                                    {
+                                                        ischnitt = vertIndexArray[i, j];
+                                                    }
+                                                    if (ischnitt >= 0)
+                                                    {
+                                                        sb.Append(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + ",");
+                                                    }
+                                                    else
+                                                    {
+                                                        sb.Append("0,");
+                                                    }
                                                 }
-                                                myWriter.WriteLine();
+                                                myWriter.WriteLine(sb.ToString());
                                             }
                                         }
 
@@ -439,13 +505,28 @@ namespace GralDomain
                                             myWriter.WriteLine("NODATA_value  " + "-9999");
                                             for (int j = NY; j > 0; j--)
                                             {
+                                                sb.Clear();
                                                 for (int i = 1; i <= NX; i++)
                                                 {
-                                                    myWriter.Write(Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
+                                                    if (AbsoluteHeight)
+                                                    {
+                                                        ischnitt = vertIndexArray[i, j];
+                                                    }
+                                                    if (ischnitt >= 0)
+                                                    {
+                                                        sb.Append(Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
+                                                    }
+                                                    else
+                                                    {
+                                                        sb.Append("0,");
+                                                    }
                                                 }
-                                                myWriter.WriteLine();
+                                                myWriter.WriteLine(sb.ToString());
                                             }
                                         }
+
+                                        sb.Clear();
+                                        sb = null;
 
                                         //add vector map to object list
                                         DrawingObjects _drobj = new DrawingObjects("VM: " + Path.GetFileNameWithoutExtension(file));
@@ -476,7 +557,6 @@ namespace GralDomain
                                             int intg = g1 + (g2 - g1) / 10 * (i + 1);
                                             int intb = b1 + (b2 - b1) / 10 * (i + 1);
                                             _drobj.FillColors[i + 1] = Color.FromArgb(intr, intg, intb);
-                                            //linecolors[0][i + 1] = Color.FromArgb(intr, intg, intb);
                                         }
 
                                         _drobj.LegendTitle = "Vectormap";
@@ -591,6 +671,7 @@ namespace GralDomain
                                                                                 Convert.ToString(dissit).PadLeft(5, '0') + ".gff")
                                 };
 
+                                CancellationTokenReset();
                                 if (await Task.Run(() => gff.ReadGffFile(CancellationTokenSource.Token)) == true)
                                 {
                                     nkk = gff.NKK;
@@ -670,27 +751,31 @@ namespace GralDomain
                                 double max = -1;
                                 double umean;
                                 //write vector file
-                                using (StreamWriter myWriter = new StreamWriter(file))
+                                try
                                 {
-                                    myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                    myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                    myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                    myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                    myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                    myWriter.WriteLine("NODATA_value  " + "-9999");
-                                    for (int j = njj; j > 0; j--)
+                                    using (StreamWriter myWriter = new StreamWriter(file))
                                     {
-                                        for (int i = 1; i <= nii; i++)
+                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
+                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
+                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
+                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
+                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
+                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        for (int j = njj; j > 0; j--)
                                         {
-                                            myWriter.Write(Convert.ToString((uk[i][j][slice[i, j]] + uk[i + 1][j][slice[i, j]]) * 0.5F, ic) + "," + Convert.ToString((vk[i][j][slice[i, j]] + vk[i][j + 1][slice[i, j]]) * 0.5F, ic) + ",");
-                                            umean = Math.Sqrt(uk[i][j][slice[i, j]] * uk[i][j][slice[i, j]] + vk[i][j][slice[i, j]] * vk[i][j][slice[i, j]]);
-                                            //compute maximum and minimum
-                                            min = Math.Min(min, umean);
-                                            max = Math.Max(max, umean);
+                                            for (int i = 1; i <= nii; i++)
+                                            {
+                                                myWriter.Write(Convert.ToString((uk[i][j][slice[i, j]] + uk[i + 1][j][slice[i, j]]) * 0.5F, ic) + "," + Convert.ToString((vk[i][j][slice[i, j]] + vk[i][j + 1][slice[i, j]]) * 0.5F, ic) + ",");
+                                                umean = Math.Sqrt(uk[i][j][slice[i, j]] * uk[i][j][slice[i, j]] + vk[i][j][slice[i, j]] * vk[i][j][slice[i, j]]);
+                                                //compute maximum and minimum
+                                                min = Math.Min(min, umean);
+                                                max = Math.Max(max, umean);
+                                            }
+                                            myWriter.WriteLine();
                                         }
-                                        myWriter.WriteLine();
                                     }
                                 }
+                                catch { }
 
                                 try
                                 {
@@ -766,10 +851,7 @@ namespace GralDomain
                                                                                             Convert.ToString(dissit).PadLeft(5, '0') + ".tke")
                                             };
 
-                                            if (CancellationTokenSource == null)
-                                            {
-                                                CancellationTokenSource = new System.Threading.CancellationTokenSource();
-                                            }
+                                            CancellationTokenReset();
                                             if (await Task.Run(() => gff.ReadTKEFile(CancellationTokenSource.Token)) == true)
                                             {
                                                 nkk = gff.NKK;
