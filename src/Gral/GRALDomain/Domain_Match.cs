@@ -189,7 +189,7 @@ namespace GralDomain
                     wait.Text = "Match - Reading GRAMM flow field " + Convert.ToString(iiwet);
                     wait.ProgressbarUpdate(this, 0);
 
-                    if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
+                    if (GralDomain.Domain.CancellationTokenSource != null && !GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
                     {
                         try
                         {
@@ -387,13 +387,9 @@ namespace GralDomain
             { }
 
             wait.Close();
-            GralDomain.Domain.CancellationTokenSource.Dispose();
-            GralDomain.Domain.CancellationTokenSource = null;
-            if (GralDomain.Domain.CancellationTokenSource == null)
-            {
-                GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
-            }
 
+            CancellationTokenReset();
+            
             if (MessageInfoForm != null)
             {
                 MessageInfoForm.Close();
@@ -861,7 +857,7 @@ namespace GralDomain
                     catch { }
 
 #if __MonoCS__
-                MMO.close_allowed = true;
+                MMO.CloseMatchDialogAllowed = true;
                 MMO.Close ();
 #endif
                 }
@@ -881,7 +877,7 @@ namespace GralDomain
                         wait1.Close();
                     }
 #if __MonoCS__
-                MMO.close_allowed = true;
+                MMO.CloseMatchDialogAllowed = true;
                 MMO.Close ();
 #endif
                 }
