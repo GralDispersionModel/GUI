@@ -28,8 +28,7 @@ namespace GralBackgroundworkers
 {
     public partial class ProgressFormBackgroundworker
     {
-        private string decsep;
-        private List<double> xrec = new List<double>();
+       private List<double> xrec = new List<double>();
 
         /// <summary>
         /// Calculate receptor concentrations and GRAL flow field receptor wind fields 
@@ -40,7 +39,7 @@ namespace GralBackgroundworkers
             //reading emission variations
             int maxsource = 100; //mydata.MaxSource; allow all source-group numbers!
             int maxcomputedsourcegroup = mydata.MaxSourceComputed;
-            decsep = mydata.Decsep;
+            string decsep = mydata.Decsep;
 
             double[,] emifac_day = new double[24, maxsource];
             double[,] emifac_mon = new double[12, maxsource];
@@ -160,7 +159,7 @@ namespace GralBackgroundworkers
                         using (StreamReader read1 = new StreamReader(newpath))
                         {
                             //get source group numbers
-                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                             for (int i = 2; i < text10.Length; i++)
                             {
                                 //get the column corresponding with the source group number stored in sg_numbers
@@ -185,7 +184,7 @@ namespace GralBackgroundworkers
 
                             for (int i = 0; i < mettimefilelength; i++)
                             {
-                                text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                                text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                                 for (int n = 0; n < maxsource; n++)
                                 {
                                     if (sg_time[n] == 0)
