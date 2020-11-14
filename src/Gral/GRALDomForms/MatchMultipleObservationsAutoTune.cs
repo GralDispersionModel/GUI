@@ -10,6 +10,7 @@
 ///</remarks>
 #endregion
 
+using GralDomain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -228,12 +229,7 @@ namespace GralDomForms
             wait.Close();
             wait.Dispose();
 
-            GralDomain.Domain.CancellationTokenSource.Dispose();
-            GralDomain.Domain.CancellationTokenSource = null;
-            if (GralDomain.Domain.CancellationTokenSource == null)
-            {
-                GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
-            }
+            Domain.CancellationTokenReset();
 
             Show();
         }
