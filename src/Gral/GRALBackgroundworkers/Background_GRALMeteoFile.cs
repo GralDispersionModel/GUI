@@ -156,8 +156,15 @@ namespace GralBackgroundworkers
                         string result = text[0] + "." + Convert.ToString(fictiousyear, ic) + "," + text[1] + ":00,";
 
                         int cmpSit = SearchCorrespondingMeteopgtAllSituation(meteoTimeSeries, meteoPGTALL, sitCount - 1);
-                        result += Convert.ToString(Math.Round(windVel[ptNumber][cmpSit], 2), ic) + "," + Convert.ToString(windDir[ptNumber][cmpSit], ic) + "," + Convert.ToString(locSCL[ptNumber][cmpSit], ic);
-                        
+                        if (cmpSit >= 0)
+                        {
+                            result += Convert.ToString(Math.Round(windVel[ptNumber][cmpSit], 2), ic) + "," + Convert.ToString(windDir[ptNumber][cmpSit], ic) + "," + Convert.ToString(locSCL[ptNumber][cmpSit], ic);
+                        }
+                        else // insert an invalid line
+                        {
+                            result += "0,0,0";
+                        }
+
                         mywriter.WriteLine(result);
                         sitCount++;
                     }
@@ -172,10 +179,10 @@ namespace GralBackgroundworkers
         /// <param name="MetTimeSeries">Mettime series</param>
         /// <param name="MeteoPgtALL">Meteopgt.all data</param>
         /// <param name="MetTimeSeriesIndex">Index in the mettime series</param>
-        /// <returns>Index in meteopgt.all matching the mettime series at the index MetTimeSeriesIndex</returns>
+        /// <returns>Index in meteopgt.all matching the mettime series at the index MetTimeSeriesIndex, -1 if no corresponding situation found</returns>
         public int SearchCorrespondingMeteopgtAllSituation(List<string> MetTimeSeries, List<string> MeteoPgtALL, int MetTimeSeriesIndex)
         {
-            int MeteopgtIndex = 0;
+            int MeteopgtIndex = -1;
             string[] text;
             double wVel = 0, wDir = 0;
             int wSCL = 0;
@@ -289,7 +296,7 @@ namespace GralBackgroundworkers
                             _newPoint.Height = _pt.Z;
 
                             // GRAMM indices
-                            if (! string.IsNullOrEmpty(mydata.Path_GRAMMwindfield))
+                            if (!string.IsNullOrEmpty(mydata.Path_GRAMMwindfield))
                             {
                                 double xsi = _pt.X - mydata.GrammWest;
                                 double eta = _pt.Y - mydata.GrammSouth;
@@ -404,32 +411,32 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Calculate the wind direction
         /// </summary>
-        /// <param name="Umittel">Wind U component</param>
-        /// <param name="Vmittel">Wind V component</param>
+        /// <param name="UComponent">Wind U component</param>
+        /// <param name="VComponent">Wind V component</param>
         /// <returns>Wind direction in degrees</returns>
-        public int WindDirection(double Umittel, double Vmittel)
+        public int WindDirection(double UComponent, double VComponent)
         {
             int wr = 0;
-            if (Vmittel == 0)
+            if (Math.Abs(VComponent) < 0.0000000001)
             {
                 wr = 90;
             }
             else
             {
-                wr = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
+                wr = Convert.ToInt32(Math.Abs(Math.Atan(UComponent / VComponent)) * 180 / Math.PI);
             }
 
-            if ((Vmittel > 0) && (Umittel <= 0))
+            if ((VComponent > 0) && (UComponent <= 0))
             {
                 wr = 180 - wr;
             }
 
-            if ((Vmittel >= 0) && (Umittel > 0))
+            if ((VComponent >= 0) && (UComponent > 0))
             {
                 wr = 180 + wr;
             }
 
-            if ((Vmittel < 0) && (Umittel >= 0))
+            if ((VComponent < 0) && (UComponent >= 0))
             {
                 wr = 360 - wr;
             }
