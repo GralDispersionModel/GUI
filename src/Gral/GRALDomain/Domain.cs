@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using GralDomForms;
@@ -280,6 +281,11 @@ namespace GralDomain
         ///Cancel Token for all created await tasks
         /// </summary>
         public static System.Threading.CancellationTokenSource CancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+        /// <summary>
+        /// An object for locking purposes
+        /// </summary>
+        public static readonly object LockObject = new object();
 
         /// <summary>
         /// Send a event with clicked coordinates to all registered forms
@@ -590,6 +596,7 @@ namespace GralDomain
                                 }
                                 if (File.Exists(_drobj.ContourFilename))
                                 {
+                                    ReDrawVectors = true;
                                     LoadVectors(_drobj.ContourFilename, _drobj);
                                 }
                             }
@@ -3052,6 +3059,7 @@ namespace GralDomain
                 SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm)
                 {
                     selectGRAMM_GRAL = 2,
+                    ShowConcentrationFiles = true,
                     GRZPath = files
                 };
                 disp.StartPosition = FormStartPosition.Manual;
@@ -3104,6 +3112,7 @@ namespace GralDomain
             {
                 try
                 {
+                    CancellationTokenReset();
                     if(await System.Threading.Tasks.Task.Run(() => ReadConAndWriteESRI(dialog.FileName, string.Empty, CancellationTokenSource.Token)) == true)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("File successfully converted", Location);
@@ -3256,6 +3265,7 @@ namespace GralDomain
 
                         string confilename = Path.Combine(files, Path.GetFileNameWithoutExtension(compressed_file) + SliceAndSourceGroup);
                         //MessageBox.Show(confilename + "/"+ _drobj.ContourFilename);
+                        CancellationTokenReset();
                         if (ReadConAndWriteESRI(confilename, _drobj.ContourFilename, CancellationTokenSource.Token) == true)
                         {
                             MessageBoxTemporary Box = new MessageBoxTemporary("File successfully converted", Location);
@@ -4477,6 +4487,123 @@ namespace GralDomain
         private void checkBox26_CheckedChanged(object sender, EventArgs e)
         {
             ShowVegetationDialog(sender, e);
+        }
+
+        private void generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MouseControl = 33;
+            Cursor = Cursors.Cross;
+
+            GralDomForms.SelectMultiplePoints _selmp = new SelectMultiplePoints();
+            SendCoors += _selmp.ReceiveClickedCoordinates;
+            _selmp.CancelComputation += CancelMetTimeSeries;
+            _selmp.StartComputation += ConcentrationTimeSeries;
+            
+            _selmp.MeteoModel = 0;
+            _selmp.StartPosition = FormStartPosition.Manual;
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Owner = this;
+            _selmp.Show();
+        }
+
+        /// <summary>
+        /// Start the evaluation of Time series
+        /// </summary>
+        private void ConcentrationTimeSeries(object sender, EventArgs e)
+        {
+            List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
+            string _prefix = string.Empty;
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+                
+                foreach (System.Data.DataRow row in _sl.PointCoorData.Rows)
+                {
+                    if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
+                    {
+                        string a = _sl.MeteoInit + "_" + Convert.ToString(row[0]) + ".met";
+                        a = string.Join("_", a.Split(Path.GetInvalidFileNameChars())); // remove invalid characters
+
+                        GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
+                        {
+                            filename = a,
+                            X = Convert.ToDouble(row[1]),
+                            Y = Convert.ToDouble(row[2]),
+                            Z = Convert.ToDouble(row[3])
+                        };
+                        receptor_points.Add(item);
+                    }
+                }
+                _prefix = _sl.MeteoInit;
+                _sl.Close();
+            }
+
+            if (receptor_points.Count == 0)
+            {
+                MessageBox.Show(this, "No points defined", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else // start the evaluation
+            {
+                string _selSourceGrp = string.Empty;
+                foreach (ListViewItem itm in MainForm.listView1.Items)
+                {
+                    _selSourceGrp = _selSourceGrp + itm.Text + ","; // name of selected source groups
+                }
+                _selSourceGrp = _selSourceGrp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
+                {
+                    Projectname = Gral.Main.ProjectName,
+                    Decsep = decsep,
+                    UserText = "The process may take some minutes. The data will be saved in the folder Computation",
+                    Caption = "Evaluate concentration time series", // + DataCollection.Meteofilename;
+                    Rechenart = 38, // ; 38 =  Evaluation points concentration
+                    EvalPoints = receptor_points, // evaluation points
+                    GFFGridSize = MainForm.HorGridSize,
+                    Horgridsize = MainForm.HorGridSize,
+                    DomainWest = MainForm.GralDomRect.West,
+                    DomainSouth = MainForm.GralDomRect.South,
+                    CellsGralX = MainForm.CellsGralX,
+                    CellsGralY = MainForm.CellsGralY,
+                    Slice = MainForm.GRALSettings.NumHorSlices,
+                    SliceHeights = MainForm.GRALSettings.HorSlices,
+                    Sel_Source_Grp = _selSourceGrp, 
+                    MaxSource = MainForm.listView1.Items.Count,
+                    Prefix = _prefix,
+                    Checkbox19 = MainForm.checkBox19.Checked
+            };
+
+                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                {
+                    Text = DataCollection.Caption
+                };
+                BackgroundStart.Show();
+            }
+            // now the backgroundworker works
+            // gen_meteofile(Convert.ToDouble(trans), GRAMMmeteofile);
+            // Reset mousecontrol
+            MouseControl = 0;
+        }
+
+        /// <summary>
+        /// Reset the Cancel Token -> create new token Thread safe (locked)   
+        /// </summary>
+        public static void CancellationTokenReset()
+        {
+            lock (LockObject)
+            {
+                if (CancellationTokenSource == null)
+                {
+                    GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
+                }
+                else if (CancellationTokenSource.IsCancellationRequested)
+                {
+                    CancellationTokenSource.Dispose();
+                    CancellationTokenSource = null;
+                    CancellationTokenSource = new System.Threading.CancellationTokenSource();
+                }
+            }
         }
     }
 }
