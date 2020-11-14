@@ -1215,6 +1215,7 @@ namespace GralDomain
                     break;
 
                 case 32:
+                case 33:
                     ////get sample point for computing meteorological time series from GRAMM windfield
                     //{
                     //    XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
