@@ -169,7 +169,7 @@ namespace GralBackgroundworkers
                     using (StreamReader read = new StreamReader(newpath))
                     {
                         //get source group numbers
-                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';',',' }, StringSplitOptions.RemoveEmptyEntries);
                         for (int i = 2; i < text10.Length; i++)
                         {
                             //get the column corresponding with the source group number stored in sg_numbers
@@ -196,7 +196,7 @@ namespace GralBackgroundworkers
 
                         for (int i = 0; i < mettimefilelength; i++)
                         {
-                            text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';',',' }, StringSplitOptions.RemoveEmptyEntries);
                             for (int n = 0; n < maxsource; n++)
                             {
                                 if (sg_time[n] == 0)
