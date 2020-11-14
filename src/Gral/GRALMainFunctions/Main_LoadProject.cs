@@ -402,7 +402,7 @@ namespace Gral
 					OpenProject.ReadMeteopgtAllFile();
 					DispSituationfrequ = OpenProject.DispsituationFrequ;
 					frequency = OpenProject.MeteoFrequ;
-					progressBar1.Maximum = Convert.ToInt16(frequency);
+					progressBar1.Maximum = Convert.ToInt32(frequency);
 					
 					frequency = 0;
 					for (int i = 0; i < trackbar-1; i++)
@@ -412,7 +412,7 @@ namespace Gral
 
                     if (frequency <= progressBar1.Maximum)
                     {
-                        progressBar1.Value = Convert.ToInt16(frequency);
+                        progressBar1.Value = Convert.ToInt32(frequency);
                     }
 
                     label66.Text = "Flow situation: " + Convert.ToString(trackbar-1) + "/" + Convert.ToString(Math.Round(frequency / 10, 1)) + "%";
