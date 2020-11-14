@@ -32,68 +32,69 @@ namespace GralDomain
         public void Picturebox1_MouseDown(object sender, MouseEventArgs e)
         {
             #region Mousecontrol-Values
-//				2    Move map
-//				3    Georeferencing 1
-//				4    Set startpoint of GRAL domain
-//				5    Set endpoint of GRAL domain
-//				6    Position of point source
-//				7    Select point source
-//				8    Position of area corner
-//				9    Select area source
-//				10    Position of line corner
-//				11    Select line source
-//				12    Georeferencing 2
-//				13    Panel zoom
-//				14    Get zoom area for panel zoom
-//				15    Position of portal
-//				16    Select portal
-//				17    Position of building corner
-//				19    Select buildings
-//				20    Digitize north arrow
-//				21    Digitize map scale bar
-//				22    Measure distance
-//				23    Measure area
-//				24    Position of receptor
-//				25    Select receptor
-//				26    Delete one mouseclick from queue for receptor
-//				28    Set poition of legend
-//				30    Set startpoint of GRAMM domain
-//				31    Set endpoint of GRAMM domain
-//				32    Sample point for met-timeseries
-//				35    Sample point for source apportionment
-//				40    Sample point for vertical profile GRAMM online
-//				44    Select section for wind section drawing
-//				45    Select section for concentration section drawing
-//				50    Sample point for concentration from file
-//				62    Sample point for vertical profile
-//				65    Sample point for re-order
-//				66    Sample point for match-to-observation
-//				70    Check single value at GRAMM grid
-//				75	  Position of wall corner
-//				76    Select wall
-//				77    Select vegetation
-//				78	  Position of wall corner
-//				79    Position of area corner
-//				100    final corner point of changed line source point
-//				101    final editing wall point
-//				108    final corner point of changed area source point
-//				109    final corner point of changed vegetation point
-//				117    final corner point of changed building edge point
-//				200    3D concentration - set point
-//				300    Startpoint of exporting GRAMM domain
-//				301    Endpoint of exporting GRAMM domain
-//				700    Delete one mouseclick from queue for point source
-//				1000   Position of line source point inline editing
-//				1001 	Position of wall point inline editing
-//				1080    Position of area source point inline editing
-//				1081    Position of vegetation point inline editing
-//				1170    Position of building edge point inline editing
-//				2400    Position of receptor inline editing
-//				6000    Position of point source inline editing
-//				7000    Move and scale base map
-//				9999    Mofification of the GRAL topography
+            //				2    Move map
+            //				3    Georeferencing 1
+            //				4    Set startpoint of GRAL domain
+            //				5    Set endpoint of GRAL domain
+            //				6    Position of point source
+            //				7    Select point source
+            //				8    Position of area corner
+            //				9    Select area source
+            //				10    Position of line corner
+            //				11    Select line source
+            //				12    Georeferencing 2
+            //				13    Panel zoom
+            //				14    Get zoom area for panel zoom
+            //				15    Position of portal
+            //				16    Select portal
+            //				17    Position of building corner
+            //				19    Select buildings
+            //				20    Digitize north arrow
+            //				21    Digitize map scale bar
+            //				22    Measure distance
+            //				23    Measure area
+            //				24    Position of receptor
+            //				25    Select receptor
+            //				26    Delete one mouseclick from queue for receptor
+            //				28    Set poition of legend
+            //				30    Set startpoint of GRAMM domain
+            //				31    Set endpoint of GRAMM domain
+            //				32    Sample point for met-timeseries
+            //				33    Sample point for concentration-timeseries
+            //				35    Sample point for source apportionment
+            //				40    Sample point for vertical profile GRAMM online
+            //				44    Select section for wind section drawing
+            //				45    Select section for concentration section drawing
+            //				50    Sample point for concentration from file
+            //				62    Sample point for vertical profile
+            //				65    Sample point for re-order
+            //				66    Sample point for match-to-observation
+            //				70    Check single value at GRAMM grid
+            //				75	  Position of wall corner
+            //				76    Select wall
+            //				77    Select vegetation
+            //				78	  Position of wall corner
+            //				79    Position of area corner
+            //				100    final corner point of changed line source point
+            //				101    final editing wall point
+            //				108    final corner point of changed area source point
+            //				109    final corner point of changed vegetation point
+            //				117    final corner point of changed building edge point
+            //				200    3D concentration - set point
+            //				300    Startpoint of exporting GRAMM domain
+            //				301    Endpoint of exporting GRAMM domain
+            //				700    Delete one mouseclick from queue for point source
+            //				1000   Position of line source point inline editing
+            //				1001 	Position of wall point inline editing
+            //				1080    Position of area source point inline editing
+            //				1081    Position of vegetation point inline editing
+            //				1170    Position of building edge point inline editing
+            //				2400    Position of receptor inline editing
+            //				6000    Position of point source inline editing
+            //				7000    Move and scale base map
+            //				9999    Mofification of the GRAL topography
             #endregion
-            
+
             switch (e.Button)
             {
                 case MouseButtons.Left:
