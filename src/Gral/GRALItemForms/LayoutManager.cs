@@ -16,7 +16,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using Gral;
 using Gral.GRALItemForms;
