@@ -949,6 +949,7 @@ namespace GralDomain
                                                                                     Convert.ToString(dissit).PadLeft(5, '0') + ".gff")
                 };
 
+                CancellationTokenReset();
                 if (await System.Threading.Tasks.Task.Run(() => gff.ReadGffFile(CancellationTokenSource.Token)) == true)
                 {
                     nkk = gff.NKK;
