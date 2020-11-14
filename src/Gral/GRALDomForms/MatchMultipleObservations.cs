@@ -19,6 +19,7 @@ using GralIO;
 using GralData;
 using System.Threading.Tasks;
 using System.Diagnostics.Eventing.Reader;
+using GralDomain;
 
 namespace GralDomForms
 {
@@ -360,10 +361,7 @@ namespace GralDomForms
                 radioButton1.Checked = true;
             }
 
-            if (GralDomain.Domain.CancellationTokenSource == null)
-            {
-                GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
-            }
+            Domain.CancellationTokenReset();
         }
 
         //show windrose of selected meteo-file
@@ -1105,6 +1103,7 @@ namespace GralDomForms
         private async void StartUserMatchTuning()
         {
             //MessageBox.Show(MatchingData.PGT[1].PGTFrq.ToString() + "/" + MatchingData.WeightingFactor[0].ToString());
+            Domain.CancellationTokenReset();
             List<string> mettimeseries = await Task.Run(() => { return MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token); });
             WriteMetTimeSeries(mettimeseries);
             SetTuningResults(MatchingData);
