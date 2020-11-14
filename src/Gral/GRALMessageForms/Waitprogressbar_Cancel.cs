@@ -60,6 +60,11 @@ namespace GralMessage
 			}	
 		}
 
+		/// <summary>
+		/// Set Cancellation Token
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Cancel_buttonMouseClick(object sender, MouseEventArgs e)
 		{
             if (GralDomain.Domain.CancellationTokenSource != null)
