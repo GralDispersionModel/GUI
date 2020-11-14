@@ -127,6 +127,9 @@
       <DependentUpon>BackgroundWorker.cs</DependentUpon>
     </Compile>
     <Compile Include="GRALBackgroundworkers\BackgroundWorkerData.cs" />
+    <Compile Include="GRALBackgroundworkers\Background_EvalTimeSeries.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GRALBackgroundworkers\Background_GRALMeteoFile.cs">
       <SubType>Form</SubType>
     </Compile>
