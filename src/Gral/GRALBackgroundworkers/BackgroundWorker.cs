@@ -163,6 +163,11 @@ namespace GralBackgroundworkers
                 ReceptorConcentration(MyData, e);
             }
 
+            if (MyData.Rechenart == 38)
+            {
+                GenerateTimeSeries(MyData, e);
+            }
+
             if (MyData.Rechenart == 40)
             {
                 HighPercentiles(MyData, e);
@@ -313,7 +318,18 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("File(s) GRAL_meteostation.met written to Subdirectory Metfiles");
                 }
-                
+
+                if (MyBackData.Rechenart == 38) // Evaluation points concentration
+                {
+                    MyBackData.Rechenart = 0;
+                    if (Computation_Completed)
+                    {
+                        MessageBoxTemporary Box = new MessageBoxTemporary("A time series file for all evaluation points has been created", Location);
+                        Box.Show();
+                    }
+                    //MessageBox.Show("File(s) GRAL_meteostation.met written to Subdirectory Metfiles");
+                }
+
                 if (MyBackData.Rechenart == 40) // High Percentils
                 {
                     MyBackData.Rechenart = 0;
