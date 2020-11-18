@@ -82,6 +82,7 @@ namespace GralIO
                             write.WriteLine(Main.CopyCorestoProject.ToString());
                             write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                             write.WriteLine(Main.CalculationCoresPath);
+                            write.WriteLine(Main.VectorMapAutoScaling.ToString());
                         }
                         OK = true;
                     }
