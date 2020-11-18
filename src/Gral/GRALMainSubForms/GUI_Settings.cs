@@ -58,6 +58,7 @@ namespace GralMainForms
             radioButton6.Checked = Main.CopyCorestoProject; // Yes
                         
             checkBox1.Checked = Main.CompatibilityToVersion1901;
+			checkBox2.Checked = Main.VectorMapAutoScaling;
             
             radioButton3.CheckedChanged += new EventHandler(RadioButton3Click);
             radioButton4.CheckedChanged += new EventHandler(RadioButton4Click);
@@ -210,6 +211,7 @@ namespace GralMainForms
                     write.WriteLine(Main.CopyCorestoProject.ToString());
                     write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                     write.WriteLine(Main.CalculationCoresPath);
+					write.WriteLine(Main.VectorMapAutoScaling.ToString());
                 }
             }
             catch { }
@@ -230,5 +232,11 @@ namespace GralMainForms
             Main.CompatibilityToVersion1901 = checkBox1.Checked;
             RadioButton5_6Click(null, null); // write file
         }
+
+        private void checkBox2_Click(object sender, EventArgs e)
+        {
+			Main.VectorMapAutoScaling = checkBox2.Checked;
+			RadioButton5_6Click(null, null); // write file
+		}
     }
 }

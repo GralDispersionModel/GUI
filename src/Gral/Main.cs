@@ -61,6 +61,10 @@ namespace Gral
         /// </summary>
         public static bool CompatibilityToVersion1901 = true;
         /// <summary>
+        /// Automatic Scaling for Vector Maps?
+        /// </summary>
+        public static bool VectorMapAutoScaling = true;
+        /// <summary>
         /// A time series of the recent meteorological data
         /// </summary>
         public static List<GralData.WindData> MeteoTimeSeries = new List<GralData.WindData>();
@@ -435,6 +439,11 @@ namespace Gral
                     if (!read.EndOfStream)
                     {
                         CalculationCoresPath = read.ReadLine();
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        VectorMapAutoScaling = Convert.ToBoolean(read.ReadLine());
                     }
                 }
             }

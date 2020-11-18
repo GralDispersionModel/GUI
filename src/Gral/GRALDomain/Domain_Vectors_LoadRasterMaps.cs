@@ -80,7 +80,7 @@ namespace GralDomain
                             }
                             int[,] _contcol = _drobj.ContourColor;
                             double min = 1000;
-                            double max = -1;
+                            double max = 0;
                             for (int i = ny - 1; i > -1; i--)
                             {
                                 data = myReader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -139,8 +139,11 @@ namespace GralDomain
                                 _drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
                             }
 
-                            max = Math.Max(15, max); // set default scale -> make it easier to compare vector maps
-
+                            if (!Gral.Main.VectorMapAutoScaling)
+                            {
+                                max = 10; // default fix scaling factor
+                            }
+                            
                             //compute arrow-polygons
                             double xcenter = 0.0;
                             double ycenter = 0.0;
@@ -148,7 +151,12 @@ namespace GralDomain
                             double y1 = 0.0;
                             double xrot = 0.0;
                             double yrot = 0.0;
-                            double scale = dx / max;
+                            double scale = dx / (max + 1) * _drobj.VectorScale;
+                            if (Math.Abs(max) < 0.000001) // if umean max == 0 -> no vectors -> scale  = 0!
+                            {
+                                scale = 0;
+                            }
+
                             double length = 1;
                             double anglecor = 3.14 / 180;
 
@@ -161,8 +169,7 @@ namespace GralDomain
                                         //x,y coordinates of the cell center
                                         xcenter = x11 + (dx * (i + 1) - dx * 0.5);
                                         ycenter = y11 + (dx * (j + 1) - dx * 0.5);
-                                        double skalierung1 = _drobj.VectorScale;
-                                        length = scale * (umean[i, j] + 1) * skalierung1;
+                                        length = scale * (umean[i, j] + 1); // + 1 -> avoid lenght 0!
 
                                         //point 1 of arrow
                                         x1 = xcenter - length * 0.5;

@@ -135,6 +135,7 @@ namespace Gral
 						write.WriteLine(CopyCorestoProject.ToString());
 						write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                         write.WriteLine(Main.CalculationCoresPath);
+						write.WriteLine(Main.VectorMapAutoScaling.ToString());
 					}
 				}
 				catch

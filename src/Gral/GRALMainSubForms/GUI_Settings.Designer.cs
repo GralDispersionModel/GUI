@@ -45,6 +45,7 @@ namespace GralMainForms
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.groupBox25.SuspendLayout();
             this.groupBox26.SuspendLayout();
             this.SuspendLayout();
@@ -110,7 +111,7 @@ namespace GralMainForms
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(192, 248);
+            this.button1.Location = new System.Drawing.Point(192, 277);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(116, 39);
             this.button1.TabIndex = 5;
@@ -128,12 +129,23 @@ namespace GralMainForms
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.Click += new System.EventHandler(this.CheckBox1Click);
             // 
+            // checkBox2
+            // 
+            this.checkBox2.Location = new System.Drawing.Point(12, 225);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(334, 24);
+            this.checkBox2.TabIndex = 6;
+            this.checkBox2.Text = "Vector automatic scaling";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Click += new System.EventHandler(this.checkBox2_Click);
+            // 
             // GUI_Settings
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 304);
+            this.ClientSize = new System.Drawing.Size(516, 328);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox26);
@@ -155,5 +167,6 @@ namespace GralMainForms
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.GroupBox groupBox25;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
