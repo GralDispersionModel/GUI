@@ -131,7 +131,7 @@
             65536});
             this.concatenate.Location = new System.Drawing.Point(133, 63);
             this.concatenate.Maximum = new decimal(new int[] {
-            2,
+            4,
             0,
             0,
             0});
@@ -370,6 +370,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(52, 20);
             this.numericUpDown1.TabIndex = 7;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown1, "Set the number of iterations for the auto tuning");
             this.numericUpDown1.Value = new decimal(new int[] {
             3,
             0,
@@ -413,6 +414,7 @@
             this.button9.Size = new System.Drawing.Size(98, 23);
             this.button9.TabIndex = 2;
             this.button9.Text = "&Match Windrose";
+            this.toolTip1.SetToolTip(this.button9, "Preview for the matched windrose");
             this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button3_Click);
             // 

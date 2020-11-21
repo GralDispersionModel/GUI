@@ -1100,11 +1100,11 @@ namespace GralDomForms
         /// <summary>
         /// Start the match tuning with user defined parameters
         /// </summary>
-        private async void StartUserMatchTuning()
+        private void StartUserMatchTuning()
         {
             //MessageBox.Show(MatchingData.PGT[1].PGTFrq.ToString() + "/" + MatchingData.WeightingFactor[0].ToString());
             Domain.CancellationTokenReset();
-            List<string> mettimeseries = await Task.Run(() => { return MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token); });
+            List<string> mettimeseries = MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token);
             WriteMetTimeSeries(mettimeseries);
             SetTuningResults(MatchingData);
             Show();

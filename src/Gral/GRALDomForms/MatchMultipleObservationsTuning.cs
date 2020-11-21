@@ -35,6 +35,15 @@ namespace GralDomForms
             wait.Width = 350;
 #endif
             MessageWindow MessageInfoForm = null;
+            List<string> synchroErrorList = new List<string>();
+            if (!MatchSettings.AutomaticMode)
+            {
+                MessageInfoForm = new MessageWindow
+                {
+                    Text = "GRAMM matching error",
+                    ShowInTaskbar = false
+                }; // Kuntner
+            }
             CultureInfo ic = CultureInfo.InvariantCulture;
 
             List<string> metTimeSeries = new List<string>();
@@ -104,164 +113,188 @@ namespace GralDomForms
 
                             //search for the GRAMM wind field, which fits best the observed wind data at the observation sites
                             //for (int n = 1; n <= NumberofWeatherSituations; n++) // n = number of calculated GRAMM fields
-                            Parallel.For(1, NumberofWeatherSituations, n =>
+                            int _cores = Math.Max(1, Environment.ProcessorCount - 2);
+                            int range_parallel = (int)((NumberofWeatherSituations + 1)/ _cores);
+                            range_parallel = Math.Min((NumberofWeatherSituations + 1), range_parallel); // if NumberofWeatherSituations < range_parallel
+                            Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(1, (NumberofWeatherSituations + 1), range_parallel), range =>
                             {
                                 double u_METEO, v_METEO, wg_METEO, richtung = 0;
                                 double err = 10000; double err_min = 1000000;
                                 double[] err_st = new double[MetFileNames.Count];
+                                double bestFitErrorVal_local = 100000000;
+                                int bestFitSituation_local = 1;
 
-                                for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
+                                for (int n = range.Item1; n < range.Item2; n++)
                                 {
-                                    /* TEST OETTL 3.2.17
-                                    richtung = (270-Convert.ToDouble(wind_direction[j][counter[j]]))*Math.PI/180;
-                                    u_METEO = wind_speeds[j][counter[j]]* Math.Cos(richtung);
-                                    v_METEO = wind_speeds[j][counter[j]]* Math.Sin(richtung);
-                                    wg_METEO = Math.Sqrt(u_METEO*u_METEO + v_METEO*v_METEO);
-                                     */
-
-                                    //comparison is only possible when date and time are similar
-                                    int metTimeSeriesPointer = TimeSeriesPointer[j][met_count];
-                                    if (metTimeSeriesPointer != -1)
+                                    for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
                                     {
-                                        richtung = (270 - Convert.ToDouble(WindDirectionObs[j][metTimeSeriesPointer])) * Math.PI / 180;
-                                        u_METEO = WindVelocityObs[j][metTimeSeriesPointer] * Math.Cos(richtung);
-                                        v_METEO = WindVelocityObs[j][metTimeSeriesPointer] * Math.Sin(richtung);
-                                        wg_METEO = Math.Sqrt(u_METEO * u_METEO + v_METEO * v_METEO);
+                                        /* TEST OETTL 3.2.17
+                                        richtung = (270-Convert.ToDouble(wind_direction[j][counter[j]]))*Math.PI/180;
+                                        u_METEO = wind_speeds[j][counter[j]]* Math.Cos(richtung);
+                                        v_METEO = wind_speeds[j][counter[j]]* Math.Sin(richtung);
+                                        wg_METEO = Math.Sqrt(u_METEO*u_METEO + v_METEO*v_METEO);
+                                         */
 
-                                        //difference in wind directions between GRAMM and Observations - used as additional weighting factor
-
-                                        double Wind_Dir_Meas = Convert.ToDouble(WindDirectionObs[j][metTimeSeriesPointer]); // Wind direction from Measurement
-
-                                        if (MatchSettings.Optimization == 2) // error using components
+                                        //comparison is only possible when date and time are similar
+                                        int metTimeSeriesPointer = TimeSeriesPointer[j][met_count];
+                                        if (metTimeSeriesPointer != -1)
                                         {
-                                            // error for direction
-                                            err = Math.Abs(WindDir[j, n] - Wind_Dir_Meas);
-                                            if (err > 180)
-                                            {
-                                                err = 360 - err;
-                                            }
+                                            richtung = (270 - Convert.ToDouble(WindDirectionObs[j][metTimeSeriesPointer])) * Math.PI / 180;
+                                            u_METEO = WindVelocityObs[j][metTimeSeriesPointer] * Math.Cos(richtung);
+                                            v_METEO = WindVelocityObs[j][metTimeSeriesPointer] * Math.Sin(richtung);
+                                            wg_METEO = Math.Sqrt(u_METEO * u_METEO + v_METEO * v_METEO);
 
-                                            err = Math.Abs(err);
-                                            err = Math.Pow(Math.Max(0, (err - 12)), 1.8) * MatchSettings.WeightingDirection[j]; // weighting factor
-                                                                                                                                // error for speed - normalized
-                                            err += Math.Abs(WGramm[j, n] - wg_METEO) / Math.Max(0.35, Math.Min(WGramm[j, n], wg_METEO)) * 100;
-                                        }
-                                        else if (MatchSettings.Optimization == 1) // error using vectors
-                                        {
-                                            // error using vectors
-                                            err = Math.Sqrt(Math.Pow((UGramm[j, n] - u_METEO) * 400, 2) +
-                                                            Math.Pow((VGramm[j, n] - v_METEO) * 400, 2));
-                                        }
+                                            //difference in wind directions between GRAMM and Observations - used as additional weighting factor
 
-                                        // use weighting factor for met-station-error
-                                        if (MatchSettings.WeightingFactor[j] >= 0)
-                                        {
-                                            err_st[j] = err * MatchSettings.WeightingFactor[j];
-                                        }
-                                        else
-                                        {
-                                            err_st[j] = err;
-                                        }
+                                            double Wind_Dir_Meas = Convert.ToDouble(WindDirectionObs[j][metTimeSeriesPointer]); // Wind direction from Measurement
 
-                                        //	double xxx;
-                                        //	error for stability - +- 1 ak = no error - stability error not weighted
-                                        if (MatchSettings.StrongerWeightedSC1AndSC7 &&
-                                            StabilityClassObs[0][met_count] <= 2 || StabilityClassObs[0][met_count] >= 6) // keep original SC 6 and 7
-                                        {
-                                            double temp = Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) * 200; // stability
-                                                                                                                                       //											    xxx = temp;
                                             if (MatchSettings.Optimization == 2) // error using components
                                             {
-                                                err_st[j] += temp; // stability
-                                            }
-                                            else // error using vectors
-                                            {
-                                                err_st[j] += Math.Sqrt(err_st[j] * err_st[j] + temp * temp);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            double temp = Math.Max(0, Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) - 1) * 200; // stability
-                                            temp += Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) * 4; // little additional error. that best SCL can be found
-                                                                                                                               //  xxx = temp;
-                                            if (MatchSettings.Optimization == 2) // error using components
-                                            {
-                                                err_st[j] += temp; // stability
-                                            }
-                                            else // error using vectors
-                                            {
-                                                err_st[j] += Math.Sqrt(err_st[j] * err_st[j] + temp * temp);
-                                            }
-                                        }
-                                        // mess.listBox1.Items.Add(Convert.ToString(LocalStabilityClass[n]) + "/" + Convert.ToString(err_st[j]-xxx) + "/" + Convert.ToString(xxx));
-                                        // mess.Show();
-
-                                        err_min = Math.Min(err_min, err_st[j]); // error min
-
-                                    } // synchron fits
-                                    else // no synchronity
-                                    {
-                                        if (n == 1)
-                                        {
-                                            if (MessageInfoForm == null && !MatchSettings.AutomaticMode)
-                                            {
-                                                MessageInfoForm = new MessageWindow
+                                                // error for direction
+                                                err = Math.Abs(WindDir[j, n] - Wind_Dir_Meas);
+                                                if (err > 180)
                                                 {
-                                                    Text = "GRAMM matching error",
-                                                    ShowInTaskbar = false
-                                                }; // Kuntner
+                                                    err = 360 - err;
+                                                }
 
-                                                MessageInfoForm.listBox1.Items.Add("No date sync with obs. station " + (j + 1).ToString() + " at line " + metTimeSeriesPointer.ToString() + " and orig. date " + date_station0.ToString()); // Kuntner
-                                                MessageInfoForm.Show();
+                                                err = Math.Abs(err);
+                                                err = Math.Pow(Math.Max(0, (err - 12)), 1.8) * MatchSettings.WeightingDirection[j]; // weighting factor
+                                                                                                                                    // error for speed - normalized
+                                                err += Math.Abs(WGramm[j, n] - wg_METEO) / Math.Max(0.35, Math.Min(WGramm[j, n], wg_METEO)) * 100;
                                             }
-                                            err_st[j] = 0;
-                                        }
-                                    }
-                                } // Number of actual Met-Station
+                                            else if (MatchSettings.Optimization == 1) // error using vectors
+                                            {
+                                                // error using vectors
+                                                err = Math.Sqrt(Math.Pow((UGramm[j, n] - u_METEO) * 400, 2) +
+                                                                Math.Pow((VGramm[j, n] - v_METEO) * 400, 2));
+                                            }
 
-                                int match_station = 0; // counter, how much stations matched
-                                err = 0;
-                                // find sum error without bad met-stations
-                                for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
-                                {
-                                    if (TimeSeriesPointer[j][met_count] != -1)
-                                    {
-                                        if ((MatchSettings.Outliers == false) || ((err_st[j] / Math.Max(0.01, MatchSettings.WeightingFactor[j])) < err_min * 2)) // don´t use bad stations if outliers = true;
+                                            // use weighting factor for met-station-error
+                                            if (MatchSettings.WeightingFactor[j] >= 0)
+                                            {
+                                                err_st[j] = err * MatchSettings.WeightingFactor[j];
+                                            }
+                                            else
+                                            {
+                                                err_st[j] = err;
+                                            }
+
+                                            //	double xxx;
+                                            //	error for stability - +- 1 ak = no error - stability error not weighted
+                                            if (MatchSettings.StrongerWeightedSC1AndSC7 &&
+                                                StabilityClassObs[0][met_count] <= 2 || StabilityClassObs[0][met_count] >= 6) // keep original SC 6 and 7
+                                            {
+                                                double temp = Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) * 200; // stability
+                                                // xxx = temp;
+                                                if (MatchSettings.Optimization == 2) // error using components
+                                                {
+                                                    err_st[j] += temp; // stability
+                                                }
+                                                else // error using vectors
+                                                {
+                                                    err_st[j] += Math.Sqrt(err_st[j] * err_st[j] + temp * temp);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                double temp = Math.Max(0, Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) - 1) * 200; // stability
+                                                temp += Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) * 4; // little additional error. that best SCL can be found
+                                                                                                                                   //  xxx = temp;
+                                                if (MatchSettings.Optimization == 2) // error using components
+                                                {
+                                                    err_st[j] += temp; // stability
+                                                }
+                                                else // error using vectors
+                                                {
+                                                    err_st[j] += Math.Sqrt(err_st[j] * err_st[j] + temp * temp);
+                                                }
+                                            }
+                                            // mess.listBox1.Items.Add(Convert.ToString(LocalStabilityClass[n]) + "/" + Convert.ToString(err_st[j]-xxx) + "/" + Convert.ToString(xxx));
+                                            // mess.Show();
+
+                                            err_min = Math.Min(err_min, err_st[j]); // error min
+                                        } // synchron fits
+                                        else // no synchronity
                                         {
-                                            err += err_st[j];
-                                            match_station++;
+                                            if (n == 1)
+                                            {
+                                                if (!MatchSettings.AutomaticMode)
+                                                {
+                                                    lock (lockObj)
+                                                    {
+                                                        synchroErrorList.Add("No date sync with obs. station " + (j + 1).ToString() + " at line " + (metTimeSeriesPointer + 1).ToString() + " and orig. date " + date_station0.ToString()); // Kuntner
+                                                    }
+
+                                                }
+                                                err_st[j] = 0;
+                                            }
+                                        }
+                                    } // Number of actual Met-Station
+
+                                    int match_station = 0; // counter, how much stations matched
+                                    err = 0;
+                                    // find sum error without bad met-stations
+                                    for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
+                                    {
+                                        if (TimeSeriesPointer[j][met_count] != -1)
+                                        {
+                                            if ((MatchSettings.Outliers == false) || ((err_st[j] / Math.Max(0.01, MatchSettings.WeightingFactor[j])) < err_min * 2)) // don´t use bad stations if outliers = true;
+                                            {
+                                                err += err_st[j];
+                                                match_station++;
+                                            }
                                         }
                                     }
-                                }
 
-                                if (match_station > 0)
-                                {
-                                    err /= match_station; // norm to the count of matches stations
-                                }
-                                else
-                                {
-                                    err = err_st[0];
-                                }
+                                    if (match_station > 0)
+                                    {
+                                        err /= match_station; // normalize to the count of matches stations
+                                    }
+                                    else
+                                    {
+                                        err = err_st[0];
+                                    }
 
-                                if (err < bestFitErrorVal) // find best fitting weather situation -> 1st check
+                                    if (err < bestFitErrorVal_local) // find best fitting local weather situation 
+                                    {
+                                        bestFitErrorVal_local = err;  // error of best fitting situation
+                                        bestFitSituation_local = n;    // best fitting situation
+                                    }
+                                } // ParallelForEach() range.item loop
+
+                                if (bestFitSituation_local < bestFitErrorVal) // find best fitting total weather situation -> 1st check
                                 {
                                     lock (lockObj)
                                     {
-                                        if (err < bestFitErrorVal) // find best fitting weather situation -> locked check
+                                        if (bestFitSituation_local < bestFitErrorVal) // find best fitting weather situation -> locked check
                                         {
-                                            bestFitErrorVal = err;  // error of best fitting situation
-                                            bestFitSituation = n;    // best fitting situation
+                                            bestFitErrorVal = bestFitSituation_local;  // error of best fitting situation
+                                            bestFitSituation = bestFitSituation_local; // best fitting situation
                                         }
                                     }
                                 }
-                            }); // loop over calculated GRAMM - Fields
+                            }); // Parallel.ForEach loop for all calculated GRAMM - Fields
 
                             Application.DoEvents();
 
+                            //show the messageinfo form if synchro errors occured
+                            if (MessageInfoForm != null && !MatchSettings.AutomaticMode)
+                            {
+                                if (synchroErrorList.Count > 0)
+                                {
+                                    MessageInfoForm.Show();
+                                }
+                                foreach(string _err in synchroErrorList)
+                                {
+                                    MessageInfoForm.listBox1.Items.Add(_err);
+                                }
+                                synchroErrorList.Clear();
+                                synchroErrorList.TrimExcess();
+                            }
                             // write actual weather-situation of Mettimeseries.dat with the original data from meteopgt.all
                             metTimeSeries.Add(met_day + "." + met_month + "," + met_hour + ","
-                                                          + Convert.ToString(WindVelMeteoPGT[bestFitSituation], ic) + "," +
-                                                          Convert.ToString(WindDirMeteoPGT[bestFitSituation], ic) + "," +
+                                                      + Convert.ToString(WindVelMeteoPGT[bestFitSituation], ic) + "," +
+                                                      Convert.ToString(WindDirMeteoPGT[bestFitSituation], ic) + "," +
                                                           Convert.ToString(StabClassMeteoPGT[bestFitSituation], ic));
 
                             if (MatchSettings.PGT[bestFitSituation - 1].PGTFrq < 0)
@@ -341,12 +374,15 @@ namespace GralDomForms
                                     ShowInTaskbar = false
                                 }; // Kuntner
                                 Application.DoEvents();
-
+                            }
+                            if (MessageInfoForm != null && !MatchSettings.AutomaticMode)
+                            {
                                 MessageInfoForm.listBox1.Items.Add(ex.Message + " Error when computing wind deviations Met-File line" + Convert.ToString(met_count)); // Kuntner
                                 MessageInfoForm.Show();
                             }
                         }
                     } // Problem with time stamp of station 0
+
                     cts.ThrowIfCancellationRequested(); // Cancel procedure?
                 } // loop over all weather situations "met_count"
             }

@@ -130,7 +130,7 @@ namespace GralDomForms
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(60, 20);
             this.numericUpDown1.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.numericUpDown1, "Diameter of the wind rose");
+            this.toolTip1.SetToolTip(this.numericUpDown1, "Diameter of the wind rose in meters");
             this.numericUpDown1.Value = new decimal(new int[] {
             100,
             0,
@@ -169,6 +169,7 @@ namespace GralDomForms
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(60, 20);
             this.numericUpDown2.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.numericUpDown2, "Set the maximum wind velocity");
             this.numericUpDown2.Value = new decimal(new int[] {
             8,
             0,
@@ -183,6 +184,7 @@ namespace GralDomForms
             this.radioButton1.TabIndex = 4;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Velocity";
+            this.toolTip1.SetToolTip(this.radioButton1, "Show the wind velocity rose");
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton2
@@ -193,6 +195,7 @@ namespace GralDomForms
             this.radioButton2.TabIndex = 48;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Stability";
+            this.toolTip1.SetToolTip(this.radioButton2, "Show the stability rose");
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // checkBox1
@@ -205,6 +208,7 @@ namespace GralDomForms
             this.checkBox1.Size = new System.Drawing.Size(96, 17);
             this.checkBox1.TabIndex = 6;
             this.checkBox1.Text = "Bias correction";
+            this.toolTip1.SetToolTip(this.checkBox1, "Apply a bias correction for classified meteorological situations ");
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // checkBox2
@@ -215,6 +219,7 @@ namespace GralDomForms
             this.checkBox2.Size = new System.Drawing.Size(85, 17);
             this.checkBox2.TabIndex = 7;
             this.checkBox2.Text = "Draw frames";
+            this.toolTip1.SetToolTip(this.checkBox2, "Apply a frame for each wind sector");
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // checkBox3
@@ -225,6 +230,7 @@ namespace GralDomForms
             this.checkBox3.Size = new System.Drawing.Size(114, 17);
             this.checkBox3.TabIndex = 8;
             this.checkBox3.Text = "Draw small sectors";
+            this.toolTip1.SetToolTip(this.checkBox3, "Draw small wind sectors");
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
             // DomainWindRoseDialog
