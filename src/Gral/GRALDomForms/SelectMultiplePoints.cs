@@ -46,7 +46,7 @@ namespace GralDomForms
         /// <summary>
         /// File name 
         /// </summary>
-        public string MeteoInit = string.Empty;
+        public string MeteoInitFileName = string.Empty;
         /// <summary>
         /// Counter for automatic file names
         /// </summary>
@@ -101,6 +101,18 @@ namespace GralDomForms
             PointCoorData.Columns.Add("X coor", typeof(double));
             PointCoorData.Columns.Add("Y coor", typeof(double));
             PointCoorData.Columns.Add("Z coor", typeof(double));
+
+            if (string.IsNullOrEmpty(MeteoInitFileName))
+            {
+                button8.Visible = false;
+            }
+            else
+            {
+                label2.Text = "Result file name";
+                button8.Visible = true;
+                textBox1.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(MeteoInitFileName, 60);
+                textBox1.ReadOnly = true;
+            }
 
             dataGridView1.DataSource = PointCoorData;
         }
@@ -190,8 +202,11 @@ namespace GralDomForms
             {
                 LocalStability = false;
             }
-            MeteoInit = textBox1.Text;
-
+            //take string from textbox, if user sets a prefix or postfix, but use string from SaveFileDialog otherwise
+            if (string.IsNullOrEmpty(MeteoInitFileName))
+            {
+                MeteoInitFileName = textBox1.Text;
+            }
             // send Message to domain Form, that computation should be started
             try
             {
@@ -275,5 +290,21 @@ namespace GralDomForms
             }
         }
 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog
+            {
+                InitialDirectory = Path.GetDirectoryName(MeteoInitFileName),
+                FileName = Path.GetFileName(MeteoInitFileName),
+                Title = "Set the result file name",
+                AddExtension = true,
+                OverwritePrompt = true,
+                CheckPathExists = true
+            };
+            saveFile.ShowDialog();
+            MeteoInitFileName = saveFile.FileName;
+            textBox1.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(MeteoInitFileName, 60);
+            saveFile.Dispose();
+        }
     }
 }

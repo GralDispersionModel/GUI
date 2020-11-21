@@ -40,6 +40,8 @@ namespace GralDomForms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectMultiplePoints));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -51,6 +53,8 @@ namespace GralDomForms
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -73,6 +77,7 @@ namespace GralDomForms
             this.button1.Size = new System.Drawing.Size(113, 33);
             this.button1.TabIndex = 1;
             this.button1.Text = "&Add receptor points";
+            this.toolTip1.SetToolTip(this.button1, "Add all receptor points to the datagrid");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -98,11 +103,12 @@ namespace GralDomForms
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(357, 305);
+            this.checkBox1.Location = new System.Drawing.Point(327, 367);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(180, 24);
             this.checkBox1.TabIndex = 8;
             this.checkBox1.Text = "Use local stability classes";
+            this.toolTip1.SetToolTip(this.checkBox1, "Use the  GRAMM local stability classes");
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -111,29 +117,31 @@ namespace GralDomForms
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Location = new System.Drawing.Point(185, 305);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(146, 75);
+            this.groupBox1.Size = new System.Drawing.Size(136, 96);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select flow field model";
             // 
             // radioButton2
             // 
-            this.radioButton2.Location = new System.Drawing.Point(11, 45);
+            this.radioButton2.Location = new System.Drawing.Point(11, 19);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(104, 24);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "GRAL";
+            this.toolTip1.SetToolTip(this.radioButton2, "Analyze GRAL wind fields");
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // radioButton1
             // 
-            this.radioButton1.Location = new System.Drawing.Point(11, 15);
+            this.radioButton1.Location = new System.Drawing.Point(11, 61);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(110, 24);
             this.radioButton1.TabIndex = 1;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "GRAMM";
+            this.toolTip1.SetToolTip(this.radioButton1, "Analyze GRAMM wind fields");
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -146,24 +154,37 @@ namespace GralDomForms
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(354, 334);
+            this.label2.Location = new System.Drawing.Point(327, 305);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(214, 19);
             this.label2.TabIndex = 12;
-            this.label2.Text = "File name without extension";
+            this.label2.Text = "File name prefix without extension";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(357, 356);
+            this.textBox1.Location = new System.Drawing.Point(327, 328);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(192, 20);
+            this.textBox1.Size = new System.Drawing.Size(322, 20);
             this.textBox1.TabIndex = 11;
+            // 
+            // button8
+            // 
+            this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
+            this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button8.Location = new System.Drawing.Point(655, 325);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(24, 24);
+            this.button8.TabIndex = 13;
+            this.toolTip1.SetToolTip(this.button8, "Set the filename for the results");
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // SelectMultiplePoints
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(709, 425);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -173,8 +194,8 @@ namespace GralDomForms
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SelectMultiplePoints";
-            this.ShowIcon = false;
             this.Text = "Select Multiple Points";
             this.Load += new System.EventHandler(this.SelectMultiplePoints_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -197,5 +218,7 @@ namespace GralDomForms
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
