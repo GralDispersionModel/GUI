@@ -4503,6 +4503,7 @@ namespace GralDomain
             _selmp.StartPosition = FormStartPosition.Manual;
             _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
             _selmp.Owner = this;
+            _selmp.MeteoInitFileName = Path.Combine(Gral.Main.ProjectName, "TimeSeries.txt");
             _selmp.Show();
         }
 
@@ -4522,9 +4523,8 @@ namespace GralDomain
                 {
                     if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
                     {
-                        string a = _sl.MeteoInit + "_" + Convert.ToString(row[0]) + ".met";
-                        a = string.Join("_", a.Split(Path.GetInvalidFileNameChars())); // remove invalid characters
-
+                        string a = Convert.ToString(row[0]);
+                        
                         GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
                         {
                             filename = a,
@@ -4535,7 +4535,7 @@ namespace GralDomain
                         receptor_points.Add(item);
                     }
                 }
-                _prefix = _sl.MeteoInit;
+                _prefix = _sl.MeteoInitFileName;
                 _sl.Close();
             }
 

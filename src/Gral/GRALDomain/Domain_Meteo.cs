@@ -40,14 +40,14 @@ namespace GralDomain
             {
                 SendCoors -= _sl.ReceiveClickedCoordinates;
                 localSCL = _sl.LocalStability;
-                GRAMMmeteofile = _sl.MeteoInit; //value + ".met";
+                GRAMMmeteofile = _sl.MeteoInitFileName; //value + ".met";
                 meteoModel = _sl.MeteoModel;
 
                 foreach (DataRow row in _sl.PointCoorData.Rows)
                 {
                     if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
                     {
-                        string a = _sl.MeteoInit + "_" + Convert.ToString(row[0]) + ".met";
+                        string a = _sl.MeteoInitFileName + "_" + Convert.ToString(row[0]) + ".met";
                         a = string.Join("_", a.Split(Path.GetInvalidFileNameChars())); // remove invalid characters
 
                         GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
