@@ -1090,6 +1090,9 @@
     <EmbeddedResource Include="GRALDomForms\SelectItem.resx">
       <DependentUpon>SelectItem.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GRALDomForms\SelectMultiplePoints.resx">
+      <DependentUpon>SelectMultiplePoints.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\VerticalProfileConcentration.resx">
       <DependentUpon>VerticalProfileConcentration.cs</DependentUpon>
     </EmbeddedResource>
