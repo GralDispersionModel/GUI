@@ -209,8 +209,8 @@ namespace GralBackgroundworkers
                     sitCount++;
                 }
 
-                //write the results
-                string file = Path.Combine(mydata.Projectname, @"Computation", "ReceptorPostEval_" + mydata.Filename + ".txt");
+                //write the results - Prefix contains the  filename in this case
+                string file = Path.Combine(mydata.Prefix);
                 using (StreamWriter mywriter = new StreamWriter(file, false))
                 {
                     //write header
