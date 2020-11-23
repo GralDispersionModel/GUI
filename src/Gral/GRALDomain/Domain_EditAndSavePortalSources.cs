@@ -72,8 +72,8 @@ namespace GralDomain
                 MouseControl = 15;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditPortals.Show();
-                EditPortals.TopMost = true; // Kuntner
                 EditPortals.ShowForm();
+                EditPortals.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("TUNNEL PORTALS");

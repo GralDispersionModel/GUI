@@ -71,8 +71,8 @@ namespace GralDomain
                 MouseControl = 79;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditVegetation.Show();
-                EditVegetation.TopMost = true; // Kuntner
                 EditVegetation.ShowForm();
+                EditVegetation.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("VEGETATION");

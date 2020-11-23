@@ -58,8 +58,8 @@ namespace GralDomain
                 MouseControl = 8;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditAS.Show();
-                EditAS.TopMost = true; // Kuntner
                 EditAS.ShowForm();
+                EditAS.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("AREA SOURCES");

@@ -409,6 +409,23 @@ namespace GralDomain
             EditWall.StartPosition = FormStartPosition.Manual;
             EditVegetation.StartPosition = FormStartPosition.Manual;
 
+            EditPS.TopLevel = false;
+            EditAS.TopLevel = false;
+            EditB.TopLevel = false;
+            EditLS.TopLevel = false;
+            EditPortals.TopLevel = false;
+            EditR.TopLevel = false;
+            EditWall.TopLevel = false;
+            EditVegetation.TopLevel = false;
+            Controls.Add(EditPS);
+            Controls.Add(EditAS);
+            Controls.Add(EditB);
+            Controls.Add(EditLS);
+            Controls.Add(EditPortals);
+            Controls.Add(EditR);
+            Controls.Add(EditWall);
+            Controls.Add(EditVegetation);
+
             GeoReferenceOne.Form_Georef1_Closed += new Georeference1_Closed(CloseGeoRef1); // Message, that georef1 is closed
             GeoReferenceTwo.Form_Georef2_Closed += new Georeference2_Closed(CloseGeoRef2); // Message, that georef2 is closed
             

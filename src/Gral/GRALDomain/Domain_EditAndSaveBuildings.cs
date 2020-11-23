@@ -67,8 +67,8 @@ namespace GralDomain
                 MouseControl = 17;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditB.Show();
-                EditB.TopMost = true; // Kuntner
                 EditB.ShowForm();
+                EditB.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("BUILDINGS");

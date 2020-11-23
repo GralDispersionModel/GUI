@@ -72,7 +72,7 @@ namespace GralDomain
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditWall.Show();
                 EditWall.ShowForm();
-                EditWall.TopMost = true; // Kuntner
+                EditWall.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("WALLS");
@@ -90,7 +90,7 @@ namespace GralDomain
         /// <param name="sender">if checkbox25.checked == false and sender == null -> EditWall.SaveArray not called</param>
         void EditAndSaveWallData(object sender, EventArgs e)
         {
-            checkBox4.Checked = false;
+            checkBox25.Checked = false;
             wallsToolStripMenuItem.Checked = checkBox25.Checked;
             MouseControl = 0;
             Cursor = Cursors.Default;

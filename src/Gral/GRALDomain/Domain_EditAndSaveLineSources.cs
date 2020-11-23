@@ -69,8 +69,8 @@ namespace GralDomain
                 MouseControl = 10;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditLS.Show();
-                EditLS.TopMost = true; // Kuntner
                 EditLS.ShowForm();
+                EditLS.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("LINE SOURCES");

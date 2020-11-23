@@ -72,7 +72,7 @@ namespace GralDomain
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditR.Show();
                 EditR.ShowForm();
-                EditR.TopMost = true; // Kuntner
+                EditR.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("RECEPTORS");

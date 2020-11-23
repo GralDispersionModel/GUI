@@ -58,8 +58,8 @@ namespace GralDomain
                 InfoBoxCloseAllForms(); // close all infoboxes
 
                 EditPS.Show();
-                EditPS.TopMost = true; // Kuntner
                 EditPS.ShowForm();
+                EditPS.BringToFront();
                 Cursor = Cursors.Cross;
 
                 CheckForExistingDrawingObject("POINT SOURCES");
