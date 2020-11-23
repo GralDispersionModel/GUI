@@ -219,6 +219,7 @@
             this.loadContourMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractConcentrationAtOnePointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertgrzFileToASCIIFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createAnAnimatedGIFFromgrzFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
@@ -246,7 +247,6 @@
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.picturebox1 = new System.Windows.Forms.PictureBox();
-            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -2341,6 +2341,13 @@
             this.extractConcentrationAtOnePointToolStripMenuItem.Text = "Extract concentration at a point";
             this.extractConcentrationAtOnePointToolStripMenuItem.Click += new System.EventHandler(this.Button35_Click);
             // 
+            // generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem
+            // 
+            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Name = "generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem";
+            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Size = new System.Drawing.Size(331, 22);
+            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Text = "Generate time series for several evaluation points";
+            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Click += new System.EventHandler(this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem_Click);
+            // 
             // convertgrzFileToASCIIFileToolStripMenuItem
             // 
             this.convertgrzFileToASCIIFileToolStripMenuItem.Name = "convertgrzFileToASCIIFileToolStripMenuItem";
@@ -2563,13 +2570,6 @@
             this.picturebox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Picturebox1_MouseMove);
             this.picturebox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Picturebox1_MouseUp);
             // 
-            // generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem
-            // 
-            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Name = "generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem";
-            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Size = new System.Drawing.Size(331, 22);
-            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Text = "Generate time series for several evaluation points";
-            this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem.Click += new System.EventHandler(this.generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem_Click);
-            // 
             // Domain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -2587,6 +2587,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DomainFormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DomainFormClosed);
             this.Load += new System.EventHandler(this.Domain_Load);
+            this.SizeChanged += new System.EventHandler(this.Domain_SizeChanged);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
