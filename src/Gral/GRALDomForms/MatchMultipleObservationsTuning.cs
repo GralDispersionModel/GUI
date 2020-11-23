@@ -222,7 +222,7 @@ namespace GralDomForms
                                                 {
                                                     lock (lockObj)
                                                     {
-                                                        synchroErrorList.Add("No date sync with obs. station " + (j + 1).ToString() + " at line " + (metTimeSeriesPointer + 1).ToString() + " and orig. date " + date_station0.ToString()); // Kuntner
+                                                        synchroErrorList.Add("No date sync with obs. station " + (j + 1).ToString() + " at line " + (met_count + 1).ToString() + " and orig. date " + date_station0.ToString()); // Kuntner
                                                     }
 
                                                 }
@@ -308,56 +308,59 @@ namespace GralDomForms
                             // Compute error values for the Match-Fine tuning
                             for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
                             {
-                                double richtung = (270 - Convert.ToDouble(WindDirectionObs[j][TimeSeriesPointer[j][met_count]])) * Math.PI / 180;
-                                double u_METEO = WindVelocityObs[j][TimeSeriesPointer[j][met_count]] * Math.Cos(richtung);
-                                double v_METEO = WindVelocityObs[j][TimeSeriesPointer[j][met_count]] * Math.Sin(richtung);
-                                double wg_METEO = Math.Sqrt(u_METEO * u_METEO + v_METEO * v_METEO);
-
-                                double err = Math.Sqrt(Math.Pow((UGramm[j, bestFitSituation] - u_METEO), 2) + Math.Pow((VGramm[j, bestFitSituation] - v_METEO), 2));
-                                //double wg_Matched = Math.Sqrt(Math.Pow(UGramm[j, best_fit], 2) + Math.Pow(VGramm[j, best_fit], 2));
-
-                                //double err = Math.Abs(wg_METEO - wg_Matched);
-
-                                //evaluation of error values for user feedback
-                                double errp = 0;
-                                if (wg_METEO > 0.5)
+                                if (TimeSeriesPointer[j][met_count] >= 0)
                                 {
-                                    errp = err / wg_METEO;
-                                }
-                                else
-                                {
-                                    errp = err / 0.5;
-                                }
+                                    double richtung = (270 - Convert.ToDouble(WindDirectionObs[j][TimeSeriesPointer[j][met_count]])) * Math.PI / 180;
+                                    double u_METEO = WindVelocityObs[j][TimeSeriesPointer[j][met_count]] * Math.Cos(richtung);
+                                    double v_METEO = WindVelocityObs[j][TimeSeriesPointer[j][met_count]] * Math.Sin(richtung);
+                                    double wg_METEO = Math.Sqrt(u_METEO * u_METEO + v_METEO * v_METEO);
 
-                                if (errp <= 0.1)
-                                {
-                                    MatchSettings.VectorErrorSum[j, 0]++;
-                                }
+                                    double err = Math.Sqrt(Math.Pow((UGramm[j, bestFitSituation] - u_METEO), 2) + Math.Pow((VGramm[j, bestFitSituation] - v_METEO), 2));
+                                    //double wg_Matched = Math.Sqrt(Math.Pow(UGramm[j, best_fit], 2) + Math.Pow(VGramm[j, best_fit], 2));
 
-                                if (errp <= 0.2)
-                                {
-                                    MatchSettings.VectorErrorSum[j, 1]++;
-                                }
+                                    //double err = Math.Abs(wg_METEO - wg_Matched);
 
-                                if (errp <= 0.4)
-                                {
-                                    MatchSettings.VectorErrorSum[j, 2]++;
-                                }
+                                    //evaluation of error values for user feedback
+                                    double errp = 0;
+                                    if (wg_METEO > 0.5)
+                                    {
+                                        errp = err / wg_METEO;
+                                    }
+                                    else
+                                    {
+                                        errp = err / 0.5;
+                                    }
 
-                                if (errp <= 0.6)
-                                {
-                                    MatchSettings.VectorErrorSum[j, 3]++;
-                                }
+                                    if (errp <= 0.1)
+                                    {
+                                        MatchSettings.VectorErrorSum[j, 0]++;
+                                    }
 
-                                err = Math.Abs(LocalStabilityClass[j, bestFitSituation] - StabilityClassObs[j][met_count]);
-                                if (err == 0)
-                                {
-                                    MatchSettings.SCErrorSum[j, 0]++;
-                                }
+                                    if (errp <= 0.2)
+                                    {
+                                        MatchSettings.VectorErrorSum[j, 1]++;
+                                    }
 
-                                if (err <= 1)
-                                {
-                                    MatchSettings.SCErrorSum[j, 1]++;
+                                    if (errp <= 0.4)
+                                    {
+                                        MatchSettings.VectorErrorSum[j, 2]++;
+                                    }
+
+                                    if (errp <= 0.6)
+                                    {
+                                        MatchSettings.VectorErrorSum[j, 3]++;
+                                    }
+
+                                    err = Math.Abs(LocalStabilityClass[j, bestFitSituation] - StabilityClassObs[j][met_count]);
+                                    if (err == 0)
+                                    {
+                                        MatchSettings.SCErrorSum[j, 0]++;
+                                    }
+
+                                    if (err <= 1)
+                                    {
+                                        MatchSettings.SCErrorSum[j, 1]++;
+                                    }
                                 }
                             }
                             //write_debug.WriteLine(Convert.ToString(best_fit)+"/"+Convert.ToString((double) 1000/filelength[0]));
