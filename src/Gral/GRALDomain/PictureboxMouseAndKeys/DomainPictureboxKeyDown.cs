@@ -31,6 +31,12 @@ namespace GralDomain
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            // no override if an item form has the focus
+            if (EditB.ContainsFocus || EditPS.ContainsFocus || EditAS.ContainsFocus || EditLS.ContainsFocus || EditPortals.ContainsFocus || EditR.ContainsFocus || EditWall.ContainsFocus || EditVegetation.ContainsFocus)
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
+
             int movex = 0;
             int movey = 0;
             double xfac_old = XFac;
