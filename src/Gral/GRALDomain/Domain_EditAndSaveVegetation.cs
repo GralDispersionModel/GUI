@@ -63,7 +63,7 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditVegetation.Location = GetScreenPositionForNewDialog();
+                        EditVegetation.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Veg = false;

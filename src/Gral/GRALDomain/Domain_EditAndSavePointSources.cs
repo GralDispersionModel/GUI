@@ -49,7 +49,7 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditPS.Location = GetScreenPositionForNewDialog();
+                        EditPS.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Ps = false;

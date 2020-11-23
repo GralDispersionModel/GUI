@@ -51,7 +51,7 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditAS.Location = GetScreenPositionForNewDialog();
+                        EditAS.Location = GetScreenPositionForNewDialog(0);
                     }
                     ShowFirst.As = false;
                 }

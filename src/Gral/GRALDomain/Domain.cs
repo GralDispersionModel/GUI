@@ -2477,7 +2477,7 @@ namespace GralDomain
             using (SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm))
             {
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog();
+                disp.Location = GetScreenPositionForNewDialog(1);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
                 if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
@@ -2601,7 +2601,7 @@ namespace GralDomain
             MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
             MMO.StartPosition = FormStartPosition.Manual;
-            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog().X - 1200);
+            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog(1).X - 1200);
             MMO.Show();
         }
 
@@ -2698,7 +2698,7 @@ namespace GralDomain
                     }
 
                     disp.StartPosition = FormStartPosition.Manual;
-                    disp.Location = GetScreenPositionForNewDialog();
+                    disp.Location = GetScreenPositionForNewDialog(1);
                     if (disp.ShowDialog() == DialogResult.OK)
                     {
                         ProfileConcentration.DispersionSituation = disp.selected_situation;
@@ -3080,7 +3080,7 @@ namespace GralDomain
                     GRZPath = files
                 };
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog();
+                disp.Location = GetScreenPositionForNewDialog(1);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
                 {
                     int dissit = disp.selected_situation; // selected situation
@@ -3506,7 +3506,7 @@ namespace GralDomain
         {
             using (GralDomForms.ViewFrameSaveAndLoad viewframe = new ViewFrameSaveAndLoad())
             {
-                viewframe.Location = GetScreenPositionForNewDialog();
+                viewframe.Location = GetScreenPositionForNewDialog(1);
                 if (viewframe.ShowDialog() == DialogResult.OK)
                 {
                     if (viewframe.SelText.Length > 0)
@@ -4414,17 +4414,32 @@ namespace GralDomain
         /// <summary>
         /// Search the left or right postition of the recent screen
         /// </summary>
-        private System.Drawing.Point GetScreenPositionForNewDialog()
+        /// <param name="Mode">0 = relative, 1 = absolute</param>
+        /// <returns></returns>
+        private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
+            
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
+                if (Mode == 0)
+                {
+                    x = 200;
+                }
                 x += 150;
             }
             else
             {
-                x += panel1.Left - 350;
+                if (Mode == 0)
+                {
+                    x = this.Width - 450;
+                }
+                else
+                {
+                    x += panel1.Left - 350;
+                }
             }
+           
             return new System.Drawing.Point(x, 60);
         }
 
@@ -4620,6 +4635,20 @@ namespace GralDomain
                     CancellationTokenSource = null;
                     CancellationTokenSource = new System.Threading.CancellationTokenSource();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Resize of the domain form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Domain_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState != FormWindowState.Maximized && WindowState != FormWindowState.Minimized)
+            {
+                // Reset position of child forms
+                ShowFirst.Reset();
             }
         }
     }

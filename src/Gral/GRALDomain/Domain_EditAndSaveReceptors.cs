@@ -63,7 +63,7 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditR.Location = GetScreenPositionForNewDialog();
+                        EditR.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Re = false;
