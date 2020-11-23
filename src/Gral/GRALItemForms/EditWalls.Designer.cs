@@ -66,7 +66,7 @@ namespace GralItemForms
             this.checkBox1.Location = new System.Drawing.Point(16, 99);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(104, 21);
-            this.checkBox1.TabIndex = 3;
+            this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "absolute height";
             this.toolTip1.SetToolTip(this.checkBox1, "define height as absolute height over sea");
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -119,7 +119,7 @@ namespace GralItemForms
             this.button3.Location = new System.Drawing.Point(137, 228);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(32, 32);
-            this.button3.TabIndex = 8;
+            this.button3.TabIndex = 9;
             this.toolTip1.SetToolTip(this.button3, "Delete all walls");
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3Click);
@@ -130,7 +130,7 @@ namespace GralItemForms
             this.button2.Location = new System.Drawing.Point(75, 228);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(32, 32);
-            this.button2.TabIndex = 7;
+            this.button2.TabIndex = 8;
             this.toolTip1.SetToolTip(this.button2, "Remove one wall");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Button2Click);
@@ -141,7 +141,7 @@ namespace GralItemForms
             this.button1.Location = new System.Drawing.Point(10, 228);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(32, 32);
-            this.button1.TabIndex = 6;
+            this.button1.TabIndex = 7;
             this.toolTip1.SetToolTip(this.button1, "Add one wall");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1Click);
@@ -162,7 +162,7 @@ namespace GralItemForms
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(76, 20);
-            this.numericUpDown1.TabIndex = 2;
+            this.numericUpDown1.TabIndex = 3;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Height of an edge point above ground level");
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.NumericUpDown1ValueChanged);
@@ -198,7 +198,7 @@ namespace GralItemForms
             this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(159, 19);
-            this.trackBar2.TabIndex = 4;
+            this.trackBar2.TabIndex = 5;
             this.toolTip1.SetToolTip(this.trackBar2, "Select edge points");
             this.trackBar2.Value = 1;
             this.trackBar2.Scroll += new System.EventHandler(this.TrackBar2Scroll);
@@ -210,7 +210,7 @@ namespace GralItemForms
             this.button5.Location = new System.Drawing.Point(90, 153);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(24, 24);
-            this.button5.TabIndex = 5;
+            this.button5.TabIndex = 6;
             this.toolTip1.SetToolTip(this.button5, "Edit edge point table");
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.TextBox2Click);
@@ -220,7 +220,7 @@ namespace GralItemForms
             this.textBox1.Location = new System.Drawing.Point(49, 40);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(120, 20);
-            this.textBox1.TabIndex = 1;
+            this.textBox1.TabIndex = 2;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label2
@@ -248,7 +248,7 @@ namespace GralItemForms
             this.button4.Location = new System.Drawing.Point(94, 270);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 24);
-            this.button4.TabIndex = 77;
+            this.button4.TabIndex = 78;
             this.button4.Text = "&Cancel";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.cancelButtonClick);
