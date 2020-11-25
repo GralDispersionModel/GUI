@@ -4439,7 +4439,7 @@ namespace GralDomain
                     x += panel1.Left - 350;
                 }
             }
-           
+            x = Math.Max(10, x);
             return new System.Drawing.Point(x, 60);
         }
 
