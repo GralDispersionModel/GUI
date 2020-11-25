@@ -53,42 +53,42 @@ namespace GralDomain
                 CopiedItem.PortalSource = null;
 
                 // reset move line sources
-                if (MouseControl == 1000)
+                if (MouseControl == MouseMode.LineSourceInlineEdit)
                 {
-                    MouseControl = 11;
+                    MouseControl = MouseMode.LineSourceSel;
                 }
                 // reset move walls
-                if (MouseControl == 1001)
+                if (MouseControl == MouseMode.WallInlineEdit)
                 {
-                    MouseControl = 76;
+                    MouseControl = MouseMode.WallSel;
                 }
                 // reset move vegetation
-                if (MouseControl == 1081)
+                if (MouseControl == MouseMode.VegetationInlineEdit)
                 {
-                    MouseControl = 77;
+                    MouseControl = MouseMode.VegetationSel;
                 }
                 // reset move area source
-                if (MouseControl == 1080)
+                if (MouseControl == MouseMode.AreaInlineEdit)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
                 // reset move building
-                if (MouseControl == 1170)
+                if (MouseControl == MouseMode.BuildingInlineEdit)
                 {
-                    MouseControl = 19;
+                    MouseControl = MouseMode.BuildingSel;
                 }
                 // reset move point source 
-                if (MouseControl == 6000)
+                if (MouseControl == MouseMode.PointSourceInlineEdit)
                 {
-                    MouseControl = 7;
+                    MouseControl = MouseMode.PointSourceSel;
                 }
                 // reset move receptor 
-                if (MouseControl == 2400)
+                if (MouseControl == MouseMode.ReceptorInlineEdit)
                 {
-                    MouseControl = 25;
+                    MouseControl = MouseMode.ReceptorSel;
                 }
                 // reset lenght and area measurement
-                if (MouseControl == 22 || MouseControl == 23)
+                if (MouseControl == MouseMode.ViewDistanceMeasurement || MouseControl == MouseMode.ViewAreaMeasurement)
                 {
                     if (EditLS.CornerLineSource > 0 || EditAS.CornerAreaCount > 1)
                     {
@@ -105,15 +105,15 @@ namespace GralDomain
                 }
 
                 //reset zoom and move map 
-                if (MouseControl == -1 || MouseControl == 1 || MouseControl == 2)
+                if (MouseControl == MouseMode.ZoomOut || MouseControl == MouseMode.ZoomIn || MouseControl == MouseMode.ViewMoveMap)
                 {
-                    MouseControl = 0;
+                    MouseControl = MouseMode.Default;
                     Cursor = Cursors.Default;
                 }
             }
 
             // Shift topmost map start
-            if (MouseControl == 7000)
+            if (MouseControl == MouseMode.BaseMapMoveScale)
             {
                 // search top base map at object manager
                 DrawingObjects _drobj = null;
@@ -186,7 +186,7 @@ namespace GralDomain
 
                 if (keyData == Keys.Escape) // cancel the shift + zoom option
                 {
-                    MouseControl = 0;
+                    MouseControl = MouseMode.Default;
                     // reset to old values
                     _drobj.DestRec = BaseMapOldValues.Destrec;
                     _drobj.West = BaseMapOldValues.West;
@@ -330,7 +330,7 @@ namespace GralDomain
             EventArgs e = new EventArgs();
 
             //delete selected area source
-            if (MouseControl == 9)
+            if (MouseControl == MouseMode.AreaSourceSel)
             {
                 if (keyData == (Keys.Shift | Keys.Delete)) // delete mutiple elements
                 {
@@ -345,7 +345,7 @@ namespace GralDomain
                 }
             }
             //delete selected line source
-            if (MouseControl == 11)
+            if (MouseControl == MouseMode.LineSourceSel)
             {
                 if (keyData == (Keys.Shift | Keys.Delete)) // delete mutiple elements
                 {
@@ -360,7 +360,7 @@ namespace GralDomain
                 }
             }
             //delete selected point source
-            if (MouseControl == 7)
+            if (MouseControl == MouseMode.PointSourceSel)
             {
                 if (keyData == (Keys.Shift | Keys.Delete)) // delete mutiple elements
                 {
@@ -375,7 +375,7 @@ namespace GralDomain
                 }
             }
             //delete selected tunnel portal
-            if (MouseControl == 16)
+            if (MouseControl == MouseMode.PortalSourceSel)
             {
                 if (keyData == (Keys.Shift | Keys.Delete)) // delete mutiple elements
                 {
@@ -390,7 +390,7 @@ namespace GralDomain
                 }
             }
             //delete selected building
-            if (MouseControl == 19)
+            if (MouseControl == MouseMode.BuildingSel)
             {
                 if (keyData == (Keys.Shift | Keys.Delete)) // delete mutiple elements
                 {
@@ -417,16 +417,17 @@ namespace GralDomain
         /// </summary>
         private void MoveCoordinatesOfEditedItems(double xfac_old, double transformx_old, double transformy_old)
         {
-            if (MouseControl == 50)
+            if (MouseControl == MouseMode.SetPointConcFile)
             {
                 InfoBoxCloseAllForms(); // delete info boxes at concentration info
             }
 
             //new coordinates for edited line source, walls or section drawing for wind fields
-            if ((MouseControl == 10) || (MouseControl == 22) || (MouseControl == 44) || (MouseControl == 45) || (MouseControl == 100) || (MouseControl == 1000))
+            if ((MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.ViewDistanceMeasurement) || 
+                (MouseControl == MouseMode.SectionWindSel) || (MouseControl == MouseMode.SectionConcSel) || (MouseControl == MouseMode.LineSourceEditFinal) || (MouseControl == MouseMode.LineSourceInlineEdit))
 
             {
-                if (MouseControl == 100)
+                if (MouseControl == MouseMode.LineSourceEditFinal)
                 {
                     CornerAreaSource[1].X = Convert.ToInt32(TransformX + (CornerAreaSource[1].X - transformx_old) / xfac_old * XFac);
                     CornerAreaSource[1].Y = Convert.ToInt32(TransformY + (CornerAreaSource[1].Y - transformy_old) / xfac_old * XFac);
@@ -442,9 +443,9 @@ namespace GralDomain
             }
 
             //new coordinates for edited area source
-            if ((MouseControl == 8) || (MouseControl == 23) || (MouseControl == 108) || (MouseControl == 1080))
+            if ((MouseControl == MouseMode.AreaSourcePos) || (MouseControl == MouseMode.ViewAreaMeasurement) || (MouseControl == MouseMode.AreaSourceEditFinal) || (MouseControl == MouseMode.AreaInlineEdit))
             {
-                if (MouseControl == 108)
+                if (MouseControl == MouseMode.AreaSourceEditFinal)
                 {
                     CornerAreaSource[1].X = Convert.ToInt32(TransformX + (CornerAreaSource[1].X - transformx_old) / xfac_old * XFac);
                     CornerAreaSource[1].Y = Convert.ToInt32(TransformY + (CornerAreaSource[1].Y - transformy_old) / xfac_old * XFac);
@@ -460,9 +461,9 @@ namespace GralDomain
             }
 
             //new coordinates for edited building
-            if ((MouseControl == 17) || (MouseControl == 117) || (MouseControl == 1170))
+            if ((MouseControl == MouseMode.BuildingPos) || (MouseControl == MouseMode.BuildingEditFinal) || (MouseControl == MouseMode.BuildingInlineEdit))
             {
-                if (MouseControl == 117)
+                if (MouseControl == MouseMode.BuildingEditFinal)
                 {
                     CornerAreaSource[1].X = Convert.ToInt32(TransformX + (CornerAreaSource[1].X - transformx_old) / xfac_old * XFac);
                     CornerAreaSource[1].Y = Convert.ToInt32(TransformY + (CornerAreaSource[1].Y - transformy_old) / xfac_old * XFac);
@@ -478,9 +479,9 @@ namespace GralDomain
             }
 
             //new coordinates for edited walls
-            if ((MouseControl == 75) || (MouseControl == 101) || (MouseControl == 1001) || (MouseControl == 1080))
+            if ((MouseControl == MouseMode.WallSet) || (MouseControl == MouseMode.WallEditFinal) || (MouseControl == MouseMode.WallInlineEdit) || (MouseControl == MouseMode.AreaInlineEdit))
             {
-                if (MouseControl == 101)
+                if (MouseControl == MouseMode.WallEditFinal)
                 {
                     CornerAreaSource[1].X = Convert.ToInt32(TransformX + (CornerAreaSource[1].X - transformx_old) / xfac_old * XFac);
                     CornerAreaSource[1].Y = Convert.ToInt32(TransformY + (CornerAreaSource[1].Y - transformy_old) / xfac_old * XFac);
@@ -496,9 +497,9 @@ namespace GralDomain
             }
 
             //new coordinates for edited forests
-            if ((MouseControl == 79) || (MouseControl == 109) || (MouseControl == 1081))
+            if ((MouseControl == MouseMode.AreaPosCorner) || (MouseControl == MouseMode.VegetationEditFinal) || (MouseControl == MouseMode.VegetationInlineEdit))
             {
-                if (MouseControl == 109)
+                if (MouseControl == MouseMode.VegetationEditFinal)
                 {
                     CornerAreaSource[1].X = Convert.ToInt32(TransformX + (CornerAreaSource[1].X - transformx_old) / xfac_old * XFac);
                     CornerAreaSource[1].Y = Convert.ToInt32(TransformY + (CornerAreaSource[1].Y - transformy_old) / xfac_old * XFac);

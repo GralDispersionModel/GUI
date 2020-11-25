@@ -273,7 +273,7 @@ namespace Gral
                         }
 
                         SaveMeteoDataFile();
-                        Change_Label(1, 2); // meteo button green
+                        ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, Gral.ButtonColorEnum.BlackHook); // meteo button green
                         ChangedWindData = false;
                     }
                     catch
@@ -421,7 +421,7 @@ namespace Gral
                     Anemometerheight = 10;
 
                     SaveMeteoDataFile();
-                    Change_Label(1, 2); // meteo button green
+                    ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, Gral.ButtonColorEnum.BlackHook); // meteo button green
                     ChangedWindData = false;
                 }
                 catch

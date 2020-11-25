@@ -66,7 +66,7 @@ namespace GralDomain
 
                     ShowFirst.Ls = false;
                 }
-                MouseControl = 10;
+                MouseControl = MouseMode.LineSourcePos;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditLS.Show();
                 EditLS.ShowForm();
@@ -77,7 +77,7 @@ namespace GralDomain
             }
             else
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 EditLS.Hide();
             }
         }
@@ -89,7 +89,7 @@ namespace GralDomain
         {
             checkBox8.Checked = false;
             lineSourcesToolStripMenuItem.Checked = checkBox8.Checked;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             Cursor = Cursors.Default;
 
             if (Gral.Main.Project_Locked == true)
@@ -115,7 +115,7 @@ namespace GralDomain
                 MainForm.Pollmod.Clear();
                 MainForm.SetEmissionFilesInvalid();
                 MainForm.button18.Visible = false;
-                MainForm.Change_Label(2, -1); // Emission button not visible
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
                 MainForm.button21.Visible = false;
 
                 for (int i = 0; i <= EditLS.CornerLineSource; i++)

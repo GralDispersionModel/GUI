@@ -453,7 +453,7 @@ namespace GralDomain
                 }
                 
                 // GRAL topography allowed?
-                if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None && Gral.Main.Project_Locked == false &&
+                if (MainForm.GRALSettings.BuildingMode > 0 && Gral.Main.Project_Locked == false &&
                     MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
                 {
                     originalGRALTopographyToolStripMenuItem.Enabled = true;
@@ -2640,7 +2640,7 @@ namespace GralDomain
                     Decsep = decsep,
                     UserText = @"The process may take some minutes. Re-ordered wind field data is stored in the subdirectory \Re-ordered\",
                     Caption = "Re-Order Wind Fields ",
-                    Rechenart = GralBackgroundworkers.BWMode.ReOrder // ; 1 = re-order the GRAMM_Windfield
+                    Rechenart = 2 // ; 1 = re-order the GRAMM_Windfield
                 };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart =
@@ -4590,7 +4590,7 @@ namespace GralDomain
                     Decsep = decsep,
                     UserText = "The process may take some minutes. The data will be saved in the folder Computation",
                     Caption = "Evaluate concentration time series", // + DataCollection.Meteofilename;
-                    Rechenart = GralBackgroundworkers.BWMode.EvalPointsTimeSeries, // ; 38 =  Evaluation points concentration
+                    Rechenart = 38, // ; 38 =  Evaluation points concentration
                     EvalPoints = receptor_points, // evaluation points
                     GFFGridSize = MainForm.HorGridSize,
                     Horgridsize = MainForm.HorGridSize,

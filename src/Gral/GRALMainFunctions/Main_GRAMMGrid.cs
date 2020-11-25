@@ -43,7 +43,7 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMLoadCreateTopography(object sender, EventArgs e)
         {
-            if (GRALSettings.BuildingMode == 3)
+            if (GRALSettings.BuildingMode == BuildingModeEnum.GRAMM)
             {
                 //Special mode: generate flat topography file when GRAMM is used to compute flow around buildings
                 Topofile = Path.Combine(ProjectName, @"Maps", "Flat_topo.txt");
@@ -278,7 +278,7 @@ namespace Gral
             mywriter.Close();*/
 
             //show controls for landuse file generation
-            if (GRALSettings.BuildingMode != 3)
+            if (GRALSettings.BuildingMode != BuildingModeEnum.GRAMM)
             {
                 button20.Visible = true;
                 button43.Visible = true;

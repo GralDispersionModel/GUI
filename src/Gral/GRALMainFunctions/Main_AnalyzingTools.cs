@@ -114,7 +114,7 @@ namespace Gral
                                 DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
                                 DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                DataCollection.Rechenart = 28; // 28 = Compute Mean, Max
+                                DataCollection.Rechenart = GralBackgroundworkers.BWMode.MeanMeteoPGT; // 28 = Compute Mean, Max
                                 DataCollection.WriteDepositionOrOdourData = depositionOutput;
                                 depositionOutput = false;
 
@@ -215,7 +215,7 @@ namespace Gral
                                 DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
                                 DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                DataCollection.Rechenart = 25; // 25 = Compute Mean, Max, DailyMax
+                                DataCollection.Rechenart = GralBackgroundworkers.BWMode.MeanMaxTimeSeries; // 25 = Compute Mean, Max, DailyMax
                                 DataCollection.WriteDepositionOrOdourData = depositionOutput;
                                 depositionOutput = false;
 
@@ -300,7 +300,7 @@ namespace Gral
 
                         WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                         DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-                        DataCollection.Rechenart = 37; // 37 = Time series
+                        DataCollection.Rechenart = GralBackgroundworkers.BWMode.ReceptorTimeSeries; // 37 = Time series
 
                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                         {
@@ -345,7 +345,7 @@ namespace Gral
 
             WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
             DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-            DataCollection.Rechenart = 37; // 37 = Time series / met files
+            DataCollection.Rechenart = GralBackgroundworkers.BWMode.ReceptorTimeSeries; // 37 = Time series / met files
 
             GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
             {
@@ -426,7 +426,7 @@ namespace Gral
                                 DataCollection.UserText += Environment.NewLine + "Result file name: " + Convert.ToString(Math.Round(DataCollection.Percentile, 1)).Replace(DecimalSep, "_") + "_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
                                 DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                DataCollection.Rechenart = 40; // 40 = compute high percentils
+                                DataCollection.Rechenart = GralBackgroundworkers.BWMode.HighPercentiles; // 40 = compute high percentils
 
                                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                                 {
@@ -562,7 +562,7 @@ namespace Gral
                                         DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
                                         DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                        DataCollection.Rechenart = 27; // 27 = Compute Odour hours
+                                        DataCollection.Rechenart = GralBackgroundworkers.BWMode.OdorHours; // 27 = Compute Odour hours
                                         DataCollection.WriteDepositionOrOdourData = writeAdditionalFiles;
 
                                         //check if GRAL simulations were carried out in transient mode
@@ -576,7 +576,7 @@ namespace Gral
                                             {
                                                 if (data.Transientflag == 0)
                                                 {
-                                                    DataCollection.Rechenart = 24; // 24 = Compute Odour hours in transient mode
+                                                    DataCollection.Rechenart = GralBackgroundworkers.BWMode.OdorHoursTransient; // 24 = Compute Odour hours in transient mode
                                                 }
                                             }
                                         }
@@ -640,7 +640,7 @@ namespace Gral
                                     DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename;
                                     DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                    DataCollection.Rechenart = 23; // 23 = Compute Odour concentration percentiles
+                                    DataCollection.Rechenart = GralBackgroundworkers.BWMode.OdorConcentrationPercentile; // 23 = Compute Odour concentration percentiles
 
                                     //check if GRAL simulations were carried out in transient mode
                                     try
@@ -653,7 +653,7 @@ namespace Gral
                                         {
                                             if (data.Transientflag == 0)
                                             {
-                                                DataCollection.Rechenart = 23; // 23 = Compute Odour concentration percentiles in transient mode
+                                                DataCollection.Rechenart = GralBackgroundworkers.BWMode.OdorConcentrationPercentile; // 23 = Compute Odour concentration percentiles in transient mode
                                             }
                                         }
                                     }
@@ -828,7 +828,7 @@ namespace Gral
                                         WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                         DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
-                                        DataCollection.Rechenart = 26; // 26 = Compute compost
+                                        DataCollection.Rechenart = GralBackgroundworkers.BWMode.OdorCompost; // 26 = Compute compost
                                         DataCollection.WriteDepositionOrOdourData = writeAdditionalFiles;
 
                                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
@@ -990,7 +990,7 @@ namespace Gral
                                         WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                         DataCollection.UserText += "The process may take some minutes";
 
-                                        DataCollection.Rechenart = 29; // 29 = AllInAllOut
+                                        DataCollection.Rechenart = GralBackgroundworkers.BWMode.OdorAllinAllout; // 29 = AllInAllOut
                                         DataCollection.WriteDepositionOrOdourData = writeAdditionalFiles;
 
                                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)

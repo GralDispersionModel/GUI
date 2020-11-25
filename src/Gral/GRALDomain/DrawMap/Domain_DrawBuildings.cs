@@ -111,7 +111,7 @@ namespace GralDomain
                                     Array.Resize(ref myPoints, point_counter);
                                 }
                                 
-                                if ((n == EditB.ItemDisplayNr) && ((MouseControl == 19) || (MouseControl == 17)))
+                                if ((n == EditB.ItemDisplayNr) && ((MouseControl == MouseMode.BuildingSel) || (MouseControl == MouseMode.BuildingPos)))
                                 {
                                     g.FillPolygon(SelectedBrush, myPoints);
                                     Brush edges = new SolidBrush(Color.Green);

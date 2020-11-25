@@ -37,6 +37,11 @@ namespace Gral
     /// </summary>
     public partial class Main
     {
+        /// <summary>
+        /// Enumeration for Time Series Mode
+        /// </summary>
+        private enum SetTimeSeriesModeEnum { PointSourceVelocity = 0, PointSourceTemperature = 1, PortalSourceVelocity = 2, PortalSourceTemperature = 3 };
+
         private CultureInfo ic = CultureInfo.InvariantCulture;
         
         //////////////////////////////////////////////////////////////////////////
@@ -159,7 +164,7 @@ namespace Gral
                 // create new Time Series for Temperature and Velocity
                 if (VelTimeSeries.Count > 0)
                 {
-                    WriteTempVelTimeSeries(VelTimeSeries, 0);
+                    WriteTempVelTimeSeries(VelTimeSeries, SetTimeSeriesModeEnum.PointSourceVelocity);
                 }
                 else
                 {
@@ -167,7 +172,7 @@ namespace Gral
                 }
                 if (TempTimeSeries.Count > 0)
                 {
-                    WriteTempVelTimeSeries(TempTimeSeries, 1);
+                    WriteTempVelTimeSeries(TempTimeSeries, SetTimeSeriesModeEnum.PointSourceTemperature);
                 }
                 else
                 {
@@ -583,7 +588,7 @@ namespace Gral
                 // create new Time Series for Temperature and Velocity
                 if (VelTimeSeries.Count > 0)
                 {
-                    WriteTempVelTimeSeries(VelTimeSeries, 2);
+                    WriteTempVelTimeSeries(VelTimeSeries, SetTimeSeriesModeEnum.PortalSourceVelocity);
                 }
                 else
                 {
@@ -591,7 +596,7 @@ namespace Gral
                 }
                 if (TempTimeSeries.Count > 0)
                 {
-                    WriteTempVelTimeSeries(TempTimeSeries, 3);
+                    WriteTempVelTimeSeries(TempTimeSeries, SetTimeSeriesModeEnum.PortalSourceTemperature);
                 }
                 else
                 {
@@ -887,9 +892,9 @@ namespace Gral
         /// Write a Time Series for Temperature or Velocity of Point Sources or Portal Sources
         /// </summary>
         /// <param name="EntryList">Time Series List</param>
-        /// <param name="mode">0: Point Source Velocity 1: Point Source Temperature 2: Portal Source Velocity 3: Portal Source Temperature</param>
+        /// <param name="Mode">0: Point Source Velocity 1: Point Source Temperature 2: Portal Source Velocity 3: Portal Source Temperature</param>
         /// <returns></returns>
-        private bool WriteTempVelTimeSeries(List<string> EntryList, int mode)
+        private bool WriteTempVelTimeSeries(List<string> EntryList, SetTimeSeriesModeEnum Mode)
         {
             GralItemForms.EditTimeSeriesValues edT = new GralItemForms.EditTimeSeriesValues();
             float[,] GridValues = new float[12, 4];
@@ -905,19 +910,19 @@ namespace Gral
                 return false;
             }
                         
-            if (mode == 0) // Point source Vel
+            if (Mode == SetTimeSeriesModeEnum.PointSourceVelocity) 
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPointSourceVel.tsd");
             }
-            else if (mode == 1) //Point source Temp
+            else if (Mode == SetTimeSeriesModeEnum.PointSourceTemperature) 
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPointSourceTemp.tsd");
             }
-            else if (mode == 2) //Portal source Vel
+            else if (Mode == SetTimeSeriesModeEnum.PortalSourceVelocity) 
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPortalSourceVel.tsd");
             }
-            else if (mode == 3) //Portal source Temp
+            else if (Mode == SetTimeSeriesModeEnum.PortalSourceTemperature)
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPortalSourceTemp.tsd");
             }
@@ -1492,23 +1497,23 @@ namespace Gral
             message.Close();
             message.Dispose();
             
-            Change_Label(3, 2); // Building label green
+            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings , ButtonColorEnum.BlackHook); // Building label green
 
             if (file == false) // problem at writing buildings.dat
             {
                 File.Delete(newPath);
-                Change_Label(3, 0); // Building label red & delete buildings.dat
+                ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 
                 if (_bdList.Count == 0 && _vdList.Count == 0 && _wdList.Count == 0)
                 {
-                    Change_Label(3, -1); // Building label invisible
+                    ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.Invisible); // Building label invisible
                     MessageBox.Show(this, "No buildings, walls or vegetation areas \n inside the GRAL domain area", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             //			}
             //			catch(Exception ex)
             //			{
-            //				Change_Label(3, -1); // Building label invisible
+            //				Change_Label(SetButtonColorEnum.ButtonBuildings, Gral.SetButtonColorEnum.Invisible) // Building label invisible
             //				MessageBox.Show(this, ex.Message,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             //			}
 

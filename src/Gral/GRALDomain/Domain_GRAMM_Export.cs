@@ -626,7 +626,7 @@ namespace GralDomain
                             Caption = "Export GRAMM Wind Fields ",
                             GRAMMCells = cellOrig,
                             GRAMMSubCells = cellSub,
-                            Rechenart = 60 
+                            Rechenart = GralBackgroundworkers.BWMode.GrammExportSubDomain 
                         };
                         message.listBox1.Items.Add("..");
                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart =

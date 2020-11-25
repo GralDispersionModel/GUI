@@ -26,14 +26,14 @@ namespace GralDomain
     /////////////////////////////////////////////////////////////////////////////////
 
     public partial class Domain
-	{
-		/// <summary>
+    {
+        /// <summary>
         /// Start the evaluation of Meteo-Stations
         /// </summary>
-		private void MetTimeSeries(object sender, EventArgs e)
-		{
+        private void MetTimeSeries(object sender, EventArgs e)
+        {
             List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
-            int meteoModel = 0;
+            MeteoModelEmum meteoModel = MeteoModelEmum.None ;
             bool localSCL = false;
             // Release send coors
             if (sender is SelectMultiplePoints _sl)
@@ -62,13 +62,13 @@ namespace GralDomain
                 }
                 _sl.Close();
             }
-			
-			if (receptor_points.Count == 0)
+            
+            if (receptor_points.Count == 0)
             {
                 MessageBox.Show(this, "No points defined", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else if (meteoModel == 1) // GRAMM
-			{
+            else if (meteoModel == MeteoModelEmum.GRAMM) // GRAMM
+            {
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
@@ -79,7 +79,7 @@ namespace GralDomain
                     Decsep = decsep,
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
                     Caption = "Compute Wind-Statistics ", // + DataCollection.Meteofilename;
-                    Rechenart = 1, // ; 1 = analyse the GRAMM_Windfield
+                    Rechenart = GralBackgroundworkers.BWMode.GrammMetFile, // ; 1 = analyse the GRAMM_Windfield
                     LocalStability = localSCL, // use local stability?
                     EvalPoints = receptor_points // evaluation points
                 };
@@ -89,8 +89,8 @@ namespace GralDomain
                     Text = DataCollection.Caption
                 };
                 BackgroundStart.Show();
-			}
-            else if (meteoModel == 2) // GRAL
+            }
+            else if (meteoModel == MeteoModelEmum.GRAL) // GRAL
             {
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
@@ -103,7 +103,7 @@ namespace GralDomain
                     Decsep = decsep,
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
                     Caption = "Compute GRAL Wind-Statistics ", // + DataCollection.Meteofilename;
-                    Rechenart = 3, // ; 3 = analyse the GRAL Windfield
+                    Rechenart = GralBackgroundworkers.BWMode.GralMetFile, // ; 3 = analyse the GRAL Windfield
                     LocalStability = localSCL, // use local stability?
                     EvalPoints = receptor_points // evaluation points
                 };
@@ -117,20 +117,20 @@ namespace GralDomain
             // now the backgroundworker works
             // gen_meteofile(Convert.ToDouble(trans), GRAMMmeteofile);
             // Reset mousecontrol
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
         }
-		
-		// Cancel the Mettime Dialog
-		private void CancelMetTimeSeries(object sender, EventArgs e)
-		{
+        
+        // Cancel the Mettime Dialog
+        private void CancelMetTimeSeries(object sender, EventArgs e)
+        {
             // Release send coors
             if (sender is SelectMultiplePoints _sl)
             {
                 SendCoors -= _sl.ReceiveClickedCoordinates;
                 _sl.Close();
             }
-            MouseControl = 0;	
-		}
+            MouseControl = MouseMode.Default;	
+        }
 
         private void ComputeMeanWindVelocity(object sender, EventArgs e)
         {
@@ -170,7 +170,7 @@ namespace GralDomain
                             Decsep = decsep,
                             UserText = @"The process may take some minutes. The file " + Path.GetFileName(file) + @" is stored in the subdirectory \maps\",
                             Caption = "Compute mean wind velocity",
-                            Rechenart = 31, // ; 31
+                            Rechenart = GralBackgroundworkers.BWMode.GrammMeanWindVel, // ; 31
                             Filename = file
                         };
                         
@@ -184,5 +184,5 @@ namespace GralDomain
                 }
             }
         }
-	}
+    }
 }

@@ -23,7 +23,28 @@ using System.Collections.Generic;
 
 namespace GralBackgroundworkers
 {
-	/// <summary>
+    public enum BWMode
+    {
+        None = 0,
+        GrammMetFile = 1,
+        ReOrder = 2,
+        GralMetFile = 3,
+        OdorConcentrationPercentile = 23,
+        OdorHoursTransient = 24,
+        MeanMaxTimeSeries = 25,
+        OdorCompost = 26,
+        OdorHours = 27,
+        MeanMeteoPGT = 28,
+        OdorAllinAllout = 29,
+        GrammMeanWindVel = 31,
+        ReceptorTimeSeries = 37,
+        EvalPointsTimeSeries = 38,
+        HighPercentiles = 40,
+        MathRasterOperations = 50,
+        GrammExportSubDomain = 60
+    }
+
+    /// <summary>
     /// Class to collect data used by the Backgroundworker
     /// </summary>
     public class BackgroundworkerData
@@ -35,7 +56,7 @@ namespace GralBackgroundworkers
         public string Meteofilename { get; set; }
         public string UserText { get; set; }
         public string Caption { get; set; }
-        public int Rechenart { get; set; }
+        public BWMode Rechenart { get; set; }
         public int XDomain { get; set; }
         public int YDomain { get; set; }
         public double GrammWest { get; set; }

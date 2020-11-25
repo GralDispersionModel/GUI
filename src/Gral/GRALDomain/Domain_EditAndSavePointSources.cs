@@ -54,7 +54,7 @@ namespace GralDomain
 
                     ShowFirst.Ps = false;
                 }
-                MouseControl = 6;
+                MouseControl = MouseMode.PointSourcePos;
                 InfoBoxCloseAllForms(); // close all infoboxes
 
                 EditPS.Show();
@@ -66,7 +66,7 @@ namespace GralDomain
             }
             else
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 EditPS.Hide();
             }
         }
@@ -78,7 +78,7 @@ namespace GralDomain
         {
             checkBox4.Checked = false;
             pointSourcesToolStripMenuItem.Checked = checkBox4.Checked;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             if (Gral.Main.Project_Locked == true)
             {
                 //Gral.Main.Project_Locked_Message(); // Project locked!
@@ -102,7 +102,7 @@ namespace GralDomain
                 MainForm.Pollmod.Clear();
                 MainForm.SetEmissionFilesInvalid();
                 MainForm.button18.Visible = false;
-                MainForm.Change_Label(2, -1); // Emission button not visible
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
                 MainForm.button21.Visible = false;
 
                 Cursor = Cursors.Default;
@@ -149,7 +149,7 @@ namespace GralDomain
                 _form.Hide();
             }
 
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             Picturebox1_Paint();
         }
     }

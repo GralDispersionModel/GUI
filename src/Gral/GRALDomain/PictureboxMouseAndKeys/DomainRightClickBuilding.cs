@@ -96,7 +96,7 @@ namespace GralDomain
 				CopiedItem.Building = null;
 				EditAndSaveBuildingsData(null, null); // save changes
 				Picturebox1_Paint();
-				MouseControl = 19;
+				MouseControl = MouseMode.BuildingSel;
 			}
 		}
 		
@@ -121,7 +121,7 @@ namespace GralDomain
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointBuilding();
-				MouseControl = 1170;
+				MouseControl = MouseMode.BuildingInlineEdit;
 			}
 			if (mi.Index == 2) // Add edge point
 			{
@@ -168,7 +168,7 @@ namespace GralDomain
 				
 				if (EditB.ItemData.Count > 0)
                 {
-                    MouseControl = 19;
+                    MouseControl = MouseMode.BuildingSel;
                 }
 
                 Picturebox1_Paint();
@@ -213,7 +213,7 @@ namespace GralDomain
 				
 				if (EditB.ItemData.Count > 0)
                 {
-                    MouseControl = 19;
+                    MouseControl = MouseMode.BuildingSel;
                 }
 
                 Picturebox1_Paint();
@@ -229,7 +229,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditB.ItemData.Count > 0)
                 {
-                    MouseControl = 19;
+                    MouseControl = MouseMode.BuildingSel;
                 }
             }
 			if (mi.Index == 5) // Copy building

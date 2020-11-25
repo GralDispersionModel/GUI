@@ -134,8 +134,8 @@ namespace GralIO
         /// <summary>
         ///0: no buildings, 1: diagnostic approach, 2: prognostic approach 
         /// </summary>
-        private int _buildingmode;
-        public int BuildingMode
+        private Gral.BuildingModeEnum _buildingmode;
+        public Gral.BuildingModeEnum BuildingMode
         {
             get
             {
@@ -143,7 +143,7 @@ namespace GralIO
             }
             set
             {
-                _buildingmode = Math.Max(0, Math.Min(2, value));
+                _buildingmode = (Gral.BuildingModeEnum) Math.Max(0, Math.Min(2, (int) value));
             }
         }
         /// <summary>
@@ -215,7 +215,7 @@ namespace GralIO
             HorSlices[0] = 3;
             Deltaz = 2;
             DispersionSituation = 1;
-            BuildingMode = 0;
+            BuildingMode = Gral.BuildingModeEnum.None;
             BuildingHeightsWrite = false;
             Compressed = 1;
             Transientflag = 0;

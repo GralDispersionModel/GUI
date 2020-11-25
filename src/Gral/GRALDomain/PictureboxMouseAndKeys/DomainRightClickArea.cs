@@ -94,7 +94,7 @@ namespace GralDomain
                 {
                     ItemNames = ItemNames,
                     StartPosition = FormStartPosition.Manual,
-                    Left = e.X,
+                    Left = e.X + St_F.GetScreenAtMousePosition(),
                     Top = e.Y,
                     Owner = this
                 };
@@ -135,7 +135,7 @@ namespace GralDomain
                 CopiedItem.AreaSource = null;
                 EditAndSaveAreaSourceData(null, null); // save changes
                 Picturebox1_Paint();
-                MouseControl = 19;
+                MouseControl = MouseMode.BuildingSel;
             }
         }
         
@@ -161,7 +161,7 @@ namespace GralDomain
                 textBox1.Text = coor.X.ToString();
                 textBox2.Text = coor.Y.ToString();
                 MoveEdgepointArea();
-                MouseControl = 1080;
+                MouseControl = MouseMode.AreaInlineEdit;
             }
             if (mi.Index == 2) // Add edge point
             {
@@ -208,7 +208,7 @@ namespace GralDomain
                 
                 if (EditAS.ItemData.Count > 0)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
 
                 Picturebox1_Paint();
@@ -253,7 +253,7 @@ namespace GralDomain
                 
                 if (EditAS.ItemData.Count > 0)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
 
                 Picturebox1_Paint();
@@ -269,7 +269,7 @@ namespace GralDomain
                 Picturebox1_Paint();
                 if (EditAS.ItemData.Count > 0)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
             }
             if (mi.Index == 5) // Copy source

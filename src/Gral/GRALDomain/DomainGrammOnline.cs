@@ -605,14 +605,14 @@ namespace GralDomain
         //show vertical profile of a quantity of GRAMM online
         private void Button34_Click(object sender, EventArgs e)
         {
-            MouseControl = 40;
+            MouseControl = MouseMode.SetPointVertWindProfileOnline;
             Cursor = Cursors.Cross;
         }
 
         // show vertical profile of a 3D concentraion
         private void Button52_Click(object sender, EventArgs e)
         {
-            MouseControl = 200;
+            MouseControl = MouseMode.SetPointConcProfile;
             Cursor = Cursors.Cross;
         }
 

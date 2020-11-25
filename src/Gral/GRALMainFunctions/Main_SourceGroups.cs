@@ -336,7 +336,7 @@ namespace Gral
 			//			listBox5.Items.Clear();
 			//			button18.Visible = false;
 			//			button21.Visible = false;
-			//			Change_Label(2, -1); // Emission label invisible
+			//			Change_Label(Gral.SetButtonColorEnum.ButtonEmission, SetButtonColorEnum.Invisible); // Emission label invisible
 
 			//enable/disable GRAL simulations
 			Enable_GRAL();
@@ -403,7 +403,7 @@ namespace Gral
                 }
 
                 //generate file GRAMM_geb, when GRAMM is used for flow simulations around buildings
-                if (GRALSettings.BuildingMode == 3)
+                if (GRALSettings.BuildingMode == BuildingModeEnum.GRAMM)
                 {
                     textBox13.Text = textBox6.Text;
                     textBox12.Text = textBox7.Text;
@@ -475,7 +475,7 @@ namespace Gral
             message.listBox1.Items.Add("Collect pollutants for selected source groups...");
             message.Refresh();
             listBox5.Items.Clear();
-            Change_Label(2, -1); // Emission label invisible
+            ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.Invisible); // Emission label invisible
 
             button18.Visible = false;
             button21.Visible = false;
@@ -528,7 +528,7 @@ namespace Gral
                     button48.Visible = true;
                     if (Change_Emission_Label == true)
                     {
-                        Change_Label(2, 0); // Emission label red
+                        ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
                     }
                 }
                 else

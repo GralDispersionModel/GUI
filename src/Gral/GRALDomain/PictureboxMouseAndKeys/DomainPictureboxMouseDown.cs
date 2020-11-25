@@ -155,7 +155,7 @@ namespace GralDomain
         /// </summary>
         private void Picturebox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if ((MouseControl == 2) | (e.Button==MouseButtons.Middle)) // Kuntner auch beim Auslassen des mittleren Buttons verschieben
+            if ((MouseControl == MouseMode.ViewMoveMap) | (e.Button==MouseButtons.Middle)) // Kuntner auch beim Auslassen des mittleren Buttons verschieben
             {
                 double xfac_old = XFac;
                 double transformx_old = TransformX;
@@ -183,15 +183,15 @@ namespace GralDomain
             }
 
             //define GRAL Domain
-            if (MouseControl == 5)
+            if (MouseControl == MouseMode.GralDomainEndPoint)
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
                 
                 if (Gral.Main.Project_Locked == true)
                 {
                     Gral.Main.ProjectLockedMessage(); // Project locked! - do not save any changes!
-                    MouseControl = 0;
+                    MouseControl = MouseMode.Default;
                     Picturebox1_Paint();
                     return;
                 }
@@ -249,7 +249,7 @@ namespace GralDomain
                         GRALDomain = new Rectangle(x1, y1, width, height);
                         
                         // GRAL topography allowed?
-                        if (MainForm.GRALSettings.BuildingMode > 0 && Gral.Main.Project_Locked == false &&
+                        if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None && Gral.Main.Project_Locked == false &&
                             MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
                         {
                             originalGRALTopographyToolStripMenuItem.Enabled = true;
@@ -270,7 +270,7 @@ namespace GralDomain
                         MainForm.listBox5.Items.Clear();
                         MainForm.SetEmissionFilesInvalid();
                         MainForm.button18.Visible = false; // Emission button not visible
-                        MainForm.Change_Label(2, -1); // Emission button not visible
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
                         MainForm.button21.Visible = false;
                         Picturebox1_Paint();
 
@@ -288,9 +288,9 @@ namespace GralDomain
             
 
             //define GRAMM Domain
-            if (MouseControl == 31)
+            if (MouseControl == MouseMode.GrammDomainEndPoint)
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
                 
                 if (MainForm.GRAMM_Locked == true)
@@ -347,9 +347,9 @@ namespace GralDomain
             }
 
             //define GRAMM sub-domain for export
-            if (MouseControl == 301)
+            if (MouseControl == MouseMode.GrammExportFinal)
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
                 
                 //export GRAMM sub-domain
@@ -358,11 +358,11 @@ namespace GralDomain
             }
 
             //get zoom area for panel zoom
-            if (MouseControl == 14)
+            if (MouseControl == MouseMode.ViewPanelZoomArea)
             {
                 double fac1 = 1;
                 double fac2 = 1;
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor = Cursors.Default;
                 try
                 {
@@ -396,7 +396,7 @@ namespace GralDomain
                 }
             }
             
-            if (MouseControl == 9999) // if GRAL topography is changed
+            if (MouseControl == MouseMode.GRALTopographyModify) // if GRAL topography is changed
             {
                 // restore Blocked array
                 Array.Clear(TopoModifyBlocked, 0, TopoModifyBlocked.Length);

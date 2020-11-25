@@ -108,7 +108,7 @@ namespace GralDomain
 
             switch (MouseControl)
             {
-                case 7:
+                case MouseMode.PointSourceSel:
                     // Edit Point Source - Right Mouse
                     {
                         int i = RightClickSearchPointSource(e); // get number of point source at mouse position
@@ -144,7 +144,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 25:
+                case MouseMode.ReceptorSel:
                     //select receptors - Right Mouse
                     {
                         int i = RightClickSearchReceptor(e);
@@ -180,7 +180,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 9:
+                case MouseMode.AreaSourceSel:
                     //select area sources - Right Mouse
                     {
                         int i = RightClickSearchAreaSource(e);
@@ -230,7 +230,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 11:
+                case MouseMode.LineSourceSel:
                     //select line sources - Right Mouse
                     {
                         int i = RightClickSearchLineSource(e);
@@ -289,7 +289,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 76:
+                case MouseMode.WallSel:
 
                     //select wall - Right Mouse
                     {
@@ -347,7 +347,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 16:
+                case MouseMode.PortalSourceSel:
                     //select portal sources Right Mouse
                     {
                         int i = 0;
@@ -394,7 +394,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 19:
+                case MouseMode.BuildingSel:
 
                     //select buildings  Right Mouse
                     {
@@ -451,7 +451,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 77:
+                case MouseMode.VegetationSel:
                     //select vegetation  Right Mouse
                     {
                         int i = RightClickSearchVegetation(e);
@@ -505,7 +505,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 8:
+                case MouseMode.AreaSourcePos:
                     //final corner point of area source
                     if (EditAS.CornerAreaCount > 1)
                     {
@@ -535,7 +535,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 79:
+                case MouseMode.AreaPosCorner:
                     //final corner point of vegetation
                     if (EditVegetation.CornerVegetation > 0)
                     {
@@ -558,7 +558,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 17:
+                case MouseMode.BuildingPos:
                     //final corner point of buildings
                     if (EditB.CornerBuilding > 1)
                     {
@@ -586,13 +586,13 @@ namespace GralDomain
                     }
                     break;
 
-                case 117:
+                case MouseMode.BuildingEditFinal:
                     // case 1170 //
                     //final corner point of changed building edge point
                     SetNewEdgepointBuilding();
                     break;
 
-                case 10:
+                case MouseMode.LineSourcePos:
                     //final corner point of line source
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -614,13 +614,13 @@ namespace GralDomain
                     }
                     break;
 
-                case 100:
+                case MouseMode.LineSourceEditFinal:
                     /* case 1000: */
                     //final corner point of changed line source point
                     SetNewEdgepointLine();
                     break;
 
-                case 75:
+                case MouseMode.WallSet:
                     //final corner point of wall
                     if (EditWall.CornerWallCount > 0)
                     {
@@ -648,13 +648,13 @@ namespace GralDomain
                     }
                     break;
 
-                case 101:
+                case MouseMode.WallEditFinal:
                     /*case 1001:*/
                     //final corner point of changed wall edge
                     SetNewEdgepointWall();
                     break;
 
-                case 15:
+                case MouseMode.PortalSourcePos:
                     //second point of a portal source
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -692,7 +692,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 22:
+                case MouseMode.ViewDistanceMeasurement:
                     //measuring tool "distance"
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -727,7 +727,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 44:
+                case MouseMode.SectionWindSel:
                     //Section drawing
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -796,7 +796,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 45:
+                case MouseMode.SectionConcSel:
                     // Vertical concentration section
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -826,7 +826,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 23:
+                case MouseMode.ViewAreaMeasurement:
                     //measuring tool "area"
                     if (EditAS.CornerAreaCount > 1)
                     {

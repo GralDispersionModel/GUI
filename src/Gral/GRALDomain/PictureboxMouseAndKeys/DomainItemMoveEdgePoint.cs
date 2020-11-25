@@ -80,7 +80,7 @@ namespace GralDomain
 			
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			EditAS.CornerAreaCount = indexmin;
-			MouseControl = 108; // Marker for editing area-source point
+			MouseControl = MouseMode.AreaSourceEditFinal; // Marker for editing area-source point
 			//MessageBox.Show(this, Convert.ToString(indexmin));
 		}
         
@@ -140,7 +140,7 @@ namespace GralDomain
 			
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			EditVegetation.CornerVegetation = indexmin;
-			MouseControl = 109; // Marker for editing vegetation point
+			MouseControl = MouseMode.VegetationEditFinal; // Marker for editing vegetation point
 			//MessageBox.Show(this, Convert.ToString(indexmin));
 		}
 		
@@ -195,7 +195,7 @@ namespace GralDomain
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			
 			EditLS.CornerLineSource = indexmin;
-			MouseControl = 100; // Marker for editing line-source point
+			MouseControl = MouseMode.LineSourceEditFinal; // Marker for editing line-source point
 		}
 		
 		/// <summary>
@@ -248,7 +248,7 @@ namespace GralDomain
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditWall.CornerWallY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			EditWall.CornerWallCount = indexmin;
-			MouseControl = 101; // Marker for editing wall point
+			MouseControl = MouseMode.WallEditFinal; // Marker for editing wall point
 		}
 		
 		/// <summary>
@@ -305,7 +305,7 @@ namespace GralDomain
 			RubberLineCoors[1].Y =  Convert.ToInt32((EditB.CornerBuildingY[index] - MapSize.North) * 1 / BmpScale / MapSize.SizeY + TransformY);
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			EditB.CornerBuilding = indexmin;
-			MouseControl = 117; // Marker for editing buliding edge
+			MouseControl = MouseMode.BuildingEditFinal; // Marker for editing buliding edge
 			//MessageBox.Show(this, Convert.ToString(indexmin));
 		}        
     }

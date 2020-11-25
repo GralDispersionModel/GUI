@@ -34,7 +34,7 @@ namespace Gral
         private void CollectAllUsedPollutants()
 		{
 			listBox5.Items.Clear();
-			Change_Label(2, 0); // Emission label red
+			ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
 			
 			List <int> SelectedSourceGroups = new List<int>();
 			List <PollutantsData> AllPollutants    = new List<PollutantsData>();

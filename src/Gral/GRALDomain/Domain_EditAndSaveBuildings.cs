@@ -64,7 +64,7 @@ namespace GralDomain
 
                     ShowFirst.Bu = false;
                 }
-                MouseControl = 17;
+                MouseControl = MouseMode.BuildingPos;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditB.Show();
                 EditB.ShowForm();
@@ -76,7 +76,7 @@ namespace GralDomain
             else
             {
                 EditB.Hide();
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Picturebox1_Paint();
             }
         }
@@ -88,7 +88,7 @@ namespace GralDomain
         {
             checkBox15.Checked = false;
             buildingsToolStripMenuItem.Checked = checkBox15.Checked;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             if (Gral.Main.Project_Locked == true)
             {
                 //Gral.Main.Project_Locked_Message(); // Project locked!
@@ -112,18 +112,18 @@ namespace GralDomain
                 }
                 EditB.CornerBuilding = 0;
                 
-                MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 
-                if (MainForm.GRALSettings.BuildingMode != 0)
+                if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None)
                 {
                     if (EditB.ItemData.Count > 0)
                     {
-                        MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
                         MainForm.button9.Visible = true;
                     }
                     else
                     {
-                        MainForm.Change_Label(3, -1); // Building label - no buildings
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.Invisible); // Building label - no buildings
                     }
                 }
                 //add/delete buildings in object list

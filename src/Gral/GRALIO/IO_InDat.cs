@@ -74,7 +74,7 @@ namespace GralIO
 					myWriter.WriteLine();
 					myWriter.WriteLine(Convert.ToString(_data.Deltaz, ic) + " \t ! Vertical grid spacing in [m]");
 					myWriter.WriteLine(Convert.ToString(_data.DispersionSituation) + " \t ! Start the calculation with this weather number");
-					myWriter.WriteLine(Convert.ToString(_data.BuildingMode) +","+ _data.PrognosticSubDomains.ToString(ic) +
+					myWriter.WriteLine(Convert.ToString((int) _data.BuildingMode) +","+ _data.PrognosticSubDomains.ToString(ic) +
                         " \t ! How to take buildings into account? 1 = simple mass conservation, 2 = mass conservation with Poisson equation + advection, Factor for the prognostic sub domain size");
 					
 					if(_data.BuildingHeightsWrite == false)
@@ -199,7 +199,7 @@ namespace GralIO
 
                     text = myreader.ReadLine().Split(new char[] { '!' }, StringSplitOptions.RemoveEmptyEntries); // Remove comment
                     text = text[0].Split(new char[] { ' ', ',', '\r', '\n', ';', '!' }, StringSplitOptions.RemoveEmptyEntries);
-                    _data.BuildingMode = Convert.ToInt32(text[0]);
+                    _data.BuildingMode = (Gral.BuildingModeEnum) Convert.ToInt32(text[0]);
                     _data.PrognosticSubDomains = 15;
                     if (text.Length > 1)
                     {

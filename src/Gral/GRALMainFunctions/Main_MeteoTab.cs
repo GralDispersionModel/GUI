@@ -76,7 +76,7 @@ namespace Gral
             groupBox3.Visible = false;
             button6.Visible = false;
             button7.Visible = false;
-            Change_Label(1, 0); // meteo button red
+            ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
 
             groupBox23.Visible = false; // Anemometer heigth
             label100.Visible = false;
@@ -915,7 +915,7 @@ namespace Gral
                 groupBox2.Visible = true;
                 groupBox3.Visible = true;
                 button7.Visible = true;
-                Change_Label(1, 0); // meteo button red
+                ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
 
                 label100.Visible = true;
                 groupBox20.Visible = true;
@@ -986,7 +986,7 @@ namespace Gral
             if (changedwind)
             {
                 button7.Visible = true;
-                Change_Label(1, 0); // meteo button red
+                ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
             }
         }
 

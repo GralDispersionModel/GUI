@@ -68,7 +68,7 @@ namespace GralDomain
 
                     ShowFirst.Re = false;
                 }
-                MouseControl = 24;
+                MouseControl = MouseMode.ReceptorPos;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditR.Show();
                 EditR.ShowForm();
@@ -79,7 +79,7 @@ namespace GralDomain
             }
             else
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 EditR.Hide();
             }
         }
@@ -91,7 +91,7 @@ namespace GralDomain
         private void EditAndSaveReceptorData(object sender, EventArgs e)
         {
             checkBox20.Checked = false;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             receptorPointsToolStripMenuItem.Checked = checkBox20.Checked;
 
             if (Gral.Main.Project_Locked == true)
@@ -117,7 +117,7 @@ namespace GralDomain
 
                 MainForm.GRALSettings.Receptorflag = "1";
                 WriteInDat(); // write new in.dat
-                MainForm.Change_Label(0, 0); // red label at control button
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonControl, Gral.ButtonColorEnum.RedDot); // red label at control button
             }
             Cursor = Cursors.Default;
             

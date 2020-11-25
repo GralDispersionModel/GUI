@@ -179,7 +179,7 @@ namespace GralDomForms
                     TextBox1 = textBox1.Text,
                     UserText = "The calculation may take some time.",
                     Caption = "Performing raster operations",
-                    Rechenart = 50,
+                    Rechenart = GralBackgroundworkers.BWMode.MathRasterOperations,
                     Unit = textBox2.Text.Trim()
                 };
 

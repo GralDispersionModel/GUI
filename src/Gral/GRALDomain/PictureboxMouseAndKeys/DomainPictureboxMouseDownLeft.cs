@@ -59,8 +59,7 @@ namespace GralDomain
 #if __MonoCS__
 #else
             //ToolTip for lenght measurement
-            if ((MouseControl == 10 || MouseControl == 17 || MouseControl == 8 ||
-                 MouseControl == 22 || MouseControl == 23 || MouseControl == 75 || MouseControl == 79) && ShowLenghtLabel)
+            if ((MouseControl == MouseMode.LineSourcePos || MouseControl == MouseMode.BuildingPos || MouseControl == MouseMode.AreaSourcePos || MouseControl == MouseMode.ViewDistanceMeasurement || MouseControl == MouseMode.ViewAreaMeasurement || MouseControl == MouseMode.WallSet || MouseControl == MouseMode.AreaPosCorner) && ShowLenghtLabel)
             {
                 ToolTipMousePosition.Active = true; // show tool tip lenght of rubberline segment
                 FirstPointLenght.X = (float)St_F.TxtToDbl(textBox1.Text, false);
@@ -81,30 +80,30 @@ namespace GralDomain
 
             switch (MouseControl)
             {
-                case 1:
+                case MouseMode.ZoomIn:
                     //Zoom in
                     ZoomPlusMinus(1, e);
                     break;
 
-                case -1:
+                case MouseMode.ZoomOut:
                     //Zoom out
                     ZoomPlusMinus(-1, e);
                     break;
 
-                case 13:
+                case MouseMode.ViewPanelZoom:
                     //Panel zoom
                     XDomain = e.X;
                     YDomain = e.Y;
-                    MouseControl = 14;
+                    MouseControl = MouseMode.ViewPanelZoomArea;
                     break;
 
-                case 2:
+                case MouseMode.ViewMoveMap:
                     //Move map
                     OldXPosition = e.X;
                     OldYPosition = e.Y;
                     break;
 
-                case 3:
+                case MouseMode.BaseMapGeoReference1:
                     //Georeferencing1
                     //Convert PictureBox-Coordinates in Picture-Coordinates
                     GeoReferenceOne.XMouse = (Convert.ToDouble(e.X) - (TransformX + Convert.ToInt32((ItemOptions[0].West - MapSize.West) / BmpScale / MapSize.SizeX))) / ItemOptions[0].PixelMx * MapSize.SizeX / XFac;
@@ -112,7 +111,7 @@ namespace GralDomain
                     GeoReferenceOne.Refresh();
                     break;
 
-                case 12:
+                case MouseMode.BaseMapGeoReference2:
                     //Georeferencing2
                     //Convert PictureBox-Coordinates in Picture-Coordinates
                     GeoReferenceTwo.XMouse = (Convert.ToDouble(e.X) - (TransformX + Convert.ToInt32((ItemOptions[0].West - MapSize.West) / BmpScale / MapSize.SizeX))) / ItemOptions[0].PixelMx * MapSize.SizeX / XFac;
@@ -120,7 +119,7 @@ namespace GralDomain
                     GeoReferenceTwo.Refresh();
                     break;
 
-                case 5:
+                case MouseMode.GralDomainEndPoint:
                     // set endpoint of GRAL-Domain when using shift-Key
                     // calculate the GRAL-Domain
                     {
@@ -139,19 +138,19 @@ namespace GralDomain
                     }
                     break;
 
-                case 4:
+                case MouseMode.GralDomainStartPoint:
                     //get starting point for drawing GRAL model domain
                     if (Gral.Main.Project_Locked == false)
                     {
                         XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
                         YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
                         Cursor.Clip = Bounds;
-                        MouseControl = 5;
+                        MouseControl = MouseMode.GralDomainEndPoint;
                     }
                     break;
 
-                case 6:
-                case 6000:
+                case MouseMode.PointSourcePos:
+                case MouseMode.PointSourceInlineEdit:
                     //digitize position of point source
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -159,18 +158,18 @@ namespace GralDomain
                         EditPS.SetXCoorText(textBox1.Text);
                         EditPS.SetYCoorText(textBox2.Text);
                         EditPS.SaveArray();
-                        if (MouseControl == 6000) // set new position inline editing
+                        if (MouseControl == MouseMode.PointSourceInlineEdit) // set new position inline editing
                         {
                             EditAndSavePointSourceData(sender, null);
                             InfoBoxCloseAllForms();
-                            MouseControl = 700;
+                            MouseControl = MouseMode.PointSourceDeQueue;
                         }
 
                         Picturebox1_Paint(); // 
                     }
                     break;
 
-                case 8:
+                case MouseMode.AreaSourcePos:
                     //digitize position of the corner points of area sources
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {
@@ -213,7 +212,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 17:
+                case MouseMode.BuildingPos:
                     //digitize position of the corner points of buildings
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -260,7 +259,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 79:
+                case MouseMode.AreaPosCorner:
                     //digitize position of the corner points of forests
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {
@@ -303,7 +302,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 10:
+                case MouseMode.LineSourcePos:
                     //digitize position of the corner points of line sources
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditLS.CornerLineX.Length > 1) // Kuntner: change point of line source
                     {
@@ -347,7 +346,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 75:
+                case MouseMode.WallSet:
                     //digitize position of the corner points of walls
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -399,8 +398,8 @@ namespace GralDomain
                     }
                     break;
 
-                case 24:
-                case 2400:
+                case MouseMode.ReceptorPos:
+                case MouseMode.ReceptorInlineEdit:
                     //digitize position of receptors
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -408,12 +407,12 @@ namespace GralDomain
                         EditR.SetXCoorText(textBox1.Text);
                         EditR.SetYCoorText(textBox2.Text);
                         EditR.SaveArray();
-                        if (MouseControl == 2400) // set new position inline editing
+                        if (MouseControl == MouseMode.ReceptorInlineEdit) // set new position inline editing
                         {
                             EditAndSaveReceptorData(sender, null);
 
                             InfoBoxCloseAllForms();
-                            MouseControl = 26;
+                            MouseControl = MouseMode.ReceptorDeQueue;
                         }
 
                         Picturebox1_Paint(); // 
@@ -422,7 +421,7 @@ namespace GralDomain
 
                     // Tooltip for picturebox1
 
-                case 7:
+                case MouseMode.PointSourceSel:
                     //select point sources
                     {
                         int i = 0;
@@ -499,12 +498,12 @@ namespace GralDomain
                     }
                     break;
 
-                case 700:
+                case MouseMode.PointSourceDeQueue:
                     // delete one mouseclick from queue
-                    MouseControl = 7;
+                    MouseControl = MouseMode.PointSourceSel;
                     break;
 
-                case 25:
+                case MouseMode.ReceptorSel:
                     //select receptors
                     {
                         int i = 0;
@@ -540,12 +539,12 @@ namespace GralDomain
                     }
                     break;
 
-                case 26:
+                case MouseMode.ReceptorDeQueue:
                     // delete one mouseclick from queue
-                    MouseControl = 25;
+                    MouseControl = MouseMode.ReceptorSel;
                     break;
 
-                case 9:
+                case MouseMode.AreaSourceSel:
                     //select area sources
                     {
                         int i = 0;
@@ -643,7 +642,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 77:
+                case MouseMode.VegetationSel:
                     //select vegetation
                     {
                         int i = 0;
@@ -690,7 +689,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 19:
+                case MouseMode.BuildingSel:
                     //select buildings
                     {
                         int i = 0;
@@ -745,7 +744,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 11:
+                case MouseMode.LineSourceSel:
                     //select line sources
                     {
                         int i = 0;
@@ -855,7 +854,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 16:
+                case MouseMode.PortalSourceSel:
                     //select portal sources
                     {
                         int i = 0;
@@ -942,7 +941,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 76:
+                case MouseMode.WallSel:
                     //select walls
                     {
                         int i = 0;
@@ -1000,7 +999,7 @@ namespace GralDomain
                     }
                     break; ;
 
-                case 20:
+                case MouseMode.ViewNorthArrowPos:
                     //digitize position of north arrow
                     {
                         //get x,y coordinates
@@ -1034,7 +1033,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 21:
+                case MouseMode.ViewScaleBarPos:
                     //digitize position of map scale bar
                     {
                         //get x,y coordinates
@@ -1066,7 +1065,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 15:
+                case MouseMode.PortalSourcePos:
                     //digitize position of portal source
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -1089,7 +1088,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 22:
+                case MouseMode.ViewDistanceMeasurement:
                     //measuring tool "distance"
                     {
                         //get x,y coordinates
@@ -1104,8 +1103,8 @@ namespace GralDomain
                     }
                     break;
 
-                case 44:
-                case 45:
+                case MouseMode.SectionWindSel:
+                case MouseMode.SectionConcSel:
                     // select section for windfiled section drawing
                     {
                         //get x,y coordinates
@@ -1123,7 +1122,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 23:
+                case MouseMode.ViewAreaMeasurement:
                     //measuring tool "area"
                     {
                         //get x,y coordinates
@@ -1138,7 +1137,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 28:
+                case MouseMode.ViewLegendPos:
                     //position of legend
                     {
                         if (ActualEditedDrawingObject != null)
@@ -1151,7 +1150,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 31:
+                case MouseMode.GrammDomainEndPoint:
                     // set endpoint of GRAMM model domain with shift button
                     if (shift_key_pressed)
                     {
@@ -1171,7 +1170,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 301:
+                case MouseMode.GrammExportFinal:
                     // set endpoint for exporting GRAMM sub-domain with shift button
                     if (shift_key_pressed)
                     {
@@ -1191,45 +1190,34 @@ namespace GralDomain
                     }
                     break;
 
-                case 30:
+                case MouseMode.GrammDomainStartPoint:
                     //get starting point for drawing GRAMM model domain
                     {
                         XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
                         YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
                         //							xdomain = e.X;
                         //							ydomain = e.Y;
-                        MouseControl = 31;
+                        MouseControl = MouseMode.GrammDomainEndPoint;
                         Cursor.Clip = Bounds;
                     }
                     break;
 
-                case 300:
+                case MouseMode.GrammExportStart:
                     //get starting point for exporting GRAMM sub-domain
                     {
                         XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
                         YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
                         GRAMMDomain = new Rectangle(XDomain, YDomain, 0, 0);
-                        MouseControl = 301;
+                        MouseControl = MouseMode.GrammExportFinal;
                         Cursor.Clip = Bounds;
                     }
                     break;
 
-                case 32:
-                case 33:
-                    ////get sample point for computing meteorological time series from GRAMM windfield
-                    //{
-                    //    XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                    //    YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                    //    if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
-                    //    {
-                    //        MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //    }
-                    //    MeteoDialog.X_Coor.Text = XDomain.ToString();
-                    //    MeteoDialog.Y_Coor.Text = YDomain.ToString();
-                    //}
+                case MouseMode.SetPointMetTimeSeries:
+                case MouseMode.SetPointConcTimeSeries:
                     break;
 
-                case 65:
+                case MouseMode.SetPointReOrder:
                     //get sample point for re-ordering GRAMM windfield to meet observed wind data better
                     {
                         XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
@@ -1240,14 +1228,14 @@ namespace GralDomain
                         }
                         else
                         {
-                            MouseControl = 0;
+                            MouseControl = MouseMode.Default;
                             Cursor = Cursors.Default;
                             ReorderGrammWindfields();
                         }
                     }
                     break;
 
-                case 66:
+                case MouseMode.SetPointMatch:
                     //get sample point for re-ordering GRAMM windfield to meet newly observed wind and stability data at any location within the model domain
                     {
                         if (MMO != null)
@@ -1274,31 +1262,31 @@ namespace GralDomain
                     }
                     break;
 
-                case 35:
+                case MouseMode.SetPointSourceApport:
                     //get sample point for computing source apportionment
                     {
                         XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
                         YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        MouseControl = 0;
+                        MouseControl = MouseMode.Default;
                         Cursor = Cursors.Default;
                         SourceApportionment(XDomain, YDomain);
                     }
                     break;
 
-                case 50:
+                case MouseMode.SetPointConcFile:
                     //get sample point to get a concentration value 
                     {
                         XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
                         YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        //mousecontrol = 0;
+                        //MouseControl = MouseMode.Default;
                         GetConcentrationFromFile(ConcFilename);
                     }
                     break;
 
-                case 40:
+                case MouseMode.SetPointVertWindProfileOnline:
                     //get sample point for vertical profile for GRAMM online evaluations
                     {
-                        MouseControl = 0;
+                        MouseControl = MouseMode.Default;
                         Cursor = Cursors.Default;
                         XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
                         YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
@@ -1306,7 +1294,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 200:
+                case MouseMode.SetPointConcProfile:
                     //get sample point for vertical 3D profile of GRAL concentrations
                     {
                         XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
@@ -1315,7 +1303,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 62:
+                case MouseMode.SetPointVertWindProfile:
                     //get sample point for vertical profile for GRAMM windfields
                     {
                         XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
@@ -1324,7 +1312,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 70:
+                case MouseMode.SetPointGRAMMGrid:
                     // check single value at GRAMM grid
                     {
                         int sel = 0;
@@ -1380,29 +1368,29 @@ namespace GralDomain
                     }
                     break;
 
-                case 1000:
+                case MouseMode.LineSourceInlineEdit:
                     //final corner point of changed line source point
                     SetNewEdgepointLine();
                     break;
 
-                case 1001:
+                case MouseMode.WallInlineEdit:
                     //final corner point of changed wall
                     SetNewEdgepointWall();
                     break;
 
-                case 1170:
+                case MouseMode.BuildingInlineEdit:
                     //final corner point of changed building edge point
                     SetNewEdgepointBuilding();
                     break;
 
-                case 108:
-                case 1080:
+                case MouseMode.AreaSourceEditFinal:
+                case MouseMode.AreaInlineEdit:
                     //final corner point of changed area source point
                     SetNewEdgepointArea();
                     break;
 
-                case 109:
-                case 1081:
+                case MouseMode.VegetationEditFinal:
+                case MouseMode.VegetationInlineEdit:
                     //final corner point of changed vegetation
                     SetNewEdgepointVegetation();
                     break;

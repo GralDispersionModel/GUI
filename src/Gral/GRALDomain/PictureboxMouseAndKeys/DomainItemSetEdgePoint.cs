@@ -40,14 +40,14 @@ namespace GralDomain
 			// Reset Rubber-Line Drawing
 			Cursor.Clip = Rectangle.Empty;
 
-            if (MouseControl == 108)
+            if (MouseControl == MouseMode.AreaSourceEditFinal)
             {
-                MouseControl = 8; // reset to areasource-Input
+                MouseControl = MouseMode.AreaSourcePos; // reset to areasource-Input
             }
-            else if (MouseControl == 1080)
+            else if (MouseControl == MouseMode.AreaInlineEdit)
             {
                 EditAndSaveAreaSourceData(this, null); // save changes
-                MouseControl = 9; //continue area selection
+                MouseControl = MouseMode.AreaSourceSel; //continue area selection
             }
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			Picturebox1_Paint();
@@ -67,14 +67,14 @@ namespace GralDomain
 			// Reset Rubber-Line Drawing
 			Cursor.Clip = Rectangle.Empty;
 			
-			if (MouseControl == 100)
+			if (MouseControl == MouseMode.LineSourceEditFinal)
             {
-                MouseControl =10; // reset to linesource-Input
+                MouseControl = MouseMode.LineSourcePos; // reset to linesource-Input
             }
-            else if (MouseControl == 1000)
+            else if (MouseControl == MouseMode.LineSourceInlineEdit)
 			{
 				EditAndSaveLineSourceData(null, null); // save changes
-				MouseControl = 11; //continue line selection
+				MouseControl = MouseMode.LineSourceSel; //continue line selection
 			}
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			Picturebox1_Paint();
@@ -93,14 +93,14 @@ namespace GralDomain
 			// Reset Rubber-Line Drawing
 			Cursor.Clip = Rectangle.Empty;
 			
-			if (MouseControl == 101)
+			if (MouseControl == MouseMode.WallEditFinal)
             {
-                MouseControl =75; // reset to wall-Input
+                MouseControl = MouseMode.WallSet; // reset to wall-Input
             }
-            else if (MouseControl == 1001)
+            else if (MouseControl == MouseMode.WallInlineEdit)
 			{
 				EditAndSaveWallData(this, null); // save changes
-				MouseControl = 76; //continue line selection
+				MouseControl = MouseMode.WallSel; //continue line selection
 			}
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			Picturebox1_Paint();
@@ -119,14 +119,14 @@ namespace GralDomain
 			// Reset Rubber-Line Drawing
 			Cursor.Clip = Rectangle.Empty;
 			
-			if (MouseControl == 117)
+			if (MouseControl == MouseMode.BuildingEditFinal)
             {
-                MouseControl =17; // reset to building-Input
+                MouseControl = MouseMode.BuildingPos; // reset to building-Input
             }
-            else if (MouseControl == 1170)
+            else if (MouseControl == MouseMode.BuildingInlineEdit)
 			{
 				EditAndSaveBuildingsData(null, null); // save changes
-				MouseControl = 19; //continue building selection
+				MouseControl = MouseMode.BuildingSel; //continue building selection
 			}
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			Picturebox1_Paint();
@@ -145,14 +145,14 @@ namespace GralDomain
 			// Reset Rubber-Line Drawing
 			Cursor.Clip = Rectangle.Empty;
 			
-			if (MouseControl == 109)
+			if (MouseControl == MouseMode.VegetationEditFinal)
             {
-                MouseControl = 79; // reset to building-Input
+                MouseControl = MouseMode.AreaPosCorner; // reset to vegetation-Input
             }
-            else if (MouseControl == 1081)
+            else if (MouseControl == MouseMode.VegetationInlineEdit)
 			{
 				EditAndSaveVegetationData(this, null); // save changes
-				MouseControl = 77; //continue vegetation selection
+				MouseControl = MouseMode.VegetationSel; //continue vegetation selection
 			}
 			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
 			Picturebox1_Paint();

@@ -71,7 +71,7 @@ namespace GralDomain
 			CopiedItem.PointSource = null;
 			EditAndSavePointSourceData(null, null); // save changes
 			Picturebox1_Paint();
-			MouseControl = 7;
+			MouseControl = MouseMode.PointSourceSel;
 		}
 		
 		/// <summary>
@@ -88,7 +88,7 @@ namespace GralDomain
 			}
 			if (mi.Index == 1) // new Position of Point Source
 			{
-				MouseControl = 6000;
+				MouseControl = MouseMode.PointSourceInlineEdit;
 			}
 			if (mi.Index == 2) // Delete source
 			{
@@ -97,7 +97,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditPS.ItemData.Count > 0)
                 {
-                    MouseControl = 7;
+                    MouseControl = MouseMode.PointSourceSel;
                 }
             }
 			if (mi.Index == 3) // Copy source

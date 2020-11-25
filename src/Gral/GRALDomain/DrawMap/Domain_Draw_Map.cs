@@ -251,7 +251,7 @@ namespace GralDomain
                 //draw GRAL model domain
                 try
                 {
-                    if ((obname == "GRAL DOMAIN") && (_drobj.Show == true) && (MouseControl != 5))
+                    if ((obname == "GRAL DOMAIN") && (_drobj.Show == true) && (MouseControl != MouseMode.GralDomainEndPoint))
                     {
                         int x1 = Convert.ToInt32((MainForm.GralDomRect.West - form1_west) * factor_x) + TransformX;
                         int y1 = Convert.ToInt32((MainForm.GralDomRect.North - form1_north) * factor_y) + TransformY;
@@ -309,7 +309,7 @@ namespace GralDomain
                 //draw GRAMM model domain
                 try
                 {
-                    if ((obname == "GRAMM DOMAIN") && (_drobj.Show == true) && (MouseControl != 31))
+                    if ((obname == "GRAMM DOMAIN") && (_drobj.Show == true) && (MouseControl != MouseMode.GrammDomainEndPoint))
                     {
                         int x1 = Convert.ToInt32((MainForm.GrammDomRect.West - form1_west) * factor_x) + TransformX;
                         int y1 = Convert.ToInt32((MainForm.GrammDomRect.North - form1_north) * factor_y) + TransformY;
@@ -374,19 +374,19 @@ namespace GralDomain
             
             Pen p = new Pen(Color.LightBlue, 3);
             //draw actual edited GRAL model domain
-            if (MouseControl == 5)
+            if (MouseControl == MouseMode.GralDomainEndPoint)
             {
                 g.DrawRectangle(p, GRALDomain);
             }
 
             //draw actual edited GRAMM model domain
-            if (MouseControl == 31)
+            if (MouseControl == MouseMode.GrammDomainEndPoint)
             {
                 g.DrawRectangle(p, GRAMMDomain);
             }
 
             //draw actual edited line source
-            if ((EditLS.CornerLineSource > 0) && (MouseControl == 10))
+            if ((EditLS.CornerLineSource > 0) && (MouseControl == MouseMode.LineSourcePos))
             {
                 for (int i = 0; i < EditLS.CornerLineSource; i++)
                 {
@@ -395,7 +395,7 @@ namespace GralDomain
             }
             
             //draw actual edited wall
-            if ((EditWall.CornerWallCount > 0) && (MouseControl == 75))
+            if ((EditWall.CornerWallCount > 0) && (MouseControl == MouseMode.WallSet))
             {
                 for (int i = 0; i < EditWall.CornerWallCount; i++)
                 {
@@ -404,14 +404,14 @@ namespace GralDomain
             }
             
             //draw actual edited tunnel portal
-            if ((EditLS.CornerLineSource > 0) && (MouseControl == 15))
+            if ((EditLS.CornerLineSource > 0) && (MouseControl == MouseMode.PortalSourcePos))
             {
 //				for (int i = 0; i < editls.cornerline + 1; i++)
 //					g.DrawLine(p, cornerareasource[i], cornerareasource[i + 1]);
             }
 
             //draw measuring distance
-            if ((EditLS.CornerLineSource > 0) && (MouseControl == 22))
+            if ((EditLS.CornerLineSource > 0) && (MouseControl == MouseMode.ViewDistanceMeasurement))
             {
                 for (int i = 0; i < EditLS.CornerLineSource ; i++)
                 {
@@ -420,7 +420,7 @@ namespace GralDomain
             }
 
             //draw line for windfield section drawing
-            if ((EditLS.CornerLineSource > 0) && (MouseControl == 44))
+            if ((EditLS.CornerLineSource > 0) && (MouseControl == MouseMode.SectionWindSel))
             {
                 for (int i = 0; i < EditLS.CornerLineSource ; i++)
                 {
@@ -429,7 +429,7 @@ namespace GralDomain
             }
             
             //draw acutal edited area source
-            if ((EditAS.CornerAreaCount > 0) && ((MouseControl == 8) || (MouseControl == 23)))
+            if ((EditAS.CornerAreaCount > 0) && ((MouseControl == MouseMode.AreaSourcePos) || (MouseControl == MouseMode.ViewAreaMeasurement)))
             {
                 for (int i = 0; i < EditAS.CornerAreaCount ; i++)
                 {
@@ -438,7 +438,7 @@ namespace GralDomain
             }
 
             //draw acutal edited vegetation
-            if ((EditVegetation.CornerVegetation > 0) && ((MouseControl == 79)))
+            if ((EditVegetation.CornerVegetation > 0) && ((MouseControl == MouseMode.AreaPosCorner)))
             {
                 for (int i = 0; i < EditVegetation.CornerVegetation ; i++)
                 {
@@ -447,7 +447,7 @@ namespace GralDomain
             }
             
             //draw actual edited building
-            if ((EditB.CornerBuilding > 0) && (MouseControl == 17))
+            if ((EditB.CornerBuilding > 0) && (MouseControl == MouseMode.BuildingPos))
             {
                 for (int i = 0; i < EditB.CornerBuilding ; i++)
                 {
@@ -456,8 +456,8 @@ namespace GralDomain
             }
             p.Dispose();
             
-            if ((MouseControl == 100) || (MouseControl == 108)
-                || (MouseControl == 109) || (MouseControl == 117)) // Kuntner: if edge-point is moved
+            if ((MouseControl == MouseMode.LineSourceEditFinal) || (MouseControl == MouseMode.AreaSourceEditFinal)
+                || (MouseControl == MouseMode.VegetationEditFinal) || (MouseControl == MouseMode.BuildingEditFinal)) // Kuntner: if edge-point is moved
             {
                 g.DrawRectangle(new Pen(Color.Black, 1), CornerAreaSource[1].X-3,CornerAreaSource[1].Y-3, 6,6);
             }
@@ -468,7 +468,7 @@ namespace GralDomain
             };            //Pen for drawing panelzoom rectangle
             
             //draw panelzoom rectangle
-            if (MouseControl == 14)
+            if (MouseControl == MouseMode.ViewPanelZoomArea)
             {
                 g.DrawRectangle(new Pen(Color.Black, 3), PanelZoom);
                 g.DrawRectangle(pz, PanelZoom);

@@ -45,7 +45,7 @@ namespace GralDomain
 			CopiedItem.PortalSource = null;
 			EditAndSavePortalSourceData(null, null); // save changes
 			Picturebox1_Paint();
-			MouseControl = 16;
+			MouseControl = MouseMode.PortalSourceSel;
 		}
 			
 		/// <summary>
@@ -73,7 +73,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditPortals.ItemData.Count > 0)
                 {
-                    MouseControl = 16;
+                    MouseControl = MouseMode.PortalSourceSel;
                 }
             }
 			if (mi.Index == 2) // Flip exit surface
@@ -86,7 +86,7 @@ namespace GralDomain
 
 			    EditAndSavePortalSourceData(null, null); // save changes
 				Picturebox1_Paint();
-				MouseControl = 16;
+				MouseControl = MouseMode.PortalSourceSel;
 			}
 			if (mi.Index == 3) // Copy source
 			{

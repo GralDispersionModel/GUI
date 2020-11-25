@@ -277,7 +277,7 @@ namespace Gral
                     //save GRAMM input file
                     GRAMMin(EmifileReset);
                     //delete windfields only if GRAMM is not used for mikroscale applications
-                    if (GRALSettings.BuildingMode != 3)
+                    if (GRALSettings.BuildingMode != Gral.BuildingModeEnum.GRAMM)
                     {
                         //File.Delete(Path.Combine(projectname, @"Computation", "windfeld.txt"));
                     }

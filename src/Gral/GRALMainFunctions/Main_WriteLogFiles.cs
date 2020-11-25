@@ -117,8 +117,8 @@ namespace Gral
 							
 							mywriter.WriteLine(" ");
 							mywriter.WriteLine("Buildings".PadRight(40,'='));
-							mywriter.WriteLine(GRALSettings.BuildingMode.ToString() + "\t  // Buildings microscale windfield model");
-							if (GRALSettings.BuildingMode > 0) // microscale Windfield model
+							mywriter.WriteLine(GRALSettings.BuildingMode.ToString().PadLeft(14) + "\t  // Buildings microscale windfield model");
+							if (GRALSettings.BuildingMode != BuildingModeEnum.None) // microscale Windfield model
 							{
 								mywriter.WriteLine(Convert.ToString(numericUpDown10.Value).PadLeft(14) + "  \t  // Horizontal Grid resolution");
 								mywriter.WriteLine(Convert.ToString(numericUpDown11.Value).PadLeft(14) + "  \t  // Vertical thickness of first layer");

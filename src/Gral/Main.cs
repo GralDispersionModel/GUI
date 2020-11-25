@@ -22,6 +22,23 @@ using System.IO;
 using System.Windows.Forms;
 namespace Gral
 {
+    /// <summary>
+    /// Enumeration for input file button style
+    /// </summary>
+    public enum ButtonColorEnum
+    {
+        RedDot = 0, GreenDot = 1, BlackHook = 2, Invisible = -1,
+        ButtonControl = 10, ButtonMeteo = 11, ButtonEmission = 12, ButtonBuildings = 13
+    }
+
+    /// <summary>
+    /// Enumeration for building mode
+    /// </summary>
+    public enum BuildingModeEnum
+    {
+        None = 0, Diagnostic = 1, Prognostic = 2, GRAMM = 3
+    }
+
     public partial class Main : Form
     {
         /// <summary>
@@ -330,7 +347,7 @@ namespace Gral
             CreateTextbox1(_y0, 80, 22, 0);
             TBox3[0].Value = 3;
             GRALSettings.HorSlices[0] = 3;
-            GRALSettings.BuildingMode = 0;
+            GRALSettings.BuildingMode = BuildingModeEnum.None;
             SetBuildingRadioButton();
 
             //define default pollutants
@@ -876,7 +893,7 @@ namespace Gral
                 }
                 message.Close();
                 message.Dispose();
-                Change_Label(2, 2); // Emission label green
+                ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.BlackHook); // Emission label green
             }
             catch
             {
@@ -995,7 +1012,7 @@ namespace Gral
         /// </summary>
         public void DeleteEmissionFiles()
         {
-            Change_Label(2, 0); // Emission label red
+            ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
             string newPath = Path.Combine(ProjectName, @"Computation", "point.dat");
             File.Delete(newPath);
             newPath = Path.Combine(ProjectName, @"Computation", "portals.dat");
@@ -1086,7 +1103,7 @@ namespace Gral
         {
             if (radioButton3.Checked)
             {
-                GRALSettings.BuildingMode = 0;
+                GRALSettings.BuildingMode = BuildingModeEnum.None;
             }
             numericUpDown42.Enabled = false;
             SetBuildingMethode(sender, e);
@@ -1097,7 +1114,7 @@ namespace Gral
         {
             if (radioButton4.Checked)
             {
-                GRALSettings.BuildingMode = 1;
+                GRALSettings.BuildingMode = BuildingModeEnum.Diagnostic;
             }
             numericUpDown42.Enabled = false;
             SetBuildingMethode(sender, e);
@@ -1108,7 +1125,7 @@ namespace Gral
         {
             if (radioButton5.Checked)
             {
-                GRALSettings.BuildingMode = 2;
+                GRALSettings.BuildingMode = BuildingModeEnum.Prognostic;
                 numericUpDown42.Enabled = !Project_Locked;
             }
 
@@ -1189,7 +1206,7 @@ namespace Gral
         {
             if (IndatReset == true)
             {
-                Change_Label(0, 0); // red dot at control button
+                ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot); // red dot at control button
                 //				try
                 //				{
                 //					string newpath = Path.Combine(projectname, "Computation","in.dat");
@@ -1492,7 +1509,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button9_Click(object sender, EventArgs e)
         {
-            if (GRALSettings.BuildingMode > 0)
+            if (GRALSettings.BuildingMode != BuildingModeEnum.None)
             {
                 Cursor = Cursors.WaitCursor;
                 try
@@ -1893,7 +1910,7 @@ namespace Gral
             if (enable == true)
             {
                 groupBox16.Visible = true; // GRAl-Start Group Box
-                if (GRALSettings.BuildingMode == 2) // Prognostic GRAL -> Online GroupBox visible
+                if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic) // Prognostic GRAL -> Online GroupBox visible
                 {
                     groupBox17.Visible = true;
                 }
@@ -2397,7 +2414,7 @@ namespace Gral
             numericUpDown39.Enabled = !locked; // Latidude
             numericUpDown43.Enabled = !locked; // Compressed mode for GRAL output
             
-            if (GRALSettings.BuildingMode == 2)
+            if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic)
             {
                 numericUpDown42.Enabled = !locked; // Sub domain factor
             }
@@ -2665,7 +2682,7 @@ namespace Gral
                 try
                 {
                     // show number of cells
-                    if (CellsGralX > 0 && numericUpDown10.Value > 0 && GRALSettings.BuildingMode != 0)
+                    if (CellsGralX > 0 && numericUpDown10.Value > 0 && GRALSettings.BuildingMode != BuildingModeEnum.None)
                     {
                         n = Convert.ToDouble(numericUpDown10.Text);
                         double c = Convert.ToDouble(numericUpDown9.Text);
@@ -3008,20 +3025,18 @@ namespace Gral
         /// </summary>
         public void SetEmissionFilesInvalid()
         {
-            Change_Label(2, 0); // Emission label red
+            ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
         }
         /// <summary>
         /// Change the label color for the computation buttons
         /// </summary>
-        /// <param name="button">0 = Control, 1= meteo, 2 = emission, 3 = building</param>
-        /// <param name="mode">0 = red dot, 1 = green dot, 2 = black hook, -1 invisible</param>
-        public void Change_Label(int button, int mode)
+        /// <param name="button">10 = Control, 11= meteo, 12 = emission, 13 = building</param>
+        /// <param name="Mode">0 = red dot, 1 = green dot, 2 = black hook, -1 invisible</param>
+        public void ChangeButtonLabel(ButtonColorEnum button, ButtonColorEnum Mode)
         {
-            // button: 0 = Control, 1= meteo, 2 = emission, 3 = building
-            // mode: 0 = red dot, 1 = green dot, 2 = black hook, -1 invisible
-            if (button == 0)
+            if (button == ButtonColorEnum.ButtonControl)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox1.Visible = false;
                     Control_OK  = false;
@@ -3031,25 +3046,25 @@ namespace Gral
                     pictureBox1.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.RedDot;
                     Control_OK = false;
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.GreenDot;
                     Control_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.BlackHook;
                     Control_OK = true;
                 }
             }
-            if (button == 1)
+            if (button == ButtonColorEnum.ButtonMeteo)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox2.Visible = false;
                     Meteo_OK = false;
@@ -3059,25 +3074,25 @@ namespace Gral
                     pictureBox2.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.RedDot;
                     Meteo_OK = false;
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.GreenDot;
                     Meteo_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.BlackHook;
                     Meteo_OK = true;
                 }
             }
-            if (button == 2)
+            if (button == ButtonColorEnum.ButtonEmission)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox3.Visible = false;
                     Emission_OK = false;
@@ -3087,25 +3102,25 @@ namespace Gral
                     pictureBox3.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.RedDot;
                     Emission_OK = false;
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.GreenDot;
                     Emission_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.BlackHook;
                     Emission_OK = true;
                 }
             }
-            if (button == 3)
+            if (button == ButtonColorEnum.ButtonBuildings)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox4.Visible = false;
                     Building_OK = true; // no buildings!
@@ -3115,7 +3130,7 @@ namespace Gral
                     pictureBox4.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.RedDot;
                     Building_OK = false;
@@ -3138,12 +3153,12 @@ namespace Gral
                     }
                     catch {}
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.GreenDot;
                     Building_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.BlackHook;
                     Building_OK = true;

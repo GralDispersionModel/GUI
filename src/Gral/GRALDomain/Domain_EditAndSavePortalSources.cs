@@ -69,7 +69,7 @@ namespace GralDomain
 
                     ShowFirst.Ts = false;
                 }
-                MouseControl = 15;
+                MouseControl = MouseMode.PortalSourcePos;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditPortals.Show();
                 EditPortals.ShowForm();
@@ -80,7 +80,7 @@ namespace GralDomain
             }
             else
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 EditPortals.Hide();
             }
         }
@@ -92,7 +92,7 @@ namespace GralDomain
         {
             checkBox12.Checked = false;
             tunnelPortalsToolStripMenuItem.Checked = checkBox12.Checked;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             Cursor = Cursors.Default;
             EditPortals.Hide(); // Kuntner first hide form to save actual sourcedata
             if (Gral.Main.Project_Locked == true)
@@ -116,7 +116,7 @@ namespace GralDomain
                 MainForm.Pollmod.Clear();
                 MainForm.SetEmissionFilesInvalid();
                 MainForm.button18.Visible = false;
-                MainForm.Change_Label(2, -1); // Emission button not visible
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
                 MainForm.button21.Visible = false; //Show Emissions
                 MainForm.button13.Visible = false; //Nemo
 

@@ -117,7 +117,7 @@ namespace GralDomain
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointWall();
-				MouseControl = 1001;
+				MouseControl = MouseMode.WallInlineEdit;
 			}
 			
 			if (mi.Index == 2) // Add edge point
@@ -169,7 +169,7 @@ namespace GralDomain
 				
 				if (EditWall.ItemData.Count > 0)
                 {
-                    MouseControl = 76;
+                    MouseControl = MouseMode.WallSel;
                 }
 
                 Picturebox1_Paint();
@@ -215,7 +215,7 @@ namespace GralDomain
 				
 				if (EditWall.ItemData.Count > 0)
                 {
-                    MouseControl = 76;
+                    MouseControl = MouseMode.WallSel;
                 }
 
                 Picturebox1_Paint();
@@ -224,7 +224,7 @@ namespace GralDomain
 			
 			if (mi.Index == 4) // Delete wall
 			{
-				MouseControl = 0;
+				MouseControl = MouseMode.Default;
 				int i = Convert.ToInt32(mi.Tag);
 				EditWall.SetTrackBar(i + 1);
 				EditWall.ItemDisplayNr = i;
@@ -234,7 +234,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditWall.ItemData.Count > 0)
                 {
-                    MouseControl = 76;
+                    MouseControl = MouseMode.WallSel;
                 }
             }
 			Menu m = sender as Menu;

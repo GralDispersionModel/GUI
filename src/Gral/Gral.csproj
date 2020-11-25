@@ -181,6 +181,7 @@
     <Compile Include="GRALData\DomainArea.cs" />
     <Compile Include="GRALData\DouglasPeucker.cs" />
     <Compile Include="GRALData\DrawingObject.cs" />
+    <Compile Include="GRALData\Enumerations.cs" />
     <Compile Include="GRALData\EventArgsCoors.cs" />
     <Compile Include="GRALData\PGTAll.cs" />
     <Compile Include="GRALData\PointDStruct.cs" />

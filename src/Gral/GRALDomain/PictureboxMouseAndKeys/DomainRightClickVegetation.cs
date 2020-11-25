@@ -93,7 +93,7 @@ namespace GralDomain
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointVegetation();
-				MouseControl = 1081;
+				MouseControl = MouseMode.VegetationInlineEdit;
 			}
 			if (mi.Index == 2) // Add edge point
 			{
@@ -140,7 +140,7 @@ namespace GralDomain
 				
 				if (EditVegetation.ItemData.Count > 0)
                 {
-                    MouseControl = 77;
+                    MouseControl = MouseMode.VegetationSel;
                 }
 
                 Picturebox1_Paint();
@@ -185,7 +185,7 @@ namespace GralDomain
 				
 				if (EditVegetation.ItemData.Count > 0)
                 {
-                    MouseControl = 77;
+                    MouseControl = MouseMode.VegetationSel;
                 }
 
                 Picturebox1_Paint();
@@ -201,7 +201,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditVegetation.ItemData.Count > 0)
                 {
-                    MouseControl = 77;
+                    MouseControl = MouseMode.VegetationSel;
                 }
             }
 			Menu m = sender as Menu;

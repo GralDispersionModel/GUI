@@ -68,7 +68,7 @@ namespace GralDomain
 
                     ShowFirst.Veg = false;
                 }
-                MouseControl = 79;
+                MouseControl = MouseMode.AreaPosCorner;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditVegetation.Show();
                 EditVegetation.ShowForm();
@@ -79,7 +79,7 @@ namespace GralDomain
             }
             else
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 EditVegetation.Hide();
             }
         }
@@ -92,7 +92,7 @@ namespace GralDomain
         {
             checkBox26.Checked = false;
             VegetationToolStripMenuItem.Checked = checkBox26.Checked;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
 
             if (Gral.Main.Project_Locked == true)
             {
@@ -111,7 +111,7 @@ namespace GralDomain
                 _veg = null;
 
                 Cursor = Cursors.Default;
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 //this.Width = ScreenWidth;
                 //this.Height = ScreenHeight - 50;
                 for (int i = 0; i <= EditVegetation.CornerVegetation; i++)
@@ -120,18 +120,18 @@ namespace GralDomain
                 }
 
                 EditVegetation.CornerVegetation = 0;
-                MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 
-                if (MainForm.GRALSettings.BuildingMode != 0)
+                if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None)
                 {
                     if (EditVegetation.ItemData.Count > 0)
                     {
-                        MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
                         MainForm.button9.Visible = true;
                     }
                     else
                     {
-                        MainForm.Change_Label(3, -1); // Building label - no buildings
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.Invisible); // Building label - no buildings
                     }
                 }
 

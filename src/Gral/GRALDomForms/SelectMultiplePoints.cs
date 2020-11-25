@@ -32,9 +32,9 @@ namespace GralDomForms
         /// </summary>
         public event CancelMultiplePoints CancelComputation;
         /// <summary>
-        /// Values: 0 - GRAMM Windfield,  Bit 1 GRAMM only, Bit 2 GRAL only
+        /// Values: 0 - no model selection,  Bit 1 GRAMM, Bit 2 GRAL
         /// </summary>
-        public int MeteoModel = 0;
+        public GralDomain.MeteoModelEmum MeteoModel = GralDomain.MeteoModelEmum.None;
         /// <summary>
         /// true: allow selection of local stability classes
         /// </summary>
@@ -60,7 +60,7 @@ namespace GralDomForms
         private void SelectMultiplePoints_Load(object sender, EventArgs e)
         {
 
-            if (MeteoModel == 0) // No selection of GRAMM or GRAL Model
+            if (MeteoModel == GralDomain.MeteoModelEmum.None) // No selection of GRAMM or GRAL Model
             {
                 groupBox1.Visible = false;
             }
@@ -70,12 +70,12 @@ namespace GralDomForms
                 radioButton1.Visible = false;
                 radioButton2.Visible = false;
 
-                if ((MeteoModel & 1) == 1) // GRAMM
+                if (((int) MeteoModel & 1) == (int) GralDomain.MeteoModelEmum.GRAMM) // GRAMM
                 {
                     radioButton1.Visible = true;
                     radioButton1.Checked = true;
                 }
-                if ((MeteoModel & 2) == 2) // GRAL
+                if (((int) MeteoModel & 2) == (int) GralDomain.MeteoModelEmum.GRAL) // GRAL
                 {
                     radioButton2.Visible = true;
                     if (radioButton1.Visible == false)
@@ -187,11 +187,11 @@ namespace GralDomForms
         {
             if (radioButton1.Checked)
             {
-                MeteoModel = 1;
+                MeteoModel = GralDomain.MeteoModelEmum.GRAMM;
             }
             else if (radioButton2.Checked)
             {
-                MeteoModel = 2;
+                MeteoModel = GralDomain.MeteoModelEmum.GRAL;
             }
             
             if (checkBox1.Checked)

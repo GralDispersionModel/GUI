@@ -762,7 +762,7 @@ namespace GralDomain
                             MainForm.groupBox2.Visible = true;
                             MainForm.groupBox3.Visible = true;
                             MainForm.button7.Visible = true;
-                            MainForm.Change_Label(1, 2); // meteo button green
+                            MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonMeteo, Gral.ButtonColorEnum.BlackHook); // meteo button green
                         }
                         catch { }
 

@@ -469,10 +469,10 @@ namespace Gral
 				groupBox23.Visible = false; // Anemometer height
 				label100.Visible = false;
 				groupBox20.Visible = false;
-				Change_Label(0,-1);  // Control not visible
-				Change_Label(1, -1);  // meteo not visible
-				Change_Label(2, -1); // Emission label not visible
-				Change_Label(3, -1); // Building label not visible
+				ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.Invisible);  // Control not visible
+				ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.Invisible);  // meteo not visible
+				ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.Invisible); // Emission label not visible
+				ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.Invisible); // Building label not visible
 				
 				GralDomRect.East = 0;
 				GralDomRect.West = 0;
@@ -496,7 +496,7 @@ namespace Gral
 				CellsGralX = 0;
 				CellsGralY = 0;
 				TBox3[0].Value = 3;
-				GRALSettings.BuildingMode = 0;
+				GRALSettings.BuildingMode = BuildingModeEnum.None;
                 radioButton3.Checked = true;
 
                 groupBox4.Visible = true;
@@ -564,7 +564,7 @@ namespace Gral
 
                     SetBuildingRadioButton();
 
-                    Change_Label(0, 2); // Control label OK
+                    ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook); // Control label OK
 					checkBox23.Checked = GRALSettings.BuildingHeightsWrite; // write building heights?
                     numericUpDown43.Value = GRALSettings.Compressed;        // use compressed *.con files?
                     
@@ -984,7 +984,7 @@ namespace Gral
 					button18.Visible = true;
 					button21.Visible = true;
 					button48.Visible = true;
-					Change_Label(2, 0); // Emission label red
+					ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
 					
 					listBox5.Items.Add(text);
 					listBox5.SelectedIndex = 0;
@@ -1105,7 +1105,7 @@ namespace Gral
 
                 if (fileexist == true)
 				{
-					Change_Label(2, 2); // Emission label green
+					ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.BlackHook);
 				}
 
 				message.listBox1.Items.Add("Loading meteorological data...");
@@ -1230,7 +1230,7 @@ namespace Gral
 							groupBox3.Visible = true;
 							button6.Visible = true;
 							button7.Visible = true;
-							Change_Label(1, 0); // meteo button red
+							ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
 							
 							groupBox23.Visible= true; // Anemometer height
 							label100.Visible = true;
@@ -1253,7 +1253,7 @@ namespace Gral
 					newPath2 = Path.Combine(ProjectName, @"Computation","meteopgt.all");
 					if (File.Exists(newPath2))
 					{
-						Change_Label(1, 2); // meteo button green
+						ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, Gral.ButtonColorEnum.BlackHook); // meteo button green
 					}
 				}
 				catch
@@ -1266,26 +1266,26 @@ namespace Gral
 				message.Refresh();
 				try
 				{
-                    if (GRALSettings.BuildingMode == 0 ||
+                    if (GRALSettings.BuildingMode == BuildingModeEnum.None ||
                         (GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(ProjectName, @"Computation", "Buildings.txt")) < 3) &&
                         (GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(ProjectName, @"Emissions", "Walls.txt")) < 3) &&
                         (GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(ProjectName, @"Computation", "Vegetation.txt")) < 3)) // no buildings, walls or vegetation
                     {
-                        Change_Label(3, -1); // no buildings
+                        ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.Invisible); // no buildings
                     }
                     else
                     {
-                        Change_Label(3, 1); // Building green dot
+                        ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.GreenDot); // Building green dot
                         button9.Visible = true;
 
                         string newPath2 = Path.Combine(ProjectName, "Computation", "buildings.dat");
                         if (File.Exists(newPath2))
                         {
-                            Change_Label(3, 2); // Building label OK
+                            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.BlackHook); // Building label OK
                         }
                         else
                         {
-                            Change_Label(3, 0); // building label red
+                            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.RedDot); // building label red
                         }
                     }
 				}
@@ -1293,7 +1293,7 @@ namespace Gral
 				{
 					MessageBox.Show(this, "Could not read buildings.dat file");
 				}
-                if (GRALSettings.BuildingMode == 2)
+                if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic)
                 {
                     numericUpDown42.Enabled = !Project_Locked;
                 }
@@ -1327,7 +1327,7 @@ namespace Gral
 					{
 						button22.Visible = true;
 						groupBox12.Visible = true;
-						if (GRALSettings.BuildingMode != 3)
+						if (GRALSettings.BuildingMode != BuildingModeEnum.GRAMM)
 						{
 							listBox6.Visible = true;
 							radioButton1.Checked = false;
@@ -1606,15 +1606,15 @@ namespace Gral
 
         private void SetBuildingRadioButton()
         {
-            if (GRALSettings.BuildingMode == 0)
+            if (GRALSettings.BuildingMode == BuildingModeEnum.None)
             {
                 radioButton3.Checked = true;
             }
-            else if (GRALSettings.BuildingMode == 1)
+            else if (GRALSettings.BuildingMode == BuildingModeEnum.Diagnostic)
             {
                 radioButton4.Checked = true;
             }
-            else if (GRALSettings.BuildingMode == 2)
+            else if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic)
             {
                 radioButton5.Checked = true;
             }

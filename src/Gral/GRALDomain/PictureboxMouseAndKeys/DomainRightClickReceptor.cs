@@ -70,7 +70,7 @@ namespace GralDomain
 			CopiedItem.Receptor = null;
 			EditAndSaveReceptorData(null, null); // save changes
 			Picturebox1_Paint();
-			MouseControl = 25;
+			MouseControl = MouseMode.ReceptorSel;
 		}
 		
 		/// <summary>
@@ -88,7 +88,7 @@ namespace GralDomain
 			}
 			if (mi.Index == 1) // new Position of Receptor
 			{
-				MouseControl = 2400;
+				MouseControl = MouseMode.ReceptorInlineEdit;
 			}
 			if (mi.Index == 2) // Delete Receptor
 			{
@@ -97,7 +97,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditR.ItemData.Count > 0)
                 {
-                    MouseControl = 25;
+                    MouseControl = MouseMode.ReceptorSel;
                 }
             }
 			if (mi.Index == 3) // Copy receptor

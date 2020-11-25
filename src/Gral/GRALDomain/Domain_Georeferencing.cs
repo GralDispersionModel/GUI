@@ -69,7 +69,7 @@ namespace GralDomain
 			{
 				GeoReferenceOne.Show();
 				GeoReferenceOne.TopMost = true;
-				MouseControl = 3;
+				MouseControl = MouseMode.BaseMapGeoReference1;
 				Cursor = Cursors.Cross;
 				//this.WindowState = System.Windows.Forms.FormWindowState.Normal;
 				//this.Location = new System.Drawing.Point(0, 0);
@@ -234,7 +234,7 @@ namespace GralDomain
 
 				GeoReferenceOne.Hide();
 				Cursor = Cursors.Default;
-				MouseControl = 0;
+				MouseControl = MouseMode.Default;
 				//this.Width = ScreenWidth; // RM Kuntner
 				//this.Height = ScreenHeight - 50; // RM Kuntner
 				Picturebox1_Paint();
@@ -286,7 +286,7 @@ namespace GralDomain
 			{
 				GeoReferenceTwo.Show();
 				GeoReferenceTwo.TopMost = true;
-				MouseControl = 12;
+				MouseControl = MouseMode.BaseMapGeoReference2;
 				Cursor = Cursors.Cross; // Kuntner
 				//this.WindowState = System.Windows.Forms.FormWindowState.Normal; // RM Kuntner
 				//this.Location = new System.Drawing.Point(0, 0); // RM Kuntner
@@ -457,7 +457,7 @@ namespace GralDomain
 
 				GeoReferenceTwo.Hide();
 				Cursor = Cursors.Default;
-				MouseControl = 0;
+				MouseControl = MouseMode.Default;
 				//this.Width = ScreenWidth; // RM Kuntner
 				// this.Height = ScreenHeight - 50; // RM Kuntner
 			}
@@ -478,7 +478,7 @@ namespace GralDomain
 			button29.Visible = false;
 			button35.Visible = true;
 			//dont show button to define GRAMM domain, when GRAMM is used to take buildings into account
-			if (MainForm.GRALSettings.BuildingMode != 3)
+			if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.GRAMM)
             {
                 button29.Visible = true;
             }

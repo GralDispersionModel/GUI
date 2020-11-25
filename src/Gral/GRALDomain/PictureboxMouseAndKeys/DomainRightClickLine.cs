@@ -121,7 +121,7 @@ namespace GralDomain
 				CopiedItem.LineSource = null;
 				EditAndSaveLineSourceData(null, null); // save changes
 				Picturebox1_Paint();
-				MouseControl = 11;
+				MouseControl = MouseMode.LineSourceSel;
 			}
 		}
 		
@@ -147,7 +147,7 @@ namespace GralDomain
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointLine();
-				MouseControl = 1000;
+				MouseControl = MouseMode.LineSourceInlineEdit;
 			}
 			
 			if (mi.Index == 2) // Add edge point
@@ -198,7 +198,7 @@ namespace GralDomain
 				
 				if (EditLS.ItemData.Count > 0)
                 {
-                    MouseControl = 11;
+                    MouseControl = MouseMode.LineSourceSel;
                 }
 
                 Picturebox1_Paint();
@@ -244,14 +244,14 @@ namespace GralDomain
 				
 				if (EditLS.ItemData.Count > 0)
                 {
-                    MouseControl = 11;
+                    MouseControl = MouseMode.LineSourceSel;
                 }
 
                 Picturebox1_Paint();
 			}
 			if (mi.Index == 4) // Delete line Source
 			{
-				MouseControl = 0;
+				MouseControl = MouseMode.Default;
 				int i = Convert.ToInt32(mi.Tag);
 				EditLS.SetTrackBar(i + 1);
 				EditLS.ItemDisplayNr = i;
@@ -261,7 +261,7 @@ namespace GralDomain
 				Picturebox1_Paint();
 				if (EditLS.ItemData.Count > 0)
                 {
-                    MouseControl = 11;
+                    MouseControl = MouseMode.LineSourceSel;
                 }
             }
 			if (mi.Index == 5) // Copy line source
