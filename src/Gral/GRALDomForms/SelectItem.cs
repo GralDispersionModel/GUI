@@ -61,7 +61,7 @@ namespace GralDomForms
         
         void Button2Click(object sender, EventArgs e)
         {
-            SelectedIndex = 0; // nothing selected -> select item 1
+            SelectedIndex = -1; // nothing selected
         }
         
         void ListBox1DoubleClick(object sender, EventArgs e)

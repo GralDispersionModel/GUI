@@ -94,14 +94,14 @@ namespace GralDomain
                 {
                     ItemNames = ItemNames,
                     StartPosition = FormStartPosition.Manual,
-                    Left = e.X + St_F.GetScreenAtMousePosition(),
+                    Left = e.X + this.Left,
                     Top = e.Y,
                     Owner = this
                 };
                 selectitem.ShowDialog();
                 int i = selectitem.SelectedIndex;
                 selectitem.Dispose();
-                if (i < ItemNumber.Count)
+                if (i >= 0 && i < ItemNumber.Count)
                 {
                     return ItemNumber[i];
                 }
