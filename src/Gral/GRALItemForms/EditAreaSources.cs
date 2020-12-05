@@ -67,7 +67,6 @@ namespace GralItemForms
         private readonly int Button1_Width = 50;
         private readonly int Button1_Height = 10;
         private readonly int TBWidth = 80;
-        private int TextBox_x0 = 0;
         private int TrackBar_x0 = 0;
         private int Numericupdown_x0 = 0;
         private int TabControl_x0 = 0;
@@ -124,7 +123,6 @@ namespace GralItemForms
         {
             Dialog_Initial_Width = ClientSize.Width;
             TrackBar_x0 = trackBar1.Left;
-            TextBox_x0 = textBox1.Left;
             Numericupdown_x0 = numericUpDown1.Left;
             TabControl_x0 = groupBox1.Left;
             
@@ -623,13 +621,13 @@ namespace GralItemForms
                 dialog_width -= 12;
                 groupBox1.Width = dialog_width - TabControl_x0;
                 trackBar1.Width = dialog_width - TrackBar_x0;
-                textBox1.Width = dialog_width - TextBox_x0;
-                textBox2.Width = dialog_width - button5.Right - 11;
-                textBox3.Width = dialog_width - TextBox_x0;
-                numericUpDown1.Width = dialog_width - TextBox_x0;
-                numericUpDown2.Width = dialog_width - TextBox_x0;
-                numericUpDown4.Width = dialog_width - TextBox_x0;
-                comboBox1.Width      = dialog_width - TextBox_x0;
+                textBox1.Width = dialog_width - textBox1.Left;
+                textBox2.Width = dialog_width - textBox2.Left;
+                textBox3.Width = dialog_width - textBox3.Left;
+                numericUpDown1.Width = dialog_width - numericUpDown1.Left;
+                numericUpDown2.Width = dialog_width - numericUpDown2.Left;
+                numericUpDown4.Width = dialog_width - numericUpDown4.Left;
+                comboBox1.Width      = dialog_width - comboBox1.Left;
             }
 
             button7.Left = Math.Max(100, this.Width - 103);
@@ -650,6 +648,7 @@ namespace GralItemForms
                 areaemission [nr].Width = (int) (element_width);
                 but1[nr].Location = new System.Drawing.Point(areaemission[nr].Left + areaemission[nr].Width + 5, areapollutant[nr].Top - 1);
             }
+            panel1.Width = ClientSize.Width;
         }
         
         private void RedrawDomain(object sender, EventArgs e)
@@ -690,11 +689,11 @@ namespace GralItemForms
                     };
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                     {
-                        vert.Location = new Point(Right + 4, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                     }
                     else
                     {
-                        vert.Location = new Point(Left - 250, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
                     }
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
                     if (vert.ShowDialog() == DialogResult.OK)
@@ -730,11 +729,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    edit.Location = new Point(Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(areaemission[nr].Text,true);
@@ -849,12 +848,12 @@ namespace GralItemForms
                 bool enable = !Main.Project_Locked;
                 if (enable)
                 {
-                    Text = "Edit area sources";
+                    labelTitle.Text = "Edit Area Sources";
                     comboBox1.DropDownStyle = ComboBoxStyle.DropDown;
                 }
                 else
                 {
-                    Text = "Area source settings (project locked)";
+                    labelTitle.Text = "Area Source Settings (Project Locked)";
                     comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
                 }
 
@@ -879,8 +878,9 @@ namespace GralItemForms
                     areapollutant[i].Visible = enable;
                     labelpollutant[i].Visible = !enable;
                 }
-                
             }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
         
         public void SetNumberOfVerticesText(string _s)
@@ -972,6 +972,21 @@ namespace GralItemForms
             SetTrackBarMaximum();
             FillValues();
             _as = null;
+        }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
         }
     }
 }

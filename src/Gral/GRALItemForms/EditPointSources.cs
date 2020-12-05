@@ -665,6 +665,7 @@ namespace GralItemForms
                 pemission [nr].Width = element_width;
                 but1[nr].Location = new System.Drawing.Point(pemission[nr].Left + pemission[nr].Width + 5, ppollutant[nr].Top - 1);
             }
+            panel1.Width = ClientSize.Width;
         }
 
         void TextBox1Leave(object sender, EventArgs e)
@@ -703,12 +704,13 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    edit.Location = new Point(Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
                 }
+                
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(pemission[nr].Text, true);
                 edit.Pollutant = ppollutant[nr].SelectedIndex;
@@ -826,11 +828,11 @@ namespace GralItemForms
                 bool enable = !Main.Project_Locked;
                 if (enable)
                 {
-                    Text = "Edit point sources";
+                    labelTitle.Text = "Edit Point Sources";
                 }
                 else
                 {
-                    Text = "Point source settings (project locked)";
+                    labelTitle.Text = "Point Source Settings (Project Locked)";
                 }
 
                 foreach (Control c in Controls)
@@ -854,8 +856,9 @@ namespace GralItemForms
                     ppollutant[i].Visible = enable;
                     labelpollutant[i].Visible = !enable;
                 }
-
             }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
 
         public void SetXCoorText(string _s)
@@ -925,11 +928,11 @@ namespace GralItemForms
 
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edT.Location = new Point(Right + 4, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    edT.Location = new Point(Left - 750, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, Top);
                 }
 
                 if (edT.ShowDialog() == DialogResult.OK)
@@ -1019,5 +1022,21 @@ namespace GralItemForms
             FillValues();
             _ps = null;
         }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
+        }
+
     }
 }

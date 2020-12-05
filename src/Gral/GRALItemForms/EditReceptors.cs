@@ -358,11 +358,11 @@ namespace GralItemForms
                 bool enable = !Main.Project_Locked;
                 if (enable)
                 {
-                    Text = "Edit receptors";
+                    labelTitle.Text = "Edit Receptors";
                 }
                 else
                 {
-                    Text = "Receptor settings (project locked)";
+                    labelTitle.Text = "Receptor Settings (Project Locked)";
                 }
                 foreach (Control c in Controls)
                 {
@@ -372,6 +372,8 @@ namespace GralItemForms
                     }
                 }
             }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
 
         void EditReceptorsResizeEnd(object sender, EventArgs e)
@@ -381,13 +383,9 @@ namespace GralItemForms
             {
                 dialog_width -= 12;
                 trackBar1.Width = dialog_width - TrackBar_x0;
-                textBox1.Width = dialog_width - TextBox_x0;
-                textBox2.Width = dialog_width - TextBox_x0;
-                textBox3.Width = dialog_width - TextBox_x0;
-                numericUpDown1.Width = dialog_width - Numericupdown_x0;
-                numericUpDown2.Width = dialog_width - Numericupdown_x0;
+                textBox1.Width = dialog_width - textBox1.Left;
             }
-            button5.Left = Math.Max(100, this.Width - 103); ;
+            panel1.Width = ClientSize.Width;
         }
 
         public void SetXCoorText(string _s)
@@ -475,5 +473,21 @@ namespace GralItemForms
             SetTrackBarMaximum();
             FillValues();
         }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
+        }
+
     }
 }

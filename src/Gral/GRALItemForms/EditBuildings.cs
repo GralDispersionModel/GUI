@@ -59,7 +59,7 @@ namespace GralItemForms
 		private int TextBox_x0 = 0;
 		private int TrackBar_x0 = 0;
 		private int Numericupdown_x0 = 0;
-		
+
         public EditBuildings()
         {
             InitializeComponent();
@@ -441,11 +441,11 @@ namespace GralItemForms
 				bool enable = !Main.Project_Locked;
 				if (enable)
 				{
-					Text = "Edit buildings";
+				   labelTitle.Text = "Edit Buildings";
 				}
 				else
 				{
-					Text = "Building settings (project locked)";
+                    labelTitle.Text = "Building Settings (Project Locked)";
 				}
 				foreach (Control c in Controls)
 				{
@@ -455,6 +455,8 @@ namespace GralItemForms
 					}
 				}
 			}
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
         void EditbuildingsResizeEnd(object sender, EventArgs e)
         {
@@ -468,6 +470,7 @@ namespace GralItemForms
 				textBox5.Width = dialog_width - TextBox_x0;
 			}
             button4.Left = Math.Max(100, this.Width - 100);
+            panel1.Width = ClientSize.Width;
         }
         
         public void SetNumberOfVerticesText(string _s)
@@ -543,11 +546,11 @@ namespace GralItemForms
                 };
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    vert.Location = new Point(Right + 4, Top);
+                    vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    vert.Location = new Point(Left - 250, Top);
+                    vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
                 }
 
                 vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
@@ -602,6 +605,21 @@ namespace GralItemForms
             _bd = null;
             SetTrackBarMaximum();
             FillValues();
+        }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
         }
     }
 }

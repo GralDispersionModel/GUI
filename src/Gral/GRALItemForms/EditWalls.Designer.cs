@@ -52,18 +52,22 @@ namespace GralItemForms
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.button5 = new System.Windows.Forms.Button();
+            this.Exit = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.labelTitle = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(16, 99);
+            this.checkBox1.Location = new System.Drawing.Point(12, 131);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(104, 21);
             this.checkBox1.TabIndex = 4;
@@ -74,10 +78,10 @@ namespace GralItemForms
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(93, 181);
+            this.textBox3.Location = new System.Drawing.Point(89, 213);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(76, 20);
+            this.textBox3.Size = new System.Drawing.Size(117, 20);
             this.textBox3.TabIndex = 69;
             this.textBox3.TabStop = false;
             this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -85,7 +89,7 @@ namespace GralItemForms
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 184);
+            this.label4.Location = new System.Drawing.Point(3, 216);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 13);
             this.label4.TabIndex = 68;
@@ -93,10 +97,10 @@ namespace GralItemForms
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(120, 156);
+            this.textBox2.Location = new System.Drawing.Point(133, 188);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(49, 20);
+            this.textBox2.Size = new System.Drawing.Size(73, 20);
             this.textBox2.TabIndex = 67;
             this.textBox2.TabStop = false;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -107,7 +111,7 @@ namespace GralItemForms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 159);
+            this.label3.Location = new System.Drawing.Point(3, 191);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
             this.label3.TabIndex = 66;
@@ -116,7 +120,7 @@ namespace GralItemForms
             // button3
             // 
             this.button3.Image = global::Gral.Properties.Resources.TrashcanSmall;
-            this.button3.Location = new System.Drawing.Point(137, 228);
+            this.button3.Location = new System.Drawing.Point(174, 260);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(32, 32);
             this.button3.TabIndex = 9;
@@ -127,7 +131,7 @@ namespace GralItemForms
             // button2
             // 
             this.button2.Image = global::Gral.Properties.Resources.DeleteSmall;
-            this.button2.Location = new System.Drawing.Point(75, 228);
+            this.button2.Location = new System.Drawing.Point(89, 260);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(32, 32);
             this.button2.TabIndex = 8;
@@ -138,7 +142,7 @@ namespace GralItemForms
             // button1
             // 
             this.button1.Image = global::Gral.Properties.Resources.AddSmall1;
-            this.button1.Location = new System.Drawing.Point(10, 228);
+            this.button1.Location = new System.Drawing.Point(6, 260);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(32, 32);
             this.button1.TabIndex = 7;
@@ -154,7 +158,7 @@ namespace GralItemForms
             0,
             0,
             65536});
-            this.numericUpDown1.Location = new System.Drawing.Point(93, 73);
+            this.numericUpDown1.Location = new System.Drawing.Point(130, 107);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             8000,
             0,
@@ -170,7 +174,7 @@ namespace GralItemForms
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 77);
+            this.label5.Location = new System.Drawing.Point(3, 109);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 13);
             this.label5.TabIndex = 58;
@@ -180,11 +184,11 @@ namespace GralItemForms
             // trackBar1
             // 
             this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(10, 15);
+            this.trackBar1.Location = new System.Drawing.Point(6, 47);
             this.trackBar1.Maximum = 1;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(166, 19);
+            this.trackBar1.Size = new System.Drawing.Size(200, 19);
             this.trackBar1.TabIndex = 60;
             this.toolTip1.SetToolTip(this.trackBar1, "Select walls");
             this.trackBar1.Value = 1;
@@ -193,11 +197,11 @@ namespace GralItemForms
             // trackBar2
             // 
             this.trackBar2.AutoSize = false;
-            this.trackBar2.Location = new System.Drawing.Point(10, 126);
+            this.trackBar2.Location = new System.Drawing.Point(6, 158);
             this.trackBar2.Maximum = 1;
             this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(159, 19);
+            this.trackBar2.Size = new System.Drawing.Size(200, 19);
             this.trackBar2.TabIndex = 5;
             this.toolTip1.SetToolTip(this.trackBar2, "Select edge points");
             this.trackBar2.Value = 1;
@@ -207,7 +211,7 @@ namespace GralItemForms
             // 
             this.button5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button5.BackgroundImage")));
             this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button5.Location = new System.Drawing.Point(90, 153);
+            this.button5.Location = new System.Drawing.Point(86, 185);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(24, 24);
             this.button5.TabIndex = 6;
@@ -215,18 +219,32 @@ namespace GralItemForms
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.TextBox2Click);
             // 
+            // Exit
+            // 
+            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
+            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Exit.Location = new System.Drawing.Point(186, 3);
+            this.Exit.Name = "Exit";
+            this.Exit.Size = new System.Drawing.Size(24, 24);
+            this.Exit.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.Exit, "Close form");
+            this.Exit.UseVisualStyleBackColor = true;
+            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(49, 40);
+            this.textBox1.Location = new System.Drawing.Point(45, 72);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(120, 20);
+            this.textBox1.Size = new System.Drawing.Size(161, 20);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 43);
+            this.label2.Location = new System.Drawing.Point(3, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 56;
@@ -234,7 +252,7 @@ namespace GralItemForms
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(10, 270);
+            this.button6.Location = new System.Drawing.Point(12, 316);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 24);
             this.button6.TabIndex = 77;
@@ -245,7 +263,7 @@ namespace GralItemForms
             // button4
             // 
             this.button4.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button4.Location = new System.Drawing.Point(94, 270);
+            this.button4.Location = new System.Drawing.Point(130, 316);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 24);
             this.button4.TabIndex = 78;
@@ -253,13 +271,37 @@ namespace GralItemForms
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.cancelButtonClick);
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.panel1.Controls.Add(this.Exit);
+            this.panel1.Controls.Add(this.labelTitle);
+            this.panel1.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(217, 34);
+            this.panel1.TabIndex = 79;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // labelTitle
+            // 
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.Location = new System.Drawing.Point(3, 3);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(153, 25);
+            this.labelTitle.TabIndex = 56;
+            this.labelTitle.Text = "Edit Walls";
+            this.labelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
             // EditWalls
             // 
             this.AcceptButton = this.button6;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button4;
-            this.ClientSize = new System.Drawing.Size(188, 306);
+            this.ClientSize = new System.Drawing.Size(218, 361);
+            this.ControlBox = false;
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -282,7 +324,6 @@ namespace GralItemForms
             this.Name = "EditWalls";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Edit walls";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditWalls_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditWallsFormClosed);
             this.Load += new System.EventHandler(this.EditWallsLoad);
@@ -291,6 +332,7 @@ namespace GralItemForms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,5 +355,8 @@ namespace GralItemForms
 		private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button Exit;
+        private System.Windows.Forms.Label labelTitle;
     }
 }

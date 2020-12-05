@@ -25,8 +25,6 @@ using System.Windows.Forms;
 
 namespace GralItemForms
 {
-    
-
     public partial class EditPortalSources : Form
     {
         private TextBox [] portalemission = new TextBox [10];       //textboxes for emission strenght input of portal sources
@@ -879,6 +877,8 @@ namespace GralItemForms
                 button7.Left = groupBox3.Width / 2 - button7.Width / 2;
             }
             
+            panel1.Width = ClientSize.Width;
+
             if (ClientSize.Height > (tabControl1.Top + TabControl1_Height))
             {
                 tabControl1.Height = ClientSize.Height - tabControl1.Top;
@@ -912,11 +912,11 @@ namespace GralItemForms
                 bool enable = !Main.Project_Locked;
                 if (enable)
                 {
-                    Text = "Edit tunnel portal sources";
+                    labelTitle.Text = "Edit Portal Sources";
                 }
                 else
                 {
-                    Text = "Tunnel portal settings (project locked)";
+                    labelTitle.Text = "Portal Settings (Project Locked)";
                 }
                 foreach (Control c in Controls)
                 {
@@ -950,6 +950,8 @@ namespace GralItemForms
                     labelpollutant[i].Visible = !enable;
                 }
             }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
         
         private void RedrawDomain(object sender, EventArgs e)
@@ -989,11 +991,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    edit.Location = new Point(Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(portalemission[nr].Text, true);
@@ -1342,11 +1344,11 @@ namespace GralItemForms
                 
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edT.Location = new Point(Right + 4, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    edT.Location = new Point(Left - 750, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, Top);
                 }
                 
                 if (edT.ShowDialog() == DialogResult.OK)
@@ -1455,5 +1457,21 @@ namespace GralItemForms
             SetTrackBarMaximum();
             FillValues();
         }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
+        }
+
     }
 }

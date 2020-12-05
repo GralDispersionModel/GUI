@@ -70,7 +70,7 @@ namespace GralItemForms
         private int TextBox_x0 = 0;
         private int TrackBar_x0 = 0;
         private int Numericupdown_x0 = 0;
-        
+
         public EditVegetation()
         {
             //
@@ -394,11 +394,11 @@ namespace GralItemForms
                     };
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                     {
-                        vert.Location = new Point(Right + 4, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                     }
                     else
                     {
-                        vert.Location = new Point(Left - 250, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
                     }
                     
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
@@ -458,11 +458,11 @@ namespace GralItemForms
                 bool enable = !Main.Project_Locked;
                 if (enable)
                 {
-                    Text = "Edit vegetation";
+                    labelTitle.Text = "Edit Vegetation";
                 }
                 else
                 {
-                    Text = "Vegetation data (project locked)";
+                    labelTitle.Text = "Vegetation Data (Project Locked)";
                 }
                 foreach (Control c in Controls)
                 {
@@ -472,6 +472,8 @@ namespace GralItemForms
                     }
                 }
             }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
         
         void EditForestsResizeEnd(object sender, EventArgs e)
@@ -481,9 +483,8 @@ namespace GralItemForms
             {
                 dialog_width -= 12;
                 trackBar1.Width = dialog_width - TrackBar_x0;
-                textBox2.Width = dialog_width - button5.Right - 5;
             }
-            button4.Left = Math.Max(100, this.Width - 105);
+            panel1.Width = ClientSize.Width;
         }
         
         public void SetNumberOfVerticesText(string _s)
@@ -572,6 +573,21 @@ namespace GralItemForms
             _vdata = null;
             SetTrackBarMaximum();
             FillValues();
+        }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
         }
     }
 }
