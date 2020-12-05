@@ -624,7 +624,7 @@ namespace GralDomain
                                                     }
                                                     else
                                                     {
-                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                                     }
                                                 }
                                             }
@@ -732,7 +732,7 @@ namespace GralDomain
                                     infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(Math.Round(height, 1))) + "\n";
                                 }
 
-                                infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
+                                //infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
                                 infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_bd.Area, 1).ToString() + "\n";
                                 AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
@@ -839,7 +839,7 @@ namespace GralDomain
                                             }
                                             else
                                             {
-                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                             }
                                         }       
                                     }
@@ -927,7 +927,7 @@ namespace GralDomain
                                         }
                                         else
                                         {
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                         }
                                     }               
                                 }
