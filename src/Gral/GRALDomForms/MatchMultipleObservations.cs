@@ -37,8 +37,7 @@ namespace GralDomForms
         private List<string> spaltenbezeichnungen = new List<string>(); //liste mit spaltenbezeichnungen
         private int RemoveLine = -999;
         public bool StartMatch = false;
-        bool OnlyIterativeTuning = false;
-
+        
         private string _settings_path;
         public string SettingsPath { set { _settings_path = value; } }
         public string GRAMMPath;
@@ -149,6 +148,11 @@ namespace GralDomForms
         public MatchMultipleObservationsData MatchingData;
 
         /// <summary>
+        /// Pointer from each meteo station time series entry to the time series with same time stamp of station 0
+        /// </summary>
+        private int[][] TimeSeriesPointer = null;
+
+        /// <summary>
         /// Dialog for the match to observation process
         /// </summary>
         public MatchMultipleObservations()
@@ -159,11 +163,16 @@ namespace GralDomForms
 
             //create data grid view for input of emission measurements
             spaltenbezeichnungen.Clear();
-            create_table(0, 0, spaltenbezeichnungen);
+            CreateDataTable(0, 0, spaltenbezeichnungen);
         }
 
-        //create data grid view for input of emission measurements
-        private void create_table(int row, int column, List<string> headers)
+        /// <summary>
+        /// create data grid view for input of emission measurements
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <param name="headers"></param>
+        private void CreateDataTable(int row, int column, List<string> headers)
         {
             //zuerst löschen der data grid view
             dataGridView1.Rows.Clear();
@@ -173,11 +182,12 @@ namespace GralDomForms
             dataGridView1.Columns.Add("Name", "Name");
             dataGridView1.Columns.Add("x-coord.", "x-coord.");
             dataGridView1.Columns.Add("y-coord.", "y-coord.");
-            dataGridView1.Columns.Add("height(m)", "height(m)");
+            dataGridView1.Columns.Add("Height(m)", "Height(m)");
             dataGridView1.Columns.Add("Start", "Start");
             dataGridView1.Columns.Add("End", "End");
-            dataGridView1.Columns.Add("Weighting factor", "Weighting factor");
-            dataGridView1.Columns.Add("Direction factor", "Direction factor");
+            dataGridView1.Columns.Add("Weighting Factor", "Weighting Factor");
+            dataGridView1.Columns.Add("Direction Factor", "Direction Factor");
+            dataGridView1.Columns.Add("Auto Tuning Factor", "Auto Tuning Factor");
             dataGridView1.Columns.Add("V 10%", "V 10%");
             dataGridView1.Columns.Add("V 20%", "V 20%");
             dataGridView1.Columns.Add("V 40%", "V 40%");
@@ -204,6 +214,7 @@ namespace GralDomForms
             dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView1.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             dataGridView1.Columns[0].ReadOnly = true;
             dataGridView1.Columns[1].ReadOnly = true;
@@ -211,15 +222,19 @@ namespace GralDomForms
             dataGridView1.Columns[4].ReadOnly = true;
             dataGridView1.Columns[5].ReadOnly = true;
 
-            dataGridView1.Columns[8].ReadOnly = true;
             dataGridView1.Columns[9].ReadOnly = true;
             dataGridView1.Columns[10].ReadOnly = true;
             dataGridView1.Columns[11].ReadOnly = true;
             dataGridView1.Columns[12].ReadOnly = true;
             dataGridView1.Columns[13].ReadOnly = true;
+            dataGridView1.Columns[14].ReadOnly = true;
         }
 
-        // Change the selection of the datagridview
+        /// <summary>
+        /// Change the selection of the datagridview
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void DataGridView1SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0) // no rows selected
@@ -230,10 +245,13 @@ namespace GralDomForms
             {
                 RemoveLine = dataGridView1.SelectedRows[0].Index;
             }
-
         }
 
-        //delete one line (a meteo station)
+        /// <summary>
+        /// delete one line (a meteo station)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             if (RemoveLine > -1 && RemoveLine <= dataGridView1.Rows.Count)
@@ -275,7 +293,11 @@ namespace GralDomForms
             }
         }
 
-        //start the procedure
+        /// <summary>
+        /// Start the matching process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button5_Click(object sender, EventArgs e)
         {
             if (dataGridView1.RowCount > 0) // if a meteo line exist
@@ -319,7 +341,11 @@ namespace GralDomForms
             }
         }
 
-        //cancel the procedure
+        /// <summary>
+        /// cancel the MMO process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
             StartMatch = false;
@@ -364,7 +390,47 @@ namespace GralDomForms
             Domain.CancellationTokenReset();
         }
 
-        //show windrose of selected meteo-file
+        /// <summary>
+        /// Calculates the number of unique weather situations based on the mettime series for a classified meteorology
+        /// </summary>
+        /// <param name="MetTimeSeries">List for a MetTimeSeries</param>
+        /// <returns>Number of unique weather situations in the mettime series</returns>
+        private int CalculateUsedNumberOfWeatherSituations(List<string> MetTimeSeries)
+        {
+            List<string> _meteoSituations = new List<string>();
+            if (MetTimeSeries != null)
+            {
+                foreach (string _mettime in MetTimeSeries)
+                {
+                    string[] text = _mettime.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (text.Length > 4)
+                    {
+                        string recentMeteo = text[2] + "," + text[3] + "," + text[4];
+                        //search if this text exits in the meteoSituations
+                        bool exists = false;
+                        foreach (string compare in _meteoSituations)
+                        {
+                            if (compare.Equals(recentMeteo))
+                            {
+                                exists = true;
+                                break;
+                            }
+                        }
+                        if (!exists)
+                        {
+                            _meteoSituations.Add(recentMeteo);
+                        }
+                    }
+                }
+            }
+            return _meteoSituations.Count;
+        }
+
+        /// <summary>
+        /// Show the original or the matched windrose of selected meteo-file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
             if (RemoveLine > -1 && RemoveLine <= dataGridView1.Rows.Count)
@@ -556,7 +622,6 @@ namespace GralDomForms
 
         void Match_Multiple_ObservationsVisibleChanged(object sender, EventArgs e)
         {
-
             if (LocalStabilityUsed)
             {
                 checkBox2.Checked = true;
@@ -578,6 +643,11 @@ namespace GralDomForms
                 button2.Visible = true;
                 checkBox2.Visible = true;
                 checkBox4.Enabled = true;
+                // reset the time series pointer
+                TimeSeriesPointer = null;
+                // reset auto mode passes
+                checkBox5.Checked = true;
+                checkBox6.Checked = true;
             }
 
             if (Match_Mode == 1)
@@ -618,7 +688,11 @@ namespace GralDomForms
             Cursor = Cursors.Default;
         }
 
-        // Save MMO Files
+        /// <summary>
+        /// Save MMO Files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button1Click(object sender, EventArgs e) // Save match data to file
         {
             using (SaveFileDialog dialog = new SaveFileDialog
@@ -674,7 +748,11 @@ namespace GralDomForms
             }
         }
 
-        // Load MMO Files
+        /// <summary>
+        /// Load MMO Files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button4Click(object sender, EventArgs e)
         {
             char rowsep = ',';
@@ -739,7 +817,7 @@ namespace GralDomForms
                             }
 
                             spaltenbezeichnungen.Clear();
-                            create_table(0, 0, spaltenbezeichnungen);// delete all data from the datagridview
+                            CreateDataTable(0, 0, spaltenbezeichnungen);// delete all data from the datagridview
                             WindVelocityObs.Clear();
                             WindDirectionObs.Clear();
                             MetFileLenght.Clear();
@@ -777,6 +855,8 @@ namespace GralDomForms
                                     {
                                         dataGridView1.Rows[zeilenindex].Cells[7].Value = 1;
                                     }
+
+                                    dataGridView1.Rows[zeilenindex].Cells[8].Value = 1;
 
                                     string windfilename = data[line];
                                     line++;
@@ -930,9 +1010,13 @@ namespace GralDomForms
 
         }
 
+        /// <summary>
+        /// Do not allow to close this form as long Domain() is open!
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Match_Multiple_ObservationsFormClosing(object sender, FormClosingEventArgs e)
         {
-            // do not allow to close this form as long Domain() is open!
             // close_allowed is set to true at DomainFormClosed()
             if (CloseMatchDialogAllowed == false)
             {
@@ -959,6 +1043,11 @@ namespace GralDomForms
                     if (LoadWindData != null)
                     {
                         LoadWindData(this, e);
+                    }
+                    int lastRowIndex = dataGridView1.Rows.Count - 1;
+                    if (lastRowIndex > 0)
+                    {
+                        dataGridView1.CurrentCell = dataGridView1.Rows[lastRowIndex].Cells[0];
                     }
                 }
                 catch
@@ -1006,9 +1095,27 @@ namespace GralDomForms
             {
                 _dta.StrongerWeightedSC1AndSC7 = true;
             }
+            // vectorial auto mode
+            _dta.AtomaticModePasses = 0;
+            if (checkBox5.Checked)
+            {
+                _dta.AtomaticModePasses = 1;
+            }
+            // componentes auto mode
+            if (checkBox6.Checked)
+            {
+                _dta.AtomaticModePasses = _dta.AtomaticModePasses + 2;
+            }
+            // iterative auto mode
+            if (checkBox7.Checked)
+            {
+                _dta.AtomaticModePasses = _dta.AtomaticModePasses + 4;
+            }
 
+            _dta.ReduceSituations = (int)numericUpDown2.Value;
             _dta.WeightingFactor = new double[MetFileNames.Count + 1];
             _dta.WeightingDirection = new double[MetFileNames.Count + 1];
+            _dta.WeightingAutoMode = new double[MetFileNames.Count + 1];
             _dta.VectorErrorSum = new int[MetFileNames.Count, 4];
             _dta.SCErrorSum = new int[MetFileNames.Count, 2];
 
@@ -1026,6 +1133,7 @@ namespace GralDomForms
                     _dta.WeightingFactor[i] = Math.Max(_dta.WeightingFactor[i], 0.0);
                     _dta.WeightingDirection[i] = GralStaticFunctions.St_F.TxtToDbl(dataGridView1.Rows[i].Cells[7].Value.ToString(), false);
                     _dta.WeightingDirection[i] = Math.Min(10, Math.Max(_dta.WeightingDirection[i], 0.0));
+                    _dta.WeightingAutoMode[i] = GralStaticFunctions.St_F.TxtToDbl(dataGridView1.Rows[i].Cells[8].Value.ToString(), false);
                 }
             }
             catch (Exception ex)
@@ -1071,18 +1179,21 @@ namespace GralDomForms
         /// <param name="MatchingSettings"></param>
         private void SetTuningResults(MatchMultipleObservationsData MatchingSettings)
         {
+            int TuningResultRowIndex = 9;
             for (int j = 0; j < MetFileNames.Count; j++) // write error values to datagrid
             {
                 for (int i = 0; i < 4; i++) // 4 values
                 {
-                    dataGridView1.Rows[j].Cells[8 + i].Value = (100 * MatchingSettings.VectorErrorSum[j, i] / MetFileLenght[0]).ToString();
+                    dataGridView1.Rows[j].Cells[TuningResultRowIndex + i].Value = (100 * MatchingSettings.VectorErrorSum[j, i] / MetFileLenght[0]).ToString();
                 }
 
                 // error values for SC
-                dataGridView1.Rows[j].Cells[12].Value = (100 * MatchingSettings.SCErrorSum[j, 0] / MetFileLenght[0]).ToString();
-                dataGridView1.Rows[j].Cells[13].Value = (100 * MatchingSettings.SCErrorSum[j, 1] / MetFileLenght[0]).ToString();
+                dataGridView1.Rows[j].Cells[TuningResultRowIndex + 4].Value = (100 * MatchingSettings.SCErrorSum[j, 0] / MetFileLenght[0]).ToString();
+                dataGridView1.Rows[j].Cells[TuningResultRowIndex + 5].Value = (100 * MatchingSettings.SCErrorSum[j, 1] / MetFileLenght[0]).ToString();
+
                 dataGridView1.Rows[j].Cells[6].Value = MatchingSettings.WeightingFactor[j];
                 dataGridView1.Rows[j].Cells[7].Value = MatchingSettings.WeightingDirection[j];
+
                 if (MatchingSettings.Optimization == 1)
                 {
                     radioButton2.Checked = false;
@@ -1106,6 +1217,7 @@ namespace GralDomForms
             Domain.CancellationTokenReset();
             List<string> mettimeseries = MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token);
             WriteMetTimeSeries(mettimeseries);
+            label6.Text = "Used situations: " + CalculateUsedNumberOfWeatherSituations(mettimeseries).ToString();
             SetTuningResults(MatchingData);
             Show();
         }
@@ -1118,8 +1230,9 @@ namespace GralDomForms
         private void button8_Click(object sender, EventArgs e)
         {
             MatchingData = FillUserMatchingData(MatchingData);
-            AutoTuning();
-            OnlyIterativeTuning = true;
+            AutoTuning(MatchingData.AtomaticModePasses);
+            checkBox5.Checked = false;
+            checkBox6.Checked = false;
         }
 
         /// <summary>
@@ -1130,7 +1243,8 @@ namespace GralDomForms
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
             // Reset just iterative tuning
-            OnlyIterativeTuning = false;
+            //checkBox5.Checked = true;
+            //checkBox6.Checked = true;
         }
     }
 }

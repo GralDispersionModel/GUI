@@ -23,13 +23,15 @@ namespace GralDomForms
 {
     public partial class MatchMultipleObservations : Form
     {
-        private int[][] TimeSeriesPointer = null;
         /// <summary>
         /// Tune match process
         /// </summary>
+        /// <param name="MatchSettings">All setting for one match process</param>
+        /// <param name="cts">Cancel token</param>
+        /// <returns>List for a matched metTimeSeries</returns>
         private List<string> MatchTuning(MatchMultipleObservationsData MatchSettings, System.Threading.CancellationToken cts)
         {
-
+            CultureInfo ic = CultureInfo.InvariantCulture;
             Waitprogressbar wait = new Waitprogressbar("");
 #if __MonoCS__
             wait.Width = 350;
@@ -44,9 +46,11 @@ namespace GralDomForms
                     ShowInTaskbar = false
                 }; // Kuntner
             }
-            CultureInfo ic = CultureInfo.InvariantCulture;
-
+            
             List<string> metTimeSeries = new List<string>();
+            // List for used meteo situations, used if the number of situations should be minimized
+            HashSet<int> UsedMeteoSituations = new HashSet<int>();
+
             int  NumberofWeatherSituations = (int) St_F.CountLinesInFile(Path.Combine(GRAMMPath, @"meteopgt.all")) - 2;
 
             foreach (GralData.PGTAll reset in MatchSettings.PGT) // reset PGT_FRQ
@@ -70,6 +74,12 @@ namespace GralDomForms
             }
 
             object lockObj = new object();
+            //avoid unboxing inside the loop and pre-calculate the factor - 0.1 - 1.0
+            double ReduceSituationsFactor = 1;
+            if (MatchSettings.ReduceSituations > 0)
+            {
+                ReduceSituationsFactor = Math.Max(0, Math.Min(1, (100 - MatchSettings.ReduceSituations) / 100d));
+            }
 
             try
             {
@@ -124,7 +134,7 @@ namespace GralDomForms
                                 double bestFitErrorVal_local = 100000000;
                                 int bestFitSituation_local = 1;
 
-                                for (int n = range.Item1; n < range.Item2; n++)
+                                for (int cmpSit = range.Item1; cmpSit < range.Item2; cmpSit++)
                                 {
                                     for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
                                     {
@@ -151,7 +161,7 @@ namespace GralDomForms
                                             if (MatchSettings.Optimization == 2) // error using components
                                             {
                                                 // error for direction
-                                                err = Math.Abs(WindDir[j, n] - Wind_Dir_Meas);
+                                                err = Math.Abs(WindDir[j, cmpSit] - Wind_Dir_Meas);
                                                 if (err > 180)
                                                 {
                                                     err = 360 - err;
@@ -160,13 +170,13 @@ namespace GralDomForms
                                                 err = Math.Abs(err);
                                                 err = Math.Pow(Math.Max(0, (err - 12)), 1.8) * MatchSettings.WeightingDirection[j]; // weighting factor
                                                                                                                                     // error for speed - normalized
-                                                err += Math.Abs(WGramm[j, n] - wg_METEO) / Math.Max(0.35, Math.Min(WGramm[j, n], wg_METEO)) * 100;
+                                                err += Math.Abs(WGramm[j, cmpSit] - wg_METEO) / Math.Max(0.35, Math.Min(WGramm[j, cmpSit], wg_METEO)) * 100;
                                             }
                                             else if (MatchSettings.Optimization == 1) // error using vectors
                                             {
                                                 // error using vectors
-                                                err = Math.Sqrt(Math.Pow((UGramm[j, n] - u_METEO) * 400, 2) +
-                                                                Math.Pow((VGramm[j, n] - v_METEO) * 400, 2));
+                                                err = Math.Sqrt(Math.Pow((UGramm[j, cmpSit] - u_METEO) * 400, 2) +
+                                                                Math.Pow((VGramm[j, cmpSit] - v_METEO) * 400, 2));
                                             }
 
                                             // use weighting factor for met-station-error
@@ -179,12 +189,21 @@ namespace GralDomForms
                                                 err_st[j] = err;
                                             }
 
+                                            //Reduce number of situations -> reduce error, if situation are already used
+                                            if (ReduceSituationsFactor < 1)
+                                            {
+                                                if (UsedMeteoSituations.Contains(cmpSit))
+                                                {
+                                                    err_st[j] *= ReduceSituationsFactor; 
+                                                }
+                                            }
+
                                             //	double xxx;
                                             //	error for stability - +- 1 ak = no error - stability error not weighted
                                             if (MatchSettings.StrongerWeightedSC1AndSC7 &&
-                                                StabilityClassObs[0][met_count] <= 2 || StabilityClassObs[0][met_count] >= 6) // keep original SC 6 and 7
+                                            StabilityClassObs[0][met_count] <= 2 || StabilityClassObs[0][met_count] >= 6) // keep original SC 6 and 7
                                             {
-                                                double temp = Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) * 200; // stability
+                                                double temp = Math.Abs(LocalStabilityClass[0, cmpSit] - StabilityClassObs[0][met_count]) * 200; // stability
                                                 // xxx = temp;
                                                 if (MatchSettings.Optimization == 2) // error using components
                                                 {
@@ -197,8 +216,8 @@ namespace GralDomForms
                                             }
                                             else
                                             {
-                                                double temp = Math.Max(0, Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) - 1) * 200; // stability
-                                                temp += Math.Abs(LocalStabilityClass[0, n] - StabilityClassObs[0][met_count]) * 4; // little additional error. that best SCL can be found
+                                                double temp = Math.Max(0, Math.Abs(LocalStabilityClass[0, cmpSit] - StabilityClassObs[0][met_count]) - 1) * 200; // stability
+                                                temp += Math.Abs(LocalStabilityClass[0, cmpSit] - StabilityClassObs[0][met_count]) * 4; // little additional error. that best SCL can be found
                                                                                                                                    //  xxx = temp;
                                                 if (MatchSettings.Optimization == 2) // error using components
                                                 {
@@ -216,7 +235,8 @@ namespace GralDomForms
                                         } // synchron fits
                                         else // no synchronity
                                         {
-                                            if (n == 1)
+                                            //just 1 times per met_count
+                                            if (cmpSit == 1)
                                             {
                                                 if (!MatchSettings.AutomaticMode)
                                                 {
@@ -258,7 +278,7 @@ namespace GralDomForms
                                     if (err < bestFitErrorVal_local) // find best fitting local weather situation 
                                     {
                                         bestFitErrorVal_local = err;  // error of best fitting situation
-                                        bestFitSituation_local = n;    // best fitting situation
+                                        bestFitSituation_local = cmpSit;    // best fitting situation
                                     }
                                 } // ParallelForEach() range.item loop
 
@@ -284,7 +304,7 @@ namespace GralDomForms
                                 {
                                     MessageInfoForm.Show();
                                 }
-                                foreach(string _err in synchroErrorList)
+                                foreach (string _err in synchroErrorList)
                                 {
                                     MessageInfoForm.listBox1.Items.Add(_err);
                                 }
@@ -304,6 +324,12 @@ namespace GralDomForms
 
                             MatchSettings.PGT[bestFitSituation - 1].PGTFrq = MatchSettings.PGT[bestFitSituation - 1].PGTFrq + (double)1000d / MetFileLenght[0];
                             MatchSettings.PGT[bestFitSituation - 1].PGTNumber = bestFitSituation; // original number of weather situation
+
+                            //Add bestFitSituation if situations should be reduced
+                            if (MatchSettings.ReduceSituations > 0)
+                            {
+                                UsedMeteoSituations.Add(bestFitSituation);
+                            }
 
                             // Compute error values for the Match-Fine tuning
                             for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
