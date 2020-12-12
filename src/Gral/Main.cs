@@ -1305,7 +1305,7 @@ namespace Gral
         // import GRAMM wind field, grid, landuse, and meteorology from existing project
         private void Button24_Click(object sender, EventArgs e)
         {
-            GRAMMSetReferenceToExitingWindfields(sender, e);
+            GRAMMSetReferenceToExistingWindfields(sender, e);
         }
         //load and create the GRAMM topography
         private void Button19_Click(object sender, EventArgs e)
@@ -2050,16 +2050,6 @@ namespace Gral
         }
 
         /// <summary>
-        /// Update file size information every 120 seconds for intermediate GRAL files (*.con and *.gff)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Timer1Tick(object sender, EventArgs e)
-        {
-            GralFileSizes();
-        }
-
-        /// <summary>
         /// Get *.con, *.gff and *.wnd file size and display it in the main form
         /// </summary>
         private void GralFileSizes()
@@ -2717,6 +2707,8 @@ namespace Gral
             if (tabControl1.SelectedIndex == 6)
             {
                 CheckConFiles(); // check, if project is locked
+                GralFileSizes(); // calculate file sizes
+
                 // Check, if GRAMM Windfield exists
                 if (Directory.Exists(GRAMMwindfield))
                 {

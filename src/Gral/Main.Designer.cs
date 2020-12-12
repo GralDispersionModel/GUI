@@ -359,7 +359,6 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.Project.SuspendLayout();
             this.Comments.SuspendLayout();
@@ -4127,12 +4126,12 @@
             this.button36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button36.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.button36.ForeColor = System.Drawing.Color.Black;
-            this.button36.Location = new System.Drawing.Point(94, 428);
+            this.button36.Location = new System.Drawing.Point(14, 425);
             this.button36.Margin = new System.Windows.Forms.Padding(2);
             this.button36.Name = "button36";
-            this.button36.Size = new System.Drawing.Size(89, 27);
+            this.button36.Size = new System.Drawing.Size(167, 30);
             this.button36.TabIndex = 100;
-            this.button36.Text = "&Show fields";
+            this.button36.Text = "&Show online map";
             this.toolTip1.SetToolTip(this.button36, "Show a map window for the GRAMM/GRAL online functions");
             this.button36.UseVisualStyleBackColor = true;
             this.button36.Click += new System.EventHandler(this.Button36_Click);
@@ -5193,12 +5192,6 @@
             0,
             0});
             // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 120000;
-            this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -5644,7 +5637,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown43;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button button54;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button55;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label99;
