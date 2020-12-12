@@ -35,6 +35,8 @@ namespace GralDomain
             List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
             MeteoModelEmum meteoModel = MeteoModelEmum.None ;
             bool localSCL = false;
+            int _timeSeriesYear = 2020;
+
             // Release send coors
             if (sender is SelectMultiplePoints _sl)
             {
@@ -42,7 +44,7 @@ namespace GralDomain
                 localSCL = _sl.LocalStability;
                 GRAMMmeteofile = _sl.MeteoInitFileName; //value + ".met";
                 meteoModel = _sl.MeteoModel;
-
+                
                 foreach (DataRow row in _sl.PointCoorData.Rows)
                 {
                     if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
@@ -52,7 +54,7 @@ namespace GralDomain
 
                         GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
                         {
-                            filename = a,
+                            FileName = a,
                             X = Convert.ToDouble(row[1]),
                             Y = Convert.ToDouble(row[2]),
                             Z = Convert.ToDouble(row[3])
@@ -60,6 +62,7 @@ namespace GralDomain
                         receptor_points.Add(item);
                     }
                 }
+                _timeSeriesYear = _sl.TimeSeriesYear;
                 _sl.Close();
             }
             
@@ -72,16 +75,17 @@ namespace GralDomain
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
-                    Projectname = Gral.Main.ProjectName,
+                    ProjectName = Gral.Main.ProjectName,
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
-                    Decsep = decsep,
+                    DecSep = decsep,
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
                     Caption = "Compute Wind-Statistics ", // + DataCollection.Meteofilename;
-                    Rechenart = GralBackgroundworkers.BWMode.GrammMetFile, // ; 1 = analyse the GRAMM_Windfield
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GrammMetFile, // ; 1 = analyse the GRAMM_Windfield
                     LocalStability = localSCL, // use local stability?
-                    EvalPoints = receptor_points // evaluation points
+                    EvalPoints = receptor_points, // evaluation points
+                    FictiousYear = _timeSeriesYear
                 };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
@@ -95,17 +99,18 @@ namespace GralDomain
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
-                    Projectname = Gral.Main.ProjectName,
+                    ProjectName = Gral.Main.ProjectName,
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
                     GFFGridSize = (double)MainForm.numericUpDown10.Value,
-                    Decsep = decsep,
+                    DecSep = decsep,
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
                     Caption = "Compute GRAL Wind-Statistics ", // + DataCollection.Meteofilename;
-                    Rechenart = GralBackgroundworkers.BWMode.GralMetFile, // ; 3 = analyse the GRAL Windfield
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GralMetFile, // ; 3 = analyse the GRAL Windfield
                     LocalStability = localSCL, // use local stability?
-                    EvalPoints = receptor_points // evaluation points
+                    EvalPoints = receptor_points, // evaluation points
+                    FictiousYear = _timeSeriesYear
                 };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
@@ -158,19 +163,19 @@ namespace GralDomain
                     {
                         GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                         {
-                            Schnitt = Convert.ToDouble(trans),
-                            Meteofilename = GRAMMmeteofile,
-                            Projectname = Gral.Main.ProjectName,
+                            VericalIndex = Convert.ToDouble(trans),
+                            MeteoFileName = GRAMMmeteofile,
+                            ProjectName = Gral.Main.ProjectName,
                             Path_GRAMMwindfield = MainForm.GRAMMwindfield,
                             XDomain = XDomain,
                             YDomain = YDomain,
                             GrammWest = MainForm.GrammDomRect.West,
                             GrammSouth = MainForm.GrammDomRect.South,
                             GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
-                            Decsep = decsep,
+                            DecSep = decsep,
                             UserText = @"The process may take some minutes. The file " + Path.GetFileName(file) + @" is stored in the subdirectory \maps\",
                             Caption = "Compute mean wind velocity",
-                            Rechenart = GralBackgroundworkers.BWMode.GrammMeanWindVel, // ; 31
+                            BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GrammMeanWindVel, // ; 31
                             Filename = file
                         };
                         
