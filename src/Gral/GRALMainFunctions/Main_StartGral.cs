@@ -332,14 +332,14 @@ namespace Gral
 					GRALProcess.Exited += new System.EventHandler(GralExited);
 					GRALProcess.StartInfo.FileName = GRAL_Program_Path;
 					GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-					GRALProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAL_Program_Path);
+					GRALProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
 					if (CopyCorestoProject == false)
 					{
-						GRALProcess.StartInfo.Arguments = " " + '"' +  GRAL_Project_Path + '"';
+						GRALProcess.StartInfo.Arguments = " " + "\"" + GRAL_Project_Path + "\"";
 					}
 					if (GRALSettings.Loglevel > 0)
 					{
-						GRALProcess.StartInfo.Arguments += " " + '"' + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + '"';
+						GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
 					}
 					GRALProcess.Start();
 					

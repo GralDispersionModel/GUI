@@ -222,7 +222,7 @@ namespace Gral
                         GRAMMProcess.StartInfo.FileName = GRAMM_Program_Path;
                         GRAMMProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                         GRAMMProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
-                        GRAMMProcess.StartInfo.Arguments = GRAMM_Project_Path;
+                        GRAMMProcess.StartInfo.Arguments = "\"" + GRAMM_Project_Path + "\"";
                         GRAMMProcess.Start();
                         
                         #endif
