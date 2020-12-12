@@ -51,6 +51,10 @@ namespace GralDomForms
         /// Counter for automatic file names
         /// </summary>
         private int NameCounter = 1;
+        /// <summary>
+        /// Year for generation of meteo time series
+        /// </summary>
+        public int TimeSeriesYear = 2020;
 
         public SelectMultiplePoints()
         {
@@ -63,6 +67,7 @@ namespace GralDomForms
             if (MeteoModel == GralDomain.MeteoModelEmum.None) // No selection of GRAMM or GRAL Model
             {
                 groupBox1.Visible = false;
+                Year.Visible = false;
             }
             else
             {
@@ -207,6 +212,9 @@ namespace GralDomForms
             {
                 MeteoInitFileName = textBox1.Text;
             }
+            // Year string for meteo time series evaluation
+            TimeSeriesYear = Convert.ToInt32(numericUpDown1.Value);
+
             // send Message to domain Form, that computation should be started
             try
             {
