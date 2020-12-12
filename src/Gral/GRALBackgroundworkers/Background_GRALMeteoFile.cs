@@ -26,11 +26,11 @@ namespace GralBackgroundworkers
         private void GenerateGRALMeteofile(GralBackgroundworkers.BackgroundworkerData mydata,
                                        System.ComponentModel.DoWorkEventArgs e)
         {
-            bool transientMode = CheckForTransientMode(mydata.Projectname);
+            bool transientMode = CheckForTransientMode(mydata.ProjectName);
             List<string> meteoTimeSeries = new List<string>();
             List<string> meteoPGTALL = new List<string>();
-            ReadMettimeseries(Path.Combine(mydata.Projectname, "Computation", @"mettimeseries.dat"), ref meteoTimeSeries);
-            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", @"meteopgt.all"), ref meteoPGTALL);
+            ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", @"mettimeseries.dat"), ref meteoTimeSeries);
+            ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", @"meteopgt.all"), ref meteoPGTALL);
 
             if (meteoPGTALL.Count == 0) // no data available
             {
@@ -60,7 +60,7 @@ namespace GralBackgroundworkers
             List<EvalPointsIndices> evalPoints = ReadGRALGeometries(GRALGeom, mydata.EvalPoints, mydata);
 
             //loop over all weather situations
-            string gffPath = GralStaticFunctions.St_F.GetGffFilePath(Path.Combine(mydata.Projectname, "Computation"));
+            string gffPath = GralStaticFunctions.St_F.GetGffFilePath(Path.Combine(mydata.ProjectName, "Computation"));
 
             ReadFlowFieldFiles gff = new ReadFlowFieldFiles();
             ReadSclUstOblClasses ReadStability = new ReadSclUstOblClasses();
@@ -115,7 +115,7 @@ namespace GralBackgroundworkers
             int ptNumber = 0;
             foreach (Point_3D item in mydata.EvalPoints)
             {
-                string file = Path.Combine(mydata.Projectname, @"Metfiles", Path.GetFileName(item.filename));
+                string file = Path.Combine(mydata.ProjectName, @"Metfiles", Path.GetFileName(item.FileName));
                 if (File.Exists(file))
                 {
                     try
@@ -125,7 +125,7 @@ namespace GralBackgroundworkers
                     catch { }
                 }
 
-                int fictiousyear = 1901;
+                int fictiousyear = mydata.FictiousYear;
                 int sitCount = 1;
                 string[] text;
                 int monthold = 1;

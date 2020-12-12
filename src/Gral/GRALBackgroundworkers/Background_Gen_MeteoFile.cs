@@ -118,8 +118,8 @@ namespace GralBackgroundworkers
                 try
                 {
                     text = line_meteopgt.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    nsektor[n] = Convert.ToDouble(text[0].Replace(".", mydata.Decsep));
-                    wg[n] = Convert.ToDouble(text[1].Replace(".", mydata.Decsep));
+                    nsektor[n] = Convert.ToDouble(text[0].Replace(".", mydata.DecSep));
+                    wg[n] = Convert.ToDouble(text[1].Replace(".", mydata.DecSep));
                     iakla[n] = Convert.ToInt32(text[2]);
                 }
                 catch
@@ -225,7 +225,8 @@ namespace GralBackgroundworkers
             double wge = 0;
             double wr = 0;
             int ak = 0;
-            int fictiousyear = 1901;
+            int fictiousyear = mydata.FictiousYear;
+            fictiousyear = Math.Max(1900, fictiousyear);
             string [] month=new string[2];
             int monthold=-1;
             //loop over mettimeseries.dat
@@ -236,7 +237,7 @@ namespace GralBackgroundworkers
             int item_count = 0;
             foreach(Point_3D item in mydata.EvalPoints)
             {
-                string file = Path.Combine(mydata.Projectname, @"Metfiles", Path.GetFileName(item.filename));
+                string file = Path.Combine(mydata.ProjectName, @"Metfiles", Path.GetFileName(item.FileName));
                 if (File.Exists(file))
                 {
                     try
@@ -259,8 +260,8 @@ namespace GralBackgroundworkers
                         try
                         {
                             text = mettimeseries.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                            wge = Convert.ToDouble(text[2].Replace(".", mydata.Decsep));
-                            wr = Convert.ToDouble(text[3].Replace(".", mydata.Decsep));
+                            wge = Convert.ToDouble(text[2].Replace(".", mydata.DecSep));
+                            wr = Convert.ToDouble(text[3].Replace(".", mydata.DecSep));
                             ak = Convert.ToInt32(text[4]);
                             //new year
                             month = text[0].Split(new char[] { '.',':','-' }, StringSplitOptions.RemoveEmptyEntries);
