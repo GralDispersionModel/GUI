@@ -156,8 +156,7 @@ namespace Gral3DFunctions
                     return false;
                 }
 
-                string a;
-        		string[] dummy = new string[1000000];
+                string[] dummy = new string[1000000];
         		int x_anz; int xc;
         		int y_anz; int yc;
         		double dx; double dy;
@@ -513,7 +512,6 @@ namespace Gral3DFunctions
         {
         	try
         	{
-        		string a;
         		string[] dummy = new string[1000000];
         		
         		if (File.Exists(ElementsPath) == false)
