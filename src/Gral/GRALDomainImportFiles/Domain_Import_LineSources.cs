@@ -71,8 +71,8 @@ namespace GralDomain
                             }
 
                             Cursor = Cursors.WaitCursor;
-                            double zmax = -1000000;
-                            double zmin = 1000000;
+                            //double zmax = -1000000;
+                            //double zmin = 1000000;
                             for (i = 1; i < 10000000; i++)
                             {
                                 dummy = myReader.ReadLine();
