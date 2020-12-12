@@ -41,6 +41,7 @@ namespace GralDomain
             MMO.dataGridView1.Rows[zeilenindex].Cells[6].Value = 1;
             MMO.dataGridView1.Rows[zeilenindex].Cells[7].Value = 1;
             MMO.dataGridView1.Rows[zeilenindex].Cells[8].Value = 1;
+            
             //launch routine to read meteo data
             MMOData.Meteo = false;
             MMOData.FileLenght = 0;
