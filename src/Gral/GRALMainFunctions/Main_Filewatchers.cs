@@ -29,8 +29,8 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
-		//read the file Percent.txt when it is changed by GRAL.exe
+    {
+        //read the file Percent.txt when it is changed by GRAL.exe
         void PercentChanged(object sender, FileSystemEventArgs e)
         {
             progressBar3.Minimum = 0;
@@ -255,7 +255,7 @@ namespace Gral
             else
             {
                 UpdateProgressBar2(0);
-            	UpdateLabel67("Actual flow situation: 0 %");
+                UpdateLabel67("Actual flow situation: 0 %");
             }
         }
 
@@ -299,7 +299,7 @@ namespace Gral
             else
             {
                 UpdateProgressBar1(0);
-            	UpdateLabel66("Flow situation: 0 / 0 %");
+                UpdateLabel66("Flow situation: 0 / 0 %");
             }
         }
 
@@ -345,5 +345,5 @@ namespace Gral
             catch
             { }
         }
-	}
+    }
 }

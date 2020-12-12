@@ -29,14 +29,14 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
+    {
 
         /// <summary>
         /// set a reference to a GRAMM wind field and load the grid, landuse, and meteorology from existing project
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GRAMMSetReferenceToExitingWindfields(object sender, EventArgs e)
+        private void GRAMMSetReferenceToExistingWindfields(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(ProjectName))
             {
@@ -383,5 +383,5 @@ namespace Gral
             Enable_GRAMM();
         }
 
-	}
+    }
 }

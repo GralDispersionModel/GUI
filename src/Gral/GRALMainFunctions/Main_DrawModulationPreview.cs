@@ -32,52 +32,52 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
-		// show preview of diurnal/seasonal emission modulation
+    {
+        // show preview of diurnal/seasonal emission modulation
         public void RedrawPreviewOfModulation(object sender, EventArgs e)
         {
-        	if (listView1.SelectedItems.Count == 0)
-        	{
-        		return;
-        	}
-        	
-        	//load information about the selected diurnal and seasonal modulation for this source group
-        	string newPath = Path.Combine(ProjectName, @"Settings", "emissionmodulations.txt");
-        	string[] text2 = new string[26];
-        	
+            if (listView1.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            
+            //load information about the selected diurnal and seasonal modulation for this source group
+            string newPath = Path.Combine(ProjectName, @"Settings", "emissionmodulations.txt");
+            string[] text2 = new string[26];
+            
             string[] months = new string[12]{"Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
             float[] fac_diurnal = new float[25];
             float[] fac_seasonal = new float[13];
             
             try
-        	{
-        		// get the number of the selected Source Group = name
-        		string[] sg = new string[2];
-        		sg = listView1.SelectedItems[0].Text.Split(new char[] { ':' });
-        		string name = "";
-        		try
-        		{
-        			sg[1] = sg[1].Trim();
-        			name = sg[1];
-        		}
-        		catch
-        		{
-        			name = sg[0];
-        		}
-        		
-        		// Read emission modulation
-        		if (ReadEmissionModulation(name, ref fac_diurnal, ref fac_seasonal) == false)
-        		{
-        			return;
-        		}
-        		
-        		//MessageBox.Show(modseasonal_index.ToString() +"/" + moddirunal_index.ToString());
-        		// now paint the modulation
-        		//pictureBox5.Refresh();
-        		if (EmissionModulationMap == null)
-        		{
-        			EmissionModulationMap = new Bitmap(pictureBox5.Width, pictureBox5.Height);
-        		}
+            {
+                // get the number of the selected Source Group = name
+                string[] sg = new string[2];
+                sg = listView1.SelectedItems[0].Text.Split(new char[] { ':' });
+                string name = "";
+                try
+                {
+                    sg[1] = sg[1].Trim();
+                    name = sg[1];
+                }
+                catch
+                {
+                    name = sg[0];
+                }
+                
+                // Read emission modulation
+                if (ReadEmissionModulation(name, ref fac_diurnal, ref fac_seasonal) == false)
+                {
+                    return;
+                }
+                
+                //MessageBox.Show(modseasonal_index.ToString() +"/" + moddirunal_index.ToString());
+                // now paint the modulation
+                //pictureBox5.Refresh();
+                if (EmissionModulationMap == null)
+                {
+                    EmissionModulationMap = new Bitmap(pictureBox5.Width, pictureBox5.Height);
+                }
 
                 using (Graphics g = Graphics.FromImage(EmissionModulationMap))
                 {
@@ -170,69 +170,69 @@ namespace Gral
                     format2.Dispose();
                     mypen.Dispose();
                 }
-           	}
-        	catch{}
+            }
+            catch{}
         }
         
         private bool ReadEmissionModulation(string SG_name, ref float[] fac_diurnal, ref float[] fac_seasonal)
         {
-        	List<string> emissionmodulation = new List<string>();
+            List<string> emissionmodulation = new List<string>();
             List<string> moddiurnal = new List<string>(); //collection of diurnal emission modulation data
             List<string> modseasonal = new List<string>(); //collection of seasonal emission modulation data
             string[] sg = new string[2];
             string newPath = Path.Combine(ProjectName, @"Settings", "emissionmodulations.txt");
         
-        	try
-        	{
-        		
-        		using (StreamReader _myReader = new StreamReader(newPath))
-        		{
-        			while (_myReader.EndOfStream == false)
-        			{
-        				emissionmodulation.Add(_myReader.ReadLine().Replace('\t', ','));
-        			}
-        		}
-        		
-        		newPath = Path.Combine(ProjectName, @"Settings", "seasonal_emissionmod.txt");
-        		using (StreamReader _myReader = new StreamReader(newPath))
-        		{
-        			while(_myReader.EndOfStream == false)
-        			{
-        				modseasonal.Add(_myReader.ReadLine().Replace('\t', ','));
-        			}
-        		}
-        		
-        		newPath = Path.Combine(ProjectName, @"Settings", "diurnal_emissionmod.txt");
-        		using (StreamReader _myReader = new StreamReader(newPath))
-        		{
-        			while(_myReader.EndOfStream == false)
-        			{
-        				moddiurnal.Add(_myReader.ReadLine().Replace('\t', ','));
-        			}
-        		}
-        		
-        		foreach(string dum in emissionmodulation)
-        		{
-        			sg = dum.Split(new char[] { ',' }); // sg[0] = Source group
-        			if (sg.Count() < 2)
+            try
+            {
+                
+                using (StreamReader _myReader = new StreamReader(newPath))
+                {
+                    while (_myReader.EndOfStream == false)
+                    {
+                        emissionmodulation.Add(_myReader.ReadLine().Replace('\t', ','));
+                    }
+                }
+                
+                newPath = Path.Combine(ProjectName, @"Settings", "seasonal_emissionmod.txt");
+                using (StreamReader _myReader = new StreamReader(newPath))
+                {
+                    while(_myReader.EndOfStream == false)
+                    {
+                        modseasonal.Add(_myReader.ReadLine().Replace('\t', ','));
+                    }
+                }
+                
+                newPath = Path.Combine(ProjectName, @"Settings", "diurnal_emissionmod.txt");
+                using (StreamReader _myReader = new StreamReader(newPath))
+                {
+                    while(_myReader.EndOfStream == false)
+                    {
+                        moddiurnal.Add(_myReader.ReadLine().Replace('\t', ','));
+                    }
+                }
+                
+                foreach(string dum in emissionmodulation)
+                {
+                    sg = dum.Split(new char[] { ',' }); // sg[0] = Source group
+                    if (sg.Count() < 2)
                     {
                         return false;
                     }
 
                     // find source group
                     if (String.Compare(sg[0], SG_name) == 0)
-        			{
-        				//find the diurnal modulation
+                    {
+                        //find the diurnal modulation
                         string[] text1;
                         foreach (string dum2 in moddiurnal)
                         {
-                        	text1 = dum2.Split(new char[] { '\t', ',' });
-                        	if (text1[0].Trim() == sg[1].Trim())
+                            text1 = dum2.Split(new char[] { '\t', ',' });
+                            if (text1[0].Trim() == sg[1].Trim())
                             {
                                 // moddirunal_index = j;
                                 for (int k = 1; k < text1.Length; k++)
                                 {
-                                	if (k < fac_diurnal.Length)
+                                    if (k < fac_diurnal.Length)
                                     {
                                         fac_diurnal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
                                     }
@@ -244,13 +244,13 @@ namespace Gral
                         
                         foreach (string dum2 in modseasonal)
                         {
-                        	text1 = dum2.Split(new char[] { '\t', ',' });
-                        	if (text1[0].Trim() == sg[2].Trim())
+                            text1 = dum2.Split(new char[] { '\t', ',' });
+                            if (text1[0].Trim() == sg[2].Trim())
                             {
                                 // modseasonal_index = j;
                                 for (int k = 1; k < text1.Length; k++)
                                 {
-                                	if (k < fac_seasonal.Length)
+                                    if (k < fac_seasonal.Length)
                                     {
                                         fac_seasonal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
                                     }
@@ -259,58 +259,58 @@ namespace Gral
                             }
                         }
                    }
-        		}
-        		
-        		emissionmodulation.Clear();
-        		moddiurnal.Clear();
-        		modseasonal.Clear();
-        		
-        		return true;	
-        	}
-        	catch
-        	{
-        		emissionmodulation.Clear();
-        		moddiurnal.Clear();
-        		modseasonal.Clear();
-        		
-        		return false;
-        	}
+                }
+                
+                emissionmodulation.Clear();
+                moddiurnal.Clear();
+                modseasonal.Clear();
+                
+                return true;	
+            }
+            catch
+            {
+                emissionmodulation.Clear();
+                moddiurnal.Clear();
+                modseasonal.Clear();
+                
+                return false;
+            }
         }
         
         void Panel1Paint(object sender, PaintEventArgs e)
         {
-        	Graphics g = e.Graphics;
-        	g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;			
-        	
-        	Font titlefont = new Font("Arial", 19, FontStyle.Bold);
-        	Font subtitlefont = new Font("Arial", 11, FontStyle.Bold);
+            Graphics g = e.Graphics;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;			
+            
+            Font titlefont = new Font("Arial", 19, FontStyle.Bold);
+            Font subtitlefont = new Font("Arial", 11, FontStyle.Bold);
             StringFormat format1 = new StringFormat
             {
                 LineAlignment = StringAlignment.Near,
                 Alignment = StringAlignment.Center
             };
             Brush Solid_blue = new SolidBrush(Color.Blue);
-        	Brush Solid_black = new SolidBrush(Color.Black);
-        	
-			int x = panel1.Width / 2;
-        	int distance =  (int) (g.MeasureString("J", titlefont, 200).Height);
-        	int distance2 =  (int) (g.MeasureString("J", subtitlefont, 200).Height);
-        	
-        	g.DrawString("GRAL GUI V21.09Beta3 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            Brush Solid_black = new SolidBrush(Color.Black);
+            
+            int x = panel1.Width / 2;
+            int distance =  (int) (g.MeasureString("J", titlefont, 200).Height);
+            int distance2 =  (int) (g.MeasureString("J", subtitlefont, 200).Height);
+            
+            g.DrawString("GRAL GUI V21.09Beta3 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
             g.DrawString("Compiled for Windows", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #endif
             g.DrawString("Development Team: Dietmar Oettl and Markus Kuntner", subtitlefont, Solid_black, x, 25 + 2 * distance, format1);
-        	g.DrawString("Support and Training: Christian Kurz (kurz@ivt.tugraz.at)", subtitlefont, Solid_black, x, 25 + 2 * distance + distance2, format1);
-        	
-        	format1.Dispose();
-        	titlefont.Dispose();
-        	subtitlefont.Dispose();
-        	Solid_black.Dispose();
-        	Solid_blue.Dispose();
-        	g.Dispose();	
+            g.DrawString("Support and Training: Christian Kurz (kurz@ivt.tugraz.at)", subtitlefont, Solid_black, x, 25 + 2 * distance + distance2, format1);
+            
+            format1.Dispose();
+            titlefont.Dispose();
+            subtitlefont.Dispose();
+            Solid_black.Dispose();
+            Solid_blue.Dispose();
+            g.Dispose();	
         }
-	}
+    }
 }

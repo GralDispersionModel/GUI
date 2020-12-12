@@ -29,7 +29,7 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
+    {
         /// <summary>
         /// change the horizontal grid resolution of the GRAMM grid
         /// </summary>
@@ -301,27 +301,27 @@ namespace Gral
         
         private bool SunriseResetMeteoFiles()
         {
-        	if (File.Exists(Path.Combine(ProjectName, @"Computation", "meteopgt.all")))
-        	{
-        		if (MessageBox.Show("Reset the meteo files?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) ==
-        		    DialogResult.OK)
-        		{
-        			GRAMMin(EmifileReset); //save GRAMM input file
-        			Set_met_button(true); // meteopgt.all has to be written new -> user has to press "meteo files" button
-        			try
-        			{
-        				File.Delete(Path.Combine(ProjectName, @"Computation", "meteopgt.all"));
-        			}
-        			catch{}
-        			
-        			return true;
-        		}
-        		else
-        		{
-        			return false;
-        		}	
-        	}
-        	return true;
+            if (File.Exists(Path.Combine(ProjectName, @"Computation", "meteopgt.all")))
+            {
+                if (MessageBox.Show("Reset the meteo files?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) ==
+                    DialogResult.OK)
+                {
+                    GRAMMin(EmifileReset); //save GRAMM input file
+                    Set_met_button(true); // meteopgt.all has to be written new -> user has to press "meteo files" button
+                    try
+                    {
+                        File.Delete(Path.Combine(ProjectName, @"Computation", "meteopgt.all"));
+                    }
+                    catch{}
+                    
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }	
+            }
+            return true;
         }
         
         /// <summary>
@@ -331,12 +331,12 @@ namespace Gral
         /// <param name="e"></param>
         void GRAMMSetSunriseOption(object sender, EventArgs e)
         {
-        	if (SunriseResetMeteoFiles() == false) // Check, if meteopgt can be changed, otherwise set sunrise option to previous value 
-        	{
-        		checkBox30.Checked =! checkBox30.Checked;
-        	}
+            if (SunriseResetMeteoFiles() == false) // Check, if meteopgt can be changed, otherwise set sunrise option to previous value 
+            {
+                checkBox30.Checked =! checkBox30.Checked;
+            }
             // create new GRAMMin.dat
             GRAMMin(true);
         }
-	}
+    }
 }
