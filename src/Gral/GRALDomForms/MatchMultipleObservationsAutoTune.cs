@@ -32,14 +32,13 @@ namespace GralDomForms
             this.Hide();
             double[] testValuesVector = new double[9] { 0.01, 0.1, 0.5, 1, 5, 10, 20, 40, 60 };
             double[] testValuesDirection = new double[5] { 0.1, 0.5, 1, 3, 6 };
-            double[] Fitting = new double[MetFileNames.Count];
             double[] BestMatchFactor = new double[MetFileNames.Count];
             double[] BestMatchDirection = new double[MetFileNames.Count];
             int[] BestMatchMode = new int[MetFileNames.Count];
-            
+            double Fitting = -1;
+
             for (int i = 0; i < MetFileNames.Count; i++)
             {
-                Fitting[i] = -1;
                 BestMatchDirection[i] = MatchingData.WeightingDirection[i];
                 BestMatchFactor[i] = MatchingData.WeightingFactor[i];
                 BestMatchMode[i] = MatchingData.Optimization;
@@ -77,17 +76,17 @@ namespace GralDomForms
                         MatchTuning(_m, GralDomain.Domain.CancellationTokenSource.Token);
                         double fit = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum, _m.WeightingAutoMode);
 
-                        for (int i = 0; i < MetFileNames.Count; i++)
+                        if (fit > Fitting)
                         {
-                            if (fit > Fitting[i])
+                            for (int i = 0; i < MetFileNames.Count; i++)
                             {
-                                Fitting[i] = fit;
+
+                                Fitting = fit;
                                 BestMatchDirection[i] = _m.WeightingDirection[i];
                                 BestMatchFactor[i] = _m.WeightingFactor[i];
                                 BestMatchMode[i] = _m.Optimization;
                             }
                         }
-
                     }
                 }
             }
@@ -122,17 +121,16 @@ namespace GralDomForms
                             MatchTuning(_m, GralDomain.Domain.CancellationTokenSource.Token);
                             double fit = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum, _m.WeightingAutoMode);
 
-                            for (int i = 0; i < MetFileNames.Count; i++)
+                            if (fit > Fitting)
                             {
-                                if (fit > Fitting[i])
+                                for (int i = 0; i < MetFileNames.Count; i++)
                                 {
-                                    Fitting[i] = fit;
+                                    Fitting = fit;
                                     BestMatchDirection[i] = _m.WeightingDirection[i];
                                     BestMatchFactor[i] = _m.WeightingFactor[i];
                                     BestMatchMode[i] = _m.Optimization;
                                 }
                             }
-
                         }
                     }
                 }
@@ -142,23 +140,20 @@ namespace GralDomForms
             if ((Passes & 4) == 4)
             {
                 List<int> MetfileList = new List<int>();
+                int[] IterDirection = new int[MetFileNames.Count];
+                
                 for (int j = 0; j < MetFileNames.Count; j++)
                 {
                     MetfileList.Add(j);
+                    IterDirection[j] = 1;
                 }
-                // Add station 0 at the end of the iteration list -> improve 2 times per iteration
-                if (MetFileNames.Count > 1)
-                {
-                    MetfileList.Add(0);
-                }
-                Random rnd = new Random();
+                
                 wait.BeginInvoke(wait.UpdateProgressDelegate, this, Math.Max(5, (int)(numericUpDown1.Value * MetfileList.Count)));
 
                 for (int iterations = 0; iterations < (int)numericUpDown1.Value; iterations++)
                 {
-                    wait.Text = "Automatic Tuning - Pass 3/3-iter: " + (iterations + 1).ToString();
-                    MetfileList.Reverse();
-
+                    wait.Text = "Automatic Tuning - Pass 3/3-iteration: " + (iterations + 1).ToString();
+                    
                     foreach (int i in MetfileList)
                     {
                         wait.BeginInvoke(wait.UpdateProgressDelegate, this, 0);
@@ -172,48 +167,53 @@ namespace GralDomForms
                             Array.Copy(BestMatchFactor, _m.WeightingFactor, BestMatchFactor.Length);
                             Array.Copy(BestMatchDirection, _m.WeightingDirection, BestMatchDirection.Length);
 
-                            int direction = 1;
                             double _fac = 1.2;
-                            if (BestMatchFactor[i] < 1)
+                            if (BestMatchFactor[i] < 0.45)
                             {
                                 _fac = 1.3;
                             }
 
-                            for (int j = 0; j < 3; j++)
+                            for (int j = 0; j < 2; j++)
                             {
                                 Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
                                 Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
-                                _m.WeightingFactor[i] = _m.WeightingFactor[i] * Math.Pow(_fac, direction);
+                                _m.WeightingFactor[i] = _m.WeightingFactor[i] * Math.Pow(_fac, IterDirection[i]);
 
                                 MatchTuning(_m, GralDomain.Domain.CancellationTokenSource.Token);
                                 double fit = AutoTuningError(_m.VectorErrorSum, _m.SCErrorSum, _m.WeightingAutoMode);
-                                if (fit > Fitting[i])
+                                //1st pass
+                                if (Fitting < 0)
                                 {
-                                    Fitting[i] = fit;
+                                   Fitting = fit;
+                                    j--; // restart with iteration step 0/0
+                                }
 
+                                //Limit the tuning of an excellent fitting station to 1.2 * mean error
+                                //double fitMean = fit / MetFileNames.Count;
+                                //double thisErr = ((_m.VectorErrorSum[i, 1] * 1.1 + _m.VectorErrorSum[i, 2] * 0.9) * 1.2 * (100 - hScrollBar1.Value) + (_m.SCErrorSum[i, 0] * 1.1 + _m.SCErrorSum[i, 1] * 0.9) * hScrollBar1.Value) * _m.WeightingAutoMode[i];
+
+                                if (fit > Fitting)
+                                {
+                                    Fitting = fit;
                                     BestMatchDirection[i] = Round3Digits(_m.WeightingDirection[i]);
                                     BestMatchFactor[i] = Round3Digits(_m.WeightingFactor[i]);
                                     BestMatchMode[i] = _m.Optimization;
+                                    j = 1000; //cancel
                                 }
-                                else if (j < 1) // not improved -> try to reduce the factor
+                                else if (j == 0)  // not improved -> try to reduce the factor in step 1
                                 {
-                                    direction *= -1;
+                                    IterDirection[i] *= -1;
                                     // reset weighting factor
-                                    _m.WeightingFactor[i] = _m.WeightingFactor[i] * Math.Pow(_fac, direction);
+                                    _m.WeightingFactor[i] = _m.WeightingFactor[i] * Math.Pow(_fac, IterDirection[i]);
                                 }
-                                else // neither up nor down improved the model -> try random values
+                                else // no improvement
                                 {
-                                    direction = 0;
-                                    _m.WeightingFactor[i] = Math.Max(0, _m.WeightingFactor[i] + _m.WeightingFactor[i] * (0.75 - rnd.NextDouble()));
-                                }
-
-                                if (_m.WeightingFactor[i] > 100)
-                                {
-                                    j = 1000; // cancel
+                                    j = 1000; //cancel
                                 }
                             }
                         }
                     }
+                    MetfileList.Reverse();
                 }
             }
 
@@ -223,9 +223,9 @@ namespace GralDomForms
             Array.Copy(BestMatchFactor, MatchingData.WeightingFactor, BestMatchFactor.Length);
 
             MatchingData.Optimization = BestMatchMode[0];
-            List<string> mettimeseries = MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token);
+            (List<string> mettimeseries, int UsedWeatherSit) = MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token);
             WriteMetTimeSeries(mettimeseries);
-            label6.Text = "Used situations: " + CalculateUsedNumberOfWeatherSituations(mettimeseries).ToString();
+            label6.Text = "Used situations: " + UsedWeatherSit.ToString();
             SetTuningResults(MatchingData);
 
             wait.Close();
@@ -254,8 +254,8 @@ namespace GralDomForms
                     stationWeighting = WeightingAutoMode[i];
                 }
 
-                err += VectorErrorSum[i, 2] * 1.2 * (100 - hScrollBar1.Value) * stationWeighting;
-                err += SCErrorSum[i, 1] * hScrollBar1.Value * stationWeighting;
+                err += (VectorErrorSum[i, 1] * 1.1 + VectorErrorSum[i, 2] * 0.9) * 1.2 * (100 - hScrollBar1.Value) * stationWeighting;
+                err += (SCErrorSum[i, 0] * 1.1 + SCErrorSum[i, 1] * 0.9) * hScrollBar1.Value * stationWeighting;
             }
             return err;
         }

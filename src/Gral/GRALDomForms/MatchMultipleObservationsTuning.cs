@@ -28,8 +28,8 @@ namespace GralDomForms
         /// </summary>
         /// <param name="MatchSettings">All setting for one match process</param>
         /// <param name="cts">Cancel token</param>
-        /// <returns>List for a matched metTimeSeries</returns>
-        private List<string> MatchTuning(MatchMultipleObservationsData MatchSettings, System.Threading.CancellationToken cts)
+        /// <returns>List for a matched metTimeSeries, Number of used weather situations</returns>
+        private (List<string>, int) MatchTuning(MatchMultipleObservationsData MatchSettings, System.Threading.CancellationToken cts)
         {
             CultureInfo ic = CultureInfo.InvariantCulture;
             Waitprogressbar wait = new Waitprogressbar("");
@@ -282,13 +282,13 @@ namespace GralDomForms
                                     }
                                 } // ParallelForEach() range.item loop
 
-                                if (bestFitSituation_local < bestFitErrorVal) // find best fitting total weather situation -> 1st check
+                                if (bestFitErrorVal_local < bestFitErrorVal) // find best fitting total weather situation -> 1st check
                                 {
                                     lock (lockObj)
                                     {
-                                        if (bestFitSituation_local < bestFitErrorVal) // find best fitting weather situation -> locked check
+                                        if (bestFitErrorVal_local < bestFitErrorVal) // find best fitting weather situation -> locked check
                                         {
-                                            bestFitErrorVal = bestFitSituation_local;  // error of best fitting situation
+                                            bestFitErrorVal = bestFitErrorVal_local;  // error of best fitting situation
                                             bestFitSituation = bestFitSituation_local; // best fitting situation
                                         }
                                     }
@@ -325,11 +325,8 @@ namespace GralDomForms
                             MatchSettings.PGT[bestFitSituation - 1].PGTFrq = MatchSettings.PGT[bestFitSituation - 1].PGTFrq + (double)1000d / MetFileLenght[0];
                             MatchSettings.PGT[bestFitSituation - 1].PGTNumber = bestFitSituation; // original number of weather situation
 
-                            //Add bestFitSituation if situations should be reduced
-                            if (MatchSettings.ReduceSituations > 0)
-                            {
-                                UsedMeteoSituations.Add(bestFitSituation);
-                            }
+                            //Add bestFitSituation
+                            UsedMeteoSituations.Add(bestFitSituation);
 
                             // Compute error values for the Match-Fine tuning
                             for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
@@ -427,7 +424,7 @@ namespace GralDomForms
             {
                 wait.Close();
             }
-            return metTimeSeries;
+            return (metTimeSeries, UsedMeteoSituations.Count);
         }
 
         /// <summary>

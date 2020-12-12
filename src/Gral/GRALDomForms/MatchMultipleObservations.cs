@@ -221,13 +221,14 @@ namespace GralDomForms
             dataGridView1.Columns[2].ReadOnly = true;
             dataGridView1.Columns[4].ReadOnly = true;
             dataGridView1.Columns[5].ReadOnly = true;
-
             dataGridView1.Columns[9].ReadOnly = true;
             dataGridView1.Columns[10].ReadOnly = true;
             dataGridView1.Columns[11].ReadOnly = true;
             dataGridView1.Columns[12].ReadOnly = true;
             dataGridView1.Columns[13].ReadOnly = true;
             dataGridView1.Columns[14].ReadOnly = true;
+
+            dataGridView1.Columns[8].DefaultCellStyle.BackColor = System.Drawing.Color.WhiteSmoke;
         }
 
         /// <summary>
@@ -606,6 +607,7 @@ namespace GralDomForms
                             DrawingMode = 0
                         };
                         windrose.Show();
+                        windrose.BringToFront();
                     }
                 }
                 else
@@ -647,7 +649,7 @@ namespace GralDomForms
                 TimeSeriesPointer = null;
                 // reset auto mode passes
                 checkBox5.Checked = true;
-                checkBox6.Checked = true;
+                checkBox6.Checked = false;
             }
 
             if (Match_Mode == 1)
@@ -1215,9 +1217,9 @@ namespace GralDomForms
         {
             //MessageBox.Show(MatchingData.PGT[1].PGTFrq.ToString() + "/" + MatchingData.WeightingFactor[0].ToString());
             Domain.CancellationTokenReset();
-            List<string> mettimeseries = MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token);
+            (List<string> mettimeseries, int UsedWeatherSit) = MatchTuning(MatchingData, GralDomain.Domain.CancellationTokenSource.Token);
             WriteMetTimeSeries(mettimeseries);
-            label6.Text = "Used situations: " + CalculateUsedNumberOfWeatherSituations(mettimeseries).ToString();
+            label6.Text = "Used situations: " + UsedWeatherSit.ToString();
             SetTuningResults(MatchingData);
             Show();
         }
@@ -1242,8 +1244,8 @@ namespace GralDomForms
         /// <param name="e"></param>
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            // Reset just iterative tuning
-            //checkBox5.Checked = true;
+            // Reset tuning mode
+            checkBox5.Checked = true;
             //checkBox6.Checked = true;
         }
     }
