@@ -55,8 +55,12 @@ namespace GralDomForms
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.Year = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.Year.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -83,7 +87,7 @@ namespace GralDomForms
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(19, 356);
+            this.button2.Location = new System.Drawing.Point(19, 360);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(113, 45);
             this.button2.TabIndex = 2;
@@ -93,7 +97,7 @@ namespace GralDomForms
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(575, 356);
+            this.button3.Location = new System.Drawing.Point(575, 360);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(109, 45);
             this.button3.TabIndex = 2;
@@ -103,7 +107,7 @@ namespace GralDomForms
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(327, 367);
+            this.checkBox1.Location = new System.Drawing.Point(327, 371);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(180, 24);
             this.checkBox1.TabIndex = 8;
@@ -117,7 +121,7 @@ namespace GralDomForms
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Location = new System.Drawing.Point(185, 305);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(136, 96);
+            this.groupBox1.Size = new System.Drawing.Size(136, 100);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select flow field model";
@@ -135,7 +139,7 @@ namespace GralDomForms
             // 
             // radioButton1
             // 
-            this.radioButton1.Location = new System.Drawing.Point(11, 61);
+            this.radioButton1.Location = new System.Drawing.Point(11, 65);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(110, 24);
             this.radioButton1.TabIndex = 1;
@@ -179,11 +183,45 @@ namespace GralDomForms
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(18, 18);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            2100,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown1.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.numericUpDown1, "Year for the result file");
+            this.numericUpDown1.Value = new decimal(new int[] {
+            2020,
+            0,
+            0,
+            0});
+            // 
+            // Year
+            // 
+            this.Year.Controls.Add(this.numericUpDown1);
+            this.Year.Location = new System.Drawing.Point(478, 354);
+            this.Year.Name = "Year";
+            this.Year.Size = new System.Drawing.Size(81, 51);
+            this.Year.TabIndex = 15;
+            this.Year.TabStop = false;
+            this.Year.Text = "Year";
+            // 
             // SelectMultiplePoints
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(709, 425);
+            this.Controls.Add(this.Year);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox1);
@@ -200,6 +238,8 @@ namespace GralDomForms
             this.Load += new System.EventHandler(this.SelectMultiplePoints_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.Year.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,5 +260,7 @@ namespace GralDomForms
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.GroupBox Year;
     }
 }
