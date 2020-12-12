@@ -615,7 +615,7 @@ namespace GralDomain
                         message.listBox1.Items.Add("..");
                         GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                         {
-                            Projectname = projectname,
+                            ProjectName = projectname,
                             Path_GRAMMwindfield = GRAMMoriginal,
                             XDomain = subimin,
                             YDomain = subjmin,
@@ -626,7 +626,7 @@ namespace GralDomain
                             Caption = "Export GRAMM Wind Fields ",
                             GRAMMCells = cellOrig,
                             GRAMMSubCells = cellSub,
-                            Rechenart = GralBackgroundworkers.BWMode.GrammExportSubDomain 
+                            BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GrammExportSubDomain 
                         };
                         message.listBox1.Items.Add("..");
                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart =
