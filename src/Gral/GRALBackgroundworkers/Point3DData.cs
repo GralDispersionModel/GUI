@@ -29,6 +29,6 @@ namespace GralBackgroundworkers
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
-        public string filename { get; set; }
+        public string FileName { get; set; }
     }
 }
