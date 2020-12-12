@@ -28,17 +28,17 @@ namespace GralBackgroundworkers
                                        System.ComponentModel.DoWorkEventArgs e)
         {
             int maxsource = mydata.MaxSource;
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
-            bool no_classification = mydata.Checkbox19;
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
+            bool no_classification = mydata.MeteoNotClassified;
 
             try
             {
                 //read meteopgt.all, mettimeseries.dat
-                bool transientMode = CheckForTransientMode(mydata.Projectname);
+                bool transientMode = CheckForTransientMode(mydata.ProjectName);
                 List<string> meteoTimeSeries = new List<string>();
                 List<string> meteoPGTALL = new List<string>();
-                ReadMettimeseries(Path.Combine(mydata.Projectname, "Computation", @"mettimeseries.dat"), ref meteoTimeSeries);
-                ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", @"meteopgt.all"), ref meteoPGTALL);
+                ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", @"mettimeseries.dat"), ref meteoTimeSeries);
+                ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", @"meteopgt.all"), ref meteoPGTALL);
                 List<string> meteoInput = meteoPGTALL;
                 if (transientMode)
                 {
@@ -46,12 +46,12 @@ namespace GralBackgroundworkers
                 }
 
                 //Read Emission modulation
-                (double[,] EmissionFactHour, double[,] EmissionFactMonth, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.Projectname);
+                (double[,] EmissionFactHour, double[,] EmissionFactMonth, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
                 if (sg_numbers == null)
                 {
                     throw new Exception("Error reading the emission modulation factors");
                 }
-                double[,] EmissionFacTimeSeries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.Projectname, 
+                double[,] EmissionFacTimeSeries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName, 
                                                                                sg_numbers, ref EmissionFactHour, ref EmissionFactMonth);
 
                 if (meteoPGTALL.Count == 0) // no data available
@@ -98,7 +98,7 @@ namespace GralBackgroundworkers
                             }
 
                             string ConFile = Convert.ToString(meteoSit + 1).PadLeft(5, '0') + "-" + Convert.ToString(_slice + 1) + sg_numbers[sgNumber].PadLeft(2, '0') + ".con";
-                            string filename = Path.Combine(mydata.Projectname, @"Computation", ConFile);
+                            string filename = Path.Combine(mydata.ProjectName, @"Computation", ConFile);
                             if (ReadConFiles(filename, mydata, sgNumber, ref conc))
                             {
                                 int ptCount = 0;
@@ -227,7 +227,7 @@ namespace GralBackgroundworkers
                             {
                                 foreach (string sourceGroupName in sg_names)
                                 {
-                                    header[0] += (item.filename + "\t");
+                                    header[0] += (item.FileName + "\t");
                                     header[1] += (item.X.ToString() + "\t");
                                     header[2] += (item.Y.ToString() + "\t");
                                     header[3] += (sourceGroupName + "\t");

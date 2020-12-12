@@ -54,7 +54,7 @@ namespace GralBackgroundworkers
                     NK = mydata.GRAMMSubCells.NZ
                 };
 
-                int lines = (int) GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(mydata.Projectname, @"Computation", "meteopgt.all"));
+                int lines = (int) GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(mydata.ProjectName, @"Computation", "meteopgt.all"));
 
                 ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses
                 {
@@ -108,7 +108,7 @@ namespace GralBackgroundworkers
                             wfexport.U = subU;
                             wfexport.V = subV;
                             wfexport.W = subW;
-                            wfexport.PathWindfield = Path.Combine(Path.Combine(mydata.Projectname, "Computation"), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
+                            wfexport.PathWindfield = Path.Combine(Path.Combine(mydata.ProjectName, "Computation"), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
 
                             wfexport.Windfield_export();
                             
@@ -121,7 +121,7 @@ namespace GralBackgroundworkers
                                 ReadStablity.ReadSclFile();
 
                                 //export scl, ust, obl-files for sub-domain
-                                ReadStablity.FileName = Path.Combine(mydata.Projectname, "Computation", Convert.ToString(dissit).PadLeft(5, '0'));
+                                ReadStablity.FileName = Path.Combine(mydata.ProjectName, "Computation", Convert.ToString(dissit).PadLeft(5, '0'));
                                 ReadStablity.X0 = Math.Max(0, mydata.XDomain - 1);
                                 ReadStablity.Y0 = Math.Max(0, mydata.YDomain - 1);
                                 ReadStablity.NX = Math.Max(0, mydata.XDomain + mydata.GRAMMSubCells.NX - 1);

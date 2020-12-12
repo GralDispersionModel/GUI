@@ -64,7 +64,7 @@ namespace GralBackgroundworkers
                     throw new FileNotFoundException("Error reading ggeom.asc");
                 }
 
-                double schnitt = mydata.Schnitt;
+                double schnitt = mydata.VericalIndex;
                 //obtain index in the vertical direction
                 for (int k = 1; k <= NZ; k++)
                 {
@@ -122,7 +122,7 @@ namespace GralBackgroundworkers
                     try
                     {
                         text = line_meteopgt.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                        frequ[iiwet] = Convert.ToDouble(text[3].Replace(".", mydata.Decsep));
+                        frequ[iiwet] = Convert.ToDouble(text[3].Replace(".", mydata.DecSep));
                     }
                     catch
                     {

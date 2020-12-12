@@ -36,13 +36,13 @@ namespace GralBackgroundworkers
         {
             //reading emission variations
             int maxsource = mydata.MaxSource;
-            string decsep = mydata.Decsep;
+            string decsep = mydata.DecSep;
             double[,] emifac_day = new double[24, maxsource];
             double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
             string[] sg_numbers = new string[maxsource];
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
             bool deposition_files_exists = false;
            
             //get variation for source group
@@ -54,7 +54,7 @@ namespace GralBackgroundworkers
                     sg_numbers[itm] = GetSgNumbers(source_group_name);
                     newpath = Path.Combine("Computation", "emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
 
-                    using (StreamReader myreader = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                     {
                         for (int j = 0; j < 24; j++)
                         {
@@ -78,7 +78,7 @@ namespace GralBackgroundworkers
             {
                 InDatVariables data = new InDatVariables();
                 InDatFileIO ReadInData = new InDatFileIO();
-                data.InDatPath = Path.Combine(mydata.Projectname, "Computation","in.dat");
+                data.InDatPath = Path.Combine(mydata.ProjectName, "Computation","in.dat");
                 ReadInData.Data = data;
                 if (ReadInData.ReadInDat() == true)
                 {
@@ -113,7 +113,7 @@ namespace GralBackgroundworkers
 
             try
             {
-                using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                using (StreamReader read = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                 {
                     text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
@@ -146,7 +146,7 @@ namespace GralBackgroundworkers
 
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
-            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
+            ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
 
             if (data_meteopgt.Count == 0) // no data available
             { 
@@ -212,14 +212,14 @@ namespace GralBackgroundworkers
                             dep_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".dep";
                         }
 
-                        if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", dep_files[itm])) == false &&
-                            File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
+                        if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itm])) == false &&
+                            File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
                         {
                             exist_dep = false;
                         }
 
-                        if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itm])) == false &&
-                            File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
+                        if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itm])) == false &&
+                            File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
                         {
                             exist = false;
                             break;
@@ -277,7 +277,7 @@ namespace GralBackgroundworkers
                             RestoreJaggedArray(dep);
                             
                             //read GRAL concentration files
-                            string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itm]);
+                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itm]);
                             bool ConFileOK = ReadConFiles(filename, mydata, itm, ref conc);
 
                             // at least one con file OK -> add frequency of this weather situation to the total frequency
@@ -287,7 +287,7 @@ namespace GralBackgroundworkers
                             }
 
                             //read GRAL deposition files
-                            filename = Path.Combine(mydata.Projectname, @"Computation", dep_files[itm]);
+                            filename = Path.Combine(mydata.ProjectName, @"Computation", dep_files[itm]);
                             bool DepFileOK = ReadConFiles(filename, mydata, itm, ref dep);
                             if (DepFileOK)
                             {
@@ -330,7 +330,7 @@ namespace GralBackgroundworkers
                 {
                     fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
 
-                    if (mydata.Checkbox2 == true)
+                    if (mydata.CalculateMean == true)
                     {
                         for (int i = 0; i <= mydata.CellsGralX; i++)
                             for (int j = 0; j <= mydata.CellsGralY; j++)
@@ -341,7 +341,7 @@ namespace GralBackgroundworkers
                     }
                     itm++;
                 }
-                if (mydata.Checkbox2 == true)
+                if (mydata.CalculateMean == true)
                 {
                     //total concentration
                     for (int i = 0; i <= mydata.CellsGralX; i++)
@@ -362,7 +362,7 @@ namespace GralBackgroundworkers
                 CellSize = mydata.Horgridsize
             };
 
-            if (mydata.Checkbox2 == true)
+            if (mydata.CalculateMean == true)
             {
                 //write mean concentration files for each source group
                 string file;
@@ -387,7 +387,7 @@ namespace GralBackgroundworkers
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] ;
                     }
 
-                    file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -397,7 +397,7 @@ namespace GralBackgroundworkers
                     
                     if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
                     {
-                        file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + "_" + name + ".txt");
+                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" + name + ".txt");
                         
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
@@ -418,7 +418,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration and deposition file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
                 
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
@@ -435,7 +435,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists && mydata.WriteDepositionOrOdourData) 
                 {
-                    file = Path.Combine(mydata.Projectname, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;

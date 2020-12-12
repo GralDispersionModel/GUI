@@ -35,13 +35,13 @@ namespace GralBackgroundworkers
         {
             //reading emission variations
             int maxsource = mydata.MaxSource;
-            string decsep = mydata.Decsep;
+            string decsep = mydata.DecSep;
             double[,] emifac_day = new double[24, maxsource];
             double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
             string[] sg_numbers = new string[maxsource];
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
             
             double totfreq = mydata.OdFreq[0] * mydata.OdFreq[1] * mydata.OdFreq[2];
             double totemi = mydata.Odemi[0] + mydata.Odemi[1] + mydata.Odemi[2];
@@ -55,7 +55,7 @@ namespace GralBackgroundworkers
                     sg_numbers[itm] = GetSgNumbers(source_group_name);
                     newpath = Path.Combine("Computation", "emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
 
-                    StreamReader myreader = new StreamReader(Path.Combine(mydata.Projectname, newpath));
+                    StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath));
                     for (int j = 0; j < 24; j++)
                     {
                         text = myreader.ReadLine().Split(new char[] { ',' });
@@ -88,7 +88,7 @@ namespace GralBackgroundworkers
             newpath = Path.Combine("Computation", "mettimeseries.dat");
             try
             {
-                using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                using (StreamReader read = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                 {
                     text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
@@ -125,7 +125,7 @@ namespace GralBackgroundworkers
 
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
-            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
+            ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
             if (data_meteopgt.Count == 0) // no data available
             { 
                 BackgroundThreadMessageBox ("Error reading meteopgt.all");
@@ -202,22 +202,22 @@ namespace GralBackgroundworkers
                             odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".odr";
                         }
 
-                        if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itm])) == false &&
-                            File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
+                        if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itm])) == false &&
+                            File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == false)
                         {
                             exist = false;
                             break;
                         }
 
                         //check if vertical adjecent files to compute concentration variance exist
-                         if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", odr_files[itm])) == true ||
-                            File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == true)
+                         if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", odr_files[itm])) == true ||
+                            File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(wl).PadLeft(5, '0') + ".grz")) == true)
                         {
                             exist_conp = true;
                         }
 
                         //read GRAL concentration files
-                        string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itm]);
+                        string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itm]);
                         if (!ReadConFiles(filename, mydata, itm, ref conc))
                         {
                             // Error reading one *.con file
@@ -228,7 +228,7 @@ namespace GralBackgroundworkers
                         //read GRAL output files for quantities needed to compute the concentration variance
                         if (exist_conp == true)
                         {
-                            string filename_p = Path.Combine(mydata.Projectname, @"Computation", odr_files[itm]);
+                            string filename_p = Path.Combine(mydata.ProjectName, @"Computation", odr_files[itm]);
                             if (!ReadOdrFiles(filename_p, mydata, itm, ref concp, ref concm, ref Q_cv0, ref td))
                             {
                                 // Error reading the odr file -> Analysis not possible
@@ -503,7 +503,7 @@ namespace GralBackgroundworkers
                     name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
                 }
 
-                file = Path.Combine(mydata.Projectname, @"Maps", "Mean_Compost_" + name + ".txt");
+                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_Compost_" + name + ".txt");
                 Result.Z = itm;
                 Result.Values = concmit;
                 Result.FileName = file;
@@ -550,7 +550,7 @@ namespace GralBackgroundworkers
             {
                 //write mean total R90
                 string name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-                string file5 = Path.Combine(mydata.Projectname, @"Maps", "R90_" + name5 + ".txt");
+                string file5 = Path.Combine(mydata.ProjectName, @"Maps", "R90_" + name5 + ".txt");
                 Result.Z = -1;
                 Result.Round = 2;
                 Result.Unit = "-";
@@ -560,7 +560,7 @@ namespace GralBackgroundworkers
                 
                 //write mean total concentration flucutation intensity
                 name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-                file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
+                file5 = Path.Combine(mydata.ProjectName, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
                 Result.TwoDim = CFI;
                 Result.FileName = file5;
                 Result.WriteFloatResult();

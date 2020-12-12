@@ -47,10 +47,10 @@ namespace GralBackgroundworkers
             double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
-            string decsep = mydata.Decsep;
+            string decsep = mydata.DecSep;
             string[] sg_numbers = new string[maxsource];
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
-            bool no_classification = mydata.Checkbox19;
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
+            bool no_classification = mydata.MeteoNotClassified;
             
             //get variation for source group
             int itm=0;
@@ -61,7 +61,7 @@ namespace GralBackgroundworkers
                     sg_numbers[itm] = GetSgNumbers(source_group_name);
                     newpath = Path.Combine("Computation", "emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
 
-                    using (StreamReader myreader = new StreamReader (Path.Combine (mydata.Projectname, newpath)))
+                    using (StreamReader myreader = new StreamReader (Path.Combine (mydata.ProjectName, newpath)))
                     {
                         for (int j = 0; j < 24; j++) 
                         {
@@ -103,7 +103,7 @@ namespace GralBackgroundworkers
            
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
-            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
+            ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
             if (data_meteopgt.Count == 0) // no data available
             { 
                 BackgroundThreadMessageBox ("Error reading meteopgt.all");
@@ -129,7 +129,7 @@ namespace GralBackgroundworkers
             int mettimefilelength = 0;
             //read mettimeseries.dat to get file length necessary to define some array lengths
             newpath = Path.Combine("Computation", "mettimeseries.dat");
-            using (StreamReader sr = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+            using (StreamReader sr = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
             {
                 //text2 = sr.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 while (sr.EndOfStream == false)
@@ -159,7 +159,7 @@ namespace GralBackgroundworkers
                 }
             }
 
-            newpath = Path.Combine(mydata.Projectname, "Computation", "emissions_timeseries.txt");
+            newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
             if (File.Exists(newpath) == true)
             {
                 try
@@ -225,7 +225,7 @@ namespace GralBackgroundworkers
             {
                 InDatVariables data = new InDatVariables();
                 InDatFileIO ReadInData = new InDatFileIO();
-                data.InDatPath = Path.Combine(mydata.Projectname, "Computation","in.dat");
+                data.InDatPath = Path.Combine(mydata.ProjectName, "Computation","in.dat");
                 ReadInData.Data = data;
                 if (ReadInData.ReadInDat() == true)
                 {
@@ -269,7 +269,7 @@ namespace GralBackgroundworkers
 
             //read mettimeseries.dat
             List<string> data_mettimeseries = new List<string>();
-            ReadMettimeseries(Path.Combine(mydata.Projectname, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
+            ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
             if (data_mettimeseries.Count == 0) // no data available
             { 
                 BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
@@ -359,8 +359,8 @@ namespace GralBackgroundworkers
                                 con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
                             }
 
-                            if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itmp])) == false &&
-                                File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
+                                File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
                             {
                                 lock(thisLock)
                                 {
@@ -377,7 +377,7 @@ namespace GralBackgroundworkers
                             }
                             }
                             //read GRAL concentration files
-                            string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
+                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
                             if (!ReadConFiles(filename, mydata, itmp, ref conc))
                             {
                                 // Error reading one *.con file
@@ -449,7 +449,7 @@ namespace GralBackgroundworkers
             string file;
             string name;
             //write mean concentration hour files for each source group
-            if (mydata.Checkbox2)  // sel_sg_checkbox2 = checked
+            if (mydata.CalculateMean)  // sel_sg_checkbox2 = checked
             {
                 itm = 0;
                 foreach (string source_group_name in sg_names)
@@ -471,7 +471,7 @@ namespace GralBackgroundworkers
                         name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
                     }
 
-                    file = Path.Combine(mydata.Projectname, @"Maps", name + ".txt");
+                    file = Path.Combine(mydata.ProjectName, @"Maps", name + ".txt");
                     
                     try
                     {
@@ -513,7 +513,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration
                 name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.Projectname, @"Maps", name + ".txt");
+                file = Path.Combine(mydata.ProjectName, @"Maps", name + ".txt");
                 
                 try
                 {

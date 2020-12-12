@@ -35,11 +35,11 @@ namespace GralBackgroundworkers
         {
             //reading emission variations
             int maxsource = mydata.MaxSource;
-            string decsep = mydata.Decsep;
+            string decsep = mydata.DecSep;
             string [] text=new string[5];
             string newpath;
             string[] sg_numbers = new string[maxsource];
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
 
             //get source group numbers
             int ij = 0;
@@ -70,7 +70,7 @@ namespace GralBackgroundworkers
             newpath = Path.Combine("Computation", "mettimeseries.dat");
             try
             {
-                using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                using (StreamReader read = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                 {
                     text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
@@ -108,7 +108,7 @@ namespace GralBackgroundworkers
 
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
-            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
+            ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
             if (data_meteopgt.Count == 0) // no data available
             { 
                 BackgroundThreadMessageBox ("Error reading meteopgt.all");
@@ -176,8 +176,8 @@ namespace GralBackgroundworkers
                             odr_files[itmp] = Convert.ToString(i + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itmp]).PadLeft(2, '0') + ".odr";
                         }
 
-                        if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itmp])) == false &&
-                            File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(i + 1).PadLeft(5, '0') + ".grz")) == false)
+                        if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
+                            File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(i + 1).PadLeft(5, '0') + ".grz")) == false)
                         {
                             lock (thisLock)
                             {
@@ -186,14 +186,14 @@ namespace GralBackgroundworkers
                         }
 
                         //check if vertical adjecent files to compute concentration variance exist
-                        if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", odr_files[itmp])) == true |
-                            File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(i + 1).PadLeft(5, '0') + ".grz")) == true)
+                        if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", odr_files[itmp])) == true |
+                            File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(i + 1).PadLeft(5, '0') + ".grz")) == true)
                         {
                             parallel_existconp = true;
                         }
 
                         //read GRAL concentration files
-                        string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
+                        string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
                         if (!ReadConFiles(filename, mydata, itmp, ref conc))
                         {
                             // Error reading one *.con file
@@ -207,7 +207,7 @@ namespace GralBackgroundworkers
                         //read GRAL output files for quantities needed to compute the concentration variance
                         if (parallel_existconp == true)
                         {
-                            string filename_p = Path.Combine(mydata.Projectname, @"Computation", odr_files[itmp]);
+                            string filename_p = Path.Combine(mydata.ProjectName, @"Computation", odr_files[itmp]);
                             if(!ReadOdrFiles(filename_p, mydata, itmp, ref concp, ref concm, ref Q_cv0, ref td))
                             {
                                 // Error reading the odr file -> Analysis not possible
@@ -475,7 +475,7 @@ namespace GralBackgroundworkers
                     name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm1] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
                 }
 
-                file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
                 Result.Z = itm1;
                 Result.Values = concmit;
                 Result.FileName = file;
@@ -492,7 +492,7 @@ namespace GralBackgroundworkers
 
             //write mean total odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-            file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+            file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
             Result.Z = maxsource;
             Result.Values = concmit;
             Result.FileName = file;
@@ -541,7 +541,7 @@ namespace GralBackgroundworkers
                 }
                 //write mean total R90
                 string name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-                string file5 = Path.Combine(mydata.Projectname, @"Maps", "R90_" + name5 + ".txt");
+                string file5 = Path.Combine(mydata.ProjectName, @"Maps", "R90_" + name5 + ".txt");
                 Result.Z = -1;
                 Result.Round = 2;
                 Result.Unit = "-";
@@ -556,7 +556,7 @@ namespace GralBackgroundworkers
                 }
                 //write mean total concentration flucutation intensity
                 name5 = mydata.Prefix + mydata.Pollutant + "_total";
-                file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
+                file5 = Path.Combine(mydata.ProjectName, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
                 Result.TwoDim = CFI;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
@@ -568,7 +568,7 @@ namespace GralBackgroundworkers
                 }
                 //write mean total standard deviation of the concentration flucutations
                 name5 = mydata.Prefix + mydata.Pollutant + "_total";
-                file5 = Path.Combine(mydata.Projectname, @"Maps", "ConcentrationStandardDeviation_" + name5 + ".txt");
+                file5 = Path.Combine(mydata.ProjectName, @"Maps", "ConcentrationStandardDeviation_" + name5 + ".txt");
                 Result.Unit =  @"OU/m" + Gral.Main.CubeString;
                 Result.TwoDim = Conc_standard;
                 Result.FileName = file5;
