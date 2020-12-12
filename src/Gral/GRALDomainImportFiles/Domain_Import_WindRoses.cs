@@ -31,7 +31,7 @@ namespace GralDomain
 {
 	public partial class Domain
 	{
-		private CultureInfo ic = CultureInfo.InvariantCulture;
+		private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 		
 		// import a wind rose at a given point
 		/// <summary>
