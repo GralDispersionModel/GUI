@@ -273,8 +273,14 @@ namespace GralDomain
         
         private readonly VerticalWindProfile ProfileConcentration = new VerticalWindProfile();
        
+        /// <summary>
+        /// Delegate to force a redraw from child forms
+        /// </summary>
         private readonly ForceDomainRedraw DomainRedrawDelegate;
 
+        /// <summary>
+        /// Delegate for a message that a child form has been closed (hidden)
+        /// </summary>
         private readonly ForceItemFormHide DomainItemFormHide;
 
         /// <summary>
@@ -1630,7 +1636,7 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
-        private void _selmp_StartComputation(object sender, EventArgs e)
+        private void SelectPointsStartComputation(object sender, EventArgs e)
         {
             // Release send coors
             if (sender is SelectMultiplePoints _sl)
@@ -1641,7 +1647,7 @@ namespace GralDomain
             }
         }
 
-        private void _selmp_CancelComputation(object sender, EventArgs e)
+        private void SelectPointsCancelComputation(object sender, EventArgs e)
         {
             // Release send coors
             if (sender is SelectMultiplePoints _sl)
@@ -2225,7 +2231,7 @@ namespace GralDomain
                     Picturebox1_Paint();
                     
                     Bitmap bitMap = new Bitmap(picturebox1.Width, picturebox1.Height);
-                    Graphics gra = Graphics.FromImage(bitMap);
+                    //Graphics gra = Graphics.FromImage(bitMap);
                     picturebox1.DrawToBitmap(bitMap, new Rectangle(0, 0, picturebox1.Width, picturebox1.Height));
 
                     picturebox1.Height = Convert.ToInt32(picturebox1.Height / dpifactor);
@@ -2628,19 +2634,19 @@ namespace GralDomain
 
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
-                    Schnitt = Convert.ToDouble(trans),
-                    Meteofilename = GRAMMmeteofile,
-                    Projectname = Gral.Main.ProjectName,
+                    VericalIndex = Convert.ToDouble(trans),
+                    MeteoFileName = GRAMMmeteofile,
+                    ProjectName = Gral.Main.ProjectName,
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
                     XDomain = XDomain,
                     YDomain = YDomain,
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
-                    Decsep = decsep,
+                    DecSep = decsep,
                     UserText = @"The process may take some minutes. Re-ordered wind field data is stored in the subdirectory \Re-ordered\",
                     Caption = "Re-Order Wind Fields ",
-                    Rechenart = GralBackgroundworkers.BWMode.ReOrder // ; 1 = re-order the GRAMM_Windfield
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.ReOrder // ; 1 = re-order the GRAMM_Windfield
                 };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart =
@@ -4546,6 +4552,8 @@ namespace GralDomain
         {
             List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
             string _prefix = string.Empty;
+            int _timeSeriesYear = 2020;
+
             // Release send coors
             if (sender is SelectMultiplePoints _sl)
             {
@@ -4559,7 +4567,7 @@ namespace GralDomain
                         
                         GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
                         {
-                            filename = a,
+                            FileName = a,
                             X = Convert.ToDouble(row[1]),
                             Y = Convert.ToDouble(row[2]),
                             Z = Convert.ToDouble(row[3])
@@ -4568,6 +4576,7 @@ namespace GralDomain
                     }
                 }
                 _prefix = _sl.MeteoInitFileName;
+                _timeSeriesYear = _sl.TimeSeriesYear;
                 _sl.Close();
             }
 
@@ -4586,11 +4595,11 @@ namespace GralDomain
 
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
-                    Projectname = Gral.Main.ProjectName,
-                    Decsep = decsep,
+                    ProjectName = Gral.Main.ProjectName,
+                    DecSep = decsep,
                     UserText = "The process may take some minutes. The data will be saved in the folder Computation",
                     Caption = "Evaluate concentration time series", // + DataCollection.Meteofilename;
-                    Rechenart = GralBackgroundworkers.BWMode.EvalPointsTimeSeries, // ; 38 =  Evaluation points concentration
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.EvalPointsTimeSeries, // ; 38 =  Evaluation points concentration
                     EvalPoints = receptor_points, // evaluation points
                     GFFGridSize = MainForm.HorGridSize,
                     Horgridsize = MainForm.HorGridSize,
@@ -4600,10 +4609,11 @@ namespace GralDomain
                     CellsGralY = MainForm.CellsGralY,
                     Slice = MainForm.GRALSettings.NumHorSlices,
                     SliceHeights = MainForm.GRALSettings.HorSlices,
-                    Sel_Source_Grp = _selSourceGrp, 
+                    SelectedSourceGroup = _selSourceGrp,
                     MaxSource = MainForm.listView1.Items.Count,
                     Prefix = _prefix,
-                    Checkbox19 = MainForm.checkBox19.Checked
+                    MeteoNotClassified = MainForm.checkBox19.Checked,
+                    FictiousYear = _timeSeriesYear
             };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
