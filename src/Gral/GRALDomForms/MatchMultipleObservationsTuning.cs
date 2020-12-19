@@ -253,15 +253,20 @@ namespace GralDomForms
 
                                     int match_station = 0; // counter, how much stations matched
                                     err = 0;
-                                    // find sum error without bad met-stations
+                                    
+                                    // find sum error without stations, when auto mode factor = 0
                                     for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
                                     {
                                         if (TimeSeriesPointer[j][met_count] != -1)
                                         {
-                                            if ((MatchSettings.Outliers == false) || ((err_st[j] / Math.Max(0.01, MatchSettings.WeightingFactor[j])) < err_min * 2)) // don´t use bad stations if outliers = true;
+                                            if (MatchSettings.WeightingAutoMode[j] > 0.000001)
                                             {
-                                                err += err_st[j];
-                                                match_station++;
+                                                // ignore bad stations if remove outliers = true;
+                                                if ((MatchSettings.Outliers == false) || ((err_st[j] / Math.Max(0.01, MatchSettings.WeightingFactor[j])) < err_min * 2)) 
+                                                {
+                                                    err += err_st[j];
+                                                    match_station++;
+                                                }
                                             }
                                         }
                                     }

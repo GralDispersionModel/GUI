@@ -69,6 +69,11 @@ namespace GralDomForms
                         for (int j = 0; j < MetFileNames.Count; j++)
                         {
                             _m.WeightingFactor[j] = fact;
+                            // set factor for stations with auto mode 0 to low value
+                            if(j < MatchingData.WeightingAutoMode.Length && MatchingData.WeightingAutoMode[j] < 0.0000001)
+                            {
+
+                            }
                         }
                         Array.Clear(_m.SCErrorSum, 0, _m.SCErrorSum.Length);
                         Array.Clear(_m.VectorErrorSum, 0, _m.VectorErrorSum.Length);
@@ -158,7 +163,8 @@ namespace GralDomForms
                     {
                         wait.BeginInvoke(wait.UpdateProgressDelegate, this, 0);
                         Application.DoEvents();
-                        if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested)
+                        if (!GralDomain.Domain.CancellationTokenSource.Token.IsCancellationRequested
+                            && i < MatchingData.WeightingAutoMode.Length && MatchingData.WeightingAutoMode[i] > 0.0000001)
                         {
                             //local copy of Matching data
                             MatchMultipleObservationsData _m = new MatchMultipleObservationsData(MatchingData);
@@ -206,7 +212,7 @@ namespace GralDomForms
                                     // reset weighting factor
                                     _m.WeightingFactor[i] = _m.WeightingFactor[i] * Math.Pow(_fac, IterDirection[i]);
                                 }
-                                else // no improvement
+                                else if (j > 0) // no improvement
                                 {
                                     j = 1000; //cancel
                                 }
