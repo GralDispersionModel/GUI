@@ -718,7 +718,7 @@ namespace GralDomForms
 
                         using (StreamWriter sr = new StreamWriter(filename))
                         {
-                            sr.WriteLine("MMO Settings2");
+                            sr.WriteLine("MMO Settings3");
                             sr.WriteLine(checkBox1.Checked.ToString());
                             sr.WriteLine(checkBox2.Checked.ToString());
                             sr.WriteLine(concatenate.Value.ToString());
@@ -726,13 +726,14 @@ namespace GralDomForms
                             sr.WriteLine(radioButton2.Checked.ToString());
                             sr.WriteLine(checkBox3.Checked.ToString());
                             sr.WriteLine(checkBox4.Checked.ToString());
+                            
                             // Paste (get the clipboard and serialize it to a file)
                             foreach (DataGridViewRow row in dataGridView1.Rows)
                             {
                                 int i = 0;
                                 foreach (DataGridViewCell cell in row.Cells)
                                 {
-                                    if (i < 8)
+                                    if (i < 9)
                                     {
                                         sr.Write(cell.Value.ToString() + "\t");
                                     }
@@ -787,6 +788,11 @@ namespace GralDomForms
                             else if (temp.Equals("MMO Settings2"))
                             {
                                 MMOFileFormat = 2;
+                                temp = sr.ReadLine();
+                            }
+                            else if (temp.Equals("MMO Settings3"))
+                            {
+                                MMOFileFormat = 3;
                                 temp = sr.ReadLine();
                             }
                             bool.TryParse(temp, out t);
@@ -850,15 +856,22 @@ namespace GralDomForms
                                     int line = 7;
                                     if (MMOFileFormat > 0)
                                     {
-                                        dataGridView1.Rows[zeilenindex].Cells[7].Value = Convert.ToDouble(data[line]);
-                                        line++;
+                                        dataGridView1.Rows[zeilenindex].Cells[7].Value = Convert.ToDouble(data[line++]);
                                     }
                                     else
                                     {
                                         dataGridView1.Rows[zeilenindex].Cells[7].Value = 1;
                                     }
 
-                                    dataGridView1.Rows[zeilenindex].Cells[8].Value = 1;
+                                    //Auto Mode factor
+                                    if (MMOFileFormat > 2)
+                                    {
+                                        dataGridView1.Rows[zeilenindex].Cells[8].Value = Convert.ToDouble(data[line++]); ;
+                                    }
+                                    else
+                                    {
+                                        dataGridView1.Rows[zeilenindex].Cells[8].Value = 1;
+                                    }
 
                                     string windfilename = data[line];
                                     line++;
