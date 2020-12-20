@@ -726,7 +726,8 @@ namespace GralDomForms
                             sr.WriteLine(radioButton2.Checked.ToString());
                             sr.WriteLine(checkBox3.Checked.ToString());
                             sr.WriteLine(checkBox4.Checked.ToString());
-                            
+                            sr.WriteLine(numericUpDown2.Value.ToString());
+
                             // Paste (get the clipboard and serialize it to a file)
                             foreach (DataGridViewRow row in dataGridView1.Rows)
                             {
@@ -822,6 +823,13 @@ namespace GralDomForms
                                 temp = sr.ReadLine();
                                 bool.TryParse(temp, out t);
                                 checkBox4.Checked = t;
+                            }
+
+                            if (MMOFileFormat > 2)
+                            {
+                                temp = sr.ReadLine();
+                                decimal.TryParse(temp, out v);
+                                numericUpDown2.Value = v;
                             }
 
                             spaltenbezeichnungen.Clear();
