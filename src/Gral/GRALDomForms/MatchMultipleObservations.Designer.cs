@@ -147,6 +147,7 @@
             this.concatenate.TabIndex = 4;
             this.concatenate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.concatenate, "Set limit for concatenated situations; 0 = no concatenation");
+            this.concatenate.ForeColor = System.Drawing.Color.Black;
             // 
             // button1
             // 
@@ -213,6 +214,7 @@
             this.checkBox2.Text = "Use local stability classes";
             this.toolTip1.SetToolTip(this.checkBox2, "Use the GRAMM computed local stability classes");
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox1
             // 
@@ -225,6 +227,7 @@
             this.checkBox1.Text = "Remove outliers";
             this.toolTip1.SetToolTip(this.checkBox1, "Remove outliers ");
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.ForeColor = System.Drawing.Color.Black;
             // 
             // radioButton2
             // 
@@ -247,6 +250,7 @@
             this.radioButton1.Text = "Vectorial";
             this.toolTip1.SetToolTip(this.radioButton1, "Use the vectorial method");
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox4
             // 
@@ -257,6 +261,7 @@
             this.checkBox4.Text = "3 x 3 average vector";
             this.toolTip1.SetToolTip(this.checkBox4, "Use an average wind vector of 3x3 cells");
             this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.ForeColor = System.Drawing.Color.Black;
             // 
             // button8
             // 
@@ -304,6 +309,7 @@
             0,
             0,
             0});
+            this.numericUpDown1.ForeColor = System.Drawing.Color.Black;
             // 
             // button9
             // 
@@ -332,6 +338,7 @@
             this.numericUpDown2.TabIndex = 21;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown2, "Reduce the number of situations\r\n0 = no reduction\r\n90 = max. reduction");
+            this.numericUpDown2.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox5
             // 
@@ -345,6 +352,7 @@
             this.checkBox5.Text = "V";
             this.toolTip1.SetToolTip(this.checkBox5, "Vectorial tuning");
             this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkBox5.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox6
             // 
@@ -356,6 +364,7 @@
             this.checkBox6.Text = "C";
             this.toolTip1.SetToolTip(this.checkBox6, "Components tuning");
             this.checkBox6.UseVisualStyleBackColor = true;
+            this.checkBox6.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox7
             // 
@@ -371,6 +380,7 @@
             this.checkBox7.Text = "I";
             this.toolTip1.SetToolTip(this.checkBox7, "Iterative tuning");
             this.checkBox7.UseVisualStyleBackColor = true;
+            this.checkBox7.ForeColor = System.Drawing.Color.Black;
             // 
             // dataGridView1
             // 
@@ -399,6 +409,7 @@
             this.label1.Size = new System.Drawing.Size(412, 16);
             this.label1.TabIndex = 8;
             this.label1.Text = "The first meteo station defines the stability classes and the time span";
+            this.label1.ForeColor = System.Drawing.Color.Black;
             // 
             // groupbox1
             // 
@@ -421,6 +432,7 @@
             this.groupbox1.TabIndex = 9;
             this.groupbox1.TabStop = false;
             this.groupbox1.Text = "Optimization settings";
+            this.groupbox1.ForeColor = System.Drawing.Color.Black;
             // 
             // label6
             // 
@@ -429,6 +441,7 @@
             this.label6.Size = new System.Drawing.Size(154, 17);
             this.label6.TabIndex = 13;
             this.label6.Text = "Used situations:";
+            this.label6.ForeColor = System.Drawing.Color.Black;
             // 
             // label7
             // 
@@ -437,6 +450,7 @@
             this.label7.Size = new System.Drawing.Size(102, 20);
             this.label7.TabIndex = 6;
             this.label7.Text = "Reduce situations";
+            this.label7.ForeColor = System.Drawing.Color.Black;
             // 
             // label2
             // 
@@ -445,6 +459,7 @@
             this.label2.Size = new System.Drawing.Size(37, 20);
             this.label2.TabIndex = 6;
             this.label2.Text = "‰";
+            this.label2.ForeColor = System.Drawing.Color.Black;
             // 
             // label10
             // 
@@ -453,6 +468,7 @@
             this.label10.Size = new System.Drawing.Size(96, 23);
             this.label10.TabIndex = 5;
             this.label10.Text = "Concatenation limit";
+            this.label10.ForeColor = System.Drawing.Color.Black;
             // 
             // groupBox2
             // 
@@ -474,6 +490,7 @@
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Automatic Tuning";
+            this.groupBox2.ForeColor = System.Drawing.Color.Black;
             // 
             // label5
             // 
@@ -483,6 +500,7 @@
             this.label5.Size = new System.Drawing.Size(50, 13);
             this.label5.TabIndex = 6;
             this.label5.Text = "Iterations";
+            this.label5.ForeColor = System.Drawing.Color.Black;
             // 
             // label4
             // 
@@ -492,6 +510,7 @@
             this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 1;
             this.label4.Text = "Stability";
+            this.label4.ForeColor = System.Drawing.Color.Black;
             // 
             // label3
             // 
@@ -501,6 +520,7 @@
             this.label3.Size = new System.Drawing.Size(38, 13);
             this.label3.TabIndex = 1;
             this.label3.Text = "Vector";
+            this.label3.ForeColor = System.Drawing.Color.Black;
             // 
             // MatchMultipleObservations
             // 

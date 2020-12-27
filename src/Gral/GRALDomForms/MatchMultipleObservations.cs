@@ -164,6 +164,14 @@ namespace GralDomForms
             //create data grid view for input of emission measurements
             spaltenbezeichnungen.Clear();
             CreateDataTable(0, 0, spaltenbezeichnungen);
+
+#if __MonoCS__
+            var allNumUpDowns = Gral.Main.GetAllControls<NumericUpDown>(this);
+            foreach (NumericUpDown nu in allNumUpDowns)
+            {
+                nu.TextAlign = HorizontalAlignment.Left;
+            }
+#endif
         }
 
         /// <summary>
@@ -1075,6 +1083,8 @@ namespace GralDomForms
                 }
                 catch
                 { }
+                this.Show();
+                this.BringToFront();
             }
             if (bt.Text.Equals("&Repeat"))
             {
