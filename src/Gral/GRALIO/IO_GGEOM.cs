@@ -97,10 +97,10 @@ namespace GralIO
         /// <summary>
     	/// Read the ggeom.asc file
     	/// </summary>
-    	/// <param name="mode">0: read AH and ZSP, 1: read AH, 2: read NX, NY, NZ, 3: read the complete file</param> 
+    	/// <param name="mode">0: read AH and ZSP, 1: read AH, 2: read NX, NY, NZ, -1: read the complete file</param> 
 		public bool ReadGGeomAsc(int mode)
 		{
-            // mode 0 = read AH and ZSP, 1 = read AH, 2 = read NX, NY, NZ, 3 = read the complete file
+            // mode 0 = read AH and ZSP, 1 = read AH, 2 = read NX, NY, NZ, -1 = read the complete file
 			try
 			{
 				bool result = false;
