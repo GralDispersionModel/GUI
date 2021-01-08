@@ -433,12 +433,20 @@ namespace GralDomain
                                         //write vector file
                                         using (StreamWriter myWriter = new StreamWriter(file))
                                         {
-                                            myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                                            myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                                            myWriter.WriteLine("Xllcorner     " + Convert.ToString(MainForm.GrammDomRect.West, ic));
-                                            myWriter.WriteLine("Yllcorner     " + Convert.ToString(MainForm.GrammDomRect.South, ic));
-                                            myWriter.WriteLine("cellsize      " + Convert.ToString(MainForm.GRAMMHorGridSize, ic));
-                                            myWriter.WriteLine("NODATA_value  " + "-9999");
+                                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                            {
+                                                NCols = NX,
+                                                NRows = NY,
+                                                XllCorner = MainForm.GrammDomRect.West,
+                                                YllCorner = MainForm.GrammDomRect.South,
+                                                CellSize = MainForm.GRAMMHorGridSize,
+                                                Unit = string.Empty,
+                                                Round = 4
+                                            };
+                                            if (!writeHeader.WriteEsriHeader(myWriter))
+                                            {
+                                                throw new Exception();
+                                            }
                                             for (int j = NY; j > 0; j--)
                                             {
                                                 sb.Clear();
@@ -472,12 +480,21 @@ namespace GralDomain
                                         file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + ".u");
                                         using (StreamWriter myWriter = new StreamWriter(file3))
                                         {
-                                            myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                                            myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                                            myWriter.WriteLine("Xllcorner     " + Convert.ToString(MainForm.GrammDomRect.West, ic));
-                                            myWriter.WriteLine("Yllcorner     " + Convert.ToString(MainForm.GrammDomRect.South, ic));
-                                            myWriter.WriteLine("cellsize      " + Convert.ToString(MainForm.GRAMMHorGridSize, ic));
-                                            myWriter.WriteLine("NODATA_value  " + "-9999");
+                                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                            {
+                                                NCols = NX,
+                                                NRows = NY,
+                                                XllCorner = MainForm.GrammDomRect.West,
+                                                YllCorner = MainForm.GrammDomRect.South,
+                                                CellSize = MainForm.GRAMMHorGridSize,
+                                                Unit = string.Empty,
+                                                Round = 4
+                                            };
+                                            if (!writeHeader.WriteEsriHeader(myWriter))
+                                            {
+                                                throw new Exception();
+                                            }
+
                                             for (int j = NY; j > 0; j--)
                                             {
                                                 sb.Clear();
@@ -504,12 +521,21 @@ namespace GralDomain
                                         file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + ".v");
                                         using (StreamWriter myWriter = new StreamWriter(file3))
                                         {
-                                            myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                                            myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                                            myWriter.WriteLine("Xllcorner     " + Convert.ToString(MainForm.GrammDomRect.West, ic));
-                                            myWriter.WriteLine("Yllcorner     " + Convert.ToString(MainForm.GrammDomRect.South, ic));
-                                            myWriter.WriteLine("cellsize      " + Convert.ToString(MainForm.GRAMMHorGridSize, ic));
-                                            myWriter.WriteLine("NODATA_value  " + "-9999");
+                                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                            {
+                                                NCols = NX,
+                                                NRows = NY,
+                                                XllCorner = MainForm.GrammDomRect.West,
+                                                YllCorner = MainForm.GrammDomRect.South,
+                                                CellSize = MainForm.GRAMMHorGridSize,
+                                                Unit = string.Empty,
+                                                Round = 4
+                                            };
+                                            if (!writeHeader.WriteEsriHeader(myWriter))
+                                            {
+                                                throw new Exception();
+                                            }
+                                            
                                             for (int j = NY; j > 0; j--)
                                             {
                                                 sb.Clear();
@@ -762,12 +788,21 @@ namespace GralDomain
                                 {
                                     using (StreamWriter myWriter = new StreamWriter(file))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -791,12 +826,21 @@ namespace GralDomain
                                     file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_u.txt");
                                     using (StreamWriter myWriter = new StreamWriter(file3))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -811,12 +855,21 @@ namespace GralDomain
                                     file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_v.txt");
                                     using (StreamWriter myWriter = new StreamWriter(file3))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -831,12 +884,21 @@ namespace GralDomain
                                     file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_w.txt");
                                     using (StreamWriter myWriter = new StreamWriter(file3))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+                                        
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -872,12 +934,21 @@ namespace GralDomain
                                                 file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_tke.txt");
                                                 using (StreamWriter myWriter = new StreamWriter(file3))
                                                 {
-                                                    myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                                    myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                                    myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                                    myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                                    myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                                    myWriter.WriteLine("NODATA_value  " + "-9999");
+                                                    GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                                    {
+                                                        NCols = nii,
+                                                        NRows = njj,
+                                                        XllCorner = GRALwest,
+                                                        YllCorner = GRALsued,
+                                                        CellSize = GRAL_cellsize_ff,
+                                                        Unit = string.Empty,
+                                                        Round = 4
+                                                    };
+                                                    if (!writeHeader.WriteEsriHeader(myWriter))
+                                                    {
+                                                        throw new Exception();
+                                                    }
+
                                                     for (int j = njj; j > 0; j--)
                                                     {
                                                         for (int i = 1; i <= nii; i++)
