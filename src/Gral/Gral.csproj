@@ -564,6 +564,7 @@
     <Compile Include="GRALDomForms\WindFileData.cs" />
     <Compile Include="GRALIO\CreateGralTopography.cs" />
     <Compile Include="GRALIO\CreateGrammGrid.cs" />
+    <Compile Include="GRALIO\EsriGridHeader.cs" />
     <Compile Include="GRALIO\IO_GGEOM.cs" />
     <Compile Include="GRALIO\IO_InDat.cs" />
     <Compile Include="GRALIO\IO_InDatData.cs" />
@@ -699,6 +700,7 @@
     <Compile Include="GRALItemForms\ShowVertices.Designer.cs">
       <DependentUpon>ShowVertices.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALMainFunctions\Main_TerrainInterpolation.cs" />
     <Compile Include="GRALMainSubForms\Main_SpecialSettings.cs">
       <SubType>Form</SubType>
     </Compile>
