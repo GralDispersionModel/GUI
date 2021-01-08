@@ -53,15 +53,14 @@ namespace GralIO
 		
 		public float[][][] Values;
 		public float[,] TwoDim;
-		public double [,] DblArr; 
-		
+		public double [,] DblArr;
+		private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 		// Write float result files to disc
 		/// <summary>
-    	/// Write an ESRII ASCII File with header and unit for 2 or 3 dimensional float arrays Values or TwoDim
-    	/// </summary>
+		/// Write an ESRII ASCII File with header and unit for 2 or 3 dimensional float arrays Values or TwoDim
+		/// </summary>
 		public bool WriteFloatResult()
 		{
-			CultureInfo ic = CultureInfo.InvariantCulture;
 			try
 			{
 				if (File.Exists(_filename))
@@ -71,30 +70,19 @@ namespace GralIO
 					}
 					catch{}
 				}
-					
-				using (StreamWriter myWriter = new StreamWriter(_filename))
-				{
-					// Header
-					myWriter.WriteLine("ncols         " + Convert.ToString(_ncols, ic));
-					myWriter.WriteLine("nrows         " + Convert.ToString(_nrows, ic));
-					myWriter.WriteLine("xllcorner     " + Convert.ToString(_xllcorner, ic));
-					myWriter.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
-					myWriter.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
-					if (_unit.Length > 0)
-                    {
-                        myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
-                    }
-                    else
-                    {
-                        myWriter.WriteLine("NODATA_value  " + "-9999");
-                    }
 
+                using (StreamWriter myWriter = new StreamWriter(_filename))
+                {
+                    if (!WriteEsriHeader(myWriter))
+                    {
+                        throw new Exception();
+                    }
                     StringBuilder SB = new StringBuilder();
-					for (int j = _nrows - 1; j > -1; j--)
-					{
+                    for (int j = _nrows - 1; j > -1; j--)
+                    {
                         SB.Clear();
-						for (int i = 0; i < _ncols; i++)
-						{
+                        for (int i = 0; i < _ncols; i++)
+                        {
                             if (_z < 0)
                             {
                                 SB.Append(Math.Round(TwoDim[i, j], _round).ToString(ic));
@@ -107,14 +95,14 @@ namespace GralIO
                                 SB.Append(" ");
                                 //myWriter.Write(Convert.ToString(Math.Round(Values[i, j, _z], _round), ic) + " ");
                             }
-						}
-						myWriter.WriteLine(SB.ToString());
+                        }
+                        myWriter.WriteLine(SB.ToString());
                         SB.Clear();
-					}
+                    }
                     SB = null;
                 }
-				
-				return true;
+
+                return true;
 			}
 			catch(Exception e)
 			{
@@ -129,8 +117,6 @@ namespace GralIO
     	/// </summary>
 		public bool WriteDblArrResult()
 		{
-			CultureInfo ic = CultureInfo.InvariantCulture;
-			
 			try
 			{
 				if (File.Exists(_filename))
@@ -140,41 +126,30 @@ namespace GralIO
 					}
 					catch{}
 				}
-					
-				using (StreamWriter myWriter = new StreamWriter(_filename))
-				{
-					// Header
-					myWriter.WriteLine("ncols         " + Convert.ToString(_ncols, ic));
-					myWriter.WriteLine("nrows         " + Convert.ToString(_nrows, ic));
-					myWriter.WriteLine("xllcorner     " + Convert.ToString(_xllcorner, ic));
-					myWriter.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
-					myWriter.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
-					if (_unit.Length > 0)
-                    {
-                        myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
-                    }
-                    else
-                    {
-                        myWriter.WriteLine("NODATA_value  " + "-9999");
-                    }
 
+                using (StreamWriter myWriter = new StreamWriter(_filename))
+                {
+                    if (!WriteEsriHeader(myWriter))
+                    {
+                        throw new Exception();
+                    }
                     StringBuilder SB = new StringBuilder();
                     for (int j = _nrows; j > 0; j--)
-					{
+                    {
                         SB.Clear();
-						for (int i = 1; i < _ncols + 1; i++)
-						{
+                        for (int i = 1; i < _ncols + 1; i++)
+                        {
                             SB.Append(Math.Round(DblArr[i, j], _round).ToString(ic));
                             SB.Append(" ");
-							//myWriter.Write(Convert.ToString(Math.Round(DblArr[i, j], _round), ic) + " ");
-						}
-						myWriter.WriteLine(SB.ToString());
+                            //myWriter.Write(Convert.ToString(Math.Round(DblArr[i, j], _round), ic) + " ");
+                        }
+                        myWriter.WriteLine(SB.ToString());
                         SB.Clear();
-					}
+                    }
                     SB = null;
-				}
-				
-				return true;
+                }
+
+                return true;
 			}
 			catch(Exception e)
 			{
@@ -189,8 +164,6 @@ namespace GralIO
         /// </summary>
         public bool WriteJaggedDblArrResult(double[][] Res)
         {
-            CultureInfo ic = CultureInfo.InvariantCulture;
-
             try
             {
                 if (File.Exists(_filename))
@@ -204,21 +177,10 @@ namespace GralIO
 
                 using (StreamWriter myWriter = new StreamWriter(_filename))
                 {
-                    // Header
-                    myWriter.WriteLine("ncols         " + Convert.ToString(_ncols, ic));
-                    myWriter.WriteLine("nrows         " + Convert.ToString(_nrows, ic));
-                    myWriter.WriteLine("xllcorner     " + Convert.ToString(_xllcorner, ic));
-                    myWriter.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
-                    myWriter.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
-                    if (_unit.Length > 0)
+                    if (!WriteEsriHeader(myWriter))
                     {
-                        myWriter.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
+                        throw new Exception();
                     }
-                    else
-                    {
-                        myWriter.WriteLine("NODATA_value  " + "-9999");
-                    }
-
                     StringBuilder SB = new StringBuilder();
                     for (int j = 0; j < _nrows; j++)
                     {
@@ -242,6 +204,37 @@ namespace GralIO
                 return false;
             }
         }
+
+		/// <summary>
+		/// Write the header of an Esri file
+		/// </summary>
+		/// <param name="Writer">Open StreamWriter</param>
+		/// <returns>true: writing OK, false: writing error</returns>
+		public bool WriteEsriHeader(StreamWriter Writer)
+        {
+			try
+			{
+				// Header
+				Writer.WriteLine("ncols         " + Convert.ToString(_ncols, ic));
+				Writer.WriteLine("nrows         " + Convert.ToString(_nrows, ic));
+				Writer.WriteLine("xllcorner     " + Convert.ToString(_xllcorner, ic));
+				Writer.WriteLine("yllcorner     " + Convert.ToString(_yllcorner, ic));
+				Writer.WriteLine("cellsize      " + Convert.ToString(_Cellsize, ic));
+				if (!string.IsNullOrEmpty(_unit))
+				{
+					Writer.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + _unit);
+				}
+				else
+				{
+					Writer.WriteLine("NODATA_value  " + "-9999");
+				}
+			}
+			catch
+            {
+				return false;
+            }
+			return true;
+		}
 
     }
 }
