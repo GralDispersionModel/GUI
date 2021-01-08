@@ -226,7 +226,7 @@ namespace GralDomain
         /// </summary>
         private float [,] CellHeights = new float[1,1];           // Cell heights
         /// <summary>
-        /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL
+        /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL, -1 GRAMM edge points
         /// </summary>
         private int CellHeightsType = 0;
         /// <summary>
@@ -746,28 +746,52 @@ namespace GralDomain
                 {
                     PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
                 };
-
-                double[,] AH = new double[1, 1];
-                ggeom.AH = AH;
-
-                if (ggeom.ReadGGeomAsc(1) == true)
+                // Mean cell height
+                if (CellHeightsType == 1 || CellHeightsType == 0)
                 {
-                    AH = ggeom.AH;
-                    ggeom = null;
-                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
-                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
+                    double[,] AH = new double[1, 1];
+                    ggeom.AH = AH;
+                    //read mean height only
+                    if (ggeom.ReadGGeomAsc(1) == true)
                     {
-                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                        AH = ggeom.AH;
+                        ggeom = null;
+                        CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
+                        for (int i = 1; i <= AH.GetUpperBound(0); i++)
                         {
-                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                            for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                            {
+                                CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                            }
                         }
+                        SetCellHeightsType(1);
                     }
+                }
+                // Edge cell height
+                else if (CellHeightsType == -1)
+                {
+                    double[,,] AHE = new double[1, 1, 1];
+                    ggeom.AHE = AHE;
+                    // read entire ggeom.asc file
+                    if (ggeom.ReadGGeomAsc(-1) == true)
+                    {
+                        AHE = ggeom.AHE;
+                        ggeom = null;
 
-                    SetCellHeightsType(1);
+                        CellHeights = new float[AHE.GetUpperBound(0) + 1, AHE.GetUpperBound(1) + 1];
+                        for (int i = 1; i <= AHE.GetUpperBound(0); i++)
+                        {
+                            for (int j = 1; j <= AHE.GetUpperBound(1); j++)
+                            {
+                                CellHeights[i, j] = (float)Math.Round(AHE[i, j, 1], 1);
+                            }
+                        }
+                        SetCellHeightsType(-1);
+                    }
                 }
             }
-            
-            if (CellHeightsType > 0)
+
+            if (Math.Abs(CellHeightsType) > 0)
             {
                 return true;
             }
@@ -3791,11 +3815,11 @@ namespace GralDomain
             }
 
             using (Dialog_3D dial = new Dialog_3D
-                   {
-                       Smoothing = smooth,
-                       VertFactor = vert_fac,
-                       GRAL_Topo = GRAL_Topo
-                   })
+            {
+                Smoothing = smooth,
+                VertFactor = vert_fac,
+                GRAL_Topo = GRAL_Topo
+            })
             {
                 if (dial.ShowDialog() == DialogResult.Cancel)
                 {
@@ -3807,7 +3831,7 @@ namespace GralDomain
                 vert_fac = dial.VertFactor;
                 GRAL_Topo = dial.GRAL_Topo;
             }
-            
+
             if (GRAL_Topo == true) // Show GRAL height
             {
                 GRAL_3D_View(smooth, vert_fac);
@@ -4461,6 +4485,7 @@ namespace GralDomain
             }
         }
 
+
         private void MenuCellHeightsGral(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGral.Checked)
@@ -4481,16 +4506,25 @@ namespace GralDomain
             {
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
             }
             else if (CellHeightsType == 1)
             {
                 MenuEntryCellHeightsGramm.Checked = true;
                 MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
             }
             else if (CellHeightsType == 2)
             {
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = true;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
+            }
+            else if (CellHeightsType == -1)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = true;
             }
         }
 
@@ -4659,6 +4693,18 @@ namespace GralDomain
             {
                 // Reset position of child forms
                 ShowFirst.Reset();
+            }
+        }
+
+        private void MenuEntryCellHeightsGrammEdge_Click(object sender, EventArgs e)
+        {
+            if(!MenuEntryCellHeightsGrammEdge.Checked)
+            {
+                SetCellHeightsType(-1);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
             }
         }
     }
