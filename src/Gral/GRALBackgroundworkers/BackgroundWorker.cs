@@ -363,17 +363,6 @@ namespace GralBackgroundworkers
                 }
             }
             Rechenknecht.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted);
-
-        }
-        
-        private void WriteHeader(GralBackgroundworkers.BackgroundworkerData my_data, string unit)
-        {
-            my_data.Writer.WriteLine("ncols         " + Convert.ToString(my_data.CellsGralX));
-            my_data.Writer.WriteLine("nrows         " + Convert.ToString(my_data.CellsGralY));
-            my_data.Writer.WriteLine("xllcorner     " + Convert.ToString(my_data.DomainWest));
-            my_data.Writer.WriteLine("yllcorner     " + Convert.ToString(my_data.DomainSouth));
-            my_data.Writer.WriteLine("cellsize      " + Convert.ToString(my_data.Horgridsize));
-            my_data.Writer.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + unit);
         }
         
         private string GetSgNumbers(string Sourcegroupname)
