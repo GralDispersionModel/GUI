@@ -457,6 +457,9 @@ namespace GralItemForms
         {
             try
             {
+                //set line source emission rate to kg/h/km
+                checkBox3.Checked = false;
+
                 LineSourceData _ldata;
                 if (ItemDisplayNr < ItemData.Count)
                 {
