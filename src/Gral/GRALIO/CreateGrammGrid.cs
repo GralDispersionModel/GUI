@@ -591,6 +591,10 @@ namespace GralIO
                             {
                                 Wait.Text = "Reading GRAMM topography " + ((int)((float)y / Header.NRows * 100F)).ToString() + "%";
                             }
+                            if (y % 100 == 0)
+                            {
+                                Application.DoEvents();
+                            }
                         }
 
                         Wait.Text = "Reading GRAMM topography 100 %";
