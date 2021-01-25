@@ -2647,14 +2647,14 @@ namespace GralDomain
         /// <summary>
         /// Start the Re-order wind fields function
         /// </summary>
-        private void ReorderGrammWindfields()
+        private void ReorderGrammWindfields(PointD TestPt)
         {
             //select height above ground for the windfield analysis
             int trans = Convert.ToInt32(10);
             if (InputBox1("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
             {
                 
-                WriteGrammLog(2,Convert.ToString(XDomain), Convert.ToString(YDomain), Convert.ToString(trans));
+                WriteGrammLog(2,Convert.ToString(TestPt.X), Convert.ToString(TestPt.Y), Convert.ToString(trans));
 
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
@@ -2662,8 +2662,8 @@ namespace GralDomain
                     MeteoFileName = GRAMMmeteofile,
                     ProjectName = Gral.Main.ProjectName,
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
-                    XDomain = XDomain,
-                    YDomain = YDomain,
+                    XDomain = Convert.ToInt32(TestPt.X),
+                    YDomain = Convert.ToInt32(TestPt.Y),
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
@@ -2754,8 +2754,15 @@ namespace GralDomain
         /// <summary>
         /// Computes source apportionment for GRAL results
         /// </summary>
-        private void SourceApportionment(int xdomain, int ydomain)
+        private void SourceApportionment(PointD TestPt)
         {
+            if (TestPt.X < MainForm.GralDomRect.West || TestPt.Y < MainForm.GralDomRect.South ||
+                TestPt.X > MainForm.GralDomRect.East || TestPt.Y > MainForm.GralDomRect.North)
+            {
+                MessageBox.Show(this, "Sample point is outside the GRAL domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             Cursor = Cursors.WaitCursor;
             //sample all files with GRAL results
             string files = Path.Combine(Gral.Main.ProjectName, @"Maps");
@@ -2817,10 +2824,10 @@ namespace GralDomain
                             dummy = myreader.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                             //compute raw and column to extract data (no interpolation is applied)
-                            int col = Convert.ToInt32(Math.Truncate((xdomain - x11) / cellsize)) + 1;
-                            int raw = Convert.ToInt32(Math.Truncate((ydomain - y11) / cellsize)) + 1;
+                            int col = (int) ((TestPt.X - x11) / cellsize) + 1;
+                            int raw = (int) ((TestPt.Y - y11) / cellsize) + 1;
 
-                            if ((xdomain > x11 + cellsize * numbcol) || (xdomain < x11) || (ydomain > y11 + cellsize * numbraw) || (ydomain < y11))
+                            if ((TestPt.X > x11 + cellsize * numbcol) || (TestPt.X < x11) || (TestPt.Y > y11 + cellsize * numbraw) || (TestPt.Y < y11))
                             {
                                 MessageBox.Show(this, "Sample point is outside the GRAL domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
@@ -2848,7 +2855,7 @@ namespace GralDomain
                 conc[files_conc.Length + 1] = Convert.ToDouble(background);
 
                 //show pie chart
-                Piediagram pie = new Piediagram(xdomain, ydomain)
+                Piediagram pie = new Piediagram(TestPt.X, TestPt.Y)
                 {
                     FilesConc = files_conc,
                     Concentration = conc
@@ -2887,13 +2894,16 @@ namespace GralDomain
             dialog.Dispose();
         }
 
+
         /// <summary>
         /// Extract the concentration value at a given location async
         /// </summary>
-        private async void GetConcentrationFromFile(string filename)
+        /// <param name="FileName">File name with ESRi data</param>
+        /// <param name="TestPt">Coordinates of the desired point</param>
+        private async void GetConcentrationFromFile(string FileName, PointD TestPt)
         {
             Cursor = Cursors.WaitCursor;
-            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(filename)) == false)
+            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(FileName, TestPt)) == false)
             {
                 MessageBoxTemporary Box = new MessageBoxTemporary("File not readable or sample point is outside the GRAL domain", Location);
                 Box.Show();
@@ -2905,7 +2915,10 @@ namespace GralDomain
         /// <summary>
         /// Extract concentration value at a given location
         /// </summary>
-        private bool GetConcentration(string filename)
+        /// <param name="FileName">Name of file with ESRi data</param>
+        /// <param name="TestPt">Coordinates of location</param>
+        /// <returns>True if reading OK, otherwise false</returns>
+        private bool GetConcentration(string FileName, PointD TestPt)
         {
             bool readingOK = false;
             //sample the selected files with GRAL results
@@ -2917,14 +2930,14 @@ namespace GralDomain
                 {
                     int index = CheckForExistingDrawingObject("CONCENTRATION VALUES");
                     DrawingObjects _drobj = ItemOptions[index];
-                    if (_drobj.ContourFilename != Path.GetFileName(filename)) // new File -> delete exiting infos
+                    if (_drobj.ContourFilename != Path.GetFileName(FileName)) // new File -> delete exiting infos
                     {
                         _drobj.ContourPolygons.Clear();
                         _drobj.ContourPolygons.TrimExcess();
-                        _drobj.ContourFilename = Path.GetFileName(filename);
+                        _drobj.ContourFilename = Path.GetFileName(FileName);
                     }
                     
-                    using(StreamReader myreader = new StreamReader(filename))
+                    using(StreamReader myreader = new StreamReader(FileName))
                     {
                         dummy = myreader.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                         int numbcol = Convert.ToInt32(dummy[1].Replace(".", decsep));
@@ -2944,10 +2957,10 @@ namespace GralDomain
                         }
 
                         //compute row and column to extract data (no interpolation is applied)
-                        int col = Convert.ToInt32(Math.Truncate((XDomain - x11) / cellsize)) + 1;
-                        int row = Convert.ToInt32(Math.Truncate((YDomain - y11) / cellsize)) + 1;
+                        int col = (int) ((TestPt.X - x11) / cellsize) + 1;
+                        int row = (int) ((TestPt.Y - y11) / cellsize) + 1;
 
-                        if ((XDomain > x11 + cellsize * numbcol) || (XDomain < x11) || (YDomain > y11 + cellsize * numbraw) || (YDomain < y11))
+                        if ((TestPt.X > x11 + cellsize * numbcol) || (TestPt.X < x11) || (TestPt.Y > y11 + cellsize * numbraw) || (TestPt.Y < y11))
                         {
                             
                         }
@@ -2969,11 +2982,11 @@ namespace GralDomain
                             
                             if (unit.Length == 0) // unit not available from file -> loot to filename
                             {
-                                string temp =  Path.GetFileName(filename).ToUpper();
+                                string temp =  Path.GetFileName(FileName).ToUpper();
                                 
                                 GralData.ContourPolygon _d = new GralData.ContourPolygon();
                                 _d.EdgePoints = new PointD[2];
-                                _d.EdgePoints[0] = new PointD(XDomain, YDomain);
+                                _d.EdgePoints[0] = new PointD(TestPt.X, TestPt.Y);
                                 _d.EdgePoints[1] = new PointD(concentration * 1E12, 0);
                                 
                                 _drobj.ContourPolygons.Add(_d); // position and concentration
@@ -3022,11 +3035,11 @@ namespace GralDomain
                             }
                             else
                             {
-                                string temp =  Path.GetFileName(filename).ToUpper();
+                                string temp =  Path.GetFileName(FileName).ToUpper();
                                 
                                 GralData.ContourPolygon _d = new GralData.ContourPolygon();
                                 _d.EdgePoints = new PointD[2];
-                                _d.EdgePoints[0] = new PointD(XDomain, YDomain);
+                                _d.EdgePoints[0] = new PointD(TestPt.X, TestPt.Y);
                                 _d.EdgePoints[1] = new PointD(concentration * 1E12, 0);
                                 _drobj.ContourPolygons.Add(_d); // position and concentration
                                 
