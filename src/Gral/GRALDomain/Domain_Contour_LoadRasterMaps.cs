@@ -335,8 +335,14 @@ namespace GralDomain
 					double item_max = _drobj.ItemValues[0];
 					double item_min = _drobj.ItemValues[_drobj.ItemValues.Count - 1];
 					Application.DoEvents();
-					
-					Parallel.For(0, ny - 2, j =>
+
+					int yOffset = ny - 1;
+					if (CheckForEmptyLastRow(zlevel, nx, ny))
+					{
+						yOffset = ny - 2;
+					}
+
+					Parallel.For(0, yOffset , j =>
 		             {
 		             	float[] h = new float[5];
 		             	int[] sh = new int[5];
