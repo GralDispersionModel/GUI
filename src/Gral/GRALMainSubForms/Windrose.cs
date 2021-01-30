@@ -727,12 +727,14 @@ namespace GralMainForms
                 MetfileName = "wind velocity " + MetFileName,
                 SectFrequency = SectFrequ,
                 WndClasses = WndClasses,
-                Mode = DrawingMode
+                Mode = DrawingMode,
+                StartPosition = FormStartPosition.Manual
             };
             if (DrawingMode == 1)
             {
                 wrt.MetfileName = "stability classes " + MetFileName;
-            }
+            }          
+            wrt.Location = new Point(Left + 20, Top + 20);     
             wrt.Show();
         }
 
