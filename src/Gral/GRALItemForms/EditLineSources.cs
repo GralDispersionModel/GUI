@@ -258,11 +258,25 @@ namespace GralItemForms
             {
                 if (linepollutant[nr].SelectedIndex == 2)
                 {
-                    but1[nr].Text = "[MOU/h/km]";
+                    if (checkBox3.Checked)
+                    {
+                        but1[nr].Text = "[MOU/h]";
+                    }
+                    else
+                    {
+                       but1[nr].Text = "[MOU/h/km]";
+                    }
                 }
                 else
                 {
-                    but1[nr].Text = "[kg/h/km]";
+                    if (checkBox3.Checked)
+                    {
+                        but1[nr].Text = "[kg/h]";
+                    }
+                    else
+                    {
+                        but1[nr].Text = "[kg/h/km]";
+                    }
                 }
             }
         }
@@ -1577,14 +1591,6 @@ namespace GralItemForms
             {
                 for (int nr = 0; nr < but1.Length; nr++)
                 {
-                    if (linepollutant[nr].SelectedIndex == 2)
-                    {
-                        but1[nr].Text = "[MOU/h]";
-                    }
-                    else
-                    {
-                        but1[nr].Text = "[kg/h]";
-                    }
                     double _val = St_F.TxtToDbl(lineemission[nr].Text, false);
                     lineemission[nr].Text = Convert.ToString(_val * lenght);
                 }
@@ -1594,18 +1600,12 @@ namespace GralItemForms
             {
                 for (int nr = 0; nr < but1.Length; nr++)
                 {
-                    if (linepollutant[nr].SelectedIndex == 2)
-                    {
-                        but1[nr].Text = "[MOU/h/km]";
-                    }
-                    else
-                    {
-                        but1[nr].Text = "[kg/h/km]";
-                    }
                     double _val = St_F.TxtToDbl(lineemission[nr].Text, false);
                     lineemission[nr].Text = Convert.ToString(_val / lenght);
                 }
             }
+            //update the unit of each pollutant
+            Odour(sender, e);
         }
 
         /// <summary>
