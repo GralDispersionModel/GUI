@@ -88,7 +88,7 @@ namespace GralMainForms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1Click);
             // 
-            // Show_Emission_Timeseries
+            // ShowEmissionTimeseries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -98,8 +98,8 @@ namespace GralMainForms
             this.Controls.Add(this.button1);
             this.Controls.Add(this.hScrollBar1);
             this.Controls.Add(this.button4);
-            this.Name = "Show_Emission_Timeseries";
-            this.ShowIcon = false;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "ShowEmissionTimeseries";
             this.Text = "Modulation file \"Emissions_timeseries.txt\"";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Show_Emission_TimeseriesFormClosed);
             this.Load += new System.EventHandler(this.ShowEmissionTimeseriesLoad);
@@ -107,6 +107,7 @@ namespace GralMainForms
             this.ResizeEnd += new System.EventHandler(this.Show_Emission_TimeseriesResizeEnd);
             this.Resize += new System.EventHandler(this.ShowEmissionTimeseriesResize);
             this.ResumeLayout(false);
+
         }
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
