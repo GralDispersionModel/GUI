@@ -43,6 +43,8 @@ namespace GralDomain
             }
             catch { }
 
+            Domain.CancellationTokenReset();
+
             //MessageBox.Show(this, Convert.ToString(MMO.WeightingFactor[0]));
 
             MMO.Hide(); // Kuntner
