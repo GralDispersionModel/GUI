@@ -2858,8 +2858,10 @@ namespace GralDomain
                 Piediagram pie = new Piediagram(TestPt.X, TestPt.Y)
                 {
                     FilesConc = files_conc,
-                    Concentration = conc
+                    Concentration = conc,
+                    StartPosition = FormStartPosition.Manual
                 };
+                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, Top + 400);
                 pie.Show();
                 Cursor = Cursors.Default;
                 MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
@@ -3856,6 +3858,9 @@ namespace GralDomain
             #endif
         }
 
+        /// <summary>
+        /// Sort integer values descending direction
+        /// </summary>
         private class SortIntDescending : IComparer<int>
         {
             int IComparer<int>.Compare(int a, int b) //implement Compare
@@ -3993,6 +3998,11 @@ namespace GralDomain
         }
         
         
+        /// <summary>
+        /// Delete all selected items 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void DeleteSelectedItemsToolStripMenuItemClick(object sender, EventArgs e)
         {
             //delete selected area source
@@ -4033,6 +4043,11 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
+        /// <summary>
+        /// Save item data to disk
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void WriteAllItemsToDisk(object sender, EventArgs e)
         {
             EditAndSaveAreaSourceData(sender, e);
@@ -4190,7 +4205,10 @@ namespace GralDomain
                                     if (i % 40 == 0)
                                     {
                                         wait.Text = "Writing GRAL topography " + ((int)(100 - (float)i / (ny + 2) * 100F)).ToString() + "%";
-                                        cts.ThrowIfCancellationRequested();
+                                        if (cts != null)
+                                        {
+                                            cts.ThrowIfCancellationRequested();
+                                        }
                                     }
 
                                     //string line = String.Empty;
@@ -4255,7 +4273,7 @@ namespace GralDomain
                 }
                 else
                 {
-                    if (CancellationTokenSource.IsCancellationRequested)
+                    if (CancellationTokenSource != null && CancellationTokenSource.IsCancellationRequested)
                     {
                         return;
                     }
@@ -4338,10 +4356,12 @@ namespace GralDomain
 
             // Go to the dialog
             using (DialogModifyGRALTopography mod = new DialogModifyGRALTopography
-                   {
-                       modify = TopoModify
-                   })
             {
+                modify = TopoModify,
+                StartPosition = FormStartPosition.Manual
+            })
+            {
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, Top + 200);
                 if (mod.ShowDialog() == DialogResult.OK)
                 {
                     TopoModify = mod.modify;
@@ -4397,6 +4417,9 @@ namespace GralDomain
             }
         }
 
+        /// <summary>
+        /// Low pass filter for the GRAL topography
+        /// </summary>
         void LowPassGralTopographyApply()
         {
             // create deep copy of cell height
@@ -4446,11 +4469,16 @@ namespace GralDomain
 
             if (MessageBox.Show(this, "Write new GRAL_topofile.txt?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
+                CancellationTokenReset();
                 if (WriteGralGeometry(CancellationTokenSource.Token) == false)
                 {
                     File.Copy(filecopy, file);
+                    MessageBoxTemporary Box = new MessageBoxTemporary("Error when saving GRAL geometry", Location);
                 }
-                MessageBoxTemporary Box = new MessageBoxTemporary("GRAL geometry saved", Location);
+                else
+                {
+                    MessageBoxTemporary Box = new MessageBoxTemporary("GRAL geometry saved", Location);
+                }
             }
         }
 
@@ -4486,6 +4514,11 @@ namespace GralDomain
             return new System.Drawing.Point(x, 60);
         }
 
+        /// <summary>
+        /// Show GRAMM terrain grid heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuCellHeightsGramm(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGramm.Checked)
@@ -4498,7 +4531,28 @@ namespace GralDomain
             }
         }
 
+        /// <summary>
+        /// Show GRAMM terrain edge point heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuEntryCellHeightsGrammEdge_Click(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGrammEdge.Checked)
+            {
+                SetCellHeightsType(-1);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }
+        }
 
+        /// <summary>
+        /// Show GRAL terrain grid heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuCellHeightsGral(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGral.Checked)
@@ -4512,6 +4566,10 @@ namespace GralDomain
             }      
         }
 
+        /// <summary>
+        /// Set the type of cell height to be displayed
+        /// </summary>
+        /// <param name="type">0: No cell height, 1: GRAMM, 2: GRAL, -1: GRAMM edge points</param>
         private void SetCellHeightsType(int type)
         {
             CellHeightsType = type;
@@ -4574,6 +4632,11 @@ namespace GralDomain
             ShowVegetationDialog(sender, e);
         }
 
+        /// <summary>
+        /// Generate a concentration time series based on *.con or *.grz files for several evaluation points 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MouseControl = MouseMode.SetPointConcTimeSeries;
@@ -4706,18 +4769,6 @@ namespace GralDomain
             {
                 // Reset position of child forms
                 ShowFirst.Reset();
-            }
-        }
-
-        private void MenuEntryCellHeightsGrammEdge_Click(object sender, EventArgs e)
-        {
-            if(!MenuEntryCellHeightsGrammEdge.Checked)
-            {
-                SetCellHeightsType(-1);
-                if (!TryToLoadCellHeights())
-                {
-                    SetCellHeightsType(0);
-                }
             }
         }
     }
