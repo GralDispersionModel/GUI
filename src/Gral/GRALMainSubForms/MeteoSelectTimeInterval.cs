@@ -58,6 +58,21 @@ namespace GralMainForms
             checkBox1.Checked = WindRoseSet.BiasCorrection;
             checkBox2.Checked = WindRoseSet.ShowFrames;
             checkBox3.Checked = WindRoseSet.DrawSmallSectors;
+            
+            switch (WindRoseSet.SectorCount)
+            {
+                case 24:
+                    radioButton2.Checked = true;
+                    break;
+                case 32:
+                    radioButton3.Checked = true;
+                    break;
+                default:
+                    radioButton1.Checked = true;
+                    break;
+            }
+
+            checkBox4.Checked = WindRoseSet.Ignore00Values;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -68,6 +83,20 @@ namespace GralMainForms
             WindRoseSet.BiasCorrection = checkBox1.Checked;
             WindRoseSet.ShowFrames = checkBox2.Checked;
             WindRoseSet.DrawSmallSectors = checkBox3.Checked;
+            if (radioButton1.Checked)
+            {
+                WindRoseSet.SectorCount = 16;
+            }
+            else if (radioButton2.Checked)
+            {
+                WindRoseSet.SectorCount = 24;
+            }
+            else if (radioButton3.Checked)
+            {
+                WindRoseSet.SectorCount = 32;
+            }
+            WindRoseSet.Ignore00Values = checkBox4.Checked;
+
             this.Close();
         }
     }
