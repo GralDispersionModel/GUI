@@ -23,5 +23,35 @@ namespace GralShape
         public int NumPoints;
         public int[] Parts;
         public GralDomain.PointD[] Points;
+
+        /// <summary>
+        /// Create an empty Shape Polygon Class 
+        /// </summary>
+        public SHPPolygon()
+        {
+            Box = new double[4];
+            NumParts = 0;
+            NumPoints = 0;
+        }
+
+        /// <summary>
+        /// Create a deep copy of a Shape Polygon Class
+        /// </summary>
+        /// <param name="Other">Other Shape Polygon class</param>
+        /// <param name="PointsIncluded">Copy shape points?</param>
+        public SHPPolygon(SHPPolygon Other, bool PointsIncluded)
+        {
+            Box = new double[Other.Box.GetLength(0)];
+            System.Array.Copy(Other.Box, Box, Other.Box.GetLength(0));
+            NumParts = Other.NumParts;
+            NumPoints = Other.NumPoints;
+            Parts = new int[Other.Parts.GetLength(0)];
+            System.Array.Copy(Other.Parts, Parts, Other.Parts.GetLength(0));
+            if (PointsIncluded)
+            {
+                Points = new GralDomain.PointD[Other.Points.GetLength(0)];
+                System.Array.Copy(Other.Points, Points, Other.Points.GetLength(0));
+            }
+        }
     }
 }
