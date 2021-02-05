@@ -505,11 +505,19 @@ namespace GralDomain
             {
                 if (ShpLines != null)
                 {
+                    for (int i = 0; i < ShpLines.Count; i++)
+                    {
+                        ShpLines[i] = null;
+                    }
                     ShpLines.Clear();
                     ShpLines.TrimExcess();
                 }
                 if (ShpPolygons != null)
                 {
+                    for (int i = 0; i < ShpPolygons.Count; i++)
+                    {
+                       ShpPolygons[i] = null;
+                    }
                     ShpPolygons.Clear();
                     ShpPolygons.TrimExcess();
                 }
