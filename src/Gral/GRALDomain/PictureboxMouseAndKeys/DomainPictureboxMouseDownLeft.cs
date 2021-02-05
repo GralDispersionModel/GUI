@@ -133,7 +133,7 @@ namespace GralDomain
                         int recwidth = x2 - x1;
                         int recheigth = y2 - y1;
                         GRALDomain = new Rectangle(x1, y1, recwidth, recheigth);
-
+                        XDomain = 0;
                         Picturebox1_MouseUp(null, e); // force button up event
                     }
                     break;
@@ -1165,6 +1165,7 @@ namespace GralDomain
                         int recwidth = x2 - x1;
                         int recheigth = y2 - y1;
                         GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
+                        XDomain = 0;
 
                         Picturebox1_MouseUp(null, e); // force button up event
                     }
@@ -1205,9 +1206,9 @@ namespace GralDomain
                 case MouseMode.GrammExportStart:
                     //get starting point for exporting GRAMM sub-domain
                     {
-                        int xDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
-                        int yDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
-                        GRAMMDomain = new Rectangle(xDomain, yDomain, 0, 0);
+                        XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
+                        YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
+                        GRAMMDomain = new Rectangle(XDomain, YDomain, 0, 0);
                         MouseControl = MouseMode.GrammExportFinal;
                         Cursor.Clip = Bounds;
                     }
