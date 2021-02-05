@@ -2841,7 +2841,10 @@ namespace Gral
         /// </summary>
         void SetButton57Bitmap()
         {
-            if (GRALSettings.WriteESRIResult || File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) || !GRALSettings.WaitForKeyStroke)
+            if (GRALSettings.WriteESRIResult || 
+                File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) ||
+                !GRALSettings.WaitForKeyStroke ||
+                GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50)
             {
                 button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
             }
@@ -3522,13 +3525,20 @@ namespace Gral
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
                     MSp.LogLevel = GRALSettings.Loglevel;
+                    MSp.RadiusForPrognosticFlowField = GRALSettings.PrognosticSubDomainsSizeSourceRadius;
+                    MSp.StartPosition = FormStartPosition.Manual;
+                    MSp.Left = Left + 80;
+                    MSp.Top = Top + 40;
 
                     if (MSp.ShowDialog() == DialogResult.OK )
                     {
-                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke)
+                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || 
+                            MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke ||
+                            MSp.RadiusForPrognosticFlowField != GRALSettings.PrognosticSubDomainsSizeSourceRadius)
                         {
                             GRALSettings.WriteESRIResult = MSp.WriteASCiiOutput;
                             GRALSettings.WaitForKeyStroke = MSp.KeyStrokeWhenExitGRAL;
+                            GRALSettings.PrognosticSubDomainsSizeSourceRadius = MSp.RadiusForPrognosticFlowField;
                             ResetInDat();
                         }
                         GRALSettings.Loglevel = MSp.LogLevel;

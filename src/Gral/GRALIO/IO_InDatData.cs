@@ -200,6 +200,21 @@ namespace GralIO
         ///GRAL log output for debugging 
         /// </summary>
         public double AdaptiveRoughness { get; set; }
+        /// <summary>
+        ///Size of prognostic Sub Domains measured from sources; 0 = off
+        /// </summary>
+        private int _prognosticSubDomainsSourceRadius;
+        public int PrognosticSubDomainsSizeSourceRadius
+        {
+            get
+            {
+                return _prognosticSubDomainsSourceRadius;
+            }
+            set
+            {
+                _prognosticSubDomainsSourceRadius = Math.Max(0, Math.Min(100000, value));
+            }
+        }
 
         public InDatVariables()
         {
@@ -224,6 +239,7 @@ namespace GralIO
             WriteESRIResult = false;
             Loglevel = 0;
             AdaptiveRoughness = 0;
+            PrognosticSubDomainsSizeSourceRadius = 0;
         }
 
         public InDatVariables(InDatVariables other)
@@ -252,6 +268,7 @@ namespace GralIO
             WriteESRIResult = other.WriteESRIResult;
             Loglevel = other.Loglevel;
             AdaptiveRoughness = other.AdaptiveRoughness;
+            PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
         }
 
     }
