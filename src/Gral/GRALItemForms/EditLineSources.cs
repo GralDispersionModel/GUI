@@ -258,11 +258,25 @@ namespace GralItemForms
             {
                 if (linepollutant[nr].SelectedIndex == 2)
                 {
-                    but1[nr].Text = "[MOU/h/km]";
+                    if (checkBox3.Checked)
+                    {
+                        but1[nr].Text = "[MOU/h]";
+                    }
+                    else
+                    {
+                       but1[nr].Text = "[MOU/h/km]";
+                    }
                 }
                 else
                 {
-                    but1[nr].Text = "[kg/h/km]";
+                    if (checkBox3.Checked)
+                    {
+                        but1[nr].Text = "[kg/h]";
+                    }
+                    else
+                    {
+                        but1[nr].Text = "[kg/h/km]";
+                    }
                 }
             }
         }
@@ -457,6 +471,9 @@ namespace GralItemForms
         {
             try
             {
+                //set line source emission rate to kg/h/km
+                checkBox3.Checked = false;
+
                 LineSourceData _ldata;
                 if (ItemDisplayNr < ItemData.Count)
                 {
@@ -1293,6 +1310,11 @@ namespace GralItemForms
             toolTip1.Dispose();
         }
 
+        /// <summary>
+        /// Select a source group
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button7Click(object sender, EventArgs e)
         {
             EditSelectSourcegroup sgsel = new EditSelectSourcegroup
@@ -1301,12 +1323,13 @@ namespace GralItemForms
             };
             if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
             {
-                sgsel.Location = new Point(Right + 4, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
             }
             else
             {
-                sgsel.Location = new Point(Left - 460, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, Top);
             }
+
             sgsel.SourceGroup = SG_List;
             sgsel.CopyFrom = new List<string>();
             foreach (var text in listBox2.Items)
@@ -1568,14 +1591,6 @@ namespace GralItemForms
             {
                 for (int nr = 0; nr < but1.Length; nr++)
                 {
-                    if (linepollutant[nr].SelectedIndex == 2)
-                    {
-                        but1[nr].Text = "[MOU/h]";
-                    }
-                    else
-                    {
-                        but1[nr].Text = "[kg/h]";
-                    }
                     double _val = St_F.TxtToDbl(lineemission[nr].Text, false);
                     lineemission[nr].Text = Convert.ToString(_val * lenght);
                 }
@@ -1585,18 +1600,12 @@ namespace GralItemForms
             {
                 for (int nr = 0; nr < but1.Length; nr++)
                 {
-                    if (linepollutant[nr].SelectedIndex == 2)
-                    {
-                        but1[nr].Text = "[MOU/h/km]";
-                    }
-                    else
-                    {
-                        but1[nr].Text = "[kg/h/km]";
-                    }
                     double _val = St_F.TxtToDbl(lineemission[nr].Text, false);
                     lineemission[nr].Text = Convert.ToString(_val / lenght);
                 }
             }
+            //update the unit of each pollutant
+            Odour(sender, e);
         }
 
         /// <summary>

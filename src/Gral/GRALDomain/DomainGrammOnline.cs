@@ -617,7 +617,7 @@ namespace GralDomain
         }
 
         //show vertical profile of a quantity of GRAMM online
-        private void VertProfile()
+        private void VertProfile(PointD TestPt)
         {
             //define GRAMM online field
             string file = Path.Combine(Gral.Main.ProjectName, @"Computation", "vp_speed.txt");
@@ -628,13 +628,13 @@ namespace GralDomain
                 int y1 = 1;
                 if (MainForm.textBox13.Text != "")
                 {
-                    x1 = (int)((XDomain - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
-                    y1 = (int)((YDomain - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
+                    x1 = (int)((TestPt.X - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
+                    y1 = (int)((TestPt.Y - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
                 }
                 else
                 {
-                    x1 = (int)((XDomain - Convert.ToDecimal(MainForm.textBox6.Text)) / MainForm.numericUpDown10.Value) + 1;
-                    y1 = (int)((YDomain - Convert.ToDecimal(MainForm.textBox5.Text)) / MainForm.numericUpDown10.Value) + 1;
+                    x1 = (int)((TestPt.X - Convert.ToDouble(MainForm.textBox6.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
+                    y1 = (int)((TestPt.Y - Convert.ToDouble(MainForm.textBox5.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
                 }
 
                 using (StreamWriter writer = new StreamWriter(file))
@@ -652,7 +652,7 @@ namespace GralDomain
         }
 
         //show vertical profile of a quantity of GRAMM online
-        private void Vert3DConcentration()
+        private void Vert3DConcentration(PointD TestPt)
         {
             if (VerticalProfileForm == null)
             {
@@ -661,8 +661,8 @@ namespace GralDomain
             if (VerticalProfileForm != null)
             {
                 VerticalProfileForm.filename = Path.Combine(Gral.Main.ProjectName, "Computation", "Vertical_Concentrations.txt");
-                VerticalProfileForm.X = XDomain;
-                VerticalProfileForm.Y = YDomain;
+                VerticalProfileForm.X = TestPt.X;
+                VerticalProfileForm.Y = TestPt.Y;
                 VerticalProfileForm.Init();
                 VerticalProfileForm.Show();
             }
@@ -672,7 +672,7 @@ namespace GralDomain
         /// <summary>
         /// This method is used to start the vertical wind profile window
         /// </summary>
-        private void VertProfile2()
+        private void VertProfile2(PointD TestPt)
         {
             try
             {
@@ -680,11 +680,11 @@ namespace GralDomain
                 {
                     if (ProfileConcentration.GRALorGRAMM < 2) // GRAMM
                     {
-                        VerticalProfileGramm(ProfileConcentration.DispersionSituation);
+                        VerticalProfileGramm(ProfileConcentration.DispersionSituation, TestPt);
                     }
                     else
                     {
-                        VerticalProfileGral(ProfileConcentration.DispersionSituation);
+                        VerticalProfileGral(ProfileConcentration.DispersionSituation, TestPt);
                     }
                 }
             }
@@ -694,7 +694,7 @@ namespace GralDomain
         /// <summary>
         /// Start the vertical wind profile GRAMM window
         /// </summary>
-        private async void VerticalProfileGramm(int dissit)
+        private async void VerticalProfileGramm(int dissit, PointD TestPt)
         {
             try
             {
@@ -706,13 +706,17 @@ namespace GralDomain
                 int y1 = 1;
                 if (MainForm.textBox13.Text != "")
                 {
-                    x1 = (Convert.ToInt32(XDomain) - Convert.ToInt32(MainForm.GrammDomRect.West)) / Convert.ToInt32(MainForm.GRAMMHorGridSize) + 1;
-                    y1 = (Convert.ToInt32(YDomain) - Convert.ToInt32(MainForm.GrammDomRect.South)) / Convert.ToInt32(MainForm.GRAMMHorGridSize) + 1;
+                    x1 = (int) ((TestPt.X - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
+                    y1 = (int) ((TestPt.Y - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
+                    if (TestPt.X < MainForm.GrammDomRect.West || TestPt.Y < MainForm.GrammDomRect.South)
+                    {
+                        throw new Exception();
+                    }
                 }
                 else
                 {
-                    x1 = (Convert.ToInt32(XDomain) - Convert.ToInt32(MainForm.textBox6.Text)) / Convert.ToInt32(MainForm.numericUpDown10.Value) + 1;
-                    y1 = (Convert.ToInt32(YDomain) - Convert.ToInt32(MainForm.textBox5.Text)) / Convert.ToInt32(MainForm.numericUpDown10.Value) + 1;
+                    x1 = (int) ((TestPt.X - Convert.ToInt32(MainForm.textBox6.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
+                    y1 = (int) ((TestPt.Y - Convert.ToInt32(MainForm.textBox5.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
                 }
 
                 //Cursor = Cursors.WaitCursor;
@@ -856,18 +860,23 @@ namespace GralDomain
         /// <summary>
         /// Start the vertical wind profile GRAL window
         /// </summary>
-        private async void VerticalProfileGral(int dissit)
+        private async void VerticalProfileGral(int dissit, PointD TestPt)
         {
             try
             {
+                if (TestPt.X < MainForm.GralDomRect.West || TestPt.Y < MainForm.GralDomRect.South)
+                {
+                    throw new Exception();
+                }
+
                 //get cell indices of GRAL grid
                 string file1 = Path.Combine(Gral.Main.ProjectName, @"Maps", "Vertical_Profile_Velocity.txt");
                 string file2 = Path.Combine(Gral.Main.ProjectName, @"Maps", "Vertical_Profile_Direction.txt");
 
                 string[] text = new string[1];
                 float flowfieldraster = Convert.ToSingle(MainForm.numericUpDown10.Value);
-                int x1 = Convert.ToInt32(Math.Truncate((XDomain - MainForm.GralDomRect.West) / flowfieldraster)) + 1;
-                int y1 = Convert.ToInt32(Math.Truncate((YDomain - MainForm.GralDomRect.South) / flowfieldraster)) + 1;
+                int x1 = (int) ((TestPt.X - MainForm.GralDomRect.West) / flowfieldraster) + 1;
+                int y1 = (int) ((TestPt.Y - MainForm.GralDomRect.South) / flowfieldraster) + 1;
 
                 //Cursor = Cursors.WaitCursor;
 
@@ -910,7 +919,7 @@ namespace GralDomain
                         }
                         AHMIN = reader.ReadSingle();
 
-                        if (x1 <= 0 || y1 <= 0 || x1 >= nii || y1 >= njj)
+                        if (x1 < 1 || y1 < 1 || x1 > nii || y1 > njj)
                         {
                             return;
                         }

@@ -226,7 +226,7 @@ namespace GralDomain
         /// </summary>
         private float [,] CellHeights = new float[1,1];           // Cell heights
         /// <summary>
-        /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL
+        /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL, -1 GRAMM edge points
         /// </summary>
         private int CellHeightsType = 0;
         /// <summary>
@@ -746,28 +746,52 @@ namespace GralDomain
                 {
                     PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
                 };
-
-                double[,] AH = new double[1, 1];
-                ggeom.AH = AH;
-
-                if (ggeom.ReadGGeomAsc(1) == true)
+                // Mean cell height
+                if (CellHeightsType == 1 || CellHeightsType == 0)
                 {
-                    AH = ggeom.AH;
-                    ggeom = null;
-                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
-                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
+                    double[,] AH = new double[1, 1];
+                    ggeom.AH = AH;
+                    //read mean height only
+                    if (ggeom.ReadGGeomAsc(1) == true)
                     {
-                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                        AH = ggeom.AH;
+                        ggeom = null;
+                        CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
+                        for (int i = 1; i <= AH.GetUpperBound(0); i++)
                         {
-                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                            for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                            {
+                                CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                            }
                         }
+                        SetCellHeightsType(1);
                     }
+                }
+                // Edge cell height
+                else if (CellHeightsType == -1)
+                {
+                    double[,,] AHE = new double[1, 1, 1];
+                    ggeom.AHE = AHE;
+                    // read entire ggeom.asc file
+                    if (ggeom.ReadGGeomAsc(-1) == true)
+                    {
+                        AHE = ggeom.AHE;
+                        ggeom = null;
 
-                    SetCellHeightsType(1);
+                        CellHeights = new float[AHE.GetUpperBound(0) + 1, AHE.GetUpperBound(1) + 1];
+                        for (int i = 1; i <= AHE.GetUpperBound(0); i++)
+                        {
+                            for (int j = 1; j <= AHE.GetUpperBound(1); j++)
+                            {
+                                CellHeights[i, j] = (float)Math.Round(AHE[i, j, 1], 1);
+                            }
+                        }
+                        SetCellHeightsType(-1);
+                    }
                 }
             }
-            
-            if (CellHeightsType > 0)
+
+            if (Math.Abs(CellHeightsType) > 0)
             {
                 return true;
             }
@@ -2623,14 +2647,14 @@ namespace GralDomain
         /// <summary>
         /// Start the Re-order wind fields function
         /// </summary>
-        private void ReorderGrammWindfields()
+        private void ReorderGrammWindfields(PointD TestPt)
         {
             //select height above ground for the windfield analysis
             int trans = Convert.ToInt32(10);
             if (InputBox1("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
             {
                 
-                WriteGrammLog(2,Convert.ToString(XDomain), Convert.ToString(YDomain), Convert.ToString(trans));
+                WriteGrammLog(2,Convert.ToString(TestPt.X), Convert.ToString(TestPt.Y), Convert.ToString(trans));
 
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
@@ -2638,8 +2662,8 @@ namespace GralDomain
                     MeteoFileName = GRAMMmeteofile,
                     ProjectName = Gral.Main.ProjectName,
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
-                    XDomain = XDomain,
-                    YDomain = YDomain,
+                    XDomain = Convert.ToInt32(TestPt.X),
+                    YDomain = Convert.ToInt32(TestPt.Y),
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
@@ -2730,8 +2754,15 @@ namespace GralDomain
         /// <summary>
         /// Computes source apportionment for GRAL results
         /// </summary>
-        private void SourceApportionment(int xdomain, int ydomain)
+        private void SourceApportionment(PointD TestPt)
         {
+            if (TestPt.X < MainForm.GralDomRect.West || TestPt.Y < MainForm.GralDomRect.South ||
+                TestPt.X > MainForm.GralDomRect.East || TestPt.Y > MainForm.GralDomRect.North)
+            {
+                MessageBox.Show(this, "Sample point is outside the GRAL domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             Cursor = Cursors.WaitCursor;
             //sample all files with GRAL results
             string files = Path.Combine(Gral.Main.ProjectName, @"Maps");
@@ -2793,10 +2824,10 @@ namespace GralDomain
                             dummy = myreader.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                             //compute raw and column to extract data (no interpolation is applied)
-                            int col = Convert.ToInt32(Math.Truncate((xdomain - x11) / cellsize)) + 1;
-                            int raw = Convert.ToInt32(Math.Truncate((ydomain - y11) / cellsize)) + 1;
+                            int col = (int) ((TestPt.X - x11) / cellsize) + 1;
+                            int raw = (int) ((TestPt.Y - y11) / cellsize) + 1;
 
-                            if ((xdomain > x11 + cellsize * numbcol) || (xdomain < x11) || (ydomain > y11 + cellsize * numbraw) || (ydomain < y11))
+                            if ((TestPt.X > x11 + cellsize * numbcol) || (TestPt.X < x11) || (TestPt.Y > y11 + cellsize * numbraw) || (TestPt.Y < y11))
                             {
                                 MessageBox.Show(this, "Sample point is outside the GRAL domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
@@ -2824,11 +2855,13 @@ namespace GralDomain
                 conc[files_conc.Length + 1] = Convert.ToDouble(background);
 
                 //show pie chart
-                Piediagram pie = new Piediagram(xdomain, ydomain)
+                Piediagram pie = new Piediagram(TestPt.X, TestPt.Y)
                 {
                     FilesConc = files_conc,
-                    Concentration = conc
+                    Concentration = conc,
+                    StartPosition = FormStartPosition.Manual
                 };
+                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, Top + 400);
                 pie.Show();
                 Cursor = Cursors.Default;
                 MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
@@ -2863,13 +2896,16 @@ namespace GralDomain
             dialog.Dispose();
         }
 
+
         /// <summary>
         /// Extract the concentration value at a given location async
         /// </summary>
-        private async void GetConcentrationFromFile(string filename)
+        /// <param name="FileName">File name with ESRi data</param>
+        /// <param name="TestPt">Coordinates of the desired point</param>
+        private async void GetConcentrationFromFile(string FileName, PointD TestPt)
         {
             Cursor = Cursors.WaitCursor;
-            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(filename)) == false)
+            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(FileName, TestPt)) == false)
             {
                 MessageBoxTemporary Box = new MessageBoxTemporary("File not readable or sample point is outside the GRAL domain", Location);
                 Box.Show();
@@ -2881,7 +2917,10 @@ namespace GralDomain
         /// <summary>
         /// Extract concentration value at a given location
         /// </summary>
-        private bool GetConcentration(string filename)
+        /// <param name="FileName">Name of file with ESRi data</param>
+        /// <param name="TestPt">Coordinates of location</param>
+        /// <returns>True if reading OK, otherwise false</returns>
+        private bool GetConcentration(string FileName, PointD TestPt)
         {
             bool readingOK = false;
             //sample the selected files with GRAL results
@@ -2893,14 +2932,14 @@ namespace GralDomain
                 {
                     int index = CheckForExistingDrawingObject("CONCENTRATION VALUES");
                     DrawingObjects _drobj = ItemOptions[index];
-                    if (_drobj.ContourFilename != Path.GetFileName(filename)) // new File -> delete exiting infos
+                    if (_drobj.ContourFilename != Path.GetFileName(FileName)) // new File -> delete exiting infos
                     {
                         _drobj.ContourPolygons.Clear();
                         _drobj.ContourPolygons.TrimExcess();
-                        _drobj.ContourFilename = Path.GetFileName(filename);
+                        _drobj.ContourFilename = Path.GetFileName(FileName);
                     }
                     
-                    using(StreamReader myreader = new StreamReader(filename))
+                    using(StreamReader myreader = new StreamReader(FileName))
                     {
                         dummy = myreader.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                         int numbcol = Convert.ToInt32(dummy[1].Replace(".", decsep));
@@ -2920,10 +2959,10 @@ namespace GralDomain
                         }
 
                         //compute row and column to extract data (no interpolation is applied)
-                        int col = Convert.ToInt32(Math.Truncate((XDomain - x11) / cellsize)) + 1;
-                        int row = Convert.ToInt32(Math.Truncate((YDomain - y11) / cellsize)) + 1;
+                        int col = (int) ((TestPt.X - x11) / cellsize) + 1;
+                        int row = (int) ((TestPt.Y - y11) / cellsize) + 1;
 
-                        if ((XDomain > x11 + cellsize * numbcol) || (XDomain < x11) || (YDomain > y11 + cellsize * numbraw) || (YDomain < y11))
+                        if ((TestPt.X > x11 + cellsize * numbcol) || (TestPt.X < x11) || (TestPt.Y > y11 + cellsize * numbraw) || (TestPt.Y < y11))
                         {
                             
                         }
@@ -2945,11 +2984,11 @@ namespace GralDomain
                             
                             if (unit.Length == 0) // unit not available from file -> loot to filename
                             {
-                                string temp =  Path.GetFileName(filename).ToUpper();
+                                string temp =  Path.GetFileName(FileName).ToUpper();
                                 
                                 GralData.ContourPolygon _d = new GralData.ContourPolygon();
                                 _d.EdgePoints = new PointD[2];
-                                _d.EdgePoints[0] = new PointD(XDomain, YDomain);
+                                _d.EdgePoints[0] = new PointD(TestPt.X, TestPt.Y);
                                 _d.EdgePoints[1] = new PointD(concentration * 1E12, 0);
                                 
                                 _drobj.ContourPolygons.Add(_d); // position and concentration
@@ -2998,11 +3037,11 @@ namespace GralDomain
                             }
                             else
                             {
-                                string temp =  Path.GetFileName(filename).ToUpper();
+                                string temp =  Path.GetFileName(FileName).ToUpper();
                                 
                                 GralData.ContourPolygon _d = new GralData.ContourPolygon();
                                 _d.EdgePoints = new PointD[2];
-                                _d.EdgePoints[0] = new PointD(XDomain, YDomain);
+                                _d.EdgePoints[0] = new PointD(TestPt.X, TestPt.Y);
                                 _d.EdgePoints[1] = new PointD(concentration * 1E12, 0);
                                 _drobj.ContourPolygons.Add(_d); // position and concentration
                                 
@@ -3791,11 +3830,11 @@ namespace GralDomain
             }
 
             using (Dialog_3D dial = new Dialog_3D
-                   {
-                       Smoothing = smooth,
-                       VertFactor = vert_fac,
-                       GRAL_Topo = GRAL_Topo
-                   })
+            {
+                Smoothing = smooth,
+                VertFactor = vert_fac,
+                GRAL_Topo = GRAL_Topo
+            })
             {
                 if (dial.ShowDialog() == DialogResult.Cancel)
                 {
@@ -3807,7 +3846,7 @@ namespace GralDomain
                 vert_fac = dial.VertFactor;
                 GRAL_Topo = dial.GRAL_Topo;
             }
-            
+
             if (GRAL_Topo == true) // Show GRAL height
             {
                 GRAL_3D_View(smooth, vert_fac);
@@ -3819,6 +3858,9 @@ namespace GralDomain
             #endif
         }
 
+        /// <summary>
+        /// Sort integer values descending direction
+        /// </summary>
         private class SortIntDescending : IComparer<int>
         {
             int IComparer<int>.Compare(int a, int b) //implement Compare
@@ -3956,6 +3998,11 @@ namespace GralDomain
         }
         
         
+        /// <summary>
+        /// Delete all selected items 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void DeleteSelectedItemsToolStripMenuItemClick(object sender, EventArgs e)
         {
             //delete selected area source
@@ -3996,6 +4043,11 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
+        /// <summary>
+        /// Save item data to disk
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void WriteAllItemsToDisk(object sender, EventArgs e)
         {
             EditAndSaveAreaSourceData(sender, e);
@@ -4153,7 +4205,10 @@ namespace GralDomain
                                     if (i % 40 == 0)
                                     {
                                         wait.Text = "Writing GRAL topography " + ((int)(100 - (float)i / (ny + 2) * 100F)).ToString() + "%";
-                                        cts.ThrowIfCancellationRequested();
+                                        if (cts != null)
+                                        {
+                                            cts.ThrowIfCancellationRequested();
+                                        }
                                     }
 
                                     //string line = String.Empty;
@@ -4218,7 +4273,7 @@ namespace GralDomain
                 }
                 else
                 {
-                    if (CancellationTokenSource.IsCancellationRequested)
+                    if (CancellationTokenSource != null && CancellationTokenSource.IsCancellationRequested)
                     {
                         return;
                     }
@@ -4301,10 +4356,12 @@ namespace GralDomain
 
             // Go to the dialog
             using (DialogModifyGRALTopography mod = new DialogModifyGRALTopography
-                   {
-                       modify = TopoModify
-                   })
             {
+                modify = TopoModify,
+                StartPosition = FormStartPosition.Manual
+            })
+            {
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, Top + 200);
                 if (mod.ShowDialog() == DialogResult.OK)
                 {
                     TopoModify = mod.modify;
@@ -4360,6 +4417,9 @@ namespace GralDomain
             }
         }
 
+        /// <summary>
+        /// Low pass filter for the GRAL topography
+        /// </summary>
         void LowPassGralTopographyApply()
         {
             // create deep copy of cell height
@@ -4409,11 +4469,16 @@ namespace GralDomain
 
             if (MessageBox.Show(this, "Write new GRAL_topofile.txt?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
+                CancellationTokenReset();
                 if (WriteGralGeometry(CancellationTokenSource.Token) == false)
                 {
                     File.Copy(filecopy, file);
+                    MessageBoxTemporary Box = new MessageBoxTemporary("Error when saving GRAL geometry", Location);
                 }
-                MessageBoxTemporary Box = new MessageBoxTemporary("GRAL geometry saved", Location);
+                else
+                {
+                    MessageBoxTemporary Box = new MessageBoxTemporary("GRAL geometry saved", Location);
+                }
             }
         }
 
@@ -4449,6 +4514,11 @@ namespace GralDomain
             return new System.Drawing.Point(x, 60);
         }
 
+        /// <summary>
+        /// Show GRAMM terrain grid heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuCellHeightsGramm(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGramm.Checked)
@@ -4461,6 +4531,28 @@ namespace GralDomain
             }
         }
 
+        /// <summary>
+        /// Show GRAMM terrain edge point heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuEntryCellHeightsGrammEdge_Click(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGrammEdge.Checked)
+            {
+                SetCellHeightsType(-1);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Show GRAL terrain grid heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuCellHeightsGral(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGral.Checked)
@@ -4474,6 +4566,10 @@ namespace GralDomain
             }      
         }
 
+        /// <summary>
+        /// Set the type of cell height to be displayed
+        /// </summary>
+        /// <param name="type">0: No cell height, 1: GRAMM, 2: GRAL, -1: GRAMM edge points</param>
         private void SetCellHeightsType(int type)
         {
             CellHeightsType = type;
@@ -4481,16 +4577,25 @@ namespace GralDomain
             {
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
             }
             else if (CellHeightsType == 1)
             {
                 MenuEntryCellHeightsGramm.Checked = true;
                 MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
             }
             else if (CellHeightsType == 2)
             {
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = true;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
+            }
+            else if (CellHeightsType == -1)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = true;
             }
         }
 
@@ -4527,6 +4632,11 @@ namespace GralDomain
             ShowVegetationDialog(sender, e);
         }
 
+        /// <summary>
+        /// Generate a concentration time series based on *.con or *.grz files for several evaluation points 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MouseControl = MouseMode.SetPointConcTimeSeries;

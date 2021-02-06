@@ -74,8 +74,7 @@ namespace GralDomain
                 CancellationTokenSource.Cancel();
                 CancellationTokenSource.Dispose();
             }
-            CancellationTokenSource = null;
-
+            
             ReleaseFileSystemWatchers();
             
             if (ObjectManagerForm != null) // Kuntner: close objectmanager
@@ -98,7 +97,6 @@ namespace GralDomain
             {
                 ProfileConcentration.VertProfileVelocity.Close();
             }
-
 
             if (picturebox1 != null)
             {
@@ -284,6 +282,8 @@ namespace GralDomain
             ItemOptions.TrimExcess();
             //Application.DoEvents();
             
+            CancellationTokenSource = null;
+
             try
             {
                 if (DomainClosed!= null)

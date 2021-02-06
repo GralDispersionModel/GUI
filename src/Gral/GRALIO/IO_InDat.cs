@@ -122,9 +122,11 @@ namespace GralIO
                     }
 
                     myWriter.WriteLine(_data.AdaptiveRoughness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
+
+                    myWriter.WriteLine(_data.PrognosticSubDomainsSizeSourceRadius.ToString(ic) + "\t ! Radius surrounding sources, in which the wind field is to be calculated prognostically; 0 = off, valid values: 50 - 10000 m  ");
                 }
-				
-			}
+
+            }
 			catch
 			{
 				MessageBox.Show("Error writing in.dat","I/O error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -221,7 +223,7 @@ namespace GralIO
                         _data.BuildingHeightsWrite = false;
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read data compressed value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
@@ -248,7 +250,7 @@ namespace GralIO
                         _data.Compressed = 0;
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read Wait for Key Stroke value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
@@ -263,7 +265,7 @@ namespace GralIO
                         }
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read ESRI Result value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
@@ -280,7 +282,7 @@ namespace GralIO
                         }
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read Adaptive Roughness value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         if (text.Length > 0)
@@ -291,6 +293,19 @@ namespace GralIO
                             }
                         }
                     }
+
+                    if (myreader.EndOfStream == false) // read Sub Domain radius from sources
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (double.TryParse(text[0], NumberStyles.Any, ic, out double _val))
+                            {
+                                _data.PrognosticSubDomainsSizeSourceRadius = Convert.ToInt32(_val);
+                            }
+                        }
+                    }
+
                 }
 			}
 			catch

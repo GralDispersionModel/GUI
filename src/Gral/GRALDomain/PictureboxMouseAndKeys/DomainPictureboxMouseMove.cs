@@ -157,18 +157,34 @@ namespace GralDomain
 				catch
 				{}
 			}
-			if (CellHeightsType == 1) // Show GRAMM height
+			if (Math.Abs(CellHeightsType) == 1) // Show GRAMM height
 			{
 				try
 				{
 					if (MainForm.GRAMMHorGridSize > 0)
 					{
-                        int i = (int)((x_real - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
-                        int j = (int)((y_real - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
-                        if ((x_real - MainForm.GrammDomRect.West) > 0 && (y_real - MainForm.GrammDomRect.South) > 0 && i <= CellHeights.GetUpperBound(0) && j <= CellHeights.GetUpperBound(1))
+						int i = 0; int j = 0;
+						// GRAMM mean height
+						if (CellHeightsType == 1)
+						{
+							i = (int)((x_real - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
+							j = (int)((y_real - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
+						}
+						else // GRAMM edge height
                         {
-                            string heightString = CellHeights[i, j].ToString("F1");
-                            toolStripTextBox3.Text = heightString;
+							i = (int)((x_real - MainForm.GrammDomRect.West + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
+							j = (int)((y_real - MainForm.GrammDomRect.South + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
+						}
+                        if (i > 0 && j > 0 && i <= CellHeights.GetUpperBound(0) && j <= CellHeights.GetUpperBound(1))
+                        {
+							string _prefix = "M: ";
+							if (CellHeightsType == -1)
+							{
+								_prefix = "E: ";
+							}
+							
+							string heightString = _prefix + CellHeights[i, j].ToString("F1");
+							toolStripTextBox3.Text = heightString;
                             textBox3.Text = heightString;
                         }
                         else

@@ -133,7 +133,7 @@ namespace GralDomain
                         int recwidth = x2 - x1;
                         int recheigth = y2 - y1;
                         GRALDomain = new Rectangle(x1, y1, recwidth, recheigth);
-
+                        XDomain = 0;
                         Picturebox1_MouseUp(null, e); // force button up event
                     }
                     break;
@@ -1165,6 +1165,7 @@ namespace GralDomain
                         int recwidth = x2 - x1;
                         int recheigth = y2 - y1;
                         GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
+                        XDomain = 0;
 
                         Picturebox1_MouseUp(null, e); // force button up event
                     }
@@ -1220,9 +1221,9 @@ namespace GralDomain
                 case MouseMode.SetPointReOrder:
                     //get sample point for re-ordering GRAMM windfield to meet observed wind data better
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
+                        int xDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                        int yDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                        if ((xDomain < MainForm.GrammDomRect.West) || (xDomain > MainForm.GrammDomRect.East) || (yDomain < MainForm.GrammDomRect.South) || (yDomain > MainForm.GrammDomRect.North))
                         {
                             MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -1230,7 +1231,7 @@ namespace GralDomain
                         {
                             MouseControl = MouseMode.Default;
                             Cursor = Cursors.Default;
-                            ReorderGrammWindfields();
+                            ReorderGrammWindfields(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                         }
                     }
                     break;
@@ -1265,21 +1266,17 @@ namespace GralDomain
                 case MouseMode.SetPointSourceApport:
                     //get sample point for computing source apportionment
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
                         MouseControl = MouseMode.Default;
                         Cursor = Cursors.Default;
-                        SourceApportionment(XDomain, YDomain);
+                        SourceApportionment(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
                 case MouseMode.SetPointConcFile:
                     //get sample point to get a concentration value 
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
                         //MouseControl = MouseMode.Default;
-                        GetConcentrationFromFile(ConcFilename);
+                        GetConcentrationFromFile(ConcFilename, new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
@@ -1288,27 +1285,21 @@ namespace GralDomain
                     {
                         MouseControl = MouseMode.Default;
                         Cursor = Cursors.Default;
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        VertProfile();
+                        VertProfile(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
                 case MouseMode.SetPointConcProfile:
                     //get sample point for vertical 3D profile of GRAL concentrations
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        Vert3DConcentration();
+                        Vert3DConcentration(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
                 case MouseMode.SetPointVertWindProfile:
                     //get sample point for vertical profile for GRAMM windfields
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        VertProfile2();
+                        VertProfile2(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
@@ -1335,18 +1326,18 @@ namespace GralDomain
                         double[,] arr = new double[1, 1];
                         int x1 = 1;
                         int y1 = 1;
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                        int xDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                        int yDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
 
                         if (MainForm.textBox13.Text != "")
                         {
-                            x1 = Convert.ToInt32(Math.Floor((XDomain - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize));
-                            y1 = Convert.ToInt32(Math.Floor((YDomain - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize));
+                            x1 = Convert.ToInt32(Math.Floor((xDomain - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize));
+                            y1 = Convert.ToInt32(Math.Floor((yDomain - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize));
                         }
                         else
                         {
-                            x1 = Convert.ToInt32(Math.Floor((XDomain - Convert.ToInt32(MainForm.textBox6.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
-                            y1 = Convert.ToInt32(Math.Floor((YDomain - Convert.ToInt32(MainForm.textBox5.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
+                            x1 = Convert.ToInt32(Math.Floor((xDomain - Convert.ToInt32(MainForm.textBox6.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
+                            y1 = Convert.ToInt32(Math.Floor((yDomain - Convert.ToInt32(MainForm.textBox5.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
                         }
                         //MessageBox.Show(this, Convert.ToString(x1) +"/" + Convert.ToString(y1));
 

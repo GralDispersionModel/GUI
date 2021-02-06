@@ -189,12 +189,21 @@ namespace GralBackgroundworkers
                 }
                 using (StreamWriter myWriter = new StreamWriter(file))
                 {
-                    myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                    myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                    myWriter.WriteLine("Xllcorner     " + Convert.ToString(mydata.GrammWest));
-                    myWriter.WriteLine("Yllcorner     " + Convert.ToString(mydata.GrammSouth));
-                    myWriter.WriteLine("cellsize      " + Convert.ToString(mydata.GRAMMhorgridsize));
-                    myWriter.WriteLine("NODATA_value  " + "-9999" + "\t UNIT \t m/s");
+                    GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                    {
+                        NCols = NX,
+                        NRows = NY,
+                        XllCorner = mydata.GrammWest,
+                        YllCorner = mydata.GrammSouth,
+                        CellSize = mydata.GRAMMhorgridsize,
+                        Unit = "m/s",
+                        Round = 3
+                    };
+                    if (!writeHeader.WriteEsriHeader(myWriter))
+                    {
+                        throw new Exception();
+                    }
+                    
                     double min = 1000;
                     double max = -1;
                     for (int j = NY; j > 0; j--)

@@ -62,7 +62,7 @@ namespace GralItemData
 			
 			try
 			{
-				if (text.Length > 10) // otherwise the file is corrupt
+				if (text.Length > 8) // otherwise the file is corrupt
 				{
 					version = Convert.ToInt32(text[index++]);
 					Name   = text[index++];

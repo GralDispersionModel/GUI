@@ -485,7 +485,20 @@ namespace GralBackgroundworkers
 
                         using (StreamWriter myWriter = new StreamWriter(file, false))
                         {
-                            mydata.Writer=myWriter; WriteHeader(mydata, mydata.Unit);
+                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                            {
+                                NCols = mydata.CellsGralX,
+                                NRows = mydata.CellsGralY,
+                                XllCorner = mydata.DomainWest,
+                                YllCorner = mydata.DomainSouth,
+                                CellSize = mydata.Horgridsize,
+                                Unit = mydata.Unit,
+                                Round = 5
+                            };
+                            if (!writeHeader.WriteEsriHeader(myWriter))
+                            {
+                                throw new Exception();
+                            }
                             
                             for (int j = mydata.CellsGralY - 1; j > -1; j--)
                             {
@@ -527,7 +540,20 @@ namespace GralBackgroundworkers
                         
                     using (StreamWriter mywriter = new StreamWriter(file, false))
                     {
-                        mydata.Writer=mywriter; WriteHeader(mydata, mydata.Unit);
+                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                        {
+                            NCols = mydata.CellsGralX,
+                            NRows = mydata.CellsGralY,
+                            XllCorner = mydata.DomainWest,
+                            YllCorner = mydata.DomainSouth,
+                            CellSize = mydata.Horgridsize,
+                            Unit = mydata.Unit,
+                            Round = 5
+                        };
+                        if (!writeHeader.WriteEsriHeader(mywriter))
+                        {
+                            throw new Exception();
+                        }
                         
                         for (int j = mydata.CellsGralY - 1; j > -1; j--)
                         {

@@ -137,6 +137,7 @@
             this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
             this.shownCellHeightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEntryCellHeightsGramm = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuEntryCellHeightsGrammEdge = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEntryCellHeightsGral = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.sectionViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1647,6 +1648,7 @@
             // 
             this.shownCellHeightToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuEntryCellHeightsGramm,
+            this.MenuEntryCellHeightsGrammEdge,
             this.MenuEntryCellHeightsGral});
             this.shownCellHeightToolStripMenuItem.Name = "shownCellHeightToolStripMenuItem";
             this.shownCellHeightToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
@@ -1655,14 +1657,21 @@
             // MenuEntryCellHeightsGramm
             // 
             this.MenuEntryCellHeightsGramm.Name = "MenuEntryCellHeightsGramm";
-            this.MenuEntryCellHeightsGramm.Size = new System.Drawing.Size(143, 22);
-            this.MenuEntryCellHeightsGramm.Text = "GRAMM grid";
+            this.MenuEntryCellHeightsGramm.Size = new System.Drawing.Size(213, 22);
+            this.MenuEntryCellHeightsGramm.Text = "GRAMM grid mean height";
             this.MenuEntryCellHeightsGramm.Click += new System.EventHandler(this.MenuCellHeightsGramm);
+            // 
+            // MenuEntryCellHeightsGrammEdge
+            // 
+            this.MenuEntryCellHeightsGrammEdge.Name = "MenuEntryCellHeightsGrammEdge";
+            this.MenuEntryCellHeightsGrammEdge.Size = new System.Drawing.Size(213, 22);
+            this.MenuEntryCellHeightsGrammEdge.Text = "GRAMM grid edge points";
+            this.MenuEntryCellHeightsGrammEdge.Click += new System.EventHandler(this.MenuEntryCellHeightsGrammEdge_Click);
             // 
             // MenuEntryCellHeightsGral
             // 
             this.MenuEntryCellHeightsGral.Name = "MenuEntryCellHeightsGral";
-            this.MenuEntryCellHeightsGral.Size = new System.Drawing.Size(143, 22);
+            this.MenuEntryCellHeightsGral.Size = new System.Drawing.Size(213, 22);
             this.MenuEntryCellHeightsGral.Text = "GRAL grid";
             this.MenuEntryCellHeightsGral.Click += new System.EventHandler(this.MenuCellHeightsGral);
             // 
@@ -2497,7 +2506,7 @@
             this.toolStripTextBox3.Name = "toolStripTextBox3";
             this.toolStripTextBox3.ReadOnly = true;
             this.toolStripTextBox3.ShortcutsEnabled = false;
-            this.toolStripTextBox3.Size = new System.Drawing.Size(40, 21);
+            this.toolStripTextBox3.Size = new System.Drawing.Size(60, 21);
             this.toolStripTextBox3.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // toolStripTextBox2
@@ -2829,5 +2838,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuEntryCellHeightsGramm;
         private System.Windows.Forms.ToolStripMenuItem MenuEntryCellHeightsGral;
         private System.Windows.Forms.ToolStripMenuItem generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuEntryCellHeightsGrammEdge;
     }
 }

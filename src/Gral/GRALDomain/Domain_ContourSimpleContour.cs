@@ -395,7 +395,13 @@ namespace GralDomain
                 }
             });
 
-            _drobj.ContourClipping = new RectangleF((float)(x11 + dx), (float)(y11 + (ny - 2) * dx), (float)((nx - 3) * dx), (float)((ny - 2) * dx));
+            int yOffset = 1;
+            if (CheckForEmptyLastRow(zlevel, nx, ny))
+            {
+                yOffset = 2;
+            }
+
+            _drobj.ContourClipping = new RectangleF((float)(x11 + dx), (float)(y11 + (ny - yOffset) * dx), (float)((nx - 3) * dx), (float)((ny - yOffset) * dx));
 
             // analyze drawing order
             // 1st step: get min & max values of the contoue lines
@@ -477,9 +483,9 @@ namespace GralDomain
         }
         
         /// <summary>
-    	/// Compute the inner angle of two lines
-    	/// </summary>
-    	/// <param name="polypoints">List for polygon points</param> 
+        /// Compute the inner angle of two lines
+        /// </summary>
+        /// <param name="polypoints">List for polygon points</param> 
         private double GetAngleBetweenLines(PointD p11, PointD p12, PointD p21, PointD p22)
         {
             double sin = (p11.X - p12.X) * (p21.Y - p22.Y) - (p21.X - p22.X) * (p11.Y - p12.Y);
@@ -495,10 +501,10 @@ namespace GralDomain
         }
 
         /// <summary>
-    	/// Compute the area and the orientation (clockwise < 0, counter clockwise > 0) of a polygon
-    	/// </summary>
-    	/// <param name="polypoints">List for polygon points</param> 
-		private double CalcOrientation(List<GralDomain.PointD> polypoints)
+        /// Compute the area and the orientation (clockwise < 0, counter clockwise > 0) of a polygon
+        /// </summary>
+        /// <param name="polypoints">List for polygon points</param> 
+        private double CalcOrientation(List<GralDomain.PointD> polypoints)
         {
             double area = 0;
             if (polypoints.Count > 2)
@@ -527,6 +533,30 @@ namespace GralDomain
                 area = 10E9;
             }
             return area;
+        }
+
+        /// <summary>
+        /// Check for an empty 1st row of a concentration array (for GRAL versions prior to 21.09)
+        /// </summary>
+        /// <param name="zlevel">Concentration array</param>
+        /// <param name="nx"></param>
+        /// <param name="ny"></param>
+        /// <returns>true if the last row is zero</returns>
+        private bool CheckForEmptyLastRow(double[,] zlevel, int nx, int ny)
+        {
+            double sum = 0;
+            for (int x = 0; x < nx - 1; x++)
+            {
+                sum += zlevel[x, ny - 1];
+            }
+            if (sum < 3 * double.Epsilon)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

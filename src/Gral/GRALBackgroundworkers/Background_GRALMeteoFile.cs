@@ -87,16 +87,28 @@ namespace GralBackgroundworkers
 
                     foreach (EvalPointsIndices _pt in evalPoints)
                     {
-                        if (_pt.IxGRAL > 0 && _pt.IxGRAL < gff.NII &&
-                            _pt.IyGRAL > 0 && _pt.IyGRAL < gff.NJJ &&
+                        // GFFFileData starts with index 1
+                        int xG = _pt.IxGRAL + 1;
+                        int yG = _pt.IyGRAL + 1;
+                        
+                        if (xG > 0 && xG < gff.NII &&
+                            yG > 0 && yG < gff.NJJ &&
                             _pt.IzGRAL > 0 && _pt.IzGRAL < gff.NKK)
                         {
-                            float uk = gff.Uk[_pt.IxGRAL][_pt.IyGRAL][_pt.IzGRAL];
-                            float vk = gff.Vk[_pt.IxGRAL][_pt.IyGRAL][_pt.IzGRAL];
-                            float wk = gff.Wk[_pt.IxGRAL][_pt.IyGRAL][_pt.IzGRAL];
+                            float uk = gff.Uk[xG][yG][_pt.IzGRAL];
+                            float vk = gff.Vk[xG][yG][_pt.IzGRAL];
+                            float wk = gff.Wk[xG][yG][_pt.IzGRAL];
 
                             windVel[ptCount][meteoSit - 1] = (float)Math.Sqrt(uk * uk + vk * vk);
-                            windDir[ptCount][meteoSit - 1] = WindDirection(uk, vk);
+                            if (windVel[ptCount][meteoSit - 1] > 0.00001)
+                            {
+                                windDir[ptCount][meteoSit - 1] = WindDirection(uk, vk);
+                            }
+                            else // NoData values
+                            {
+                                windVel[ptCount][meteoSit - 1] = 0;
+                                windDir[ptCount][meteoSit - 1] = 0;
+                            }
                         }
                         int scl = gff.AK;
                         if (useLocalStabilityClass)
@@ -291,8 +303,8 @@ namespace GralBackgroundworkers
                         foreach (Point_3D _pt in EvalPoints)
                         {
                             EvalPointsIndices _newPoint = new EvalPointsIndices();
-                            _newPoint.IxGRAL = Convert.ToInt32(Math.Floor((_pt.X - GRALwest) / mydata.GFFGridSize)) + 1;
-                            _newPoint.IyGRAL = Convert.ToInt32(Math.Floor((_pt.Y - GRALsouth) / mydata.GFFGridSize)) + 1;
+                            _newPoint.IxGRAL = (int) ((_pt.X - GRALwest) / mydata.GFFGridSize);
+                            _newPoint.IyGRAL = (int) ((_pt.Y - GRALsouth) / mydata.GFFGridSize);
                             _newPoint.Height = _pt.Z;
 
                             // GRAMM indices

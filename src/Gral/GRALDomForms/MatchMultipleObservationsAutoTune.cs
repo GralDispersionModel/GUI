@@ -44,13 +44,14 @@ namespace GralDomForms
                 BestMatchMode[i] = MatchingData.Optimization;
             }
 
+            Domain.CancellationTokenReset();
             GralMessage.WaitProgressbarCancel wait = new GralMessage.WaitProgressbarCancel("");
 #if __MonoCS__
             wait.Width = 350;
 #endif
             wait.Text = "Automatic Tuning - Pass 1/3";
             wait.Show();
-
+           
             // 1st guess: brute force test for all meteo stations
             if ((Passes & 1) == 1)
             {

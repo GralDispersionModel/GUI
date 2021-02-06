@@ -25,6 +25,8 @@ namespace GralData
         public bool ShowBias { get; set; }
         public bool ShowFrames { get; set; }
         public bool DrawSmallSectors { get; set; }
+        public int SectorCount { get; set; }
+        public bool Ignore00Values { get; set; }
 
         /// <summary>
         /// Initialize the windrose settings with default values
@@ -38,6 +40,8 @@ namespace GralData
             ShowBias = true;
             ShowFrames = false;
             DrawSmallSectors = false;
+            SectorCount = 16;
+            Ignore00Values = false;
         }
 
         public WindRoseSettings(WindRoseSettings other)
@@ -49,6 +53,8 @@ namespace GralData
             ShowBias = other.ShowBias;
             ShowFrames = other.ShowFrames;
             DrawSmallSectors = other.DrawSmallSectors;
+            SectorCount = other.SectorCount;
+            Ignore00Values = other.Ignore00Values;
         }
 
     }

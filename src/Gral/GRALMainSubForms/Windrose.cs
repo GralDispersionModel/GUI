@@ -24,11 +24,12 @@ namespace GralMainForms
     /// </summary>
     public partial class Windrose : Form
     {
-        private Point[] WindRosePoints = new Point[49];
-        public double[,] SectFrequ = new double[16, 8];
+        private Point[] WindRosePoints;
+        public double[,] SectFrequ = new double[16, 8]; 
         public double[] WndClasses = new double[7];
         public string MetFileName;
         public List<GralData.WindData> WindData;
+        public int WindSectorCount = 16;
 
         private int IniScale = 270;
         public int StartHour;
@@ -98,6 +99,8 @@ namespace GralMainForms
 
         private void Form3_Load(object sender, EventArgs e)
         {
+            WindRosePoints = new Point[WindSectorCount * 3 + 1];
+
             if (St_F.WindRoseFormSize.Height > 100)
             {
                 this.Size = St_F.WindRoseFormSize;
@@ -189,10 +192,10 @@ namespace GralMainForms
 
 
             //draw windrose
-            double[] sektsum = new double[16];
+            double[] sektsum = new double[WindSectorCount];
             SektMax = 0;
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < WindSectorCount; i++)
             {
                 for (int n = 0; n < 8; n++)
                 {
@@ -248,18 +251,19 @@ namespace GralMainForms
                 }
             }
 
-            const double sectorangle = Math.PI / 8;
+            double sectorangle = Math.PI * 2 / WindSectorCount;
 
-            double sectorwidth = 0.196;
+            double sectorwidth = Math.PI / WindSectorCount;
+
             if (SmallSectors)
             {
-                sectorwidth = Math.PI / 18;
+                sectorwidth = Math.PI / WindSectorCount * 0.85;
             }
 
             for (int n = 7; n >= 0; n--)
             {
                 int l = 1;
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < WindSectorCount; i++)
                 {
                     //coordinates wind rose - drawing
                     int x1 = 0; int y1 = 0; int x2 = 0; int y2 = 0;
@@ -271,7 +275,9 @@ namespace GralMainForms
                         y2 = Convert.ToInt32(Math.Cos(sectorangle * i + sectorwidth) * sektsum[i] * scale);
                     }
                     catch
-                    { }
+                    {
+                        MessageBox.Show("Bus");
+                    }
                     WindRosePoints[i + l - 1] = new Point(mid_x, mid_y);
                     WindRosePoints[i + l] = new Point(mid_x + x1, mid_y - y1);
                     WindRosePoints[i + l + 1] = new Point(mid_x + x2, mid_y - y2);
@@ -721,18 +727,26 @@ namespace GralMainForms
 
         private void button8_Click(object sender, EventArgs e)
         {
-            // show a table with frequencies for 16 directions and 8 (7) classes
+            if (WindSectorCount != 16)
+            {
+                MessageBox.Show(this, "Table only available for 22.5° sectors", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // show a table with frequencies for WindSectorCount directions and 8 (7) classes
             WindroseTable wrt = new WindroseTable
             {
                 MetfileName = "wind velocity " + MetFileName,
                 SectFrequency = SectFrequ,
                 WndClasses = WndClasses,
-                Mode = DrawingMode
+                Mode = DrawingMode,
+                StartPosition = FormStartPosition.Manual
             };
             if (DrawingMode == 1)
             {
                 wrt.MetfileName = "stability classes " + MetFileName;
-            }
+            }          
+            wrt.Location = new Point(Left + 20, Top + 20);     
             wrt.Show();
         }
 

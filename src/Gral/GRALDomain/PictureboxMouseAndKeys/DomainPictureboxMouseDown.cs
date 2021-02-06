@@ -195,7 +195,17 @@ namespace GralDomain
                     Picturebox1_Paint();
                     return;
                 }
-                
+
+                //Check for an existing GRAL geometry
+                if (ReadGralGeometry()) 
+                {
+                    if (MessageBox.Show(this, "Use new GRAL domain and delete existing domain and GRAL topography data?", "New GRAL Domain Area", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        MouseControl = MouseMode.Default;
+                        Picturebox1_Paint();
+                        return;
+                    }
+                }
                 //compute model domain extenstions in natural coordinates and clip them to the chosen raster size of the concentration grid
                 MainForm.GralDomRect.North = Math.Round((GRALDomain.Top - TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
                 MainForm.GralDomRect.North = Math.Round(MainForm.GralDomRect.North / MainForm.HorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown9.Value);
@@ -276,7 +286,8 @@ namespace GralDomain
 
                         MainForm.DeleteGralTopofile();
                         MainForm.DeleteGralGffFile();
-                        
+                        CellHeightsType = 0;    // reset cell height view
+                        TryToLoadCellHeights(); // load availabele cell heights -> reset menu items
                     }
                     catch
                     {
