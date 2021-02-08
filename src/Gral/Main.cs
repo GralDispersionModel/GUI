@@ -3526,6 +3526,8 @@ namespace Gral
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
                     MSp.LogLevel = GRALSettings.Loglevel;
                     MSp.RadiusForPrognosticFlowField = GRALSettings.PrognosticSubDomainsSizeSourceRadius;
+                    MSp.GRALOnlineFunctions = GRALSettings.UseGRALOnlineFunctions;
+
                     MSp.StartPosition = FormStartPosition.Manual;
                     MSp.Left = Left + 80;
                     MSp.Top = Top + 40;
@@ -3534,11 +3536,13 @@ namespace Gral
                     {
                         if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || 
                             MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke ||
-                            MSp.RadiusForPrognosticFlowField != GRALSettings.PrognosticSubDomainsSizeSourceRadius)
+                            MSp.RadiusForPrognosticFlowField != GRALSettings.PrognosticSubDomainsSizeSourceRadius ||
+                            MSp.GRALOnlineFunctions != GRALSettings.UseGRALOnlineFunctions)
                         {
                             GRALSettings.WriteESRIResult = MSp.WriteASCiiOutput;
                             GRALSettings.WaitForKeyStroke = MSp.KeyStrokeWhenExitGRAL;
                             GRALSettings.PrognosticSubDomainsSizeSourceRadius = MSp.RadiusForPrognosticFlowField;
+                            GRALSettings.UseGRALOnlineFunctions = MSp.GRALOnlineFunctions;
                             ResetInDat();
                         }
                         GRALSettings.Loglevel = MSp.LogLevel;

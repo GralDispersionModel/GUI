@@ -193,6 +193,10 @@ namespace GralIO
         /// </summary>
         public bool WriteESRIResult { get; set; }
         /// <summary>
+        ///Use GRAL Online functions
+        /// </summary>
+        public bool UseGRALOnlineFunctions { get; set; }
+        /// <summary>
         ///GRAL log output for debugging 
         /// </summary>
         public int Loglevel { get; set; }
@@ -236,6 +240,7 @@ namespace GralIO
             Transientflag = 0;
             PrognosticSubDomains = 15;
             WaitForKeyStroke = true;
+            UseGRALOnlineFunctions = true;
             WriteESRIResult = false;
             Loglevel = 0;
             AdaptiveRoughness = 0;
@@ -269,6 +274,7 @@ namespace GralIO
             Loglevel = other.Loglevel;
             AdaptiveRoughness = other.AdaptiveRoughness;
             PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
+            UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
         }
 
     }

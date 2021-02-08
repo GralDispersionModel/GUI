@@ -46,6 +46,7 @@
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -133,7 +134,7 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(15, 361);
+            this.button1.Location = new System.Drawing.Point(15, 392);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(90, 29);
             this.button1.TabIndex = 2;
@@ -144,7 +145,7 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(215, 361);
+            this.button2.Location = new System.Drawing.Point(215, 392);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(90, 29);
             this.button2.TabIndex = 2;
@@ -255,11 +256,26 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "Radius in [m]";
             // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Checked = true;
+            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
+            this.checkBox5.Location = new System.Drawing.Point(15, 349);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(214, 20);
+            this.checkBox5.TabIndex = 61;
+            this.checkBox5.Text = "Disable GRAL Online Functions";
+            this.toolTip1.SetToolTip(this.checkBox5, "Wait for a keystroke at the end of a calculation");
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
             // Main_SpecialSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(320, 413);
+            this.ClientSize = new System.Drawing.Size(320, 444);
+            this.Controls.Add(this.checkBox5);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.checkBox3);
@@ -304,5 +320,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox5;
     }
 }

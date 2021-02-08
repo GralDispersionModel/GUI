@@ -124,6 +124,15 @@ namespace GralIO
                     myWriter.WriteLine(_data.AdaptiveRoughness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
 
                     myWriter.WriteLine(_data.PrognosticSubDomainsSizeSourceRadius.ToString(ic) + "\t ! Radius surrounding sources, in which the wind field is to be calculated prognostically; 0 = off, valid values: 50 - 10000 m  ");
+                    
+                    if (_data.UseGRALOnlineFunctions)
+                    {
+                        myWriter.WriteLine("1 \t ! Use GRAL Online Functions = true");
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("0 \t ! Use GRAL Online Functions = false");
+                    }
                 }
 
             }
@@ -302,6 +311,25 @@ namespace GralIO
                             if (double.TryParse(text[0], NumberStyles.Any, ic, out double _val))
                             {
                                 _data.PrognosticSubDomainsSizeSourceRadius = Convert.ToInt32(_val);
+                            }
+                        }
+                    }
+
+                    if (myreader.EndOfStream == false) // read Sub Domain radius from sources
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                            {
+                                if (_val == 1)
+                                {
+                                    _data.UseGRALOnlineFunctions = true;
+                                }
+                                else
+                                {
+                                    _data.UseGRALOnlineFunctions = false;
+                                }
                             }
                         }
                     }

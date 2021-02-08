@@ -10,17 +10,24 @@ namespace GralMainForms
         public bool KeyStrokeWhenExitGRAL = true;
         public int LogLevel = 0;
         public int RadiusForPrognosticFlowField = 0;
+        public bool GRALOnlineFunctions = true;
 
         public Main_SpecialSettings()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// OK Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             if (Gral.Main.Project_Locked == false)
             {
                 WriteASCiiOutput = checkBox1.Checked;
+                GRALOnlineFunctions = !checkBox5.Checked;
                 LogLevel = (int) numericUpDown2.Value;
 
                 string KeepTransientPath = Path.Combine(Gral.Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat");
@@ -100,6 +107,7 @@ namespace GralMainForms
                 numericUpDown3.Value = 150;
                 checkBox4.Checked = false;
             }
+            checkBox5.Checked = !GRALOnlineFunctions;
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
