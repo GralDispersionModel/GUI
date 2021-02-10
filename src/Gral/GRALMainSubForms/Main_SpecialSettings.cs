@@ -108,6 +108,15 @@ namespace GralMainForms
                 checkBox4.Checked = false;
             }
             checkBox5.Checked = !GRALOnlineFunctions;
+            if (Gral.Main.Project_Locked)
+            {
+                foreach (Control c in Controls)
+                {
+                    c.Enabled = false;
+                }
+                button1.Enabled = true;
+                button2.Enabled = true;
+            }
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
