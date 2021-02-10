@@ -1052,13 +1052,16 @@ namespace Gral
         {
             St_F.CheckInput(sender, e);
 
-            if (sender == numericUpDown45 && checkBox29.Checked) // optional adaptive roughness lenght
+            if (sender == numericUpDown45) // optional adaptive roughness lenght
             {
-                GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
-            }
-            else
-            {
-                GRALSettings.AdaptiveRoughness = 0;
+                if (checkBox29.Checked)
+                {
+                    GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
+                }
+                else
+                {
+                    GRALSettings.AdaptiveRoughness = 0;
+                }
             }
             ResetInDat();
         }
