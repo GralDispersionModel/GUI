@@ -143,8 +143,12 @@ namespace GralMainForms
 		
 		void ListView1DoubleClick(object sender, EventArgs e)
 		{
-			_selectedFile = listView1.SelectedItems[0].Text;
-			DialogResult = DialogResult.OK;
+            try
+            {
+                _selectedFile = listView1.SelectedItems[0].Text;
+                DialogResult = DialogResult.OK;
+            }
+            catch { }
 		}
 		void Button2Click(object sender, EventArgs e)
 		{
