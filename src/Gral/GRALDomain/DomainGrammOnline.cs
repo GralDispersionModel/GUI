@@ -959,7 +959,7 @@ namespace GralDomain
                 };
 
                 CancellationTokenReset();
-                if (await System.Threading.Tasks.Task.Run(() => gff.ReadGffFile(CancellationTokenSource.Token)) == true)
+                if (gff.ReadGffFile(CancellationTokenSource.Token) == true)
                 {
                     nkk = gff.NKK;
                     njj = gff.NJJ;

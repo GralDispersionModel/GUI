@@ -705,7 +705,7 @@ namespace GralDomain
                                 };
 
                                 CancellationTokenReset();
-                                if (await Task.Run(() => gff.ReadGffFile(CancellationTokenSource.Token)) == true)
+                                if (gff.ReadGffFile(CancellationTokenSource.Token) == true)
                                 {
                                     nkk = gff.NKK;
                                     njj = gff.NJJ;
@@ -765,15 +765,53 @@ namespace GralDomain
                                 {
                                     for (int j = 1; j < njj + 1; j++)
                                     {
-                                        for (int k = 1; k < nkk + 1; k++)
+                                        if (!AbsoluteHeight)
                                         {
-                                            if (HOKART[k] + AHMIN >= AH[i, j] - Building_heights[i, j]) //check if point is above ground level
+                                            //slice for height above ground: check if slice is above model domain
+                                            if (AH[i, j] - Building_heights[i, j] + schnitt >= AHMIN + HOKART[nkk])
                                             {
-                                                //check if point is above desired slice above ground
-                                                if (AHMIN + HOKART[k] >= AH[i, j] - Building_heights[i, j] + schnitt)
+                                                slice[i, j] = nkk;
+                                            }
+                                            //check if slice is below model domain
+                                            else if (AH[i, j] - Building_heights[i, j] + schnitt <= AHMIN + HOKART[1])
+                                            {
+                                                slice[i, j] = 0;
+                                            }
+                                            else
+                                            {
+                                                for (int k = 1; k < nkk + 1; k++)
                                                 {
-                                                    slice[i, j] = k;
-                                                    break;
+                                                    //check if point is above desired slice above ground
+                                                        if (AHMIN + HOKART[k] >= AH[i, j] - Building_heights[i, j] + schnitt)
+                                                        {
+                                                            slice[i, j] = k;
+                                                            break;
+                                                        }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //slice for absolute height above ground
+                                            if (schnitt >= AHMIN + HOKART[nkk])
+                                            {
+                                                slice[i, j] = nkk;
+                                            }
+                                            //check if slice is below model domain
+                                            else if (schnitt <= AHMIN + HOKART[1] + Building_heights[i, j])
+                                            {
+                                                slice[i, j] = 0;
+                                            }
+                                            else
+                                            {
+                                                for (int k = 1; k < nkk + 1; k++)
+                                                {
+                                                    //check if point is above desired slice above abs. height
+                                                    if (AHMIN + HOKART[k] > schnitt)
+                                                    {
+                                                        slice[i, j] = k;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }

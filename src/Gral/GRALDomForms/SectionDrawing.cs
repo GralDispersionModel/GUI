@@ -1447,7 +1447,7 @@ namespace GralDomForms
                 };
 
                 System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
-                if (await System.Threading.Tasks.Task.Run(() => gff.ReadGffFile(cts.Token)) == true)
+                if (gff.ReadGffFile(cts.Token) == true)
 				{
 					nkk = gff.NKK;
 					njj = gff.NJJ;

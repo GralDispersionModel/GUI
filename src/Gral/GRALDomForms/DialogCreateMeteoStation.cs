@@ -119,8 +119,9 @@ namespace GralDomForms
                     radioButton2.Visible = true;
                     if (radioButton1.Visible == false) 
                     {
+                        //No GRAMM 
                         radioButton2.Checked = true;
-                        label2.Text = "Height above lowest" + Environment.NewLine + "model elevation";
+                        label2.Text = "Height above ground";
                     }
                     Hide_Coor();
                 }
@@ -287,9 +288,14 @@ namespace GralDomForms
         {
             if (radioButton2.Checked)
             {
-                label2.Text = "Height above lowest" + Environment.NewLine + "model elevation";
-                checkBox5.Checked = false;
-                checkBox5.Enabled = false;
+                if (checkBox5.Enabled && checkBox5.Checked)
+                {
+                    label2.Text = "Abslute height";
+                }
+                else
+                {
+                    label2.Text = "Height above ground";
+                }
             }
         }
 
