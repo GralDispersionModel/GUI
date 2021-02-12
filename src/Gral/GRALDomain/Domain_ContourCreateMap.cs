@@ -287,7 +287,7 @@ namespace GralDomain
             _drobj.LegendUnit = " ";
             _drobj.Filter = false; // no filter
             _drobj.LineWidth = 0; // no Lines
-            _drobj.Transparancy = 50;
+            _drobj.Transparancy = 160;
         }
         /// <summary>
         /// Set drawing style for GRAMM Steady State Files
