@@ -122,17 +122,21 @@ namespace GralDomain
 				EditAndSaveLineSourceData(null, null); // save changes
 				Picturebox1_Paint();
 				MouseControl = MouseMode.LineSourceSel;
-			}
+                ContextMenuStrip m = sender as ContextMenuStrip;
+                if (m != null)
+                {
+                    m.Dispose();
+                }
+            }
 		}
-		
+
 		/// <summary>
-        /// Right mouse click to a line source -> show context menu
-        /// </summary>
-		private void RightClickLine(object sender, System.EventArgs e)
+		/// ContextMenu Edit Line Source
+		/// </summary>
+		private void RightClickLineEdit(object sender, EventArgs e)
 		{
-			MenuItem mi = sender as MenuItem;
-			
-			if (mi.Index == 0) // Edit Line Source
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				int i = Convert.ToInt32(mi.Tag);
 				EditLS.SetTrackBar(i + 1);
@@ -140,136 +144,169 @@ namespace GralDomain
 				EditLS.FillValues();
 				LineSourcesToolStripMenuItemClick(null, null);
 			}
-			
-			if (mi.Index == 1) // Move edge point
+        }
+        /// <summary>
+		/// ContextMenu Move Edge Point Line Source
+		/// </summary>
+		private void RightClickLineMoveEdge(object sender, EventArgs e)
+		{
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				PointD coor = (PointD) mi.Tag;
+				PointD coor = (PointD)mi.Tag;
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointLine();
 				MouseControl = MouseMode.LineSourceInlineEdit;
 			}
-			
-			if (mi.Index == 2) // Add edge point
-			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
-				int i = pt.Index;
-				
-				EditLS.SetTrackBar(i + 1);
-				EditLS.ItemDisplayNr = i;
-				EditLS.FillValues();
-				
-				int j = 0;
-				int indexmin = 0;
-				double min = 100000000;
-				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
-				{
-					double dx = pt.X - _pt.X;
-					double dy = pt.Y - _pt.Y;
-					
-					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
-					{
-						min = Math.Sqrt(dx * dx + dy * dy);
-						indexmin = j;
-					}
-					j++;
-				}
-				if (indexmin < EditLS.ItemData[i].Pt.Count)
-				{
-					int indexnext = indexmin + 1;
-					if (indexnext >= EditLS.ItemData[i].Pt.Count)
-					{
-						indexnext = 0;
-					}
-					EditLS.ItemData[i].Pt.Insert(indexmin + 1, GetPointBetween(EditLS.ItemData[i].Pt[indexmin], EditLS.ItemData[i].Pt[indexnext]));
-				}
+		}
+        /// <summary>
+		/// ContextMenu Add Edge Point Line Source
+		/// </summary>
+		private void RightClickLineAddEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
+            {
+                SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
+                int i = pt.Index;
 
-				int count = 0;
-				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
-				{
-					EditLS.CornerLineX[count] = _pt.X;
-					EditLS.CornerLineY[count] = _pt.Y;
-					EditLS.CornerLineZ[count] = _pt.Z;
-					count++;
-				}
-				EditLS.SetNumberOfVerticesText(EditLS.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveLineSourceData(sender, null); // save changes
-				
-				if (EditLS.ItemData.Count > 0)
+                EditLS.SetTrackBar(i + 1);
+                EditLS.ItemDisplayNr = i;
+                EditLS.FillValues();
+
+                int j = 0;
+                int indexmin = 0;
+                double min = 100000000;
+                foreach (GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
+                {
+                    double dx = pt.X - _pt.X;
+                    double dy = pt.Y - _pt.Y;
+
+                    if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
+                    {
+                        min = Math.Sqrt(dx * dx + dy * dy);
+                        indexmin = j;
+                    }
+                    j++;
+                }
+                if (indexmin < EditLS.ItemData[i].Pt.Count)
+                {
+                    int indexnext = indexmin + 1;
+                    if (indexnext >= EditLS.ItemData[i].Pt.Count)
+                    {
+                        indexnext = 0;
+                    }
+                    EditLS.ItemData[i].Pt.Insert(indexmin + 1, GetPointBetween(EditLS.ItemData[i].Pt[indexmin], EditLS.ItemData[i].Pt[indexnext]));
+                }
+
+                int count = 0;
+                foreach (GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
+                {
+                    EditLS.CornerLineX[count] = _pt.X;
+                    EditLS.CornerLineY[count] = _pt.Y;
+                    EditLS.CornerLineZ[count] = _pt.Z;
+                    count++;
+                }
+                EditLS.SetNumberOfVerticesText(EditLS.ItemData[i].Pt.Count.ToString());
+
+                EditAndSaveLineSourceData(sender, null); // save changes
+
+                if (EditLS.ItemData.Count > 0)
                 {
                     MouseControl = MouseMode.LineSourceSel;
                 }
 
                 Picturebox1_Paint();
-			}
-			if (mi.Index == 3) // Delete edge point
-			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
-				int i = pt.Index;
-				
-				EditLS.SetTrackBar(i + 1);
-				EditLS.ItemDisplayNr = i;
-				EditLS.FillValues();
-				
-				int j = 0;
-				int indexmin = 0;
-				double min = 100000000;
-				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
-				{
-					double dx = pt.X - _pt.X;
-					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
-					{
-						min = Math.Sqrt(dx * dx + dy * dy);
-						indexmin = j;
-					}
-					j++;
-				}
-				if (indexmin < EditLS.ItemData[i].Pt.Count)
-				{
-					EditLS.ItemData[i].Pt.RemoveAt(indexmin);
-				}
-				int count = 0;
-				foreach(GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
-				{
-					EditLS.CornerLineX[count] = _pt.X;
-					EditLS.CornerLineY[count] = _pt.Y;
-					EditLS.CornerLineZ[count] = _pt.Z;
-					count++;
-				}
-				EditLS.SetNumberOfVerticesText(EditLS.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveLineSourceData(sender, null); // save changes
-				
-				if (EditLS.ItemData.Count > 0)
+            }
+		}
+        /// <summary>
+		/// ContextMenu Delete Edge Point Line Source
+		/// </summary>
+		private void RightClickLineDelEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
+            {
+                SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
+                int i = pt.Index;
+
+                EditLS.SetTrackBar(i + 1);
+                EditLS.ItemDisplayNr = i;
+                EditLS.FillValues();
+
+                int j = 0;
+                int indexmin = 0;
+                double min = 100000000;
+                foreach (GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
+                {
+                    double dx = pt.X - _pt.X;
+                    double dy = pt.Y - _pt.Y;
+                    if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
+                    {
+                        min = Math.Sqrt(dx * dx + dy * dy);
+                        indexmin = j;
+                    }
+                    j++;
+                }
+                if (indexmin < EditLS.ItemData[i].Pt.Count)
+                {
+                    EditLS.ItemData[i].Pt.RemoveAt(indexmin);
+                }
+                int count = 0;
+                foreach (GralData.PointD_3d _pt in EditLS.ItemData[i].Pt)
+                {
+                    EditLS.CornerLineX[count] = _pt.X;
+                    EditLS.CornerLineY[count] = _pt.Y;
+                    EditLS.CornerLineZ[count] = _pt.Z;
+                    count++;
+                }
+                EditLS.SetNumberOfVerticesText(EditLS.ItemData[i].Pt.Count.ToString());
+
+                EditAndSaveLineSourceData(sender, null); // save changes
+
+                if (EditLS.ItemData.Count > 0)
                 {
                     MouseControl = MouseMode.LineSourceSel;
                 }
 
                 Picturebox1_Paint();
-			}
-			if (mi.Index == 4) // Delete line Source
+            }
+		}
+        /// <summary>
+		/// ContextMenu Delete Line Source
+		/// </summary>
+		private void RightClickLineDelete(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				MouseControl = MouseMode.Default;
-				int i = Convert.ToInt32(mi.Tag);
-				EditLS.SetTrackBar(i + 1);
-				EditLS.ItemDisplayNr = i;
-				EditLS.FillValues();
-				EditLS.RemoveOne(true);
-				EditAndSaveLineSourceData(sender, null); // save changes
-				Picturebox1_Paint();
-				if (EditLS.ItemData.Count > 0)
+                MouseControl = MouseMode.Default;
+                int i = Convert.ToInt32(mi.Tag);
+                EditLS.SetTrackBar(i + 1);
+                EditLS.ItemDisplayNr = i;
+                EditLS.FillValues();
+                EditLS.RemoveOne(true);
+                EditAndSaveLineSourceData(sender, null); // save changes
+                Picturebox1_Paint();
+                if (EditLS.ItemData.Count > 0)
                 {
                     MouseControl = MouseMode.LineSourceSel;
                 }
             }
-			if (mi.Index == 5) // Copy line source
+        }
+        /// <summary>
+		/// ContextMenu Copy Line Source
+		/// </summary>
+		private void RightClickLineCopy(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				CopiedItem.LineSource = new LineSourceData(EditLS.ItemData[Convert.ToInt32(mi.Tag)]);
 			}
-			Menu m = sender as Menu;
-			m.Dispose ();
 		}
+
+		
     }
 }

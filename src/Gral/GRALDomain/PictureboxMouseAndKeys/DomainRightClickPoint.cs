@@ -72,40 +72,68 @@ namespace GralDomain
 			EditAndSavePointSourceData(null, null); // save changes
 			Picturebox1_Paint();
 			MouseControl = MouseMode.PointSourceSel;
-		}
-		
-		/// <summary>
-        /// Right mouse click to a point source -> show context menu
+            ContextMenuStrip m = sender as ContextMenuStrip;
+            if (m != null)
+            {
+                m.Dispose();
+            }
+        }
+
+
+        /// <summary>
+        /// ContextMenu Edit Point Source
         /// </summary>
-		private void RightClickPointSource(object sender, System.EventArgs e)
-		{
-			MenuItem mi = sender as MenuItem;
-			int i = Convert.ToInt32(mi.Tag);
-			
-			if (mi.Index == 0) // Edit Point Source
-			{
-				PointSourcesToolStripMenuItemClick(null, null);
-			}
-			if (mi.Index == 1) // new Position of Point Source
-			{
-				MouseControl = MouseMode.PointSourceInlineEdit;
-			}
-			if (mi.Index == 2) // Delete source
-			{
-				EditPS.RemoveOne(true);
-				EditAndSavePointSourceData(null, null); // save changes
-				Picturebox1_Paint();
-				if (EditPS.ItemData.Count > 0)
+        private void RightClickPSEdit(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                //int i = Convert.ToInt32(mi.Tag);
+                PointSourcesToolStripMenuItemClick(null, null);
+            }
+        }
+        /// <summary>
+        /// ContextMenu Move Point Source
+        /// </summary>
+        private void RightClickPSMove(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                //int i = Convert.ToInt32(mi.Tag);
+                MouseControl = MouseMode.PointSourceInlineEdit;
+            }
+        }
+        /// <summary>
+        /// ContextMenu Delete Point Source
+        /// </summary>
+        private void RightClickPSDelete(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                //int i = Convert.ToInt32(mi.Tag);
+                EditPS.RemoveOne(true);
+                EditAndSavePointSourceData(null, null); // save changes
+                Picturebox1_Paint();
+                if (EditPS.ItemData.Count > 0)
                 {
                     MouseControl = MouseMode.PointSourceSel;
                 }
             }
-			if (mi.Index == 3) // Copy source
-			{
-				CopiedItem.PointSource = new PointSourceData(EditPS.ItemData[Convert.ToInt32(mi.Tag)]);
-			}
-			Menu m = sender as Menu;
-			m.Dispose ();
-		} 
+        }
+        /// <summary>
+        /// ContextMenu Copy Point Source
+        /// </summary>
+        private void RightClickPSCopy(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                //int i = Convert.ToInt32(mi.Tag);
+                CopiedItem.PointSource = new PointSourceData(EditPS.ItemData[Convert.ToInt32(mi.Tag)]);
+            }
+        }
+        
     }
 }
