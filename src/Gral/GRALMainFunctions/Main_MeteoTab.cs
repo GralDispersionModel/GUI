@@ -259,8 +259,8 @@ namespace Gral
                             {
                                 if (ignore00Values == false || data.Vel > 0.000001 || data.Dir > 0.000001)
                                 {
-                                    double SectAngle = 360 / WindSectCount;
-                                    int sektor = Convert.ToInt32(Math.Round(data.Dir / SectAngle, 0));
+                                    double SectAngle = 360D / WindSectCount;
+                                    int sektor = (int)(Math.Round(data.Dir / SectAngle, 0));
                                     int wklass = 0; //Convert.ToInt32(Math.Truncate(windge[i])) + 1;
 
                                     for (int c = 0; c < 6; c++)
@@ -424,8 +424,8 @@ namespace Gral
                             {
                                 if (ignore00Values == false || data.Vel > 0.000001 || data.Dir > 0.000001)
                                 {
-                                    double SectAngle = 360 / WindSectCount;
-                                    int sektor = Convert.ToInt32(Math.Round(data.Dir / SectAngle, 0));
+                                    double SectAngle = 360D / WindSectCount;
+                                    int sektor = (int)(Math.Round(data.Dir / SectAngle, 0));
 
                                     if (sektor > WindSectCount - 1)
                                     {
