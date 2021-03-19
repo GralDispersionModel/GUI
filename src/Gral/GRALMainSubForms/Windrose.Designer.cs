@@ -54,6 +54,7 @@
             this.button1.Size = new System.Drawing.Size(36, 33);
             this.button1.TabIndex = 10;
             this.button1.Text = "+";
+            this.toolTip1.SetToolTip(this.button1, "Enlarge the Rose Key: Shift and +");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -66,6 +67,7 @@
             this.button2.Size = new System.Drawing.Size(36, 33);
             this.button2.TabIndex = 11;
             this.button2.Text = "-";
+            this.toolTip1.SetToolTip(this.button2, "Shrink the Rose Key: Shift and -");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -88,6 +90,7 @@
             this.button4.Size = new System.Drawing.Size(36, 33);
             this.button4.TabIndex = 19;
             this.button4.Text = "-";
+            this.toolTip1.SetToolTip(this.button4, "Decrease the Scale Key: -");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -110,6 +113,7 @@
             this.button5.Size = new System.Drawing.Size(36, 33);
             this.button5.TabIndex = 18;
             this.button5.Text = "+";
+            this.toolTip1.SetToolTip(this.button5, "Increase the Scale Key: +");
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -135,7 +139,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(36, 37);
             this.button6.TabIndex = 23;
-            this.toolTip1.SetToolTip(this.button6, "Set Font");
+            this.toolTip1.SetToolTip(this.button6, "Set the Font");
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.Button6Click);
             // 
@@ -148,7 +152,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(36, 37);
             this.button7.TabIndex = 24;
-            this.toolTip1.SetToolTip(this.button7, "Pin Scale");
+            this.toolTip1.SetToolTip(this.button7, "Pin the scale");
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.Button7Click);
             // 
@@ -161,7 +165,7 @@
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(36, 37);
             this.button8.TabIndex = 25;
-            this.toolTip1.SetToolTip(this.button8, "Show data table");
+            this.toolTip1.SetToolTip(this.button8, "Show the data table");
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
