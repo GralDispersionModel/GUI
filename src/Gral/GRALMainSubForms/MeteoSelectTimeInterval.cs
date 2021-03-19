@@ -93,7 +93,7 @@ namespace GralMainForms
             }
             else if (radioButton3.Checked)
             {
-                WindRoseSet.SectorCount = 32;
+                WindRoseSet.SectorCount = 36;
             }
             WindRoseSet.Ignore00Values = checkBox4.Checked;
 
