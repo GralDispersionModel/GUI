@@ -18,15 +18,54 @@ namespace GralData
     /// </summary>
     public class WindRoseSettings
     {
+        /// <summary>
+        /// Max velocity scale
+        /// </summary>
         public int MaxVelocity { get; set; }
+        /// <summary>
+        /// Starting hour of the time filter
+        /// </summary>
         public int StartStunde { get; set; }
+        /// <summary>
+        /// Final hour of the time filter
+        /// </summary>
         public int EndStunde { get; set; }
+        /// <summary>
+        /// Apply a bias correction
+        /// </summary>
         public bool BiasCorrection { get; set; }
+        /// <summary>
+        /// Show the Bias Textbox
+        /// </summary>
         public bool ShowBias { get; set; }
+        /// <summary>
+        /// Draw a frame around each pie segment
+        /// </summary>
         public bool ShowFrames { get; set; }
+        /// <summary>
+        /// Draw smaller sectors with a little gap
+        /// </summary>
         public bool DrawSmallSectors { get; set; }
+        /// <summary>
+        /// Number of wind rose sectors
+        /// </summary>
         public int SectorCount { get; set; }
+        /// <summary>
+        /// Ignore values with wind speed and direction = 0
+        /// </summary>
         public bool Ignore00Values { get; set; }
+        /// <summary>
+        /// Show the wind sector group box in the dialog
+        /// </summary>
+        public bool ShowWindSectorGroupBox { get; set; }
+        /// <summary>
+        /// Show the Max Scale group box
+        /// </summary>
+        public bool ShowMaxScaleGroupBox { get; set; }
+        /// <summary>
+        /// Set the max vertical scale ; 0 = Auto Scale
+        /// </summary>
+        public int MaxScaleVertical { get; set; }
 
         /// <summary>
         /// Initialize the windrose settings with default values
@@ -42,8 +81,14 @@ namespace GralData
             DrawSmallSectors = false;
             SectorCount = 16;
             Ignore00Values = false;
+            ShowWindSectorGroupBox = true;
+            ShowMaxScaleGroupBox = false;
+            MaxScaleVertical = 0;
         }
 
+        /// <summary>
+        /// Copy wind rose settings
+        /// </summary>
         public WindRoseSettings(WindRoseSettings other)
         {
             MaxVelocity = other.MaxVelocity;
@@ -55,7 +100,9 @@ namespace GralData
             DrawSmallSectors = other.DrawSmallSectors;
             SectorCount = other.SectorCount;
             Ignore00Values = other.Ignore00Values;
+            ShowWindSectorGroupBox = other.ShowWindSectorGroupBox;
+            ShowMaxScaleGroupBox = other.ShowMaxScaleGroupBox;
+            MaxScaleVertical = other.MaxScaleVertical;
         }
-
     }
 }
