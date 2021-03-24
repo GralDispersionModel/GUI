@@ -186,14 +186,13 @@ namespace GralMainForms
                 {
                     g.DrawString("Bias correction not applied", kleinfont, BrushBlack, _x0, _y0 + 5 * distance, StringFormatNearFar);
                 }
-
-                g.DrawString("N", new Font("Arial", 15), BrushBlack, mid_x, 2, format2);
             }
-
 
             //draw windrose
             double[] sektsum = new double[WindSectorCount];
             SektMax = 0;
+            double sektMin = double.MaxValue;
+            int MinSektNr = 0;
 
             for (int i = 0; i < WindSectorCount; i++)
             {
@@ -202,10 +201,17 @@ namespace GralMainForms
                     sektsum[i] = SectFrequ[i, n] + sektsum[i];
                 }
                 SektMax = Math.Max(sektsum[i], SektMax);
+                if (sektsum[i] < sektMin)
+                {
+                    sektMin = sektsum[i];
+                    MinSektNr = i;
+                }
             }
 
             SektMax += XScale;
 
+            SektMax = Math.Round(SektMax * 100) * 0.01;
+           
             //scaling factor to maximise wind rose in window
             if (SektMax <= 0)
             {
@@ -217,8 +223,103 @@ namespace GralMainForms
                 SektMax = St_F.Pin_Wind_Scale;
             }
 
-            double scale = IniScale / SektMax;
+            int FrStep = 30; // frequency step
+            if (SektMax > 0.7 && SektMax < 2)
+            {
+                FrStep = 20;
+            }
+            else if (SektMax > 0.4)
+            {
+                FrStep = 10;
+            }
+            else if (SektMax > 0.2)
+            {
+                FrStep = 5;
+            }
+            else if (SektMax > 0.1)
+            {
+                FrStep = 4;
+            }
+            else
+            {
+                FrStep = 2;
+            }
 
+            int NumberOfScales = (int)(SektMax * 100 / FrStep);
+
+            double scale = IniScale / SektMax;
+            double sectorangle = Math.PI * 2 / WindSectorCount;
+
+            //draw axis of windrose
+            //double div = SektMax * scale / NumberOfScales;
+            double div = SektMax * scale / (SektMax * 100 / FrStep);
+
+            using (Pen p = new Pen(Color.Black, 1))
+            {
+                Pen p2 = new Pen(Color.DarkGray, 1)
+                {
+                    DashStyle = DashStyle.DashDot
+                };
+                StringFormat StringFormatCenter = new StringFormat
+                {
+                    LineAlignment = StringAlignment.Center,
+                    Alignment = StringAlignment.Center
+                };
+
+                try
+                {
+                    double r = div * NumberOfScales;
+                    string wi = "";
+                    SizeF str = g.MeasureString("235,5 °", kleinfont, 200);
+
+                    for (int i = 0; i < WindSectorCount; i++)
+                    {
+                        g.DrawLine(p2, mid_x, mid_y, Convert.ToInt32(mid_x + r * Math.Sin(i * sectorangle)), Convert.ToInt32(mid_y - r * Math.Cos(i * sectorangle)));
+                        wi = Convert.ToString(Math.Round(i * sectorangle * 180 / Math.PI, 1)) + " °";
+                        
+                        double dx = (r + 0.5 * (str.Width + str.Height)) * Math.Sin(i * sectorangle);
+                        double dy = - (r + 0.5 * (str.Width + str.Height)) * Math.Cos(i * sectorangle);
+
+                        g.DrawString(wi, kleinfont, BrushBlack, Convert.ToInt32(mid_x + dx), Convert.ToInt32(mid_y + dy), StringFormatCenter);
+                    }
+                }
+                catch { }
+                //base.OnPaint(e);
+
+                p2 = new Pen(Color.DarkGray, 1)
+                {
+                    DashStyle = DashStyle.Dot
+                };
+
+                //draw circles and text for frequency
+                Brush brushWhite = new SolidBrush(Color.White);
+                for (int i = 1; i < NumberOfScales + 1; i++)
+                {
+                    try
+                    {
+                        int x1 = Convert.ToInt32(div * i);
+                        if (i < NumberOfScales)
+                        {
+                            g.DrawEllipse(p2, mid_x - x1, mid_y - x1, 2 * x1, 2 * x1);
+                        }
+                        else
+                        {
+                            g.DrawEllipse(p, mid_x - x1, mid_y - x1, 2 * x1, 2 * x1);
+                        }
+
+                        int dx = Convert.ToInt32(x1 * Math.Sin(MinSektNr * sectorangle));
+                        int dy = -Convert.ToInt32(x1 * Math.Cos(MinSektNr * sectorangle));
+                        string fr = Convert.ToString(i * FrStep) + "%";
+                        SizeF str = g.MeasureString(fr, kleinfont, 200);
+                        g.FillRectangle(brushWhite , mid_x + dx - str.Width / 2, mid_y + dy - str.Height / 2, str.Width, str.Height);
+                        g.DrawString(fr, kleinfont, BrushBlack, mid_x + dx, mid_y + dy, StringFormatCenter);
+                    }
+                    catch { }
+                }
+                StringFormatCenter.Dispose();
+                brushWhite.Dispose();
+            }
+            
             int x_legend = pictureBox1.Width - (int)(g.MeasureString("0.0 - 2.2 m/s", kleinfont).Width) - 30;
 
             if (x_legend < 0)
@@ -251,10 +352,7 @@ namespace GralMainForms
                 }
             }
 
-            double sectorangle = Math.PI * 2 / WindSectorCount;
-
             double sectorwidth = Math.PI / WindSectorCount;
-
             if (SmallSectors)
             {
                 sectorwidth = Math.PI / WindSectorCount * 0.85;
@@ -276,7 +374,6 @@ namespace GralMainForms
                     }
                     catch
                     {
-                        MessageBox.Show("Bus");
                     }
                     WindRosePoints[i + l - 1] = new Point(mid_x, mid_y);
                     WindRosePoints[i + l] = new Point(mid_x + x1, mid_y - y1);
@@ -296,34 +393,6 @@ namespace GralMainForms
                 }
             }
 
-            //draw axis of windrose
-            double div = Math.Round(SektMax * scale / 4, 0);
-            Pen p = new Pen(Color.Black, 1);
-            try
-            {
-                g.DrawLine(p, Convert.ToInt32(mid_x - div * 6), mid_y, Convert.ToInt32(mid_x + div * 6), mid_y);
-                g.DrawLine(p, mid_x, Convert.ToInt32(mid_y - div * 6), mid_x, Convert.ToInt32(mid_y + div * 6));
-            }
-            catch { }
-            //base.OnPaint(e);
-
-            //draw circles
-            p = new Pen(Color.Black, 1)
-            {
-                DashStyle = DashStyle.Dot
-            };
-            for (int i = 1; i < 5; i++)
-            {
-                try
-                {
-                    int x1 = Convert.ToInt32(div * i);
-                    g.DrawEllipse(p, mid_x - x1, mid_y - x1, 2 * x1, 2 * x1);
-                    g.DrawString(Convert.ToString(Math.Round((Convert.ToDouble(i) * 0.25 * SektMax * 100), 0)) + "%", kleinfont, BrushBlack, mid_x + x1, mid_y + 5);
-                }
-                catch { }
-            }
-
-            p.Dispose();
             kleinfont.Dispose();
             format2.Dispose();
             StringFormatNearFar.Dispose();
@@ -810,5 +879,26 @@ namespace GralMainForms
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Oemplus || keyData == Keys.Add)
+            {
+                button5_Click(null, null);
+            }
+            else if (keyData == Keys.OemMinus || keyData == Keys.Subtract)
+            {
+                button4_Click(null, null);
+            }
+            else if (keyData == (Keys.Subtract | Keys.Shift))
+            {
+                button2_Click(null, null);
+            }
+            else if (keyData == (Keys.Add | Keys.Shift))
+            {
+                button1_Click(null, null);
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }

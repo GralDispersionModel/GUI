@@ -36,7 +36,8 @@ namespace GralMainForms
         private CultureInfo ic = CultureInfo.InvariantCulture;
         private bool Emissions_Time_Series_Used = false;
         private List <string> Date_Time = new List<string>();
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+        private int CopyToClipboardScale = 1;
 
         public TotalEmissions(double[] totemi, Gral.Main f, string poll)
         {
@@ -253,8 +254,8 @@ namespace GralMainForms
             }
             return false;
         }
-                
-        protected override void OnPaint(PaintEventArgs e)
+
+        void PictureBox1Paint(object sender, PaintEventArgs e)
         {
             int anz_sources = form1.listView1.Items.Count;
             // no more sources available -> close the form
@@ -263,8 +264,10 @@ namespace GralMainForms
                 this.Close();
                 return;
             }
+
             Graphics g = e.Graphics;
-            g.ScaleTransform((float) Width / 1000f,(float) Width / 1000f);
+            
+            g.ScaleTransform(pictureBox1.Width / 1000f, pictureBox1.Width / 1000f);
             g.Clear(Color.White);
             base.OnPaint(e);
             
@@ -382,8 +385,6 @@ namespace GralMainForms
                 g.FillRectangle(new HatchBrush(HatchStyle.Percent90, Color.White), ecke1, Convert.ToInt32(500*scalefactor - hoehe), Convert.ToInt32(chartwidth*scalefactor), hoehe);
                 g.DrawRectangle(new Pen(Color.Black), ecke1, Convert.ToInt32(500 * scalefactor - hoehe), Convert.ToInt32(chartwidth*scalefactor), hoehe);
                 g.DrawString(Convert.ToString(Math.Round(value, round)), legend, black, ecke1 + Convert.ToInt32(chartwidth*scalefactor / 2), Convert.ToInt32(500 * scalefactor - hoehe-10), format1);
-                
-                //base.OnPaint(e);
             }
 
             round = get_round(classmax);
@@ -418,8 +419,6 @@ namespace GralMainForms
                 {
                     addy = 0;
                 }
-
-                base.OnPaint(e);
             }
 
             //draw frequency levels
@@ -431,7 +430,6 @@ namespace GralMainForms
                 g.DrawLine(p3, Convert.ToInt32(55 * scalefactor), lev1, ecke1+chartwidth+20, lev1);
                 string s = Convert.ToString(Math.Round(Convert.ToDouble(i) * classmax / 5,round));
                 g.DrawString(s, legend, black, Convert.ToInt32(50 * scalefactor), lev1 - 5, format2);
-                base.OnPaint(e);
             }
             p1.Dispose();p2.Dispose();p3.Dispose();
             format1.Dispose();
@@ -470,11 +468,22 @@ namespace GralMainForms
         //save image to clipboard
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Bitmap bitMap = new Bitmap(Width, Height);
-            DrawToBitmap(bitMap, new Rectangle(0, 0, Width, Height));
+            int CopyToClipboardScale = 2;
+            if (pictureBox1.Width < 500)
+            {
+                CopyToClipboardScale = 4;
+            }
+            pictureBox1.Width *= CopyToClipboardScale;
+            pictureBox1.Height *= CopyToClipboardScale;
+            pictureBox1.Refresh();
+            Application.DoEvents();
+            Bitmap bitMap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            pictureBox1.DrawToBitmap(bitMap, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
             Clipboard.SetDataObject(bitMap);
+            pictureBox1.Width /= CopyToClipboardScale;
+            pictureBox1.Height /= CopyToClipboardScale;
+            pictureBox1.Refresh();
         }
-
 
         //consider emission variation or not
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -500,22 +509,19 @@ namespace GralMainForms
         
         void Tot_EmissionsResizeEnd(object sender, EventArgs e)
         {
-            Invalidate();
-            Update();
+            pictureBox1.Refresh();
         }
         
         void Tot_EmissionsResize(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Maximized)
             {
-                Invalidate();
-                Update();
+                Tot_EmissionsResizeEnd(null, null);
                 // Maximized!
             }
             if (WindowState == FormWindowState.Normal)
             {
-                Invalidate();
-                Update();
+                Tot_EmissionsResizeEnd(null, null);
                 // Restored!
             }
         }

@@ -46,25 +46,37 @@ namespace GralDomain
 			EditAndSavePortalSourceData(null, null); // save changes
 			Picturebox1_Paint();
 			MouseControl = MouseMode.PortalSourceSel;
-		}
-			
-		/// <summary>
-        /// Right mouse click to a portal source -> show context menu
-        /// </summary>
-		private void RightClickPortal(object sender, System.EventArgs e)
-		{
-			MenuItem mi = sender as MenuItem;
-			int i = Convert.ToInt32(mi.Tag);
-			
-			if (mi.Index == 0) // Edit Portal Source
+			ContextMenuStrip m = sender as ContextMenuStrip;
+			if (m != null)
 			{
+				m.Dispose();
+			}
+		}
+
+		/// <summary>
+		/// ContextMenu Edit Portal Source
+		/// </summary>
+		private void RightClickPortalEdit(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
+			{
+				int i = Convert.ToInt32(mi.Tag);
 				EditPortals.SetTrackBar(i + 1);
 				EditPortals.ItemDisplayNr = i;
 				EditPortals.FillValues();
 				TunnelPortalsToolStripMenuItemClick(null, null);
 			}
-			if (mi.Index == 1) // Delete Portal Source
+		}
+        /// <summary>
+        /// ContextMenu Delete Portal Source
+        /// </summary>
+        private void RightClickPortalDelete(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
+				int i = Convert.ToInt32(mi.Tag);
 				EditPortals.SetTrackBar(i + 1);
 				EditPortals.ItemDisplayNr = i;
 				EditPortals.FillValues();
@@ -72,28 +84,40 @@ namespace GralDomain
 				EditAndSavePortalSourceData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditPortals.ItemData.Count > 0)
-                {
-                    MouseControl = MouseMode.PortalSourceSel;
-                }
-            }
-			if (mi.Index == 2) // Flip exit surface
+				{
+					MouseControl = MouseMode.PortalSourceSel;
+				}
+			}
+		}
+		/// <summary>
+		/// ContextMenu Flip Portal Source
+		/// </summary>
+		private void RightClickPortalFlip(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-			    PortalsData _pdata = EditPortals.ItemData[Convert.ToInt32(mi.Tag)];
-			    PointD p1 = _pdata.Pt2;
-			    _pdata.Pt2 = _pdata.Pt1;
-                _pdata.Pt1 = p1;
-                //MessageBox.Show(_pdata.Pt1.X.ToString() + "/" + _pdata.Pt2.X.ToString() + "/" + p1.X.ToString());
+				PortalsData _pdata = EditPortals.ItemData[Convert.ToInt32(mi.Tag)];
+				PointD p1 = _pdata.Pt2;
+				_pdata.Pt2 = _pdata.Pt1;
+				_pdata.Pt1 = p1;
+				//MessageBox.Show(_pdata.Pt1.X.ToString() + "/" + _pdata.Pt2.X.ToString() + "/" + p1.X.ToString());
 
-			    EditAndSavePortalSourceData(null, null); // save changes
+				EditAndSavePortalSourceData(null, null); // save changes
 				Picturebox1_Paint();
 				MouseControl = MouseMode.PortalSourceSel;
 			}
-			if (mi.Index == 3) // Copy source
+		}
+		/// <summary>
+		/// ContextMenu Copy Portal Source
+		/// </summary>
+		private void RightClickPortalCopy(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-			    CopiedItem.PortalSource = new PortalsData(EditPortals.ItemData[Convert.ToInt32(mi.Tag)]);
+				CopiedItem.PortalSource = new PortalsData(EditPortals.ItemData[Convert.ToInt32(mi.Tag)]);
 			}
-			Menu m = sender as Menu;
-			m.Dispose ();
 		}
     }
 }

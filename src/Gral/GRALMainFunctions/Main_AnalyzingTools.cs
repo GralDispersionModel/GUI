@@ -23,7 +23,6 @@ using System.IO;
 using System.Windows.Forms;
 using GralIO;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Gral
 {

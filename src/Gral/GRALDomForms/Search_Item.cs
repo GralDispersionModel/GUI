@@ -525,25 +525,26 @@ namespace GralDomForms
         {
             if (e.Button == MouseButtons.Right) // right mouse button 
             {
-                ContextMenu m = new ContextMenu();
+                ContextMenuStrip m = new ContextMenuStrip();
                 for (int i = 0; i < _data.Columns.Count; i++)
                 {
-                    m.MenuItems.Add(new MenuItem(_data.Columns[i].ToString()));
-                    m.MenuItems[i].Checked = _visible[i];
-                    // Add functionality to the menu items using the Click event.
-                    m.MenuItems[i].Click += new System.EventHandler(menuItem_Click);
+                    ToolStripMenuItem mi = new ToolStripMenuItem();
+                    mi.Text = _data.Columns[i].ToString();
+                    mi.Checked = _visible[i];
+                    mi.Click += menuItem_Click;
+                    mi.Tag = i;
+                    m.Items.Add(mi);
                 }
-
                 m.Show(dataGridView1, new Point(e.X, e.Y));
             }
         }
 
-        private void menuItem_Click(object sender, System.EventArgs e)
+        private void menuItem_Click(object sender, EventArgs e)
         {
-            MenuItem mi = sender as MenuItem;
-            _visible[mi.Index] = !_visible[mi.Index];
-            mi.Checked = _visible[mi.Index];
-            dataGridView1.Columns[mi.Index].Visible = _visible[mi.Index];
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            _visible[Convert.ToInt32(mi.Tag)] = !_visible[Convert.ToInt32(mi.Tag)];
+            mi.Checked = _visible[Convert.ToInt32(mi.Tag)];
+            dataGridView1.Columns[Convert.ToInt32(mi.Tag)].Visible = _visible[Convert.ToInt32(mi.Tag)];
             //MessageBox.Show(sender.ToString() + mi.Index.ToString());
         }
 

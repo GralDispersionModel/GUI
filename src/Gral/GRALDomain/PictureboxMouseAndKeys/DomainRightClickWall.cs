@@ -94,15 +94,14 @@ namespace GralDomain
             
             return SelectOverlappedItem(e, ItemNames, ItemNumber);
         }
-        
+
 		/// <summary>
-        /// Right mouse click to a wall -> show context menu
-        /// </summary>
-       	private void RightClickWall(object sender, System.EventArgs e)
+		/// ContextMenu Edit Wall
+		/// </summary>
+		private void RightClickWallEdit(object sender, EventArgs e)
 		{
-			MenuItem mi = sender as MenuItem;
-			
-			if (mi.Index == 0) // Edit wall
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				int i = Convert.ToInt32(mi.Tag);
 				EditWall.SetTrackBar(i + 1);
@@ -110,35 +109,47 @@ namespace GralDomain
 				EditWall.FillValues();
 				WallsToolStripMenuItemClick(null, null);
 			}
-			
-			if (mi.Index == 1) // Move wall edge point
+		}
+		/// <summary>
+		/// ContextMenu Move Wall
+		/// </summary>
+		private void RightClickWallMoveEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				PointD coor = (PointD) mi.Tag;
+				PointD coor = (PointD)mi.Tag;
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointWall();
 				MouseControl = MouseMode.WallInlineEdit;
 			}
-			
-			if (mi.Index == 2) // Add edge point
+		}
+		/// <summary>
+		/// ContextMenu Add Edge Wall
+		/// </summary>
+		private void RightClickWallAddEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+				SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
 				int i = pt.Index;
-				
+
 				EditWall.SetTrackBar(i + 1);
 				EditWall.ItemDisplayNr = i;
 				EditWall.FillValues();
-				
+
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD_3d _pt in EditWall.ItemData[i].Pt)
+				foreach (PointD_3d _pt in EditWall.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -156,43 +167,49 @@ namespace GralDomain
 					EditWall.ItemData[i].Pt.Insert(indexmin + 1, new PointD_3d(ptbetween.X, ptbetween.Y, EditWall.ItemData[i].Pt[indexmin].Z));
 				}
 				int count = 0;
-				foreach(PointD_3d _pt in EditWall.ItemData[i].Pt)
+				foreach (PointD_3d _pt in EditWall.ItemData[i].Pt)
 				{
 					EditWall.CornerWallX[count] = _pt.X;
 					EditWall.CornerWallY[count] = _pt.Y;
-					EditWall.CornerWallZ[count] = (float) (_pt.Z);
+					EditWall.CornerWallZ[count] = (float)(_pt.Z);
 					count++;
 				}
 				EditWall.SetNumberOfVerticesText(EditWall.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveWallData(sender, null); // save changes
-				
-				if (EditWall.ItemData.Count > 0)
-                {
-                    MouseControl = MouseMode.WallSel;
-                }
 
-                Picturebox1_Paint();
+				EditAndSaveWallData(sender, null); // save changes
+
+				if (EditWall.ItemData.Count > 0)
+				{
+					MouseControl = MouseMode.WallSel;
+				}
+				Picturebox1_Paint();
 			}
-			if (mi.Index == 3) // Delete edge point
+		}
+		/// <summary>
+		/// ContextMenu Delete Edge Wall
+		/// </summary>
+		private void RightClickWallDelEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+				SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
 				int i = pt.Index;
-				
+
 				EditWall.SetTrackBar(i + 1);
 				EditWall.ItemDisplayNr = i;
 				EditWall.FillValues();
-				
+
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD_3d _pt in EditWall.ItemData[i].Pt)
+				foreach (PointD_3d _pt in EditWall.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -202,27 +219,32 @@ namespace GralDomain
 					EditWall.ItemData[i].Pt.RemoveAt(indexmin);
 				}
 				int count = 0;
-				foreach(PointD_3d _pt in EditWall.ItemData[i].Pt)
+				foreach (PointD_3d _pt in EditWall.ItemData[i].Pt)
 				{
 					EditWall.CornerWallX[count] = _pt.X;
 					EditWall.CornerWallY[count] = _pt.Y;
-					EditWall.CornerWallZ[count] = (float) (_pt.Z);
+					EditWall.CornerWallZ[count] = (float)(_pt.Z);
 					count++;
 				}
 				EditWall.SetNumberOfVerticesText(EditWall.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveWallData(sender, null); // save changes
-				
-				if (EditWall.ItemData.Count > 0)
-                {
-                    MouseControl = MouseMode.WallSel;
-                }
 
-                Picturebox1_Paint();
+				EditAndSaveWallData(sender, null); // save changes
+
+				if (EditWall.ItemData.Count > 0)
+				{
+					MouseControl = MouseMode.WallSel;
+				}
+
+				Picturebox1_Paint();
 			}
-			
-			
-			if (mi.Index == 4) // Delete wall
+		}
+		/// <summary>
+		/// ContextMenu Delete Wall
+		/// </summary>
+		private void RightClickWallDelete(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				MouseControl = MouseMode.Default;
 				int i = Convert.ToInt32(mi.Tag);
@@ -233,12 +255,11 @@ namespace GralDomain
 				EditAndSaveWallData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditWall.ItemData.Count > 0)
-                {
-                    MouseControl = MouseMode.WallSel;
-                }
-            }
-			Menu m = sender as Menu;
-			m.Dispose ();
+				{
+					MouseControl = MouseMode.WallSel;
+				}
+			}
 		}
+			
     }
 }
