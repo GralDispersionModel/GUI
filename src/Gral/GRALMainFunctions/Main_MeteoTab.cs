@@ -196,6 +196,8 @@ namespace Gral
             int endstunden = 23;
             bool biascorrection = true;
             List<WindData> wind = new List<WindData>();
+            WindroseSetting.ShowWindSectorGroupBox = true;
+            WindroseSetting.ShowMaxScaleGroupBox = false;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -212,6 +214,7 @@ namespace Gral
                     int maxwind = mts.WindRoseSet.MaxVelocity;
                     biascorrection = mts.WindRoseSet.BiasCorrection;
                     WindSectCount = mts.WindRoseSet.SectorCount;
+                    WindroseSetting.SectorCount = mts.WindRoseSet.SectorCount;
                     double[,] sectFrequency = new double[WindSectCount, 8];
                     bool ignore00Values = mts.WindRoseSet.Ignore00Values;
 
@@ -387,7 +390,9 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             int maxvelocity = WindroseSetting.MaxVelocity;
             WindroseSetting.MaxVelocity = 0;
-            
+            WindroseSetting.ShowWindSectorGroupBox = true;
+            WindroseSetting.ShowMaxScaleGroupBox = false;
+
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
@@ -399,6 +404,7 @@ namespace Gral
                 if (mts.ShowDialog() == DialogResult.OK)
                 {
                     WindSectCount = mts.WindRoseSet.SectorCount;
+                    WindroseSetting.SectorCount = mts.WindRoseSet.SectorCount;
                     double[,] sectFrequency = new double[WindSectCount, 8];
                     startstunde = mts.WindRoseSet.StartStunde;
                     endstunden = mts.WindRoseSet.EndStunde;
@@ -534,7 +540,9 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             bool showBias = WindroseSetting.ShowBias;
             WindroseSetting.ShowBias = false;
-
+            WindroseSetting.ShowWindSectorGroupBox = false;
+            WindroseSetting.ShowMaxScaleGroupBox = true;
+            
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
@@ -599,7 +607,8 @@ namespace Gral
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind,
                             StartHour = startstunde,
-                            FinalHour = endstunden
+                            FinalHour = endstunden,
+                            WindRoseSetting = WindroseSetting
                         };
                         if (wind.Count > 1)
                         {
@@ -629,6 +638,8 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             bool showBias = WindroseSetting.ShowBias;
             WindroseSetting.ShowBias = false;
+            WindroseSetting.ShowWindSectorGroupBox = false;
+            WindroseSetting.ShowMaxScaleGroupBox = false;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -728,6 +739,8 @@ namespace Gral
             bool showBias = WindroseSetting.ShowBias;
             WindroseSetting.ShowBias = false;
             WindroseSetting.MaxVelocity = 0;
+            WindroseSetting.ShowWindSectorGroupBox = false;
+            WindroseSetting.ShowMaxScaleGroupBox = true;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -774,7 +787,8 @@ namespace Gral
                             Location = new System.Drawing.Point(this.Left, this.Top),
                             ScClassFrequency = sclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
-                            Wind = wind
+                            Wind = wind,
+                            WindRoseSetting = WindroseSetting
                         };
                         if (MeteoTimeSeries.Count > 1)
                         {

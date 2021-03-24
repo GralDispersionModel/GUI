@@ -26,6 +26,7 @@ namespace GralMainForms
         public double[] ScClassFrequency = new double[7];
         public string MetFile;
 		public List <GralData.WindData> Wind;
+        public GralData.WindRoseSettings WindRoseSetting;
         
         public Stabilityclasses()
         {
@@ -76,7 +77,13 @@ namespace GralMainForms
             {
                 classmax = Math.Max(ScClassFrequency[i], classmax);
             }
+            if (WindRoseSetting.MaxScaleVertical > 0)
+            {
+                classmax = WindRoseSetting.MaxScaleVertical / 10D;
+            }
             double scale = 400 / classmax;
+
+            
 
             //draw diagram
             for (int i = 0; i < 7; i++)

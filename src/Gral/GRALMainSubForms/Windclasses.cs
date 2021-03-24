@@ -29,6 +29,7 @@ namespace GralMainForms
         private float dpi;
         public int StartHour;
         public int FinalHour;
+        public GralData.WindRoseSettings WindRoseSetting;
 
         public Windclasses()
         {
@@ -89,6 +90,10 @@ namespace GralMainForms
             for (int i = 0; i < (maxwind + 1); i++)
             {
                 classmax = Math.Max(WClassFrequency[i], classmax);
+            }
+            if (WindRoseSetting.MaxScaleVertical > 0)
+            {
+                classmax = WindRoseSetting.MaxScaleVertical / 10D;
             }
             double scale = 400 / classmax;
 
