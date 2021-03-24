@@ -21,6 +21,7 @@ namespace GralMainForms
     public partial class MeteoSelectTimeInterval : Form
     {
         public GralData.WindRoseSettings WindRoseSet;
+
         
         /// <summary>
         /// Input box for start and endtime of a meteorological time series
@@ -58,18 +59,30 @@ namespace GralMainForms
             checkBox1.Checked = WindRoseSet.BiasCorrection;
             checkBox2.Checked = WindRoseSet.ShowFrames;
             checkBox3.Checked = WindRoseSet.DrawSmallSectors;
-            
-            switch (WindRoseSet.SectorCount)
+
+            if (!WindRoseSet.ShowWindSectorGroupBox)
             {
-                case 24:
-                    radioButton2.Checked = true;
-                    break;
-                case 32:
-                    radioButton3.Checked = true;
-                    break;
-                default:
-                    radioButton1.Checked = true;
-                    break;
+                groupBox1.Visible = false;
+                if (WindRoseSet.ShowMaxScaleGroupBox)
+                {
+                    groupBox2.Visible = true;
+                    comboBox3.SelectedIndex = WindRoseSet.MaxScaleVertical;
+                }
+            }
+            else
+            {
+                switch (WindRoseSet.SectorCount)
+                {
+                    case 24:
+                        radioButton2.Checked = true;
+                        break;
+                    case 36:
+                        radioButton3.Checked = true;
+                        break;
+                    default:
+                        radioButton1.Checked = true;
+                        break;
+                }
             }
 
             checkBox4.Checked = WindRoseSet.Ignore00Values;
@@ -96,6 +109,11 @@ namespace GralMainForms
                 WindRoseSet.SectorCount = 36;
             }
             WindRoseSet.Ignore00Values = checkBox4.Checked;
+
+            if (WindRoseSet.ShowMaxScaleGroupBox)
+            {
+                WindRoseSet.MaxScaleVertical = comboBox3.SelectedIndex;
+            }
 
             this.Close();
         }
