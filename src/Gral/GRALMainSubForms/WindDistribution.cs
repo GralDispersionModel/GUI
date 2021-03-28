@@ -14,6 +14,8 @@ namespace GralMainForms
         public double MeanWindSpeed;
         public string StartDate = string.Empty;
         public string EndDate = string.Empty;
+        private const float HorSize = 762F;
+        private const float VertSize = 508F;
 
         public WindDistribution()
         {
@@ -22,9 +24,21 @@ namespace GralMainForms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            int CopyToClipboardScale = 3;
+            if (panel1.Width < 500)
+            {
+                CopyToClipboardScale = 5;
+            }
+            panel1.Width *= CopyToClipboardScale;
+            panel1.Height *= CopyToClipboardScale;
+            panel1.Refresh();
+            Application.DoEvents();
             Bitmap bitMap = new Bitmap(panel1.Width, panel1.Height);
-            panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width * 2, panel1.Height * 2));
+            panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Clipboard.SetDataObject(bitMap);
+            panel1.Width /= CopyToClipboardScale;
+            panel1.Height /= CopyToClipboardScale;
+            panel1.Refresh();
         }
 
         private void WindDistribution_Load(object sender, EventArgs e)
@@ -62,6 +76,8 @@ namespace GralMainForms
         {
             Graphics g = e.Graphics;
             g.Clear(Color.White);
+            float _scale = Math.Min(panel1.Width / HorSize, panel1.Height / VertSize);
+            g.ScaleTransform(_scale, _scale);
 
             StringFormat format1 = new StringFormat
             {
@@ -76,21 +92,24 @@ namespace GralMainForms
             Brush _greyBrush = new SolidBrush(Color.Gray);
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 1);
-            Pen p3 = new Pen(Color.Black, 1);
-            RectangleF ClipBounds = new RectangleF(0, 0, panel1.Width, panel1.Height);
+            Pen p3 = new Pen(Color.DarkGray, 1)
+            {
+                DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot
+            };
+            RectangleF ClipBounds = new RectangleF(0, 0, HorSize, VertSize);
 
             SizeF _lenght  = g.MeasureString(MetFile, _mediumFont);
             SizeF _lenght2 = g.MeasureString("100", _smallFont);
 
             int x0 = (int)(_lenght2.Width + _lenght2.Height) + 10;
-            int y0 = panel1.Height - (int)_lenght2.Height * 2 - 30;
+            int y0 = (int) VertSize - (int)_lenght2.Height * 2 - 30;
 
-            g.DrawString(MetFile, _mediumFont, _blackBrush, (panel1.Width - _lenght.Width) / 2, _lenght.Height + 4, format1);
+            g.DrawString(MetFile, _mediumFont, _blackBrush, (HorSize - _lenght.Width) / 2, _lenght.Height + 4, format1);
             string infodata = StartDate + " - " + EndDate + " " + StartHour.ToString() + ":00 - " + FinalHour.ToString() + ":00  Mean wind speed: " + Math.Round(MeanWindSpeed, 1).ToString() + "m/s";
             _lenght = g.MeasureString(infodata, _smallFont);
-            g.DrawString(infodata, _smallFont, _blackBrush, (panel1.Width - _lenght.Width) / 2, _lenght.Height * 2.5F + 4, format1);
+            g.DrawString(infodata, _smallFont, _blackBrush, (HorSize - _lenght.Width) / 2, _lenght.Height * 2.5F + 4, format1);
 
-            double xfac = (panel1.Width - x0 - 10) / (MaxWind - 1);
+            double xfac = (HorSize - x0 - 10) / (MaxWind - 1);
             double yfac = (y0 - 80) / 10;
             int ymin = (int)(y0 - 10 * yfac);
             int xmax = (int)(x0 + (MaxWind - 1) * xfac);
@@ -100,12 +119,13 @@ namespace GralMainForms
                 return;
             }
 
-            //draw axis
-            p3.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-            g.DrawLine(p2, x0, ymin, x0, y0 + 5);
-            g.DrawLine(p2, x0 - 5, y0, panel1.Width - 10, y0);
-            g.DrawLine(p2, x0, ymin, panel1.Width - 10, ymin);
-            g.DrawLine(p2, xmax, ymin, xmax, y0);
+            //draw frequency levels
+            for (int i = 0; i < 11; i++)
+            {
+                int yr = (int)(y0 - i * yfac);
+                g.DrawLine(p3, x0 - 3, yr, xmax, yr);
+                g.DrawString((i * 10).ToString(), _smallFont, _blackBrush, x0 - _lenght2.Width - 1, (int)(yr - _lenght2.Height / 2));
+            }
 
             int xr = 0;
             for (int i = 0; i < (MaxWind); i++)
@@ -115,9 +135,17 @@ namespace GralMainForms
                 g.DrawString(fs, _smallFont, _blackBrush, new PointF(xr - _lenght2.Height / 2, y0 + 5), format1);
                 g.DrawLine(p3, xr, ymin, xr, y0 + 2);
             }
+            
+            //draw axis
+            p3.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            g.DrawLine(p2, x0, ymin, x0, y0 + 5);
+            g.DrawLine(p2, x0 - 5, y0, HorSize - 10, y0);
+            g.DrawLine(p2, x0, ymin, HorSize - 10, ymin);
+            g.DrawLine(p2, xmax, ymin, xmax, y0);
+
             ClipBounds.Width = xr;
             
-            g.DrawString("v [m/s]", _smallFont, _blackBrush, new PointF((int) (panel1.Width / 2 - 30), (int) (y0 + _lenght2.Height)), format1);
+            g.DrawString("v [m/s]", _smallFont, _blackBrush, new PointF((int) (HorSize / 2 - 30), (int) (y0 + _lenght2.Height)), format1);
 
             StringFormat verticalString = new StringFormat
             {
@@ -126,17 +154,8 @@ namespace GralMainForms
                 LineAlignment = StringAlignment.Near
             };
             SizeF _lenght3 = g.MeasureString("Frequency [%]", _smallFont);
-            g.DrawString("Frequency [%]", _smallFont, _blackBrush, 4, (int) ((panel1.Height - _lenght3.Width) / 2), verticalString);
+            g.DrawString("Frequency [%]", _smallFont, _blackBrush, 4, (int) ((VertSize - _lenght3.Width) / 2), verticalString);
             
-            //draw frequency levels
-            for (int i = 0; i < 11; i++)
-            {
-                int yr = (int)(y0 - i * yfac);
-                g.DrawLine(p3, x0 - 3, yr, xmax, yr);
-                g.DrawString((i * 10).ToString(), _smallFont, _blackBrush, x0 - _lenght2.Width - 1, (int)(yr - _lenght2.Height / 2));
-                base.OnPaint(e);
-            }
-
             // Draw Graph
             Pen p4 = new Pen(Color.Blue, 3);
             PointF[] _pt = new PointF[WClassFrequency.Length];

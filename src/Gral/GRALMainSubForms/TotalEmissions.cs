@@ -37,7 +37,6 @@ namespace GralMainForms
         private bool Emissions_Time_Series_Used = false;
         private List <string> Date_Time = new List<string>();
         private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-        private int CopyToClipboardScale = 1;
 
         public TotalEmissions(double[] totemi, Gral.Main f, string poll)
         {
@@ -136,7 +135,10 @@ namespace GralMainForms
                 {
                 }
             }
-            
+
+            pictureBox1.Width = ClientSize.Width;
+            pictureBox1.Height = ClientSize.Height;
+            pictureBox1.Refresh();
             if (form1 != null)
             {
                 Location = new Point(Math.Max(0,form1.Location.X + form1.Width / 2 - Width / 2 - 100),
@@ -339,6 +341,11 @@ namespace GralMainForms
                 }
             }
             
+            if (classmax == 0)
+            {
+                return;
+            }
+
             double scale = 400 / classmax * scalefactor;
 
             //draw diagram
@@ -347,7 +354,22 @@ namespace GralMainForms
             int hoehe_max = 0;
             int ecke1=0;
             int round = 1;
-            
+
+            //draw frequency levels
+            Pen p3 = new Pen(Color.DarkGray, 0.5f)
+            {
+                DashStyle = DashStyle.Dash
+            };
+            ecke1 = Convert.ToInt32((Convert.ToInt32(55 + (anz_sources - 1) * chartwidth)) * scalefactor);
+            for (int i = 1; i < 6; i++)
+            {
+                int levels = Convert.ToInt32(Convert.ToDouble(i) * classmax * scale / 5);
+                int lev1 = Convert.ToInt32((500 - levels) * scalefactor);
+                g.DrawLine(p3, Convert.ToInt32(55 * scalefactor) - 3, lev1, ecke1 + chartwidth + 20, lev1);
+                string s = Convert.ToString(Math.Round(Convert.ToDouble(i) * classmax / 5, round));
+                g.DrawString(s, legend, black, Convert.ToInt32(50 * scalefactor), lev1 - 5, format2);
+            }
+
             for (int i = 0; i < anz_sources; i++)
             {
                 selpoll = form1.listView1.Items[i].SubItems[0].Text.Split(new char[] {':'});
@@ -392,11 +414,7 @@ namespace GralMainForms
             //draw axis
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 3);
-            Pen p3 = new Pen(Color.Black, 0.5f)
-            {
-                DashStyle = DashStyle.Dash
-            };
-
+            
             p2.EndCap = LineCap.ArrowAnchor;
             g.DrawLine(p1, Convert.ToInt32(55 * scalefactor), Convert.ToInt32(500 * scalefactor), ecke1 + chartwidth + 20, Convert.ToInt32(500 * scalefactor));
             g.DrawLine(p2, Convert.ToInt32(55 * scalefactor), Convert.ToInt32(500 * scalefactor), Convert.ToInt32(55 * scalefactor), (int) (500 * scalefactor - hoehe_max - 20));
@@ -421,16 +439,6 @@ namespace GralMainForms
                 }
             }
 
-            //draw frequency levels
-            ecke1 = Convert.ToInt32((Convert.ToInt32(55 + (anz_sources-1) * chartwidth)) * scalefactor);
-            for (int i = 1; i < 6; i++)
-            {
-                int levels = Convert.ToInt32(Convert.ToDouble(i) * classmax * scale/5);
-                int lev1 = Convert.ToInt32((500  - levels)*scalefactor);
-                g.DrawLine(p3, Convert.ToInt32(55 * scalefactor), lev1, ecke1+chartwidth+20, lev1);
-                string s = Convert.ToString(Math.Round(Convert.ToDouble(i) * classmax / 5,round));
-                g.DrawString(s, legend, black, Convert.ToInt32(50 * scalefactor), lev1 - 5, format2);
-            }
             p1.Dispose();p2.Dispose();p3.Dispose();
             format1.Dispose();
             format2.Dispose();
@@ -469,7 +477,7 @@ namespace GralMainForms
         private void button1_Click_1(object sender, EventArgs e)
         {
             int CopyToClipboardScale = 2;
-            if (pictureBox1.Width < 500)
+            if (pictureBox1.Width < 800)
             {
                 CopyToClipboardScale = 4;
             }
@@ -509,6 +517,8 @@ namespace GralMainForms
         
         void Tot_EmissionsResizeEnd(object sender, EventArgs e)
         {
+            pictureBox1.Width = ClientSize.Width;
+            pictureBox1.Height = ClientSize.Height;
             pictureBox1.Refresh();
         }
         

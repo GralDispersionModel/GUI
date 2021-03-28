@@ -27,7 +27,9 @@ namespace GralMainForms
         public string MetFile;
 		public List <GralData.WindData> Wind;
         public GralData.WindRoseSettings WindRoseSetting;
-        
+        private const float HorSize = 762F;
+        private const float VertSize = 508F;
+
         public Stabilityclasses()
         {
             InitializeComponent();
@@ -39,6 +41,10 @@ namespace GralMainForms
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            
+            float _scale = Math.Min(panel1.Width / HorSize, panel1.Height / 473F);
+            g.ScaleTransform(_scale, _scale);
+
             StringFormat format1 = new StringFormat();
             Font _smallFont = new Font("Arial", 8);
             Font _mediumFont = new Font("Arial", 9);
@@ -51,26 +57,22 @@ namespace GralMainForms
             SizeF _lenght = g.MeasureString(MetFile, _smallFont);
             int distance = (int) _lenght.Height + 2;
             
-            float _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            float _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(MetFile, _smallFont, _blackBrush, _x, 2, format1);
             
             string _data = "Data points: " + Convert.ToString(Wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
-            _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + distance, format1);
             
             if (Wind.Count > 1)
 			{
 			    _data = Wind[0].Date + " - " + Wind[Wind.Count - 1].Date;
 			   _lenght = g.MeasureString(_data, _smallFont);
-			    _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+			    _x = Math.Max(0, HorSize - _lenght.Width - 5);
 			    g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
 			}
             
-			
-			float _scale = Math.Min(panel1.Width / 784F, panel1.Height / 473F);
-			g.ScaleTransform(_scale, _scale);
-
 			//scaling factor
             double classmax = 0;
             for (int i = 0; i < 7; i++)
@@ -98,7 +100,7 @@ namespace GralMainForms
             //draw axis
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 3);
-            Pen p3 = new Pen(Color.Black, 1)
+            Pen p3 = new Pen(Color.DarkGray, 1)
             {
                 DashStyle = DashStyle.Dot
             };
@@ -112,7 +114,16 @@ namespace GralMainForms
             g.DrawString("slightly stable", _smallFont, _blackBrush, 382, 450);
             g.DrawString("stable", _smallFont, _blackBrush, 475, 450);
             g.DrawString("very stable", _smallFont, _blackBrush, 545, 450);
-            g.DrawString("Frequency [%]", _mediumFont, _blackBrush, 12, 5);
+            
+            StringFormat verticalString = new StringFormat
+            {
+                FormatFlags = StringFormatFlags.DirectionVertical,
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Near
+            };
+            SizeF _lenght3 = g.MeasureString("Frequency [%]", _mediumFont);
+            g.DrawString("Frequency [%]", _mediumFont, _blackBrush, 4, (int)((VertSize - _lenght3.Width) / 2), verticalString);
+
             g.DrawString("  0", _largeFont, _blackBrush, 25, 435);
             //base.OnPaint(e);
 
@@ -146,9 +157,21 @@ namespace GralMainForms
         //save image to clipboard
         private void button1_Click(object sender, EventArgs e)
         {
+            int CopyToClipboardScale = 3;
+            if (panel1.Width < 500)
+            {
+                CopyToClipboardScale = 5;
+            }
+            panel1.Width *= CopyToClipboardScale;
+            panel1.Height *= CopyToClipboardScale;
+            panel1.Refresh();
+            Application.DoEvents();
             Bitmap bitMap = new Bitmap(panel1.Width, panel1.Height);
             panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Clipboard.SetDataObject(bitMap);
+            panel1.Width /= CopyToClipboardScale;
+            panel1.Height /= CopyToClipboardScale;
+            panel1.Refresh();
         }
 
         

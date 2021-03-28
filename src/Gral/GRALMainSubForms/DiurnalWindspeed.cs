@@ -27,6 +27,8 @@ namespace GralMainForms
         public string metfile;
 		public List <GralData.WindData> wind;
         private double _mean_wind_speed = 0;
+        private const float HorSize = 762F;
+        private const float VertSize = 508F;
 
         public DiurnalWindspeed()
         {
@@ -37,7 +39,10 @@ namespace GralMainForms
         {
             Graphics g = e.Graphics;
             g.Clear(Color.White);
-                        
+
+            float _scale = Math.Min(panel1.Width / HorSize, panel1.Height / VertSize);
+            g.ScaleTransform(_scale, _scale);
+
             //scaling factor
             double classmax = 0;
             for (int i = 0; i < 24; i++)
@@ -62,12 +67,12 @@ namespace GralMainForms
             SizeF _lenght = g.MeasureString(metfile, _smallFont);
             int distance = (int) _lenght.Height + 2;
             
-            float _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            float _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(metfile, _smallFont, _blackBrush, _x, 2, format1);
             
             string _data = "Data points: " + Convert.ToString(wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
-            _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + distance, format1);
 			
 			//g.DrawString(wind[0].Date, _smallFont, _blackBrush, 675, 2 + 2 * distance, format1);
@@ -75,18 +80,15 @@ namespace GralMainForms
 			{
 			    _data = wind[0].Date + " - " + wind[wind.Count - 1].Date;
 			   _lenght = g.MeasureString(_data, _smallFont);
-			    _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+			    _x = Math.Max(0, HorSize - _lenght.Width - 5);
 			    g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
 			}
 			
 			_data = "Mean wind speed " + Math.Round(_mean_wind_speed, 1).ToString() + " m/s";
 			_lenght = g.MeasureString(_data, _smallFont);
-			_x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+			_x = Math.Max(0, HorSize - _lenght.Width - 5);
 			g.DrawString(_data, _smallFont, _blackBrush, _x, 4 + 3 * distance, format1);
 			
-     		float _scale = Math.Min(panel1.Width / 719F, panel1.Height / 475F);
-			g.ScaleTransform(_scale, _scale);
-
 			int hoehe2 = 0;
             Pen p4 = new Pen(Color.Blue, 3)
             {
@@ -130,10 +132,18 @@ namespace GralMainForms
             }
             string_Format.Dispose();
             p3.DashStyle = DashStyle.Dot;
-            
-            g.DrawString("Mean wind speed [m/s]", _mediumFont, _blackBrush, 12, 5);
+
+            StringFormat verticalString = new StringFormat
+            {
+                FormatFlags = StringFormatFlags.DirectionVertical,
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Near
+            };
+            SizeF _lenght3 = g.MeasureString("Mean wind speed [m/s]", _mediumFont);
+            g.DrawString("Mean wind speed [m/s]", _mediumFont, _blackBrush, 4, (int)((VertSize - _lenght3.Width) / 2), verticalString);
             g.DrawString("  0", _largeFont, _blackBrush, 25, 435);
-            base.OnPaint(e);
+
+            verticalString.Dispose();
 
             //draw frequency levels
             double step;
@@ -158,7 +168,6 @@ namespace GralMainForms
                 }
                 g.DrawLine(p3, 55, lev1, 695, lev1);
                 g.DrawString(s, _largeFont, _blackBrush, 25, lev1 - 5);
-                base.OnPaint(e);
             }
             
             p1.Dispose();p2.Dispose();p3.Dispose();p4.Dispose();
@@ -187,9 +196,21 @@ namespace GralMainForms
         //save image to clipboard
         private void button1_Click(object sender, EventArgs e)
         {
+            int CopyToClipboardScale = 3;
+            if (panel1.Width < 500)
+            {
+                CopyToClipboardScale = 5;
+            }
+            panel1.Width *= CopyToClipboardScale;
+            panel1.Height *= CopyToClipboardScale;
+            panel1.Refresh();
+            Application.DoEvents();
             Bitmap bitMap = new Bitmap(panel1.Width, panel1.Height);
-            panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width * 2, panel1.Height * 2));
+            panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Clipboard.SetDataObject(bitMap);
+            panel1.Width /= CopyToClipboardScale;
+            panel1.Height /= CopyToClipboardScale;
+            panel1.Refresh();
         }
 		void DiurnalWindspeedFormClosed(object sender, FormClosedEventArgs e)
 		{
