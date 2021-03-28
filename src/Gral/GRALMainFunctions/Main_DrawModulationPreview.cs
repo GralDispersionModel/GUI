@@ -296,7 +296,7 @@ namespace Gral
             int distance =  (int) (g.MeasureString("J", titlefont, 200).Height);
             int distance2 =  (int) (g.MeasureString("J", subtitlefont, 200).Height);
             
-            g.DrawString("GRAL GUI V21.09Beta4 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            g.DrawString("GRAL GUI V21.09RC1 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
