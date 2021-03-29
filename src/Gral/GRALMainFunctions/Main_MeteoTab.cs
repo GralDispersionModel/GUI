@@ -198,6 +198,7 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             WindroseSetting.ShowWindSectorGroupBox = true;
             WindroseSetting.ShowMaxScaleGroupBox = false;
+            WindroseSetting.ShowBias = true;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -392,6 +393,7 @@ namespace Gral
             WindroseSetting.MaxVelocity = 0;
             WindroseSetting.ShowWindSectorGroupBox = true;
             WindroseSetting.ShowMaxScaleGroupBox = false;
+            WindroseSetting.ShowBias = true;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
