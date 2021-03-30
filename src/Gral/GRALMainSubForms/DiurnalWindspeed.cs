@@ -37,6 +37,11 @@ namespace GralMainForms
         
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (panel1.Width < 20 || panel1.Height < 20)
+            {
+                return;
+            }
+
             Graphics g = e.Graphics;
             g.Clear(Color.White);
 

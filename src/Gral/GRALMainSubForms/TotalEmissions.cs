@@ -259,6 +259,11 @@ namespace GralMainForms
 
         void PictureBox1Paint(object sender, PaintEventArgs e)
         {
+            if (pictureBox1.Width < 20 || pictureBox1.Height < 20)
+            {
+                return;
+            }
+
             int anz_sources = form1.listView1.Items.Count;
             // no more sources available -> close the form
             if (anz_sources == 0)

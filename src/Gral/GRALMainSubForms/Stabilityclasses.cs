@@ -40,8 +40,12 @@ namespace GralMainForms
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (panel1.Width < 20 || panel1.Height < 20)
+            {
+                return;
+            }
+
             Graphics g = e.Graphics;
-            
             float _scale = Math.Min(panel1.Width / HorSize, panel1.Height / 473F);
             g.ScaleTransform(_scale, _scale);
 
