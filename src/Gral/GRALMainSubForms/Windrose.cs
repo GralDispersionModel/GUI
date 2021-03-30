@@ -127,6 +127,11 @@ namespace GralMainForms
 
         void PictureBox1Paint(object sender, PaintEventArgs e)
         {
+            if (pictureBox1.Width < 20 || pictureBox1.Height < 20)
+            {
+                return;
+            }
+
             int mid_x = pictureBox1.Width / 2; // Kuntner
             int mid_y = pictureBox1.Height / 2;
 
@@ -796,12 +801,6 @@ namespace GralMainForms
 
         private void button8_Click(object sender, EventArgs e)
         {
-            if (WindSectorCount != 16)
-            {
-                MessageBox.Show(this, "Table only available for 22.5° sectors", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
             // show a table with frequencies for WindSectorCount directions and 8 (7) classes
             WindroseTable wrt = new WindroseTable
             {
@@ -897,7 +896,6 @@ namespace GralMainForms
             {
                 button1_Click(null, null);
             }
-
             return base.ProcessCmdKey(ref msg, keyData);
         }
     }

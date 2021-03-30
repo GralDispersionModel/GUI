@@ -92,12 +92,22 @@ namespace GralMainForms
 
             double[] sum_classes = new double[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            for (int i = 0; i < 16; i++)
+            int sectCount = SectFrequency.GetUpperBound(0) + 1;
+            for (int i = 0; i < sectCount; i++)
             {
                 DataRow workrow;
                 workrow = _data.NewRow();
                 summe = 0;
-                workrow[0] = richtungen[i].ToString();
+                
+                if (sectCount == 16)
+                {
+                    workrow[0] = richtungen[i].ToString();
+                }
+                else
+                {
+                    workrow[0] = Convert.ToString(Math.Round(i * 360D / sectCount, 1)) + " °";
+                }
+                
                 int n = 0;
                 
                 for (; n < nmax; n++)
