@@ -363,7 +363,7 @@ namespace Gral
                             }
                         }
 
-                        if (wind.Count > 1)
+                        if (wind.Count > 0)
                         {
                             windrose.Show();
                         }
@@ -514,7 +514,7 @@ namespace Gral
                                 windrose.BiasCorrection = 1;
                             }
                         }
-                        if (wind.Count > 1)
+                        if (wind.Count > 0)
                         {
                             windrose.Show();
                         }
@@ -612,7 +612,7 @@ namespace Gral
                             FinalHour = endstunden,
                             WindRoseSetting = WindroseSetting
                         };
-                        if (wind.Count > 1)
+                        if (wind.Count > 0)
                         {
                             wclass.Show();
                         }
@@ -792,7 +792,7 @@ namespace Gral
                             Wind = wind,
                             WindRoseSetting = WindroseSetting
                         };
-                        if (MeteoTimeSeries.Count > 1)
+                        if (MeteoTimeSeries.Count > 0)
                         {
                             sclass.Show();
                         }
@@ -851,7 +851,7 @@ namespace Gral
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
             };
-            if (MeteoTimeSeries.Count > 1)
+            if (MeteoTimeSeries.Count > 0)
             {
                 mwind.Show();
             }
@@ -912,7 +912,7 @@ namespace Gral
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
             };
-            if (MeteoTimeSeries.Count > 1)
+            if (MeteoTimeSeries.Count > 0)
             {
                 mwinddir.Show();
             }
