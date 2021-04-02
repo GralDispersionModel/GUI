@@ -25,7 +25,7 @@ namespace GralMainForms
     public partial class Windrose : Form
     {
         private Point[] WindRosePoints;
-        public double[,] SectFrequ = new double[16, 8]; 
+        public double[,] SectFrequ = new double[16, 8];
         public double[] WndClasses = new double[7];
         public string MetFileName;
         public List<GralData.WindData> WindData;
@@ -56,6 +56,7 @@ namespace GralMainForms
         private Pen PenDarkRed = new Pen(Color.DarkRed);
         private Pen PenBrown = new Pen(Color.Brown);
         private Pen PenGray = new Pen(Color.Gray, 1);
+        private Pen PenGrayTransparent = new Pen(Color.FromArgb(60, Color.Gray), 1);
 
         private Brush BrushBlue = new SolidBrush(Color.Blue);
         private Brush BrushRedGreen = new SolidBrush(Color.LightSkyBlue);
@@ -75,7 +76,7 @@ namespace GralMainForms
         private bool MoveLegend = false;
         private Rectangle InfoPosition = St_F.WindRoseInfo;
         private bool MoveInfo = false;
-        private int CopyToClipboardScale  = 1;
+        private int CopyToClipboardScale = 1;
 
         /// <summary>
         /// Show a wind speed or wind SC wind rose
@@ -85,12 +86,22 @@ namespace GralMainForms
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Increase Scale
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             IniScale = Convert.ToInt32(IniScale * 1.1);
             Refresh();
         }
 
+        /// <summary>
+        /// Decrease Scale
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             IniScale = Convert.ToInt32(IniScale * 0.9);
@@ -166,7 +177,7 @@ namespace GralMainForms
             InfoPosition.Height = distance * 5;
             if (InfoPosition.X == 0 && InfoPosition.Y == 0)
             {
-                InfoPosition.X = mid_x * 2 - 20 - InfoPosition.Width; 
+                InfoPosition.X = mid_x * 2 - 20 - InfoPosition.Width;
                 InfoPosition.Y = y_text;
             }
 
@@ -216,7 +227,7 @@ namespace GralMainForms
             SektMax += XScale;
 
             SektMax = Math.Round(SektMax * 100) * 0.01;
-           
+
             //scaling factor to maximise wind rose in window
             if (SektMax <= 0)
             {
@@ -281,9 +292,9 @@ namespace GralMainForms
                     {
                         g.DrawLine(p2, mid_x, mid_y, Convert.ToInt32(mid_x + r * Math.Sin(i * sectorangle)), Convert.ToInt32(mid_y - r * Math.Cos(i * sectorangle)));
                         wi = Convert.ToString(Math.Round(i * sectorangle * 180 / Math.PI, 1)) + " °";
-                        
+
                         double dx = (r + 0.5 * (str.Width + str.Height)) * Math.Sin(i * sectorangle);
-                        double dy = - (r + 0.5 * (str.Width + str.Height)) * Math.Cos(i * sectorangle);
+                        double dy = -(r + 0.5 * (str.Width + str.Height)) * Math.Cos(i * sectorangle);
 
                         g.DrawString(wi, kleinfont, BrushBlack, Convert.ToInt32(mid_x + dx), Convert.ToInt32(mid_y + dy), StringFormatCenter);
                     }
@@ -316,7 +327,7 @@ namespace GralMainForms
                         int dy = -Convert.ToInt32(x1 * Math.Cos(MinSektNr * sectorangle));
                         string fr = Convert.ToString(i * FrStep) + "%";
                         SizeF str = g.MeasureString(fr, kleinfont, 200);
-                        g.FillRectangle(brushWhite , mid_x + dx - str.Width / 2, mid_y + dy - str.Height / 2, str.Width, str.Height);
+                        g.FillRectangle(brushWhite, mid_x + dx - str.Width / 2, mid_y + dy - str.Height / 2, str.Width, str.Height);
                         g.DrawString(fr, kleinfont, BrushBlack, mid_x + dx, mid_y + dy, StringFormatCenter);
                     }
                     catch { }
@@ -324,7 +335,7 @@ namespace GralMainForms
                 StringFormatCenter.Dispose();
                 brushWhite.Dispose();
             }
-            
+
             int x_legend = pictureBox1.Width - (int)(g.MeasureString("0.0 - 2.2 m/s", kleinfont).Width) - 30;
 
             if (x_legend < 0)
@@ -341,7 +352,7 @@ namespace GralMainForms
 
             LegendPosition.Width = (int)(25 + g.MeasureString(Convert.ToString(WndClasses[0]).PadLeft(2) + " -" + Convert.ToString(WndClasses[1]).PadLeft(2) + " m/s", kleinfont).Width);
             LegendPosition.Height = LegendPosition.Y + (int)Math.Max(20, distance * 1.01F) * 7;
-            
+
             for (int n = 7; n >= 0; n--)
             {
                 int VertDist = (int)Math.Max(20, distance * 1.01F);
@@ -396,11 +407,27 @@ namespace GralMainForms
                 {
                     DrawWindSCRose(g, n);
                 }
-            }
 
-            kleinfont.Dispose();
-            format2.Dispose();
-            StringFormatNearFar.Dispose();
+                PenGrayTransparent.DashStyle = DashStyle.Dot;
+
+                //Draw circles with transparent color above areas with wind sectors
+                for (int i = 1; i < NumberOfScales + 1; i++)
+                {
+                    int x1 = Convert.ToInt32(div * i);
+                    if (i < NumberOfScales)
+                    {
+                        g.DrawEllipse(PenGrayTransparent, mid_x - x1, mid_y - x1, 2 * x1, 2 * x1);
+                    }
+                    else
+                    {
+                        g.DrawEllipse(PenGrayTransparent, mid_x - x1, mid_y - x1, 2 * x1, 2 * x1);
+                    }
+                }
+
+                kleinfont.Dispose();
+                format2.Dispose();
+                StringFormatNearFar.Dispose();
+            }
         }
 
         private void DrawWindSpeedScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
@@ -504,6 +531,11 @@ namespace GralMainForms
             }
         }
 
+        /// <summary>
+        /// Draw Wind Rose Sectors
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="n"></param>
         private void DrawWindSpeedRose(Graphics g, int n)
         {
             switch (n)
@@ -599,6 +631,11 @@ namespace GralMainForms
             }
         }
 
+        /// <summary>
+        /// Draw Stability Class Wind Rose Sectors
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="n"></param>
         private void DrawWindSCRose(Graphics g, int n)
         {
             switch (n)
@@ -683,7 +720,11 @@ namespace GralMainForms
             }
         }
 
-        //save image to clipboard
+        /// <summary>
+        /// save image to clipboard
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
             CopyToClipboardScale = 2;
@@ -706,14 +747,22 @@ namespace GralMainForms
             pictureBox1.Refresh();
         }
 
-        //increase the scale of the x-axis by one
+        /// <summary>
+        /// increase the scale of the x-axis by one step
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button5_Click(object sender, EventArgs e)
         {
             XScale += 0.01;
             Refresh();
         }
 
-        //decrease the scale of the x-axis by one
+        /// <summary>
+        /// decrease the scale of the x-axis by one step
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
             XScale -= 0.01;
@@ -724,7 +773,6 @@ namespace GralMainForms
         {
             pictureBox1.Width = Math.Max(1, ClientSize.Width - 69);
             pictureBox1.Height = Math.Max(1, ClientRectangle.Height - 1);
-
             pictureBox1.Refresh();
         }
 
@@ -744,6 +792,7 @@ namespace GralMainForms
             PenYellow.Dispose();
             PenGray.Dispose();
             PenDarkRed.Dispose();
+            PenGrayTransparent.Dispose();
 
             BrushBlue.Dispose();
             BrushBrown.Dispose();
@@ -757,12 +806,22 @@ namespace GralMainForms
             BrushLightBlue.Dispose();
         }
 
+        /// <summary>
+        /// Set Font for the wind rose view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button6Click(object sender, EventArgs e)
         {
             St_F.SetSmallFont();
             pictureBox1.Refresh();
         }
 
+        /// <summary>
+        /// Pin the scale for drawing wind roses
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button7Click(object sender, EventArgs e)
         {
             if (St_F.Pin_Wind_Scale < 0.1)
@@ -794,14 +853,17 @@ namespace GralMainForms
                 InfoPosition.X = 0;
                 InfoPosition.Y = 0;
             }
-            
-            St_F.WindRoseFormSize = this.Size;
 
+            St_F.WindRoseFormSize = this.Size;
         }
 
+        /// <summary>
+        /// show a table with frequencies for WindSectorCount directions and 8 (7) classes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button8_Click(object sender, EventArgs e)
         {
-            // show a table with frequencies for WindSectorCount directions and 8 (7) classes
             WindroseTable wrt = new WindroseTable
             {
                 MetfileName = "wind velocity " + MetFileName,
@@ -813,14 +875,18 @@ namespace GralMainForms
             if (DrawingMode == 1)
             {
                 wrt.MetfileName = "stability classes " + MetFileName;
-            }          
-            wrt.Location = new Point(Left + 20, Top + 20);     
+            }
+            wrt.Location = new Point(Left + 20, Top + 20);
             wrt.Show();
         }
 
+        /// <summary>
+        /// Use the mouse cursor to move the legend or the scale
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            //check if mouse cursor is within the legend -> move legend 
             if (LegendPosition.Contains(e.Location))
             {
                 MoveLegend = true;
@@ -834,6 +900,11 @@ namespace GralMainForms
         }
 
 
+        /// <summary>
+        /// Move the legend or the scale using the mouse cursor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             //show SizeAll cursor when moving mouse above legend or info box
@@ -854,7 +925,7 @@ namespace GralMainForms
                 St_F.WindRoseLegend.Y = LegendPosition.Y;
                 pictureBox1.Refresh();
             }
-            if(MoveInfo)
+            if (MoveInfo)
             {
                 InfoPosition.X = e.X - MousedXdY.X;
                 InfoPosition.Y = e.Y - MousedXdY.Y;
@@ -864,6 +935,11 @@ namespace GralMainForms
             }
         }
 
+        /// <summary>
+        /// Stop moving the scale or the legend 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             if (MoveLegend)
