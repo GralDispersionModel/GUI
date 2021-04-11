@@ -59,7 +59,7 @@ namespace GralDomain
 #if __MonoCS__
 #else
             //ToolTip for lenght measurement
-            if ((MouseControl == MouseMode.LineSourcePos || MouseControl == MouseMode.BuildingPos || MouseControl == MouseMode.AreaSourcePos || MouseControl == MouseMode.ViewDistanceMeasurement || MouseControl == MouseMode.ViewAreaMeasurement || MouseControl == MouseMode.WallSet || MouseControl == MouseMode.AreaPosCorner) && ShowLenghtLabel)
+            if ((MouseControl == MouseMode.LineSourcePos || MouseControl == MouseMode.BuildingPos || MouseControl == MouseMode.AreaSourcePos || MouseControl == MouseMode.ViewDistanceMeasurement || MouseControl == MouseMode.ViewAreaMeasurement || MouseControl == MouseMode.WallSet || MouseControl == MouseMode.VegetationPosCorner) && ShowLenghtLabel)
             {
                 ToolTipMousePosition.Active = true; // show tool tip lenght of rubberline segment
                 FirstPointLenght.X = (float)St_F.TxtToDbl(textBox1.Text, false);
@@ -259,7 +259,7 @@ namespace GralDomain
                     }
                     break;
 
-                case MouseMode.AreaPosCorner:
+                case MouseMode.VegetationPosCorner:
                     //digitize position of the corner points of forests
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {

@@ -71,7 +71,7 @@ namespace GralDomain
         WallSel = 76,
         VegetationSel = 77,
         WallPosCorner = 78,
-        AreaPosCorner = 79,
+        VegetationPosCorner = 79,
         LineSourceEditFinal = 100,
         WallEditFinal = 101,
         AreaSourceEditFinal = 108,

@@ -15,7 +15,7 @@
  * User: U0178969
  * Date: 21.01.2019
  * Time: 17:08
- * 
+ *
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
@@ -228,7 +228,7 @@ namespace GralDomain
                             it = new ToolStripMenuItem("Move Edge Point");
                             it.Tag = new PointD(textBox1.Text,
                                                             textBox2.Text,
-                                                            CultureInfo.CurrentCulture); 
+                                                            CultureInfo.CurrentCulture);
                             it.Click += RightClickAreaMoveEdge;
                             mi.DropDownItems.Add(it);
                             it = new ToolStripMenuItem("Add Edge Point");
@@ -311,7 +311,7 @@ namespace GralDomain
                             it.Tag = i;
                             it.Click += RightClickLineCopy;
                             mi.DropDownItems.Add(it);
-                            
+
                             if (Gral.Main.Project_Locked == true)
                             {
                                 mi.DropDownItems[0].Text = "Show Line Source Data";
@@ -374,7 +374,7 @@ namespace GralDomain
                             it.Tag = i;
                             it.Click += RightClickWallDelete;
                             mi.DropDownItems.Add(it);
-                            
+
                             if (Gral.Main.Project_Locked == true)
                             {
                                 mi.DropDownItems[0].Text = "Show Line Source Data";
@@ -445,7 +445,7 @@ namespace GralDomain
                                 }
                                 m.Items.Add(mi);
                                 m.Show(picturebox1, new Point(e.X, e.Y));
-                           
+
                                 stop = true;
                             }
                             i += 1;
@@ -497,14 +497,14 @@ namespace GralDomain
 
                             if (Gral.Main.Project_Locked == true)
                             {
-                                mi.DropDownItems[0].Text = "Show Area Source Data";
+                                mi.DropDownItems[0].Text = "Show Building Data";
                                 mi.DropDownItems[1].Enabled = false;
                                 mi.DropDownItems[2].Enabled = false;
                                 mi.DropDownItems[3].Enabled = false;
                                 mi.DropDownItems[4].Enabled = false;
                                 mi.DropDownItems[5].Enabled = false;
                             }
-                            if (EditAS.ItemData[i].Pt.Count < 4) // at least 3 edge points
+                            if (EditB.ItemData[i].Pt.Count < 4) // at least 3 edge points
                             {
                                 mi.DropDownItems[3].Enabled = false;
                             }
@@ -549,7 +549,7 @@ namespace GralDomain
                             it.Tag = i;
                             it.Click += RightClickVegetationDelete;
                             mi.DropDownItems.Add(it);
-                            
+
                             if (Gral.Main.Project_Locked == true)
                             {
                                 mi.DropDownItems[0].Text = "Show Area Source Data";
@@ -558,7 +558,7 @@ namespace GralDomain
                                 mi.DropDownItems[3].Enabled = false;
                                 mi.DropDownItems[4].Enabled = false;
                             }
-                            if (EditAS.ItemData[i].Pt.Count < 4) // at least 3 edge points
+                            if (EditVegetation.ItemData[i].Pt.Count < 4) // at least 3 edge points
                             {
                                 mi.DropDownItems[3].Enabled = false;
                             }
@@ -602,7 +602,7 @@ namespace GralDomain
                     }
                     break;
 
-                case MouseMode.AreaPosCorner:
+                case MouseMode.VegetationPosCorner:
                     //final corner point of vegetation
                     if (EditVegetation.CornerVegetation > 0)
                     {
@@ -739,7 +739,7 @@ namespace GralDomain
                         Cursor.Clip = Rectangle.Empty;
                         Picturebox1_Paint();
                     }
-                    
+
                     //digitizing tunnel portals
                     if (EditLS.CornerLineSource > 0)
                     {

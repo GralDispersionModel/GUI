@@ -68,7 +68,7 @@ namespace GralDomain
 
                     ShowFirst.Veg = false;
                 }
-                MouseControl = MouseMode.AreaPosCorner;
+                MouseControl = MouseMode.VegetationPosCorner;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditVegetation.Show();
                 EditVegetation.ShowForm();

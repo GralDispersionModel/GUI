@@ -497,7 +497,7 @@ namespace GralDomain
             }
 
             //new coordinates for edited forests
-            if ((MouseControl == MouseMode.AreaPosCorner) || (MouseControl == MouseMode.VegetationEditFinal) || (MouseControl == MouseMode.VegetationInlineEdit))
+            if ((MouseControl == MouseMode.VegetationPosCorner) || (MouseControl == MouseMode.VegetationEditFinal) || (MouseControl == MouseMode.VegetationInlineEdit))
             {
                 if (MouseControl == MouseMode.VegetationEditFinal)
                 {

@@ -147,7 +147,7 @@ namespace GralDomain
 			
 			if (MouseControl == MouseMode.VegetationEditFinal)
             {
-                MouseControl = MouseMode.AreaPosCorner; // reset to vegetation-Input
+                MouseControl = MouseMode.VegetationPosCorner; // reset to vegetation-Input
             }
             else if (MouseControl == MouseMode.VegetationInlineEdit)
 			{

@@ -438,7 +438,7 @@ namespace GralDomain
             }
 
             //draw acutal edited vegetation
-            if ((EditVegetation.CornerVegetation > 0) && ((MouseControl == MouseMode.AreaPosCorner)))
+            if ((EditVegetation.CornerVegetation > 0) && ((MouseControl == MouseMode.VegetationPosCorner)))
             {
                 for (int i = 0; i < EditVegetation.CornerVegetation ; i++)
                 {

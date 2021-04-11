@@ -292,7 +292,7 @@ namespace GralDomain
 			}
 			
 			//draw vegetation
-			if ((MouseControl == MouseMode.AreaPosCorner))
+			if ((MouseControl == MouseMode.VegetationPosCorner))
 			{
 				CornerAreaSource[EditVegetation.CornerVegetation + 1] = new Point(e.X, e.Y);
 				DrawRubberLine(EditVegetation.CornerVegetation, 1);
