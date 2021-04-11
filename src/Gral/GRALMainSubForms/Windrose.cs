@@ -291,7 +291,7 @@ namespace GralMainForms
                     for (int i = 0; i < WindSectorCount; i++)
                     {
                         g.DrawLine(p2, mid_x, mid_y, Convert.ToInt32(mid_x + r * Math.Sin(i * sectorangle)), Convert.ToInt32(mid_y - r * Math.Cos(i * sectorangle)));
-                        wi = Convert.ToString(Math.Round(i * sectorangle * 180 / Math.PI, 1)) + " °";
+                        wi = Convert.ToString(Math.Round(i * sectorangle * 180 / Math.PI, 1)) + " " + "\x00B0";
 
                         double dx = (r + 0.5 * (str.Width + str.Height)) * Math.Sin(i * sectorangle);
                         double dy = -(r + 0.5 * (str.Width + str.Height)) * Math.Cos(i * sectorangle);
@@ -936,7 +936,7 @@ namespace GralMainForms
         }
 
         /// <summary>
-        /// Stop moving the scale or the legend 
+        /// Stop moving the scale or the legend
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

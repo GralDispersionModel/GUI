@@ -98,18 +98,18 @@ namespace GralMainForms
                 DataRow workrow;
                 workrow = _data.NewRow();
                 summe = 0;
-                
+
                 if (sectCount == 16)
                 {
                     workrow[0] = richtungen[i].ToString();
                 }
                 else
                 {
-                    workrow[0] = Convert.ToString(Math.Round(i * 360D / sectCount, 1)) + " °";
+                    workrow[0] = Convert.ToString(Math.Round(i * 360D / sectCount, 1)) + " " + "\x00B0";
                 }
-                
+
                 int n = 0;
-                
+
                 for (; n < nmax; n++)
                 {
                     double prozent = 0;
@@ -138,7 +138,7 @@ namespace GralMainForms
             workrow1[0] = "Sum";
             for (int n = 0; n < nmax + 1; n++)
             {
-                workrow1[n + 1] = sum_classes[n].ToString();
+                workrow1[n + 1] = Math.Round(sum_classes[n], 1).ToString();
             }
             _data.Rows.Add(workrow1);
 
@@ -148,6 +148,10 @@ namespace GralMainForms
             dataGridView1.ColumnHeadersHeight = 26;
             dataGridView1.Columns.Cast<DataGridViewColumn>().ToList().ForEach(f => f.SortMode = DataGridViewColumnSortMode.NotSortable);
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].DefaultCellStyle.Font = new System.Drawing.Font(Font, FontStyle.Bold);   // Set Bold
+            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            dataGridView1.RowsDefaultCellStyle.BackColor = Color.LightGray;
+            dataGridView1.RowsDefaultCellStyle.ForeColor = Color.Black;
             dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
     }

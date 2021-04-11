@@ -1892,7 +1892,7 @@ namespace GralDomForms
 				int y = 3;
 				g.DrawString("GRAL windfield", drawFont, stringBrush, 10, y, drawFormat);
 				y+=10;
-				g.DrawString("Wind sector: " + Convert.ToString(GRAL_direction) + " °", drawFont, stringBrush, 10, y, drawFormat);
+				g.DrawString("Wind sector: " + Convert.ToString(GRAL_direction) + " " + "\x00B0", drawFont, stringBrush, 10, y, drawFormat);
 				y+=10;
 				g.DrawString("Wind speed: " + Convert.ToString(Math.Round(GRAL_speed,2)) + " m/s", drawFont, stringBrush, 10, y, drawFormat);
 				y+=10;
@@ -1948,7 +1948,7 @@ namespace GralDomForms
 				int y = 3;
 				g.DrawString("GRAMM windfield", drawFont, stringBrush, 10, y, drawFormat);
 				y+=10;
-				g.DrawString("Wind sector: " + select_situation.SelectedItems[0].SubItems[1].Text + " °", drawFont, stringBrush, 10, y, drawFormat);
+				g.DrawString("Wind sector: " + select_situation.SelectedItems[0].SubItems[1].Text + " " + "\x00B0", drawFont, stringBrush, 10, y, drawFormat);
 				y+=10;
 				g.DrawString("Wind speed: " + select_situation.SelectedItems[0].SubItems[2].Text + " m/s", drawFont, stringBrush, 10, y, drawFormat);
 				y+=10;
