@@ -459,7 +459,7 @@ namespace GralDomain
                 }
                 
                 // GRAL topography allowed?
-                if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None && Gral.Main.Project_Locked == false &&
+                if (Gral.Main.Project_Locked == false &&
                     MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
                 {
                     originalGRALTopographyToolStripMenuItem.Enabled = true;
