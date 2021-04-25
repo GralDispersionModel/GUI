@@ -557,52 +557,65 @@ namespace GralIO
             {
                 List<string> text1 = new List<string>(); // save meteopgt.all lines temporarily
                 bool meteo_header_new = false;
+				double _meteofrequ_max = -100000000;
+				double _meteofrequ_min = 100000000;
 
-                using (StreamReader meteopgt = new StreamReader(Path.Combine(_projectname, @"Computation","meteopgt.all")))
+				using (StreamReader meteopgt = new StreamReader(Path.Combine(_projectname, @"Computation","meteopgt.all")))
 				{
 					string[] text = new string[1];
-                    text1.Add(meteopgt.ReadLine());
-                    text = text1[0].Split(new char[] { ' ', ',', '\t', ';','!' }, StringSplitOptions.RemoveEmptyEntries);
-					
-                    try
+					//Header line 1
+					string temp = meteopgt.ReadLine();
+					if (!string.IsNullOrEmpty(temp))
 					{
-						text[1] = text[1].Trim();
-						if (text[1] == "1")
-                        {
-                            _MeteoClassification = true; // no classification
-                        }
-                        else
-                        {
-                            _MeteoClassification = false;
-                        }
-                    }
-					catch
-					{
-						_MeteoClassification = false;
-					}
+						text1.Add(temp);
+						text = text1[0].Split(new char[] { ' ', ',', '\t', ';', '!' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    text1.Add(meteopgt.ReadLine());
-
-					_meteofrequ = 0;
-                    double _meteofrequ_max = -100000000;
-                    double _meteofrequ_min =  100000000;
-                    double _temp = 0;
-
-					for (int n = 0; n < 100000; n++)
-					{
 						try
 						{
-                            text1.Add(meteopgt.ReadLine());
-                            text = text1[n + 2].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                            _temp = Convert.ToDouble(text[3].Replace(".", decsep));
-                            _meteofrequ += _temp;
-                            _meteofrequ_max = Math.Max(_meteofrequ_max, _temp);
-                            _meteofrequ_min = Math.Min(_meteofrequ_min, _temp);
-                            _dispsituationfrequ[n] = _temp;
+							text[1] = text[1].Trim();
+							if (text[1] == "1")
+							{
+								_MeteoClassification = true; // no classification
+							}
+							else
+							{
+								_MeteoClassification = false;
+							}
 						}
 						catch
 						{
-							break;
+							_MeteoClassification = false;
+						}
+						//Header line 2
+						temp = meteopgt.ReadLine();
+						if (!string.IsNullOrEmpty(temp))
+						{
+							text1.Add(temp);
+
+							_meteofrequ = 0;
+							double _temp = 0;
+
+							for (int n = 0; n < 100000; n++)
+							{
+								try
+								{
+									temp = meteopgt.ReadLine();
+									if (!string.IsNullOrEmpty(temp))
+									{
+										text1.Add(meteopgt.ReadLine());
+										text = text1[n + 2].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+										_temp = Convert.ToDouble(text[3].Replace(".", decsep));
+										_meteofrequ += _temp;
+										_meteofrequ_max = Math.Max(_meteofrequ_max, _temp);
+										_meteofrequ_min = Math.Min(_meteofrequ_min, _temp);
+										_dispsituationfrequ[n] = _temp;
+									}
+								}
+								catch
+								{
+									break;
+								}
+							}
 						}
 					}
                     // if the flag for the classification does not match the data (at matches from GUI versions below 18.01) correct the flag
@@ -614,7 +627,7 @@ namespace GralIO
                     }                    
                 }
                 
-                if(meteo_header_new==true)
+                if(meteo_header_new)
                 {
                     //correct the header in meteopgt.all
                     try
@@ -622,8 +635,7 @@ namespace GralIO
                         File.Delete(Path.Combine(_projectname, @"Computation", "meteopgt.all"));
                         using (StreamWriter _meteopgt = new StreamWriter(Path.Combine(_projectname, @"Computation", "meteopgt.all")))
                         {
-                            string[] _text = new string[1];
-                            _text = text1[0].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            string[] _text = text1[0].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                             if (text1.Count > 2)
                             {
