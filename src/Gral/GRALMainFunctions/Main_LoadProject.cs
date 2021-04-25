@@ -1040,30 +1040,33 @@ namespace Gral
 
                                 a = myreader.ReadLine().Split('\t');
 
-                                string [] txt = myreader.ReadLine().Split(new char[] { '\t', '!' }); // split groups
-
-                                for (int i = 0; i < txt.Length; i++)
-                                {
-                                    string[] _values = txt[i].Split(new char[] { ':' }); // split source group number and decay rate
-                                    if (_values.Length > 1)
+                                string temp = myreader.ReadLine();
+                                if (!string.IsNullOrEmpty(temp))
+                                { 
+                                    string[] txt = temp.Split(new char[] { '\t', '!' }); // split groups
+                                    for (int i = 0; i < txt.Length; i++)
                                     {
-                                        int sg_number = 0;
-                                        if (int.TryParse(_values[0], out sg_number))
+                                        string[] _values = txt[i].Split(new char[] { ':' }); // split source group number and decay rate
+                                        if (_values.Length > 1)
                                         {
-                                            double decay = 0;
-                                            if (sg_number > 0 && sg_number < 100)
+                                            int sg_number = 0;
+                                            if (int.TryParse(_values[0], out sg_number))
                                             {
-                                                try
+                                                double decay = 0;
+                                                if (sg_number > 0 && sg_number < 100)
                                                 {
-                                                    decay = Convert.ToDouble(_values[1], ic);
-                                                }
-                                                catch { }
-                                                if (decay > 0)
-                                                {
-                                                    GralData.DecayRates dr = new GralData.DecayRates();
-                                                    dr.SourceGroup = sg_number;
-                                                    dr.DecayRate = decay;
-                                                    DecayRate.Add(dr);
+                                                    try
+                                                    {
+                                                        decay = Convert.ToDouble(_values[1], ic);
+                                                    }
+                                                    catch { }
+                                                    if (decay > 0)
+                                                    {
+                                                        GralData.DecayRates dr = new GralData.DecayRates();
+                                                        dr.SourceGroup = sg_number;
+                                                        dr.DecayRate = decay;
+                                                        DecayRate.Add(dr);
+                                                    }
                                                 }
                                             }
                                         }
