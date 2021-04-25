@@ -53,7 +53,6 @@ namespace Gral
                             "Afterwards it should be possible to open the project with this GUI version", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
-
                 }
 
                 Cursor = Cursors.WaitCursor;
@@ -1409,17 +1408,23 @@ namespace Gral
                 message.listBox1.Items.Add("Loading GRAMM windfield information...");
                 message.Refresh();
                 
+                // A windfield has been defined previously....
                 if (File.Exists(Path.Combine(ProjectName, "Computation","windfeld.txt")))
                 {
-                    bool allright=true;
+                    bool alright=true;
                     
-                    //get path of wind field files
+                    //get path of wind field files from windfeld.txt
                     bool missing = false;
                     using (StreamReader sr = new StreamReader (Path.Combine (ProjectName, @"Computation", "windfeld.txt")))
                     {
                         if (!sr.EndOfStream)
                         {
                             GRAMMwindfield = sr.ReadLine();
+                        }
+                        //Catch empty string
+                        if (string.IsNullOrEmpty(GRAMMwindfield))
+                        {
+                            GRAMMwindfield = string.Empty;
                         }
                         if (GRAMMwindfield.Length > 1 && GRAMMwindfield [GRAMMwindfield.Length - 1] != Path.DirectorySeparatorChar)
                         {
@@ -1428,7 +1433,7 @@ namespace Gral
                         }
                     }
                     
-                    if(missing) // write windfeld.txt if last Seperator charcter is missed
+                    if(missing) // write windfeld.txt if last Seperator character is missed
                     {
                         try
                         {
@@ -1448,10 +1453,10 @@ namespace Gral
                     
                     if (Directory.Exists(GRAMMwindfield) == false)
                     {
-                        allright = false;
+                        alright = false;
                     }
 
-                    if (allright == true)
+                    if (alright == true)
                     {
                         //search for flow files
                         FileInfo[] files_flow = null;
@@ -1463,46 +1468,101 @@ namespace Gral
                         catch {}
                         if (files_flow.Length == 0)
                         {
-                            allright = false;
+                            alright = false;
                             GRAMM_Locked = false; 					// unlock GRAMM project
                         }
                         else
                         {
                             GRAMM_Locked = true; 					// lock GRAMM project
                         }
-                        
                     }
-                    if (allright==false)
+                    //Directory not valid or no wind field files available
+                    if (alright == false)
                     {
                         try
                         {
-                            FolderBrowserDialog dialogGRAMM = new FolderBrowserDialog
+                            bool repeat = true;
+                            while (repeat)
                             {
-                                Description = "GRAMM wind field files not found - please enter path",
-                                SelectedPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar)
-                            };
-                            if (dialogGRAMM.ShowDialog() == DialogResult.OK)
-                            {
-                                GRAMMwindfield = dialogGRAMM.SelectedPath + Path.DirectorySeparatorChar;
-                                if (File.Exists(Path.Combine(GRAMMwindfield, "GRAMM.geb")) == false) // not the computation folder?
+                                repeat = false;
+                                using (FolderBrowserDialog dialogGRAMM = new FolderBrowserDialog
                                 {
-                                    GRAMMwindfield = Path.Combine(GRAMMwindfield, "Computation") + Path.DirectorySeparatorChar; // try path "Computation"
+                                    Description = "GRAMM wind field files not found - please enter path",
+                                    SelectedPath = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar)
+                                })
+                                {
+                                    if (dialogGRAMM.ShowDialog() == DialogResult.OK)
+                                    {
+                                        GRAMMwindfield = dialogGRAMM.SelectedPath + Path.DirectorySeparatorChar;
+                                        if (File.Exists(Path.Combine(GRAMMwindfield, "GRAMM.geb")) == false) // not the computation folder?
+                                        {
+                                            GRAMMwindfield = Path.Combine(GRAMMwindfield, "Computation") + Path.DirectorySeparatorChar; // try path "Computation"
+                                        }
+
+                                        if (File.Exists(Path.Combine(GRAMMwindfield, "GRAMM.geb")))
+                                        {
+                                            // check if Gramm.geb in original folder and in the new folder match
+                                            if (File.Exists(Path.Combine(ProjectName, "Computation", "GRAMM.geb")))
+                                            {
+                                                //Read GRAMMGeb from project path
+                                                if (OpenProject.ReadGrammGebFile() == true)
+                                                {
+                                                    Decimal vL = OpenProject.GRAMMvertlayers;
+                                                    double dW = OpenProject.West;
+                                                    double dE = OpenProject.East;
+                                                    double dS = OpenProject.South;
+                                                    double dN = OpenProject.North;
+
+                                                    //Read GRAMMGeb from new selected path
+                                                    string pathUp = Path.GetDirectoryName(Path.GetDirectoryName(GRAMMwindfield));
+                                                    if (string.IsNullOrEmpty(pathUp))
+                                                    {
+                                                        pathUp = GRAMMwindfield;
+                                                    }
+                                                    IO_ReadFiles OpenNewGrammIn = new IO_ReadFiles
+                                                    {
+                                                        ProjectName = pathUp
+                                                    };
+                                                    if (OpenNewGrammIn.ReadGrammGebFile() == true)
+                                                    {
+                                                        if (vL == OpenNewGrammIn.GRAMMvertlayers && Math.Abs(dW - OpenNewGrammIn.West) < 0.1 && Math.Abs(dE - OpenNewGrammIn.East) < 0.1 &&
+                                                            Math.Abs(dS - OpenNewGrammIn.South) < 0.1 && Math.Abs(dN - OpenNewGrammIn.North) < 0.1)
+                                                        {
+                                                            alright = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (!alright)
+                                        {
+                                            if (MessageBox.Show(this, "Selected GRAMM folder does not match the current project! \nTry another folder (OK) or set a new reference to the wind field in the Topography tab (Cancel)",
+                                                                    "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                                            {
+                                                repeat = true;
+                                            }
+                                        }
+                                    }
                                 }
-                                
+                            }
+
+                            // found a valid and matching GRAMM wind field 
+                            if (alright)
+                            {
                                 //write file information for GRAMM windfield
-                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, "Computation","windfeld.txt")))
+                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, "Computation", "windfeld.txt")))
                                 {
                                     GRAMMwrite.WriteLine(GRAMMwindfield);
-                                    #if __MonoCS__
+#if __MonoCS__
                                     GRAMMwrite.WriteLine(GRAMMwindfield);
-                                    #endif
+#endif
                                 }
                                 Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
-                                
+
                                 //write file information for landuse file
-                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Settings","Landuse.txt")))
+                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
                                 {
-                                    GRAMMwrite.WriteLine(Path.Combine(GRAMMwindfield,@"landuse.asc"));
+                                    GRAMMwrite.WriteLine(Path.Combine(GRAMMwindfield, @"landuse.asc"));
 #if __MonoCS__
                                     GRAMMwrite.WriteLine(Path.Combine(GRAMMwindfield,@"landuse.asc"));
 #endif
@@ -1512,7 +1572,7 @@ namespace Gral
                                 listBox6.Items.Clear();
                                 listBox6.Items.Add(Landusefile);
                                 //write file information for topography file only if ggeom.asc contains a path and no grid info
-                                using (StreamReader ggeomread = new StreamReader(Path.Combine(ProjectName, "Computation","ggeom.asc")))
+                                using (StreamReader ggeomread = new StreamReader(Path.Combine(ProjectName, "Computation", "ggeom.asc")))
                                 {
                                     try
                                     {
@@ -1524,7 +1584,7 @@ namespace Gral
                                     catch
                                     {
                                         //new path info is stored in the file ggeom.asc
-                                        using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, "Computation","ggeom.asc")))
+                                        using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, "Computation", "ggeom.asc")))
                                         {
                                             GRAMMwrite.WriteLine(Path.Combine(GRAMMwindfield, @"ggeom.asc"));
 #if __MonoCS__
@@ -1540,40 +1600,39 @@ namespace Gral
                                 listBox2.Items.Add(Topofile);
                                 //read and overwrite existing topography file in Settings
                                 string[] text = new string[3];
-                                using (StreamReader sr = new StreamReader(Path.Combine(ProjectName, @"Settings","Topography.txt")))
+                                using (StreamReader sr = new StreamReader(Path.Combine(ProjectName, @"Settings", "Topography.txt")))
                                 {
                                     text[0] = sr.ReadLine();
                                     text[1] = sr.ReadLine();
                                     text[2] = sr.ReadLine();
                                 }
                                 //write file information for topography file
-                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Settings","Topography.txt")))
+                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Topography.txt")))
                                 {
                                     GRAMMwrite.WriteLine(Path.Combine(GRAMMwindfield, @"ggeom.asc"));
                                     GRAMMwrite.WriteLine(text[1]);
                                     GRAMMwrite.WriteLine(text[2]);
                                 }
+
+                                //search for flow files
+                                FileInfo[] files_flow = null;
+                                try
+                                {
+                                    DirectoryInfo di = new DirectoryInfo(GRAMMwindfield);
+                                    files_flow = di.GetFiles("*.wnd");
+                                }
+                                catch { }
+                                if (files_flow.Length == 0)
+                                {
+                                    alright = false;
+                                    GRAMM_Locked = false;                   // unlock GRAMM project
+                                }
+                                else
+                                {
+                                    GRAMM_Locked = true;                    // lock GRAMM project
+                                }
                             }
-                            
-                            dialogGRAMM.Dispose();
-                            //search for flow files
-                            FileInfo[] files_flow = null;
-                            try
-                            {
-                                DirectoryInfo di = new DirectoryInfo(GRAMMwindfield);
-                                files_flow = di.GetFiles("*.wnd");
-                            }
-                            catch {}
-                            if (files_flow.Length == 0)
-                            {
-                                allright = false;
-                                GRAMM_Locked = false; 					// unlock GRAMM project
-                            }
-                            else
-                            {
-                                GRAMM_Locked = true; 					// lock GRAMM project
-                            }
-                            
+                        
                         }
                         catch
                         { }
