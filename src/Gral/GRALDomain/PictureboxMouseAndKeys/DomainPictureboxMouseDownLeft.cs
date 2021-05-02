@@ -194,12 +194,21 @@ namespace GralDomain
                         }
                         if (EditSourceShape)
                         {
-                            //set new area source - get x,y coordinates
-                            CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
-                            EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                            EditAS.CornerAreaCount += 1;
-                            EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount));
+                            double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            //Skip double click on same coor
+                            if (EditAS.CornerAreaCount > 1 && Math.Abs(x - EditAS.CornerAreaX[EditAS.CornerAreaCount - 1]) < 0.01 &&
+                                                              Math.Abs(y - EditAS.CornerAreaY[EditAS.CornerAreaCount - 1]) < 0.01)
+                            { }
+                            else
+                            {
+                                //set new area source - get x,y coordinates
+                                CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
+                                EditAS.CornerAreaX[EditAS.CornerAreaCount] = x;
+                                EditAS.CornerAreaY[EditAS.CornerAreaCount] = y;
+                                EditAS.CornerAreaCount += 1;
+                                EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount));
+                            }
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
@@ -240,12 +249,21 @@ namespace GralDomain
 
                             if (EditSourceShape)
                             {
-                                //set new building - get x,y coordinates
-                                CornerAreaSource[EditB.CornerBuilding] = new Point(e.X, e.Y);
-                                EditB.CornerBuildingX[EditB.CornerBuilding] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                                EditB.CornerBuildingY[EditB.CornerBuilding] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                                EditB.CornerBuilding++;
-                                EditB.SetNumberOfVerticesText(Convert.ToString(EditB.CornerBuilding));
+                                double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                                double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                                //Skip double click on same coor
+                                if (EditB.CornerBuilding > 1 && Math.Abs(x - EditB.CornerBuildingX[EditB.CornerBuilding - 1]) < 0.01 &&
+                                                                Math.Abs(y - EditB.CornerBuildingY[EditB.CornerBuilding - 1]) < 0.01)
+                                { }
+                                else
+                                {
+                                    //set new building - get x,y coordinates
+                                    CornerAreaSource[EditB.CornerBuilding] = new Point(e.X, e.Y);
+                                    EditB.CornerBuildingX[EditB.CornerBuilding] = x;
+                                    EditB.CornerBuildingY[EditB.CornerBuilding] = y;
+                                    EditB.CornerBuilding++;
+                                    EditB.SetNumberOfVerticesText(Convert.ToString(EditB.CornerBuilding));
+                                }
                                 // Reset Rubber-Line Drawing
                                 Cursor.Clip = Bounds;
                                 RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
@@ -284,12 +302,21 @@ namespace GralDomain
                         }
                         if (EditSourceShape)
                         {
-                            //set new area source - get x,y coordinates
-                            CornerAreaSource[EditVegetation.CornerVegetation] = new Point(e.X, e.Y);
-                            EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                            EditVegetation.CornerVegetation += 1;
-                            EditVegetation.SetNumberOfVerticesText(Convert.ToString(EditVegetation.CornerVegetation));
+                            double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            //Skip double click on same coor
+                            if (EditVegetation.CornerVegetation > 1 && Math.Abs(x - EditVegetation.CornerVegX[EditVegetation.CornerVegetation - 1]) < 0.01 &&
+                                                                       Math.Abs(y - EditVegetation.CornerVegY[EditVegetation.CornerVegetation - 1]) < 0.01)
+                            { }
+                            else
+                            {
+                                //set new area source - get x,y coordinates
+                                CornerAreaSource[EditVegetation.CornerVegetation] = new Point(e.X, e.Y);
+                                EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = x;
+                                EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = y;
+                                EditVegetation.CornerVegetation += 1;
+                                EditVegetation.SetNumberOfVerticesText(Convert.ToString(EditVegetation.CornerVegetation));
+                            }
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
@@ -327,17 +354,26 @@ namespace GralDomain
                         }
                         if (EditSourceShape)
                         {
-                            // set new line-source - get x,y coordinates
-                            CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
-                            EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-
-                            EditLS.CornerLineSource += 1;
-                            EditLS.SetNumberOfVerticesText(Convert.ToString(EditLS.CornerLineSource));
+                            double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            //Skip double click on same coor
+                            if (EditLS.CornerLineSource > 1 && Math.Abs(x - EditLS.CornerLineX[EditLS.CornerLineSource - 1]) < 0.01 &&
+                                                               Math.Abs(y - EditLS.CornerLineY[EditLS.CornerLineSource - 1]) < 0.01)
+                            {}
+                            else
+                            { 
+                                // set new line-source edge point - get x,y coordinates
+                                CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
+                                EditLS.CornerLineX[EditLS.CornerLineSource] = x;
+                                EditLS.CornerLineY[EditLS.CornerLineSource] = y;
+                                EditLS.CornerLineSource += 1;
+                                EditLS.SetNumberOfVerticesText(Convert.ToString(EditLS.CornerLineSource));
+                            }
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
+
                         }
                         else
                         {
@@ -373,18 +409,27 @@ namespace GralDomain
                             }
                             if (EditSourceShape)
                             {
-                                // set new wall - get x,y coordinates
-                                CornerAreaSource[EditWall.CornerWallCount] = new Point(e.X, e.Y);
-                                EditWall.CornerWallX[EditWall.CornerWallCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                                EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                                EditWall.CornerWallZ[EditWall.CornerWallCount] = EditWall.GetNumericUpDownHeightValue();
-                                if (EditWall.CheckboxAbsHeightChecked()) // absolute height
+                                double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                                double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                                //Skip double click on same coor
+                                if (EditWall.CornerWallCount > 1 && Math.Abs(x - EditWall.CornerWallX[EditWall.CornerWallCount - 1]) < 0.01 &&
+                                                                    Math.Abs(y - EditWall.CornerWallY[EditWall.CornerWallCount - 1]) < 0.01)
+                                { }
+                                else
                                 {
-                                    EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
-                                }
+                                    // set new wall - get x,y coordinates
+                                    CornerAreaSource[EditWall.CornerWallCount] = new Point(e.X, e.Y);
+                                    EditWall.CornerWallX[EditWall.CornerWallCount] = x;
+                                    EditWall.CornerWallY[EditWall.CornerWallCount] = y;
+                                    EditWall.CornerWallZ[EditWall.CornerWallCount] = EditWall.GetNumericUpDownHeightValue();
+                                    if (EditWall.CheckboxAbsHeightChecked()) // absolute height
+                                    {
+                                        EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
+                                    }
 
-                                EditWall.CornerWallCount += 1;
-                                EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount));
+                                    EditWall.CornerWallCount += 1;
+                                    EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount));
+                                }
                                 // Reset Rubber-Line Drawing
                                 Cursor.Clip = Bounds;
                                 RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
