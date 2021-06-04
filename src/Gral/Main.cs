@@ -1313,7 +1313,18 @@ namespace Gral
         //load and create the GRAMM topography
         private void Button19_Click(object sender, EventArgs e)
         {
-            GRAMMLoadCreateTopography(sender, e);
+            //calculate top height for the GRAMM mesh
+            double top = Convert.ToDouble(numericUpDown17.Value);
+            for (int i = 2; i <= Convert.ToInt32(numericUpDown16.Value) + 1; i++)
+            {
+                top += Convert.ToDouble(numericUpDown17.Value) * Math.Pow(Convert.ToDouble(numericUpDown19.Value), i - 2);
+            }
+            if (top < 10000 || MessageBox.Show("A maximum layer height above 10000 m can lead to unstable GRAMM calculations due to low air pressure.\n" +
+                "It is recommended to reduce the number of vertical layers or the vertical stretching factor.\nWould you like to continue?", "Create GRAMM Topography", 
+                MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                GRAMMLoadCreateTopography(sender, e);
+            }    
         }
         //load and create the GRAMM landuse file
         private void Button20_Click(object sender, EventArgs e)
@@ -2934,7 +2945,7 @@ namespace Gral
         /// </summary>
         void NumericUpDown32ValueChanged(object sender, EventArgs e)
         {
-            if (ProjectName.Length >0) // if a project exists
+            if (ProjectName.Length > 0) // if a project exists
             {
                 //user defines maximum number of processors to be used in the simulations
                 string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");

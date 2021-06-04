@@ -149,12 +149,12 @@ namespace Gral
                 Cursor = Cursors.WaitCursor;
 
                 //user can define the number of grid cells at the boundaries used to smooth the topography
-                int n = (int)numericUpDown18.Value * 3; // smooth = max 1/3 of cell count!
+                int n = (int)numericUpDown18.Value * 5; // smooth = max 1/5 of cell count!
                 n = (int)Math.Min((Math.Abs(Convert.ToDouble(textBox12.Text) - Convert.ToDouble(textBox13.Text)) / n), Math.Abs(Convert.ToDouble(textBox14.Text) - Convert.ToDouble(textBox15.Text)) / n);
                 
                 // n= minimal number of cells in x/y direction allowed for smoothing
                 CellNrTopographySmooth = Math.Min(CellNrTopographySmooth, n);
-                if (InputBox1("Define the number of cells at boundaries for smoothing topography", "Nr. of cells:", 0, n, ref CellNrTopographySmooth) == DialogResult.Cancel)
+                if (InputBox1("Define the number of cells at boundaries for smoothing topography", "Nr. of cells (default 0): ", 0, n, ref CellNrTopographySmooth) == DialogResult.Cancel)
                 {
                     Cursor = Cursors.Arrow;
                     return;

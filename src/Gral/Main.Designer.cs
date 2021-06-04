@@ -4481,7 +4481,7 @@
             this.numericUpDown33.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown33.Location = new System.Drawing.Point(121, 215);
             this.numericUpDown33.Maximum = new decimal(new int[] {
-            10,
+            64,
             0,
             0,
             0});
