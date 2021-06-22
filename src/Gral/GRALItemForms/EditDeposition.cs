@@ -49,8 +49,7 @@ namespace GralItemForms
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
-			InitializeComponent();
-			
+			InitializeComponent();	
 		}
 		
 		void Button1Click(object sender, EventArgs e)
@@ -173,11 +172,14 @@ namespace GralItemForms
 			{
 				checkBox2.Checked = true;
 				checkBox3.Checked = true;
-			}
-			
+			}			
 		}
 		
-		void init_pollutant(int type)
+		/// <summary>
+        /// Init dialog for the 1st time
+        /// </summary>
+        /// <param name="type">0=not initialized deposition, 1=initialized deposition</param>
+        void init_pollutant(int type)
 		{
 			if (type == 0 && Main.Project_Locked == false) // first intialization
 			{
@@ -205,7 +207,6 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.003;
                     }
-
                     _dep.Conc    = 1;
 					numericUpDown5.Enabled = false;
 					numericUpDown7.Enabled = false;
@@ -216,7 +217,6 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.01;
                     }
-
                     _dep.Conc    = 1;
 					numericUpDown5.Enabled = false;
 					numericUpDown7.Enabled = false;
@@ -230,9 +230,9 @@ namespace GralItemForms
 						_dep.V_Dep3 = 0.05;
 						_dep.Frac_2_5 = 100;
 						_dep.Density = 1800;
-						_dep.Conc    = 1;
 					}
-					numericUpDown1.Enabled = true;
+                    _dep.Conc = 1;
+                    numericUpDown1.Enabled = true;
 					numericUpDown2.Enabled = true;
 					numericUpDown3.Enabled = true;
 					listBox1.Enabled = true;
@@ -257,7 +257,6 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.01;
                     }
-
                     _dep.Conc    = 1;
 					numericUpDown5.Enabled = false;
 					numericUpDown7.Enabled = false;
@@ -276,12 +275,10 @@ namespace GralItemForms
                         {
                             _dep.Density = 11430;
                         }
-
                         if (_pollutant == 17)
                         {
                             _dep.Density = 8900;
                         }
-
                         _dep.Conc    = 2;
 					}
 					numericUpDown1.Enabled = true;
@@ -294,7 +291,6 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.005;
                     }
-
                     _dep.Conc    = 1;
 					numericUpDown5.Enabled = true;
 					numericUpDown7.Enabled = false;
@@ -307,7 +303,12 @@ namespace GralItemForms
 			
 		}
 		
-		void NumericUpDown2ValueChanged(object sender, EventArgs e)
+		/// <summary>
+        /// Change percentage of Pm2.5 or PM10
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void NumericUpDown2ValueChanged(object sender, EventArgs e)
 		{
 			if (numericUpDown3.Value < numericUpDown2.Value)
             {
@@ -331,23 +332,25 @@ namespace GralItemForms
                 comma = Math.Max(0, Convert.ToInt32(5 - (Math.Log10(_emission) + 1)));
             }
 
+            double er = 0;
             if (_dep.Conc == 1) // PM 2.5
 			{
 				float em100 = (float) _emission * 100 / p1; // 100 % of emission
 				label12.Text = Convert.ToString(Math.Round(em100 * p1 / 100, comma)); // PM 2,5
 				label13.Text = Convert.ToString(Math.Round(em100 * (p2 - p1) / 100, comma));
 				label14.Text = Convert.ToString(Math.Round(em100 * (p3 - p2) / 100, comma));
-			}
+                er = Math.Round((em100 * p1 + em100 * (p2 - p1) + em100 * (p3 - p2)) / 100, 3);
+            }
 			else if (_dep.Conc == 2) // PM 10
 			{
 				float em100 = (float) _emission * 100 / p2; // 100 % of emission
 				label12.Text = Convert.ToString(Math.Round(em100 * p1 / 100, comma)); // PM 2,5
 				label13.Text = Convert.ToString(Math.Round(em100 * p2 / 100 - em100 * p1 / 100, comma));
 				label14.Text = Convert.ToString(Math.Round(em100 * (p3 - p2) / 100, comma));
-			}
-			
+                er = Math.Round((em100 * p1 + em100 * p2 + em100 * (p3 - p2)) / 100, 3);
+            }
+            label5.Text = er.ToString() + " kg/h";
 		}
-		
 		
 		void CheckBox3CheckedChanged(object sender, EventArgs e)
 		{
@@ -428,8 +431,32 @@ namespace GralItemForms
                 }
 			}
 		}
-		
-	}
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown5_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 	
 	
 }
