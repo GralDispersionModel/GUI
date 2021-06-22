@@ -46,6 +46,7 @@ namespace GralItemForms
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -67,10 +68,10 @@ namespace GralItemForms
             this.panel3 = new System.Windows.Forms.Panel();
             this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
             this.button3 = new System.Windows.Forms.Button();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -80,7 +81,6 @@ namespace GralItemForms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -146,6 +146,21 @@ namespace GralItemForms
             this.label6.TabIndex = 3;
             this.label6.Text = "Percentage [%]";
             // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.DecimalPlaces = 2;
+            this.numericUpDown5.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDown5.Location = new System.Drawing.Point(35, 19);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(64, 20);
+            this.numericUpDown5.TabIndex = 11;
+            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown5, "The density is used for the calculation of the sedimentation velocity");
+            // 
             // label8
             // 
             this.label8.Location = new System.Drawing.Point(104, 21);
@@ -153,7 +168,6 @@ namespace GralItemForms
             this.label8.Size = new System.Drawing.Size(44, 19);
             this.label8.TabIndex = 3;
             this.label8.Text = "g/cm³";
-            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // label9
             // 
@@ -402,22 +416,6 @@ namespace GralItemForms
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3Click);
             // 
-            // numericUpDown5
-            // 
-            this.numericUpDown5.DecimalPlaces = 2;
-            this.numericUpDown5.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDown5.Location = new System.Drawing.Point(35, 19);
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(64, 20);
-            this.numericUpDown5.TabIndex = 11;
-            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown5, "The density is used for the calculation of the sedimentation velocity");
-            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
-            // 
             // label5
             // 
             this.label5.Location = new System.Drawing.Point(6, 21);
@@ -427,7 +425,6 @@ namespace GralItemForms
             this.label5.TabIndex = 14;
             this.label5.Text = "Total emission";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // groupBox1
             // 
@@ -478,6 +475,7 @@ namespace GralItemForms
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Edit_DepositionFormClosed);
             this.Load += new System.EventHandler(this.Edit_DepositionLoad);
             this.VisibleChanged += new System.EventHandler(this.Edit_DepositionVisibleChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
@@ -487,7 +485,6 @@ namespace GralItemForms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
