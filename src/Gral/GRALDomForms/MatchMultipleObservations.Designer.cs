@@ -131,6 +131,7 @@
             // concatenate
             // 
             this.concatenate.DecimalPlaces = 1;
+            this.concatenate.ForeColor = System.Drawing.Color.Black;
             this.concatenate.Increment = new decimal(new int[] {
             1,
             0,
@@ -147,7 +148,6 @@
             this.concatenate.TabIndex = 4;
             this.concatenate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.concatenate, "Set limit for concatenated situations; 0 = no concatenation");
-            this.concatenate.ForeColor = System.Drawing.Color.Black;
             // 
             // button1
             // 
@@ -207,6 +207,7 @@
             // 
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.ForeColor = System.Drawing.Color.Black;
             this.checkBox2.Location = new System.Drawing.Point(108, 38);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(157, 24);
@@ -214,12 +215,12 @@
             this.checkBox2.Text = "Use local stability classes";
             this.toolTip1.SetToolTip(this.checkBox2, "Use the GRAMM computed local stability classes");
             this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox1
             // 
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.ForeColor = System.Drawing.Color.Black;
             this.checkBox1.Location = new System.Drawing.Point(108, 15);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(157, 24);
@@ -227,7 +228,6 @@
             this.checkBox1.Text = "Remove outliers";
             this.toolTip1.SetToolTip(this.checkBox1, "Remove outliers ");
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.ForeColor = System.Drawing.Color.Black;
             // 
             // radioButton2
             // 
@@ -242,6 +242,7 @@
             // 
             // radioButton1
             // 
+            this.radioButton1.ForeColor = System.Drawing.Color.Black;
             this.radioButton1.Location = new System.Drawing.Point(6, 15);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(104, 24);
@@ -250,10 +251,10 @@
             this.radioButton1.Text = "Vectorial";
             this.toolTip1.SetToolTip(this.radioButton1, "Use the vectorial method");
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox4
             // 
+            this.checkBox4.ForeColor = System.Drawing.Color.Black;
             this.checkBox4.Location = new System.Drawing.Point(276, 15);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(151, 24);
@@ -261,7 +262,6 @@
             this.checkBox4.Text = "3 x 3 average vector";
             this.toolTip1.SetToolTip(this.checkBox4, "Use an average wind vector of 3x3 cells");
             this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.ForeColor = System.Drawing.Color.Black;
             // 
             // button8
             // 
@@ -273,8 +273,7 @@
             this.button8.Size = new System.Drawing.Size(80, 26);
             this.button8.TabIndex = 14;
             this.button8.Text = "A&uto start";
-            this.toolTip1.SetToolTip(this.button8, "Start the automatic tuning \r\nIf all factors are 1: all tuning steps\r\nOtherwise: i" +
-        "teration step only");
+            this.toolTip1.SetToolTip(this.button8, "Start the automatic tuning \r\n -auto optimization");
             this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
@@ -293,6 +292,7 @@
             // 
             // numericUpDown1
             // 
+            this.numericUpDown1.ForeColor = System.Drawing.Color.Black;
             this.numericUpDown1.Location = new System.Drawing.Point(117, 78);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             9,
@@ -309,7 +309,6 @@
             0,
             0,
             0});
-            this.numericUpDown1.ForeColor = System.Drawing.Color.Black;
             // 
             // button9
             // 
@@ -321,12 +320,13 @@
             this.button9.Size = new System.Drawing.Size(100, 26);
             this.button9.TabIndex = 4;
             this.button9.Text = "&Match Windrose";
-            this.toolTip1.SetToolTip(this.button9, "Preview for the matched windrose");
+            this.toolTip1.SetToolTip(this.button9, "Preview for the matched windrose of the selectet obs. site");
             this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button3_Click);
             // 
             // numericUpDown2
             // 
+            this.numericUpDown2.ForeColor = System.Drawing.Color.Black;
             this.numericUpDown2.Location = new System.Drawing.Point(381, 63);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             90,
@@ -338,13 +338,13 @@
             this.numericUpDown2.TabIndex = 21;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown2, "Reduce the number of situations\r\n0 = no reduction\r\n90 = max. reduction");
-            this.numericUpDown2.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
             this.checkBox5.Checked = true;
             this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox5.ForeColor = System.Drawing.Color.Black;
             this.checkBox5.Location = new System.Drawing.Point(12, 20);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(33, 17);
@@ -352,11 +352,11 @@
             this.checkBox5.Text = "V";
             this.toolTip1.SetToolTip(this.checkBox5, "Vectorial tuning");
             this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
+            this.checkBox6.ForeColor = System.Drawing.Color.Black;
             this.checkBox6.Location = new System.Drawing.Point(12, 46);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(33, 17);
@@ -364,7 +364,6 @@
             this.checkBox6.Text = "C";
             this.toolTip1.SetToolTip(this.checkBox6, "Components tuning");
             this.checkBox6.UseVisualStyleBackColor = true;
-            this.checkBox6.ForeColor = System.Drawing.Color.Black;
             // 
             // checkBox7
             // 
@@ -373,6 +372,7 @@
             this.checkBox7.Checked = true;
             this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox7.Enabled = false;
+            this.checkBox7.ForeColor = System.Drawing.Color.Black;
             this.checkBox7.Location = new System.Drawing.Point(12, 70);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(29, 17);
@@ -380,7 +380,6 @@
             this.checkBox7.Text = "I";
             this.toolTip1.SetToolTip(this.checkBox7, "Iterative tuning");
             this.checkBox7.UseVisualStyleBackColor = true;
-            this.checkBox7.ForeColor = System.Drawing.Color.Black;
             // 
             // dataGridView1
             // 
@@ -404,12 +403,12 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(412, 16);
             this.label1.TabIndex = 8;
             this.label1.Text = "The first meteo station defines the stability classes and the time span";
-            this.label1.ForeColor = System.Drawing.Color.Black;
             // 
             // groupbox1
             // 
@@ -426,49 +425,49 @@
             this.groupbox1.Controls.Add(this.checkBox1);
             this.groupbox1.Controls.Add(this.radioButton2);
             this.groupbox1.Controls.Add(this.radioButton1);
+            this.groupbox1.ForeColor = System.Drawing.Color.Black;
             this.groupbox1.Location = new System.Drawing.Point(12, 315);
             this.groupbox1.Name = "groupbox1";
             this.groupbox1.Size = new System.Drawing.Size(443, 112);
             this.groupbox1.TabIndex = 9;
             this.groupbox1.TabStop = false;
             this.groupbox1.Text = "Optimization settings";
-            this.groupbox1.ForeColor = System.Drawing.Color.Black;
             // 
             // label6
             // 
+            this.label6.ForeColor = System.Drawing.Color.Black;
             this.label6.Location = new System.Drawing.Point(273, 88);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(154, 17);
             this.label6.TabIndex = 13;
             this.label6.Text = "Used situations:";
-            this.label6.ForeColor = System.Drawing.Color.Black;
             // 
             // label7
             // 
+            this.label7.ForeColor = System.Drawing.Color.Black;
             this.label7.Location = new System.Drawing.Point(273, 66);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(102, 20);
             this.label7.TabIndex = 6;
             this.label7.Text = "Reduce situations";
-            this.label7.ForeColor = System.Drawing.Color.Black;
             // 
             // label2
             // 
+            this.label2.ForeColor = System.Drawing.Color.Black;
             this.label2.Location = new System.Drawing.Point(177, 70);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(37, 20);
             this.label2.TabIndex = 6;
             this.label2.Text = "‰";
-            this.label2.ForeColor = System.Drawing.Color.Black;
             // 
             // label10
             // 
+            this.label10.ForeColor = System.Drawing.Color.Black;
             this.label10.Location = new System.Drawing.Point(6, 66);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(96, 23);
             this.label10.TabIndex = 5;
             this.label10.Text = "Concatenation limit";
-            this.label10.ForeColor = System.Drawing.Color.Black;
             // 
             // groupBox2
             // 
@@ -484,43 +483,43 @@
             this.groupBox2.Controls.Add(this.hScrollBar1);
             this.groupBox2.Controls.Add(this.button8);
             this.groupBox2.Enabled = false;
+            this.groupBox2.ForeColor = System.Drawing.Color.Black;
             this.groupBox2.Location = new System.Drawing.Point(461, 315);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(299, 112);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Automatic Tuning";
-            this.groupBox2.ForeColor = System.Drawing.Color.Black;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.Black;
             this.label5.Location = new System.Drawing.Point(61, 80);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(50, 13);
             this.label5.TabIndex = 6;
             this.label5.Text = "Iterations";
-            this.label5.ForeColor = System.Drawing.Color.Black;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(241, 44);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 1;
             this.label4.Text = "Stability";
-            this.label4.ForeColor = System.Drawing.Color.Black;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.Black;
             this.label3.Location = new System.Drawing.Point(59, 44);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(38, 13);
             this.label3.TabIndex = 1;
             this.label3.Text = "Vector";
-            this.label3.ForeColor = System.Drawing.Color.Black;
             // 
             // MatchMultipleObservations
             // 
