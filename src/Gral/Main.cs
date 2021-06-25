@@ -2457,7 +2457,7 @@ namespace Gral
             button9.Enabled = !locked;
             button10.Enabled = !locked;
             //button12.Enabled = !locked;
-            button11.Enabled = !locked; // set *.gff File path
+            //button11.Enabled = !locked; // set *.gff File path
             button13.Enabled = !locked;
             button15.Enabled = !locked;
             button16.Enabled = !locked;
@@ -3376,28 +3376,35 @@ namespace Gral
         /// <param name="e"></param>
         void Button11Click(object sender, EventArgs e)
         {
-            string gff_filepath = St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation"));
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog
-                   {
-                       Description = "Select the path for gff files",
-                       SelectedPath = gff_filepath
-                   })
+            if (Project_Locked)
             {
-                dialog.ShowDialog();
-                gff_filepath = dialog.SelectedPath;
-                if (Directory.Exists(gff_filepath))
+                MessageBox.Show(this, St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation")), "GRAL GUI *.gff File path", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                string gff_filepath = St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation"));
+                using (FolderBrowserDialog dialog = new FolderBrowserDialog
                 {
-                    try
+                    Description = "Select the path for gff files",
+                    SelectedPath = gff_filepath
+                })
+                {
+                    dialog.ShowDialog();
+                    gff_filepath = dialog.SelectedPath;
+                    if (Directory.Exists(gff_filepath))
                     {
-                        using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, "Computation", "GFF_FilePath.txt")))
+                        try
                         {
-                            writer.WriteLine(gff_filepath);
+                            using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, "Computation", "GFF_FilePath.txt")))
+                            {
+                                writer.WriteLine(gff_filepath);
 #if __MonoCS__
-                            writer.WriteLine(gff_filepath);
+                                writer.WriteLine(gff_filepath);
 #endif
+                            }
                         }
+                        catch { }
                     }
-                    catch{}
                 }
             }
         }
