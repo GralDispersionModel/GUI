@@ -315,12 +315,15 @@ namespace Gral
                                             {
                                                 _sect -= 360;
                                             }
-                                            sektor = (int)(_sect / SectAngle);
-                                            if (sektor >= 0 && sektor < WindSectCount)
+                                            //sektor = (int)(_sect / SectAngle);
+                                            //if (sektor >= 0 && sektor < WindSectCount)
+                                            sektor = (int)(Math.Round(_sect / SectAngle, 0));
+                                            if (sektor > WindSectCount - 1)
                                             {
-                                                count++;
-                                                sectFrequency[sektor, wklass]++;
+                                                sektor = 0;
                                             }
+                                            count++;
+                                            sectFrequency[sektor, wklass]++;
                                         }
                                     }
                                     else
