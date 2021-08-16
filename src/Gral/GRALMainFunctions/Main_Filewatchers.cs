@@ -119,13 +119,14 @@ namespace Gral
                     //compute completed dispersion situations in %
                     if (transient == 1)
                     {
+                        progressBar4.Maximum = 100;
                         for (int i = 0; i < trackbar; i++)
                         {
                             frequency += DispSituationfrequ[i];
                         }
-                        if (Convert.ToInt32(frequency) < progressBar4.Maximum)
+                        if (Convert.ToInt32(frequency / 10) < progressBar4.Maximum)
                         {
-                            UpdateProgressBar4(trackbar);
+                            UpdateProgressBar4(Convert.ToInt32(frequency / 10));
                         }
                     }
                     else

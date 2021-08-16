@@ -97,7 +97,7 @@ namespace Gral
 				{
 					if (ReadFile.MeteoFrequ > 0)
                     {
-                        progressBar4.Maximum = Convert.ToInt32(ReadFile.MeteoFrequ);
+                        progressBar4.Maximum = 100;
                     }
 
                     DispSituationfrequ = ReadFile.DispsituationFrequ;

@@ -358,7 +358,7 @@ namespace Gral
 
                     if (transient == 1)
                     {
-                        progressBar4.Maximum = Convert.ToInt32(frequency);
+                        progressBar4.Maximum = 100;
                         frequency = 0;
                         for (int i = 0; i < trackbar; i++)
                         {
