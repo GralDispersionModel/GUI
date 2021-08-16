@@ -392,10 +392,10 @@ namespace GralDomain
 
             CancellationTokenReset();
             
-            if (MessageInfoForm != null)
-            {
-                MessageInfoForm.Close();
-            }
+            //if (MessageInfoForm != null)
+            //{
+            //   MessageInfoForm.Close();
+            //}
         }
 
         /// <summary>
@@ -558,9 +558,11 @@ namespace GralDomain
                             MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
 
-                        wait1.Show();
-                        wait1.ProgressbarUpdate(this, MatchData.PGT.Count);
-
+                        if (wait1 != null)
+                        {
+                            wait1.Show();
+                            wait1.ProgressbarUpdate(this, MatchData.PGT.Count);
+                        }
                         int i = 0;
                         foreach (GralData.PGTAll a_Line in MatchData.PGT)
                         {
@@ -630,7 +632,10 @@ namespace GralDomain
                         MessageInfoForm.Show();
                     }
 
-                    wait1.Hide();
+                    if (wait1 != null)
+                    {
+                        wait1.Hide();
+                    }
 
                     Gral.Main.MeteoTimeSeries.Clear();
                     Gral.Main.MeteoTimeSeries.TrimExcess();
@@ -721,7 +726,11 @@ namespace GralDomain
                         MainForm.TBox[0].Text = "0";
                         if (MMOData.WsClasses > 1 && MMOData.WsClasses < 11)
                         {
-                            MainForm.TBox[MMOData.WsClasses - 1].Text = MainForm.NumUpDown[MMOData.WsClasses - 2].Text;
+                            try
+                            {
+                                MainForm.TBox[MMOData.WsClasses - 1].Text = MainForm.NumUpDown[MMOData.WsClasses - 2].Text;
+                            }
+                            catch { }
                         };
                     }
                     catch { }
@@ -823,8 +832,11 @@ namespace GralDomain
                     //MessageBox.Show(this, "Process finished.");
 
                     Cursor = Cursors.Default;
-                    wait1.Close(); // Kuntner now wait and wait 1 are closed
-                   
+                    if (wait1 != null)
+                    {
+                        wait1.Close(); // close info box
+                    }
+
                     string error = "";
                     if (MessageInfoForm != null)
                     {
@@ -832,13 +844,11 @@ namespace GralDomain
                         {
                             error += MessageInfoForm.listBox1.Items[i].ToString() + Environment.NewLine;
                         }
-                        MessageInfoForm.Close();
+                        //MessageInfoForm.Close();
                     }
                     WriteGrammLog(4, error, "", ""); // write log-file
 
-
-
-                    button43.Visible = false; // match is completed -> hide button
+                    button43.Visible = false; // match is completed -> hide match button
 
                     // release memory held by MMO.
                     try
@@ -869,9 +879,7 @@ namespace GralDomain
 
                     if (MessageInfoForm != null)
                     {
-                        MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
                         MessageInfoForm.Close();
-                        MessageInfoForm = null;
                     }
                    
                     if (wait1 != null)
@@ -898,7 +906,12 @@ namespace GralDomain
 
         private void MessageFormClosed(object sender, EventArgs e)
         {
-            MessageInfoForm = null;
+            if (MessageInfoForm != null)
+            {
+                MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
+                MessageInfoForm.Dispose();
+                MessageInfoForm = null;
+            }
         }
     }
 }

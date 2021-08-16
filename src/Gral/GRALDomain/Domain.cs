@@ -2864,10 +2864,10 @@ namespace GralDomain
                 pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, Top + 400);
                 pie.Show();
                 Cursor = Cursors.Default;
-                MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
-                MessageInfoForm.Close();
-                MessageInfoForm.Dispose();
-                MessageInfoForm = null;
+                if (MessageInfoForm != null)
+                {
+                    MessageInfoForm.Close();
+                }
                 files_conc = null;
             }
             dialog.Dispose();
