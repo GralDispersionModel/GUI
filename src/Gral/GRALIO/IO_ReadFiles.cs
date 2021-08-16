@@ -602,7 +602,7 @@ namespace GralIO
                                     temp = meteopgt.ReadLine();
                                     if (!string.IsNullOrEmpty(temp))
                                     {
-                                        text1.Add(meteopgt.ReadLine());
+                                        text1.Add(temp);
                                         text = text1[n + 2].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                         _temp = Convert.ToDouble(text[3].Replace(".", decsep));
                                         _meteofrequ += _temp;
