@@ -346,6 +346,8 @@ namespace Gral
 
                         GralMainForms.Windrose windrose = new GralMainForms.Windrose
                         {
+                            StartPosition = FormStartPosition.Manual,
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             SectFrequ = sectFrequency,
                             MetFileName = Path.GetFileName(MetfileName),
                             WindData = wind,
@@ -497,7 +499,7 @@ namespace Gral
                         GralMainForms.Windrose windrose = new GralMainForms.Windrose()
                         {
                             StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             SectFrequ = sectFrequency,
                             MetFileName = Path.GetFileName(MetfileName),
                             WindData = wind,
@@ -607,7 +609,7 @@ namespace Gral
                         GralMainForms.Windclasses wclass = new GralMainForms.Windclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             WClassFrequency = wclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind,
@@ -704,7 +706,7 @@ namespace Gral
                             GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
                             {
                                 StartPosition = FormStartPosition.Manual,
-                                Location = new System.Drawing.Point(this.Left, this.Top),
+                                Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                                 WClassFrequency = wclassFrequency,
                                 MetFile = Path.GetFileName(MetfileName),
                                 MaxWind = maxwind,
@@ -789,7 +791,7 @@ namespace Gral
                         GralMainForms.Stabilityclasses sclass = new GralMainForms.Stabilityclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             ScClassFrequency = sclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind,
@@ -849,7 +851,7 @@ namespace Gral
             GralMainForms.DiurnalWindspeed mwind = new GralMainForms.DiurnalWindspeed()
             {
                 StartPosition = FormStartPosition.Manual,
-                Location = new System.Drawing.Point(this.Left, this.Top),
+                Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                 meanwind = meanwind,
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
@@ -910,7 +912,7 @@ namespace Gral
             GralMainForms.DiurnalWinddirections mwinddir = new GralMainForms.DiurnalWinddirections()
             {
                 StartPosition = FormStartPosition.Manual,
-                Location = new System.Drawing.Point(this.Left, this.Top),
+                Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                 meanwinddir = meanwinddir,
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
