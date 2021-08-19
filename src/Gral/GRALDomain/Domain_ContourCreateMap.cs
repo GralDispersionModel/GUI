@@ -148,6 +148,10 @@ namespace GralDomain
                     {
                         SetSubDomainStyle(_drobj);
                     }
+                    else if (Path.GetFileName(file).Contains("RoughnessLengthsGral.txt")) // special settings for RoughnessLengths files
+                    {
+                        SetRoughnessLenghtStyle(_drobj);
+                    }
                     else
                     {
                         //compute values for 9 contours
@@ -288,6 +292,34 @@ namespace GralDomain
             _drobj.Filter = false; // no filter
             _drobj.LineWidth = 0; // no Lines
             _drobj.Transparancy = 160;
+        }
+        /// <summary>
+        /// Set drawing style for Roughness Lenghts files
+        /// </summary>
+        /// <param name="_drobj">Drawing Object</param>
+        private static void SetRoughnessLenghtStyle(DrawingObjects _drobj)
+        {
+            //compute values for 8 contours
+            for (int i = 0; i < 8; i++)
+            {
+                _drobj.ItemValues.Add(0);
+                _drobj.FillColors.Add(Color.DarkGray);
+                _drobj.LineColors.Add(Color.DarkGray);
+            }
+            // initial scale of contour map
+            for (int i = 0; i < 8; i++)
+            {
+                _drobj.ItemValues[i] = (i + 1) * 0.2;
+                Color c = Color.FromArgb(255 - i * 32, 255 - i * 32, 255 - i * 32);
+                _drobj.FillColors[i] = c;
+                _drobj.LineColors[i] = c;
+            }
+            _drobj.LegendTitle = "GRAL Roughness Lenghts";
+            _drobj.LegendUnit = "m";
+            _drobj.Filter = false; // no filter
+            _drobj.LineWidth = 0; // no Lines
+            _drobj.Transparancy = 160;
+            _drobj.FillYesNo = true;
         }
         /// <summary>
         /// Set drawing style for GRAMM Steady State Files

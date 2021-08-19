@@ -3003,10 +3003,10 @@ namespace GralDomain
                                     _drobj.LegendTitle = "Deposition";
                                     _drobj.LegendUnit = Gral.Main.mg_p_m2;
                                 }
-                                else if (temp.Contains("ROUGHNESS.TXT"))
+                                else if (temp.Contains("ROUGHNESS.TXT") || temp.Contains("ROUGHNESSLENGTHSGRAL.TXT"))
                                 {
                                     _drobj.LegendTitle = "Roughness";
-                                    _drobj.LegendUnit = string.Empty;
+                                    _drobj.LegendUnit = "m";
                                 }
                                 else if (temp.Contains("GGEOM.TXT"))
                                 {
