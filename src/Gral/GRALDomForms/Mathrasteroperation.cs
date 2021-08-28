@@ -175,11 +175,11 @@ namespace GralDomForms
                     RasterD = RasterD,
                     RasterE = RasterG,
                     RasterF = RasterF,
-                    Decsep = decsep,
-                    TextBox1 = textBox1.Text,
+                    DecSep = decsep,
+                    MathRasterEquation = textBox1.Text,
                     UserText = "The calculation may take some time.",
                     Caption = "Performing raster operations",
-                    Rechenart = 50,
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.MathRasterOperations,
                     Unit = textBox2.Text.Trim()
                 };
 

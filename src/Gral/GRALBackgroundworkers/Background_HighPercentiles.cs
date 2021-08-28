@@ -47,10 +47,10 @@ namespace GralBackgroundworkers
             double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
-            string decsep = mydata.Decsep;
+            string decsep = mydata.DecSep;
             string[] sg_numbers = new string[maxsource];
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
-            bool no_classification = mydata.Checkbox19;
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
+            bool no_classification = mydata.MeteoNotClassified;
             
             //get variation for source group
             int itm=0;
@@ -61,7 +61,7 @@ namespace GralBackgroundworkers
                     sg_numbers[itm] = GetSgNumbers(source_group_name);
                     newpath = Path.Combine("Computation", "emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
 
-                    using (StreamReader myreader = new StreamReader (Path.Combine (mydata.Projectname, newpath)))
+                    using (StreamReader myreader = new StreamReader (Path.Combine (mydata.ProjectName, newpath)))
                     {
                         for (int j = 0; j < 24; j++) 
                         {
@@ -78,7 +78,7 @@ namespace GralBackgroundworkers
             }
             catch(Exception ex)
             {
-                BackgroundThreadMessageBox (ex.Message);
+                BackgroundThreadMessageBox ("Reading emissionsxxx.dat " + ex.Message);
                 return;
             }
 
@@ -100,11 +100,10 @@ namespace GralBackgroundworkers
             //int indexi = 0;
             //int indexj = 0;
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
-            double[] fmod = new double[maxsource];
-            
+           
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
-            ReadMeteopgtAll(Path.Combine(mydata.Projectname, "Computation", "meteopgt.all"), ref data_meteopgt);
+            ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
             if (data_meteopgt.Count == 0) // no data available
             { 
                 BackgroundThreadMessageBox ("Error reading meteopgt.all");
@@ -121,7 +120,7 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    BackgroundThreadMessageBox ("Can´t read meteopgt.all");
+                    BackgroundThreadMessageBox ("Error when reading meteopgt.all");
                 }
             }
             
@@ -130,7 +129,7 @@ namespace GralBackgroundworkers
             int mettimefilelength = 0;
             //read mettimeseries.dat to get file length necessary to define some array lengths
             newpath = Path.Combine("Computation", "mettimeseries.dat");
-            using (StreamReader sr = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+            using (StreamReader sr = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
             {
                 //text2 = sr.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 while (sr.EndOfStream == false)
@@ -141,7 +140,7 @@ namespace GralBackgroundworkers
             }
             if (mettimefilelength == 0) // File-lenght must > 0
             {
-                BackgroundThreadMessageBox ("Can´t read mettimeseries.dat");
+                BackgroundThreadMessageBox ("Error when reading mettimeseries.dat");
                 return; // leave method
             }
             //mettimefilelength--;
@@ -160,7 +159,7 @@ namespace GralBackgroundworkers
                 }
             }
 
-            newpath = Path.Combine(mydata.Projectname, "Computation", "emissions_timeseries.txt");
+            newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
             if (File.Exists(newpath) == true)
             {
                 try
@@ -170,7 +169,7 @@ namespace GralBackgroundworkers
                     using (StreamReader read = new StreamReader(newpath))
                     {
                         //get source group numbers
-                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';',',' }, StringSplitOptions.RemoveEmptyEntries);
                         for (int i = 2; i < text10.Length; i++)
                         {
                             //get the column corresponding with the source group number stored in sg_numbers
@@ -197,7 +196,7 @@ namespace GralBackgroundworkers
 
                         for (int i = 0; i < mettimefilelength; i++)
                         {
-                            text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';',',' }, StringSplitOptions.RemoveEmptyEntries);
                             for (int n = 0; n < maxsource; n++)
                             {
                                 if (sg_time[n] == 0)
@@ -215,7 +214,7 @@ namespace GralBackgroundworkers
                 }
                 catch(Exception ex)
                 {
-                    BackgroundThreadMessageBox (ex.Message + " Can´t read emissions_timeseries.txt - evaluation stopped");
+                    BackgroundThreadMessageBox (ex.Message + " Error when reading emissions_timeseries.txt - evaluation stopped");
                     return;
                 }
             }
@@ -226,7 +225,7 @@ namespace GralBackgroundworkers
             {
                 InDatVariables data = new InDatVariables();
                 InDatFileIO ReadInData = new InDatFileIO();
-                data.InDatPath = Path.Combine(mydata.Projectname, "Computation","in.dat");
+                data.InDatPath = Path.Combine(mydata.ProjectName, "Computation","in.dat");
                 ReadInData.Data = data;
                 if (ReadInData.ReadInDat() == true)
                 {
@@ -256,12 +255,12 @@ namespace GralBackgroundworkers
             }
             catch (Exception ex)
             {
-                BackgroundThreadMessageBox(ex.Message);
+                BackgroundThreadMessageBox("Reset emission factors for transient calculation " + ex.Message);
                 return;
             }
             
             
-            int arraylength = Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100);   
+            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100));   
             float[][][][] concpercentile = CreateArray<float[][][]>(mydata.CellsGralX + 1, () => CreateArray<float[][]>(mydata.CellsGralY + 1, () => CreateArray<float[]>(maxsource + 1, () => new float[arraylength])));
 
             
@@ -270,7 +269,7 @@ namespace GralBackgroundworkers
 
             //read mettimeseries.dat
             List<string> data_mettimeseries = new List<string>();
-            ReadMettimeseries(Path.Combine(mydata.Projectname, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
+            ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
             if (data_mettimeseries.Count == 0) // no data available
             { 
                 BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
@@ -360,8 +359,8 @@ namespace GralBackgroundworkers
                                 con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
                             }
 
-                            if (File.Exists(Path.Combine(mydata.Projectname, @"Computation", con_files[itmp])) == false &&
-                                File.Exists(Path.Combine(mydata.Projectname, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
+                                File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
                             {
                                 lock(thisLock)
                                 {
@@ -378,7 +377,7 @@ namespace GralBackgroundworkers
                             }
                             }
                             //read GRAL concentration files
-                            string filename = Path.Combine(mydata.Projectname, @"Computation", con_files[itmp]);
+                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
                             if (!ReadConFiles(filename, mydata, itmp, ref conc))
                             {
                                 // Error reading one *.con file
@@ -399,7 +398,7 @@ namespace GralBackgroundworkers
                             numhour += 1;
                             int std = Convert.ToInt32(hour);
                             int mon = Convert.ToInt32(month) - 1;		
-                            Object thisLock2 = new Object();							
+                            
                             //for (int ii = 0; ii <= mydata.CellsGralX; ii++)
                             Parallel.For(0, mydata.CellsGralX, ii =>
                             {
@@ -407,82 +406,50 @@ namespace GralBackgroundworkers
                                 {
                                     float fac = 0;
                                     float fac_total = 0;
-                                    
+                                    float[] _ConcCell = conc[ii][j];
+                                    float[][] _ConcPerc = concpercentile[ii][j];
+
                                     int itmi = 0;
                                     foreach (string source_group_name in sg_names)
                                     {
-                                        //compute mean emission modulation factor
-                                        if ((ii == 0) && (j == 0))
-                                        {
-                                            lock(thisLock2)
-                                            {
-                                                fmod[itmi] = fmod[itmi] + emifac_day[std - hourplus, itmi] * emifac_mon[mon, itmi] * emifac_timeseries[count_ws, itmi];
-                                            }
-                                        }
-                                        
-                                        fac = mydata.EmissionFactor * conc[ii][j][itmi] * (float)emifac_day[std - hourplus, itmi] * (float)emifac_mon[mon, itmi] * (float)emifac_timeseries[count_ws, itmi];
+                                        fac = mydata.EmissionFactor * _ConcCell[itmi] * (float)emifac_day[std - hourplus, itmi] * (float)emifac_mon[mon, itmi] * (float)emifac_timeseries[count_ws, itmi];
                                         fac_total += fac;
 
                                         //compute percentile concentrations for each source group and in total
-                                        float[] _conc = concpercentile[ii][j][itmi];
-                                        for (int p = arraylength-1; p >= 0; p--)
+                                        float[] _conc = _ConcPerc[itmi];
+                                        //check whether actual concentration is higher than already stored concentrations
+                                        int pcomp = BinarySearch(_conc, fac);
+                                        if (pcomp >= 0)
                                         {
-                                            //check whether actual concentration is higher than already stored concentrations
-                                            if (fac > _conc[p])
-                                            {
-                                                //re-order all concentrations from that point on
-                                                for (int l = 0; l < p;l++ )
-                                                {
-                                                    _conc[l] = _conc[l+1];
-                                                }
-                                                _conc[p] = fac;
-                                                break;
-                                            }
+                                            Array.Copy(_conc, 1, _conc, 0, pcomp);
+                                            _conc[pcomp] = fac;
                                         }
                                         itmi++;
                                     }
 
                                     //compute total percentile over all source groups
-                                    for (int p = arraylength - 1; p >= 0; p--)
-                                    {
-                                        float[] _conc = concpercentile[ii][j][maxsource];
+                                    { 
+                                        float[] _conc = _ConcPerc[maxsource];
                                         //check whether actual concentration is higher than already stored concentrations
-                                        if (fac_total > _conc[p])
+                                        int pcomp = BinarySearch(_conc, fac_total);
+                                        if (pcomp >= 0)
                                         {
-                                            //re-order all concentrations from that point on
-                                            for (int l = 0; l < p; l++)
-                                            {
-                                                _conc[l] = _conc[l+1];
-                                            }
-                                            _conc[p] = fac_total;
-                                            break;
+                                            Array.Copy(_conc, 1, _conc, 0, pcomp);
+                                            _conc[pcomp] = fac_total;
                                         }
                                     }
                                 }
                             });
-                            thisLock2 = null;
                         }
                     }
                 }
                 
             }
             
-            
-            //final computations for mean modulation factors
-            if (nnn > 0)
-            {
-                itm=0;
-                foreach (string source_group_name in sg_names)
-                {
-                    fmod[itm] = fmod[itm] / Convert.ToDouble(nnn);
-                    itm++;
-                }
-            }
-
             string file;
             string name;
             //write mean concentration hour files for each source group
-            if (mydata.Checkbox2)  // sel_sg_checkbox2 = checked
+            if (mydata.CalculateMean)  // sel_sg_checkbox2 = checked
             {
                 itm = 0;
                 foreach (string source_group_name in sg_names)
@@ -504,7 +471,7 @@ namespace GralBackgroundworkers
                         name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
                     }
 
-                    file = Path.Combine(mydata.Projectname, @"Maps", name + ".txt");
+                    file = Path.Combine(mydata.ProjectName, @"Maps", name + ".txt");
                     
                     try
                     {
@@ -518,7 +485,20 @@ namespace GralBackgroundworkers
 
                         using (StreamWriter myWriter = new StreamWriter(file, false))
                         {
-                            mydata.Writer=myWriter; WriteHeader(mydata, mydata.Unit);
+                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                            {
+                                NCols = mydata.CellsGralX,
+                                NRows = mydata.CellsGralY,
+                                XllCorner = mydata.DomainWest,
+                                YllCorner = mydata.DomainSouth,
+                                CellSize = mydata.Horgridsize,
+                                Unit = mydata.Unit,
+                                Round = 5
+                            };
+                            if (!writeHeader.WriteEsriHeader(myWriter))
+                            {
+                                throw new Exception();
+                            }
                             
                             for (int j = mydata.CellsGralY - 1; j > -1; j--)
                             {
@@ -532,7 +512,7 @@ namespace GralBackgroundworkers
                     }
                     catch(Exception ex)
                     {
-                        BackgroundThreadMessageBox (ex.Message);
+                        BackgroundThreadMessageBox ("Write results for source groups " + ex.Message);
                     }
                     
                     itm++;
@@ -546,7 +526,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration
                 name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.Projectname, @"Maps", name + ".txt");
+                file = Path.Combine(mydata.ProjectName, @"Maps", name + ".txt");
                 
                 try
                 {
@@ -560,7 +540,20 @@ namespace GralBackgroundworkers
                         
                     using (StreamWriter mywriter = new StreamWriter(file, false))
                     {
-                        mydata.Writer=mywriter; WriteHeader(mydata, mydata.Unit);
+                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                        {
+                            NCols = mydata.CellsGralX,
+                            NRows = mydata.CellsGralY,
+                            XllCorner = mydata.DomainWest,
+                            YllCorner = mydata.DomainSouth,
+                            CellSize = mydata.Horgridsize,
+                            Unit = mydata.Unit,
+                            Round = 5
+                        };
+                        if (!writeHeader.WriteEsriHeader(mywriter))
+                        {
+                            throw new Exception();
+                        }
                         
                         for (int j = mydata.CellsGralY - 1; j > -1; j--)
                         {
@@ -574,10 +567,53 @@ namespace GralBackgroundworkers
                 }
                 catch(Exception ex)
                 {
-                    BackgroundThreadMessageBox (ex.Message);
+                    BackgroundThreadMessageBox ("Write total result file " + ex.Message);
                 }
             }
             Computation_Completed = true; // set flag, that computation was successful
+        }
+
+        /// <summary>
+        /// Find the index of a value in Perc[] that exceeds the value Conc
+        /// </summary>
+        /// <param name="Perc">Percentile array</param> 
+        /// <param name="Conc">Concentration to compare with Perc[]</param> 
+        private int BinarySearch(float[] Perc, float Conc)
+        {
+            int low = 0;
+            
+            if (Conc < Perc[0])
+            {
+                low = -1; // return -1 if below Perc[0]
+            }
+            else if (Conc > Perc[Perc.Length - 1])
+            {
+                low = Perc.Length - 1;
+            }
+            else
+            {
+                int high = Perc.Length - 1;
+                int mid = 0;
+                while (low <= high)
+                {
+                    mid = (low + high) >> 1;
+                    if (Perc[mid] >= Conc)
+                    {
+                        high = mid - 1;
+                    }
+                    else
+                    {
+                        low = mid + 1;
+                    }
+                }
+
+                if (low >= Perc.Length)
+                {
+                    low = Perc.Length - 1;
+                }
+                low--;
+            }
+            return low;
         }
     }
 }

@@ -71,49 +71,62 @@ namespace GralDomain
             
             return SelectOverlappedItem(e, ItemNames, ItemNumber);
         }
-        
+
 		/// <summary>
-        /// Right mouse click to a vegetation area -> show context menu
-        /// </summary>
-       	private void RightClickVegetation(object sender, System.EventArgs e)
+		/// ContextMenu Edit Vegetation
+		/// </summary>
+		private void RightClickVegetationEdit(object sender, EventArgs e)
 		{
-			MenuItem mi = sender as MenuItem;
-			
-			if (mi.Index == 0) // Edit Area Source
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				int i = Convert.ToInt32(mi.Tag);
 				EditVegetation.SetTrackBar(i + 1);
 				EditVegetation.ItemDisplayNr = i;
 				EditVegetation.FillValues();
-				VegetationToolStripMenuItemClick( null, null);
+				VegetationToolStripMenuItemClick(null, null);
 			}
-			if (mi.Index == 1) // Move edge point
+		}
+		/// <summary>
+		/// ContextMenu Vegetation Move Edge Point
+		/// </summary>
+		private void RightClickVegetationMoveEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				PointD coor = (PointD) mi.Tag;
+				PointD coor = (PointD)mi.Tag;
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointVegetation();
-				MouseControl = 1081;
+				MouseControl = MouseMode.VegetationInlineEdit;
 			}
-			if (mi.Index == 2) // Add edge point
+		}
+		/// <summary>
+		/// ContextMenu Vegetation Add Edge Point
+		/// </summary>
+		private void RightClickVegetationAddEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+				SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
 				int i = pt.Index;
-				
+
 				EditVegetation.SetTrackBar(i + 1);
 				EditVegetation.ItemDisplayNr = i;
 				EditVegetation.FillValues();
-				
+
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD _pt in EditVegetation.ItemData[i].Pt)
+				foreach (PointD _pt in EditVegetation.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -128,42 +141,48 @@ namespace GralDomain
 					EditVegetation.ItemData[i].Pt.Insert(indexmin + 1, GetPointBetween(EditVegetation.ItemData[i].Pt[indexmin], EditVegetation.ItemData[i].Pt[indexnext]));
 				}
 				int count = 0;
-				foreach(PointD _pt in EditVegetation.ItemData[i].Pt)
+				foreach (PointD _pt in EditVegetation.ItemData[i].Pt)
 				{
 					EditVegetation.CornerVegX[count] = _pt.X;
 					EditVegetation.CornerVegY[count] = _pt.Y;
 					count++;
 				}
 				EditVegetation.SetNumberOfVerticesText(EditVegetation.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveVegetationData(sender, null); // save changes
-				
-				if (EditVegetation.ItemData.Count > 0)
-                {
-                    MouseControl = 77;
-                }
 
-                Picturebox1_Paint();
+				EditAndSaveVegetationData(sender, null); // save changes
+
+				if (EditVegetation.ItemData.Count > 0)
+				{
+					MouseControl = MouseMode.VegetationSel;
+				}
+				Picturebox1_Paint();
 			}
-			if (mi.Index == 3) // Delete edge point
+		}
+		/// <summary>
+		/// ContextMenu Vegetation Delete Edge Point
+		/// </summary>
+		private void RightClickVegetationDelEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+				SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
 				int i = pt.Index;
-				
+
 				EditVegetation.SetTrackBar(i + 1);
 				EditVegetation.ItemDisplayNr = i;
 				EditVegetation.FillValues();
-				
+
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD _pt in EditVegetation.ItemData[i].Pt)
+				foreach (PointD _pt in EditVegetation.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -173,24 +192,30 @@ namespace GralDomain
 					EditVegetation.ItemData[i].Pt.RemoveAt(indexmin);
 				}
 				int count = 0;
-				foreach(PointD _pt in EditVegetation.ItemData[i].Pt)
+				foreach (PointD _pt in EditVegetation.ItemData[i].Pt)
 				{
 					EditVegetation.CornerVegX[count] = _pt.X;
 					EditVegetation.CornerVegY[count] = _pt.Y;
 					count++;
 				}
 				EditVegetation.SetNumberOfVerticesText(EditVegetation.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveVegetationData(sender, null); // save changes
-				
-				if (EditVegetation.ItemData.Count > 0)
-                {
-                    MouseControl = 77;
-                }
 
-                Picturebox1_Paint();
+				EditAndSaveVegetationData(sender, null); // save changes
+
+				if (EditVegetation.ItemData.Count > 0)
+				{
+					MouseControl = MouseMode.VegetationSel;
+				}
+				Picturebox1_Paint();
 			}
-			if (mi.Index == 4) // Delete Vegetation
+		}
+		/// <summary>
+		/// ContextMenu Vegetation Delete
+		/// </summary>
+		private void RightClickVegetationDelete(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				int i = Convert.ToInt32(mi.Tag);
 				EditVegetation.SetTrackBar(i + 1);
@@ -200,12 +225,11 @@ namespace GralDomain
 				EditAndSaveVegetationData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditVegetation.ItemData.Count > 0)
-                {
-                    MouseControl = 77;
-                }
-            }
-			Menu m = sender as Menu;
-			m.Dispose ();
-		} 
+				{
+					MouseControl = MouseMode.VegetationSel;
+				}
+			}
+		}
+
     }
 }

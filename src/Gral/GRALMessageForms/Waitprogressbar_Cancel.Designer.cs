@@ -8,7 +8,7 @@
  */
 namespace GralMessage
 {
-	partial class Waitprogressbar_Cancel
+	partial class WaitProgressbarCancel
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -36,6 +36,7 @@ namespace GralMessage
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaitProgressbarCancel));
             this.cancel_button = new System.Windows.Forms.Button();
             this.progressbar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
@@ -60,7 +61,7 @@ namespace GralMessage
             this.progressbar.TabIndex = 1;
             this.progressbar.UseWaitCursor = true;
             // 
-            // Waitprogressbar_Cancel
+            // WaitProgressbarCancel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -68,10 +69,10 @@ namespace GralMessage
             this.ControlBox = false;
             this.Controls.Add(this.progressbar);
             this.Controls.Add(this.cancel_button);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Waitprogressbar_Cancel";
-            this.ShowInTaskbar = false;
+            this.Name = "WaitProgressbarCancel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Waitprogressbar_Cancel";
             this.ResumeLayout(false);

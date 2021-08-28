@@ -194,7 +194,7 @@ namespace GralDomain
                         }
                         else // not filtered -> draw point
                         {
-                            if ((n == EditLS.ItemDisplayNr) && ((MouseControl == 11) || (MouseControl == 10)))
+                            if ((n == EditLS.ItemDisplayNr) && ((MouseControl == MouseMode.LineSourceSel) || (MouseControl == MouseMode.LineSourcePos)))
                             {
                                 Brush edges = new SolidBrush(Color.Green);
                                 g.DrawLine(mypen, (int) x1, (int) y1, (int) x2, (int) y2);

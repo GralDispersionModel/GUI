@@ -44,10 +44,9 @@ namespace GralItemForms
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -69,7 +68,10 @@ namespace GralItemForms
             this.panel3 = new System.Windows.Forms.Panel();
             this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
             this.button3 = new System.Windows.Forms.Button();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -79,13 +81,14 @@ namespace GralItemForms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(252, 267);
+            this.button1.Location = new System.Drawing.Point(253, 310);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(88, 23);
             this.button1.TabIndex = 13;
@@ -107,13 +110,13 @@ namespace GralItemForms
             this.listBox1.Location = new System.Drawing.Point(100, 8);
             this.listBox1.Name = "listBox1";
             this.listBox1.ScrollAlwaysVisible = true;
-            this.listBox1.Size = new System.Drawing.Size(239, 43);
+            this.listBox1.Size = new System.Drawing.Size(251, 56);
             this.listBox1.TabIndex = 1;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(13, 70);
+            this.label2.Location = new System.Drawing.Point(13, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 19);
             this.label2.TabIndex = 3;
@@ -135,35 +138,32 @@ namespace GralItemForms
             this.label4.TabIndex = 4;
             this.label4.Text = " 10";
             // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(3, 9);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(10, 19);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "<";
-            this.label5.Visible = false;
-            // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(13, 100);
+            this.label6.Location = new System.Drawing.Point(13, 120);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 19);
             this.label6.TabIndex = 3;
             this.label6.Text = "Percentage [%]";
             // 
-            // label7
+            // numericUpDown5
             // 
-            this.label7.Location = new System.Drawing.Point(13, 233);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(81, 19);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "Particle density";
-            this.toolTip1.SetToolTip(this.label7, "equivalent to a solid sphere");
+            this.numericUpDown5.DecimalPlaces = 2;
+            this.numericUpDown5.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDown5.Location = new System.Drawing.Point(35, 19);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(64, 20);
+            this.numericUpDown5.TabIndex = 11;
+            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown5, "The density is used for the calculation of the sedimentation velocity");
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(170, 233);
+            this.label8.Location = new System.Drawing.Point(104, 21);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(44, 19);
             this.label8.TabIndex = 3;
@@ -171,7 +171,7 @@ namespace GralItemForms
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(13, 182);
+            this.label9.Location = new System.Drawing.Point(13, 202);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(81, 34);
             this.label9.TabIndex = 3;
@@ -179,7 +179,7 @@ namespace GralItemForms
             // 
             // label11
             // 
-            this.label11.Location = new System.Drawing.Point(13, 126);
+            this.label11.Location = new System.Drawing.Point(13, 146);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(81, 19);
             this.label11.TabIndex = 3;
@@ -223,7 +223,7 @@ namespace GralItemForms
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(21, 7);
+            this.numericUpDown1.Location = new System.Drawing.Point(13, 7);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -303,7 +303,7 @@ namespace GralItemForms
             // 
             // label10
             // 
-            this.label10.Location = new System.Drawing.Point(13, 145);
+            this.label10.Location = new System.Drawing.Point(13, 165);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(81, 34);
             this.label10.TabIndex = 3;
@@ -317,7 +317,7 @@ namespace GralItemForms
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.numericUpDown2);
-            this.panel1.Location = new System.Drawing.Point(100, 60);
+            this.panel1.Location = new System.Drawing.Point(100, 80);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(76, 156);
             this.panel1.TabIndex = 10;
@@ -349,7 +349,7 @@ namespace GralItemForms
             this.panel2.Controls.Add(this.numericUpDown3);
             this.panel2.Controls.Add(this.label13);
             this.panel2.Controls.Add(this.checkBox2);
-            this.panel2.Location = new System.Drawing.Point(181, 60);
+            this.panel2.Location = new System.Drawing.Point(186, 80);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(76, 156);
             this.panel2.TabIndex = 11;
@@ -379,12 +379,11 @@ namespace GralItemForms
             this.panel3.Controls.Add(this.numericUpDown8);
             this.panel3.Controls.Add(this.checkBox3);
             this.panel3.Controls.Add(this.numericUpDown1);
-            this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label14);
             this.panel3.Controls.Add(this.label15);
-            this.panel3.Location = new System.Drawing.Point(265, 60);
+            this.panel3.Location = new System.Drawing.Point(275, 80);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(75, 156);
+            this.panel3.Size = new System.Drawing.Size(76, 156);
             this.panel3.TabIndex = 12;
             // 
             // numericUpDown8
@@ -409,7 +408,7 @@ namespace GralItemForms
             // button3
             // 
             this.button3.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button3.Location = new System.Drawing.Point(13, 267);
+            this.button3.Location = new System.Drawing.Point(16, 310);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(88, 23);
             this.button3.TabIndex = 12;
@@ -417,19 +416,36 @@ namespace GralItemForms
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3Click);
             // 
-            // numericUpDown5
+            // label5
             // 
-            this.numericUpDown5.DecimalPlaces = 2;
-            this.numericUpDown5.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDown5.Location = new System.Drawing.Point(101, 231);
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(64, 20);
-            this.numericUpDown5.TabIndex = 11;
-            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.label5.Location = new System.Drawing.Point(6, 21);
+            this.label5.Name = "label5";
+            this.label5.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label5.Size = new System.Drawing.Size(140, 23);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Total emission";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Location = new System.Drawing.Point(186, 254);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(165, 47);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Total emission";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.numericUpDown5);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Location = new System.Drawing.Point(16, 254);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(160, 47);
+            this.groupBox2.TabIndex = 16;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Particle density";
             // 
             // EditDeposition
             // 
@@ -437,11 +453,10 @@ namespace GralItemForms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button3;
-            this.ClientSize = new System.Drawing.Size(352, 302);
-            this.Controls.Add(this.numericUpDown5);
-            this.Controls.Add(this.label8);
+            this.ClientSize = new System.Drawing.Size(367, 357);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label6);
@@ -460,6 +475,7 @@ namespace GralItemForms
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Edit_DepositionFormClosed);
             this.Load += new System.EventHandler(this.Edit_DepositionLoad);
             this.VisibleChanged += new System.EventHandler(this.Edit_DepositionVisibleChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
@@ -469,7 +485,8 @@ namespace GralItemForms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -496,14 +513,15 @@ namespace GralItemForms
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.ToolTip toolTip1;
-		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ListBox listBox1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button button1;
-	}
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+    }
 }

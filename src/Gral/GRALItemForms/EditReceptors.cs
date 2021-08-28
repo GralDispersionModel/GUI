@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
+using System.IO;
 
 using Gral;
 using GralDomain;
@@ -35,17 +36,18 @@ namespace GralItemForms
         private CultureInfo ic = CultureInfo.InvariantCulture;
 
         // delegate to send a message, that redraw is needed!
-		public event ForceDomainRedraw ReceptorRedraw;
+        public event ForceDomainRedraw ReceptorRedraw;
 
         public bool AllowClosing = false;
-        //delegate to send a message, that user tries to close the form
-        public event ForceItemFormHide ItemFormHide;
+        //delegates to send a message, that user uses OK or Cancel button
+        public event ForceItemOK ItemFormOK;
+        public event ForceItemCancel ItemFormCancel;
 
         public double MinReceptorHeight = 0; // min receptor height from Main - DeltaZ
 
-		private int TextBox_x0 = 0;
-		private int TrackBar_x0 = 0;
-		private int Numericupdown_x0 = 0;
+        private int TextBox_x0 = 0;
+        private int TrackBar_x0 = 0;
+        private int Numericupdown_x0 = 0;
 
         public EditReceptors()
         {
@@ -53,9 +55,9 @@ namespace GralItemForms
 
             #if __MonoCS__
 
-				numericUpDown1.TextAlign =  HorizontalAlignment.Left;
+                numericUpDown1.TextAlign =  HorizontalAlignment.Left;
                 numericUpDown2.TextAlign = HorizontalAlignment.Left;
-		    #else
+            #else
             #endif
             MouseMove += new MouseEventHandler(Aktiv);
         }
@@ -74,19 +76,19 @@ namespace GralItemForms
             FillValues();
             if (textBox1.Text.Length == 0 && numericUpDown1.Value == 0) // set standard values for the 1st Receptor point
             {
-            	textBox2.Text = "";
+                textBox2.Text = "";
                 textBox3.Text = "";
                 numericUpDown1.Value = 3;
                 numericUpDown2.Value = 0;
             }
 
             TrackBar_x0 = trackBar1.Left;
-			TextBox_x0 = textBox1.Left;
-			Numericupdown_x0 = numericUpDown1.Left;
+            TextBox_x0 = textBox1.Left;
+            Numericupdown_x0 = numericUpDown1.Left;
 
-			textBox2.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-			textBox3.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-			numericUpDown1.Minimum = (decimal) (MinReceptorHeight);
+            textBox2.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+            textBox3.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+            numericUpDown1.Minimum = (decimal) (MinReceptorHeight);
         }
 
         //increase the number of receptors by one
@@ -118,81 +120,81 @@ namespace GralItemForms
 
         //save data in array list
         /// <summary>
-    	/// Saves the recent dialog data in the item object and the item list
-    	/// </summary>
+        /// Saves the recent dialog data in the item object and the item list
+        /// </summary>
         public void SaveArray()
         {
             bool valid_coors = true;
             double x = 0;
             double y = 0;
-		    try
-		    {
-		        x = double.Parse(textBox2.Text);
-		        y = double.Parse(textBox3.Text);
-		    }
-		    catch
-		    {
-		        valid_coors = false;
-		    }
+            try
+            {
+                x = double.Parse(textBox2.Text);
+                y = double.Parse(textBox3.Text);
+            }
+            catch
+            {
+                valid_coors = false;
+            }
 
-		    ReceptorData _rdata;
-			if (ItemDisplayNr >= ItemData.Count) // new item
-			{
-				_rdata = new ReceptorData();
-			}
-			else // change existing item
-			{
-				_rdata = ItemData[ItemDisplayNr];
-			}
+            ReceptorData _rdata;
+            if (ItemDisplayNr >= ItemData.Count) // new item
+            {
+                _rdata = new ReceptorData();
+            }
+            else // change existing item
+            {
+                _rdata = ItemData[ItemDisplayNr];
+            }
 
             if (textBox1.Text != "" && valid_coors)
             {
-            	_rdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
-            	_rdata.Pt = new PointD(x, y);
-            	_rdata.Height = (float) (numericUpDown1.Value);
-            	_rdata.DisplayValue = (float) (numericUpDown2.Value);
+                _rdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
+                _rdata.Pt = new PointD(x, y);
+                _rdata.Height = (float) (numericUpDown1.Value);
+                _rdata.DisplayValue = (float) (numericUpDown2.Value);
 
-            	if (ItemDisplayNr >= ItemData.Count) // new item
-            	{
-            	    ItemData.Add(_rdata);
-            	}
-            	else
-            	{
-            	    ItemData[ItemDisplayNr] = _rdata;
-            	}
+                if (ItemDisplayNr >= ItemData.Count) // new item
+                {
+                    ItemData.Add(_rdata);
+                }
+                else
+                {
+                    ItemData[ItemDisplayNr] = _rdata;
+                }
 
-            	RedrawDomain(this, null);
+                RedrawDomain(this, null);
              }
         }
 
         //fill actual values
         /// <summary>
-    	/// Fills the dialog with data from the recent item object
-    	/// </summary>
+        /// Fills the dialog with data from the recent item object
+        /// </summary>
         public void FillValues()
         {
-        	ReceptorData _rdata;
-        	if (ItemDisplayNr < ItemData.Count)
-        	{
-        		_rdata = ItemData[ItemDisplayNr];
-        	}
-        	else
-        	{
-        		if (ItemData.Count > 0)
-        		{
-        			_rdata = new ReceptorData(ItemData[ItemData.Count - 1]);
-        		}
-        		else
-        		{
-        			_rdata = new ReceptorData();
-        		}
-        	}
+            ReceptorData _rdata;
+            if (ItemDisplayNr < ItemData.Count)
+            {
+                _rdata = ItemData[ItemDisplayNr];
+            }
+            else
+            {
+                if (ItemData.Count > 0)
+                {
+                    _rdata = new ReceptorData(ItemData[ItemData.Count - 1]);
+                }
+                else
+                {
+                    _rdata = new ReceptorData();
+                }
+            }
 
-        	textBox1.Text = _rdata.Name;
-        	textBox2.Text = _rdata.Pt.X.ToString();
-        	textBox3.Text = _rdata.Pt.Y.ToString();
-        	numericUpDown1.Value = St_F.ValueSpan(MinReceptorHeight, 999, _rdata.Height);
-        	numericUpDown2.Value = St_F.ValueSpan(-1000000, 1000000, _rdata.DisplayValue);
+            textBox1.Text = _rdata.Name;
+            textBox2.Text = _rdata.Pt.X.ToString();
+            textBox3.Text = _rdata.Pt.Y.ToString();
+            numericUpDown1.Value = St_F.ValueSpan(MinReceptorHeight, 999, _rdata.Height);
+            numericUpDown2.Value = St_F.ValueSpan(-1000000, 1000000, _rdata.DisplayValue);
         }
 
         //remove actual receptor
@@ -203,8 +205,8 @@ namespace GralItemForms
         }
 
         /// <summary>
-    	/// Remove the recent item object from the item list
-    	/// </summary>
+        /// Remove the recent item object from the item list
+        /// </summary>
         public void RemoveOne(bool ask)
         {
             if (ask == true)
@@ -241,7 +243,7 @@ namespace GralItemForms
                         FillValues();
                     }
                     catch
-					{
+                    {
                     }
                 }
             }
@@ -268,22 +270,22 @@ namespace GralItemForms
 
         private void RedrawDomain(object sender, EventArgs e)
         {
-        	// send Message to domain Form, that Section-Form is closed
-			try
-			{
-			if (ReceptorRedraw != null)
+            // send Message to domain Form, that Section-Form is closed
+            try
+            {
+            if (ReceptorRedraw != null)
                 {
                     ReceptorRedraw(this, e);
                 }
             }
-			catch
-			{}
+            catch
+            {}
         }
 
         public void ShowForm()
         {
-        	ItemDisplayNr = trackBar1.Value - 1;
-        	RedrawDomain(this, null);
+            ItemDisplayNr = trackBar1.Value - 1;
+            RedrawDomain(this, null);
         }
 
         private void EditReceptors_FormClosing(object sender, FormClosingEventArgs e)
@@ -295,19 +297,14 @@ namespace GralItemForms
             }
             else
             {
+                if (((sender as Form).ActiveControl is Button) == false)
+                {
+                    // cancel if x has been pressed = restore old values!
+                    cancelButtonClick(null, null);
+                }
                 // Hide form and send message to caller when user tries to close this form
                 if (!AllowClosing)
                 {
-                    // send Message to domain Form, that redraw is necessary
-                    try
-                    {
-                        if (ItemFormHide != null)
-                        {
-                            ItemFormHide(this, e);
-                        }
-                    }
-                    catch
-                    { }
                     this.Hide();
                     e.Cancel = true;
                 }
@@ -316,15 +313,15 @@ namespace GralItemForms
 
         void EditReceptorsFormClosed(object sender, FormClosedEventArgs e)
         {
-        	MouseMove -= new MouseEventHandler(Aktiv);
-        	textBox2.TextChanged -= new System.EventHandler(St_F.CheckInput);
-		    textBox3.TextChanged -= new System.EventHandler(St_F.CheckInput);
-		    textBox2.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
-        	textBox2.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            MouseMove -= new MouseEventHandler(Aktiv);
+            textBox2.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            textBox3.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            textBox2.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            textBox2.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
 
-        	ItemData.Clear();
-			ItemData.TrimExcess();
-			toolTip1.Dispose();
+            ItemData.Clear();
+            ItemData.TrimExcess();
+            toolTip1.Dispose();
         }
 
         private void Paste(object sender, KeyEventArgs e)
@@ -347,88 +344,150 @@ namespace GralItemForms
 
         void Button4Click(object sender, EventArgs e)
         {
-        	SaveArray();
+            SaveArray();
             FillValues();
         }
 
         void EditReceptorsVisibleChanged(object sender, EventArgs e)
         {
-        	if (!Visible)
-			{
-			}
-			else // Enable/disable items
-			{
-				bool enable = !Main.Project_Locked;
-				if (enable)
-				{
-					Text = "Edit receptors";
-				}
-				else
-				{
-					Text = "Receptor settings (project locked)";
-				}
-				foreach (Control c in Controls)
-				{
-					if (c != trackBar1)
-					{
-						c.Enabled = enable;
-					}
-				}
-			}
+            if (!Visible)
+            {
+            }
+            else // Enable/disable items
+            {
+                bool enable = !Main.Project_Locked;
+                if (enable)
+                {
+                    labelTitle.Text = "Edit Receptors";
+                }
+                else
+                {
+                    labelTitle.Text = "Receptor Settings (Project Locked)";
+                }
+                foreach (Control c in Controls)
+                {
+                    if (c != trackBar1)
+                    {
+                        c.Enabled = enable;
+                    }
+                }
+            }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
 
         void EditReceptorsResizeEnd(object sender, EventArgs e)
         {
-        	int dialog_width = ClientSize.Width;
-        	if (dialog_width > 130)
-			{
-				dialog_width -= 12;
-				trackBar1.Width = dialog_width - TrackBar_x0;
-				textBox1.Width = dialog_width - TextBox_x0;
-				textBox2.Width = dialog_width - TextBox_x0;
-				textBox3.Width = dialog_width - TextBox_x0;
-				numericUpDown1.Width = dialog_width - Numericupdown_x0;
-				numericUpDown2.Width = dialog_width - Numericupdown_x0;
-			}
-            button6.Left = (int)((dialog_width - button6.Width) * 0.5);
+            int dialog_width = ClientSize.Width;
+            if (dialog_width > 130)
+            {
+                dialog_width -= 12;
+                trackBar1.Width = dialog_width - TrackBar_x0;
+                textBox1.Width = dialog_width - textBox1.Left;
+            }
+            panel1.Width = ClientSize.Width;
         }
 
         public void SetXCoorText(string _s)
         {
-        	textBox2.Text = _s;
+            textBox2.Text = _s;
         }
         public void SetYCoorText(string _s)
         {
-        	textBox3.Text = _s;
+            textBox3.Text = _s;
         }
 
         /// <summary>
-    	/// Set the trackbar to the desired item number
-    	/// </summary>
+        /// Set the trackbar to the desired item number
+        /// </summary>
         public bool SetTrackBar(int _nr)
-		{
-        	if (_nr >= trackBar1.Minimum && _nr <= trackBar1.Maximum)
-			{
-				trackBar1.Value = _nr;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+        {
+            if (_nr >= trackBar1.Minimum && _nr <= trackBar1.Maximum)
+            {
+                trackBar1.Value = _nr;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
-    	/// Set the trackbar maximum to the maximum count in the item list
-    	/// </summary>
-		public void SetTrackBarMaximum()
-		{
-			trackBar1.Maximum = Math.Max(ItemData.Count, 1);
-		}
+        /// Set the trackbar maximum to the maximum count in the item list
+        /// </summary>
+        public void SetTrackBarMaximum()
+        {
+            trackBar1.Maximum = Math.Max(ItemData.Count, 1);
+        }
 
+        /// <summary>
+        /// OK Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
-            this.Close(); // does not close the form, because closing hides the form
+            SaveArray();
+            FillValues();
+            // send Message to domain Form, that OK button has been pressed
+            try
+            {
+                if (ItemFormOK != null)
+                {
+                    ItemFormOK(this, e);
+                }
+            }
+            catch
+            { }
         }
+        /// <summary>
+        /// Cancel button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cancelButtonClick(object sender, EventArgs e)
+        {
+            ResetItemData();
+            // send Message to domain Form, that Cancel button has been pressed
+            try
+            {
+                if (ItemFormCancel != null)
+                {
+                    ItemFormCancel(this, e);
+                }
+            }
+            catch
+            { }
+        }
+        /// <summary>
+        /// Reset item data when cancelling the dialog
+        /// </summary>
+        public void ResetItemData()
+        {
+            ItemData.Clear();
+            ItemData.TrimExcess();
+            ReceptorDataIO _rd = new ReceptorDataIO();
+            _rd.LoadReceptors(ItemData, Path.Combine(Gral.Main.ProjectName, "Computation", "Receptor.dat"));
+            _rd = null;
+            SetTrackBarMaximum();
+            FillValues();
+        }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
+        }
+
     }
 }

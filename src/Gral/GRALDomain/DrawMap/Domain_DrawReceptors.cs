@@ -148,7 +148,7 @@ namespace GralDomain
                             g.DrawString( _rd.Name.Trim(), LabelFont, LabelBrush, x1 + penrec.Width, y1 - penrec.Width - LabelFont.Height);
                         }
                         
-                        if ((n == EditR.ItemDisplayNr) && ((MouseControl == 25) || (MouseControl == 24)))
+                        if ((n == EditR.ItemDisplayNr) && ((MouseControl == MouseMode.ReceptorSel) || (MouseControl == MouseMode.ReceptorPos)))
                         {
                             Pen penmarked = new Pen(Color.Green)
                             {

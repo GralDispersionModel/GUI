@@ -95,7 +95,7 @@ namespace GralDomain
                             }
                             else // not filtered -> draw point
                             {
-                                if ((n == EditWall.ItemDisplayNr) && ((MouseControl == 76) || (MouseControl == 75)))
+                                if ((n == EditWall.ItemDisplayNr) && ((MouseControl == MouseMode.WallSel) || (MouseControl == MouseMode.WallSet)))
                                 {
                                     Brush edges = new SolidBrush(Color.Green);
                                     g.DrawLine(mypen, (int)x1, (int)y1, (int)x2, (int)y2);

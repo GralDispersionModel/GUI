@@ -777,6 +777,39 @@ namespace GralStaticFunctions
             Screen screen = Screen.FromPoint(Cursor.Position);
             return screen.Bounds.Left;            
         }
-		
+
+        /// <summary>
+        /// Reduce the lenght of a file name inclusive path
+        /// </summary>
+        /// <param name="FileName">File name with path</param>
+        /// <param name="Lenght">Lenght of resulting string</param>
+        /// <returns></returns>
+        public static string ReduceFileNameLenght(string FileName, int Lenght)
+        {
+            string _a = FileName;
+            if (_a.Length > Lenght)
+            {
+                int _pathLenght = Path.GetDirectoryName(FileName).Length;
+                int _nameLenght = Path.GetFileName(FileName).Length;
+                if (_nameLenght > Lenght)
+                {
+                    _a = Path.GetFileName(FileName);
+                }
+                else
+                {
+                    int _diff = Lenght - _nameLenght - 3;
+                    if (_diff > 0)
+                    {
+                        _a = Path.GetDirectoryName(FileName).Substring(0, _diff) + "..." + Path.GetFileName(FileName);
+                    }
+                    else
+                    {
+                        _a = Path.GetFileName(FileName);
+                    }
+                }
+            }
+            return _a;
+        }
+
     }
 }

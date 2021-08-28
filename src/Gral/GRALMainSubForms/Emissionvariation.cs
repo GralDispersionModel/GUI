@@ -656,7 +656,7 @@ namespace GralMainForms
                 form1.listBox5.Items.Clear();
                 form1.button18.Visible = false;
                 form1.button21.Visible = false;
-                form1.Change_Label(2, -1); // Emission label invisible
+                form1.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.Invisible); // Emission label invisible
                 
                 foreach (string text in form1.Pollmod)
                 {
@@ -664,7 +664,7 @@ namespace GralMainForms
                     form1.listBox5.SelectedIndex = 0;
                     form1.button18.Visible = true;
                     form1.button21.Visible = true;
-                    form1.Change_Label(2, 0); // Emission label red
+                    form1.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
                 }
             }
 

@@ -53,9 +53,9 @@
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(27, 23);
+            this.groupBox1.Location = new System.Drawing.Point(12, 23);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(101, 116);
+            this.groupBox1.Size = new System.Drawing.Size(130, 77);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Decimal Separator";
@@ -64,7 +64,7 @@
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(7, 74);
+            this.radioButton2.Location = new System.Drawing.Point(6, 48);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(49, 17);
             this.radioButton2.TabIndex = 1;
@@ -76,7 +76,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(7, 39);
+            this.radioButton1.Location = new System.Drawing.Point(6, 22);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(60, 17);
             this.radioButton1.TabIndex = 0;
@@ -91,9 +91,9 @@
             this.groupBox2.Controls.Add(this.radioButton4);
             this.groupBox2.Controls.Add(this.radioButton3);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(181, 23);
+            this.groupBox2.Location = new System.Drawing.Point(243, 23);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(130, 180);
+            this.groupBox2.Size = new System.Drawing.Size(130, 128);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Row Separator";
@@ -101,7 +101,7 @@
             // radioButton6
             // 
             this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(16, 145);
+            this.radioButton6.Location = new System.Drawing.Point(15, 100);
             this.radioButton6.Name = "radioButton6";
             this.radioButton6.Size = new System.Drawing.Size(70, 17);
             this.radioButton6.TabIndex = 5;
@@ -112,7 +112,7 @@
             // radioButton5
             // 
             this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(16, 111);
+            this.radioButton5.Location = new System.Drawing.Point(15, 74);
             this.radioButton5.Name = "radioButton5";
             this.radioButton5.Size = new System.Drawing.Size(74, 17);
             this.radioButton5.TabIndex = 4;
@@ -123,7 +123,7 @@
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(16, 75);
+            this.radioButton4.Location = new System.Drawing.Point(15, 48);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(52, 17);
             this.radioButton4.TabIndex = 3;
@@ -135,7 +135,7 @@
             // 
             this.radioButton3.AutoSize = true;
             this.radioButton3.Checked = true;
-            this.radioButton3.Location = new System.Drawing.Point(16, 40);
+            this.radioButton3.Location = new System.Drawing.Point(15, 22);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(60, 17);
             this.radioButton3.TabIndex = 2;
@@ -147,9 +147,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(28, 151);
+            this.button1.Location = new System.Drawing.Point(12, 117);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(59, 51);
+            this.button1.Size = new System.Drawing.Size(85, 34);
             this.button1.TabIndex = 2;
             this.button1.Text = "&Check";
             this.button1.UseVisualStyleBackColor = true;
@@ -157,9 +157,10 @@
             // 
             // listView1
             // 
-            this.listView1.Location = new System.Drawing.Point(27, 218);
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(12, 168);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(283, 134);
+            this.listView1.Size = new System.Drawing.Size(361, 134);
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -168,9 +169,9 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(101, 151);
+            this.button2.Location = new System.Drawing.Point(133, 117);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(57, 51);
+            this.button2.Size = new System.Drawing.Size(85, 34);
             this.button2.TabIndex = 4;
             this.button2.Text = "&OK";
             this.button2.UseVisualStyleBackColor = true;
@@ -178,7 +179,7 @@
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(7, 387);
+            this.monthCalendar1.Location = new System.Drawing.Point(12, 337);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 5;
             this.monthCalendar1.TabStop = false;
@@ -187,7 +188,7 @@
             // 
             // monthCalendar2
             // 
-            this.monthCalendar2.Location = new System.Drawing.Point(179, 387);
+            this.monthCalendar2.Location = new System.Drawing.Point(195, 337);
             this.monthCalendar2.Name = "monthCalendar2";
             this.monthCalendar2.TabIndex = 6;
             this.monthCalendar2.TabStop = false;
@@ -198,7 +199,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(7, 364);
+            this.label1.Location = new System.Drawing.Point(7, 314);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 20);
             this.label1.TabIndex = 7;
@@ -209,7 +210,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 4F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(177, 364);
+            this.label2.Location = new System.Drawing.Point(193, 314);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 20);
             this.label2.TabIndex = 8;
@@ -221,7 +222,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(362, 558);
+            this.ClientSize = new System.Drawing.Size(385, 511);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.monthCalendar2);

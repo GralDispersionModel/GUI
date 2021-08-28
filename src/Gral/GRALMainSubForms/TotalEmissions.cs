@@ -36,7 +36,7 @@ namespace GralMainForms
         private CultureInfo ic = CultureInfo.InvariantCulture;
         private bool Emissions_Time_Series_Used = false;
         private List <string> Date_Time = new List<string>();
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 
         public TotalEmissions(double[] totemi, Gral.Main f, string poll)
         {
@@ -135,7 +135,10 @@ namespace GralMainForms
                 {
                 }
             }
-            
+
+            pictureBox1.Width = ClientSize.Width;
+            pictureBox1.Height = ClientSize.Height;
+            pictureBox1.Refresh();
             if (form1 != null)
             {
                 Location = new Point(Math.Max(0,form1.Location.X + form1.Width / 2 - Width / 2 - 100),
@@ -253,12 +256,25 @@ namespace GralMainForms
             }
             return false;
         }
-                
-        protected override void OnPaint(PaintEventArgs e)
+
+        void PictureBox1Paint(object sender, PaintEventArgs e)
         {
+            if (pictureBox1.Width < 20 || pictureBox1.Height < 20)
+            {
+                return;
+            }
+
+            int anz_sources = form1.listView1.Items.Count;
+            // no more sources available -> close the form
+            if (anz_sources == 0)
+            {
+                this.Close();
+                return;
+            }
 
             Graphics g = e.Graphics;
-            g.ScaleTransform((float) Width / 1000f,(float) Width / 1000f);
+            
+            g.ScaleTransform(pictureBox1.Width / 1000f, pictureBox1.Width / 1000f);
             g.Clear(Color.White);
             base.OnPaint(e);
             
@@ -301,7 +317,7 @@ namespace GralMainForms
             
             //scaling factor
             double classmax = 0;
-            int anz_sources = form1.listView1.Items.Count;
+            
             string[] selpoll = new string[2];
             int sgroup = 0;
                 
@@ -330,6 +346,11 @@ namespace GralMainForms
                 }
             }
             
+            if (classmax == 0)
+            {
+                return;
+            }
+
             double scale = 400 / classmax * scalefactor;
 
             //draw diagram
@@ -338,7 +359,22 @@ namespace GralMainForms
             int hoehe_max = 0;
             int ecke1=0;
             int round = 1;
-            
+
+            //draw frequency levels
+            Pen p3 = new Pen(Color.DarkGray, 0.5f)
+            {
+                DashStyle = DashStyle.Dash
+            };
+            ecke1 = Convert.ToInt32((Convert.ToInt32(55 + (anz_sources - 1) * chartwidth)) * scalefactor);
+            for (int i = 1; i < 6; i++)
+            {
+                int levels = Convert.ToInt32(Convert.ToDouble(i) * classmax * scale / 5);
+                int lev1 = Convert.ToInt32((500 - levels) * scalefactor);
+                g.DrawLine(p3, Convert.ToInt32(55 * scalefactor) - 3, lev1, ecke1 + chartwidth + 20, lev1);
+                string s = Convert.ToString(Math.Round(Convert.ToDouble(i) * classmax / 5, round));
+                g.DrawString(s, legend, black, Convert.ToInt32(50 * scalefactor), lev1 - 5, format2);
+            }
+
             for (int i = 0; i < anz_sources; i++)
             {
                 selpoll = form1.listView1.Items[i].SubItems[0].Text.Split(new char[] {':'});
@@ -376,8 +412,6 @@ namespace GralMainForms
                 g.FillRectangle(new HatchBrush(HatchStyle.Percent90, Color.White), ecke1, Convert.ToInt32(500*scalefactor - hoehe), Convert.ToInt32(chartwidth*scalefactor), hoehe);
                 g.DrawRectangle(new Pen(Color.Black), ecke1, Convert.ToInt32(500 * scalefactor - hoehe), Convert.ToInt32(chartwidth*scalefactor), hoehe);
                 g.DrawString(Convert.ToString(Math.Round(value, round)), legend, black, ecke1 + Convert.ToInt32(chartwidth*scalefactor / 2), Convert.ToInt32(500 * scalefactor - hoehe-10), format1);
-                
-                //base.OnPaint(e);
             }
 
             round = get_round(classmax);
@@ -385,11 +419,7 @@ namespace GralMainForms
             //draw axis
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 3);
-            Pen p3 = new Pen(Color.Black, 0.5f)
-            {
-                DashStyle = DashStyle.Dash
-            };
-
+            
             p2.EndCap = LineCap.ArrowAnchor;
             g.DrawLine(p1, Convert.ToInt32(55 * scalefactor), Convert.ToInt32(500 * scalefactor), ecke1 + chartwidth + 20, Convert.ToInt32(500 * scalefactor));
             g.DrawLine(p2, Convert.ToInt32(55 * scalefactor), Convert.ToInt32(500 * scalefactor), Convert.ToInt32(55 * scalefactor), (int) (500 * scalefactor - hoehe_max - 20));
@@ -412,21 +442,8 @@ namespace GralMainForms
                 {
                     addy = 0;
                 }
-
-                base.OnPaint(e);
             }
 
-            //draw frequency levels
-            ecke1 = Convert.ToInt32((Convert.ToInt32(55 + (anz_sources-1) * chartwidth)) * scalefactor);
-            for (int i = 1; i < 6; i++)
-            {
-                int levels = Convert.ToInt32(Convert.ToDouble(i) * classmax * scale/5);
-                int lev1 = Convert.ToInt32((500  - levels)*scalefactor);
-                g.DrawLine(p3, Convert.ToInt32(55 * scalefactor), lev1, ecke1+chartwidth+20, lev1);
-                string s = Convert.ToString(Math.Round(Convert.ToDouble(i) * classmax / 5,round));
-                g.DrawString(s, legend, black, Convert.ToInt32(50 * scalefactor), lev1 - 5, format2);
-                base.OnPaint(e);
-            }
             p1.Dispose();p2.Dispose();p3.Dispose();
             format1.Dispose();
             format2.Dispose();
@@ -464,11 +481,22 @@ namespace GralMainForms
         //save image to clipboard
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Bitmap bitMap = new Bitmap(Width, Height);
-            DrawToBitmap(bitMap, new Rectangle(0, 0, Width, Height));
+            int CopyToClipboardScale = 2;
+            if (pictureBox1.Width < 800)
+            {
+                CopyToClipboardScale = 4;
+            }
+            pictureBox1.Width *= CopyToClipboardScale;
+            pictureBox1.Height *= CopyToClipboardScale;
+            pictureBox1.Refresh();
+            Application.DoEvents();
+            Bitmap bitMap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            pictureBox1.DrawToBitmap(bitMap, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
             Clipboard.SetDataObject(bitMap);
+            pictureBox1.Width /= CopyToClipboardScale;
+            pictureBox1.Height /= CopyToClipboardScale;
+            pictureBox1.Refresh();
         }
-
 
         //consider emission variation or not
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -494,22 +522,21 @@ namespace GralMainForms
         
         void Tot_EmissionsResizeEnd(object sender, EventArgs e)
         {
-            Invalidate();
-            Update();
+            pictureBox1.Width = ClientSize.Width;
+            pictureBox1.Height = ClientSize.Height;
+            pictureBox1.Refresh();
         }
         
         void Tot_EmissionsResize(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Maximized)
             {
-                Invalidate();
-                Update();
+                Tot_EmissionsResizeEnd(null, null);
                 // Maximized!
             }
             if (WindowState == FormWindowState.Normal)
             {
-                Invalidate();
-                Update();
+                Tot_EmissionsResizeEnd(null, null);
                 // Restored!
             }
         }

@@ -51,7 +51,6 @@ namespace GralData
 			var stk = new Stack<KeyValuePair<int, int>>();
 			stk.Push(new KeyValuePair<int, int>(startindex, lastindex));
 			
-			int globalStartIndex = startindex;
 			var bitArray = new BitArray(lastindex + 1, true);
 			
 			while(stk.Count > 0)

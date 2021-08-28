@@ -43,30 +43,36 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMLoadCreateTopography(object sender, EventArgs e)
         {
-            if (GRALSettings.BuildingMode == 3)
+            if (GRALSettings.BuildingMode == BuildingModeEnum.GRAMM)
             {
                 //Special mode: generate flat topography file when GRAMM is used to compute flow around buildings
                 Topofile = Path.Combine(ProjectName, @"Maps", "Flat_topo.txt");
-                using (StreamWriter myWriter = new StreamWriter(Topofile))
+                try
                 {
-                    int NX = Convert.ToInt32((GrammDomRect.East - GrammDomRect.West) / GRAMMHorGridSize) + 2;
-                    int NY = Convert.ToInt32((GrammDomRect.North - GrammDomRect.South) / GRAMMHorGridSize) + 2;
-                    myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                    myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                    myWriter.WriteLine("xllcorner     " + Convert.ToString(GrammDomRect.West - GRAMMHorGridSize));
-                    myWriter.WriteLine("yllcorner     " + Convert.ToString(GrammDomRect.South - GRAMMHorGridSize));
-                    myWriter.WriteLine("cellsize      " + Convert.ToString(GRAMMHorGridSize));
-                    myWriter.WriteLine("NODATA_value  " + "-9999" + "\t UNIT \t m");
-                    for (int j = NY; j > 0; j--)
+                    using (StreamWriter myWriter = new StreamWriter(Topofile))
                     {
-                        for (int i = 1; i <= NX; i++)
+                        int NX = Convert.ToInt32((GrammDomRect.East - GrammDomRect.West) / GRAMMHorGridSize) + 2;
+                        int NY = Convert.ToInt32((GrammDomRect.North - GrammDomRect.South) / GRAMMHorGridSize) + 2;
+                        myWriter.WriteLine("ncols         " + Convert.ToString(NX));
+                        myWriter.WriteLine("nrows         " + Convert.ToString(NY));
+                        myWriter.WriteLine("xllcorner     " + Convert.ToString(GrammDomRect.West - GRAMMHorGridSize));
+                        myWriter.WriteLine("yllcorner     " + Convert.ToString(GrammDomRect.South - GRAMMHorGridSize));
+                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAMMHorGridSize));
+                        myWriter.WriteLine("NODATA_value  " + "-9999" + "\t UNIT \t m");
+                        for (int j = NY; j > 0; j--)
                         {
-                            myWriter.Write("0 ");
+                            for (int i = 1; i <= NX; i++)
+                            {
+                                myWriter.Write("0 ");
+                            }
+                            myWriter.WriteLine();
                         }
-                        myWriter.WriteLine();
                     }
                 }
-
+                catch
+                {
+                    MessageBox.Show("Error when reading Flat_topo.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             else
             {
@@ -123,6 +129,10 @@ namespace Gral
 
             try
             {
+                if (string.IsNullOrEmpty(textBox15.Text) || string.IsNullOrEmpty(textBox12.Text))
+                {
+                    throw new Exception("No GRAMM domain defined! Please define a GRAMM domain area.");
+                }
                 //clear listbox
                 listBox2.Items.Clear();
                 //generate the file geom.in
@@ -139,12 +149,12 @@ namespace Gral
                 Cursor = Cursors.WaitCursor;
 
                 //user can define the number of grid cells at the boundaries used to smooth the topography
-                int n = (int)numericUpDown18.Value * 3; // smooth = max 1/3 of cell count!
+                int n = (int)numericUpDown18.Value * 5; // smooth = max 1/5 of cell count!
                 n = (int)Math.Min((Math.Abs(Convert.ToDouble(textBox12.Text) - Convert.ToDouble(textBox13.Text)) / n), Math.Abs(Convert.ToDouble(textBox14.Text) - Convert.ToDouble(textBox15.Text)) / n);
                 
                 // n= minimal number of cells in x/y direction allowed for smoothing
                 CellNrTopographySmooth = Math.Min(CellNrTopographySmooth, n);
-                if (InputBox1("Define the number of cells at boundaries for smoothing topography", "Nr. of cells:", 0, n, ref CellNrTopographySmooth) == DialogResult.Cancel)
+                if (InputBox1("Define the number of cells at boundaries for smoothing topography", "Nr. of cells (default 0): ", 0, n, ref CellNrTopographySmooth) == DialogResult.Cancel)
                 {
                     Cursor = Cursors.Arrow;
                     return;
@@ -189,7 +199,7 @@ namespace Gral
             catch(Exception ex)
             {
                 Cursor = Cursors.Default;
-                MessageBox.Show("Unable to generate GRAMM grid" + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unable to generate the GRAMM grid!" + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             //enable/disable GRAMM simulations
@@ -278,7 +288,7 @@ namespace Gral
             mywriter.Close();*/
 
             //show controls for landuse file generation
-            if (GRALSettings.BuildingMode != 3)
+            if (GRALSettings.BuildingMode != BuildingModeEnum.GRAMM)
             {
                 button20.Visible = true;
                 button43.Visible = true;

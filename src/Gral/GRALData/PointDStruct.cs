@@ -61,7 +61,7 @@ namespace GralDomain
 
 		public override bool Equals(object obj) 
 		{
-			return obj is PointD && this == (PointD)obj;
+			return obj is PointD d && this == d;
 		}
 		public override int GetHashCode() 
 		{

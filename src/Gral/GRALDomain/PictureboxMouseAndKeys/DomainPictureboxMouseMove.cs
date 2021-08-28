@@ -34,9 +34,7 @@ namespace GralDomain
 		{
 			double lenght=0;
 			
-			if ((MouseControl == 6) || (MouseControl == 8) || (MouseControl == 17) || (MouseControl == 10)
-			    || (MouseControl == 15) || (MouseControl == 24) || (MouseControl == 3) || (MouseControl == 12) 
-			    || (MouseControl == 75) || (MouseControl == 79))
+			if ((MouseControl == MouseMode.BaseMapGeoReference1) || (MouseControl == MouseMode.BaseMapGeoReference2))
             {
                 Activate();
             }
@@ -66,7 +64,7 @@ namespace GralDomain
                             textBox3.Text = heightString;
 
                             // change cell height
-                            if (MouseControl == 9999 && e.Button == MouseButtons.Left)
+                            if (MouseControl == MouseMode.GRALTopographyModify && e.Button == MouseButtons.Left)
                             {
                                 if (TopoModifyBlocked[i, j] == false)
                                 {
@@ -159,18 +157,34 @@ namespace GralDomain
 				catch
 				{}
 			}
-			if (CellHeightsType == 1) // Show GRAMM height
+			if (Math.Abs(CellHeightsType) == 1) // Show GRAMM height
 			{
 				try
 				{
 					if (MainForm.GRAMMHorGridSize > 0)
 					{
-                        int i = (int)((x_real - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
-                        int j = (int)((y_real - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
-                        if ((x_real - MainForm.GrammDomRect.West) > 0 && (y_real - MainForm.GrammDomRect.South) > 0 && i <= CellHeights.GetUpperBound(0) && j <= CellHeights.GetUpperBound(1))
+						int i = 0; int j = 0;
+						// GRAMM mean height
+						if (CellHeightsType == 1)
+						{
+							i = (int)((x_real - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
+							j = (int)((y_real - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
+						}
+						else // GRAMM edge height
                         {
-                            string heightString = CellHeights[i, j].ToString("F1");
-                            toolStripTextBox3.Text = heightString;
+							i = (int)((x_real - MainForm.GrammDomRect.West + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
+							j = (int)((y_real - MainForm.GrammDomRect.South + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
+						}
+                        if (i > 0 && j > 0 && i <= CellHeights.GetUpperBound(0) && j <= CellHeights.GetUpperBound(1))
+                        {
+							string _prefix = "M: ";
+							if (CellHeightsType == -1)
+							{
+								_prefix = "E: ";
+							}
+							
+							string heightString = _prefix + CellHeights[i, j].ToString("F1");
+							toolStripTextBox3.Text = heightString;
                             textBox3.Text = heightString;
                         }
                         else
@@ -184,7 +198,7 @@ namespace GralDomain
 			}
 
 			//draw GRAL model domain
-			if ((MouseControl == 5) && (XDomain > 0))
+			if ((MouseControl == MouseMode.GralDomainEndPoint) && (XDomain > 0))
 			{
 				int x1 = Math.Min(e.X, XDomain);
 				int y1 = Math.Min(e.Y, YDomain);
@@ -198,7 +212,7 @@ namespace GralDomain
 			}
 
 			//draw GRAMM model domain
-			if ((MouseControl == 31) && (XDomain > 0))
+			if ((MouseControl == MouseMode.GrammDomainEndPoint) && (XDomain > 0))
 			{
 				int x1 = Math.Min(e.X, XDomain);
 				int y1 = Math.Min(e.Y, YDomain);
@@ -212,7 +226,7 @@ namespace GralDomain
 			}
 
 			//draw GRAMM sub-domain for export
-			if ((MouseControl == 301) && (XDomain > 0))
+			if ((MouseControl == MouseMode.GrammExportFinal) && (XDomain > 0))
 			{
 				int x1 = Math.Min(e.X, XDomain);
 				int y1 = Math.Min(e.Y, YDomain);
@@ -226,7 +240,7 @@ namespace GralDomain
 			}
 
 			//draw area source
-			if ((MouseControl == 8)||(MouseControl==23))
+			if ((MouseControl == MouseMode.AreaSourcePos)||(MouseControl == MouseMode.ViewAreaMeasurement))
 			{
 				CornerAreaSource[EditAS.CornerAreaCount + 1] = new Point(e.X, e.Y);
 				DrawRubberLine(EditAS.CornerAreaCount, 1);
@@ -235,7 +249,7 @@ namespace GralDomain
 			}
 			
 			// Copy or Move Point Source
-			if (CopiedItem.PointSource != null || MouseControl == 6000) 
+			if (CopiedItem.PointSource != null || MouseControl == MouseMode.PointSourceInlineEdit) 
 			{
 				DrawRubberPS(e.X, e.Y, 0);
 			}
@@ -248,7 +262,7 @@ namespace GralDomain
 				DrawRubberLineSource();
 			}
 			//Copy or Move Receptor
-			if (CopiedItem.Receptor != null || MouseControl == 2400)
+			if (CopiedItem.Receptor != null || MouseControl == MouseMode.ReceptorInlineEdit)
 			{
 				DrawRubberPS(e.X, e.Y, 1);
 			}
@@ -262,7 +276,7 @@ namespace GralDomain
 			}
 			
 			//draw rubber line for changing edge points
-			if ((MouseControl == 108) ||(MouseControl == 100) || (MouseControl == 117) || (MouseControl == 101))
+			if ((MouseControl == MouseMode.AreaSourceEditFinal) ||(MouseControl == MouseMode.LineSourceEditFinal) || (MouseControl == MouseMode.BuildingEditFinal) || (MouseControl == MouseMode.WallEditFinal))
 			{
 				CornerAreaSource[2] = new Point(e.X, e.Y);
 				DrawRubberLine(1, 1);
@@ -270,8 +284,7 @@ namespace GralDomain
 			}
 			
 			// draw rubberlines of edited buildings, area sources, line sources, walls
-			if (MouseControl == 1170 || MouseControl == 1080 || MouseControl == 1081 ||
-			    (MouseControl == 1000) || (MouseControl == 1001))
+			if (MouseControl == MouseMode.BuildingInlineEdit || MouseControl == MouseMode.AreaInlineEdit || MouseControl == MouseMode.VegetationInlineEdit || (MouseControl == MouseMode.LineSourceInlineEdit) || (MouseControl == MouseMode.WallInlineEdit))
 			{
 				CornerAreaSource[2] = new Point(e.X, e.Y);
 				DrawRubberLine(1, 2);
@@ -279,7 +292,7 @@ namespace GralDomain
 			}
 			
 			//draw vegetation
-			if ((MouseControl == 79))
+			if ((MouseControl == MouseMode.VegetationPosCorner))
 			{
 				CornerAreaSource[EditVegetation.CornerVegetation + 1] = new Point(e.X, e.Y);
 				DrawRubberLine(EditVegetation.CornerVegetation, 1);
@@ -288,7 +301,7 @@ namespace GralDomain
 			}
 			
 			//draw building
-			if (MouseControl == 17)
+			if (MouseControl == MouseMode.BuildingPos)
 			{
 				CornerAreaSource[EditB.CornerBuilding + 1] = new Point(e.X, e.Y);
 				DrawRubberLine(EditB.CornerBuilding, 1);
@@ -296,7 +309,7 @@ namespace GralDomain
 				RubberLineCoors[0].X = -2; // reset lenght label
 			}
 			//draw line source, tunnel portals source, measuring tool distance or section drawing for windfields
-			if ((MouseControl == 10) || (MouseControl == 22) || (MouseControl == 15) || (MouseControl == 44) || (MouseControl == 45))
+			if ((MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.ViewDistanceMeasurement) || (MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.SectionWindSel) || (MouseControl == MouseMode.SectionConcSel))
 			{
 				CornerAreaSource[EditLS.CornerLineSource + 1] = new Point(e.X, e.Y);
 				DrawRubberLine(EditLS.CornerLineSource, 1);
@@ -305,7 +318,7 @@ namespace GralDomain
 			}
 
 			//draw walls
-			if (MouseControl == 75)
+			if (MouseControl == MouseMode.WallSet)
 			{
 				CornerAreaSource[EditWall.CornerWallCount + 1] = new Point(e.X, e.Y);
 				DrawRubberLine(EditWall.CornerWallCount, 1);
@@ -314,7 +327,7 @@ namespace GralDomain
 			}
 			
 			//draw rectangle for panel zoom
-			if ((MouseControl == 14) && (XDomain > 0))
+			if ((MouseControl == MouseMode.ViewPanelZoomArea) && (XDomain > 0))
 			{
 				int x1 = Math.Min(e.X, XDomain);
 				int y1 = Math.Min(e.Y, YDomain);

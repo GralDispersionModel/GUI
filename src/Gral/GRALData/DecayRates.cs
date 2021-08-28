@@ -29,7 +29,7 @@ namespace GralData
     {
         public int SourceGroup { get; set; }
         public double DecayRate { get; set; }
-        private static CultureInfo ic = CultureInfo.InvariantCulture;
+        private readonly static CultureInfo ic = CultureInfo.InvariantCulture;
 
         public override string ToString()
         {

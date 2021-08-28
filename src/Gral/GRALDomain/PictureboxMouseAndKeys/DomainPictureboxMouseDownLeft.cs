@@ -59,41 +59,51 @@ namespace GralDomain
 #if __MonoCS__
 #else
             //ToolTip for lenght measurement
-            if ((MouseControl == 10 || MouseControl == 17 || MouseControl == 8 ||
-                 MouseControl == 22 || MouseControl == 23 || MouseControl == 75 || MouseControl == 79) && ShowLenghtLabel)
+            if ((MouseControl == MouseMode.LineSourcePos || MouseControl == MouseMode.BuildingPos || MouseControl == MouseMode.AreaSourcePos || MouseControl == MouseMode.ViewDistanceMeasurement || MouseControl == MouseMode.ViewAreaMeasurement || MouseControl == MouseMode.WallSet || MouseControl == MouseMode.VegetationPosCorner) && ShowLenghtLabel)
             {
                 ToolTipMousePosition.Active = true; // show tool tip lenght of rubberline segment
                 FirstPointLenght.X = (float)St_F.TxtToDbl(textBox1.Text, false);
                 FirstPointLenght.Y = (float)St_F.TxtToDbl(textBox2.Text, false);
             }
 #endif
+            // send Message to all forms registered to the SendClickedCoordinates event
+            try
+            {
+                if (SendCoors != null)
+                {
+                    PointD _pt = new PointD(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
+                    SendCoors(_pt, e);
+                }
+            }
+            catch
+            { }
 
             switch (MouseControl)
             {
-                case 1:
+                case MouseMode.ZoomIn:
                     //Zoom in
                     ZoomPlusMinus(1, e);
                     break;
 
-                case -1:
+                case MouseMode.ZoomOut:
                     //Zoom out
                     ZoomPlusMinus(-1, e);
                     break;
 
-                case 13:
+                case MouseMode.ViewPanelZoom:
                     //Panel zoom
                     XDomain = e.X;
                     YDomain = e.Y;
-                    MouseControl = 14;
+                    MouseControl = MouseMode.ViewPanelZoomArea;
                     break;
 
-                case 2:
+                case MouseMode.ViewMoveMap:
                     //Move map
                     OldXPosition = e.X;
                     OldYPosition = e.Y;
                     break;
 
-                case 3:
+                case MouseMode.BaseMapGeoReference1:
                     //Georeferencing1
                     //Convert PictureBox-Coordinates in Picture-Coordinates
                     GeoReferenceOne.XMouse = (Convert.ToDouble(e.X) - (TransformX + Convert.ToInt32((ItemOptions[0].West - MapSize.West) / BmpScale / MapSize.SizeX))) / ItemOptions[0].PixelMx * MapSize.SizeX / XFac;
@@ -101,7 +111,7 @@ namespace GralDomain
                     GeoReferenceOne.Refresh();
                     break;
 
-                case 12:
+                case MouseMode.BaseMapGeoReference2:
                     //Georeferencing2
                     //Convert PictureBox-Coordinates in Picture-Coordinates
                     GeoReferenceTwo.XMouse = (Convert.ToDouble(e.X) - (TransformX + Convert.ToInt32((ItemOptions[0].West - MapSize.West) / BmpScale / MapSize.SizeX))) / ItemOptions[0].PixelMx * MapSize.SizeX / XFac;
@@ -109,7 +119,7 @@ namespace GralDomain
                     GeoReferenceTwo.Refresh();
                     break;
 
-                case 5:
+                case MouseMode.GralDomainEndPoint:
                     // set endpoint of GRAL-Domain when using shift-Key
                     // calculate the GRAL-Domain
                     {
@@ -123,24 +133,24 @@ namespace GralDomain
                         int recwidth = x2 - x1;
                         int recheigth = y2 - y1;
                         GRALDomain = new Rectangle(x1, y1, recwidth, recheigth);
-
+                        XDomain = 0;
                         Picturebox1_MouseUp(null, e); // force button up event
                     }
                     break;
 
-                case 4:
+                case MouseMode.GralDomainStartPoint:
                     //get starting point for drawing GRAL model domain
                     if (Gral.Main.Project_Locked == false)
                     {
                         XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
                         YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
                         Cursor.Clip = Bounds;
-                        MouseControl = 5;
+                        MouseControl = MouseMode.GralDomainEndPoint;
                     }
                     break;
 
-                case 6:
-                case 6000:
+                case MouseMode.PointSourcePos:
+                case MouseMode.PointSourceInlineEdit:
                     //digitize position of point source
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -148,18 +158,18 @@ namespace GralDomain
                         EditPS.SetXCoorText(textBox1.Text);
                         EditPS.SetYCoorText(textBox2.Text);
                         EditPS.SaveArray();
-                        if (MouseControl == 6000) // set new position inline editing
+                        if (MouseControl == MouseMode.PointSourceInlineEdit) // set new position inline editing
                         {
                             EditAndSavePointSourceData(sender, null);
                             InfoBoxCloseAllForms();
-                            MouseControl = 700;
+                            MouseControl = MouseMode.PointSourceDeQueue;
                         }
 
                         Picturebox1_Paint(); // 
                     }
                     break;
 
-                case 8:
+                case MouseMode.AreaSourcePos:
                     //digitize position of the corner points of area sources
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {
@@ -170,29 +180,48 @@ namespace GralDomain
                     {
                         if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                         {
-                            if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (EditAS.ItemDisplayNr < EditAS.ItemData.Count && EditAS.ItemData[EditAS.ItemDisplayNr].Pt.Count > 0)
+                            {
+                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    EditSourceShape = true;
+                                }
+                            }
+                            else // new item
                             {
                                 EditSourceShape = true;
                             }
-
                         }
                         if (EditSourceShape)
                         {
-                            //set new area source - get x,y coordinates
-                            CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
-                            EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                            EditAS.CornerAreaCount += 1;
-                            EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount));
+                            double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            //Skip double click on same coor
+                            if (EditAS.CornerAreaCount > 1 && Math.Abs(x - EditAS.CornerAreaX[EditAS.CornerAreaCount - 1]) < 0.01 &&
+                                                              Math.Abs(y - EditAS.CornerAreaY[EditAS.CornerAreaCount - 1]) < 0.01)
+                            { }
+                            else
+                            {
+                                //set new area source - get x,y coordinates
+                                CornerAreaSource[EditAS.CornerAreaCount] = new Point(e.X, e.Y);
+                                EditAS.CornerAreaX[EditAS.CornerAreaCount] = x;
+                                EditAS.CornerAreaY[EditAS.CornerAreaCount] = y;
+                                EditAS.CornerAreaCount += 1;
+                                EditAS.SetNumberOfVerticesText(Convert.ToString(EditAS.CornerAreaCount));
+                            }
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
                         }
+                        else
+                        {
+                            ToolTipMousePosition.Active = false;
+                        }
                     }
                     break;
 
-                case 17:
+                case MouseMode.BuildingPos:
                     //digitize position of the corner points of buildings
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -205,30 +234,50 @@ namespace GralDomain
                         {
                             if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                             {
-                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (EditB.ItemDisplayNr < EditB.ItemData.Count && EditB.ItemData[EditB.ItemDisplayNr].Pt.Count > 0)
+                                {
+                                    if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                    {
+                                        EditSourceShape = true;
+                                    }
+                                }
+                                else // new item
                                 {
                                     EditSourceShape = true;
                                 }
-
                             }
+
                             if (EditSourceShape)
                             {
-                                //set new building - get x,y coordinates
-                                CornerAreaSource[EditB.CornerBuilding] = new Point(e.X, e.Y);
-                                EditB.CornerBuildingX[EditB.CornerBuilding] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                                EditB.CornerBuildingY[EditB.CornerBuilding] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                                EditB.CornerBuilding++;
-                                EditB.SetNumberOfVerticesText(Convert.ToString(EditB.CornerBuilding));
+                                double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                                double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                                //Skip double click on same coor
+                                if (EditB.CornerBuilding > 1 && Math.Abs(x - EditB.CornerBuildingX[EditB.CornerBuilding - 1]) < 0.01 &&
+                                                                Math.Abs(y - EditB.CornerBuildingY[EditB.CornerBuilding - 1]) < 0.01)
+                                { }
+                                else
+                                {
+                                    //set new building - get x,y coordinates
+                                    CornerAreaSource[EditB.CornerBuilding] = new Point(e.X, e.Y);
+                                    EditB.CornerBuildingX[EditB.CornerBuilding] = x;
+                                    EditB.CornerBuildingY[EditB.CornerBuilding] = y;
+                                    EditB.CornerBuilding++;
+                                    EditB.SetNumberOfVerticesText(Convert.ToString(EditB.CornerBuilding));
+                                }
                                 // Reset Rubber-Line Drawing
                                 Cursor.Clip = Bounds;
                                 RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                                 Picturebox1_Paint(); // 
                             }
+                            else
+                            {
+                                ToolTipMousePosition.Active = false;
+                            }
                         }
                     }
                     break;
 
-                case 79:
+                case MouseMode.VegetationPosCorner:
                     //digitize position of the corner points of forests
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditAS.CornerAreaX.Length > 1) // Kuntner: change one edge-point of area source
                     {
@@ -239,31 +288,49 @@ namespace GralDomain
                     {
                         if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                         {
-                            if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (EditVegetation.ItemDisplayNr < EditVegetation.ItemData.Count && EditVegetation.ItemData[EditVegetation.ItemDisplayNr].Pt.Count > 0)
+                            {
+                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    EditSourceShape = true;
+                                }
+                            }
+                            else // new item
                             {
                                 EditSourceShape = true;
                             }
-
                         }
                         if (EditSourceShape)
                         {
-                            //set new area source - get x,y coordinates
-                            CornerAreaSource[EditVegetation.CornerVegetation] = new Point(e.X, e.Y);
-                            EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                            EditVegetation.CornerVegetation += 1;
-                            EditVegetation.SetNumberOfVerticesText(Convert.ToString(EditVegetation.CornerVegetation));
+                            double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            //Skip double click on same coor
+                            if (EditVegetation.CornerVegetation > 1 && Math.Abs(x - EditVegetation.CornerVegX[EditVegetation.CornerVegetation - 1]) < 0.01 &&
+                                                                       Math.Abs(y - EditVegetation.CornerVegY[EditVegetation.CornerVegetation - 1]) < 0.01)
+                            { }
+                            else
+                            {
+                                //set new area source - get x,y coordinates
+                                CornerAreaSource[EditVegetation.CornerVegetation] = new Point(e.X, e.Y);
+                                EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = x;
+                                EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = y;
+                                EditVegetation.CornerVegetation += 1;
+                                EditVegetation.SetNumberOfVerticesText(Convert.ToString(EditVegetation.CornerVegetation));
+                            }
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
                         }
+                        else
+                        {
+                            ToolTipMousePosition.Active = false;
+                        }
                     }
                     break;
 
-                case 10:
+                case MouseMode.LineSourcePos:
                     //digitize position of the corner points of line sources
-
                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control && EditLS.CornerLineX.Length > 1) // Kuntner: change point of line source
                     {
                         // Change one edge of the line source
@@ -273,30 +340,49 @@ namespace GralDomain
                     {
                         if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                         {
-                            if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (EditLS.ItemDisplayNr < EditLS.ItemData.Count && EditLS.ItemData[EditLS.ItemDisplayNr].Pt.Count > 0)
+                            {
+                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    EditSourceShape = true;
+                                }
+                            }
+                            else // new item
                             {
                                 EditSourceShape = true;
                             }
-
                         }
                         if (EditSourceShape)
                         {
-                            // set new line-source - get x,y coordinates
-                            CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
-                            EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-
-                            EditLS.CornerLineSource += 1;
-                            EditLS.SetNumberOfVerticesText(Convert.ToString(EditLS.CornerLineSource));
+                            double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            //Skip double click on same coor
+                            if (EditLS.CornerLineSource > 1 && Math.Abs(x - EditLS.CornerLineX[EditLS.CornerLineSource - 1]) < 0.01 &&
+                                                               Math.Abs(y - EditLS.CornerLineY[EditLS.CornerLineSource - 1]) < 0.01)
+                            {}
+                            else
+                            { 
+                                // set new line-source edge point - get x,y coordinates
+                                CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
+                                EditLS.CornerLineX[EditLS.CornerLineSource] = x;
+                                EditLS.CornerLineY[EditLS.CornerLineSource] = y;
+                                EditLS.CornerLineSource += 1;
+                                EditLS.SetNumberOfVerticesText(Convert.ToString(EditLS.CornerLineSource));
+                            }
                             // Reset Rubber-Line Drawing
                             Cursor.Clip = Bounds;
                             RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                             Picturebox1_Paint(); // 
+
+                        }
+                        else
+                        {
+                            ToolTipMousePosition.Active = false;
                         }
                     }
                     break;
 
-                case 75:
+                case MouseMode.WallSet:
                     //digitize position of the corner points of walls
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -309,36 +395,56 @@ namespace GralDomain
                         {
                             if (EditSourceShape == false && Gral.Main.Project_Locked == false)
                             {
-                                if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                if (EditWall.ItemDisplayNr < EditWall.ItemData.Count && EditWall.ItemData[EditWall.ItemDisplayNr].Pt.Count > 0)
+                                {
+                                    if (MessageBox.Show(this, "Input new and delete current shape?", "Edit vertices", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                    {
+                                        EditSourceShape = true;
+                                    }
+                                }
+                                else // new item
                                 {
                                     EditSourceShape = true;
                                 }
                             }
                             if (EditSourceShape)
                             {
-                                // set new wall - get x,y coordinates
-                                CornerAreaSource[EditWall.CornerWallCount] = new Point(e.X, e.Y);
-                                EditWall.CornerWallX[EditWall.CornerWallCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                                EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                                EditWall.CornerWallZ[EditWall.CornerWallCount] = EditWall.GetNumericUpDownHeightValue();
-                                if (EditWall.CheckboxAbsHeightChecked()) // absolute height
+                                double x = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                                double y = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                                //Skip double click on same coor
+                                if (EditWall.CornerWallCount > 1 && Math.Abs(x - EditWall.CornerWallX[EditWall.CornerWallCount - 1]) < 0.01 &&
+                                                                    Math.Abs(y - EditWall.CornerWallY[EditWall.CornerWallCount - 1]) < 0.01)
+                                { }
+                                else
                                 {
-                                    EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
-                                }
+                                    // set new wall - get x,y coordinates
+                                    CornerAreaSource[EditWall.CornerWallCount] = new Point(e.X, e.Y);
+                                    EditWall.CornerWallX[EditWall.CornerWallCount] = x;
+                                    EditWall.CornerWallY[EditWall.CornerWallCount] = y;
+                                    EditWall.CornerWallZ[EditWall.CornerWallCount] = EditWall.GetNumericUpDownHeightValue();
+                                    if (EditWall.CheckboxAbsHeightChecked()) // absolute height
+                                    {
+                                        EditWall.CornerWallZ[EditWall.CornerWallCount] *= -1;
+                                    }
 
-                                EditWall.CornerWallCount += 1;
-                                EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount));
+                                    EditWall.CornerWallCount += 1;
+                                    EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount));
+                                }
                                 // Reset Rubber-Line Drawing
                                 Cursor.Clip = Bounds;
                                 RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1;
                                 Picturebox1_Paint(); // 
                             }
+                            else
+                            {
+                                ToolTipMousePosition.Active = false;
+                            }
                         }
                     }
                     break;
 
-                case 24:
-                case 2400:
+                case MouseMode.ReceptorPos:
+                case MouseMode.ReceptorInlineEdit:
                     //digitize position of receptors
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -346,12 +452,12 @@ namespace GralDomain
                         EditR.SetXCoorText(textBox1.Text);
                         EditR.SetYCoorText(textBox2.Text);
                         EditR.SaveArray();
-                        if (MouseControl == 2400) // set new position inline editing
+                        if (MouseControl == MouseMode.ReceptorInlineEdit) // set new position inline editing
                         {
                             EditAndSaveReceptorData(sender, null);
 
                             InfoBoxCloseAllForms();
-                            MouseControl = 26;
+                            MouseControl = MouseMode.ReceptorDeQueue;
                         }
 
                         Picturebox1_Paint(); // 
@@ -360,7 +466,7 @@ namespace GralDomain
 
                     // Tooltip for picturebox1
 
-                case 7:
+                case MouseMode.PointSourceSel:
                     //select point sources
                     {
                         int i = 0;
@@ -437,12 +543,12 @@ namespace GralDomain
                     }
                     break;
 
-                case 700:
+                case MouseMode.PointSourceDeQueue:
                     // delete one mouseclick from queue
-                    MouseControl = 7;
+                    MouseControl = MouseMode.PointSourceSel;
                     break;
 
-                case 25:
+                case MouseMode.ReceptorSel:
                     //select receptors
                     {
                         int i = 0;
@@ -478,12 +584,12 @@ namespace GralDomain
                     }
                     break;
 
-                case 26:
+                case MouseMode.ReceptorDeQueue:
                     // delete one mouseclick from queue
-                    MouseControl = 25;
+                    MouseControl = MouseMode.ReceptorSel;
                     break;
 
-                case 9:
+                case MouseMode.AreaSourceSel:
                     //select area sources
                     {
                         int i = 0;
@@ -563,7 +669,7 @@ namespace GralDomain
                                                     }
                                                     else
                                                     {
-                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                                     }
                                                 }
                                             }
@@ -581,7 +687,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 77:
+                case MouseMode.VegetationSel:
                     //select vegetation
                     {
                         int i = 0;
@@ -628,7 +734,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 19:
+                case MouseMode.BuildingSel:
                     //select buildings
                     {
                         int i = 0;
@@ -671,7 +777,7 @@ namespace GralDomain
                                     infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(Math.Round(height, 1))) + "\n";
                                 }
 
-                                infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
+                                //infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
                                 infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_bd.Area, 1).ToString() + "\n";
                                 AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                                 stop = true;
@@ -683,7 +789,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 11:
+                case MouseMode.LineSourceSel:
                     //select line sources
                     {
                         int i = 0;
@@ -778,7 +884,7 @@ namespace GralDomain
                                             }
                                             else
                                             {
-                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                             }
                                         }       
                                     }
@@ -793,7 +899,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 16:
+                case MouseMode.PortalSourceSel:
                     //select portal sources
                     {
                         int i = 0;
@@ -866,7 +972,7 @@ namespace GralDomain
                                         }
                                         else
                                         {
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[OU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                         }
                                     }               
                                 }
@@ -880,7 +986,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 76:
+                case MouseMode.WallSel:
                     //select walls
                     {
                         int i = 0;
@@ -938,7 +1044,7 @@ namespace GralDomain
                     }
                     break; ;
 
-                case 20:
+                case MouseMode.ViewNorthArrowPos:
                     //digitize position of north arrow
                     {
                         //get x,y coordinates
@@ -972,7 +1078,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 21:
+                case MouseMode.ViewScaleBarPos:
                     //digitize position of map scale bar
                     {
                         //get x,y coordinates
@@ -1004,7 +1110,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 15:
+                case MouseMode.PortalSourcePos:
                     //digitize position of portal source
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -1027,7 +1133,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 22:
+                case MouseMode.ViewDistanceMeasurement:
                     //measuring tool "distance"
                     {
                         //get x,y coordinates
@@ -1042,8 +1148,8 @@ namespace GralDomain
                     }
                     break;
 
-                case 44:
-                case 45:
+                case MouseMode.SectionWindSel:
+                case MouseMode.SectionConcSel:
                     // select section for windfiled section drawing
                     {
                         //get x,y coordinates
@@ -1061,7 +1167,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 23:
+                case MouseMode.ViewAreaMeasurement:
                     //measuring tool "area"
                     {
                         //get x,y coordinates
@@ -1076,7 +1182,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 28:
+                case MouseMode.ViewLegendPos:
                     //position of legend
                     {
                         if (ActualEditedDrawingObject != null)
@@ -1089,7 +1195,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 31:
+                case MouseMode.GrammDomainEndPoint:
                     // set endpoint of GRAMM model domain with shift button
                     if (shift_key_pressed)
                     {
@@ -1104,12 +1210,13 @@ namespace GralDomain
                         int recwidth = x2 - x1;
                         int recheigth = y2 - y1;
                         GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
+                        XDomain = 0;
 
                         Picturebox1_MouseUp(null, e); // force button up event
                     }
                     break;
 
-                case 301:
+                case MouseMode.GrammExportFinal:
                     // set endpoint for exporting GRAMM sub-domain with shift button
                     if (shift_key_pressed)
                     {
@@ -1129,135 +1236,119 @@ namespace GralDomain
                     }
                     break;
 
-                case 30:
+                case MouseMode.GrammDomainStartPoint:
                     //get starting point for drawing GRAMM model domain
                     {
                         XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
                         YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
                         //							xdomain = e.X;
                         //							ydomain = e.Y;
-                        MouseControl = 31;
+                        MouseControl = MouseMode.GrammDomainEndPoint;
                         Cursor.Clip = Bounds;
                     }
                     break;
 
-                case 300:
+                case MouseMode.GrammExportStart:
                     //get starting point for exporting GRAMM sub-domain
                     {
                         XDomain = Convert.ToInt32((Convert.ToDouble(textBox1.Text.Replace(".", decsep)) - MapSize.West) / (BmpScale * MapSize.SizeX) + TransformX);
                         YDomain = Convert.ToInt32((Convert.ToDouble(textBox2.Text.Replace(".", decsep)) - MapSize.North) / (BmpScale * MapSize.SizeY) + TransformY);
                         GRAMMDomain = new Rectangle(XDomain, YDomain, 0, 0);
-                        MouseControl = 301;
+                        MouseControl = MouseMode.GrammExportFinal;
                         Cursor.Clip = Bounds;
                     }
                     break;
 
-                case 32:
-                    //get sample point for computing meteorological time series from GRAMM windfield
-                    {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
-                        {
-                            MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        MeteoDialog.X_Coor.Text = XDomain.ToString();
-                        MeteoDialog.Y_Coor.Text = YDomain.ToString();
-                    }
+                case MouseMode.SetPointMetTimeSeries:
+                case MouseMode.SetPointConcTimeSeries:
                     break;
 
-                case 65:
+                case MouseMode.SetPointReOrder:
                     //get sample point for re-ordering GRAMM windfield to meet observed wind data better
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
+                        int xDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                        int yDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                        if ((xDomain < MainForm.GrammDomRect.West) || (xDomain > MainForm.GrammDomRect.East) || (yDomain < MainForm.GrammDomRect.South) || (yDomain > MainForm.GrammDomRect.North))
                         {
                             MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
-                            MouseControl = 0;
+                            MouseControl = MouseMode.Default;
                             Cursor = Cursors.Default;
-                            ReorderGrammWindfields();
+                            ReorderGrammWindfields(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                         }
                     }
                     break;
 
-                case 66:
+                case MouseMode.SetPointMatch:
                     //get sample point for re-ordering GRAMM windfield to meet newly observed wind and stability data at any location within the model domain
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
+                        if (MMO != null)
                         {
-                            MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            //set new coordinates manually
-                            if (MMO.dataGridView1.CurrentCell != null) // Kuntner: check if line does exist!
+                            XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                            YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                            if ((XDomain < MainForm.GrammDomRect.West) || (XDomain > MainForm.GrammDomRect.East) || (YDomain < MainForm.GrammDomRect.South) || (YDomain > MainForm.GrammDomRect.North))
                             {
-                                int zeilenindex = MMO.dataGridView1.CurrentCell.RowIndex;
-                                MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(XDomain);
-                                MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(YDomain);
+                                MessageBox.Show(this, "Point is outside GRAMM domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
+                            else
+                            {
+                                //set new coordinates manually
+                                if (MMO.dataGridView1.CurrentCell != null) // Kuntner: check if line does exist!
+                                {
+                                    int zeilenindex = MMO.dataGridView1.CurrentCell.RowIndex;
+                                    MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(XDomain);
+                                    MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(YDomain);
+                                    MMO.BringToFront();
+                                }
 
+                            }
                         }
                     }
                     break;
 
-                case 35:
+                case MouseMode.SetPointSourceApport:
                     //get sample point for computing source apportionment
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        MouseControl = 0;
+                        MouseControl = MouseMode.Default;
                         Cursor = Cursors.Default;
-                        SourceApportionment(XDomain, YDomain);
+                        SourceApportionment(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
-                case 50:
+                case MouseMode.SetPointConcFile:
                     //get sample point to get a concentration value 
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        //mousecontrol = 0;
-                        GetConcentrationFromFile(ConcFilename);
+                        //MouseControl = MouseMode.Default;
+                        GetConcentrationFromFile(ConcFilename, new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
-                case 40:
+                case MouseMode.SetPointVertWindProfileOnline:
                     //get sample point for vertical profile for GRAMM online evaluations
                     {
-                        MouseControl = 0;
+                        MouseControl = MouseMode.Default;
                         Cursor = Cursors.Default;
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        VertProfile();
+                        VertProfile(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
-                case 200:
+                case MouseMode.SetPointConcProfile:
                     //get sample point for vertical 3D profile of GRAL concentrations
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        Vert3DConcentration();
+                        Vert3DConcentration(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
-                case 62:
+                case MouseMode.SetPointVertWindProfile:
                     //get sample point for vertical profile for GRAMM windfields
                     {
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
-                        VertProfile2();
+                        VertProfile2(new PointD(Convert.ToDouble(textBox1.Text.Replace(".", decsep)), Convert.ToDouble(textBox2.Text.Replace(".", decsep))));
                     }
                     break;
 
-                case 70:
+                case MouseMode.SetPointGRAMMGrid:
                     // check single value at GRAMM grid
                     {
                         int sel = 0;
@@ -1280,18 +1371,18 @@ namespace GralDomain
                         double[,] arr = new double[1, 1];
                         int x1 = 1;
                         int y1 = 1;
-                        XDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
-                        YDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
+                        int xDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
+                        int yDomain = Convert.ToInt32(Convert.ToDouble(textBox2.Text.Replace(".", decsep)));
 
                         if (MainForm.textBox13.Text != "")
                         {
-                            x1 = Convert.ToInt32(Math.Floor((XDomain - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize));
-                            y1 = Convert.ToInt32(Math.Floor((YDomain - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize));
+                            x1 = Convert.ToInt32(Math.Floor((xDomain - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize));
+                            y1 = Convert.ToInt32(Math.Floor((yDomain - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize));
                         }
                         else
                         {
-                            x1 = Convert.ToInt32(Math.Floor((XDomain - Convert.ToInt32(MainForm.textBox6.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
-                            y1 = Convert.ToInt32(Math.Floor((YDomain - Convert.ToInt32(MainForm.textBox5.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
+                            x1 = Convert.ToInt32(Math.Floor((xDomain - Convert.ToInt32(MainForm.textBox6.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
+                            y1 = Convert.ToInt32(Math.Floor((yDomain - Convert.ToInt32(MainForm.textBox5.Text)) / Convert.ToDouble(MainForm.numericUpDown10.Value)));
                         }
                         //MessageBox.Show(this, Convert.ToString(x1) +"/" + Convert.ToString(y1));
 
@@ -1313,29 +1404,29 @@ namespace GralDomain
                     }
                     break;
 
-                case 1000:
+                case MouseMode.LineSourceInlineEdit:
                     //final corner point of changed line source point
                     SetNewEdgepointLine();
                     break;
 
-                case 1001:
+                case MouseMode.WallInlineEdit:
                     //final corner point of changed wall
                     SetNewEdgepointWall();
                     break;
 
-                case 1170:
+                case MouseMode.BuildingInlineEdit:
                     //final corner point of changed building edge point
                     SetNewEdgepointBuilding();
                     break;
 
-                case 108:
-                case 1080:
+                case MouseMode.AreaSourceEditFinal:
+                case MouseMode.AreaInlineEdit:
                     //final corner point of changed area source point
                     SetNewEdgepointArea();
                     break;
 
-                case 109:
-                case 1081:
+                case MouseMode.VegetationEditFinal:
+                case MouseMode.VegetationInlineEdit:
                     //final corner point of changed vegetation
                     SetNewEdgepointVegetation();
                     break;

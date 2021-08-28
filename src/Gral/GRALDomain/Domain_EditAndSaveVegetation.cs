@@ -28,17 +28,17 @@ namespace GralDomain
     public partial class Domain
     {
         /// <summary>
-        /// Start the vegetation dialog (checkbox26 = checked) or save the vegetation data (checkbox26 = unchecked)
+        /// Show the vegetation dialog (checkbox26 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox26.checked == false and sender == null -> EditVegetation.SaveArray not called</param>
-        void EditAndSaveVegetationData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowVegetationDialog(object sender, EventArgs e)
         {
             VegetationToolStripMenuItem.Checked = checkBox26.Checked;
-            
+
             if (checkBox26.Checked == true)
             {
                 HideWindows(26); // Kuntner
-                
+
                 if (ShowFirst.Veg) // set the inital position of the form
                 {
                     if (ShowFirst.Ls == false)
@@ -63,74 +63,86 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditVegetation.Location = GetScreenPositionForNewDialog();
+                        EditVegetation.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Veg = false;
                 }
-                MouseControl = 79;
+                MouseControl = MouseMode.VegetationPosCorner;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditVegetation.Show();
-                EditVegetation.TopMost = true; // Kuntner
                 EditVegetation.ShowForm();
+                EditVegetation.BringToFront();
                 Cursor = Cursors.Cross;
-                
-                CheckForExistingDrawingObject("VEGETATION");  
+
+                CheckForExistingDrawingObject("VEGETATION");
             }
             else
             {
-                EditVegetation.Hide(); // Kuntner first hide form to save actual sourcedata
-                if (Gral.Main.Project_Locked == true)
+                MouseControl = MouseMode.Default;
+                EditVegetation.Hide();
+            }
+        }
+
+        /// <summary>
+        /// Save the vegetation data (checkbox26 = unchecked)
+        /// </summary>
+        /// <param name="sender"></param>
+        void EditAndSaveVegetationData(object sender, EventArgs e)
+        {
+            checkBox26.Checked = false;
+            VegetationToolStripMenuItem.Checked = checkBox26.Checked;
+            MouseControl = MouseMode.Default;
+
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else if (MainForm.DeleteGralGffFile() == DialogResult.OK) // Warningmessage if gff Files exist!
+            {
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
+                    EditVegetation.SaveArray();
                 }
-                else if (MainForm.DeleteGralGffFile() == DialogResult.OK) // Warningmessage if gff Files exist!
+                //save Vegetation input to file
+                VegetationDataIO _veg = new VegetationDataIO();
+                _veg.SaveVegetation(EditVegetation.ItemData, Gral.Main.ProjectName, Gral.Main.CompatibilityToVersion1901);
+                _veg = null;
+
+                Cursor = Cursors.Default;
+                MouseControl = MouseMode.Default;
+                //this.Width = ScreenWidth;
+                //this.Height = ScreenHeight - 50;
+                for (int i = 0; i <= EditVegetation.CornerVegetation; i++)
                 {
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
+                    CornerAreaSource[EditVegetation.CornerVegetation] = new Point();
+                }
+
+                EditVegetation.CornerVegetation = 0;
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
+
+                if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None)
+                {
+                    if (EditVegetation.ItemData.Count > 0)
                     {
-                        EditVegetation.SaveArray();
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
+                        MainForm.button9.Visible = true;
                     }
-                    //save Vegetation input to file
-                    VegetationDataIO _veg = new VegetationDataIO();
-                    _veg.SaveVegetation(EditVegetation.ItemData, Gral.Main.ProjectName, Gral.Main.CompatibilityToVersion1901);
-                    _veg = null;
-                    
-                    Cursor = Cursors.Default;
-                    MouseControl = 0;
-                    //this.Width = ScreenWidth;
-                    //this.Height = ScreenHeight - 50;
-                    for (int i = 0; i <= EditVegetation.CornerVegetation; i++)
+                    else
                     {
-                        CornerAreaSource[EditVegetation.CornerVegetation] = new Point();
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.Invisible); // Building label - no buildings
                     }
-                    
-                    EditVegetation.CornerVegetation = 0;
-                    Picturebox1_Paint();
-                    MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
-                    
-                    if (MainForm.GRALSettings.BuildingMode != 0)
-                    {
-                        if (EditVegetation.ItemData.Count > 0)
-                        {
-                            MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
-                            MainForm.button9.Visible = true;
-                        }
-                        else
-                        {
-                            MainForm.Change_Label(3, -1); // Building label - no buildings
-                        }
-                    }
-                    
-                    //add/delete vegetation in object list
-                    if (EditVegetation.ItemData.Count == 0)
-                    {
-                        RemoveItemFromItemOptions("VEGETATION");
-                    }
+                }
+
+                //add/delete vegetation in object list
+                if (EditVegetation.ItemData.Count == 0)
+                {
+                    RemoveItemFromItemOptions("VEGETATION");
                 }
             }
-            
+
+
             //show/hide button to select buildings
             if (EditVegetation.ItemData.Count > 0)
             {
@@ -141,10 +153,12 @@ namespace GralDomain
                 button50.Visible = false;
             }
 
+            EditVegetation.Hide(); // Kuntner first hide form to save actual sourcedata
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations
             MainForm.Enable_GRAMM();
+            Picturebox1_Paint();
         }
     }
 }

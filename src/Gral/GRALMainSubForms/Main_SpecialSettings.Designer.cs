@@ -42,10 +42,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -127,7 +134,7 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(15, 258);
+            this.button1.Location = new System.Drawing.Point(15, 392);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(90, 29);
             this.button1.TabIndex = 2;
@@ -138,7 +145,7 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(215, 258);
+            this.button2.Location = new System.Drawing.Point(215, 392);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(90, 29);
             this.button2.TabIndex = 2;
@@ -151,7 +158,7 @@
             this.checkBox3.Checked = true;
             this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            this.checkBox3.Location = new System.Drawing.Point(15, 213);
+            this.checkBox3.Location = new System.Drawing.Point(15, 323);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(201, 20);
             this.checkBox3.TabIndex = 60;
@@ -163,7 +170,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 184);
+            this.label2.Location = new System.Drawing.Point(22, 294);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 2;
@@ -171,7 +178,7 @@
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(89, 182);
+            this.numericUpDown2.Location = new System.Drawing.Point(89, 292);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             3,
             0,
@@ -184,11 +191,92 @@
         "ticle assignment\r\nand the number of reflections or time loops. This value is not" +
         " stored.");
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(10, 25);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(71, 17);
+            this.checkBox4.TabIndex = 1;
+            this.checkBox4.Text = "Activated";
+            this.toolTip1.SetToolTip(this.checkBox4, "Override the default continuation of a calculation and start a calculation again " +
+        "with\r\nSituation 1 by reusing the temporary concentration ");
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Enabled = false;
+            this.numericUpDown3.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Location = new System.Drawing.Point(160, 51);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(62, 20);
+            this.numericUpDown3.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.numericUpDown3, "Beyond this radius around sources, the wind field is calculated diagnostically \r\n" +
+        "even in the presence of buildings or vegetation areas");
+            this.numericUpDown3.Value = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.numericUpDown3);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.checkBox4);
+            this.groupBox3.Location = new System.Drawing.Point(15, 188);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(290, 89);
+            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Reduce the size of prognostic sub domains";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 53);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Radius in [m]";
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Checked = true;
+            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
+            this.checkBox5.Location = new System.Drawing.Point(15, 349);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(214, 20);
+            this.checkBox5.TabIndex = 61;
+            this.checkBox5.Text = "Disable GRAL Online Functions";
+            this.toolTip1.SetToolTip(this.checkBox5, "Wait for a keystroke at the end of a calculation");
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
             // Main_SpecialSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(320, 314);
+            this.ClientSize = new System.Drawing.Size(320, 444);
+            this.Controls.Add(this.checkBox5);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.label2);
@@ -206,6 +294,9 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,5 +316,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox5;
     }
 }

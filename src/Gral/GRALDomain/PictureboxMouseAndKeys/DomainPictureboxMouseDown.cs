@@ -32,68 +32,69 @@ namespace GralDomain
         public void Picturebox1_MouseDown(object sender, MouseEventArgs e)
         {
             #region Mousecontrol-Values
-//				2    Move map
-//				3    Georeferencing 1
-//				4    Set startpoint of GRAL domain
-//				5    Set endpoint of GRAL domain
-//				6    Position of point source
-//				7    Select point source
-//				8    Position of area corner
-//				9    Select area source
-//				10    Position of line corner
-//				11    Select line source
-//				12    Georeferencing 2
-//				13    Panel zoom
-//				14    Get zoom area for panel zoom
-//				15    Position of portal
-//				16    Select portal
-//				17    Position of building corner
-//				19    Select buildings
-//				20    Digitize north arrow
-//				21    Digitize map scale bar
-//				22    Measure distance
-//				23    Measure area
-//				24    Position of receptor
-//				25    Select receptor
-//				26    Delete one mouseclick from queue for receptor
-//				28    Set poition of legend
-//				30    Set startpoint of GRAMM domain
-//				31    Set endpoint of GRAMM domain
-//				32    Sample point for met-timeseries
-//				35    Sample point for source apportionment
-//				40    Sample point for vertical profile GRAMM online
-//				44    Select section for wind section drawing
-//				45    Select section for concentration section drawing
-//				50    Sample point for concentration from file
-//				62    Sample point for vertical profile
-//				65    Sample point for re-order
-//				66    Sample point for match-to-observation
-//				70    Check single value at GRAMM grid
-//				75	  Position of wall corner
-//				76    Select wall
-//				77    Select vegetation
-//				78	  Position of wall corner
-//				79    Position of area corner
-//				100    final corner point of changed line source point
-//				101    final editing wall point
-//				108    final corner point of changed area source point
-//				109    final corner point of changed vegetation point
-//				117    final corner point of changed building edge point
-//				200    3D concentration - set point
-//				300    Startpoint of exporting GRAMM domain
-//				301    Endpoint of exporting GRAMM domain
-//				700    Delete one mouseclick from queue for point source
-//				1000   Position of line source point inline editing
-//				1001 	Position of wall point inline editing
-//				1080    Position of area source point inline editing
-//				1081    Position of vegetation point inline editing
-//				1170    Position of building edge point inline editing
-//				2400    Position of receptor inline editing
-//				6000    Position of point source inline editing
-//				7000    Move and scale base map
-//				9999    Mofification of the GRAL topography
+            //				2    Move map
+            //				3    Georeferencing 1
+            //				4    Set startpoint of GRAL domain
+            //				5    Set endpoint of GRAL domain
+            //				6    Position of point source
+            //				7    Select point source
+            //				8    Position of area corner
+            //				9    Select area source
+            //				10    Position of line corner
+            //				11    Select line source
+            //				12    Georeferencing 2
+            //				13    Panel zoom
+            //				14    Get zoom area for panel zoom
+            //				15    Position of portal
+            //				16    Select portal
+            //				17    Position of building corner
+            //				19    Select buildings
+            //				20    Digitize north arrow
+            //				21    Digitize map scale bar
+            //				22    Measure distance
+            //				23    Measure area
+            //				24    Position of receptor
+            //				25    Select receptor
+            //				26    Delete one mouseclick from queue for receptor
+            //				28    Set poition of legend
+            //				30    Set startpoint of GRAMM domain
+            //				31    Set endpoint of GRAMM domain
+            //				32    Sample point for met-timeseries
+            //				33    Sample point for concentration-timeseries
+            //				35    Sample point for source apportionment
+            //				40    Sample point for vertical profile GRAMM online
+            //				44    Select section for wind section drawing
+            //				45    Select section for concentration section drawing
+            //				50    Sample point for concentration from file
+            //				62    Sample point for vertical profile
+            //				65    Sample point for re-order
+            //				66    Sample point for match-to-observation
+            //				70    Check single value at GRAMM grid
+            //				75	  Position of wall corner
+            //				76    Select wall
+            //				77    Select vegetation
+            //				78	  Position of wall corner
+            //				79    Position of area corner
+            //				100    final corner point of changed line source point
+            //				101    final editing wall point
+            //				108    final corner point of changed area source point
+            //				109    final corner point of changed vegetation point
+            //				117    final corner point of changed building edge point
+            //				200    3D concentration - set point
+            //				300    Startpoint of exporting GRAMM domain
+            //				301    Endpoint of exporting GRAMM domain
+            //				700    Delete one mouseclick from queue for point source
+            //				1000   Position of line source point inline editing
+            //				1001 	Position of wall point inline editing
+            //				1080    Position of area source point inline editing
+            //				1081    Position of vegetation point inline editing
+            //				1170    Position of building edge point inline editing
+            //				2400    Position of receptor inline editing
+            //				6000    Position of point source inline editing
+            //				7000    Move and scale base map
+            //				9999    Mofification of the GRAL topography
             #endregion
-            
+
             switch (e.Button)
             {
                 case MouseButtons.Left:
@@ -154,7 +155,7 @@ namespace GralDomain
         /// </summary>
         private void Picturebox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if ((MouseControl == 2) | (e.Button==MouseButtons.Middle)) // Kuntner auch beim Auslassen des mittleren Buttons verschieben
+            if ((MouseControl == MouseMode.ViewMoveMap) | (e.Button==MouseButtons.Middle)) // Kuntner auch beim Auslassen des mittleren Buttons verschieben
             {
                 double xfac_old = XFac;
                 double transformx_old = TransformX;
@@ -182,19 +183,29 @@ namespace GralDomain
             }
 
             //define GRAL Domain
-            if (MouseControl == 5)
+            if (MouseControl == MouseMode.GralDomainEndPoint)
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
                 
                 if (Gral.Main.Project_Locked == true)
                 {
                     Gral.Main.ProjectLockedMessage(); // Project locked! - do not save any changes!
-                    MouseControl = 0;
+                    MouseControl = MouseMode.Default;
                     Picturebox1_Paint();
                     return;
                 }
-                
+
+                //Check for an existing GRAL geometry
+                if (ReadGralGeometry()) 
+                {
+                    if (MessageBox.Show(this, "Use new GRAL domain and delete existing domain and GRAL topography data?", "New GRAL Domain Area", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        MouseControl = MouseMode.Default;
+                        Picturebox1_Paint();
+                        return;
+                    }
+                }
                 //compute model domain extenstions in natural coordinates and clip them to the chosen raster size of the concentration grid
                 MainForm.GralDomRect.North = Math.Round((GRALDomain.Top - TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
                 MainForm.GralDomRect.North = Math.Round(MainForm.GralDomRect.North / MainForm.HorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown9.Value);
@@ -248,7 +259,7 @@ namespace GralDomain
                         GRALDomain = new Rectangle(x1, y1, width, height);
                         
                         // GRAL topography allowed?
-                        if (MainForm.GRALSettings.BuildingMode > 0 && Gral.Main.Project_Locked == false &&
+                        if (Gral.Main.Project_Locked == false &&
                             MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
                         {
                             originalGRALTopographyToolStripMenuItem.Enabled = true;
@@ -269,13 +280,14 @@ namespace GralDomain
                         MainForm.listBox5.Items.Clear();
                         MainForm.SetEmissionFilesInvalid();
                         MainForm.button18.Visible = false; // Emission button not visible
-                        MainForm.Change_Label(2, -1); // Emission button not visible
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
                         MainForm.button21.Visible = false;
                         Picturebox1_Paint();
 
                         MainForm.DeleteGralTopofile();
                         MainForm.DeleteGralGffFile();
-                        
+                        CellHeightsType = 0;    // reset cell height view
+                        TryToLoadCellHeights(); // load availabele cell heights -> reset menu items
                     }
                     catch
                     {
@@ -287,9 +299,9 @@ namespace GralDomain
             
 
             //define GRAMM Domain
-            if (MouseControl == 31)
+            if (MouseControl == MouseMode.GrammDomainEndPoint)
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
                 
                 if (MainForm.GRAMM_Locked == true)
@@ -346,9 +358,9 @@ namespace GralDomain
             }
 
             //define GRAMM sub-domain for export
-            if (MouseControl == 301)
+            if (MouseControl == MouseMode.GrammExportFinal)
             {
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
                 
                 //export GRAMM sub-domain
@@ -357,11 +369,11 @@ namespace GralDomain
             }
 
             //get zoom area for panel zoom
-            if (MouseControl == 14)
+            if (MouseControl == MouseMode.ViewPanelZoomArea)
             {
                 double fac1 = 1;
                 double fac2 = 1;
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
                 Cursor = Cursors.Default;
                 try
                 {
@@ -395,7 +407,7 @@ namespace GralDomain
                 }
             }
             
-            if (MouseControl == 9999) // if GRAL topography is changed
+            if (MouseControl == MouseMode.GRALTopographyModify) // if GRAL topography is changed
             {
                 // restore Blocked array
                 Array.Clear(TopoModifyBlocked, 0, TopoModifyBlocked.Length);

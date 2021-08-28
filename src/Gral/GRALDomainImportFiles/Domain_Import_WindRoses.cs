@@ -31,7 +31,7 @@ namespace GralDomain
 {
 	public partial class Domain
 	{
-		private CultureInfo ic = CultureInfo.InvariantCulture;
+		private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 		
 		// import a wind rose at a given point
 		/// <summary>
@@ -157,7 +157,7 @@ namespace GralDomain
                     WindData = MeteoTimeSeries
                 };
 
-                readwindfile.ReadMeteoFiles(1000000, _wdata.RowSep, decsep, _wdata.DecSep);
+                readwindfile.ReadMeteoFiles(1000000, _wdata.RowSep, decsep, _wdata.DecSep, Gral.Main.IgnoreMeteo00Values);
 				AddWindDataToObjectList(MeteoTimeSeries, _dr, _wdata.MaxValue, _wdata.X0, _wdata.Y0);
 			}
 		}

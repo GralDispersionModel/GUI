@@ -29,17 +29,21 @@ namespace GralMainForms
         private float dpi;
         public int StartHour;
         public int FinalHour;
+        public GralData.WindRoseSettings WindRoseSetting;
+        private const float HorSize = 762F;
+        private const float VertSize = 508F;
 
         public Windclasses()
         {
             InitializeComponent();
         }
         
-        protected override void OnPaint(PaintEventArgs e)
-        {            
-        }
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (panel1.Width < 20 || panel1.Height < 20)
+            {
+                return;
+            }
             Graphics g = e.Graphics;
             StringFormat format1 = new StringFormat
             {
@@ -50,45 +54,49 @@ namespace GralMainForms
             Font _mediumFont = new Font("Arial", 9);
             Font _largeFont = new Font("Arial", 10);
             Brush _blackBrush = new SolidBrush(Color.Black);
-            Brush _greyBrush = new SolidBrush(Color.Gray);
+            Brush _greyBrush = new SolidBrush(Color.LightGray);
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 3);
-            Pen p3 = new Pen(Color.Black, 1);
+            Pen p3 = new Pen(Color.DarkGray, 1);
             
-             SizeF _lenght = g.MeasureString(MetFile, _smallFont);
-            int distance = (int) _lenght.Height + 2;
-            
-            float _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            float _scale = Math.Min(panel1.Width / HorSize, panel1.Height / VertSize);
+			g.ScaleTransform(_scale, _scale);
+
+            SizeF _lenght = g.MeasureString(MetFile, _smallFont);
+            int distance = (int)_lenght.Height + 2;
+
+            float _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(MetFile, _smallFont, _blackBrush, _x, 2, format1);
-            
+
             string _data = "Data points: " + Convert.ToString(Wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
-            _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + distance, format1);
-			
-			//g.DrawString(wind[0].Date, _smallFont, _blackBrush, 675, 2 + 2 * distance, format1);
-			if (Wind.Count > 1)
-			{
-			    _data = Wind[0].Date + " - " + Wind[Wind.Count - 1].Date;
-			   _lenght = g.MeasureString(_data, _smallFont);
-			    _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
-			    g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
-			}
-			
-            _data = Convert.ToString(StartHour) + ":00 - " + Convert.ToString(FinalHour) +":00";
+
+            //g.DrawString(wind[0].Date, _smallFont, _blackBrush, 675, 2 + 2 * distance, format1);
+            if (Wind.Count > 1)
+            {
+                _data = Wind[0].Date + " - " + Wind[Wind.Count - 1].Date;
+                _lenght = g.MeasureString(_data, _smallFont);
+                _x = Math.Max(0, HorSize - _lenght.Width - 5);
+                g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
+            }
+
+            _data = Convert.ToString(StartHour) + ":00 - " + Convert.ToString(FinalHour) + ":00";
             _lenght = g.MeasureString(_data, _smallFont);
-            _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+            _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 3 * distance, format1);
-            
-            float _scale = Math.Min(panel1.Width / 762F, panel1.Height / 508F);
-			g.ScaleTransform(_scale, _scale);
-            
+
             //scaling factor
             double classmax = 0;
             int maxwind = WClassFrequency.Length - 1;
             for (int i = 0; i < (maxwind + 1); i++)
             {
                 classmax = Math.Max(WClassFrequency[i], classmax);
+            }
+            if (WindRoseSetting.MaxScaleVertical > 0)
+            {
+                classmax = WindRoseSetting.MaxScaleVertical / 10D;
             }
             double scale = 400 / classmax;
 
@@ -99,12 +107,9 @@ namespace GralMainForms
                 int ecke1 = Convert.ToInt32(55 + i * 64);
                 g.FillRectangle(_greyBrush, ecke1, 440 - hoehe, 64, hoehe);
                 g.DrawRectangle(p3, ecke1, 440 - hoehe, 64, hoehe);
-                base.OnPaint(e);
             }
 
-            //draw axis
-           
-            
+            //draw axis         
             p3.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             p2.EndCap = LineCap.ArrowAnchor;
             g.DrawLine(p1, 55, 440, Math.Max(759, 55 + (maxwind + 1) * 64), 440);
@@ -132,9 +137,16 @@ namespace GralMainForms
             }
             e.Graphics.DrawString(">" + Convert.ToString(maxwind-1.0) + ".0 m/s", _smallFont,  _blackBrush, new PointF(132 + (maxwind - 1) *64, 445), stringFormat);
             
-            g.DrawString("Frequency [%]", _mediumFont,  _blackBrush, 12, 5);
+            StringFormat verticalString = new StringFormat
+            {
+                FormatFlags = StringFormatFlags.DirectionVertical,
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Near
+            };
+            SizeF _lenght3 = g.MeasureString("Frequency [%]", _mediumFont);
+            g.DrawString("Frequency [%]", _mediumFont, _blackBrush, 4, (int)((VertSize - _lenght3.Width) / 2), verticalString);
+
             g.DrawString("  0", _largeFont,  _blackBrush, 25, 435);
-            base.OnPaint(e);
 
             //draw frequency levels
             for (int i = 1; i < 11; i++)
@@ -148,7 +160,6 @@ namespace GralMainForms
                 }
                 g.DrawLine(p3, 55, lev1, Math.Max(759, 55 + (maxwind + 1) * 64), lev1);
                 g.DrawString(s, _largeFont,  _blackBrush, 25, lev1 - 5);
-                base.OnPaint(e);
             }
             p1.Dispose();p2.Dispose();p3.Dispose();
             
@@ -164,9 +175,21 @@ namespace GralMainForms
         //save imapge to clipboard
         private void button1_Click(object sender, EventArgs e)
         {
+            int CopyToClipboardScale = 3;
+            if (panel1.Width < 500)
+            {
+                CopyToClipboardScale = 5;
+            }
+            panel1.Width *= CopyToClipboardScale;
+            panel1.Height *= CopyToClipboardScale;
+            panel1.Refresh();
+            Application.DoEvents();
             Bitmap bitMap = new Bitmap(panel1.Width, panel1.Height);
-            panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width*2, panel1.Height*2));
+            panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Clipboard.SetDataObject(bitMap);
+            panel1.Width /= CopyToClipboardScale;
+            panel1.Height /= CopyToClipboardScale;
+            panel1.Refresh();
         }
 
         

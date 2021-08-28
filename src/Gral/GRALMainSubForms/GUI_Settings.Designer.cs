@@ -45,24 +45,30 @@ namespace GralMainForms
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButton12 = new System.Windows.Forms.RadioButton();
+            this.radioButton11 = new System.Windows.Forms.RadioButton();
+            this.radioButton10 = new System.Windows.Forms.RadioButton();
             this.groupBox25.SuspendLayout();
             this.groupBox26.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox25
             // 
             this.groupBox25.Controls.Add(this.radioButton4);
             this.groupBox25.Controls.Add(this.radioButton3);
-            this.groupBox25.Location = new System.Drawing.Point(12, 12);
+            this.groupBox25.Location = new System.Drawing.Point(12, 10);
             this.groupBox25.Name = "groupBox25";
-            this.groupBox25.Size = new System.Drawing.Size(482, 84);
+            this.groupBox25.Size = new System.Drawing.Size(482, 70);
             this.groupBox25.TabIndex = 1;
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "Default path for the application settings";
             // 
             // radioButton4
             // 
-            this.radioButton4.Location = new System.Drawing.Point(21, 50);
+            this.radioButton4.Location = new System.Drawing.Point(21, 40);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(450, 24);
             this.radioButton4.TabIndex = 1;
@@ -82,16 +88,16 @@ namespace GralMainForms
             // 
             this.groupBox26.Controls.Add(this.radioButton5);
             this.groupBox26.Controls.Add(this.radioButton6);
-            this.groupBox26.Location = new System.Drawing.Point(12, 102);
+            this.groupBox26.Location = new System.Drawing.Point(12, 88);
             this.groupBox26.Name = "groupBox26";
-            this.groupBox26.Size = new System.Drawing.Size(482, 84);
+            this.groupBox26.Size = new System.Drawing.Size(482, 70);
             this.groupBox26.TabIndex = 2;
             this.groupBox26.TabStop = false;
             this.groupBox26.Text = "Copy GRAL or GRAMM computation cores to the Computation folder?";
             // 
             // radioButton5
             // 
-            this.radioButton5.Location = new System.Drawing.Point(21, 50);
+            this.radioButton5.Location = new System.Drawing.Point(21, 40);
             this.radioButton5.Name = "radioButton5";
             this.radioButton5.Size = new System.Drawing.Size(450, 24);
             this.radioButton5.TabIndex = 3;
@@ -110,7 +116,7 @@ namespace GralMainForms
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(192, 248);
+            this.button1.Location = new System.Drawing.Point(192, 306);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(116, 39);
             this.button1.TabIndex = 5;
@@ -120,7 +126,7 @@ namespace GralMainForms
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(12, 204);
+            this.checkBox1.Location = new System.Drawing.Point(12, 255);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(334, 24);
             this.checkBox1.TabIndex = 4;
@@ -128,12 +134,73 @@ namespace GralMainForms
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.Click += new System.EventHandler(this.CheckBox1Click);
             // 
+            // checkBox2
+            // 
+            this.checkBox2.Location = new System.Drawing.Point(12, 276);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(334, 24);
+            this.checkBox2.TabIndex = 6;
+            this.checkBox2.Text = "Vector automatic scaling";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Click += new System.EventHandler(this.checkBox2_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioButton12);
+            this.groupBox1.Controls.Add(this.radioButton11);
+            this.groupBox1.Controls.Add(this.radioButton10);
+            this.groupBox1.Location = new System.Drawing.Point(12, 160);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(482, 85);
+            this.groupBox1.TabIndex = 8;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Meteo Data Import";
+            // 
+            // radioButton12
+            // 
+            this.radioButton12.AutoSize = true;
+            this.radioButton12.Location = new System.Drawing.Point(21, 60);
+            this.radioButton12.Name = "radioButton12";
+            this.radioButton12.Size = new System.Drawing.Size(413, 17);
+            this.radioButton12.TabIndex = 2;
+            this.radioButton12.TabStop = true;
+            this.radioButton12.Text = "Assign the wind direction to the previous measured wind direction if Vel and Dir " +
+    "= 0";
+            this.radioButton12.UseVisualStyleBackColor = true;
+            this.radioButton12.CheckedChanged += new System.EventHandler(this.checkBox3_Click);
+            // 
+            // radioButton11
+            // 
+            this.radioButton11.AutoSize = true;
+            this.radioButton11.Location = new System.Drawing.Point(21, 40);
+            this.radioButton11.Name = "radioButton11";
+            this.radioButton11.Size = new System.Drawing.Size(244, 17);
+            this.radioButton11.TabIndex = 1;
+            this.radioButton11.TabStop = true;
+            this.radioButton11.Text = "Reject lines with wind speed and direction = 0 ";
+            this.radioButton11.UseVisualStyleBackColor = true;
+            this.radioButton11.CheckedChanged += new System.EventHandler(this.checkBox3_Click);
+            // 
+            // radioButton10
+            // 
+            this.radioButton10.AutoSize = true;
+            this.radioButton10.Location = new System.Drawing.Point(21, 20);
+            this.radioButton10.Name = "radioButton10";
+            this.radioButton10.Size = new System.Drawing.Size(101, 17);
+            this.radioButton10.TabIndex = 0;
+            this.radioButton10.TabStop = true;
+            this.radioButton10.Text = "All data (default)";
+            this.radioButton10.UseVisualStyleBackColor = true;
+            this.radioButton10.CheckedChanged += new System.EventHandler(this.checkBox3_Click);
+            // 
             // GUI_Settings
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 304);
+            this.ClientSize = new System.Drawing.Size(516, 362);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox26);
@@ -144,6 +211,8 @@ namespace GralMainForms
             this.Load += new System.EventHandler(this.GUI_SettingsLoad);
             this.groupBox25.ResumeLayout(false);
             this.groupBox26.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -155,5 +224,10 @@ namespace GralMainForms
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.GroupBox groupBox25;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton radioButton12;
+        private System.Windows.Forms.RadioButton radioButton11;
+        private System.Windows.Forms.RadioButton radioButton10;
     }
 }

@@ -22,19 +22,19 @@ using System;
 using System.Windows.Forms;
 using GralItemData;
 using System.IO;
-    
+
 namespace GralDomain
 {
     public partial class Domain
     {
         /// <summary>
-        /// Start the wall dialog (checkbox25 = checked) or save the wall data (checkbox25 = unchecked)
+        /// Show the wall dialog (checkbox25 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox25.checked == false and sender == null -> EditWall.SaveArray not called</param>
-        void EditAndSaveWallData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowWallDialog(object sender, EventArgs e)
         {
             wallsToolStripMenuItem.Checked = checkBox25.Checked;
-            
+
             if (checkBox25.Checked == true)
             {
                 //show editing form for receptors
@@ -63,73 +63,82 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditWall.Location = GetScreenPositionForNewDialog();
+                        EditWall.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Wa = false;
                 }
-                MouseControl = 75; //edit walls
+                MouseControl = MouseMode.WallSet; //edit walls
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditWall.Show();
                 EditWall.ShowForm();
-                EditWall.TopMost = true; // Kuntner
+                EditWall.BringToFront();
                 Cursor = Cursors.Cross;
-                
-                CheckForExistingDrawingObject("WALLS"); 
+
+                CheckForExistingDrawingObject("WALLS");
             }
             else
             {
-                EditWall.Hide(); // Kuntner first hide form to save actual sourcedata
-                MarkerPoint.X = 0;
-                MarkerPoint.Y = 0;
-                
-                if (Gral.Main.Project_Locked == true)
-                {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
-                }
-                else if (MainForm.DeleteGralGffFile() == DialogResult.OK) // Warningmessage if gff Files exist!
-                {
-                    //save buildings input to file
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
-                    {
-                        EditWall.SaveArray();
-                    }
+                MouseControl = MouseMode.Default;
+                EditWall.Hide();
+            }
+        }
 
-                    string newPath = Path.Combine(Gral.Main.ProjectName, @"Emissions", "Walls.txt");
-                    WallDataIO _wd = new WallDataIO();
-                    _wd.SaveWallData(EditWall.ItemData, newPath);
-                    _wd = null;
-                    
-                    Cursor = Cursors.Default;
-                    MouseControl = 0;
-                    //this.Width = ScreenWidth;
-                    //this.Height = ScreenHeight - 50;
-                    
-                    EditWall.CornerWallCount = 0;
-                    Picturebox1_Paint();
-                    MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
-                    
-                    if (MainForm.GRALSettings.BuildingMode != 0)
+        /// <summary>
+        /// Start the wall dialog (checkbox25 = checked) or save the wall data (checkbox25 = unchecked)
+        /// </summary>
+        /// <param name="sender">if checkbox25.checked == false and sender == null -> EditWall.SaveArray not called</param>
+        void EditAndSaveWallData(object sender, EventArgs e)
+        {
+            checkBox25.Checked = false;
+            wallsToolStripMenuItem.Checked = checkBox25.Checked;
+            MouseControl = MouseMode.Default;
+            Cursor = Cursors.Default;
+
+            EditWall.Hide(); // Kuntner first hide form to save actual sourcedata
+            MarkerPoint.X = 0;
+            MarkerPoint.Y = 0;
+
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else if (MainForm.DeleteGralGffFile() == DialogResult.OK) // Warningmessage if gff Files exist!
+            {
+                //save buildings input to file
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
+                {
+                    EditWall.SaveArray();
+                }
+
+                string newPath = Path.Combine(Gral.Main.ProjectName, @"Emissions", "Walls.txt");
+                WallDataIO _wd = new WallDataIO();
+                _wd.SaveWallData(EditWall.ItemData, newPath);
+                _wd = null;
+
+                EditWall.CornerWallCount = 0;
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
+
+                if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None)
+                {
+                    if (EditWall.ItemData.Count > 0)
                     {
-                        if (EditWall.ItemData.Count > 0)
-                        {
-                            MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
-                            MainForm.button9.Visible = true;
-                        }
-                        else
-                        {
-                            MainForm.Change_Label(3, -1); // Building label - no buildings
-                        }
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
+                        MainForm.button9.Visible = true;
                     }
-                    //add/delete walls in object list
-                    if (EditWall.ItemData.Count == 0)
+                    else
                     {
-                        RemoveItemFromItemOptions("WALLS");
+                        MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.Invisible); // Building label - no buildings
                     }
+                }
+                //add/delete walls in object list
+                if (EditWall.ItemData.Count == 0)
+                {
+                    RemoveItemFromItemOptions("WALLS");
                 }
             }
+
             //show/hide button to select walls
             if (EditWall.ItemData.Count > 0)
             {
@@ -144,6 +153,7 @@ namespace GralDomain
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations
             MainForm.Enable_GRAMM();
+            Picturebox1_Paint();
         }
     }
 }

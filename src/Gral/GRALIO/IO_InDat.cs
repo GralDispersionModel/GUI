@@ -74,7 +74,7 @@ namespace GralIO
 					myWriter.WriteLine();
 					myWriter.WriteLine(Convert.ToString(_data.Deltaz, ic) + " \t ! Vertical grid spacing in [m]");
 					myWriter.WriteLine(Convert.ToString(_data.DispersionSituation) + " \t ! Start the calculation with this weather number");
-					myWriter.WriteLine(Convert.ToString(_data.BuildingMode) +","+ _data.PrognosticSubDomains.ToString(ic) +
+					myWriter.WriteLine(Convert.ToString((int) _data.BuildingMode) +","+ _data.PrognosticSubDomains.ToString(ic) +
                         " \t ! How to take buildings into account? 1 = simple mass conservation, 2 = mass conservation with Poisson equation + advection, Factor for the prognostic sub domain size");
 					
 					if(_data.BuildingHeightsWrite == false)
@@ -122,9 +122,20 @@ namespace GralIO
                     }
 
                     myWriter.WriteLine(_data.AdaptiveRoughness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
+
+                    myWriter.WriteLine(_data.PrognosticSubDomainsSizeSourceRadius.ToString(ic) + "\t ! Radius surrounding sources, in which the wind field is to be calculated prognostically; 0 = off, valid values: 50 - 10000 m  ");
+                    
+                    if (_data.UseGRALOnlineFunctions)
+                    {
+                        myWriter.WriteLine("1 \t ! Use GRAL Online Functions = true");
+                    }
+                    else
+                    {
+                        myWriter.WriteLine("0 \t ! Use GRAL Online Functions = false");
+                    }
                 }
-				
-			}
+
+            }
 			catch
 			{
 				MessageBox.Show("Error writing in.dat","I/O error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -199,7 +210,7 @@ namespace GralIO
 
                     text = myreader.ReadLine().Split(new char[] { '!' }, StringSplitOptions.RemoveEmptyEntries); // Remove comment
                     text = text[0].Split(new char[] { ' ', ',', '\r', '\n', ';', '!' }, StringSplitOptions.RemoveEmptyEntries);
-                    _data.BuildingMode = Convert.ToInt32(text[0]);
+                    _data.BuildingMode = (Gral.BuildingModeEnum) Convert.ToInt32(text[0]);
                     _data.PrognosticSubDomains = 15;
                     if (text.Length > 1)
                     {
@@ -221,7 +232,7 @@ namespace GralIO
                         _data.BuildingHeightsWrite = false;
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read data compressed value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
@@ -248,7 +259,7 @@ namespace GralIO
                         _data.Compressed = 0;
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read Wait for Key Stroke value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
@@ -263,7 +274,7 @@ namespace GralIO
                         }
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read ESRI Result value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
@@ -280,7 +291,7 @@ namespace GralIO
                         }
                     }
 
-                    if (myreader.EndOfStream == false) // read compressed value
+                    if (myreader.EndOfStream == false) // read Adaptive Roughness value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         if (text.Length > 0)
@@ -291,6 +302,38 @@ namespace GralIO
                             }
                         }
                     }
+
+                    if (myreader.EndOfStream == false) // read Sub Domain radius from sources
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (double.TryParse(text[0], NumberStyles.Any, ic, out double _val))
+                            {
+                                _data.PrognosticSubDomainsSizeSourceRadius = Convert.ToInt32(_val);
+                            }
+                        }
+                    }
+
+                    if (myreader.EndOfStream == false) // read Sub Domain radius from sources
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                            {
+                                if (_val == 1)
+                                {
+                                    _data.UseGRALOnlineFunctions = true;
+                                }
+                                else
+                                {
+                                    _data.UseGRALOnlineFunctions = false;
+                                }
+                            }
+                        }
+                    }
+
                 }
 			}
 			catch

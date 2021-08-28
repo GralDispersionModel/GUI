@@ -10,14 +10,6 @@
 ///</remarks>
 #endregion
 
-/*
- * Created by SharpDevelop.
- * User: U0178969
- * Date: 24.01.2019
- * Time: 14:37
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
 using System;
 using System.Windows.Forms;
 using GralItemData;
@@ -28,13 +20,13 @@ namespace GralDomain
     public partial class Domain
     {
         /// <summary>
-        /// Start the area source dialog (checkbox5 = checked) or save the area source data (checkbox5 = unchecked)
+        /// Show the area source dialog (checkbox5 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox5.checked == false and sender == null -> EditAS.SaveArray not called</param>
-        private void EditAndSaveAreaSourceData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowAreaSourceDialog(object sender, EventArgs e)
         {
             areaSourcesToolStripMenuItem.Checked = checkBox5.Checked;
-            
+
             if (checkBox5.Checked == true)
             {
                 //show editing form for area sources
@@ -59,82 +51,93 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditAS.Location = GetScreenPositionForNewDialog();
+                        EditAS.Location = GetScreenPositionForNewDialog(0);
                     }
                     ShowFirst.As = false;
                 }
-                MouseControl = 8;
+                MouseControl = MouseMode.AreaSourcePos;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditAS.Show();
-                EditAS.TopMost = true; // Kuntner
                 EditAS.ShowForm();
+                EditAS.BringToFront();
                 Cursor = Cursors.Cross;
-                
+
                 CheckForExistingDrawingObject("AREA SOURCES");
             }
             else
             {
-                EditAS.Hide(); // Kuntner first hide form to save actual sourcedata
-                if (Gral.Main.Project_Locked == true)
-                {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
-                }
-                else
-                {
-                    //save area sources input to file
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
-                    {
-                        EditAS.SaveArray();
-                    }
+                MouseControl = MouseMode.Default;
+                EditAS.Hide();
+            }
+        }
 
-                    AreaSourceDataIO _as = new AreaSourceDataIO();
-                    _as.SaveAreaData(EditAS.ItemData, Gral.Main.ProjectName);
-                    _as = null;
-                    
-                    MainForm.SelectAllUsedSourceGroups();
-                    MainForm.listBox5.Items.Clear();
-                    MainForm.Pollmod.Clear();
-                    MainForm.SetEmissionFilesInvalid();
-                    MainForm.button18.Visible = false;
-                    MainForm.Change_Label(2, -1); // Emission button not visible
-                    MainForm.button21.Visible = false;
-                    
-                    Cursor = Cursors.Default;
-                    MouseControl = 0;
-                    //this.Width = ScreenWidth; // RM Kuntner
-                    //this.Height = ScreenHeight - 50;
-                    for (int i = 0; i <= EditAS.CornerAreaCount; i++)
-                    {
-                        CornerAreaSource[EditAS.CornerAreaCount] = new Point();
-                    }
-                    EditAS.CornerAreaCount = 0;
-                    
-                    //add/delete area sources in object list
-                    if (EditAS.ItemData.Count == 0)
-                    {
-                        RemoveItemFromItemOptions("AREA SOURCES");
-                    }
+        /// <summary>
+        /// Start the area source dialog (checkbox5 = checked) or save the area source data (checkbox5 = unchecked)
+        /// </summary>
+        /// <param name="sender">if checkbox5.checked == false and sender == null -> EditAS.SaveArray not called</param>
+        private void EditAndSaveAreaSourceData(object sender, EventArgs e)
+        {
+            checkBox5.Checked = false;
+            areaSourcesToolStripMenuItem.Checked = checkBox5.Checked;
+            MouseControl = MouseMode.Default;
+            Cursor = Cursors.Default;
+
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else
+            {
+                //save area sources input to file
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
+                {
+                    EditAS.SaveArray();
                 }
 
-                //show/hide button to select area sources
-                if (EditAS.ItemData.Count > 0)
+                AreaSourceDataIO _as = new AreaSourceDataIO();
+                _as.SaveAreaData(EditAS.ItemData, Gral.Main.ProjectName);
+                _as = null;
+
+                MainForm.SelectAllUsedSourceGroups();
+                MainForm.listBox5.Items.Clear();
+                MainForm.Pollmod.Clear();
+                MainForm.SetEmissionFilesInvalid();
+                MainForm.button18.Visible = false;
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
+                MainForm.button21.Visible = false;
+
+                for (int i = 0; i <= EditAS.CornerAreaCount; i++)
                 {
-                    button10.Visible = true;
-                    button47.Visible = true;
-                    button37.Visible = true;
+                    CornerAreaSource[EditAS.CornerAreaCount] = new Point();
                 }
-                else
+                EditAS.CornerAreaCount = 0;
+
+                //add/delete area sources in object list
+                if (EditAS.ItemData.Count == 0)
                 {
-                    button10.Visible = false;
-                    button37.Visible = false;
+                    RemoveItemFromItemOptions("AREA SOURCES");
                 }
             }
+
+            //show/hide button to select area sources
+            if (EditAS.ItemData.Count > 0)
+            {
+                button10.Visible = true;
+                button47.Visible = true;
+                button37.Visible = true;
+            }
+            else
+            {
+                button10.Visible = false;
+                button37.Visible = false;
+            }
+            EditAS.Hide();
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
+            Picturebox1_Paint();
         }
-        
+
         /// <summary>
         /// Check for the entry ObjecType in the ItemOptions List and add entry if not already exist
         /// </summary>
@@ -155,14 +158,14 @@ namespace GralDomain
             if (exist == false)
             {
                 DrawingObjects _drobj = new DrawingObjects(ObjectType);
-                
+
                 ItemOptions.Insert(0, _drobj);
                 SaveDomainSettings(1);
                 counter = 0;
             }
-            return counter; 
-         }
-        
+            return counter;
+        }
+
         /// <summary>
         /// Remove the entry ObjecType in the ItemOptions List
         /// </summary>
@@ -177,7 +180,7 @@ namespace GralDomain
                 }
                 k++;
             }
-            
+
             RemoveItems(k);
             SaveDomainSettings(1);
         }

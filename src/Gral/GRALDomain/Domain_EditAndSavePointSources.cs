@@ -10,14 +10,6 @@
 ///</remarks>
 #endregion
 
-/*
- * Created by SharpDevelop.
- * User: U0178969
- * Date: 24.01.2019
- * Time: 14:37
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
 using System;
 using System.Windows.Forms;
 using GralItemData;
@@ -27,13 +19,12 @@ namespace GralDomain
     public partial class Domain
     {
         /// <summary>
-        /// Start the point source dialog (checkbox4 = checked) or save the point source data (checkbox 4 = unchecked)
+        /// Show the point source dialog (checkbox4 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox4.checked == false and sender == null -> EditPS.SaveArray not called</param>
-        private void EditAndSavePointSourceData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowPointSourceDialog(object sender, EventArgs e)
         {
             pointSourcesToolStripMenuItem.Checked = checkBox4.Checked;
-            
             if (checkBox4.Checked == true)
             {
                 //load existing point source data if available             
@@ -58,80 +49,108 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditPS.Location = GetScreenPositionForNewDialog();
+                        EditPS.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Ps = false;
                 }
-                MouseControl = 6;
+                MouseControl = MouseMode.PointSourcePos;
                 InfoBoxCloseAllForms(); // close all infoboxes
-                
+
                 EditPS.Show();
-                EditPS.TopMost=true; // Kuntner
                 EditPS.ShowForm();
+                EditPS.BringToFront();
                 Cursor = Cursors.Cross;
-                
-                CheckForExistingDrawingObject("POINT SOURCES");    
+
+                CheckForExistingDrawingObject("POINT SOURCES");
             }
             else
             {
-                if (Gral.Main.Project_Locked == true)
-                {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
-                }
-                else
-                {
-                    //save point sources input to file
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
-                    {
-                        EditPS.SaveArray();
-                    }
-
-                    PointSourceDataIO _ps = new PointSourceDataIO();
-                    _ps.SavePointSources(EditPS.ItemData, Gral.Main.ProjectName);
-                    _ps = null;
-                    
-                    //select source groups within the model domain
-                    MainForm.SelectAllUsedSourceGroups();
-                    MainForm.listBox5.Items.Clear();
-                    MainForm.Pollmod.Clear();
-                    MainForm.SetEmissionFilesInvalid();
-                    MainForm.button18.Visible = false;
-                    MainForm.Change_Label(2, -1); // Emission button not visible
-                    MainForm.button21.Visible = false;
-                    
-                    Cursor = Cursors.Default;
-                    MouseControl = 0;
-                    //this.Width = ScreenWidth;
-                    //this.Height = ScreenHeight - 50;
-                    //add/delete point sources in object list
-                    if (EditPS.ItemData.Count == 0)
-                    {
-                        RemoveItemFromItemOptions("POINT SOURCES");
-                    }
-                }
-
+                MouseControl = MouseMode.Default;
                 EditPS.Hide();
-                //show/hide button to select point sources
-                if (EditPS.ItemData.Count > 0)
+            }
+        }
+        /// <summary>
+        /// Save the point source data 
+        /// </summary>
+        /// <param name="sender">if checkbox4.checked == false and sender == null -> EditPS.SaveArray not called</param>
+        private void EditAndSavePointSourceData(object sender, EventArgs e)
+        {
+            checkBox4.Checked = false;
+            pointSourcesToolStripMenuItem.Checked = checkBox4.Checked;
+            MouseControl = MouseMode.Default;
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else
+            {
+                //save point sources input to file
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    button8.Visible = true;
-                    button47.Visible = true;
-                    button38.Visible = true;
+                    EditPS.SaveArray();
                 }
-                else
+
+                PointSourceDataIO _ps = new PointSourceDataIO();
+                _ps.SavePointSources(EditPS.ItemData, Gral.Main.ProjectName);
+                _ps = null;
+
+                //select source groups within the model domain
+                MainForm.SelectAllUsedSourceGroups();
+                MainForm.listBox5.Items.Clear();
+                MainForm.Pollmod.Clear();
+                MainForm.SetEmissionFilesInvalid();
+                MainForm.button18.Visible = false;
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, Gral.ButtonColorEnum.Invisible); // Emission button not visible
+                MainForm.button21.Visible = false;
+
+                Cursor = Cursors.Default;
+                //add/delete point sources in object list
+                if (EditPS.ItemData.Count == 0)
                 {
-                    button8.Visible = false;
-                    button38.Visible = false;
+                    RemoveItemFromItemOptions("POINT SOURCES");
                 }
             }
 
-            
+            //show/hide button to select point sources
+            if (EditPS.ItemData.Count > 0)
+            {
+                button8.Visible = true;
+                button47.Visible = true;
+                button38.Visible = true;
+            }
+            else
+            {
+                button8.Visible = false;
+                button38.Visible = false;
+            }
+            EditPS.Hide();
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
+            Picturebox1_Paint();
         }
-        
+
+
+        private void CancelItemForms(object sender, EventArgs e)
+        {
+            checkBox4.Checked = false;
+            checkBox5.Checked = false;
+            checkBox8.Checked = false;
+            checkBox12.Checked = false;
+            checkBox15.Checked = false;
+            checkBox20.Checked = false;
+            checkBox25.Checked = false;
+            checkBox26.Checked = false;
+
+            if (sender is Form)
+            {
+                Form _form = (Form)sender;
+                _form.Hide();
+            }
+
+            MouseControl = MouseMode.Default;
+            Picturebox1_Paint();
+        }
     }
 }

@@ -149,7 +149,14 @@ namespace GralIO
                                 }
                                 catch
                                 {
-                                    dummy = Int16.MaxValue;
+                                    if (_U[i, j, k] > 0)
+                                    {
+                                        dummy = Int16.MaxValue;
+                                    }
+                                    else
+                                    {
+                                        dummy = Int16.MinValue;
+                                    }
                                 }
                                 writer.Write(dummy);
 
@@ -159,7 +166,14 @@ namespace GralIO
                                 }
                                 catch
                                 {
-                                    dummy = Int16.MaxValue;
+                                    if (_V[i, j, k] > 0)
+                                    {
+                                        dummy = Int16.MaxValue;
+                                    }
+                                    else
+                                    {
+                                        dummy = Int16.MinValue;
+                                    }
                                 }
                                 writer.Write(dummy);
                                 try
@@ -168,7 +182,14 @@ namespace GralIO
                                 }
                                 catch
                                 {
-                                    dummy = Int16.MaxValue;
+                                    if (_W[i, j, k] > 0)
+                                    {
+                                        dummy = Int16.MaxValue;
+                                    }
+                                    else
+                                    {
+                                        dummy = Int16.MinValue;
+                                    }
                                 }
                                 writer.Write(dummy);
                             }

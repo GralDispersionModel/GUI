@@ -54,7 +54,7 @@ namespace GralMainForms
 			//fill Listbox
 			listView1.Clear();
 			listView1.GridLines = true;
-			listView1.Columns.Add("Date", 50, HorizontalAlignment.Center);
+			listView1.Columns.Add("Date", 80, HorizontalAlignment.Center);
 			listView1.Columns.Add("Hour", 40, HorizontalAlignment.Center);
 			listView1.Columns.Add("Vel. [m/s]", 70, HorizontalAlignment.Center);
 			listView1.Columns.Add("Dir. [deg]", 70, HorizontalAlignment.Center);
@@ -67,7 +67,7 @@ namespace GralMainForms
                 WindDataFile = MetFile1,
                 WindData = winddata
             };
-            readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser);
+            readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser, Main.IgnoreMeteo00Values);
 			
 			int index = Math.Min(50, winddata.Count);
 			int n1 = 0;
@@ -167,7 +167,7 @@ namespace GralMainForms
                 WindData = winddata
             };
 
-            if (readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser) == false)
+            if (readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser, Main.IgnoreMeteo00Values) == false)
 			{
 				MessageBox.Show(this, "Error when reading Meteo-File in data line " + readwindfile.WindData.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				if (winddata.Count == 0)

@@ -57,7 +57,7 @@ namespace GralDomain
 				        Box.Show();
 				        if (EditWall.ItemData.Count - numwalls > 0)
 				        {
-				            MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+				            MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 				        }
 				    }
 				    catch
@@ -104,7 +104,7 @@ namespace GralDomain
 							Box.Show();
 							if (EditWall.ItemData.Count - numwalls > 0)
 							{
-								MainForm.Change_Label(3, 0); // Building label red & delete buildings.dat
+								MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 							}
 							
 							//MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editb.buildingsdata.Count - numbuildings) + " buildings imported.");

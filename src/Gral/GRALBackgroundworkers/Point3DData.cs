@@ -25,10 +25,10 @@ namespace GralBackgroundworkers
     /// Point 3D with filename for windfield analysis
     /// </summary>
     public class Point_3D
-	{
-		public double X { get; set; }
-		public double Y { get; set; }
-		public double Z { get; set; }
-		public string filename { get; set; }
-	}
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        public string FileName { get; set; }
+    }
 }

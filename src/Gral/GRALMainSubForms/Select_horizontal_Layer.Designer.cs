@@ -36,6 +36,7 @@ namespace GralMainForms
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectHorizontalLayer));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
@@ -137,7 +138,7 @@ namespace GralMainForms
             this.refreshUpDown.Size = new System.Drawing.Size(63, 20);
             this.refreshUpDown.TabIndex = 3;
             // 
-            // Select_horizontal_layer
+            // SelectHorizontalLayer
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,10 +152,10 @@ namespace GralMainForms
             this.Controls.Add(this.LayerUpDown);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Select_horizontal_layer";
-            this.ShowIcon = false;
+            this.Name = "SelectHorizontalLayer";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select horizontal Layer";

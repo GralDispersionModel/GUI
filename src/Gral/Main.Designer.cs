@@ -176,6 +176,7 @@
             this.label30 = new System.Windows.Forms.Label();
             this.listBox4 = new System.Windows.Forms.ListBox();
             this.Meteorology = new System.Windows.Forms.TabPage();
+            this.button58 = new System.Windows.Forms.Button();
             this.groupBox23 = new System.Windows.Forms.GroupBox();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.label86 = new System.Windows.Forms.Label();
@@ -359,7 +360,6 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.Project.SuspendLayout();
             this.Comments.SuspendLayout();
@@ -566,6 +566,7 @@
             // 
             // button44
             // 
+            this.button44.ForeColor = System.Drawing.Color.Black;
             this.button44.Location = new System.Drawing.Point(112, 19);
             this.button44.Name = "button44";
             this.button44.Size = new System.Drawing.Size(116, 28);
@@ -578,6 +579,7 @@
             // button38
             // 
             this.button38.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button38.ForeColor = System.Drawing.Color.Black;
             this.button38.Location = new System.Drawing.Point(266, 18);
             this.button38.Margin = new System.Windows.Forms.Padding(2);
             this.button38.Name = "button38";
@@ -2007,6 +2009,7 @@
             this.button15.BackColor = System.Drawing.Color.Lavender;
             this.button15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.button15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button15.ForeColor = System.Drawing.Color.Black;
             this.button15.Location = new System.Drawing.Point(27, 127);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(124, 88);
@@ -2123,6 +2126,7 @@
             // button14
             // 
             this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button14.ForeColor = System.Drawing.Color.Black;
             this.button14.Location = new System.Drawing.Point(26, 19);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(125, 88);
@@ -2290,6 +2294,7 @@
             // button51
             // 
             this.button51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button51.ForeColor = System.Drawing.Color.Black;
             this.button51.Location = new System.Drawing.Point(168, 16);
             this.button51.Name = "button51";
             this.button51.Size = new System.Drawing.Size(75, 25);
@@ -2303,6 +2308,7 @@
             // button49
             // 
             this.button49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button49.ForeColor = System.Drawing.Color.Black;
             this.button49.Location = new System.Drawing.Point(87, 16);
             this.button49.Name = "button49";
             this.button49.Size = new System.Drawing.Size(75, 25);
@@ -2316,6 +2322,7 @@
             // button48
             // 
             this.button48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button48.ForeColor = System.Drawing.Color.Black;
             this.button48.Location = new System.Drawing.Point(6, 16);
             this.button48.Name = "button48";
             this.button48.Size = new System.Drawing.Size(75, 25);
@@ -2341,6 +2348,7 @@
             // 
             // button54
             // 
+            this.button54.ForeColor = System.Drawing.Color.Black;
             this.button54.Location = new System.Drawing.Point(5, 22);
             this.button54.Name = "button54";
             this.button54.Size = new System.Drawing.Size(66, 23);
@@ -2474,6 +2482,7 @@
             // button21
             // 
             this.button21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button21.ForeColor = System.Drawing.Color.Black;
             this.button21.Location = new System.Drawing.Point(647, 90);
             this.button21.Name = "button21";
             this.button21.Size = new System.Drawing.Size(64, 51);
@@ -2582,6 +2591,7 @@
             // Meteorology
             // 
             this.Meteorology.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Meteorology.Controls.Add(this.button58);
             this.Meteorology.Controls.Add(this.groupBox23);
             this.Meteorology.Controls.Add(this.button106);
             this.Meteorology.Controls.Add(this.groupBox20);
@@ -2598,6 +2608,19 @@
             this.Meteorology.Size = new System.Drawing.Size(814, 539);
             this.Meteorology.TabIndex = 1;
             this.Meteorology.Text = "METEOROLOGY";
+            // 
+            // button58
+            // 
+            this.button58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button58.ForeColor = System.Drawing.Color.Black;
+            this.button58.Image = global::Gral.Properties.Resources.SaveSmall;
+            this.button58.Location = new System.Drawing.Point(139, 19);
+            this.button58.Name = "button58";
+            this.button58.Size = new System.Drawing.Size(34, 34);
+            this.button58.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.button58, "Save as new *.met file");
+            this.button58.UseVisualStyleBackColor = true;
+            this.button58.Click += new System.EventHandler(this.button58_Click);
             // 
             // groupBox23
             // 
@@ -2860,6 +2883,7 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button6.ForeColor = System.Drawing.Color.Black;
             this.button6.Location = new System.Drawing.Point(18, 71);
             this.button6.Name = "button6";
             this.button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -2894,6 +2918,7 @@
             // button39
             // 
             this.button39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button39.ForeColor = System.Drawing.Color.Black;
             this.button39.Location = new System.Drawing.Point(8, 60);
             this.button39.Name = "button39";
             this.button39.Size = new System.Drawing.Size(116, 34);
@@ -2906,6 +2931,7 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.ForeColor = System.Drawing.Color.Black;
             this.button5.Location = new System.Drawing.Point(9, 250);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(116, 34);
@@ -2918,6 +2944,7 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.Color.Black;
             this.button4.Location = new System.Drawing.Point(9, 212);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(116, 34);
@@ -2930,6 +2957,7 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.Black;
             this.button3.Location = new System.Drawing.Point(9, 174);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(116, 34);
@@ -2942,6 +2970,7 @@
             // button56
             // 
             this.button56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button56.ForeColor = System.Drawing.Color.Black;
             this.button56.Location = new System.Drawing.Point(9, 136);
             this.button56.Name = "button56";
             this.button56.Size = new System.Drawing.Size(116, 34);
@@ -2953,6 +2982,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.Black;
             this.button2.Location = new System.Drawing.Point(9, 98);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(116, 34);
@@ -2965,6 +2995,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.Black;
             this.button1.Location = new System.Drawing.Point(9, 22);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(116, 34);
@@ -2977,6 +3008,7 @@
             // OpenMetFile
             // 
             this.OpenMetFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenMetFile.ForeColor = System.Drawing.Color.Black;
             this.OpenMetFile.Location = new System.Drawing.Point(17, 19);
             this.OpenMetFile.Name = "OpenMetFile";
             this.OpenMetFile.Size = new System.Drawing.Size(116, 34);
@@ -3209,6 +3241,7 @@
             // 
             // button43
             // 
+            this.button43.ForeColor = System.Drawing.Color.Black;
             this.button43.Location = new System.Drawing.Point(26, 296);
             this.button43.Name = "button43";
             this.button43.Size = new System.Drawing.Size(247, 34);
@@ -3224,6 +3257,7 @@
             // 
             this.button24.BackgroundImage = global::Gral.Properties.Resources.Open;
             this.button24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button24.ForeColor = System.Drawing.Color.Black;
             this.button24.Location = new System.Drawing.Point(692, 25);
             this.button24.Name = "button24";
             this.button24.Size = new System.Drawing.Size(119, 94);
@@ -3566,6 +3600,7 @@
             // 
             this.button23.BackgroundImage = global::Gral.Properties.Resources.Rueckgaenging;
             this.button23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button23.ForeColor = System.Drawing.Color.Black;
             this.button23.Location = new System.Drawing.Point(759, 338);
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(30, 31);
@@ -3579,6 +3614,7 @@
             // 
             this.button22.BackgroundImage = global::Gral.Properties.Resources.Rueckgaenging;
             this.button22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button22.ForeColor = System.Drawing.Color.Black;
             this.button22.Location = new System.Drawing.Point(759, 228);
             this.button22.Name = "button22";
             this.button22.Size = new System.Drawing.Size(30, 30);
@@ -3601,6 +3637,7 @@
             // 
             // button20
             // 
+            this.button20.ForeColor = System.Drawing.Color.Black;
             this.button20.Location = new System.Drawing.Point(25, 335);
             this.button20.Name = "button20";
             this.button20.Size = new System.Drawing.Size(104, 34);
@@ -3623,6 +3660,7 @@
             // 
             // button19
             // 
+            this.button19.ForeColor = System.Drawing.Color.Black;
             this.button19.Location = new System.Drawing.Point(26, 224);
             this.button19.Name = "button19";
             this.button19.Size = new System.Drawing.Size(104, 34);
@@ -3974,6 +4012,7 @@
             // 
             this.button42.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button42.BackgroundImage")));
             this.button42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button42.ForeColor = System.Drawing.Color.Black;
             this.button42.Location = new System.Drawing.Point(146, 50);
             this.button42.Name = "button42";
             this.button42.Size = new System.Drawing.Size(26, 25);
@@ -3986,6 +4025,7 @@
             // 
             this.button41.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button41.BackgroundImage")));
             this.button41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button41.ForeColor = System.Drawing.Color.Black;
             this.button41.Location = new System.Drawing.Point(146, 23);
             this.button41.Name = "button41";
             this.button41.Size = new System.Drawing.Size(26, 25);
@@ -4100,12 +4140,13 @@
             // 
             this.button36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button36.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
-            this.button36.Location = new System.Drawing.Point(94, 428);
+            this.button36.ForeColor = System.Drawing.Color.Black;
+            this.button36.Location = new System.Drawing.Point(14, 425);
             this.button36.Margin = new System.Windows.Forms.Padding(2);
             this.button36.Name = "button36";
-            this.button36.Size = new System.Drawing.Size(89, 27);
+            this.button36.Size = new System.Drawing.Size(167, 30);
             this.button36.TabIndex = 100;
-            this.button36.Text = "&Show fields";
+            this.button36.Text = "&Show online map";
             this.toolTip1.SetToolTip(this.button36, "Show a map window for the GRAMM/GRAL online functions");
             this.button36.UseVisualStyleBackColor = true;
             this.button36.Click += new System.EventHandler(this.Button36_Click);
@@ -4455,7 +4496,7 @@
             this.numericUpDown33.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown33.Location = new System.Drawing.Point(121, 215);
             this.numericUpDown33.Maximum = new decimal(new int[] {
-            10,
+            64,
             0,
             0,
             0});
@@ -4610,9 +4651,10 @@
             // button29
             // 
             this.button29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button29.ForeColor = System.Drawing.Color.Black;
             this.button29.Location = new System.Drawing.Point(6, 87);
             this.button29.Name = "button29";
-            this.button29.Size = new System.Drawing.Size(166, 30);
+            this.button29.Size = new System.Drawing.Size(167, 30);
             this.button29.TabIndex = 62;
             this.button29.Text = "&All in all out stables";
             this.toolTip1.SetToolTip(this.button29, "Computes odour hours for\r\nstables with an \"all in all out\"\r\nprocedure");
@@ -4622,9 +4664,10 @@
             // button47
             // 
             this.button47.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button47.Location = new System.Drawing.Point(7, 118);
+            this.button47.ForeColor = System.Drawing.Color.Black;
+            this.button47.Location = new System.Drawing.Point(6, 118);
             this.button47.Name = "button47";
-            this.button47.Size = new System.Drawing.Size(166, 30);
+            this.button47.Size = new System.Drawing.Size(167, 30);
             this.button47.TabIndex = 63;
             this.button47.Text = "&Receptor met files";
             this.toolTip1.SetToolTip(this.button47, "Computes met files at receptor points\r\n");
@@ -4634,9 +4677,10 @@
             // button26
             // 
             this.button26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button26.ForeColor = System.Drawing.Color.Black;
             this.button26.Location = new System.Drawing.Point(6, 56);
             this.button26.Name = "button26";
-            this.button26.Size = new System.Drawing.Size(166, 30);
+            this.button26.Size = new System.Drawing.Size(167, 30);
             this.button26.TabIndex = 61;
             this.button26.Text = "C&ompost";
             this.toolTip1.SetToolTip(this.button26, "Computes odour hours for\r\na single source group with up\r\nto 3 different odour str" +
@@ -4647,9 +4691,10 @@
             // button27
             // 
             this.button27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button27.ForeColor = System.Drawing.Color.Black;
             this.button27.Location = new System.Drawing.Point(6, 25);
             this.button27.Name = "button27";
-            this.button27.Size = new System.Drawing.Size(166, 30);
+            this.button27.Size = new System.Drawing.Size(167, 30);
             this.button27.TabIndex = 60;
             this.button27.Text = "Mu&ltiple Sources";
             this.toolTip1.SetToolTip(this.button27, "Computes odour hours\r\nfor all defined source groups");
@@ -4674,9 +4719,10 @@
             // button40
             // 
             this.button40.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button40.ForeColor = System.Drawing.Color.Black;
             this.button40.Location = new System.Drawing.Point(6, 121);
             this.button40.Name = "button40";
-            this.button40.Size = new System.Drawing.Size(166, 30);
+            this.button40.Size = new System.Drawing.Size(167, 30);
             this.button40.TabIndex = 53;
             this.button40.Text = "&Percentiles";
             this.toolTip1.SetToolTip(this.button40, "Computes high percentiles of concentrations.\r\n\r\n!!Caution: Computation times\r\ncan" +
@@ -4687,9 +4733,10 @@
             // button37
             // 
             this.button37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button37.ForeColor = System.Drawing.Color.Black;
             this.button37.Location = new System.Drawing.Point(6, 89);
             this.button37.Name = "button37";
-            this.button37.Size = new System.Drawing.Size(166, 30);
+            this.button37.Size = new System.Drawing.Size(167, 30);
             this.button37.TabIndex = 52;
             this.button37.Text = "&Receptor Concentrations";
             this.toolTip1.SetToolTip(this.button37, "Computes time series of concentrations at\r\nreceptor points");
@@ -4699,6 +4746,7 @@
             // button25
             // 
             this.button25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button25.ForeColor = System.Drawing.Color.Black;
             this.button25.Location = new System.Drawing.Point(6, 57);
             this.button25.Name = "button25";
             this.button25.Size = new System.Drawing.Size(167, 30);
@@ -4712,9 +4760,10 @@
             // button28
             // 
             this.button28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button28.ForeColor = System.Drawing.Color.Black;
             this.button28.Location = new System.Drawing.Point(6, 25);
             this.button28.Name = "button28";
-            this.button28.Size = new System.Drawing.Size(166, 30);
+            this.button28.Size = new System.Drawing.Size(167, 30);
             this.button28.TabIndex = 50;
             this.button28.Text = "Mean";
             this.toolTip1.SetToolTip(this.button28, "Computes average concentrations");
@@ -4875,6 +4924,7 @@
             // 
             this.button18.Cursor = System.Windows.Forms.Cursors.Default;
             this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
+            this.button18.ForeColor = System.Drawing.Color.Black;
             this.button18.Location = new System.Drawing.Point(13, 123);
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(116, 34);
@@ -4890,6 +4940,7 @@
             // 
             this.button9.Cursor = System.Windows.Forms.Cursors.Default;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
+            this.button9.ForeColor = System.Drawing.Color.Black;
             this.button9.Location = new System.Drawing.Point(13, 164);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(116, 34);
@@ -4904,6 +4955,7 @@
             // 
             this.button7.Cursor = System.Windows.Forms.Cursors.Default;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
+            this.button7.ForeColor = System.Drawing.Color.Black;
             this.button7.Location = new System.Drawing.Point(13, 83);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(116, 34);
@@ -4918,6 +4970,7 @@
             // 
             this.button10.AutoSize = true;
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
+            this.button10.ForeColor = System.Drawing.Color.Black;
             this.button10.Location = new System.Drawing.Point(13, 43);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(116, 34);
@@ -5153,12 +5206,6 @@
             0,
             0,
             0});
-            // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 120000;
-            this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
             // 
             // Main
             // 
@@ -5605,7 +5652,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown43;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button button54;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button55;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label99;
@@ -5625,6 +5671,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown46;
         private System.Windows.Forms.Label label104;
         private System.Windows.Forms.CheckBox checkBox36;
+        private System.Windows.Forms.Button button58;
     }
 }
 

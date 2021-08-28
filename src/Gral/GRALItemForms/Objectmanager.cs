@@ -44,7 +44,7 @@ namespace GralItemForms
         {
             domain.SaveDomainSettings(0);
             domain.Refresh();
-            domain.MouseControl = 0;
+            domain.MouseControl = MouseMode.Default;
             domain.Cursor = Cursors.Default;
             Hide();
             RedrawDomain(this, null);

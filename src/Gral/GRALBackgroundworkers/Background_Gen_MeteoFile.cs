@@ -118,8 +118,8 @@ namespace GralBackgroundworkers
                 try
                 {
                     text = line_meteopgt.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    nsektor[n] = Convert.ToDouble(text[0].Replace(".", mydata.Decsep));
-                    wg[n] = Convert.ToDouble(text[1].Replace(".", mydata.Decsep));
+                    nsektor[n] = Convert.ToDouble(text[0].Replace(".", mydata.DecSep));
+                    wg[n] = Convert.ToDouble(text[1].Replace(".", mydata.DecSep));
                     iakla[n] = Convert.ToInt32(text[2]);
                 }
                 catch
@@ -161,78 +161,59 @@ namespace GralBackgroundworkers
                     //obtain indices of selected point
                     int ix = Convert.ToInt32(Math.Floor(xsi/mydata.GRAMMhorgridsize)) + 1;
                     int iy = Convert.ToInt32(Math.Floor(eta / mydata.GRAMMhorgridsize)) + 1;
-                    double schnittZ = item.Z;
 
-                    //obtain index in the vertical direction
-                    for(int k=1;k<=NZ;k++)
+                    if (ix > 0 && iy > 0 && ix < NX && iy < NY)
                     {
-                        if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
-                    {
-                        ischnitt = k;
-                        break;
-                    }
-                    }
+                        double schnittZ = item.Z;
 
-                    if (mydata.LocalStability && local_stability_OK) // use local stability?
-                    {
-                        int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
-                        if (result > 0) // valid result
+                        //obtain index in the vertical direction
+                        for (int k = 1; k <= NZ; k++)
                         {
-                            local_akla[item_number][n] = result;
+                            if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
+                            {
+                                ischnitt = k;
+                                break;
+                            }
                         }
-                        else
+
+                        if (mydata.LocalStability && local_stability_OK) // use local stability?
+                        {
+                            int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
+                            if (result > 0) // valid result
+                            {
+                                local_akla[item_number][n] = result;
+                            }
+                            else
+                            {
+                                local_akla[item_number][n] = iakla[n];
+                            }
+                        }
+                        else // use global stability
                         {
                             local_akla[item_number][n] = iakla[n];
                         }
-                    }
-                    else // use global stability
-                    {
-                        local_akla[item_number][n] = iakla[n];
-                    }
-                    
-                    
-                    Uoben = UWI[ix, iy, ischnitt];
-                    Voben = VWI[ix, iy, ischnitt];
-                    if (ischnitt > 1)
-                    {
-                        Uunten = UWI[ix, iy, ischnitt - 1];
-                        Vunten = VWI[ix, iy, ischnitt - 1];
-                        Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
-                            (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
-                        Vmittel = Vunten + ((Voben - Vunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
-                            (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]));
-                    }
-                    else
-                    {
-                        Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
-                        Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
-                    }
-                    if (Vmittel == 0)
-                    {
-                        iwr[item_number][n] = 90;
-                    }
-                    else
-                    {
-                        iwr[item_number][n] = Convert.ToInt32(Math.Abs(Math.Atan(Umittel / Vmittel)) * 180 / 3.14);
-                    }
 
-                    if ((Vmittel > 0) && (Umittel <= 0))
-                    {
-                        iwr[item_number][n] = 180 - iwr[item_number][n];
-                    }
 
-                    if ((Vmittel >= 0) && (Umittel > 0))
-                    {
-                        iwr[item_number][n] = 180 + iwr[item_number][n];
-                    }
+                        Uoben = UWI[ix, iy, ischnitt];
+                        Voben = VWI[ix, iy, ischnitt];
+                        if (ischnitt > 1)
+                        {
+                            Uunten = UWI[ix, iy, ischnitt - 1];
+                            Vunten = VWI[ix, iy, ischnitt - 1];
+                            Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
+                                (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
+                            Vmittel = Vunten + ((Voben - Vunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
+                                (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]));
+                        }
+                        else
+                        {
+                            Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
+                            Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
+                        }
 
-                    if ((Vmittel < 0) && (Umittel >= 0))
-                    {
-                        iwr[item_number][n] = 360 - iwr[item_number][n];
+                        iwr[item_number][n] = WindDirection(Umittel, Vmittel);
+                        wgi[item_number][n] = (float)Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
                     }
-
-                    wgi[item_number][n] = (float) Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
-                    
                     item_number++;
                 }
                 
@@ -244,7 +225,8 @@ namespace GralBackgroundworkers
             double wge = 0;
             double wr = 0;
             int ak = 0;
-            int fictiousyear = 1901;
+            int fictiousyear = mydata.FictiousYear;
+            fictiousyear = Math.Max(1900, fictiousyear);
             string [] month=new string[2];
             int monthold=-1;
             //loop over mettimeseries.dat
@@ -255,7 +237,7 @@ namespace GralBackgroundworkers
             int item_count = 0;
             foreach(Point_3D item in mydata.EvalPoints)
             {
-                string file = Path.Combine(mydata.Projectname, @"Metfiles", Path.GetFileName(item.filename));
+                string file = Path.Combine(mydata.ProjectName, @"Metfiles", Path.GetFileName(item.FileName));
                 if (File.Exists(file))
                 {
                     try
@@ -268,18 +250,18 @@ namespace GralBackgroundworkers
                 using (StreamWriter mywriter = new StreamWriter(file, false))
                 {
                     // write header lines
-                    mywriter.WriteLine("//"+Path.GetFileName(file));
-                    mywriter.WriteLine("//X=" + item.X.ToString(ic));
-                    mywriter.WriteLine("//Y=" + item.Y.ToString(ic));
-                    mywriter.WriteLine("//Z=" + item.Z.ToString(ic));
+                    mywriter.WriteLine(@"//"+Path.GetFileName(file));
+                    mywriter.WriteLine(@"//X=" + item.X.ToString(ic));
+                    mywriter.WriteLine(@"//Y=" + item.Y.ToString(ic));
+                    mywriter.WriteLine(@"//Z=" + item.Z.ToString(ic));
                     
                     foreach(string mettimeseries in data_mettimeseries)
                     {
                         try
                         {
                             text = mettimeseries.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                            wge = Convert.ToDouble(text[2].Replace(".", mydata.Decsep));
-                            wr = Convert.ToDouble(text[3].Replace(".", mydata.Decsep));
+                            wge = Convert.ToDouble(text[2].Replace(".", mydata.DecSep));
+                            wr = Convert.ToDouble(text[3].Replace(".", mydata.DecSep));
                             ak = Convert.ToInt32(text[4]);
                             //new year
                             month = text[0].Split(new char[] { '.',':','-' }, StringSplitOptions.RemoveEmptyEntries);

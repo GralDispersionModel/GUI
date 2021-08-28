@@ -19,18 +19,45 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
+using System.Globalization;
+
 namespace GralData
 {
     /// <summary>
-    /// WindData class
+    /// Wind data from *.met or *.akt or *.akterm file 
     /// </summary>
     public class WindData
     {
-        public string Date {get; set;}
-        public string Time {get; set;}
+        /// <summary>
+        /// Date like used in *.met files as string
+        /// </summary>
+        public string Date { get; set; }
+        /// <summary>
+        /// Time like used in *.met files as string
+        /// </summary>
+        public string Time { get; set; }
+        /// <summary>
+        /// Stability class 
+        /// </summary>
         public int StabClass { get; set; }
+        /// <summary>
+        /// Hour 
+        /// </summary>
         public int Hour { get; set; }
+        /// <summary>
+        /// Wind velocity
+        /// </summary>
         public double Vel { get; set; }
+        /// <summary>
+        /// Wind direction
+        /// </summary>
         public double Dir { get; set; }
+        
+        public override string ToString()
+        {
+            CultureInfo ic = CultureInfo.InvariantCulture;
+            return Date + "," + Time + "," + Math.Round(Vel, 2).ToString(ic) + "," + Math.Round(Dir).ToString(ic) + "," + StabClass.ToString(ic);
+        }
     }
 }

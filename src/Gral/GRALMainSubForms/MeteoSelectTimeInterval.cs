@@ -21,6 +21,7 @@ namespace GralMainForms
     public partial class MeteoSelectTimeInterval : Form
     {
         public GralData.WindRoseSettings WindRoseSet;
+
         
         /// <summary>
         /// Input box for start and endtime of a meteorological time series
@@ -58,6 +59,33 @@ namespace GralMainForms
             checkBox1.Checked = WindRoseSet.BiasCorrection;
             checkBox2.Checked = WindRoseSet.ShowFrames;
             checkBox3.Checked = WindRoseSet.DrawSmallSectors;
+
+            if (!WindRoseSet.ShowWindSectorGroupBox)
+            {
+                groupBox1.Visible = false;
+                if (WindRoseSet.ShowMaxScaleGroupBox)
+                {
+                    groupBox2.Visible = true;
+                    comboBox3.SelectedIndex = WindRoseSet.MaxScaleVertical;
+                }
+            }
+            else
+            {
+                switch (WindRoseSet.SectorCount)
+                {
+                    case 24:
+                        radioButton2.Checked = true;
+                        break;
+                    case 36:
+                        radioButton3.Checked = true;
+                        break;
+                    default:
+                        radioButton1.Checked = true;
+                        break;
+                }
+            }
+
+            checkBox4.Checked = WindRoseSet.Ignore00Values;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -68,6 +96,25 @@ namespace GralMainForms
             WindRoseSet.BiasCorrection = checkBox1.Checked;
             WindRoseSet.ShowFrames = checkBox2.Checked;
             WindRoseSet.DrawSmallSectors = checkBox3.Checked;
+            if (radioButton1.Checked)
+            {
+                WindRoseSet.SectorCount = 16;
+            }
+            else if (radioButton2.Checked)
+            {
+                WindRoseSet.SectorCount = 24;
+            }
+            else if (radioButton3.Checked)
+            {
+                WindRoseSet.SectorCount = 36;
+            }
+            WindRoseSet.Ignore00Values = checkBox4.Checked;
+
+            if (WindRoseSet.ShowMaxScaleGroupBox)
+            {
+                WindRoseSet.MaxScaleVertical = comboBox3.SelectedIndex;
+            }
+
             this.Close();
         }
     }

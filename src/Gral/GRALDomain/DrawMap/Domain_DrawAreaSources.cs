@@ -34,7 +34,7 @@ namespace GralDomain
                                      double factor_x, double factor_y, Font LabelFont, Brush LabelBrush) 
         {
             int pb1_height = picturebox1.Height;
-			int pb1_width  = picturebox1.Width;
+            int pb1_width  = picturebox1.Width;
 
             StringFormat StringFormat1 = new StringFormat
             {
@@ -43,7 +43,7 @@ namespace GralDomain
             }; //format for names of sources
 
             Brush SelectedBrush = new SolidBrush(Color2Transparent(150, Color.Green));
-			
+            
             int n = -1;
             int transparency = _drobj.Transparancy;
             int linewidth_l = _drobj.LineWidth;
@@ -91,7 +91,7 @@ namespace GralDomain
                             // at last point
                             if ((i == vertices - 1) && (dismiss == false))
                             {
-                                if ((n == EditAS.ItemDisplayNr) && ((MouseControl == 9) || (MouseControl == 8)))
+                                if ((n == EditAS.ItemDisplayNr) && ((MouseControl ==  MouseMode.AreaSourceSel) || (MouseControl == MouseMode.AreaSourcePos)))
                                 {
                                     g.FillPolygon(SelectedBrush, myPoints);
                                     Brush edges = new SolidBrush(Color.Green);

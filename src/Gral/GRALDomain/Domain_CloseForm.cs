@@ -10,14 +10,6 @@
 ///</remarks>
 #endregion
 
-/*
- * Created by SharpDevelop.
- * User: U0178969
- * Date: 24.01.2019
- * Time: 14:53
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
 using System.IO;
 using System.Windows.Forms;
 
@@ -39,22 +31,24 @@ namespace GralDomain
             // Kuntner clean up open forms, picturebox, release memory to avoid memory lags
             HideWindows(0);
             
-            MMO.StartMatchProcess -= new StartMatchingProcess(StartMatchingProcess);
+            MMO.StartMatchProcess -= new StartMatchingDelegate(StartMatchingProcess);
+            MMO.CancelMatchProcess -= new CancelMatchingDelegate(MatchCancel);
+            MMO.FinishMatchProcess -= new FinishMatchingDelegate(MatchFinish);
             MMO.LoadWindData -= new LoadWindFileData(LoadWindFileForMatching);
             
             if (MMO != null)
             {
-                MMO.close_allowed = true; // allow closing of the MMO form, otherwise MMO.Close() is locked
-                MMO.wind_speeds = null;
-                MMO.wind_direction = null;
-                MMO.stability  = null;
-                MMO.metfiles = null;
-                MMO.filelength = null;
-                MMO.datum = null;
-                MMO.stunde = null;
+                MMO.CloseMatchDialogAllowed = true; // allow closing of the MMO form, otherwise MMO.Close() is locked
+                MMO.WindVelocityObs = null;
+                MMO.WindDirectionObs = null;
+                MMO.StabilityClassObs  = null;
+                MMO.MetFileNames = null;
+                MMO.MetFileLenght = null;
+                MMO.DateObsMetFile = null;
+                MMO.HourObsMetFile = null;
                 MMO.DecsepUser = null;
                 MMO.RowsepUser = null;
-                MMO.zeit = null;
+                MMO.TimeStapmsMetTimeSeries = null;
                 
                 MMO.Close();
                 MMO.Dispose();
@@ -80,8 +74,7 @@ namespace GralDomain
                 CancellationTokenSource.Cancel();
                 CancellationTokenSource.Dispose();
             }
-            CancellationTokenSource = null;
-
+            
             ReleaseFileSystemWatchers();
             
             if (ObjectManagerForm != null) // Kuntner: close objectmanager
@@ -104,7 +97,6 @@ namespace GralDomain
             {
                 ProfileConcentration.VertProfileVelocity.Close();
             }
-
 
             if (picturebox1 != null)
             {
@@ -144,14 +136,22 @@ namespace GralDomain
             EditVegetation.VegetationRedraw -= DomainRedrawDelegate; // Redraw from vegetation
             OnlineRedraw -= DomainRedrawDelegate; // Redraw from Online GRAL/GRAMM
 
-            EditPS.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditAS.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditB.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditLS.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditPortals.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditR.ItemFormHide -= DomainItemFormHide; // Hide form 
-            EditWall.ItemFormHide -= DomainItemFormHide; // Hide form
-            EditVegetation.ItemFormHide -= DomainItemFormHide; // Hide form 
+            EditPS.ItemFormOK -= EditAndSavePointSourceData; // Save PS data
+            EditPS.ItemFormCancel -= CancelItemForms; // Cancel PS Dialog
+            EditAS.ItemFormOK -= EditAndSaveAreaSourceData; // Hide form 
+            EditAS.ItemFormCancel -= CancelItemForms;
+            EditB.ItemFormOK -= EditAndSaveBuildingsData;
+            EditB.ItemFormCancel -= CancelItemForms;
+            EditLS.ItemFormOK -= EditAndSaveLineSourceData;
+            EditLS.ItemFormCancel -= CancelItemForms;
+            EditPortals.ItemFormOK -= EditAndSavePortalSourceData; // Hide form 
+            EditPortals.ItemFormCancel -= CancelItemForms;
+            EditR.ItemFormOK -= EditAndSaveReceptorData;
+            EditR.ItemFormCancel -= CancelItemForms;
+            EditWall.ItemFormOK -= EditAndSaveWallData;
+            EditWall.ItemFormCancel -= CancelItemForms;
+            EditVegetation.ItemFormOK -= EditAndSaveVegetationData;
+            EditVegetation.ItemFormCancel -= CancelItemForms;
 
             GeoReferenceOne.Form_Georef1_Closed -= new Georeference1_Closed(CloseGeoRef1); // Message, that georef1 is closed
             GeoReferenceTwo.Form_Georef2_Closed -= new Georeference2_Closed(CloseGeoRef2); // Message, that georef2 is closed
@@ -282,6 +282,8 @@ namespace GralDomain
             ItemOptions.TrimExcess();
             //Application.DoEvents();
             
+            CancellationTokenSource = null;
+
             try
             {
                 if (DomainClosed!= null)

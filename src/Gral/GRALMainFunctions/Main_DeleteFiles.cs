@@ -20,7 +20,6 @@
  */
 using System;
 using System.IO;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using GralMessage;
 
@@ -30,7 +29,7 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
+    {
         /// <summary>
         /// deletes all intermediate GRAL *.con and *.odr files
         /// </summary>
@@ -297,8 +296,8 @@ namespace Gral
 
             DeleteGralGffFile();
         }
-		
-		//delete file GRAL_topofile.txt whenever items are changed by the user affecting the topography
+        
+        //delete file GRAL_topofile.txt whenever items are changed by the user affecting the topography
         /// <summary>
         /// Deletes the high resolution GRAL_topofile.txt
         /// </summary>
@@ -385,6 +384,6 @@ namespace Gral
                 catch{}
             }
         }
-	}
+    }
 }
 

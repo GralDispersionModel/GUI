@@ -15,7 +15,7 @@
  * User: U0178969
  * Date: 21.01.2019
  * Time: 17:08
- * 
+ *
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
@@ -55,49 +55,61 @@ namespace GralDomain
             // paste an item?
             if (CopiedItem.PointSource != null)
             {
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add("Paste point source");
-                m.MenuItems[0].Click += new System.EventHandler(RightClickPointSourcePaste);
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Paste Point Source";
+                mi.Click += RightClickPointSourcePaste;
+                m.Items.Add(mi);
                 m.Show(picturebox1, new Point(e.X, e.Y));
                 return;
             }
             if (CopiedItem.AreaSource != null)
             {
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add("Paste area source");
-                m.MenuItems[0].Click += new System.EventHandler(RightClickAreaSourcePaste);
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Paste Area Source";
+                mi.Click += RightClickAreaSourcePaste;
+                m.Items.Add(mi);
                 m.Show(picturebox1, new Point(e.X, e.Y));
                 return;
             }
             if (CopiedItem.Building != null)
             {
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add("Paste building");
-                m.MenuItems[0].Click += new System.EventHandler(RightClickBuildingPaste);
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Paste Building";
+                mi.Click += RightClickBuildingPaste;
+                m.Items.Add(mi);
                 m.Show(picturebox1, new Point(e.X, e.Y));
                 return;
             }
             if (CopiedItem.LineSource != null)
             {
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add("Paste line source");
-                m.MenuItems[0].Click += new System.EventHandler(RightClickLineSourcePaste);
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Paste Line Source";
+                mi.Click += RightClickLineSourcePaste;
+                m.Items.Add(mi);
                 m.Show(picturebox1, new Point(e.X, e.Y));
                 return;
             }
             if (CopiedItem.Receptor != null)
             {
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add("Paste receptor point");
-                m.MenuItems[0].Click += new System.EventHandler(RightClickReceptorPaste);
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Paste Receptor Point";
+                mi.Click += RightClickReceptorPaste;
+                m.Items.Add(mi);
                 m.Show(picturebox1, new Point(e.X, e.Y));
                 return;
             }
             if (CopiedItem.PortalSource != null)
             {
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add("Paste portal source");
-                m.MenuItems[0].Click += new System.EventHandler(RightClickPortalPaste);
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Paste Portal Source";
+                mi.Click += RightClickPortalPaste;
+                m.Items.Add(mi);
                 m.Show(picturebox1, new Point(e.X, e.Y));
                 return;
             }
@@ -108,7 +120,7 @@ namespace GralDomain
 
             switch (MouseControl)
             {
-                case 7:
+                case MouseMode.PointSourceSel:
                     // Edit Point Source - Right Mouse
                     {
                         int i = RightClickSearchPointSource(e); // get number of point source at mouse position
@@ -120,31 +132,41 @@ namespace GralDomain
                             EditPS.FillValues();
 
                             Picturebox1_Paint();
-                            ContextMenu m = new ContextMenu();
-                            m.MenuItems.Add("Edit point source");
-                            m.MenuItems.Add("Move point source");
-                            m.MenuItems.Add("Delete source");
-                            m.MenuItems.Add("Copy source");
-                            m.Name = EditPS.ItemData[i].Name;
+
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditPS.ItemData[i].Name.Substring(0, Math.Min(10, EditPS.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Point Source");
+                            it.Tag = i;
+                            it.Click += RightClickPSEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Point Source");
+                            it.Tag = i;
+                            it.Click += RightClickPSMove;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Point Source");
+                            it.Tag = i;
+                            it.Click += RightClickPSDelete;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Copy Point Source");
+                            it.Tag = i;
+                            it.Click += RightClickPSCopy;
+                            mi.DropDownItems.Add(it);
+
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show point source data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Point Source Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
-                            for (int id = 0; id < 4; id++)
-                            {
-                                m.MenuItems[id].Tag = i;
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickPointSource);
-                            }
-
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 25:
+                case MouseMode.ReceptorSel:
                     //select receptors - Right Mouse
                     {
                         int i = RightClickSearchReceptor(e);
@@ -155,141 +177,166 @@ namespace GralDomain
                             EditR.FillValues();
 
                             Picturebox1_Paint();
-                            ContextMenu m = new ContextMenu();
 
-                            m.MenuItems.Add("Edit receptor point");
-                            m.MenuItems.Add("Move receptor point");
-                            m.MenuItems.Add("Delete receptor");
-                            m.MenuItems.Add("Copy receptor");
-                            m.Name = EditR.ItemData[i].Name;
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditR.ItemData[i].Name.Substring(0, Math.Min(10, EditR.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Receptor");
+                            it.Tag = i;
+                            it.Click += RightClickReceptorEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Receptor");
+                            it.Tag = i;
+                            it.Click += RightClickReceptorMove;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Receptor");
+                            it.Tag = i;
+                            it.Click += RightClickReceptorDelete;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Copy Receptor");
+                            it.Tag = i;
+                            it.Click += RightClickReceptorCopy;
+                            mi.DropDownItems.Add(it);
+
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show receptor point data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Receptor Point Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
-
-                            for (int id = 0; id < 4; id++)
-                            {
-                                m.MenuItems[id].Tag = i;
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickReceptor);
-                            }
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 9:
+                case MouseMode.AreaSourceSel:
                     //select area sources - Right Mouse
                     {
                         int i = RightClickSearchAreaSource(e);
 
                         if (i >= 0 && i < EditAS.ItemData.Count)
                         {
-                            ContextMenu m = new ContextMenu();
-                            m.MenuItems.Add("Edit area source");
-                            m.MenuItems.Add("Move edge point");
-                            m.MenuItems.Add("Add edge point");
-                            m.MenuItems.Add("Delete edge point");
-                            m.MenuItems.Add("Delete area source");
-                            m.MenuItems.Add("Copy area source");
-                            m.Name = EditAS.ItemData[i].Name;
-                            m.MenuItems[0].Tag = i;
-                            m.MenuItems[1].Tag = new PointD(textBox1.Text,
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditAS.ItemData[i].Name.Substring(0, Math.Min(10, EditAS.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Area Source");
+                            it.Tag = i;
+                            it.Click += RightClickAreaEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Edge Point");
+                            it.Tag = new PointD(textBox1.Text,
                                                             textBox2.Text,
                                                             CultureInfo.CurrentCulture);
-                            m.MenuItems[2].Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
-                            m.MenuItems[3].Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
-                            m.MenuItems[4].Tag = i;
-                            m.MenuItems[5].Tag = i;
+                            it.Click += RightClickAreaMoveEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Add Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
+                            it.Click += RightClickAreaAddEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
+                            it.Click += RightClickAreaDelEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Area Source");
+                            it.Tag = i;
+                            it.Click += RightClickAreaDelete;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Copy Area Source");
+                            it.Tag = i;
+                            it.Click += RightClickAreaCopy;
+                            mi.DropDownItems.Add(it);
 
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show area source data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
-                                m.MenuItems[4].Enabled = false;
-                                m.MenuItems[5].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Area Source Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
+                                mi.DropDownItems[4].Enabled = false;
+                                mi.DropDownItems[5].Enabled = false;
                             }
                             if (EditAS.ItemData[i].Pt.Count < 4) // at least 3 edge points
                             {
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
                             EditAS.SetTrackBar(i + 1);
                             EditAS.ItemDisplayNr = i;
                             EditAS.FillValues();
-
-                            for (int id = 0; id < 6; id++)
-                            {
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickArea);
-                            }
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 11:
+                case MouseMode.LineSourceSel:
                     //select line sources - Right Mouse
                     {
                         int i = RightClickSearchLineSource(e);
 
                         if (i >= 0 && i < EditLS.ItemData.Count)
                         {
-                            ContextMenu m = new ContextMenu();
-                            m.MenuItems.Add("Edit line source");
-                            m.MenuItems.Add("Move edge point");
-                            m.MenuItems.Add("Add edge point");
-                            m.MenuItems.Add("Delete edge point");
-                            m.MenuItems.Add("Delete line Source");
-                            m.MenuItems.Add("Copy line source");
-                            m.Name = EditLS.ItemData[i].Name;
-                            m.MenuItems[0].Tag = i;
-                            m.MenuItems[1].Tag = new PointD(textBox1.Text,
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditLS.ItemData[i].Name.Substring(0, Math.Min(10, EditLS.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Line Source");
+                            it.Tag = i;
+                            it.Click += RightClickLineEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Edge Point");
+                            it.Tag = new PointD(textBox1.Text,
                                                             textBox2.Text,
                                                             CultureInfo.CurrentCulture);
-                            m.MenuItems[2].Tag = new SelectedPointNumber(textBox1.Text,
+                            it.Click += RightClickLineMoveEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Add Edge Point");
+                            mi.Tag = new PointD(textBox1.Text,
+                                                            textBox2.Text,
+                                                            CultureInfo.CurrentCulture);
+                            it.Click += RightClickLineAddEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text,
                                                                          textBox2.Text,
                                                                          i,
                                                                          CultureInfo.CurrentCulture);
-
-                            m.MenuItems[3].Tag = new SelectedPointNumber(textBox1.Text,
-                                                                         textBox2.Text,
-                                                                         i,
-                                                                         CultureInfo.CurrentCulture);
-                            m.MenuItems[4].Tag = i;
-                            m.MenuItems[5].Tag = i;
+                            it.Click += RightClickLineDelEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Line Source");
+                            it.Tag = i;
+                            it.Click += RightClickLineDelete;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Copy Line Source");
+                            it.Tag = i;
+                            it.Click += RightClickLineCopy;
+                            mi.DropDownItems.Add(it);
 
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show line source data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
-                                m.MenuItems[4].Enabled = false;
-                                m.MenuItems[5].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Line Source Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
+                                mi.DropDownItems[4].Enabled = false;
+                                mi.DropDownItems[5].Enabled = false;
                             }
                             if (EditLS.ItemData[i].Pt.Count < 3) // at least 2 edge points
                             {
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
 
                             EditLS.SetTrackBar(i + 1);
                             EditLS.ItemDisplayNr = i;
                             EditLS.FillValues();
 
-                            for (int id = 0; id < 6; id++)
-                            {
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickLine);
-                            }
-
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 76:
+                case MouseMode.WallSel:
 
                     //select wall - Right Mouse
                     {
@@ -297,57 +344,61 @@ namespace GralDomain
 
                         if (i >= 0 && i < EditWall.ItemData.Count)
                         {
-
-                            ContextMenu m = new ContextMenu();
-                            m.MenuItems.Add("Edit wall");
-                            m.MenuItems.Add("Move edge point");
-                            m.MenuItems.Add("Add edge point");
-                            m.MenuItems.Add("Delete edge point");
-                            m.MenuItems.Add("Delete wall");
-                            m.Name = EditWall.ItemData[i].Name;
-                            m.MenuItems[0].Tag = i;
-                            m.MenuItems[1].Tag = new PointD(textBox1.Text,
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditWall.ItemData[i].Name.Substring(0, Math.Min(10, EditWall.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Wall");
+                            it.Tag = i;
+                            it.Click += RightClickWallEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Edge Point");
+                            it.Tag = new PointD(textBox1.Text,
                                                             textBox2.Text,
                                                             CultureInfo.CurrentCulture);
-
-                            m.MenuItems[2].Tag = new SelectedPointNumber(textBox1.Text,
+                            it.Click += RightClickWallMoveEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Add Edge Point");
+                            mi.Tag = new PointD(textBox1.Text,
+                                                            textBox2.Text,
+                                                            CultureInfo.CurrentCulture);
+                            it.Click += RightClickWallAddEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text,
                                                                          textBox2.Text,
                                                                          i,
                                                                          CultureInfo.CurrentCulture);
+                            it.Click += RightClickWallDelEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Wall");
+                            it.Tag = i;
+                            it.Click += RightClickWallDelete;
+                            mi.DropDownItems.Add(it);
 
-                            m.MenuItems[3].Tag = new SelectedPointNumber(textBox1.Text,
-                                                                         textBox2.Text,
-                                                                         i,
-                                                                         CultureInfo.CurrentCulture);
-                            m.MenuItems[4].Tag = i;
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show wall data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
-                                m.MenuItems[4].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Line Source Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
+                                mi.DropDownItems[4].Enabled = false;
                             }
                             if (EditWall.ItemData[i].Pt.Count < 3) // at least 2 edge points
                             {
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
 
                             EditWall.SetTrackBar(i + 1);
                             EditWall.ItemDisplayNr = i;
                             EditWall.FillValues();
 
-                            for (int id = 0; id < 5; id++)
-                            {
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickWall);
-                            }
-
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 16:
+                case MouseMode.PortalSourceSel:
                     //select portal sources Right Mouse
                     {
                         int i = 0;
@@ -364,25 +415,37 @@ namespace GralDomain
                             int ymean = (int)((y1 + y2) * 0.5);
                             if ((e.X >= xmean - 10) && (e.X <= xmean + 10) && (e.Y >= ymean - 10) && (e.Y <= ymean + 10))
                             {
-                                ContextMenu m = new ContextMenu();
-                                m.MenuItems.Add("Edit portal source");
-                                m.MenuItems.Add("Delete portal source");
-                                m.MenuItems.Add("Flip exit surface");
-                                m.MenuItems.Add("Copy portal source");
-                                m.Name = _po.Name;
+
+                                ContextMenuStrip m = new ContextMenuStrip();
+                                ToolStripMenuItem mi = new ToolStripMenuItem();
+                                mi.Text = "Edit " + EditPortals.ItemData[i].Name.Substring(0, Math.Min(10, EditPortals.ItemData[i].Name.Length));
+                                ToolStripMenuItem it = new ToolStripMenuItem("Edit Portal Source");
+                                it.Tag = i;
+                                it.Click += RightClickPortalEdit;
+                                mi.DropDownItems.Add(it);
+                                it = new ToolStripMenuItem("Delete Portal Source");
+                                it.Tag = i;
+                                it.Click += RightClickPortalDelete;
+                                mi.DropDownItems.Add(it);
+                                it = new ToolStripMenuItem("Flip Exit Surface");
+                                it.Tag = i;
+                                it.Click += RightClickPortalFlip;
+                                mi.DropDownItems.Add(it);
+                                it = new ToolStripMenuItem("Copy Portal Source");
+                                it.Tag = i;
+                                it.Click += RightClickPortalCopy;
+                                mi.DropDownItems.Add(it);
+
                                 if (Gral.Main.Project_Locked == true)
                                 {
-                                    m.MenuItems[0].Text = "Show portal source data";
-                                    m.MenuItems[1].Enabled = false;
-                                    m.MenuItems[2].Enabled = false;
-                                    m.MenuItems[3].Enabled = false;
+                                    mi.DropDownItems[0].Text = "Show Portal Source Data";
+                                    mi.DropDownItems[1].Enabled = false;
+                                    mi.DropDownItems[2].Enabled = false;
+                                    mi.DropDownItems[3].Enabled = false;
                                 }
-                                for (int id = 0; id < 4; id++)
-                                {
-                                    m.MenuItems[id].Tag = i;
-                                    m.MenuItems[id].Click += new System.EventHandler(RightClickPortal);
-                                }
+                                m.Items.Add(mi);
                                 m.Show(picturebox1, new Point(e.X, e.Y));
+
                                 stop = true;
                             }
                             i += 1;
@@ -394,7 +457,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 19:
+                case MouseMode.BuildingSel:
 
                     //select buildings  Right Mouse
                     {
@@ -402,110 +465,114 @@ namespace GralDomain
 
                         if (i >= 0 && i < EditB.ItemData.Count)
                         {
-                            ContextMenu m = new ContextMenu();
-                            m.MenuItems.Add("Edit building");
-                            m.MenuItems.Add("Move edge point");
-                            m.MenuItems.Add("Add edge point");
-                            m.MenuItems.Add("Delete edge point");
-                            m.MenuItems.Add("Delete building");
-                            m.MenuItems.Add("Copy building");
-                            m.Name = EditB.ItemData[i].Name;
-                            m.MenuItems[0].Tag = i;
-                            m.MenuItems[1].Tag = new PointD(textBox1.Text,
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditB.ItemData[i].Name.Substring(0, Math.Min(10, EditB.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Building");
+                            it.Tag = i;
+                            it.Click += RightClickBuildingEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Edge Point");
+                            it.Tag = new PointD(textBox1.Text,
                                                             textBox2.Text,
                                                             CultureInfo.CurrentCulture);
-                            m.MenuItems[2].Tag = new SelectedPointNumber(textBox1.Text,
-                                                                         textBox2.Text,
-                                                                         i,
-                                                                         CultureInfo.CurrentCulture);
-                            m.MenuItems[3].Tag = new SelectedPointNumber(textBox1.Text,
-                                                                         textBox2.Text,
-                                                                         i,
-                                                                         CultureInfo.CurrentCulture);
-                            m.MenuItems[4].Tag = i;
-                            m.MenuItems[5].Tag = i;
+                            it.Click += RightClickBuildingMoveEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Add Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
+                            it.Click += RightClickAreaAddEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
+                            it.Click += RightClickBuildingDelEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Building");
+                            it.Tag = i;
+                            it.Click += RightClickBuildingDelete;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Copy Building");
+                            it.Tag = i;
+                            it.Click += RightClickBuildingCopy;
+                            mi.DropDownItems.Add(it);
 
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show building data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
-                                m.MenuItems[4].Enabled = false;
-                                m.MenuItems[5].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Building Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
+                                mi.DropDownItems[4].Enabled = false;
+                                mi.DropDownItems[5].Enabled = false;
                             }
                             if (EditB.ItemData[i].Pt.Count < 4) // at least 3 edge points
                             {
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
                             EditB.SetTrackBar(i + 1);
                             EditB.ItemDisplayNr = i;
                             EditB.FillValues();
-
-                            for (int id = 0; id < 6; id++)
-                            {
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickBuilding);
-                            }
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 77:
+                case MouseMode.VegetationSel:
                     //select vegetation  Right Mouse
                     {
                         int i = RightClickSearchVegetation(e);
 
                         if (i >= 0 && i < EditVegetation.ItemData.Count)
                         {
-                            ContextMenu m = new ContextMenu();
-                            m.MenuItems.Add("Edit vegetation");
-                            m.MenuItems.Add("Move edge point");
-                            m.MenuItems.Add("Add edge point");
-                            m.MenuItems.Add("Delete edge point");
-                            m.MenuItems.Add("Delete vegegation");
-                            m.Name = EditVegetation.ItemData[i].Name;
-                            m.MenuItems[0].Tag = i;
-                            m.MenuItems[1].Tag = new PointD(textBox1.Text,
+                            ContextMenuStrip m = new ContextMenuStrip();
+                            ToolStripMenuItem mi = new ToolStripMenuItem();
+                            mi.Text = "Edit " + EditVegetation.ItemData[i].Name.Substring(0, Math.Min(10, EditVegetation.ItemData[i].Name.Length));
+                            ToolStripMenuItem it = new ToolStripMenuItem("Edit Vegetation");
+                            it.Tag = i;
+                            it.Click += RightClickVegetationEdit;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Move Edge Point");
+                            it.Tag = new PointD(textBox1.Text,
                                                             textBox2.Text,
                                                             CultureInfo.CurrentCulture);
-                            m.MenuItems[2].Tag = new SelectedPointNumber(textBox1.Text,
-                                                                         textBox2.Text,
-                                                                         i,
-                                                                         CultureInfo.CurrentCulture);
-                            m.MenuItems[3].Tag = new SelectedPointNumber(textBox1.Text,
-                                                                         textBox2.Text,
-                                                                         i,
-                                                                         CultureInfo.CurrentCulture);
-                            m.MenuItems[4].Tag = i;
+                            it.Click += RightClickVegetationMoveEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Add Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
+                            it.Click += RightClickVegetationAddEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Edge Point");
+                            it.Tag = new SelectedPointNumber(textBox1.Text, textBox2.Text, i, CultureInfo.CurrentCulture);
+                            it.Click += RightClickVegetationDelEdge;
+                            mi.DropDownItems.Add(it);
+                            it = new ToolStripMenuItem("Delete Vegetation Area");
+                            it.Tag = i;
+                            it.Click += RightClickVegetationDelete;
+                            mi.DropDownItems.Add(it);
 
                             if (Gral.Main.Project_Locked == true)
                             {
-                                m.MenuItems[0].Text = "Show vegetation data";
-                                m.MenuItems[1].Enabled = false;
-                                m.MenuItems[2].Enabled = false;
-                                m.MenuItems[3].Enabled = false;
-                                m.MenuItems[4].Enabled = false;
+                                mi.DropDownItems[0].Text = "Show Area Source Data";
+                                mi.DropDownItems[1].Enabled = false;
+                                mi.DropDownItems[2].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
+                                mi.DropDownItems[4].Enabled = false;
                             }
                             if (EditVegetation.ItemData[i].Pt.Count < 4) // at least 3 edge points
                             {
-                                m.MenuItems[3].Enabled = false;
+                                mi.DropDownItems[3].Enabled = false;
                             }
-
                             EditVegetation.SetTrackBar(i + 1);
                             EditVegetation.ItemDisplayNr = i;
                             EditVegetation.FillValues();
 
-                            for (int id = 0; id < 5; id++)
-                            {
-                                m.MenuItems[id].Click += new System.EventHandler(RightClickVegetation);
-                            }
+                            m.Items.Add(mi);
                             m.Show(picturebox1, new Point(e.X, e.Y));
                         }
                     }
                     break;
 
-                case 8:
+                case MouseMode.AreaSourcePos:
                     //final corner point of area source
                     if (EditAS.CornerAreaCount > 1)
                     {
@@ -535,7 +602,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 79:
+                case MouseMode.VegetationPosCorner:
                     //final corner point of vegetation
                     if (EditVegetation.CornerVegetation > 0)
                     {
@@ -558,7 +625,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 17:
+                case MouseMode.BuildingPos:
                     //final corner point of buildings
                     if (EditB.CornerBuilding > 1)
                     {
@@ -586,13 +653,13 @@ namespace GralDomain
                     }
                     break;
 
-                case 117:
+                case MouseMode.BuildingEditFinal:
                     // case 1170 //
                     //final corner point of changed building edge point
                     SetNewEdgepointBuilding();
                     break;
 
-                case 10:
+                case MouseMode.LineSourcePos:
                     //final corner point of line source
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -614,13 +681,13 @@ namespace GralDomain
                     }
                     break;
 
-                case 100:
+                case MouseMode.LineSourceEditFinal:
                     /* case 1000: */
                     //final corner point of changed line source point
                     SetNewEdgepointLine();
                     break;
 
-                case 75:
+                case MouseMode.WallSet:
                     //final corner point of wall
                     if (EditWall.CornerWallCount > 0)
                     {
@@ -648,13 +715,13 @@ namespace GralDomain
                     }
                     break;
 
-                case 101:
+                case MouseMode.WallEditFinal:
                     /*case 1001:*/
                     //final corner point of changed wall edge
                     SetNewEdgepointWall();
                     break;
 
-                case 15:
+                case MouseMode.PortalSourcePos:
                     //second point of a portal source
                     if (Gral.Main.Project_Locked == false)
                     {
@@ -672,7 +739,7 @@ namespace GralDomain
                         Cursor.Clip = Rectangle.Empty;
                         Picturebox1_Paint();
                     }
-                    
+
                     //digitizing tunnel portals
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -692,7 +759,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 22:
+                case MouseMode.ViewDistanceMeasurement:
                     //measuring tool "distance"
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -727,7 +794,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 44:
+                case MouseMode.SectionWindSel:
                     //Section drawing
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -796,7 +863,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 45:
+                case MouseMode.SectionConcSel:
                     // Vertical concentration section
                     if (EditLS.CornerLineSource > 0)
                     {
@@ -826,7 +893,7 @@ namespace GralDomain
                     }
                     break;
 
-                case 23:
+                case MouseMode.ViewAreaMeasurement:
                     //measuring tool "area"
                     if (EditAS.CornerAreaCount > 1)
                     {

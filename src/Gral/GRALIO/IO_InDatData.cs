@@ -134,8 +134,8 @@ namespace GralIO
         /// <summary>
         ///0: no buildings, 1: diagnostic approach, 2: prognostic approach 
         /// </summary>
-        private int _buildingmode;
-        public int BuildingMode
+        private Gral.BuildingModeEnum _buildingmode;
+        public Gral.BuildingModeEnum BuildingMode
         {
             get
             {
@@ -143,7 +143,7 @@ namespace GralIO
             }
             set
             {
-                _buildingmode = Math.Max(0, Math.Min(2, value));
+                _buildingmode = (Gral.BuildingModeEnum) Math.Max(0, Math.Min(2, (int) value));
             }
         }
         /// <summary>
@@ -193,6 +193,10 @@ namespace GralIO
         /// </summary>
         public bool WriteESRIResult { get; set; }
         /// <summary>
+        ///Use GRAL Online functions
+        /// </summary>
+        public bool UseGRALOnlineFunctions { get; set; }
+        /// <summary>
         ///GRAL log output for debugging 
         /// </summary>
         public int Loglevel { get; set; }
@@ -200,6 +204,21 @@ namespace GralIO
         ///GRAL log output for debugging 
         /// </summary>
         public double AdaptiveRoughness { get; set; }
+        /// <summary>
+        ///Size of prognostic Sub Domains measured from sources; 0 = off
+        /// </summary>
+        private int _prognosticSubDomainsSourceRadius;
+        public int PrognosticSubDomainsSizeSourceRadius
+        {
+            get
+            {
+                return _prognosticSubDomainsSourceRadius;
+            }
+            set
+            {
+                _prognosticSubDomainsSourceRadius = Math.Max(0, Math.Min(100000, value));
+            }
+        }
 
         public InDatVariables()
         {
@@ -215,15 +234,17 @@ namespace GralIO
             HorSlices[0] = 3;
             Deltaz = 2;
             DispersionSituation = 1;
-            BuildingMode = 0;
+            BuildingMode = Gral.BuildingModeEnum.None;
             BuildingHeightsWrite = false;
             Compressed = 1;
             Transientflag = 0;
             PrognosticSubDomains = 15;
             WaitForKeyStroke = true;
+            UseGRALOnlineFunctions = true;
             WriteESRIResult = false;
             Loglevel = 0;
             AdaptiveRoughness = 0;
+            PrognosticSubDomainsSizeSourceRadius = 0;
         }
 
         public InDatVariables(InDatVariables other)
@@ -252,6 +273,8 @@ namespace GralIO
             WriteESRIResult = other.WriteESRIResult;
             Loglevel = other.Loglevel;
             AdaptiveRoughness = other.AdaptiveRoughness;
+            PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
+            UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
         }
 
     }

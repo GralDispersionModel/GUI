@@ -69,8 +69,11 @@ namespace GralMainForms
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (panel1.Width < 20 || panel1.Height < 20)
+            {
+                return;
+            }
             Graphics g = e.Graphics;
-
             //draw diagram
             StringFormat format1 = new StringFormat
             {
@@ -207,12 +210,10 @@ namespace GralMainForms
                 check[indexChecked] = 1;
             }
             Refresh();
-
         }
 
         Color[] GetColorArray()
         {
-
             // declare an Array for 20 colors
             Color[] aColors = new Color[20];
 
@@ -240,7 +241,6 @@ namespace GralMainForms
             aColors[19] = Color.FromArgb(153, 255, 204); // pale green
 
             return aColors;
-
         }
 
         //save image to clipboard

@@ -81,8 +81,9 @@ namespace GralItemForms
         public event ForceDomainRedraw LinesourceRedraw;
 
         public bool AllowClosing = false;
-        //delegate to send a message, that user tries to close the form
-        public event ForceItemFormHide ItemFormHide;
+        //delegates to send a message, that user uses OK or Cancel button
+        public event ForceItemOK ItemFormOK;
+        public event ForceItemCancel ItemFormCancel;
 
         public EditLinesources()
         {
@@ -91,11 +92,11 @@ namespace GralItemForms
                                             //User defined column seperator and decimal seperator
 
 #if __MonoCS__
-			var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
-			foreach (NumericUpDown nu in allNumUpDowns)
-			{
-				nu.TextAlign = HorizontalAlignment.Left;
-			}
+            var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
+            foreach (NumericUpDown nu in allNumUpDowns)
+            {
+                nu.TextAlign = HorizontalAlignment.Left;
+            }
 #endif
 
             int y_act = groupBox1.Top + groupBox1.Height + 5;
@@ -152,8 +153,8 @@ namespace GralItemForms
             EditlinesourcesResizeEnd(null, null);
 
 #if __MonoCS__
-			listBox1.Height = 25;
-			trackBar1.Height = 12;
+            listBox1.Height = 25;
+            trackBar1.Height = 12;
 #endif
         }
 
@@ -257,11 +258,25 @@ namespace GralItemForms
             {
                 if (linepollutant[nr].SelectedIndex == 2)
                 {
-                    but1[nr].Text = "[MOU/h/km]";
+                    if (checkBox3.Checked)
+                    {
+                        but1[nr].Text = "[MOU/h]";
+                    }
+                    else
+                    {
+                       but1[nr].Text = "[MOU/h/km]";
+                    }
                 }
                 else
                 {
-                    but1[nr].Text = "[kg/h/km]";
+                    if (checkBox3.Checked)
+                    {
+                        but1[nr].Text = "[kg/h]";
+                    }
+                    else
+                    {
+                        but1[nr].Text = "[kg/h/km]";
+                    }
                 }
             }
         }
@@ -380,7 +395,7 @@ namespace GralItemForms
                     }
 
                     double lenght = St_F.CalcLenght(_ls.Pt);
-                    label15.Text = lenght.ToString(ic);
+                    label15.Text = lenght.ToString();
 
                     if (Convert.ToInt32(textBox2.Text) > 0)
                     {
@@ -456,6 +471,9 @@ namespace GralItemForms
         {
             try
             {
+                //set line source emission rate to kg/h/km
+                checkBox3.Checked = false;
+
                 LineSourceData _ldata;
                 if (ItemDisplayNr < ItemData.Count)
                 {
@@ -735,7 +753,6 @@ namespace GralItemForms
             }
 
             UpdateNewSourcegroupEmission();
-
             SaveArray();
         }
 
@@ -771,7 +788,21 @@ namespace GralItemForms
                         SourceGroupEmission[index].Pollutant[i] = linepollutant[i].SelectedIndex;
                         double _val = 0;
                         double.TryParse(lineemission[i].Text, out _val);
-                        SourceGroupEmission[index].EmissionRate[i] = _val;
+
+                        double lenght = 1; // 1km default lenght for kg/h/km
+                        if (checkBox3.Checked) // use kg/h as input and recalculate to kg/h/km
+                        {
+                            lenght = Convert.ToDouble(label15.Text);
+                            if (lenght <= 0)
+                            {
+                                lenght = 1;
+                            }
+                            else
+                            {
+                                lenght = 1000 / lenght;
+                            }
+                        }
+                        SourceGroupEmission[index].EmissionRate[i] = _val * lenght;
                     }
                 }
             }
@@ -901,7 +932,7 @@ namespace GralItemForms
                 element_width = TBWidth;
             }
 
-            button9.Left = (int)((dialog_width - button9.Width) * 0.5);
+            button10.Left = Math.Max(100, this.Width - 100);
 
             for (int nr = 0; nr < 10; nr++)
             {
@@ -911,13 +942,13 @@ namespace GralItemForms
                 lineemission[nr].Width = (int)(element_width);
                 but1[nr].Location = new System.Drawing.Point(lineemission[nr].Left + lineemission[nr].Width + 5, linepollutant[nr].Top - 1);
             }
+            panel1.Width = ClientSize.Width;
         }
 
         void EditlinesourcesVisibleChanged(object sender, EventArgs e) // Kuntner: save sourcedata if form is hidden
         {
             if (!Visible)
             {
-                SaveArray(); // save sourcedata
                 GralDomain.Domain.MarkerPoint.X = 0;
                 GralDomain.Domain.MarkerPoint.Y = 0;
             }
@@ -926,11 +957,11 @@ namespace GralItemForms
                 bool enable = !Main.Project_Locked;
                 if (enable)
                 {
-                    Text = "Edit line sources";
+                    labelTitle.Text = "Edit Line Sources";
                 }
                 else
                 {
-                    Text = "Line source settings (project locked)";
+                    labelTitle.Text = "Line Source Settings (Project Locked)";
                 }
                 foreach (Control c in Controls)
                 {
@@ -964,7 +995,11 @@ namespace GralItemForms
                     linepollutant[i].Visible = enable;
                     labelpollutant[i].Visible = !enable;
                 }
+                // enable switch to show emission rate in kg/h/km or kg/h
+                checkBox3.Enabled = true; 
             }
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
 
         private void RedrawDomain(object sender, EventArgs e)
@@ -1018,11 +1053,11 @@ namespace GralItemForms
 
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                     {
-                        vert.Location = new Point(Right + 4, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                     }
                     else
                     {
-                        vert.Location = new Point(Left - 250, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
                     }
 
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
@@ -1060,11 +1095,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    edit.Location = new Point(Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(lineemission[nr].Text, true);
@@ -1170,7 +1205,12 @@ namespace GralItemForms
                             }
 
                             labelpollutant[i].Text = linepollutant[i].Text;
-                            lineemission[i].Text = SourceGroupEmission[index].EmissionRate[i].ToString();
+                            double lenght = 1;
+                            if (checkBox3.Checked) // use kg/h as input and recalculate to kg/h/km
+                            {
+                                lenght = Convert.ToDouble(label15.Text) / 1000;
+                            }
+                            lineemission[i].Text = (SourceGroupEmission[index].EmissionRate[i] * lenght).ToString();
                         }
                     }
                 }
@@ -1217,19 +1257,14 @@ namespace GralItemForms
             }
             else
             {
+                if (((sender as Form).ActiveControl is Button) == false)
+                {
+                    // cancel if x has been pressed = restore old values!
+                    cancelButtonClick(null, null);
+                }
                 // Hide form and send message to caller when user tries to close this form
                 if (!AllowClosing)
                 {
-                    // send Message to domain Form, that redraw is necessary
-                    try
-                    {
-                        if (ItemFormHide != null)
-                        {
-                            ItemFormHide(this, e);
-                        }
-                    }
-                    catch
-                    { }
                     this.Hide();
                     e.Cancel = true;
                 }
@@ -1275,6 +1310,11 @@ namespace GralItemForms
             toolTip1.Dispose();
         }
 
+        /// <summary>
+        /// Select a source group
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button7Click(object sender, EventArgs e)
         {
             EditSelectSourcegroup sgsel = new EditSelectSourcegroup
@@ -1283,12 +1323,13 @@ namespace GralItemForms
             };
             if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
             {
-                sgsel.Location = new Point(Right + 4, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
             }
             else
             {
-                sgsel.Location = new Point(Left - 460, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, Top);
             }
+
             sgsel.SourceGroup = SG_List;
             sgsel.CopyFrom = new List<string>();
             foreach (var text in listBox2.Items)
@@ -1396,11 +1437,6 @@ namespace GralItemForms
             textBox2.Text = _s;
         }
 
-        private void button9_Click(object sender, EventArgs e)
-        {
-            this.Close(); // does not close the form, because closing hides the form
-        }
-
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
             int edge = Math.Max(0, trackBar2.Value - 1);
@@ -1484,6 +1520,127 @@ namespace GralItemForms
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             get_edgepoint_height(); // get recent edgepoint height	
+        }
+
+        /// <summary>
+        /// OK Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button9_Click(object sender, EventArgs e)
+        {
+            button4_Click(sender, e);
+            FillValues();
+            // send Message to domain Form, that OK button has been pressed
+            try
+            {
+                if (ItemFormOK != null)
+                {
+                    ItemFormOK(this, e);
+                }
+            }
+            catch
+            { }
+        }
+        /// <summary>
+        /// Cancel button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cancelButtonClick(object sender, EventArgs e)
+        {
+            ReloadItemData();
+            // send Message to domain Form, that Cancel button has been pressed
+            try
+            {
+                if (ItemFormCancel != null)
+                {
+                    ItemFormCancel(this, e);
+                }
+            }
+            catch
+            { }
+        }
+        /// <summary>
+        /// Reset item data when cancelling the dialog
+        /// </summary>
+        public void ReloadItemData()
+        {
+            ItemData.Clear();
+            ItemData.TrimExcess();
+            LineSourceDataIO _ls = new LineSourceDataIO();
+            string _file = Path.Combine(Gral.Main.ProjectName, "Emissions", "Lsources.txt");
+            _ls.LoadLineSources(ItemData, _file);
+            _ls = null;
+            SetTrackBarMaximum();
+            FillValues();
+        }
+
+        /// <summary>
+        /// Show and edit emission rate in kg/km/h or kg/h
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            //lenght in km
+            double lenght = Convert.ToDouble(label15.Text) /1000;
+            
+            // kg/h
+            if (checkBox3.Checked)
+            {
+                for (int nr = 0; nr < but1.Length; nr++)
+                {
+                    double _val = St_F.TxtToDbl(lineemission[nr].Text, false);
+                    lineemission[nr].Text = Convert.ToString(_val * lenght);
+                }
+
+            }
+            else if (lenght > 0)
+            {
+                for (int nr = 0; nr < but1.Length; nr++)
+                {
+                    double _val = St_F.TxtToDbl(lineemission[nr].Text, false);
+                    lineemission[nr].Text = Convert.ToString(_val / lenght);
+                }
+            }
+            //update the unit of each pollutant
+            Odour(sender, e);
+        }
+
+        /// <summary>
+        /// Check for lenght > 0 and lock unit switch kg/km/h 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void label15_TextChanged(object sender, EventArgs e)
+        {
+            double lenght = 0;
+            double.TryParse(label15.Text, out lenght);
+            if (lenght > 0)
+            {
+                checkBox3.Enabled = true;
+            }
+            else
+            {
+                checkBox3.Enabled = false;
+                checkBox3.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
         }
     }
 }

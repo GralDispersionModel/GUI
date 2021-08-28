@@ -16,7 +16,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using Gral;
 using Gral.GRALItemForms;
@@ -257,7 +256,7 @@ namespace GralItemForms
                 dummy = DrawObject.ColorScale.Split(new char[] { ',' });
                 numericUpDown2.Value = Convert.ToDecimal(dummy[2], ic);
                 domain.ActualEditedDrawingObject = DrawObject;
-                domain.MouseControl = 28;
+                domain.MouseControl = GralDomain.MouseMode.ViewLegendPos;
                 domain.Cursor = Cursors.Cross;
             }
             else
@@ -1829,7 +1828,7 @@ namespace GralItemForms
                     textBox1.Enabled = true;
                     textBox2.Enabled = true;
                     domain.ActualEditedDrawingObject = DrawObject;
-                    domain.MouseControl = 28;
+                    domain.MouseControl = GralDomain.MouseMode.ViewLegendPos; 
                     domain.Cursor = Cursors.Cross;
                 }
                 else
@@ -1840,7 +1839,7 @@ namespace GralItemForms
                     numericUpDown2.Enabled = false;
                     textBox1.Enabled = false;
                     textBox2.Enabled = false;
-                    domain.MouseControl = 0;
+                    domain.MouseControl = GralDomain.MouseMode.Default;
                     domain.Cursor = Cursors.Default;
                 }
             }

@@ -29,8 +29,8 @@ namespace Gral
     /// The functions within the Main MeteoTab.
     /// </summary>
     partial class Main
-	{
-		//read the file Percent.txt when it is changed by GRAL.exe
+    {
+        //read the file Percent.txt when it is changed by GRAL.exe
         void PercentChanged(object sender, FileSystemEventArgs e)
         {
             progressBar3.Minimum = 0;
@@ -119,13 +119,14 @@ namespace Gral
                     //compute completed dispersion situations in %
                     if (transient == 1)
                     {
+                        progressBar4.Maximum = 100;
                         for (int i = 0; i < trackbar; i++)
                         {
                             frequency += DispSituationfrequ[i];
                         }
-                        if (Convert.ToInt32(frequency) < progressBar4.Maximum)
+                        if (Convert.ToInt32(frequency / 10) < progressBar4.Maximum)
                         {
-                            UpdateProgressBar4(trackbar);
+                            UpdateProgressBar4(Convert.ToInt32(frequency / 10));
                         }
                     }
                     else
@@ -255,7 +256,7 @@ namespace Gral
             else
             {
                 UpdateProgressBar2(0);
-            	UpdateLabel67("Actual flow situation: 0 %");
+                UpdateLabel67("Actual flow situation: 0 %");
             }
         }
 
@@ -299,7 +300,7 @@ namespace Gral
             else
             {
                 UpdateProgressBar1(0);
-            	UpdateLabel66("Flow situation: 0 / 0 %");
+                UpdateLabel66("Flow situation: 0 / 0 %");
             }
         }
 
@@ -345,5 +346,5 @@ namespace Gral
             catch
             { }
         }
-	}
+    }
 }

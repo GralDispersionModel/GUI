@@ -54,6 +54,7 @@
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -76,6 +77,10 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button9 = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.button10 = new System.Windows.Forms.Button();
+            this.Exit = new System.Windows.Forms.Button();
+            this.labelTitle = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -89,12 +94,13 @@
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(2, 66);
+            this.label2.Location = new System.Drawing.Point(13, 102);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 1;
@@ -102,9 +108,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(84, 63);
+            this.textBox1.Location = new System.Drawing.Point(95, 99);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(114, 20);
+            this.textBox1.Size = new System.Drawing.Size(113, 20);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.textBox1, "Each street must have\r\na name in order to be saved.");
@@ -112,7 +118,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(2, 118);
+            this.label5.Location = new System.Drawing.Point(13, 154);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 13);
             this.label5.TabIndex = 7;
@@ -126,7 +132,7 @@
             0,
             0,
             65536});
-            this.numericUpDown1.Location = new System.Drawing.Point(84, 115);
+            this.numericUpDown1.Location = new System.Drawing.Point(95, 151);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             8000,
             0,
@@ -142,7 +148,7 @@
             // trackBar1
             // 
             this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(5, 41);
+            this.trackBar1.Location = new System.Drawing.Point(16, 77);
             this.trackBar1.Maximum = 1;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
@@ -156,7 +162,7 @@
             // 
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button1.Image = global::Gral.Properties.Resources.AddSmall1;
-            this.button1.Location = new System.Drawing.Point(10, 4);
+            this.button1.Location = new System.Drawing.Point(6, 40);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(32, 32);
             this.button1.TabIndex = 39;
@@ -168,7 +174,7 @@
             // 
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button2.Image = global::Gral.Properties.Resources.DeleteSmall;
-            this.button2.Location = new System.Drawing.Point(104, 4);
+            this.button2.Location = new System.Drawing.Point(121, 40);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(32, 32);
             this.button2.TabIndex = 40;
@@ -180,7 +186,7 @@
             // 
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button3.Image = global::Gral.Properties.Resources.TrashcanSmall;
-            this.button3.Location = new System.Drawing.Point(150, 4);
+            this.button3.Location = new System.Drawing.Point(176, 40);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(32, 32);
             this.button3.TabIndex = 41;
@@ -234,7 +240,7 @@
             this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.Image = global::Gral.Properties.Resources.SaveSmall;
-            this.button4.Location = new System.Drawing.Point(6, 15);
+            this.button4.Location = new System.Drawing.Point(10, 15);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(32, 32);
             this.button4.TabIndex = 9;
@@ -244,7 +250,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(84, 89);
+            this.textBox4.Location = new System.Drawing.Point(95, 125);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(113, 20);
             this.textBox4.TabIndex = 3;
@@ -254,7 +260,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(115, 256);
+            this.textBox2.Location = new System.Drawing.Point(126, 292);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(84, 20);
@@ -270,7 +276,7 @@
             this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button5.Image = global::Gral.Properties.Resources.DeleteSmall;
-            this.button5.Location = new System.Drawing.Point(150, 15);
+            this.button5.Location = new System.Drawing.Point(169, 15);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(32, 32);
             this.button5.TabIndex = 11;
@@ -286,7 +292,7 @@
             0,
             0,
             65536});
-            this.numericUpDown3.Location = new System.Drawing.Point(85, 188);
+            this.numericUpDown3.Location = new System.Drawing.Point(96, 224);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -305,7 +311,7 @@
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(10, 140);
+            this.checkBox1.Location = new System.Drawing.Point(21, 176);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(104, 21);
             this.checkBox1.TabIndex = 5;
@@ -322,7 +328,7 @@
             0,
             0,
             65536});
-            this.numericUpDown2.Location = new System.Drawing.Point(85, 210);
+            this.numericUpDown2.Location = new System.Drawing.Point(96, 246);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -343,7 +349,7 @@
             // 
             this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button6.Image = global::Gral.Properties.Resources.RestoreSmall1;
-            this.button6.Location = new System.Drawing.Point(57, 4);
+            this.button6.Location = new System.Drawing.Point(60, 40);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(32, 32);
             this.button6.TabIndex = 63;
@@ -356,7 +362,7 @@
             this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Image = global::Gral.Properties.Resources.AddSmall1;
-            this.button7.Location = new System.Drawing.Point(79, 15);
+            this.button7.Location = new System.Drawing.Point(89, 15);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(32, 32);
             this.button7.TabIndex = 10;
@@ -368,7 +374,7 @@
             // 
             this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
             this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button8.Location = new System.Drawing.Point(85, 254);
+            this.button8.Location = new System.Drawing.Point(96, 290);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(24, 24);
             this.button8.TabIndex = 8;
@@ -380,20 +386,32 @@
             // 
             this.trackBar2.AutoSize = false;
             this.trackBar2.Enabled = false;
-            this.trackBar2.Location = new System.Drawing.Point(9, 163);
+            this.trackBar2.Location = new System.Drawing.Point(6, 199);
             this.trackBar2.Maximum = 1;
             this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(190, 19);
+            this.trackBar2.Size = new System.Drawing.Size(204, 19);
             this.trackBar2.TabIndex = 78;
             this.toolTip1.SetToolTip(this.trackBar2, "Select edge points");
             this.trackBar2.Value = 1;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(12, 482);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(174, 17);
+            this.checkBox3.TabIndex = 79;
+            this.checkBox3.Text = "Show and edit emission in kg/h";
+            this.toolTip1.SetToolTip(this.checkBox3, "Use and show emission as kg/h");
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 213);
+            this.label1.Location = new System.Drawing.Point(14, 249);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 42;
@@ -402,7 +420,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 192);
+            this.label9.Location = new System.Drawing.Point(14, 228);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(67, 13);
             this.label9.TabIndex = 59;
@@ -411,7 +429,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 260);
+            this.label3.Location = new System.Drawing.Point(14, 296);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
             this.label3.TabIndex = 44;
@@ -420,7 +438,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(2, 93);
+            this.label4.Location = new System.Drawing.Point(13, 129);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 46;
@@ -583,7 +601,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 236);
+            this.label13.Location = new System.Drawing.Point(14, 272);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(57, 13);
             this.label13.TabIndex = 42;
@@ -593,18 +611,19 @@
             // label15
             // 
             this.label15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label15.Location = new System.Drawing.Point(85, 233);
+            this.label15.Location = new System.Drawing.Point(96, 269);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(113, 20);
             this.label15.TabIndex = 42;
             this.label15.Text = "0";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label15.TextChanged += new System.EventHandler(this.label15_TextChanged);
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(3, 435);
+            this.tabControl1.Location = new System.Drawing.Point(10, 503);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(200, 308);
@@ -634,7 +653,7 @@
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(3, 51);
+            this.listBox2.Location = new System.Drawing.Point(10, 53);
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(193, 56);
             this.listBox2.TabIndex = 12;
@@ -647,18 +666,18 @@
             this.groupBox2.Controls.Add(this.listBox2);
             this.groupBox2.Controls.Add(this.button7);
             this.groupBox2.Controls.Add(this.button5);
-            this.groupBox2.Location = new System.Drawing.Point(6, 282);
+            this.groupBox2.Location = new System.Drawing.Point(6, 318);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(192, 115);
+            this.groupBox2.Size = new System.Drawing.Size(215, 115);
             this.groupBox2.TabIndex = 65;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Source groups";
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(52, 403);
+            this.button9.Location = new System.Drawing.Point(5, 442);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(85, 24);
+            this.button9.Size = new System.Drawing.Size(75, 24);
             this.button9.TabIndex = 77;
             this.button9.Text = "&OK";
             this.button9.UseVisualStyleBackColor = true;
@@ -666,7 +685,7 @@
             // 
             // checkBox2
             // 
-            this.checkBox2.Location = new System.Drawing.Point(134, 140);
+            this.checkBox2.Location = new System.Drawing.Point(145, 176);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(88, 21);
             this.checkBox2.TabIndex = 5;
@@ -674,13 +693,65 @@
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
+            // button10
+            // 
+            this.button10.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button10.Location = new System.Drawing.Point(139, 442);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 24);
+            this.button10.TabIndex = 77;
+            this.button10.Text = "&Cancel";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
+            // Exit
+            // 
+            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
+            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Exit.Location = new System.Drawing.Point(190, 3);
+            this.Exit.Name = "Exit";
+            this.Exit.Size = new System.Drawing.Size(24, 24);
+            this.Exit.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.Exit, "Close form");
+            this.Exit.UseVisualStyleBackColor = true;
+            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
+            // labelTitle
+            // 
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.Location = new System.Drawing.Point(3, 3);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(153, 25);
+            this.labelTitle.TabIndex = 56;
+            this.labelTitle.Text = "Edit Line Sources";
+            this.labelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.panel1.Controls.Add(this.Exit);
+            this.panel1.Controls.Add(this.labelTitle);
+            this.panel1.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(221, 34);
+            this.panel1.TabIndex = 80;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
             // EditLinesources
             // 
             this.AcceptButton = this.button9;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(206, 761);
+            this.CancelButton = this.button10;
+            this.ClientSize = new System.Drawing.Size(222, 815);
+            this.ControlBox = false;
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.trackBar2);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.groupBox2);
@@ -712,7 +783,6 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Edit line sources";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditLinesources_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditlinesourcesFormClosed);
             this.Load += new System.EventHandler(this.Editlinesources_Load);
@@ -732,6 +802,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -785,5 +856,10 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.Button Exit;
+        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.Panel panel1;
     }
 }

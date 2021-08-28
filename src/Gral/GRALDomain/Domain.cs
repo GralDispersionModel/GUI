@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using GralDomForms;
@@ -28,6 +29,11 @@ using GralStaticFunctions;
 namespace GralDomain
 {
     public delegate void DomainformClosed(object sender, EventArgs e);
+
+    /// <summary>
+    /// delegate to send Message, that function should start
+    /// </summary>
+    public delegate void SendCoordinates(object sender, EventArgs e);
 
     public partial class Domain : Form
     {
@@ -42,7 +48,7 @@ namespace GralDomain
         /// <summary>
         /// Recent function using the mouse
         /// </summary>
-        public int MouseControl = 0;
+        public MouseMode MouseControl = MouseMode.Default;
         /// <summary>
         /// Position whren moving a map with middle mouse button
         /// </summary>
@@ -220,7 +226,7 @@ namespace GralDomain
         /// </summary>
         private float [,] CellHeights = new float[1,1];           // Cell heights
         /// <summary>
-        /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL
+        /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL, -1 GRAMM edge points
         /// </summary>
         private int CellHeightsType = 0;
         /// <summary>
@@ -267,14 +273,30 @@ namespace GralDomain
         
         private readonly VerticalWindProfile ProfileConcentration = new VerticalWindProfile();
        
+        /// <summary>
+        /// Delegate to force a redraw from child forms
+        /// </summary>
         private readonly ForceDomainRedraw DomainRedrawDelegate;
 
+        /// <summary>
+        /// Delegate for a message that a child form has been closed (hidden)
+        /// </summary>
         private readonly ForceItemFormHide DomainItemFormHide;
 
         /// <summary>
         ///Cancel Token for all created await tasks
         /// </summary>
-        System.Threading.CancellationTokenSource CancellationTokenSource = new System.Threading.CancellationTokenSource();
+        public static System.Threading.CancellationTokenSource CancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+        /// <summary>
+        /// An object for locking purposes
+        /// </summary>
+        public static readonly object LockObject = new object();
+
+        /// <summary>
+        /// Send a event with clicked coordinates to all registered forms
+        /// </summary>
+        private event SendCoordinates SendCoors;
 
         /// <summary>
         /// Start the Domain (GIS) Form of this application
@@ -303,7 +325,9 @@ namespace GralDomain
             MouseWheel += new MouseEventHandler(form1_MouseWheel); // Kuntner
             
             //event when matching process should start
-            MMO.StartMatchProcess += new StartMatchingProcess(StartMatchingProcess);
+            MMO.StartMatchProcess += new StartMatchingDelegate(StartMatchingProcess);
+            MMO.CancelMatchProcess += new CancelMatchingDelegate(MatchCancel);
+            MMO.FinishMatchProcess += new FinishMatchingDelegate(MatchFinish);
             MMO.LoadWindData += new LoadWindFileData(LoadWindFileForMatching);
             
             //GRAMM Online options
@@ -365,14 +389,22 @@ namespace GralDomain
             EditVegetation.VegetationRedraw += DomainRedrawDelegate; // Redraw from editforests
             OnlineRedraw += DomainRedrawDelegate; // Redraw from Online GRAL/GRAMM
 
-            EditPS.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditAS.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditB.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditLS.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditPortals.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditR.ItemFormHide += DomainItemFormHide; // Hide form 
-            EditWall.ItemFormHide += DomainItemFormHide; // Hide form
-            EditVegetation.ItemFormHide += DomainItemFormHide; // Hide form 
+            EditPS.ItemFormOK += EditAndSavePointSourceData; // OK button from dialog 
+            EditPS.ItemFormCancel += CancelItemForms;
+            EditAS.ItemFormOK += EditAndSaveAreaSourceData; // OK button from dialog
+            EditAS.ItemFormCancel += CancelItemForms;
+            EditB.ItemFormOK += EditAndSaveBuildingsData; // OK button from dialog
+            EditB.ItemFormCancel += CancelItemForms;
+            EditLS.ItemFormOK += EditAndSaveLineSourceData; // OK button from dialog 
+            EditLS.ItemFormCancel += CancelItemForms;
+            EditPortals.ItemFormOK += EditAndSavePortalSourceData; // OK button from dialog 
+            EditPortals.ItemFormCancel += CancelItemForms;
+            EditR.ItemFormOK += EditAndSaveReceptorData; // OK button from dialog 
+            EditR.ItemFormCancel += CancelItemForms;
+            EditWall.ItemFormOK += EditAndSaveWallData; // OK button from dialog
+            EditWall.ItemFormCancel += CancelItemForms;
+            EditVegetation.ItemFormOK += EditAndSaveVegetationData; // OK button from dialog 
+            EditVegetation.ItemFormCancel += CancelItemForms;
 
             EditPS.StartPosition = FormStartPosition.Manual;
             EditAS.StartPosition = FormStartPosition.Manual;
@@ -382,6 +414,23 @@ namespace GralDomain
             EditR.StartPosition = FormStartPosition.Manual;
             EditWall.StartPosition = FormStartPosition.Manual;
             EditVegetation.StartPosition = FormStartPosition.Manual;
+
+            EditPS.TopLevel = false;
+            EditAS.TopLevel = false;
+            EditB.TopLevel = false;
+            EditLS.TopLevel = false;
+            EditPortals.TopLevel = false;
+            EditR.TopLevel = false;
+            EditWall.TopLevel = false;
+            EditVegetation.TopLevel = false;
+            Controls.Add(EditPS);
+            Controls.Add(EditAS);
+            Controls.Add(EditB);
+            Controls.Add(EditLS);
+            Controls.Add(EditPortals);
+            Controls.Add(EditR);
+            Controls.Add(EditWall);
+            Controls.Add(EditVegetation);
 
             GeoReferenceOne.Form_Georef1_Closed += new Georeference1_Closed(CloseGeoRef1); // Message, that georef1 is closed
             GeoReferenceTwo.Form_Georef2_Closed += new Georeference2_Closed(CloseGeoRef2); // Message, that georef2 is closed
@@ -410,7 +459,7 @@ namespace GralDomain
                 }
                 
                 // GRAL topography allowed?
-                if (MainForm.GRALSettings.BuildingMode > 0 && Gral.Main.Project_Locked == false &&
+                if (Gral.Main.Project_Locked == false &&
                     MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
                 {
                     originalGRALTopographyToolStripMenuItem.Enabled = true;
@@ -570,6 +619,7 @@ namespace GralDomain
                                 }
                                 if (File.Exists(_drobj.ContourFilename))
                                 {
+                                    ReDrawVectors = true;
                                     LoadVectors(_drobj.ContourFilename, _drobj);
                                 }
                             }
@@ -696,28 +746,52 @@ namespace GralDomain
                 {
                     PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
                 };
-
-                double[,] AH = new double[1, 1];
-                ggeom.AH = AH;
-
-                if (ggeom.ReadGGeomAsc(1) == true)
+                // Mean cell height
+                if (CellHeightsType == 1 || CellHeightsType == 0)
                 {
-                    AH = ggeom.AH;
-                    ggeom = null;
-                    CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
-                    for (int i = 1; i <= AH.GetUpperBound(0); i++)
+                    double[,] AH = new double[1, 1];
+                    ggeom.AH = AH;
+                    //read mean height only
+                    if (ggeom.ReadGGeomAsc(1) == true)
                     {
-                        for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                        AH = ggeom.AH;
+                        ggeom = null;
+                        CellHeights = new float[AH.GetUpperBound(0) + 1, AH.GetUpperBound(1) + 1];
+                        for (int i = 1; i <= AH.GetUpperBound(0); i++)
                         {
-                            CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                            for (int j = 1; j <= AH.GetUpperBound(1); j++)
+                            {
+                                CellHeights[i, j] = (float)Math.Round(AH[i, j], 1);
+                            }
                         }
+                        SetCellHeightsType(1);
                     }
+                }
+                // Edge cell height
+                else if (CellHeightsType == -1)
+                {
+                    double[,,] AHE = new double[1, 1, 1];
+                    ggeom.AHE = AHE;
+                    // read entire ggeom.asc file
+                    if (ggeom.ReadGGeomAsc(-1) == true)
+                    {
+                        AHE = ggeom.AHE;
+                        ggeom = null;
 
-                    SetCellHeightsType(1);
+                        CellHeights = new float[AHE.GetUpperBound(0) + 1, AHE.GetUpperBound(1) + 1];
+                        for (int i = 1; i <= AHE.GetUpperBound(0); i++)
+                        {
+                            for (int j = 1; j <= AHE.GetUpperBound(1); j++)
+                            {
+                                CellHeights[i, j] = (float)Math.Round(AHE[i, j, 1], 1);
+                            }
+                        }
+                        SetCellHeightsType(-1);
+                    }
                 }
             }
-            
-            if (CellHeightsType > 0)
+
+            if (Math.Abs(CellHeightsType) > 0)
             {
                 return true;
             }
@@ -752,7 +826,7 @@ namespace GralDomain
         /// </summary>
         private void Button1_Click(object sender, EventArgs e)
         {
-            MouseControl = 1;
+            MouseControl = MouseMode.ZoomIn;
             CursorConverter cv = new CursorConverter();
             Cursor cursor = (Cursor)cv.ConvertFrom(Gral.Properties.Resources.zoom_in);
             Cursor = cursor;
@@ -765,7 +839,7 @@ namespace GralDomain
         /// </summary>
         private void Button7_Click(object sender, EventArgs e)
         {
-            MouseControl = 13;
+            MouseControl = MouseMode.ViewPanelZoom;
             CursorConverter cv = new CursorConverter();
             Cursor cursor = (Cursor)cv.ConvertFrom(Gral.Properties.Resources.harrow);
             Cursor = cursor;
@@ -778,7 +852,7 @@ namespace GralDomain
         /// </summary>
         private void Button2_Click(object sender, EventArgs e)
         {
-            MouseControl = -1;
+            MouseControl = MouseMode.ZoomOut;
             CursorConverter cv = new CursorConverter();
             Cursor cursor = (Cursor)cv.ConvertFrom(Gral.Properties.Resources.zoom_out);
             Cursor = cursor;
@@ -794,7 +868,7 @@ namespace GralDomain
             HideWindows(0);
 
             //fit picture to panel (show full map)
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             Cursor = Cursors.Default;
 
             //compute deltax and deltay between all base maps
@@ -876,7 +950,7 @@ namespace GralDomain
         /// </summary>
         void Button4Click(object sender, EventArgs e)
         {
-            MouseControl = 2;
+            MouseControl = MouseMode.ViewMoveMap;
             CursorConverter cv = new CursorConverter();
             Cursor cursor = (Cursor)cv.ConvertFrom(Gral.Properties.Resources.lmove);
             Cursor = cursor;
@@ -918,8 +992,8 @@ namespace GralDomain
                 }
                 if (SelectedItems.Count > 0)
                 {
-                    int temp = MouseControl;
-                    MouseControl = 19; // edit buildings
+                    MouseMode temp = MouseControl;
+                    MouseControl = MouseMode.BuildingSel; // edit buildings
                     ItemsDelete("building");
                     InfoBoxCloseAllForms(); // close all infoboxes
                     EditAndSaveBuildingsData(sender, e); // save the changes
@@ -966,27 +1040,27 @@ namespace GralDomain
                         {
                             
                             i_alt = i;
-                            if (MouseControl == 19)
+                            if (MouseControl == MouseMode.BuildingSel)
                             {
                                 EditB.ItemDisplayNr = i;
                                 EditB.RemoveOne(false, false);
                             }
-                            else if (MouseControl == 16)
+                            else if (MouseControl == MouseMode.PortalSourceSel)
                             {
                                 EditPortals.ItemDisplayNr = i;
                                 EditPortals.RemoveOne(false);
                             }
-                            else if (MouseControl == 7)
+                            else if (MouseControl == MouseMode.PointSourceSel)
                             {
                                 EditPS.ItemDisplayNr = i;
                                 EditPS.RemoveOne(false);
                             }
-                            else if (MouseControl == 11)
+                            else if (MouseControl == MouseMode.LineSourceSel)
                             {
                                 EditLS.ItemDisplayNr = i;
                                 EditLS.RemoveOne(false);
                             }
-                            else if (MouseControl == 9)
+                            else if (MouseControl == MouseMode.AreaSourceSel)
                             {
                                 EditAS.ItemDisplayNr = i;
                                 EditAS.RemoveOne(false);
@@ -1005,7 +1079,7 @@ namespace GralDomain
         /// </summary>
         private void Button5_Click(object sender, EventArgs e)
         {
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             Cursor = Cursors.Default;
             //prevent parallel editing
             HideWindows(0);
@@ -1016,9 +1090,9 @@ namespace GralDomain
         /// </summary>
         public void Panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            if ((MouseControl == 6) || (MouseControl == 8) || (MouseControl == 17) || (MouseControl == 10)
-                || (MouseControl == 15) || (MouseControl == 24) || (MouseControl == 3) || (MouseControl == 12)
-                || (MouseControl == 75) || (MouseControl == 79))
+            //if ((MouseControl == MouseMode.PointSourcePos) || (MouseControl == MouseMode.AreaSourcePos) || (MouseControl == MouseMode.BuildingPos) || (MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.PortalSourcePos) || (MouseControl ==  MouseMode.ReceptorPos) || (MouseControl == MouseMode.BaseMapGeoReference1) || (MouseControl == MouseMode.BaseMapGeoReference2) || (MouseControl == MouseMode.WallSet) || (MouseControl == MouseMode.AreaPosCorner))
+
+            if ((MouseControl == MouseMode.BaseMapGeoReference1) || (MouseControl == MouseMode.BaseMapGeoReference2))
             {
                 Activate();
             }
@@ -1102,7 +1176,7 @@ namespace GralDomain
                     
                     BaseMapOldValues.Destrec = new Rectangle(0,0,0,0);
                     
-                    MouseControl = 7000;
+                    MouseControl = MouseMode.BaseMapMoveScale;
                     CursorConverter cv = new CursorConverter();
                     Cursor cursor = (Cursor)cv.ConvertFrom(Gral.Properties.Resources.lmove);
                     Cursor = cursor;
@@ -1110,12 +1184,12 @@ namespace GralDomain
             }
             else // save new settings
             {
-                if (MouseControl == 7000) // otherwise cancel the procedure
+                if (MouseControl == MouseMode.BaseMapMoveScale) // otherwise cancel the procedure
                 {
                     SaveDomainSettings(1);
                 }
                 Cursor = DefaultCursor;
-                MouseControl = 0;
+                MouseControl = MouseMode.Default;
             }
         }
 
@@ -1125,7 +1199,7 @@ namespace GralDomain
         private void Button6_Click_1(object sender, EventArgs e)
         {
             //define model domain
-            MouseControl = 4;
+            MouseControl = MouseMode.GralDomainStartPoint;
             Cursor = Cursors.Cross;
             //prevent parallel editing
             HideWindows(0);
@@ -1137,7 +1211,7 @@ namespace GralDomain
         private void Button29_Click(object sender, EventArgs e)
         {
             //define model domain
-            MouseControl = 30;
+            MouseControl = MouseMode.GrammDomainStartPoint;
             Cursor = Cursors.Cross;
             //prevent parallel editing
             HideWindows(0);
@@ -1228,14 +1302,42 @@ namespace GralDomain
         {
             GeoReferenceOne.Hide();
             GeoReferenceTwo.Hide();
-            EditPS.Hide();
-            EditAS.Hide();
+            if (EditPS.Visible)
+            {
+                EditPS.Hide();
+                EditPS.ReloadItemData();
+            }
+            if (EditAS.Visible)
+            {
+                EditAS.Hide();
+                EditAS.ReloadItemData();
+            }
             EditPortals.Hide();
-            EditB.Hide();
-            EditLS.Hide();
-            EditR.Hide(); // Kuntner
-            EditWall.Hide();
-            EditVegetation.Hide();
+            if (EditB.Visible)
+            {
+                EditB.Hide();
+                EditB.ReloadItemData();
+            }
+            if (EditLS.Visible)
+            {
+                EditLS.Hide();
+                EditLS.ReloadItemData();
+            }
+            if (EditR.Visible)
+            {
+                EditR.Hide();
+                EditR.ResetItemData();
+            }
+            if (EditWall.Visible)
+            {
+                EditWall.Hide();
+                EditWall.ReloadItemData();
+            }
+            if (EditVegetation.Visible)
+            {
+                EditVegetation.Hide();
+                EditVegetation.ReloadItemData();
+            }
             //this.Width = ScreenWidth; Auskommentiert Kuntner
             //this.Height = ScreenHeight - 50; Auskommentiert Kuntner
             //prevent parallel editing
@@ -1558,6 +1660,27 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
+        private void SelectPointsStartComputation(object sender, EventArgs e)
+        {
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+
+                _sl.Close();
+            }
+        }
+
+        private void SelectPointsCancelComputation(object sender, EventArgs e)
+        {
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+                _sl.Close();
+            }
+        }
+
         //////////////////////////////////////////////////////////////////
         //
         //       select items
@@ -1582,7 +1705,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 7;
+            MouseControl = MouseMode.PointSourceSel;
             Cursor = Cursors.Arrow;
         }
 
@@ -1604,7 +1727,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 9;
+            MouseControl = MouseMode.AreaSourceSel;
             Cursor = Cursors.Arrow;
         }
 
@@ -1626,7 +1749,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 19;
+            MouseControl = MouseMode.BuildingSel;
             Cursor = Cursors.Arrow;
         }
 
@@ -1648,7 +1771,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 25;
+            MouseControl = MouseMode.ReceptorSel;
             Cursor = Cursors.Arrow;
         }
 
@@ -1670,7 +1793,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 11;
+            MouseControl = MouseMode.LineSourceSel;
             Cursor = Cursors.Arrow;
         }
         
@@ -1692,7 +1815,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 76;
+            MouseControl = MouseMode.WallSel;
             Cursor = Cursors.Arrow;
         }
         
@@ -1714,7 +1837,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 77;
+            MouseControl = MouseMode.VegetationSel;
             Cursor = Cursors.Arrow;
         }
         
@@ -1736,7 +1859,7 @@ namespace GralDomain
             checkBox26.Checked = false;
             
             InfoBoxCloseAllForms(); // close all infoboxes
-            MouseControl = 16;
+            MouseControl = MouseMode.PortalSourceSel;
             Cursor = Cursors.Arrow;
         }
         
@@ -1963,7 +2086,7 @@ namespace GralDomain
         private void Button18_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = 20;
+            MouseControl = MouseMode.ViewNorthArrowPos;
             
             int trans = Convert.ToInt32(NorthArrow.Scale * 100);
             foreach (DrawingObjects _drobj in ItemOptions)
@@ -1998,7 +2121,7 @@ namespace GralDomain
         private void Button19_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = 21;
+            MouseControl = MouseMode.ViewScaleBarPos;
             int trans = MapScale.Division;
             if (InputBox1("Define the divisions of the map scale bar", "Number of divisions:", 1, 10, ref trans) == DialogResult.OK)
             {
@@ -2021,7 +2144,7 @@ namespace GralDomain
             }
             SaveDomainSettings(1);
             Picturebox1_Paint();
-            MouseControl = 21;
+            MouseControl = MouseMode.ViewScaleBarPos;
             Cursor = Cursors.Cross;
         }
 
@@ -2039,7 +2162,7 @@ namespace GralDomain
         private void Button20_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = 22;
+            MouseControl = MouseMode.ViewDistanceMeasurement;
             Cursor = Cursors.Cross;
         }
 
@@ -2049,21 +2172,21 @@ namespace GralDomain
         private void Button21_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = 23;
+            MouseControl = MouseMode.ViewAreaMeasurement;
             Cursor = Cursors.Cross;
         }
         
         void Button_section_windMouseClick(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = 44;
+            MouseControl = MouseMode.SectionWindSel;
             Cursor = Cursors.Cross;
         }
         
         void Button_section_concentrationClick(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = 45;
+            MouseControl = MouseMode.SectionConcSel;
             Cursor = Cursors.Cross;
         }
         
@@ -2132,7 +2255,7 @@ namespace GralDomain
                     Picturebox1_Paint();
                     
                     Bitmap bitMap = new Bitmap(picturebox1.Width, picturebox1.Height);
-                    Graphics gra = Graphics.FromImage(bitMap);
+                    //Graphics gra = Graphics.FromImage(bitMap);
                     picturebox1.DrawToBitmap(bitMap, new Rectangle(0, 0, picturebox1.Width, picturebox1.Height));
 
                     picturebox1.Height = Convert.ToInt32(picturebox1.Height / dpifactor);
@@ -2214,7 +2337,7 @@ namespace GralDomain
         private void Button25_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Default;
-            MouseControl = 0;
+            MouseControl = MouseMode.Default;
             if (ObjectManagerForm == null) // Kuntner: if no objectmanager was created, create an new one
             {
                 ObjectManagerForm = new Objectmanager(this);
@@ -2282,41 +2405,65 @@ namespace GralDomain
         /// </summary>
         private void Button30_Click(object sender, EventArgs e)
         {
-            MouseControl = 32;
+            MouseControl = MouseMode.SetPointMetTimeSeries;
             Cursor = Cursors.Cross;
-            // open & show meteo station
-            if (MeteoDialog != null) // close possible open Dialog
-            {
-                MeteoDialog.Close();
-                MeteoDialog.Dispose();
-            }
-            MeteoDialog = new DialogCreateMeteoStation
-            {
-                Meteo_Title = "GRAL GUI Compute wind statistics",
-                Meteo_Init = "Meteo",
-                Meteo_Ext = ".met",
-                Meteo_Height = 10,
-                Meteo_Model = 0, // Receptors & Coors visible
-                X1 = Left + 70,
-                Y1 = Top + 50,
-                Xs = XDomain,
-                Ys = YDomain
-            };
+
+            GralDomForms.SelectMultiplePoints _selmp = new SelectMultiplePoints();
+            SendCoors += _selmp.ReceiveClickedCoordinates;
+            _selmp.CancelComputation += CancelMetTimeSeries;
+            _selmp.StartComputation += MetTimeSeries;
             if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
-                MeteoDialog.Local_Stability = true;
+                _selmp.LocalStability = true;
             }
-
-            //check whether receptor points are set in the project
-            if (EditR.ItemData.Count > 0)
+            _selmp.MeteoModel = 0;
+            if (MainForm.GRAMMwindfield != null)
             {
-                MeteoDialog.Receptor_Points = true;
+                _selmp.MeteoModel = MeteoModelEmum.GRAMM;
+            }
+            if (WindfieldsAvailable())
+            {
+                _selmp.MeteoModel = _selmp.MeteoModel | MeteoModelEmum.GRAL;
             }
 
-            MeteoDialog.Start_computation += new StartCreateMeteoStation(MetTimeSeries);
-            //  met_st.Start_computation += new Dialog_CreateMeteoStation.start_create_meteo_station(mettimeseries); // delegate from Dialog -> OK
-            MeteoDialog.Cancel_computation += new CancelCreateMeteoStation(CancelMetTimeSeries);
-            MeteoDialog.Show();
+            _selmp.StartPosition = FormStartPosition.Manual;
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Owner = this;
+            _selmp.Show();
+
+            //// open & show meteo station
+            //if (MeteoDialog != null) // close possible open Dialog
+            //{
+            //    MeteoDialog.Close();
+            //    MeteoDialog.Dispose();
+            //}
+            //MeteoDialog = new DialogCreateMeteoStation
+            //{
+            //    Meteo_Title = "GRAL GUI Compute wind statistics",
+            //    Meteo_Init = "Meteo",
+            //    Meteo_Ext = ".met",
+            //    Meteo_Height = 10,
+            //    Meteo_Model = 0, // Receptors & Coors visible
+            //    X1 = Left + 70,
+            //    Y1 = Top + 50,
+            //    Xs = XDomain,
+            //    Ys = YDomain
+            //};
+            //if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            //{
+            //    MeteoDialog.Local_Stability = true;
+            //}
+
+            ////check whether receptor points are set in the project
+            //if (EditR.ItemData.Count > 0)
+            //{
+            //    MeteoDialog.Receptor_Points = true;
+            //}
+
+            //MeteoDialog.Start_computation += new StartCreateMeteoStation(MetTimeSeries);
+            ////  met_st.Start_computation += new Dialog_CreateMeteoStation.start_create_meteo_station(mettimeseries); // delegate from Dialog -> OK
+            //MeteoDialog.Cancel_computation += new CancelCreateMeteoStation(CancelMetTimeSeries);
+            //MeteoDialog.Show();
         }
 
         /// <summary>
@@ -2343,7 +2490,7 @@ namespace GralDomain
         private void Button48_Click(object sender, EventArgs e)
         {
             //define model domain
-            MouseControl = 300;
+            MouseControl = MouseMode.GrammExportStart;
             Cursor = Cursors.Cross;
             //prevent parallel editing
             HideWindows(0);
@@ -2355,12 +2502,12 @@ namespace GralDomain
         void ButtonstabilityclassClick(object sender, EventArgs e)
         {
             // set mousecontrol for single point checks
-            MouseControl = 70;
+            MouseControl = MouseMode.SetPointGRAMMGrid;
             //select dispersion situation
             using (SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm))
             {
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog();
+                disp.Location = GetScreenPositionForNewDialog(1);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
                 if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
@@ -2469,20 +2616,22 @@ namespace GralDomain
         /// </summary>
         private void Button43_Click(object sender, EventArgs e)
         {
-            MouseControl = 66;
+            MouseControl = MouseMode.SetPointMatch;
             Cursor = Cursors.Cross;
             if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
-                MMO.Local_Stability = true;
+                MMO.LocalStabilityUsed = true;
             }
             else
             {
-                MMO.Local_Stability = false;
+                MMO.LocalStabilityUsed = false;
             }
 
-            MMO.Settings_Path = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
+            MMO.SettingsPath = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
+            MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
-            MMO.Match_Methode = 1; // vectorial method
+            MMO.StartPosition = FormStartPosition.Manual;
+            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog(1).X - 1200);
             MMO.Show();
         }
 
@@ -2491,37 +2640,37 @@ namespace GralDomain
         /// </summary>
         private void Button42_Click(object sender, EventArgs e)
         {
-            MouseControl = 65;
+            MouseControl = MouseMode.SetPointReOrder;
             Cursor = Cursors.Cross;
         }
         
         /// <summary>
         /// Start the Re-order wind fields function
         /// </summary>
-        private void ReorderGrammWindfields()
+        private void ReorderGrammWindfields(PointD TestPt)
         {
             //select height above ground for the windfield analysis
             int trans = Convert.ToInt32(10);
             if (InputBox1("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
             {
                 
-                WriteGrammLog(2,Convert.ToString(XDomain), Convert.ToString(YDomain), Convert.ToString(trans));
+                WriteGrammLog(2,Convert.ToString(TestPt.X), Convert.ToString(TestPt.Y), Convert.ToString(trans));
 
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
-                    Schnitt = Convert.ToDouble(trans),
-                    Meteofilename = GRAMMmeteofile,
-                    Projectname = Gral.Main.ProjectName,
+                    VericalIndex = Convert.ToDouble(trans),
+                    MeteoFileName = GRAMMmeteofile,
+                    ProjectName = Gral.Main.ProjectName,
                     Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
-                    XDomain = XDomain,
-                    YDomain = YDomain,
+                    XDomain = Convert.ToInt32(TestPt.X),
+                    YDomain = Convert.ToInt32(TestPt.Y),
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
-                    Decsep = decsep,
+                    DecSep = decsep,
                     UserText = @"The process may take some minutes. Re-ordered wind field data is stored in the subdirectory \Re-ordered\",
                     Caption = "Re-Order Wind Fields ",
-                    Rechenart = 2 // ; 1 = re-order the GRAMM_Windfield
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.ReOrder // ; 1 = re-order the GRAMM_Windfield
                 };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart =
@@ -2579,14 +2728,14 @@ namespace GralDomain
                     }
 
                     disp.StartPosition = FormStartPosition.Manual;
-                    disp.Location = GetScreenPositionForNewDialog();
+                    disp.Location = GetScreenPositionForNewDialog(1);
                     if (disp.ShowDialog() == DialogResult.OK)
                     {
                         ProfileConcentration.DispersionSituation = disp.selected_situation;
                         ProfileConcentration.GRALorGRAMM = disp.selectGRAMM_GRAL;
                         Cursor = Cursors.Default;
                         Cursor = Cursors.Cross;
-                        MouseControl = 62;
+                        MouseControl = MouseMode.SetPointVertWindProfile;
                     }
                 }
             }
@@ -2598,15 +2747,22 @@ namespace GralDomain
         /// </summary>
         private void Button33_Click(object sender, EventArgs e)
         {
-            MouseControl = 35;
+            MouseControl = MouseMode.SetPointSourceApport;
             Cursor = Cursors.Cross;
         }
         
         /// <summary>
         /// Computes source apportionment for GRAL results
         /// </summary>
-        private void SourceApportionment(int xdomain, int ydomain)
+        private void SourceApportionment(PointD TestPt)
         {
+            if (TestPt.X < MainForm.GralDomRect.West || TestPt.Y < MainForm.GralDomRect.South ||
+                TestPt.X > MainForm.GralDomRect.East || TestPt.Y > MainForm.GralDomRect.North)
+            {
+                MessageBox.Show(this, "Sample point is outside the GRAL domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             Cursor = Cursors.WaitCursor;
             //sample all files with GRAL results
             string files = Path.Combine(Gral.Main.ProjectName, @"Maps");
@@ -2668,10 +2824,10 @@ namespace GralDomain
                             dummy = myreader.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                             //compute raw and column to extract data (no interpolation is applied)
-                            int col = Convert.ToInt32(Math.Truncate((xdomain - x11) / cellsize)) + 1;
-                            int raw = Convert.ToInt32(Math.Truncate((ydomain - y11) / cellsize)) + 1;
+                            int col = (int) ((TestPt.X - x11) / cellsize) + 1;
+                            int raw = (int) ((TestPt.Y - y11) / cellsize) + 1;
 
-                            if ((xdomain > x11 + cellsize * numbcol) || (xdomain < x11) || (ydomain > y11 + cellsize * numbraw) || (ydomain < y11))
+                            if ((TestPt.X > x11 + cellsize * numbcol) || (TestPt.X < x11) || (TestPt.Y > y11 + cellsize * numbraw) || (TestPt.Y < y11))
                             {
                                 MessageBox.Show(this, "Sample point is outside the GRAL domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
@@ -2699,17 +2855,19 @@ namespace GralDomain
                 conc[files_conc.Length + 1] = Convert.ToDouble(background);
 
                 //show pie chart
-                Piediagram pie = new Piediagram(xdomain, ydomain)
+                Piediagram pie = new Piediagram(TestPt.X, TestPt.Y)
                 {
                     FilesConc = files_conc,
-                    Concentration = conc
+                    Concentration = conc,
+                    StartPosition = FormStartPosition.Manual
                 };
+                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, Top + 400);
                 pie.Show();
                 Cursor = Cursors.Default;
-                MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
-                MessageInfoForm.Close();
-                MessageInfoForm.Dispose();
-                MessageInfoForm = null;
+                if (MessageInfoForm != null)
+                {
+                    MessageInfoForm.Close();
+                }
                 files_conc = null;
             }
             dialog.Dispose();
@@ -2732,19 +2890,22 @@ namespace GralDomain
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 ConcFilename = dialog.FileName;
-                MouseControl = 50;
+                MouseControl = MouseMode.SetPointConcFile;
                 Cursor = Cursors.Cross;
             }
             dialog.Dispose();
         }
 
+
         /// <summary>
         /// Extract the concentration value at a given location async
         /// </summary>
-        private async void GetConcentrationFromFile(string filename)
+        /// <param name="FileName">File name with ESRi data</param>
+        /// <param name="TestPt">Coordinates of the desired point</param>
+        private async void GetConcentrationFromFile(string FileName, PointD TestPt)
         {
             Cursor = Cursors.WaitCursor;
-            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(filename)) == false)
+            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(FileName, TestPt)) == false)
             {
                 MessageBoxTemporary Box = new MessageBoxTemporary("File not readable or sample point is outside the GRAL domain", Location);
                 Box.Show();
@@ -2756,7 +2917,10 @@ namespace GralDomain
         /// <summary>
         /// Extract concentration value at a given location
         /// </summary>
-        private bool GetConcentration(string filename)
+        /// <param name="FileName">Name of file with ESRi data</param>
+        /// <param name="TestPt">Coordinates of location</param>
+        /// <returns>True if reading OK, otherwise false</returns>
+        private bool GetConcentration(string FileName, PointD TestPt)
         {
             bool readingOK = false;
             //sample the selected files with GRAL results
@@ -2768,14 +2932,14 @@ namespace GralDomain
                 {
                     int index = CheckForExistingDrawingObject("CONCENTRATION VALUES");
                     DrawingObjects _drobj = ItemOptions[index];
-                    if (_drobj.ContourFilename != Path.GetFileName(filename)) // new File -> delete exiting infos
+                    if (_drobj.ContourFilename != Path.GetFileName(FileName)) // new File -> delete exiting infos
                     {
                         _drobj.ContourPolygons.Clear();
                         _drobj.ContourPolygons.TrimExcess();
-                        _drobj.ContourFilename = Path.GetFileName(filename);
+                        _drobj.ContourFilename = Path.GetFileName(FileName);
                     }
                     
-                    using(StreamReader myreader = new StreamReader(filename))
+                    using(StreamReader myreader = new StreamReader(FileName))
                     {
                         dummy = myreader.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                         int numbcol = Convert.ToInt32(dummy[1].Replace(".", decsep));
@@ -2795,10 +2959,10 @@ namespace GralDomain
                         }
 
                         //compute row and column to extract data (no interpolation is applied)
-                        int col = Convert.ToInt32(Math.Truncate((XDomain - x11) / cellsize)) + 1;
-                        int row = Convert.ToInt32(Math.Truncate((YDomain - y11) / cellsize)) + 1;
+                        int col = (int) ((TestPt.X - x11) / cellsize) + 1;
+                        int row = (int) ((TestPt.Y - y11) / cellsize) + 1;
 
-                        if ((XDomain > x11 + cellsize * numbcol) || (XDomain < x11) || (YDomain > y11 + cellsize * numbraw) || (YDomain < y11))
+                        if ((TestPt.X > x11 + cellsize * numbcol) || (TestPt.X < x11) || (TestPt.Y > y11 + cellsize * numbraw) || (TestPt.Y < y11))
                         {
                             
                         }
@@ -2820,11 +2984,11 @@ namespace GralDomain
                             
                             if (unit.Length == 0) // unit not available from file -> loot to filename
                             {
-                                string temp =  Path.GetFileName(filename).ToUpper();
+                                string temp =  Path.GetFileName(FileName).ToUpper();
                                 
                                 GralData.ContourPolygon _d = new GralData.ContourPolygon();
                                 _d.EdgePoints = new PointD[2];
-                                _d.EdgePoints[0] = new PointD(XDomain, YDomain);
+                                _d.EdgePoints[0] = new PointD(TestPt.X, TestPt.Y);
                                 _d.EdgePoints[1] = new PointD(concentration * 1E12, 0);
                                 
                                 _drobj.ContourPolygons.Add(_d); // position and concentration
@@ -2839,10 +3003,10 @@ namespace GralDomain
                                     _drobj.LegendTitle = "Deposition";
                                     _drobj.LegendUnit = Gral.Main.mg_p_m2;
                                 }
-                                else if (temp.Contains("ROUGHNESS.TXT"))
+                                else if (temp.Contains("ROUGHNESS.TXT") || temp.Contains("ROUGHNESSLENGTHSGRAL.TXT"))
                                 {
                                     _drobj.LegendTitle = "Roughness";
-                                    _drobj.LegendUnit = string.Empty;
+                                    _drobj.LegendUnit = "m";
                                 }
                                 else if (temp.Contains("GGEOM.TXT"))
                                 {
@@ -2873,11 +3037,11 @@ namespace GralDomain
                             }
                             else
                             {
-                                string temp =  Path.GetFileName(filename).ToUpper();
+                                string temp =  Path.GetFileName(FileName).ToUpper();
                                 
                                 GralData.ContourPolygon _d = new GralData.ContourPolygon();
                                 _d.EdgePoints = new PointD[2];
-                                _d.EdgePoints[0] = new PointD(XDomain, YDomain);
+                                _d.EdgePoints[0] = new PointD(TestPt.X, TestPt.Y);
                                 _d.EdgePoints[1] = new PointD(concentration * 1E12, 0);
                                 _drobj.ContourPolygons.Add(_d); // position and concentration
                                 
@@ -2957,10 +3121,11 @@ namespace GralDomain
                 SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm)
                 {
                     selectGRAMM_GRAL = 2,
+                    ShowConcentrationFiles = true,
                     GRZPath = files
                 };
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog();
+                disp.Location = GetScreenPositionForNewDialog(1);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
                 {
                     int dissit = disp.selected_situation; // selected situation
@@ -3009,6 +3174,7 @@ namespace GralDomain
             {
                 try
                 {
+                    CancellationTokenReset();
                     if(await System.Threading.Tasks.Task.Run(() => ReadConAndWriteESRI(dialog.FileName, string.Empty, CancellationTokenSource.Token)) == true)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("File successfully converted", Location);
@@ -3161,6 +3327,7 @@ namespace GralDomain
 
                         string confilename = Path.Combine(files, Path.GetFileNameWithoutExtension(compressed_file) + SliceAndSourceGroup);
                         //MessageBox.Show(confilename + "/"+ _drobj.ContourFilename);
+                        CancellationTokenReset();
                         if (ReadConAndWriteESRI(confilename, _drobj.ContourFilename, CancellationTokenSource.Token) == true)
                         {
                             MessageBoxTemporary Box = new MessageBoxTemporary("File successfully converted", Location);
@@ -3357,9 +3524,9 @@ namespace GralDomain
                         mywriter.WriteLine(" Concatenation for situations less " + Convert.ToString(MMO.concatenate.Value) + " per mil ");
                     }
 
-                    for (int i=0; i < MMO.metfiles.Count; i++)
+                    for (int i=0; i < MMO.MetFileNames.Count; i++)
                     {
-                        mywriter.WriteLine(MMO.metfiles[i] + "\t  // Used Metfiles");
+                        mywriter.WriteLine(MMO.MetFileNames[i] + "\t  // Used Metfiles");
                         mywriter.WriteLine(Convert.ToString(MMO.dataGridView1.Rows[i].Cells[1].Value).PadLeft(10) + "\t  // X-coordinate of met. station");
                         mywriter.WriteLine(Convert.ToString(MMO.dataGridView1.Rows[i].Cells[2].Value).PadLeft(10) + "\t  // Y-coordinate of met. station");
                         mywriter.WriteLine(Convert.ToString(MMO.dataGridView1.Rows[i].Cells[3].Value).PadLeft(10) + "\t  // Z-coordinate of met. station");
@@ -3384,7 +3551,7 @@ namespace GralDomain
         {
             using (GralDomForms.ViewFrameSaveAndLoad viewframe = new ViewFrameSaveAndLoad())
             {
-                viewframe.Location = GetScreenPositionForNewDialog();
+                viewframe.Location = GetScreenPositionForNewDialog(1);
                 if (viewframe.ShowDialog() == DialogResult.OK)
                 {
                     if (viewframe.SelText.Length > 0)
@@ -3663,11 +3830,11 @@ namespace GralDomain
             }
 
             using (Dialog_3D dial = new Dialog_3D
-                   {
-                       Smoothing = smooth,
-                       VertFactor = vert_fac,
-                       GRAL_Topo = GRAL_Topo
-                   })
+            {
+                Smoothing = smooth,
+                VertFactor = vert_fac,
+                GRAL_Topo = GRAL_Topo
+            })
             {
                 if (dial.ShowDialog() == DialogResult.Cancel)
                 {
@@ -3679,7 +3846,7 @@ namespace GralDomain
                 vert_fac = dial.VertFactor;
                 GRAL_Topo = dial.GRAL_Topo;
             }
-            
+
             if (GRAL_Topo == true) // Show GRAL height
             {
                 GRAL_3D_View(smooth, vert_fac);
@@ -3691,6 +3858,9 @@ namespace GralDomain
             #endif
         }
 
+        /// <summary>
+        /// Sort integer values descending direction
+        /// </summary>
         private class SortIntDescending : IComparer<int>
         {
             int IComparer<int>.Compare(int a, int b) //implement Compare
@@ -3828,34 +3998,39 @@ namespace GralDomain
         }
         
         
+        /// <summary>
+        /// Delete all selected items 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void DeleteSelectedItemsToolStripMenuItemClick(object sender, EventArgs e)
         {
             //delete selected area source
-            if (MouseControl == 9)
+            if (MouseControl == MouseMode.AreaSourceSel)
             {
                 ItemsDelete("area source");
                 EditAndSaveAreaSourceData(sender, e);
             }
             //delete selected line source
-            else if (MouseControl == 11)
+            else if (MouseControl == MouseMode.LineSourceSel)
             {
                 ItemsDelete("line source");
                 EditAndSaveLineSourceData(sender, e);
             }
             //delete selected point source
-            else if (MouseControl == 7)
+            else if (MouseControl == MouseMode.PointSourceSel)
             {
                 ItemsDelete("point source");
                 EditAndSavePointSourceData(sender, e);
             }
             //delete selected tunnel portal
-            else if (MouseControl == 16)
+            else if (MouseControl == MouseMode.PortalSourceSel)
             {
                 ItemsDelete("portal");
                 EditAndSavePortalSourceData(sender, e);
             }
             //delete selected building
-            else if (MouseControl == 19)
+            else if (MouseControl == MouseMode.BuildingSel)
             {
                 ItemsDelete("building");
                 EditAndSaveBuildingsData(sender, e);
@@ -3868,6 +4043,11 @@ namespace GralDomain
             Picturebox1_Paint();
         }
 
+        /// <summary>
+        /// Save item data to disk
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void WriteAllItemsToDisk(object sender, EventArgs e)
         {
             EditAndSaveAreaSourceData(sender, e);
@@ -4025,7 +4205,10 @@ namespace GralDomain
                                     if (i % 40 == 0)
                                     {
                                         wait.Text = "Writing GRAL topography " + ((int)(100 - (float)i / (ny + 2) * 100F)).ToString() + "%";
-                                        cts.ThrowIfCancellationRequested();
+                                        if (cts != null)
+                                        {
+                                            cts.ThrowIfCancellationRequested();
+                                        }
                                     }
 
                                     //string line = String.Empty;
@@ -4090,7 +4273,7 @@ namespace GralDomain
                 }
                 else
                 {
-                    if (CancellationTokenSource.IsCancellationRequested)
+                    if (CancellationTokenSource != null && CancellationTokenSource.IsCancellationRequested)
                     {
                         return;
                     }
@@ -4173,10 +4356,12 @@ namespace GralDomain
 
             // Go to the dialog
             using (DialogModifyGRALTopography mod = new DialogModifyGRALTopography
-                   {
-                       modify = TopoModify
-                   })
             {
+                modify = TopoModify,
+                StartPosition = FormStartPosition.Manual
+            })
+            {
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, Top + 200);
                 if (mod.ShowDialog() == DialogResult.OK)
                 {
                     TopoModify = mod.modify;
@@ -4184,7 +4369,7 @@ namespace GralDomain
             }
             
             // 4th: set the mousecontrol flag
-            MouseControl = 9999;
+            MouseControl = MouseMode.GRALTopographyModify;
         }
         
         /// <summary>
@@ -4232,6 +4417,9 @@ namespace GralDomain
             }
         }
 
+        /// <summary>
+        /// Low pass filter for the GRAL topography
+        /// </summary>
         void LowPassGralTopographyApply()
         {
             // create deep copy of cell height
@@ -4281,31 +4469,56 @@ namespace GralDomain
 
             if (MessageBox.Show(this, "Write new GRAL_topofile.txt?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
+                CancellationTokenReset();
                 if (WriteGralGeometry(CancellationTokenSource.Token) == false)
                 {
                     File.Copy(filecopy, file);
+                    MessageBoxTemporary Box = new MessageBoxTemporary("Error when saving GRAL geometry", Location);
                 }
-                MessageBoxTemporary Box = new MessageBoxTemporary("GRAL geometry saved", Location);
+                else
+                {
+                    MessageBoxTemporary Box = new MessageBoxTemporary("GRAL geometry saved", Location);
+                }
             }
         }
 
         /// <summary>
         /// Search the left or right postition of the recent screen
         /// </summary>
-        private System.Drawing.Point GetScreenPositionForNewDialog()
+        /// <param name="Mode">0 = relative, 1 = absolute</param>
+        /// <returns></returns>
+        private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
+            
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
+                if (Mode == 0)
+                {
+                    x = 200;
+                }
                 x += 150;
             }
             else
             {
-                x += panel1.Left - 350;
+                if (Mode == 0)
+                {
+                    x = this.Width - 450;
+                }
+                else
+                {
+                    x += panel1.Left - 350;
+                }
             }
+            x = Math.Max(10, x);
             return new System.Drawing.Point(x, 60);
         }
 
+        /// <summary>
+        /// Show GRAMM terrain grid heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuCellHeightsGramm(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGramm.Checked)
@@ -4318,6 +4531,28 @@ namespace GralDomain
             }
         }
 
+        /// <summary>
+        /// Show GRAMM terrain edge point heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuEntryCellHeightsGrammEdge_Click(object sender, EventArgs e)
+        {
+            if (!MenuEntryCellHeightsGrammEdge.Checked)
+            {
+                SetCellHeightsType(-1);
+                if (!TryToLoadCellHeights())
+                {
+                    SetCellHeightsType(0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Show GRAL terrain grid heights
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuCellHeightsGral(object sender, EventArgs e)
         {
             if (!MenuEntryCellHeightsGral.Checked)
@@ -4331,6 +4566,10 @@ namespace GralDomain
             }      
         }
 
+        /// <summary>
+        /// Set the type of cell height to be displayed
+        /// </summary>
+        /// <param name="type">0: No cell height, 1: GRAMM, 2: GRAL, -1: GRAMM edge points</param>
         private void SetCellHeightsType(int type)
         {
             CellHeightsType = type;
@@ -4338,16 +4577,198 @@ namespace GralDomain
             {
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
             }
             else if (CellHeightsType == 1)
             {
                 MenuEntryCellHeightsGramm.Checked = true;
                 MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
             }
             else if (CellHeightsType == 2)
             {
                 MenuEntryCellHeightsGramm.Checked = false;
                 MenuEntryCellHeightsGral.Checked = true;
+                MenuEntryCellHeightsGrammEdge.Checked = false;
+            }
+            else if (CellHeightsType == -1)
+            {
+                MenuEntryCellHeightsGramm.Checked = false;
+                MenuEntryCellHeightsGral.Checked = false;
+                MenuEntryCellHeightsGrammEdge.Checked = true;
+            }
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowPointSourceDialog(sender, e);
+        }
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowAreaSourceDialog(sender, e);
+        }
+        private void checkBox15_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowBuildingDialog(sender, e);
+        }
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowLineSourceDialog(sender, e);
+        }
+        private void checkBox12_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowPortalSourceDialog(sender, e);
+        }
+        private void checkBox20_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowReceptorDialog(sender, e);
+        }
+        private void checkBox25_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowWallDialog(sender, e);
+        }
+        private void checkBox26_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowVegetationDialog(sender, e);
+        }
+
+        /// <summary>
+        /// Generate a concentration time series based on *.con or *.grz files for several evaluation points 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void generateTimeSeriesForSeveralEvaluationPointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MouseControl = MouseMode.SetPointConcTimeSeries;
+            Cursor = Cursors.Cross;
+
+            GralDomForms.SelectMultiplePoints _selmp = new SelectMultiplePoints();
+            SendCoors += _selmp.ReceiveClickedCoordinates;
+            _selmp.CancelComputation += CancelMetTimeSeries;
+            _selmp.StartComputation += ConcentrationTimeSeries;
+            
+            _selmp.MeteoModel = 0;
+            _selmp.StartPosition = FormStartPosition.Manual;
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Owner = this;
+            _selmp.MeteoInitFileName = Path.Combine(Gral.Main.ProjectName, "TimeSeries.txt");
+            _selmp.Show();
+        }
+
+        /// <summary>
+        /// Start the evaluation of Time series
+        /// </summary>
+        private void ConcentrationTimeSeries(object sender, EventArgs e)
+        {
+            List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
+            string _prefix = string.Empty;
+            int _timeSeriesYear = 2020;
+
+            // Release send coors
+            if (sender is SelectMultiplePoints _sl)
+            {
+                SendCoors -= _sl.ReceiveClickedCoordinates;
+                
+                foreach (System.Data.DataRow row in _sl.PointCoorData.Rows)
+                {
+                    if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
+                    {
+                        string a = Convert.ToString(row[0]);
+                        
+                        GralBackgroundworkers.Point_3D item = new GralBackgroundworkers.Point_3D
+                        {
+                            FileName = a,
+                            X = Convert.ToDouble(row[1]),
+                            Y = Convert.ToDouble(row[2]),
+                            Z = Convert.ToDouble(row[3])
+                        };
+                        receptor_points.Add(item);
+                    }
+                }
+                _prefix = _sl.MeteoInitFileName;
+                _timeSeriesYear = _sl.TimeSeriesYear;
+                _sl.Close();
+            }
+
+            if (receptor_points.Count == 0)
+            {
+                MessageBox.Show(this, "No points defined", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else // start the evaluation
+            {
+                string _selSourceGrp = string.Empty;
+                foreach (ListViewItem itm in MainForm.listView1.Items)
+                {
+                    _selSourceGrp = _selSourceGrp + itm.Text + ","; // name of selected source groups
+                }
+                _selSourceGrp = _selSourceGrp.TrimEnd(new char[] { ',' }); // remove last ','
+
+                GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
+                {
+                    ProjectName = Gral.Main.ProjectName,
+                    DecSep = decsep,
+                    UserText = "The process may take some minutes. The data will be saved in the folder Computation",
+                    Caption = "Evaluate concentration time series", // + DataCollection.Meteofilename;
+                    BackgroundWorkerFunction = GralBackgroundworkers.BWMode.EvalPointsTimeSeries, // ; 38 =  Evaluation points concentration
+                    EvalPoints = receptor_points, // evaluation points
+                    GFFGridSize = MainForm.HorGridSize,
+                    Horgridsize = MainForm.HorGridSize,
+                    DomainWest = MainForm.GralDomRect.West,
+                    DomainSouth = MainForm.GralDomRect.South,
+                    CellsGralX = MainForm.CellsGralX,
+                    CellsGralY = MainForm.CellsGralY,
+                    Slice = MainForm.GRALSettings.NumHorSlices,
+                    SliceHeights = MainForm.GRALSettings.HorSlices,
+                    SelectedSourceGroup = _selSourceGrp,
+                    MaxSource = MainForm.listView1.Items.Count,
+                    Prefix = _prefix,
+                    MeteoNotClassified = MainForm.checkBox19.Checked,
+                    FictiousYear = _timeSeriesYear
+            };
+
+                GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
+                {
+                    Text = DataCollection.Caption
+                };
+                BackgroundStart.Show();
+            }
+            // now the backgroundworker works
+            // gen_meteofile(Convert.ToDouble(trans), GRAMMmeteofile);
+            // Reset mousecontrol
+            MouseControl = MouseMode.Default;
+        }
+
+        /// <summary>
+        /// Reset the Cancel Token -> create new token Thread safe (locked)   
+        /// </summary>
+        public static void CancellationTokenReset()
+        {
+            lock (LockObject)
+            {
+                if (CancellationTokenSource == null)
+                {
+                    GralDomain.Domain.CancellationTokenSource = new System.Threading.CancellationTokenSource();
+                }
+                else if (CancellationTokenSource.IsCancellationRequested)
+                {
+                    CancellationTokenSource.Dispose();
+                    CancellationTokenSource = null;
+                    CancellationTokenSource = new System.Threading.CancellationTokenSource();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resize of the domain form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Domain_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState != FormWindowState.Maximized && WindowState != FormWindowState.Minimized)
+            {
+                // Reset position of child forms
+                ShowFirst.Reset();
             }
         }
     }

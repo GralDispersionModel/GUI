@@ -28,13 +28,13 @@ namespace GralDomain
     public partial class Domain
     {
         /// <summary>
-        /// Start the receptor dialog (checkbox20 = checked) or save the receptor data (checkbox20 = unchecked)
+        /// Show the receptor dialog (checkbox20 = checked) 
         /// </summary>
-        /// <param name="sender">if checkbox20.checked == false and sender == null -> EditR.SaveArray not called</param>
-        private void EditAndSaveReceptorData(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        private void ShowReceptorDialog(object sender, EventArgs e)
         {
             receptorPointsToolStripMenuItem.Checked = checkBox20.Checked;
-            
+
             if (checkBox20.Checked == true)
             {
                 //show editing form for receptors
@@ -63,76 +63,87 @@ namespace GralDomain
                     }
                     else
                     {
-                        EditR.Location = GetScreenPositionForNewDialog();
+                        EditR.Location = GetScreenPositionForNewDialog(0);
                     }
 
                     ShowFirst.Re = false;
                 }
-                MouseControl = 24;
+                MouseControl = MouseMode.ReceptorPos;
                 InfoBoxCloseAllForms(); // close all infoboxes
                 EditR.Show();
                 EditR.ShowForm();
-                EditR.TopMost = true; // Kuntner
+                EditR.BringToFront();
                 Cursor = Cursors.Cross;
-                
+
                 CheckForExistingDrawingObject("RECEPTORS");
             }
             else
             {
-                if (Gral.Main.Project_Locked == true)
-                {
-                    //Gral.Main.Project_Locked_Message(); // Project locked!
-                    MouseControl = 0;
-                    Picturebox1_Paint();
-                }
-                else
-                {
-                    //save receptor input to file
-                    if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
-                    {
-                        EditR.SaveArray();
-                    }
-
-                    ReceptorDataIO _rd = new ReceptorDataIO();
-                    _rd.SaveReceptor(EditR.ItemData, Gral.Main.ProjectName);
-                    _rd = null;
-                    
-                    //copy recptor.dat file to receptor_GRAMM.dat
-                    string newPath = Path.Combine(Gral.Main.ProjectName, @"Computation", "Receptor.dat");
-                    File.Copy(newPath,newPath.Replace(".dat","_GRAMM.dat"), true);
-                    
-                    MainForm.GRALSettings.Receptorflag="1";
-                    WriteInDat(); // write new in.dat
-                    MainForm.Change_Label(0, 0); // red label at control button
-                }
+                MouseControl = MouseMode.Default;
                 EditR.Hide();
-                Cursor = Cursors.Default;
-                MouseControl = 0;
-                //this.Width = ScreenWidth;
-                //this.Height = ScreenHeight - 50;
-                
-                //add/delete receptors in object list
-                if (EditR.ItemData.Count == 0 && Gral.Main.Project_Locked == false) // block this, if project is locked!
+            }
+        }
+
+        /// <summary>
+        /// Save the receptor data (checkbox20 = unchecked)
+        /// </summary>
+        /// <param name="sender"></param>
+        private void EditAndSaveReceptorData(object sender, EventArgs e)
+        {
+            checkBox20.Checked = false;
+            MouseControl = MouseMode.Default;
+            receptorPointsToolStripMenuItem.Checked = checkBox20.Checked;
+
+            if (Gral.Main.Project_Locked == true)
+            {
+                //Gral.Main.Project_Locked_Message(); // Project locked!
+                //Picturebox1_Paint();
+            }
+            else
+            {
+                //save receptor input to file
+                if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    MainForm.GRALSettings.Receptorflag = "0";
-                    WriteInDat(); // write new in.dat
-                    
-                    RemoveItemFromItemOptions("RECEPTORS");
+                    EditR.SaveArray();
                 }
 
-                //show/hide button to select receptors
-                if (EditR.ItemData.Count > 0)
-                {
-                    button23.Visible = true;
-                    button47.Visible = true;
-                    button39.Visible = true;
-                }
-                else
-                {
-                    button23.Visible = false;
-                    button39.Visible = false;
-                }
+                ReceptorDataIO _rd = new ReceptorDataIO();
+                _rd.SaveReceptor(EditR.ItemData, Gral.Main.ProjectName);
+                _rd = null;
+
+                //copy recptor.dat file to receptor_GRAMM.dat
+                string newPath = Path.Combine(Gral.Main.ProjectName, @"Computation", "Receptor.dat");
+                File.Copy(newPath, newPath.Replace(".dat", "_GRAMM.dat"), true);
+
+                MainForm.GRALSettings.Receptorflag = "1";
+                WriteInDat(); // write new in.dat
+                MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonControl, Gral.ButtonColorEnum.RedDot); // red label at control button
             }
-        }    
+            Cursor = Cursors.Default;
+            
+            //add/delete receptors in object list
+            if (EditR.ItemData.Count == 0 && Gral.Main.Project_Locked == false) // block this, if project is locked!
+            {
+                MainForm.GRALSettings.Receptorflag = "0";
+                WriteInDat(); // write new in.dat
+
+                RemoveItemFromItemOptions("RECEPTORS");
+            }
+
+            //show/hide button to select receptors
+            if (EditR.ItemData.Count > 0)
+            {
+                button23.Visible = true;
+                button47.Visible = true;
+                button39.Visible = true;
+            }
+            else
+            {
+                button23.Visible = false;
+                button39.Visible = false;
+            }
+            EditR.Hide();
+            Picturebox1_Paint();
+        }
     }
 }

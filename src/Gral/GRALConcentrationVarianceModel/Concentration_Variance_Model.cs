@@ -15,12 +15,12 @@ using System;
 namespace GralConcentrationVarianceModel
 {
     class Concentration_Variance_Model
-    {   
-    	/// <summary>
-    	/// Calculate R90 for the odour concentration variation model
-    	/// </summary>
-    	public static void R90_calculate(int i, int j, float conc_ip, float conc_im, float conc_jp, float conc_jm, float concp, float concm, float conc, float Q_cv0, float td, float Horgridsize, float vertgridsize, ref float R90, ref float Q_cv)
-    	{
+    {
+        /// <summary>
+        /// Calculate R90 for the odour concentration variation model
+        /// </summary>
+        public static void R90_calculate(int i, int j, float conc_ip, float conc_im, float conc_jp, float conc_jm, float concp, float concm, float conc, float Q_cv0, float td, float Horgridsize, float vertgridsize, ref float R90, ref float Q_cv)
+        {
             //concentration gradients (attention: gradients near buildings!!!)
             float dCdr = (float)((concp - concm) * 0.5 / vertgridsize +
                 (conc_ip - conc_im) * 0.5 / Horgridsize +
@@ -60,14 +60,5 @@ namespace GralConcentrationVarianceModel
                 R90 = (float)(Math.Pow(2.3, 1 / k_shapeparameter) / lamda_shapeparameter * 1.5);
             }
         }
-
-        static Func<double, double> Pow2 = (double x) =>
-            (x * x);
-
-        static Func<double, double> Pow3 = (double x) =>
-            (x * x * x);
-
-        static Func<double, double> Pow4 = (double x) =>
-            (x * x * x * x);
-        }
     }
+}

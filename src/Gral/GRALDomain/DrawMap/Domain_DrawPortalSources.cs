@@ -78,7 +78,7 @@ namespace GralDomain
 
                         g.DrawLine(new Pen(Color2Transparent(_drobj.Transparancy, _drobj.LineColors[0]), 2), Convert.ToInt32(x1), Convert.ToInt32(y1), Convert.ToInt32(x2), Convert.ToInt32(y2));
 
-                        if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == 15) || (MouseControl == 16)))
+                        if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.PortalSourceSel)))
                         {
                             g.DrawLine(new Pen(Color2Transparent(200, Color.Green), 2), Convert.ToInt32(x1), Convert.ToInt32(y1), Convert.ToInt32(x2), Convert.ToInt32(y2));
                         }
@@ -130,7 +130,7 @@ namespace GralDomain
                         g.Transform = m;
                         //g.DrawImage(portal, xmean - 15, ymean - 15, 30, 30);
 
-                        if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == 15) || (MouseControl == 16)))
+                        if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.PortalSourceSel)))
                         {
                             //g.DrawRectangle(p1, xmean - 15, ymean - 15, 30, 30);
                         }
@@ -212,7 +212,7 @@ namespace GralDomain
                         g.FillPolygon(br1, mypoint);
                         br1.Dispose();
                         
-                        if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == 15) || (MouseControl == 16)))
+                        if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.PortalSourceSel)))
                         {
                             g.FillPolygon(SelectedBrush, mypoint);
                         }

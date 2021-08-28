@@ -21,13 +21,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Text;
 
 namespace GralDomain
 {
     public partial class Domain
     {
         /// <summary>
-        /// Routine computing vectors of a vector data set
+        /// Routine loading vectors of a vector data set from file
         /// </summary>
         public void LoadVectors(string file, DrawingObjects _drobj)
         {
@@ -79,7 +80,7 @@ namespace GralDomain
                             }
                             int[,] _contcol = _drobj.ContourColor;
                             double min = 1000;
-                            double max = -1;
+                            double max = 0;
                             for (int i = ny - 1; i > -1; i--)
                             {
                                 data = myReader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -133,8 +134,16 @@ namespace GralDomain
                             }
 
                             //save geometry information of the vector map
-                            _drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
+                            lock (_drobj)
+                            {
+                                _drobj.ContourGeometry = new DrawingObjects.ContourGeometries(x11, y11, dx, nx, ny);
+                            }
 
+                            if (!Gral.Main.VectorMapAutoScaling)
+                            {
+                                max = 10; // default fix scaling factor
+                            }
+                            
                             //compute arrow-polygons
                             double xcenter = 0.0;
                             double ycenter = 0.0;
@@ -142,7 +151,12 @@ namespace GralDomain
                             double y1 = 0.0;
                             double xrot = 0.0;
                             double yrot = 0.0;
-                            double scale = dx / max;
+                            double scale = dx / (max + 1) * _drobj.VectorScale;
+                            if (Math.Abs(max) < 0.000001) // if umean max == 0 -> no vectors -> scale  = 0!
+                            {
+                                scale = 0;
+                            }
+
                             double length = 1;
                             double anglecor = 3.14 / 180;
 
@@ -155,8 +169,7 @@ namespace GralDomain
                                         //x,y coordinates of the cell center
                                         xcenter = x11 + (dx * (i + 1) - dx * 0.5);
                                         ycenter = y11 + (dx * (j + 1) - dx * 0.5);
-                                        double skalierung1 = _drobj.VectorScale;
-                                        length = scale * (umean[i, j] + 1) * skalierung1;
+                                        length = scale * (umean[i, j] + 1); // + 1 -> avoid lenght 0!
 
                                         //point 1 of arrow
                                         x1 = xcenter - length * 0.5;
@@ -233,7 +246,7 @@ namespace GralDomain
         }
 
         /// <summary>
-        /// Routine computing a vector map for wind field data
+        /// Routine computing a vector map for GRAMM or GRAL wind field data
         /// </summary>
         private async void ComputeVectorMap(object sender, EventArgs e)
         {
@@ -281,14 +294,16 @@ namespace GralDomain
                     X1 = Left + 70,
                     Y1 = Top + 50,
                     Xs = 0,
-                    Ys = 0
+                    Ys = 0,
+                    ShowAbsHeightBox = true
                 };
 
                 if (met_st.ShowDialog() == DialogResult.OK)
                 {
-                    string file = met_st.Meteo_Init;
                     int trans = met_st.Meteo_Height;
-                    file = Path.Combine(Gral.Main.ProjectName, @"Maps", file);
+                    bool AbsoluteHeight = met_st.AbsoluteHeight;
+                    string file = Path.Combine(Gral.Main.ProjectName, @"Maps", met_st.Meteo_Init);
+
                     windfieldenable = met_st.Meteo_Model;
                     {
                         //select dispersion situation
@@ -342,20 +357,50 @@ namespace GralDomain
                                     int NX = ggeom.NX;
                                     int NY = ggeom.NY;
                                     int NZ = ggeom.NZ;
-                                    int ischnitt = 0;
+                                    int ischnitt = 0; // Height index in the GRAMM wind field above ground/above sea
                                     AH = ggeom.AH;
                                     ZSP = ggeom.ZSP;
                                     ggeom = null;
                                     try
                                     {
-                                        double schnitt = Convert.ToDouble(trans);
-                                        //obtain index in the vertical direction
-                                        for (int k = 1; k <= NZ; k++)
+                                        double schnitt = Math.Abs(Convert.ToDouble(trans));
+                                        int[,] vertIndexArray = null;
+
+                                        //obtain index in the vertical direction for relative height above ground
+                                        if (!AbsoluteHeight)
                                         {
-                                            if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
+                                            for (int k = 1; k <= NZ; k++)
                                             {
-                                                ischnitt = k;
-                                                break;
+                                                if (ZSP[2, 2, k] - AH[2, 2] >= schnitt)
+                                                {
+                                                    ischnitt = k;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else //create the height index for each point when using absolute heights
+                                        {
+                                            vertIndexArray = new int[NX + 1, NY + 1];
+                                            for (int j = 1; j <= NY; j++)
+                                            {
+                                                for (int i = 1; i <= NX; i++)
+                                                {
+                                                    if (schnitt < ZSP[i, j, 1]) // below terrain
+                                                    {
+                                                        vertIndexArray[i, j] = -1;
+                                                    }
+                                                    else
+                                                    {
+                                                        for (int k = 1; k <= NZ; k++)
+                                                        {
+                                                            if (ZSP[i, j, k] >= schnitt)
+                                                            {
+                                                                vertIndexArray[i, j] = k;
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
 
@@ -383,26 +428,50 @@ namespace GralDomain
                                         double max = -1;
                                         double umean;
 
+                                        StringBuilder sb = new StringBuilder();
+
                                         //write vector file
                                         using (StreamWriter myWriter = new StreamWriter(file))
                                         {
-                                            myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                                            myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                                            myWriter.WriteLine("Xllcorner     " + Convert.ToString(MainForm.GrammDomRect.West, ic));
-                                            myWriter.WriteLine("Yllcorner     " + Convert.ToString(MainForm.GrammDomRect.South, ic));
-                                            myWriter.WriteLine("cellsize      " + Convert.ToString(MainForm.GRAMMHorGridSize, ic));
-                                            myWriter.WriteLine("NODATA_value  " + "-9999");
+                                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                            {
+                                                NCols = NX,
+                                                NRows = NY,
+                                                XllCorner = MainForm.GrammDomRect.West,
+                                                YllCorner = MainForm.GrammDomRect.South,
+                                                CellSize = MainForm.GRAMMHorGridSize,
+                                                Unit = string.Empty,
+                                                Round = 4
+                                            };
+                                            if (!writeHeader.WriteEsriHeader(myWriter))
+                                            {
+                                                throw new Exception();
+                                            }
                                             for (int j = NY; j > 0; j--)
                                             {
+                                                sb.Clear();
                                                 for (int i = 1; i <= NX; i++)
                                                 {
-                                                    myWriter.Write(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + "," + Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
-                                                    umean = Math.Sqrt(UWI[i, j, ischnitt] * UWI[i, j, ischnitt] + VWI[i, j, ischnitt] * VWI[i, j, ischnitt]);
+                                                    if (AbsoluteHeight)
+                                                    {
+                                                        ischnitt = vertIndexArray[i, j];
+                                                    }
+                                                    
+                                                    if (ischnitt >= 0)
+                                                    {
+                                                        sb.Append(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + "," + Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
+                                                        umean = Math.Sqrt(UWI[i, j, ischnitt] * UWI[i, j, ischnitt] + VWI[i, j, ischnitt] * VWI[i, j, ischnitt]);
+                                                    }
+                                                    else
+                                                    {
+                                                        sb.Append("0,0,");
+                                                        umean = 0;
+                                                    }
                                                     //compute maximum and minimum
                                                     min = Math.Min(min, umean);
                                                     max = Math.Max(max, umean);
                                                 }
-                                                myWriter.WriteLine();
+                                                myWriter.WriteLine(sb.ToString());
                                             }
                                         }
 
@@ -411,19 +480,40 @@ namespace GralDomain
                                         file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + ".u");
                                         using (StreamWriter myWriter = new StreamWriter(file3))
                                         {
-                                            myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                                            myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                                            myWriter.WriteLine("Xllcorner     " + Convert.ToString(MainForm.GrammDomRect.West, ic));
-                                            myWriter.WriteLine("Yllcorner     " + Convert.ToString(MainForm.GrammDomRect.South, ic));
-                                            myWriter.WriteLine("cellsize      " + Convert.ToString(MainForm.GRAMMHorGridSize, ic));
-                                            myWriter.WriteLine("NODATA_value  " + "-9999");
+                                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                            {
+                                                NCols = NX,
+                                                NRows = NY,
+                                                XllCorner = MainForm.GrammDomRect.West,
+                                                YllCorner = MainForm.GrammDomRect.South,
+                                                CellSize = MainForm.GRAMMHorGridSize,
+                                                Unit = string.Empty,
+                                                Round = 4
+                                            };
+                                            if (!writeHeader.WriteEsriHeader(myWriter))
+                                            {
+                                                throw new Exception();
+                                            }
+
                                             for (int j = NY; j > 0; j--)
                                             {
+                                                sb.Clear();
                                                 for (int i = 1; i <= NX; i++)
                                                 {
-                                                    myWriter.Write(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + ",");
+                                                    if (AbsoluteHeight)
+                                                    {
+                                                        ischnitt = vertIndexArray[i, j];
+                                                    }
+                                                    if (ischnitt >= 0)
+                                                    {
+                                                        sb.Append(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + ",");
+                                                    }
+                                                    else
+                                                    {
+                                                        sb.Append("0,");
+                                                    }
                                                 }
-                                                myWriter.WriteLine();
+                                                myWriter.WriteLine(sb.ToString());
                                             }
                                         }
 
@@ -431,21 +521,45 @@ namespace GralDomain
                                         file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + ".v");
                                         using (StreamWriter myWriter = new StreamWriter(file3))
                                         {
-                                            myWriter.WriteLine("ncols         " + Convert.ToString(NX));
-                                            myWriter.WriteLine("nrows         " + Convert.ToString(NY));
-                                            myWriter.WriteLine("Xllcorner     " + Convert.ToString(MainForm.GrammDomRect.West, ic));
-                                            myWriter.WriteLine("Yllcorner     " + Convert.ToString(MainForm.GrammDomRect.South, ic));
-                                            myWriter.WriteLine("cellsize      " + Convert.ToString(MainForm.GRAMMHorGridSize, ic));
-                                            myWriter.WriteLine("NODATA_value  " + "-9999");
+                                            GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                            {
+                                                NCols = NX,
+                                                NRows = NY,
+                                                XllCorner = MainForm.GrammDomRect.West,
+                                                YllCorner = MainForm.GrammDomRect.South,
+                                                CellSize = MainForm.GRAMMHorGridSize,
+                                                Unit = string.Empty,
+                                                Round = 4
+                                            };
+                                            if (!writeHeader.WriteEsriHeader(myWriter))
+                                            {
+                                                throw new Exception();
+                                            }
+                                            
                                             for (int j = NY; j > 0; j--)
                                             {
+                                                sb.Clear();
                                                 for (int i = 1; i <= NX; i++)
                                                 {
-                                                    myWriter.Write(Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
+                                                    if (AbsoluteHeight)
+                                                    {
+                                                        ischnitt = vertIndexArray[i, j];
+                                                    }
+                                                    if (ischnitt >= 0)
+                                                    {
+                                                        sb.Append(Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
+                                                    }
+                                                    else
+                                                    {
+                                                        sb.Append("0,");
+                                                    }
                                                 }
-                                                myWriter.WriteLine();
+                                                myWriter.WriteLine(sb.ToString());
                                             }
                                         }
+
+                                        sb.Clear();
+                                        sb = null;
 
                                         //add vector map to object list
                                         DrawingObjects _drobj = new DrawingObjects("VM: " + Path.GetFileNameWithoutExtension(file));
@@ -476,7 +590,6 @@ namespace GralDomain
                                             int intg = g1 + (g2 - g1) / 10 * (i + 1);
                                             int intb = b1 + (b2 - b1) / 10 * (i + 1);
                                             _drobj.FillColors[i + 1] = Color.FromArgb(intr, intg, intb);
-                                            //linecolors[0][i + 1] = Color.FromArgb(intr, intg, intb);
                                         }
 
                                         _drobj.LegendTitle = "Vectormap";
@@ -591,7 +704,8 @@ namespace GralDomain
                                                                                 Convert.ToString(dissit).PadLeft(5, '0') + ".gff")
                                 };
 
-                                if (await Task.Run(() => gff.ReadGffFile(CancellationTokenSource.Token)) == true)
+                                CancellationTokenReset();
+                                if (gff.ReadGffFile(CancellationTokenSource.Token) == true)
                                 {
                                     nkk = gff.NKK;
                                     njj = gff.NJJ;
@@ -651,15 +765,53 @@ namespace GralDomain
                                 {
                                     for (int j = 1; j < njj + 1; j++)
                                     {
-                                        for (int k = 1; k < nkk + 1; k++)
+                                        if (!AbsoluteHeight)
                                         {
-                                            if (HOKART[k] + AHMIN >= AH[i, j] - Building_heights[i, j]) //check if point is above ground level
+                                            //slice for height above ground: check if slice is above model domain
+                                            if (AH[i, j] - Building_heights[i, j] + schnitt >= AHMIN + HOKART[nkk])
                                             {
-                                                //check if point is above desired slice above ground
-                                                if (AHMIN + HOKART[k] >= AH[i, j] - Building_heights[i, j] + schnitt)
+                                                slice[i, j] = nkk;
+                                            }
+                                            //check if slice is below model domain
+                                            else if (AH[i, j] - Building_heights[i, j] + schnitt <= AHMIN + HOKART[1])
+                                            {
+                                                slice[i, j] = 0;
+                                            }
+                                            else
+                                            {
+                                                for (int k = 1; k < nkk + 1; k++)
                                                 {
-                                                    slice[i, j] = k;
-                                                    break;
+                                                    //check if point is above desired slice above ground
+                                                        if (AHMIN + HOKART[k] >= AH[i, j] - Building_heights[i, j] + schnitt)
+                                                        {
+                                                            slice[i, j] = k;
+                                                            break;
+                                                        }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //slice for absolute height above ground
+                                            if (schnitt >= AHMIN + HOKART[nkk])
+                                            {
+                                                slice[i, j] = nkk;
+                                            }
+                                            //check if slice is below model domain
+                                            else if (schnitt <= AHMIN + HOKART[1] + Building_heights[i, j])
+                                            {
+                                                slice[i, j] = 0;
+                                            }
+                                            else
+                                            {
+                                                for (int k = 1; k < nkk + 1; k++)
+                                                {
+                                                    //check if point is above desired slice above abs. height
+                                                    if (AHMIN + HOKART[k] > schnitt)
+                                                    {
+                                                        slice[i, j] = k;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
@@ -670,27 +822,40 @@ namespace GralDomain
                                 double max = -1;
                                 double umean;
                                 //write vector file
-                                using (StreamWriter myWriter = new StreamWriter(file))
+                                try
                                 {
-                                    myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                    myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                    myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                    myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                    myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                    myWriter.WriteLine("NODATA_value  " + "-9999");
-                                    for (int j = njj; j > 0; j--)
+                                    using (StreamWriter myWriter = new StreamWriter(file))
                                     {
-                                        for (int i = 1; i <= nii; i++)
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
                                         {
-                                            myWriter.Write(Convert.ToString((uk[i][j][slice[i, j]] + uk[i + 1][j][slice[i, j]]) * 0.5F, ic) + "," + Convert.ToString((vk[i][j][slice[i, j]] + vk[i][j + 1][slice[i, j]]) * 0.5F, ic) + ",");
-                                            umean = Math.Sqrt(uk[i][j][slice[i, j]] * uk[i][j][slice[i, j]] + vk[i][j][slice[i, j]] * vk[i][j][slice[i, j]]);
-                                            //compute maximum and minimum
-                                            min = Math.Min(min, umean);
-                                            max = Math.Max(max, umean);
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
                                         }
-                                        myWriter.WriteLine();
+
+                                        for (int j = njj; j > 0; j--)
+                                        {
+                                            for (int i = 1; i <= nii; i++)
+                                            {
+                                                myWriter.Write(Convert.ToString((uk[i][j][slice[i, j]] + uk[i + 1][j][slice[i, j]]) * 0.5F, ic) + "," + Convert.ToString((vk[i][j][slice[i, j]] + vk[i][j + 1][slice[i, j]]) * 0.5F, ic) + ",");
+                                                umean = Math.Sqrt(uk[i][j][slice[i, j]] * uk[i][j][slice[i, j]] + vk[i][j][slice[i, j]] * vk[i][j][slice[i, j]]);
+                                                //compute maximum and minimum
+                                                min = Math.Min(min, umean);
+                                                max = Math.Max(max, umean);
+                                            }
+                                            myWriter.WriteLine();
+                                        }
                                     }
                                 }
+                                catch { }
 
                                 try
                                 {
@@ -699,12 +864,21 @@ namespace GralDomain
                                     file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_u.txt");
                                     using (StreamWriter myWriter = new StreamWriter(file3))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -719,12 +893,21 @@ namespace GralDomain
                                     file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_v.txt");
                                     using (StreamWriter myWriter = new StreamWriter(file3))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -739,12 +922,21 @@ namespace GralDomain
                                     file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_w.txt");
                                     using (StreamWriter myWriter = new StreamWriter(file3))
                                     {
-                                        myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                        myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                        myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                        myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                        myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                        myWriter.WriteLine("NODATA_value  " + "-9999");
+                                        GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                        {
+                                            NCols = nii,
+                                            NRows = njj,
+                                            XllCorner = GRALwest,
+                                            YllCorner = GRALsued,
+                                            CellSize = GRAL_cellsize_ff,
+                                            Unit = string.Empty,
+                                            Round = 4
+                                        };
+                                        if (!writeHeader.WriteEsriHeader(myWriter))
+                                        {
+                                            throw new Exception();
+                                        }
+                                        
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -766,10 +958,7 @@ namespace GralDomain
                                                                                             Convert.ToString(dissit).PadLeft(5, '0') + ".tke")
                                             };
 
-                                            if (CancellationTokenSource == null)
-                                            {
-                                                CancellationTokenSource = new System.Threading.CancellationTokenSource();
-                                            }
+                                            CancellationTokenReset();
                                             if (await Task.Run(() => gff.ReadTKEFile(CancellationTokenSource.Token)) == true)
                                             {
                                                 nkk = gff.NKK;
@@ -783,12 +972,21 @@ namespace GralDomain
                                                 file3 = Path.Combine(Gral.Main.ProjectName, @"Maps", Path.GetFileNameWithoutExtension(file) + "_tke.txt");
                                                 using (StreamWriter myWriter = new StreamWriter(file3))
                                                 {
-                                                    myWriter.WriteLine("ncols         " + Convert.ToString(nii));
-                                                    myWriter.WriteLine("nrows         " + Convert.ToString(njj));
-                                                    myWriter.WriteLine("Xllcorner     " + Convert.ToString(GRALwest, ic));
-                                                    myWriter.WriteLine("Yllcorner     " + Convert.ToString(GRALsued, ic));
-                                                    myWriter.WriteLine("cellsize      " + Convert.ToString(GRAL_cellsize_ff, ic));
-                                                    myWriter.WriteLine("NODATA_value  " + "-9999");
+                                                    GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
+                                                    {
+                                                        NCols = nii,
+                                                        NRows = njj,
+                                                        XllCorner = GRALwest,
+                                                        YllCorner = GRALsued,
+                                                        CellSize = GRAL_cellsize_ff,
+                                                        Unit = string.Empty,
+                                                        Round = 4
+                                                    };
+                                                    if (!writeHeader.WriteEsriHeader(myWriter))
+                                                    {
+                                                        throw new Exception();
+                                                    }
+
                                                     for (int j = njj; j > 0; j--)
                                                     {
                                                         for (int i = 1; i <= nii; i++)

@@ -213,7 +213,6 @@ namespace GralShape
                 {
                     SHPPolygon polygon = new SHPPolygon();
                     //int recordShapeType = readIntLittle(data, recordContentStart);
-                    polygon.Box = new Double[4];
                     polygon.Box[0] = readDoubleLittle(data, recordContentStart + 4);
                     polygon.Box[1] = readDoubleLittle(data, recordContentStart + 12);
                     polygon.Box[2] = readDoubleLittle(data, recordContentStart + 20);
@@ -277,6 +276,9 @@ namespace GralShape
                         int c = 0;
                         for (int parts = 0; parts < polygon.NumParts; parts++)
                         {
+                            //create a local copy of the polygon class inclusive header
+                            SHPPolygon polyPart = new SHPPolygon(polygon, false);
+                            
                             int end = 0;
                             if ((polygon.NumParts - parts) > 1)
                             {
@@ -287,17 +289,16 @@ namespace GralShape
                                 end = polygon.NumPoints;
                             }
 
-                            polygon.Points = null;
-                            polygon.Points = new GralDomain.PointD[end - polygon.Parts[parts]];
+                            polyPart.Points = new GralDomain.PointD[end - polygon.Parts[parts]];
                             int cp = 0;
                             for (int i = polygon.Parts[parts]; i < end; i++)
                             {
-                                polygon.Points[cp].X = readDoubleLittle(data, pointStart + (c * 16));
-                                polygon.Points[cp].Y = readDoubleLittle(data, pointStart + (c * 16) + 8);
+                                polyPart.Points[cp].X = readDoubleLittle(data, pointStart + (c * 16));
+                                polyPart.Points[cp].Y = readDoubleLittle(data, pointStart + (c * 16) + 8);
                                 c++;cp++;
                             }
                             //SHPPolygons[index].Add(polygon); // add this ring
-                            yield return polygon;							
+                            yield return polyPart;							
                         }
                     }
                 }
@@ -307,7 +308,6 @@ namespace GralShape
                 {
                     SHPPolygon polygon = new SHPPolygon();
                     int recordShapeType = readIntLittle(data, recordContentStart);
-                    polygon.Box = new Double[4];
                     polygon.Box[0] = readDoubleLittle(data, recordContentStart + 4);
                     polygon.Box[1] = readDoubleLittle(data, recordContentStart + 12);
                     polygon.Box[2] = readDoubleLittle(data, recordContentStart + 20);
@@ -372,6 +372,9 @@ namespace GralShape
                         int c = 0;
                         for (int parts = 0; parts < polygon.NumParts; parts++)
                         {
+                            //create a local copy of the polygon class inclusive header
+                            SHPPolygon polyPart = new SHPPolygon(polygon, false);
+
                             int end = 0;
                             if ((polygon.NumParts - parts) > 1)
                             {
@@ -382,17 +385,16 @@ namespace GralShape
                                 end = polygon.NumPoints;
                             }
 
-                            polygon.Points = null;
-                            polygon.Points = new GralDomain.PointD[end - polygon.Parts[parts]];
+                            polyPart.Points = new GralDomain.PointD[end - polygon.Parts[parts]];
                             int cp = 0;
                             for (int i = polygon.Parts[parts]; i < end; i++)
                             {
-                                polygon.Points[cp].X = readDoubleLittle(data, pointStart + (c * 16));
-                                polygon.Points[cp].Y = readDoubleLittle(data, pointStart + (c * 16) + 8);
+                                polyPart.Points[cp].X = readDoubleLittle(data, pointStart + (c * 16));
+                                polyPart.Points[cp].Y = readDoubleLittle(data, pointStart + (c * 16) + 8);
                                 c++;cp++;
                             }
                             //SHPPolygons[index].Add(polygon); // add this ring
-                            yield return polygon;							
+                            yield return polyPart;							
                         }
                     }
                     
@@ -400,8 +402,7 @@ namespace GralShape
                 currentPosition = recordStart + (4 + contentLength) * 2;
             }
             
-            data = null; // release memory
-            
+            data = null; // release memory         
             yield break;
         }
 

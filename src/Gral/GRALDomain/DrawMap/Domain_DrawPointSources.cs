@@ -103,7 +103,7 @@ namespace GralDomain
                         //g.DrawImage(pointsource, x1 - 10, y1 - 10, 20, 20);
                         g.DrawArc(penrec, x1 - width, y1 - width, width * 2, width * 2, 1, 360);
                         
-                        if ((n == EditPS.ItemDisplayNr) && ((MouseControl == 7) || (MouseControl == 6)))
+                        if ((n == EditPS.ItemDisplayNr) && ((MouseControl == MouseMode.PointSourceSel) || (MouseControl == MouseMode.PointSourcePos)))
                         {
                             Pen penmarked = new Pen(Color.Green)
                             {

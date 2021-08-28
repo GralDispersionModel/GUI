@@ -98,11 +98,11 @@ namespace Gral
                     };
                     if (writer.WriteInDat()) // if writing = OK
                     {
-                        Change_Label(0, 2); // green dot at conrol button
+                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook); 
                     }
                     else // error writing in.dat
                     {
-                        Change_Label(0, 0); // red dot at control button
+                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot); 
                     }
                     writer = null;
                 }
@@ -152,7 +152,7 @@ namespace Gral
                     }
                     catch { }
 
-                    Change_Label(3, 0); // Building label red & delete buildings.dat
+                    ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 
                     numericUpDown10.ValueChanged -= new System.EventHandler(NumericUpDown10_ValueChanged); // remove event listener
                     numericUpDown10.Value = 1;
@@ -186,7 +186,7 @@ namespace Gral
                     }
                     catch { }
 
-                    Change_Label(3, 0); // Building label red & delete buildings.dat
+                    ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 
                     WriteGralGebFile();
 
@@ -262,8 +262,8 @@ namespace Gral
         /// <param name="e"></param>
         private void SetBuildingMethode(object sender, EventArgs e)
         {
-            int buildings = GRALSettings.BuildingMode;
-            if ((buildings == 0) || (buildings == 3))
+            BuildingModeEnum buildings = GRALSettings.BuildingMode;
+            if ((buildings == BuildingModeEnum.None) || (buildings == BuildingModeEnum.GRAMM))
             {
                 groupBox8.Visible = false;
             }
@@ -278,19 +278,19 @@ namespace Gral
                         string newPath1 = Path.Combine(ProjectName, @"Computation", "buildings.txt");
                         if (File.Exists(newPath1))
                         {
-                            Change_Label(3, 0); // Building label red
+                            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.RedDot); // Building label red
                             button9.Visible = true;
                         }
                         newPath1 = Path.Combine(ProjectName, @"Emissions", "Walls.txt");
                         if (File.Exists(newPath1))
                         {
-                            Change_Label(3, 0); // Building label red
+                            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.RedDot); // Building label red
                             button9.Visible = true;
                         }
                         newPath1 = Path.Combine(ProjectName, @"Computation", "Vegetation.txt");
                         if (File.Exists(newPath1))
                         {
-                            Change_Label(3, 0); // Building label red
+                            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.RedDot); // Building label red
                             button9.Visible = true;
                         }
                     }
@@ -299,7 +299,7 @@ namespace Gral
                 {
                 }
             }
-            if (buildings == 0)
+            if (buildings == BuildingModeEnum.None)
             {
                 try
                 {
@@ -307,7 +307,7 @@ namespace Gral
                     {
                         string newPath1 = Path.Combine(ProjectName, @"Computation", "buildings.dat");
                         File.Delete(newPath1);
-                        Change_Label(3, -1); // Building not available
+                        ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.Invisible); // Building not available
                         button9.Visible = false;
                     }
                 }

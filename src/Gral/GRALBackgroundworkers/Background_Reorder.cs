@@ -33,7 +33,7 @@ namespace GralBackgroundworkers
                              System.ComponentModel.DoWorkEventArgs e)
         {
             //generate directory "Re-ordered"
-            string newPath = System.IO.Path.Combine(mydata.Projectname, "Re-ordered");
+            string newPath = System.IO.Path.Combine(mydata.ProjectName, "Re-ordered");
             System.IO.Directory.CreateDirectory(newPath);
 
             //reading geometry file "ggeom.asc"
@@ -75,7 +75,7 @@ namespace GralBackgroundworkers
             //obtain index in the vertical direction
             for (int k = 1; k <= NZ; k++)
             {
-                if (ZSP[ix, iy, k] - AH[ix, iy] >= mydata.Schnitt)
+                if (ZSP[ix, iy, k] - AH[ix, iy] >= mydata.VericalIndex)
             {
                 ischnitt = k;
                 break;
@@ -126,8 +126,8 @@ namespace GralBackgroundworkers
                 try
                 {
                     text = meteopgt.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    nsektor[n] = Convert.ToDouble(text[0].Replace(".", mydata.Decsep));
-                    wg[n] = Convert.ToDouble(text[1].Replace(".", mydata.Decsep));
+                    nsektor[n] = Convert.ToDouble(text[0].Replace(".", mydata.DecSep));
+                    wg[n] = Convert.ToDouble(text[1].Replace(".", mydata.DecSep));
                     iakla[n] = Convert.ToInt32(text[2]);
                     richtung = nsektor[n] * 10;
                     richtung = (270 - richtung) * 3.1415 / 180;
@@ -161,14 +161,14 @@ namespace GralBackgroundworkers
                     Uunten = UWI[ix, iy+1, ischnitt - 1];
                     Vunten = VWI[ix, iy+1, ischnitt - 1];
                     Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy+1, ischnitt] - ZSP[ix, iy+1, ischnitt - 1]) *
-                        (mydata.Schnitt + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
+                        (mydata.VericalIndex + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
                     Vmittel = Vunten + (Voben - Vunten) / (ZSP[ix, iy+1, ischnitt] - ZSP[ix, iy+1, ischnitt - 1]) *
-                        (mydata.Schnitt + AH[ix, iy] - ZSP[ix, iy+1, ischnitt - 1]);
+                        (mydata.VericalIndex + AH[ix, iy] - ZSP[ix, iy+1, ischnitt - 1]);
                 }
                 else
                 {
-                    Umittel = Uoben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.Schnitt;
-                    Vmittel = Voben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.Schnitt;
+                    Umittel = Uoben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.VericalIndex;
+                    Vmittel = Voben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.VericalIndex;
                 }
                 if (Vmittel == 0)
                 {
@@ -249,12 +249,12 @@ namespace GralBackgroundworkers
                 
                 //copy selected wind field file to subdirectory re-ordered
                 string orifile=Path.Combine(mydata.Path_GRAMMwindfield, windfieldfile);
-                string targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".wnd");
+                string targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".wnd");
                 File.Copy(orifile, targetfile,true);
                 
                 // copy .scl file
                 orifile=Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".scl");
-                targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".scl");
+                targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".scl");
                 if (File.Exists(orifile))
                 {
                     File.Copy(orifile, targetfile,true);
@@ -262,7 +262,7 @@ namespace GralBackgroundworkers
 
                 // copy .obl file
                 orifile =Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".obl");
-                targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".obl");
+                targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".obl");
                 if (File.Exists(orifile))
                 {
                     File.Copy(orifile, targetfile,true);
@@ -270,7 +270,7 @@ namespace GralBackgroundworkers
 
                 // copy .ust file
                 orifile =Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".ust");
-                targetfile=Path.Combine(Path.Combine(mydata.Projectname, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".ust");
+                targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".ust");
                 if (File.Exists(orifile))
                 {
                     File.Copy(orifile, targetfile,true);

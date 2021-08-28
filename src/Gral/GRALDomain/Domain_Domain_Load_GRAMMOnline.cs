@@ -21,7 +21,7 @@ namespace GralDomain
         /// <summary>
         /// Load and define GRAMM Online settings
         /// </summary>
-		public void Domain_Load_GRAMMOnline()
+        public void Domain_Load_GRAMMOnline()
         {
             groupBox1.Visible = false;
             groupBox2.Visible = false;

@@ -76,7 +76,7 @@ namespace Gral
             groupBox3.Visible = false;
             button6.Visible = false;
             button7.Visible = false;
-            Change_Label(1, 0); // meteo button red
+            ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
 
             groupBox23.Visible = false; // Anemometer heigth
             label100.Visible = false;
@@ -189,13 +189,16 @@ namespace Gral
         /// <param name="e"></param>
         private void ShowWindRoseVelocity(object sender, EventArgs e)
         {
-            double[,] sectFrequency = new double[16, 8];
+            int WindSectCount = 16;
             double[] wndclasses = new double[7] { 0.5, 1, 2, 3, 4, 5, 6 };
             int count = 0;
             int startstunde = 0;
             int endstunden = 23;
             bool biascorrection = true;
             List<WindData> wind = new List<WindData>();
+            WindroseSetting.ShowWindSectorGroupBox = true;
+            WindroseSetting.ShowMaxScaleGroupBox = false;
+            WindroseSetting.ShowBias = true;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -211,6 +214,11 @@ namespace Gral
                     endstunden = mts.WindRoseSet.EndStunde;
                     int maxwind = mts.WindRoseSet.MaxVelocity;
                     biascorrection = mts.WindRoseSet.BiasCorrection;
+                    WindSectCount = mts.WindRoseSet.SectorCount;
+                    WindroseSetting.SectorCount = mts.WindRoseSet.SectorCount;
+                    double[,] sectFrequency = new double[WindSectCount, 8];
+                    bool ignore00Values = mts.WindRoseSet.Ignore00Values;
+
                     float sectorWidth = 1;
                     if (biascorrection)
                     {
@@ -253,67 +261,82 @@ namespace Gral
                             if (((startstunde < endstunden) && (data.Hour >= startstunde) && (data.Hour <= endstunden)) ||
                                 ((startstunde > endstunden) && ((data.Hour >= startstunde) || (data.Hour <= endstunden))))
                             {
-                                int sektor = Convert.ToInt32(Math.Round(data.Dir / 22.5, 0));
-                                int wklass = 0; //Convert.ToInt32(Math.Truncate(windge[i])) + 1;
-
-                                for (int c = 0; c < 6; c++)
+                                if (ignore00Values == false || data.Vel > 0.000001 || data.Dir > 0.000001)
                                 {
-                                    if (data.Vel > wndclasses[c] && data.Vel <= wndclasses[c + 1])
+                                    double SectAngle = 360D / WindSectCount;
+                                    int sektor = (int)(Math.Round(data.Dir / SectAngle, 0));
+                                    int wklass = 0; //Convert.ToInt32(Math.Truncate(windge[i])) + 1;
+
+                                    for (int c = 0; c < 6; c++)
                                     {
-                                        wklass = c + 1;
+                                        if (data.Vel > wndclasses[c] && data.Vel <= wndclasses[c + 1])
+                                        {
+                                            wklass = c + 1;
+                                        }
                                     }
-                                }
 
-                                if (data.Vel <= wndclasses[0])
-                                {
-                                    wklass = 0;
-                                }
-
-                                if (data.Vel > wndclasses[6])
-                                {
-                                    wklass = 7;
-                                }
-
-                                if (sektor > 15)
-                                {
-                                    sektor = 0;
-                                }
-
-                                if (biascorrection && sectorWidth > 1)
-                                {
-                                    double start = data.Dir - sectorWidth * 0.5F;
-                                    double ende = data.Dir + sectorWidth * 0.5F;
-
-                                    for (double subsect = start; subsect < ende; subsect += 0.5)
+                                    if (data.Vel <= wndclasses[0])
                                     {
-                                        double _sect = subsect;
-                                        if (_sect < 0)
+                                        wklass = 0;
+                                    }
+
+                                    if (data.Vel > wndclasses[6])
+                                    {
+                                        wklass = 7;
+                                    }
+
+                                    if (sektor > WindSectCount - 1)
+                                    {
+                                        sektor = 0;
+                                    }
+
+                                    if (biascorrection && sectorWidth > 1)
+                                    {
+                                        double start = data.Dir - sectorWidth * 0.49F;
+                                        double ende = data.Dir + sectorWidth * 0.49F;
+                                        double inc = 0.5;
+                                        if (WindSectCount == 24)
                                         {
-                                            _sect += 360;
+                                            inc = 0.1;
                                         }
-                                        if (_sect > 360)
+                                        else if (WindSectCount == 32)
                                         {
-                                            _sect -= 360;
+                                            inc = 0.03;
                                         }
-                                        sektor = (int)(Math.Round(_sect / 22.5, 0));
-                                        if (sektor > 15)
+
+                                        for (double subsect = start; subsect < ende; subsect += inc)
                                         {
-                                            sektor = 0;
+                                            double _sect = subsect;
+                                            if (_sect < 0)
+                                            {
+                                                _sect += 360;
+                                            }
+                                            if (_sect > 360)
+                                            {
+                                                _sect -= 360;
+                                            }
+                                            //sektor = (int)(_sect / SectAngle);
+                                            //if (sektor >= 0 && sektor < WindSectCount)
+                                            sektor = (int)(Math.Round(_sect / SectAngle, 0));
+                                            if (sektor > WindSectCount - 1)
+                                            {
+                                                sektor = 0;
+                                            }
+                                            count++;
+                                            sectFrequency[sektor, wklass]++;
                                         }
+                                    }
+                                    else
+                                    {
                                         count++;
                                         sectFrequency[sektor, wklass]++;
                                     }
+                                    wind.Add(data);
                                 }
-                                else
-                                {
-                                    count++;
-                                    sectFrequency[sektor, wklass]++;
-                                }
-                                wind.Add(data);
                             }
                         }
 
-                        for (int sektor = 0; sektor < 16; sektor++)
+                        for (int sektor = 0; sektor < WindSectCount; sektor++)
                         {
                             for (int wklass = 0; wklass < 8; wklass++)
                             {
@@ -323,6 +346,8 @@ namespace Gral
 
                         GralMainForms.Windrose windrose = new GralMainForms.Windrose
                         {
+                            StartPosition = FormStartPosition.Manual,
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             SectFrequ = sectFrequency,
                             MetFileName = Path.GetFileName(MetfileName),
                             WindData = wind,
@@ -331,7 +356,8 @@ namespace Gral
                             WndClasses = wndclasses,
                             DrawFrames = mts.WindRoseSet.ShowFrames,
                             SmallSectors = mts.WindRoseSet.DrawSmallSectors,
-                            DrawingMode = 0
+                            DrawingMode = 0,
+                            WindSectorCount = WindSectCount
                         };
                         if (biascorrection)
                         {
@@ -342,7 +368,7 @@ namespace Gral
                             }
                         }
 
-                        if (wind.Count > 1)
+                        if (wind.Count > 0)
                         {
                             windrose.Show();
                         }
@@ -362,7 +388,7 @@ namespace Gral
         /// <param name="e"></param>
         private void ShowWindRoseStability(object sender, EventArgs e)
         {
-            double[,] sectFrequency = new double[16, 8];
+            int WindSectCount = 16;
             int count = 0;
             int startstunde = 0;
             int endstunden = 23;
@@ -370,7 +396,10 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             int maxvelocity = WindroseSetting.MaxVelocity;
             WindroseSetting.MaxVelocity = 0;
-            
+            WindroseSetting.ShowWindSectorGroupBox = true;
+            WindroseSetting.ShowMaxScaleGroupBox = false;
+            WindroseSetting.ShowBias = true;
+
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
@@ -381,10 +410,14 @@ namespace Gral
             {
                 if (mts.ShowDialog() == DialogResult.OK)
                 {
+                    WindSectCount = mts.WindRoseSet.SectorCount;
+                    WindroseSetting.SectorCount = mts.WindRoseSet.SectorCount;
+                    double[,] sectFrequency = new double[WindSectCount, 8];
                     startstunde = mts.WindRoseSet.StartStunde;
                     endstunden = mts.WindRoseSet.EndStunde;
                     bool biascorrection = mts.WindRoseSet.BiasCorrection;
                     float sectorWidth = 1;
+                    bool ignore00Values = mts.WindRoseSet.Ignore00Values;
                     if (biascorrection)
                     {
                         sectorWidth = GralStaticFunctions.GetMetFileSectionWidth.GetMetSectionWidth(MeteoTimeSeries);
@@ -402,46 +435,60 @@ namespace Gral
                             if (((startstunde < endstunden) && (data.Hour >= startstunde) && (data.Hour <= endstunden)) ||
                                 ((startstunde > endstunden) && ((data.Hour >= startstunde) || (data.Hour <= endstunden))))
                             {
-                                int sektor = Convert.ToInt32(data.Dir / 22.5);
-                                if (sektor > 15)
+                                if (ignore00Values == false || data.Vel > 0.000001 || data.Dir > 0.000001)
                                 {
-                                    sektor = 0;
-                                }
+                                    double SectAngle = 360D / WindSectCount;
+                                    int sektor = (int)(Math.Round(data.Dir / SectAngle, 0));
 
-                                if (biascorrection && sectorWidth > 1)
-                                {
-                                    double start = data.Dir - sectorWidth * 0.5F;
-                                    double ende  = data.Dir + sectorWidth * 0.5F;
-
-                                    for (double subsect = start; subsect < ende; subsect += 0.5)
+                                    if (sektor > WindSectCount - 1)
                                     {
-                                        double _sect = subsect;
-                                        if (_sect < 0)
+                                        sektor = 0;
+                                    }
+
+                                    if (biascorrection && sectorWidth > 1)
+                                    {
+                                        double start = data.Dir - sectorWidth * 0.49F;
+                                        double ende = data.Dir + sectorWidth * 0.49F;
+                                        double inc = 0.5;
+                                        if (WindSectCount == 24)
                                         {
-                                            _sect += 360;
+                                            inc = 0.1;
                                         }
-                                        if (_sect > 360)
+                                        else if (WindSectCount == 32)
                                         {
-                                            _sect -= 360;
+                                            inc = 0.03;
                                         }
-                                        sektor = (int) (Math.Round(_sect / 22.5, 0));
-                                        if (sektor > 15)
+
+                                        for (double subsect = start; subsect < ende; subsect += inc)
                                         {
-                                            sektor = 0;
+                                            double _sect = subsect;
+                                            if (_sect < 0)
+                                            {
+                                                _sect += 360;
+                                            }
+                                            if (_sect > 360)
+                                            {
+                                                _sect -= 360;
+                                            }
+                                            sektor = (int)(_sect / SectAngle);
+                                            if (sektor >= 0 && sektor < WindSectCount)
+                                            {
+                                                count++;
+                                                sectFrequency[sektor, data.StabClass]++;
+                                            }
                                         }
+                                    }
+                                    else
+                                    {
                                         count++;
                                         sectFrequency[sektor, data.StabClass]++;
                                     }
+                                    wind.Add(data);
                                 }
-                                else
-                                {
-                                    count++;
-                                    sectFrequency[sektor, data.StabClass]++;
-                                }
-                                wind.Add(data);
                             }
                         }
-                        for (int sektor = 0; sektor < 16; sektor++)
+
+                        for (int sektor = 0; sektor < WindSectCount; sektor++)
                         {
                             for (int aklass = 1; aklass < 8; aklass++)
                             {
@@ -452,7 +499,7 @@ namespace Gral
                         GralMainForms.Windrose windrose = new GralMainForms.Windrose()
                         {
                             StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             SectFrequ = sectFrequency,
                             MetFileName = Path.GetFileName(MetfileName),
                             WindData = wind,
@@ -460,7 +507,8 @@ namespace Gral
                             FinalHour = endstunden,
                             DrawFrames = mts.WindRoseSet.ShowFrames,
                             SmallSectors = mts.WindRoseSet.DrawSmallSectors,
-                            DrawingMode = 1
+                            DrawingMode = 1,
+                            WindSectorCount = WindSectCount
                         };
 
                         if (biascorrection)
@@ -471,7 +519,7 @@ namespace Gral
                                 windrose.BiasCorrection = 1;
                             }
                         }
-                        if (wind.Count > 1)
+                        if (wind.Count > 0)
                         {
                             windrose.Show();
                         }
@@ -499,7 +547,9 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             bool showBias = WindroseSetting.ShowBias;
             WindroseSetting.ShowBias = false;
-
+            WindroseSetting.ShowWindSectorGroupBox = false;
+            WindroseSetting.ShowMaxScaleGroupBox = true;
+            
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
@@ -559,14 +609,15 @@ namespace Gral
                         GralMainForms.Windclasses wclass = new GralMainForms.Windclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             WClassFrequency = wclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind,
                             StartHour = startstunde,
-                            FinalHour = endstunden
+                            FinalHour = endstunden,
+                            WindRoseSetting = WindroseSetting
                         };
-                        if (wind.Count > 1)
+                        if (wind.Count > 0)
                         {
                             wclass.Show();
                         }
@@ -594,6 +645,8 @@ namespace Gral
             List<WindData> wind = new List<WindData>();
             bool showBias = WindroseSetting.ShowBias;
             WindroseSetting.ShowBias = false;
+            WindroseSetting.ShowWindSectorGroupBox = false;
+            WindroseSetting.ShowMaxScaleGroupBox = false;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -653,7 +706,7 @@ namespace Gral
                             GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
                             {
                                 StartPosition = FormStartPosition.Manual,
-                                Location = new System.Drawing.Point(this.Left, this.Top),
+                                Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                                 WClassFrequency = wclassFrequency,
                                 MetFile = Path.GetFileName(MetfileName),
                                 MaxWind = maxwind,
@@ -693,6 +746,8 @@ namespace Gral
             bool showBias = WindroseSetting.ShowBias;
             WindroseSetting.ShowBias = false;
             WindroseSetting.MaxVelocity = 0;
+            WindroseSetting.ShowWindSectorGroupBox = false;
+            WindroseSetting.ShowMaxScaleGroupBox = true;
 
             using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
             {
@@ -736,12 +791,13 @@ namespace Gral
                         GralMainForms.Stabilityclasses sclass = new GralMainForms.Stabilityclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
-                            Location = new System.Drawing.Point(this.Left, this.Top),
+                            Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                             ScClassFrequency = sclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
-                            Wind = wind
+                            Wind = wind,
+                            WindRoseSetting = WindroseSetting
                         };
-                        if (MeteoTimeSeries.Count > 1)
+                        if (MeteoTimeSeries.Count > 0)
                         {
                             sclass.Show();
                         }
@@ -795,12 +851,12 @@ namespace Gral
             GralMainForms.DiurnalWindspeed mwind = new GralMainForms.DiurnalWindspeed()
             {
                 StartPosition = FormStartPosition.Manual,
-                Location = new System.Drawing.Point(this.Left, this.Top),
+                Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                 meanwind = meanwind,
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
             };
-            if (MeteoTimeSeries.Count > 1)
+            if (MeteoTimeSeries.Count > 0)
             {
                 mwind.Show();
             }
@@ -856,12 +912,12 @@ namespace Gral
             GralMainForms.DiurnalWinddirections mwinddir = new GralMainForms.DiurnalWinddirections()
             {
                 StartPosition = FormStartPosition.Manual,
-                Location = new System.Drawing.Point(this.Left, this.Top),
+                Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
                 meanwinddir = meanwinddir,
                 metfile = Path.GetFileName(MetfileName),
                 wind = MeteoTimeSeries
             };
-            if (MeteoTimeSeries.Count > 1)
+            if (MeteoTimeSeries.Count > 0)
             {
                 mwinddir.Show();
             }
@@ -915,7 +971,7 @@ namespace Gral
                 groupBox2.Visible = true;
                 groupBox3.Visible = true;
                 button7.Visible = true;
-                Change_Label(1, 0); // meteo button red
+                ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
 
                 label100.Visible = true;
                 groupBox20.Visible = true;
@@ -986,7 +1042,7 @@ namespace Gral
             if (changedwind)
             {
                 button7.Visible = true;
-                Change_Label(1, 0); // meteo button red
+                ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
             }
         }
 
@@ -1178,6 +1234,54 @@ namespace Gral
                 File.Delete(newPath);
             }
         }
+
+        /// <summary>
+        /// Save recent met data as new *.met file
+        /// </summary>
+        /// <param name="MeteoTimeSeries">A Time series with meteo data</param>
+        private void SaveMetData(List<WindData> MeteoTimeSeries)
+        {
+            if (MeteoTimeSeries == null || MeteoTimeSeries.Count < 1)
+            {
+                MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                using (SaveFileDialog dialog = new SaveFileDialog
+                {
+                    Filter = "Met files (*.met)|*.met",
+                    Title = "Save new *.met file"
+                })
+                {
+                    if (Directory.Exists(MeteoDirectory))
+                    {
+                        dialog.InitialDirectory = MeteoDirectory;
+                    }
+                    else
+                    {
+                        dialog.InitialDirectory = Path.Combine(ProjectName, @"Metfiles");
+                    }
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            using (StreamWriter myWriter = new StreamWriter(dialog.FileName))
+                            {
+                                foreach (WindData _wnd in MeteoTimeSeries)
+                                {
+                                    myWriter.WriteLine(_wnd.ToString());
+                                }
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }

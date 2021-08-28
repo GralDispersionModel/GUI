@@ -77,7 +77,10 @@ namespace GralBackgroundworkers
 
         void Progress_FormLoad(object sender, EventArgs e)
         {
-            Location = Gral.Main.ActiveForm.Location;
+            if (Gral.Main.ActiveForm != null)
+            {
+                Location = Gral.Main.ActiveForm.Location;
+            }
             // local MyData for Backgroundworker
             //Gral.Backgroundworker_Data MyData = new Backgroundworker_Data();
         }
@@ -100,72 +103,82 @@ namespace GralBackgroundworkers
         {
             GralBackgroundworkers.BackgroundworkerData MyData = (GralBackgroundworkers.BackgroundworkerData)e.Argument;
             
-            if (MyData.Rechenart == 1)
+            if (MyData.BackgroundWorkerFunction == BWMode.GrammMetFile)
             {
                 GenerateMeteofile(MyData, e);
             }
 
-            if (MyData.Rechenart == 2)
+            if (MyData.BackgroundWorkerFunction == BWMode.ReOrder)
             {
                 Reorder(MyData, e);
             }
 
-            if (MyData.Rechenart == 23)
+            if (MyData.BackgroundWorkerFunction == BWMode.GralMetFile)
+            {
+                GenerateGRALMeteofile(MyData, e);
+            }
+
+            if (MyData.BackgroundWorkerFunction == BWMode.OdorConcentrationPercentile)
             {
                 HighPercentiles(MyData, e);
             }
 
-            if (MyData.Rechenart == 24)
+            if (MyData.BackgroundWorkerFunction == BWMode.OdorHoursTransient)
             {
                 OdourHoursTransient(MyData, e);
             }
 
-            if (MyData.Rechenart == 25)
+            if (MyData.BackgroundWorkerFunction == BWMode.MeanMaxTimeSeries)
             {
                 MeanMaxDaymax(MyData, e);
             }
 
-            if (MyData.Rechenart == 26)
+            if (MyData.BackgroundWorkerFunction == BWMode.OdorCompost)
             {
                 OdourCompost(MyData, e);
             }
 
-            if (MyData.Rechenart == 27)
+            if (MyData.BackgroundWorkerFunction == BWMode.OdorHours)
             {
                 OdourHours(MyData, e);
             }
 
-            if (MyData.Rechenart == 28)
+            if (MyData.BackgroundWorkerFunction == BWMode.MeanMeteoPGT)
             {
                 Mean(MyData, e);
             }
 
-            if (MyData.Rechenart == 29)
+            if (MyData.BackgroundWorkerFunction == BWMode.OdorAllinAllout)
             {
                 OdourAllinAllout(MyData, e);
             }
 
-            if (MyData.Rechenart == 31)
+            if (MyData.BackgroundWorkerFunction == BWMode.GrammMeanWindVel)
             {
                 MeanWindVelocity(MyData, e);
             }
 
-            if (MyData.Rechenart == 37)
+            if (MyData.BackgroundWorkerFunction == BWMode.ReceptorTimeSeries)
             {
                 ReceptorConcentration(MyData, e);
             }
 
-            if (MyData.Rechenart == 40)
+            if (MyData.BackgroundWorkerFunction == BWMode.EvalPointsTimeSeries)
+            {
+                GenerateTimeSeries(MyData, e);
+            }
+
+            if (MyData.BackgroundWorkerFunction == BWMode.HighPercentiles)
             {
                 HighPercentiles(MyData, e);
             }
 
-            if (MyData.Rechenart == 50)
+            if (MyData.BackgroundWorkerFunction == BWMode.MathRasterOperations)
             {
                 MathRasterOperation(MyData, e);
             }
 
-            if (MyData.Rechenart == 60)
+            if (MyData.BackgroundWorkerFunction == BWMode.GrammExportSubDomain)
             {
                 GRAMMExport(MyData, e);
             }
@@ -205,24 +218,28 @@ namespace GralBackgroundworkers
             else
             {
                 
-                if (MyBackData.Rechenart == 1) // Meteo Files
+                if (MyBackData.BackgroundWorkerFunction == BWMode.GrammMetFile) // Meteo Files
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".", Location);
                     Box.Show();
-                    //MessageBox.Show("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".");
                 }
-                if (MyBackData.Rechenart == 2) // Re-Order
+                if (MyBackData.BackgroundWorkerFunction == BWMode.ReOrder) // Re-Order
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Re-ordering finished!", Location);
                     Box.Show();
-                    //MessageBox.Show("Re-ordering finished!");
+                }
+                if (MyBackData.BackgroundWorkerFunction == BWMode.GralMetFile) // GRAL Meteo Files
+                {
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
+                    MessageBoxTemporary Box = new MessageBoxTemporary("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".", Location);
+                    Box.Show();
                 }
 
-                if (MyBackData.Rechenart == 25) // Mean, Max, daily Max
+                if (MyBackData.BackgroundWorkerFunction == BWMode.MeanMaxTimeSeries) // Mean, Max, daily Max
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     // calculation finished and first height slice
                     if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
@@ -232,9 +249,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
-                if (MyBackData.Rechenart == 26) // Compost
+                if (MyBackData.BackgroundWorkerFunction == BWMode.OdorCompost) // Compost
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     // calculation finished and first height slice
                     if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
@@ -244,9 +261,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
-                if (MyBackData.Rechenart == 27) // Odour hours
+                if (MyBackData.BackgroundWorkerFunction == BWMode.OdorHours) // Odour hours
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     // calculation finished and first height slice
                     if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
@@ -256,9 +273,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
-                if (MyBackData.Rechenart == 28) // Mean, Max concentrations
+                if (MyBackData.BackgroundWorkerFunction == BWMode.MeanMeteoPGT) // Mean, Max concentrations
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     // calculation finished and first height slice
                     if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
@@ -268,9 +285,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
-                if (MyBackData.Rechenart == 29) // All in all out
+                if (MyBackData.BackgroundWorkerFunction == BWMode.OdorAllinAllout) // All in all out
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     // calculation finished and first height slice
                     if (Computation_Completed && MyBackData.WriteDepositionOrOdourData)
                     {
@@ -280,9 +297,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
-                if (MyBackData.Rechenart == 31) // Mean wind velocity
+                if (MyBackData.BackgroundWorkerFunction == BWMode.GrammMeanWindVel) // Mean wind velocity
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     if (Computation_Completed)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Calculation finished: contour plots can now be created in the menu Domain", Location);
@@ -291,9 +308,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
-                if (MyBackData.Rechenart == 37) // Receptor Concentration
+                if (MyBackData.BackgroundWorkerFunction == BWMode.ReceptorTimeSeries) // Receptor Concentration
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     if (Computation_Completed)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("File(s) GRAL_meteostation.met written to Subdirectory Metfiles", Location);
@@ -301,10 +318,21 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("File(s) GRAL_meteostation.met written to Subdirectory Metfiles");
                 }
-                
-                if (MyBackData.Rechenart == 40) // High Percentils
+
+                if (MyBackData.BackgroundWorkerFunction == BWMode.EvalPointsTimeSeries) // Evaluation points concentration
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
+                    if (Computation_Completed)
+                    {
+                        MessageBoxTemporary Box = new MessageBoxTemporary("A time series file for all evaluation points has been created", Location);
+                        Box.Show();
+                    }
+                    //MessageBox.Show("File(s) GRAL_meteostation.met written to Subdirectory Metfiles");
+                }
+
+                if (MyBackData.BackgroundWorkerFunction == BWMode.HighPercentiles) // High Percentils
+                {
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     if (Computation_Completed)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Contour plots can now be created in the menu Domain", Location);
@@ -313,9 +341,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
 
-                if (MyBackData.Rechenart == 50) // Mathematical raster operations
+                if (MyBackData.BackgroundWorkerFunction == BWMode.MathRasterOperations) // Mathematical raster operations
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     if (Computation_Completed)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("Calculations finished", Location);
@@ -324,9 +352,9 @@ namespace GralBackgroundworkers
                     //MessageBox.Show("Calculations finished.");
                 }
 
-                if (MyBackData.Rechenart == 60) // GRAMM Export
+                if (MyBackData.BackgroundWorkerFunction == BWMode.GrammExportSubDomain) // GRAMM Export
                 {
-                    MyBackData.Rechenart = 0;
+                    MyBackData.BackgroundWorkerFunction = BWMode.None;
                     if (Computation_Completed)
                     {
                         MessageBoxTemporary Box = new MessageBoxTemporary("GRAMM export finished", Location);
@@ -335,17 +363,6 @@ namespace GralBackgroundworkers
                 }
             }
             Rechenknecht.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted);
-
-        }
-        
-        private void WriteHeader(GralBackgroundworkers.BackgroundworkerData my_data, string unit)
-        {
-            my_data.Writer.WriteLine("ncols         " + Convert.ToString(my_data.CellsGralX));
-            my_data.Writer.WriteLine("nrows         " + Convert.ToString(my_data.CellsGralY));
-            my_data.Writer.WriteLine("xllcorner     " + Convert.ToString(my_data.DomainWest));
-            my_data.Writer.WriteLine("yllcorner     " + Convert.ToString(my_data.DomainSouth));
-            my_data.Writer.WriteLine("cellsize      " + Convert.ToString(my_data.Horgridsize));
-            my_data.Writer.WriteLine("NODATA_value  " + "-9999 \t Unit:\t" + unit);
         }
         
         private string GetSgNumbers(string Sourcegroupname)
@@ -834,7 +851,7 @@ namespace GralBackgroundworkers
             }
         }
 
-        private bool ReadMeteopgtAll(string filename, ref List<string> data)
+        public bool ReadMeteopgtAll(string filename, ref List<string> data)
         {
             bool ok = true;
             data.Clear();
@@ -863,7 +880,7 @@ namespace GralBackgroundworkers
             return ok;
         }
         
-        private bool ReadMettimeseries(string filename, ref List<string> data)
+        public bool ReadMettimeseries(string filename, ref List<string> data)
         {
             bool ok = true;
             data.Clear();

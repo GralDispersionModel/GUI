@@ -96,18 +96,21 @@ namespace GralDomain
 				CopiedItem.Building = null;
 				EditAndSaveBuildingsData(null, null); // save changes
 				Picturebox1_Paint();
-				MouseControl = 19;
+				MouseControl = MouseMode.BuildingSel;
+				ContextMenuStrip m = sender as ContextMenuStrip;
+				if (m != null)
+				{
+					m.Dispose();
+				}
 			}
 		}
-		
 		/// <summary>
-        /// Right mouse click to a building -> show context menu
-        /// </summary>
-		private void RightClickBuilding(object sender, System.EventArgs e)
+		/// ContextMenu Edit Building
+		/// </summary>
+		private void RightClickBuildingEdit(object sender, EventArgs e)
 		{
-			MenuItem mi = sender as MenuItem;
-			
-			if (mi.Index == 0) // Edit Building
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				int i = Convert.ToInt32(mi.Tag);
 				EditB.SetTrackBar(i + 1);
@@ -115,33 +118,47 @@ namespace GralDomain
 				EditB.FillValues();
 				BuildingsToolStripMenuItemClick(null, null);
 			}
-			if (mi.Index == 1) // Move edge point
+		}
+		/// <summary>
+		/// ContextMenu Building Move Edge Point
+		/// </summary>
+		private void RightClickBuildingMoveEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				PointD coor = (PointD) mi.Tag;
+				PointD coor = (PointD)mi.Tag;
 				textBox1.Text = coor.X.ToString();
 				textBox2.Text = coor.Y.ToString();
 				MoveEdgepointBuilding();
-				MouseControl = 1170;
+				MouseControl = MouseMode.BuildingInlineEdit;
 			}
-			if (mi.Index == 2) // Add edge point
+		}
+		/// <summary>
+		/// ContextMenu Building Add Edge Point
+		/// </summary>
+		private void RightClickBuildingAddEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+				SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
 				int i = pt.Index;
-				
+
 				EditB.SetTrackBar(i + 1);
 				EditB.ItemDisplayNr = i;
 				EditB.FillValues();
-				
+
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD _pt in EditB.ItemData[i].Pt)
+				foreach (PointD _pt in EditB.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -156,42 +173,48 @@ namespace GralDomain
 					EditB.ItemData[i].Pt.Insert(indexmin + 1, GetPointBetween(EditB.ItemData[i].Pt[indexmin], EditB.ItemData[i].Pt[indexnext]));
 				}
 				int count = 0;
-				foreach(PointD _pt in EditB.ItemData[i].Pt)
+				foreach (PointD _pt in EditB.ItemData[i].Pt)
 				{
 					EditB.CornerBuildingX[count] = _pt.X;
 					EditB.CornerBuildingY[count] = _pt.Y;
 					count++;
 				}
 				EditB.SetNumberOfVerticesText(EditB.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveBuildingsData(sender, null); // save changes
-				
-				if (EditB.ItemData.Count > 0)
-                {
-                    MouseControl = 19;
-                }
 
-                Picturebox1_Paint();
+				EditAndSaveBuildingsData(sender, null); // save changes
+
+				if (EditB.ItemData.Count > 0)
+				{
+					MouseControl = MouseMode.BuildingSel;
+				}
+				Picturebox1_Paint();
 			}
-			if (mi.Index == 3) // Delete edge point
+		}
+		/// <summary>
+		/// ContextMenu Building Delete Edge Point
+		/// </summary>
+		private void RightClickBuildingDelEdge(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
-				SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+				SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
 				int i = pt.Index;
-				
+
 				EditB.SetTrackBar(i + 1);
 				EditB.ItemDisplayNr = i;
 				EditB.FillValues();
-				
+
 				int j = 0;
 				int indexmin = 0;
 				double min = 100000000;
-				foreach(PointD _pt in EditB.ItemData[i].Pt)
+				foreach (PointD _pt in EditB.ItemData[i].Pt)
 				{
 					double dx = pt.X - _pt.X;
 					double dy = pt.Y - _pt.Y;
-					if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+					if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
 					{
-						min = Math.Sqrt(dx*dx+dy*dy);
+						min = Math.Sqrt(dx * dx + dy * dy);
 						indexmin = j;
 					}
 					j++;
@@ -201,24 +224,31 @@ namespace GralDomain
 					EditB.ItemData[i].Pt.RemoveAt(indexmin);
 				}
 				int count = 0;
-				foreach(PointD _pt in EditB.ItemData[i].Pt)
+				foreach (PointD _pt in EditB.ItemData[i].Pt)
 				{
 					EditB.CornerBuildingX[count] = _pt.X;
 					EditB.CornerBuildingY[count] = _pt.Y;
 					count++;
 				}
 				EditB.SetNumberOfVerticesText(EditB.ItemData[i].Pt.Count.ToString());
-				
-				EditAndSaveBuildingsData(sender, null); // save changes
-				
-				if (EditB.ItemData.Count > 0)
-                {
-                    MouseControl = 19;
-                }
 
-                Picturebox1_Paint();
+				EditAndSaveBuildingsData(sender, null); // save changes
+
+				if (EditB.ItemData.Count > 0)
+				{
+					MouseControl = MouseMode.BuildingSel;
+				}
+
+				Picturebox1_Paint();
 			}
-			if (mi.Index == 4) // Delete Building
+		}
+		/// <summary>
+		/// ContextMenu Building Delete 
+		/// </summary>
+		private void RightClickBuildingDelete(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
 			{
 				int i = Convert.ToInt32(mi.Tag);
 				EditB.SetTrackBar(i + 1);
@@ -228,17 +258,21 @@ namespace GralDomain
 				EditAndSaveBuildingsData(null, null); // save changes
 				Picturebox1_Paint();
 				if (EditB.ItemData.Count > 0)
-                {
-                    MouseControl = 19;
-                }
-            }
-			if (mi.Index == 5) // Copy building
-			{
-				CopiedItem.Building = new BuildingData( EditB.ItemData[Convert.ToInt32(mi.Tag)]);
+				{
+					MouseControl = MouseMode.BuildingSel;
+				}
 			}
-			
-			Menu m = sender as Menu;
-			m.Dispose ();
+		}
+		/// <summary>
+		/// ContextMenu Building Copy
+		/// </summary>
+		private void RightClickBuildingCopy(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = sender as ToolStripMenuItem;
+			if (mi != null)
+			{
+				CopiedItem.Building = new BuildingData(EditB.ItemData[Convert.ToInt32(mi.Tag)]);
+			}
 		}
     }
 }

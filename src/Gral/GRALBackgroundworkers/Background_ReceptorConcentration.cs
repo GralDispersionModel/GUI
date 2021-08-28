@@ -1,7 +1,7 @@
 #region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
-/// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
+/// Copyright (C) [2019-2020]  [Dietmar Oettl, Markus Kuntner]
 /// This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
 /// the Free Software Foundation version 3 of the License
 /// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,8 +28,7 @@ namespace GralBackgroundworkers
 {
     public partial class ProgressFormBackgroundworker
     {
-        private string decsep;
-        private List<double> xrec = new List<double>();
+       private List<double> xrec = new List<double>();
 
         /// <summary>
         /// Calculate receptor concentrations and GRAL flow field receptor wind fields 
@@ -40,7 +39,7 @@ namespace GralBackgroundworkers
             //reading emission variations
             int maxsource = 100; //mydata.MaxSource; allow all source-group numbers!
             int maxcomputedsourcegroup = mydata.MaxSourceComputed;
-            decsep = mydata.Decsep;
+            string decsep = mydata.DecSep;
 
             double[,] emifac_day = new double[24, maxsource];
             double[,] emifac_mon = new double[12, maxsource];
@@ -50,14 +49,14 @@ namespace GralBackgroundworkers
             string dummy = string.Empty;
             string newpath = "";
             int[] sg_numbers = new int[maxsource];
-            string[] sg_names = mydata.Sel_Source_Grp.Split(',');
-            string[] computed_sourcegroups = mydata.Comp_Source_Grp.Split(',');
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
+            string[] computed_sourcegroups = mydata.ComputedSourceGroup.Split(',');
 
             //in transient GRAL mode, it is simply to read the File GRAL_meteozeitreihe.dat and convert it to .met files
             bool transient = false;
             InDatVariables data = new InDatVariables();
             InDatFileIO ReadInData = new InDatFileIO();
-            data.InDatPath = Path.Combine(mydata.Projectname, "Computation", "in.dat");
+            data.InDatPath = Path.Combine(mydata.ProjectName, "Computation", "in.dat");
             ReadInData.Data = data;
             if (ReadInData.ReadInDat() == true)
             {
@@ -68,7 +67,7 @@ namespace GralBackgroundworkers
             }
 
             //get variation for source group
-            if (!string.IsNullOrEmpty(mydata.Sel_Source_Grp)) // otherwise just analyze the wind data
+            if (!string.IsNullOrEmpty(mydata.SelectedSourceGroup)) // otherwise just analyze the wind data
             {
                 // Read the emission factors of all selected source-groups
                 for (int itm = 0; itm < maxsource; itm++)
@@ -83,7 +82,7 @@ namespace GralBackgroundworkers
                                 // MessageBox.Show(itm.ToString()+"/"+sg_numbers[itm]);
                                 // Read modulation of that source-group
                                 newpath = Path.Combine("Computation", "emissions" + Convert.ToString(itm + 1).PadLeft(3, '0') + ".dat");
-                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                                 {
                                     for (int j = 0; j < 24; j++)
                                     {
@@ -118,7 +117,7 @@ namespace GralBackgroundworkers
             newpath = Path.Combine("Computation", "mettimeseries.dat");
             int mettimefilelength = 0;
             string[] text2 = new string[5];
-            using (StreamReader sr = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+            using (StreamReader sr = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
             {
                 //text2 = sr.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 while (sr.EndOfStream == false)
@@ -138,7 +137,7 @@ namespace GralBackgroundworkers
             int[] sg_time = new int[maxsource];
             double[,] emifac_timeseries = new double[mettimefilelength + 1, maxsource];
 
-            if (!string.IsNullOrEmpty(mydata.Sel_Source_Grp)) // otherwise just analyze the wind data
+            if (!string.IsNullOrEmpty(mydata.SelectedSourceGroup)) // otherwise just analyze the wind data
             {
                 //it is necessary to set all values of the array emifac_timeseries equal to 1
                 for (int i = 0; i < mettimefilelength + 1; i++)
@@ -150,7 +149,7 @@ namespace GralBackgroundworkers
                 }
 
                 // read value from emissions_timeseries.txt -> emifac_day[] and emifac_mon[] not used
-                newpath = Path.Combine(mydata.Projectname, "Computation", "emissions_timeseries.txt");
+                newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
                 if (File.Exists(newpath) == true)
                 {
                     try
@@ -160,7 +159,7 @@ namespace GralBackgroundworkers
                         using (StreamReader read1 = new StreamReader(newpath))
                         {
                             //get source group numbers
-                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                             for (int i = 2; i < text10.Length; i++)
                             {
                                 //get the column corresponding with the source group number stored in sg_numbers
@@ -185,7 +184,7 @@ namespace GralBackgroundworkers
 
                             for (int i = 0; i < mettimefilelength; i++)
                             {
-                                text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                                text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                                 for (int n = 0; n < maxsource; n++)
                                 {
                                     if (sg_time[n] == 0)
@@ -224,7 +223,7 @@ namespace GralBackgroundworkers
             List<string> rec_names = new List<string>();
 
             //get number of receptor points and names of receptors
-            string receptorfile = Path.Combine(mydata.Projectname, "Computation", "Receptor.dat");
+            string receptorfile = Path.Combine(mydata.ProjectName, "Computation", "Receptor.dat");
             if (File.Exists(receptorfile))
             {
                 try
@@ -272,7 +271,7 @@ namespace GralBackgroundworkers
 
             //read meteopgt.all
             newpath = Path.Combine("Computation", "meteopgt.all");
-            using (StreamReader myReader = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+            using (StreamReader myReader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
             {
                 text = myReader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 text = myReader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -305,7 +304,7 @@ namespace GralBackgroundworkers
             int numbwet = 0;
 
             //switch between new (V21.01) and old GRAL concentration files
-            receptorfile = Path.Combine(mydata.Projectname, "Computation", "ReceptorConcentrations.dat");
+            receptorfile = Path.Combine(mydata.ProjectName, "Computation", "ReceptorConcentrations.dat");
             bool NewFileFormat = false;
             if (File.Exists(receptorfile))
             {
@@ -313,13 +312,13 @@ namespace GralBackgroundworkers
             }
             else
             {
-                receptorfile = Path.Combine(mydata.Projectname, "Computation", "zeitreihe.dat");
+                receptorfile = Path.Combine(mydata.ProjectName, "Computation", "zeitreihe.dat");
             }
 
             // Read concentration file into conc[][][]
             string[] ConcentrationHeader = new string[6];
             int NumberOfReceptors = xrec.Count;
-            if (File.Exists(receptorfile) && mydata.Sel_Source_Grp != string.Empty)
+            if (File.Exists(receptorfile) && mydata.SelectedSourceGroup != string.Empty)
             {
                 zeitflag = true;
                 try
@@ -405,7 +404,7 @@ namespace GralBackgroundworkers
             bool local_SCL = false;
             string[] text7 = new string[xrec.Count];
             
-            string GRAL_metfile = Path.Combine(mydata.Projectname, "Computation","GRAL_Meteozeitreihe.dat");
+            string GRAL_metfile = Path.Combine(mydata.ProjectName, "Computation","GRAL_Meteozeitreihe.dat");
             int zeitreihe_lenght = (int) GralStaticFunctions.St_F.CountLinesInFile(GRAL_metfile);
             
             double[,] GRAL_u = new double[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
@@ -425,13 +424,13 @@ namespace GralBackgroundworkers
                 }
             }
 
-            if (!string.IsNullOrEmpty(mydata.Sel_Source_Grp)) // otherwise just analyze the wind data
+            if (!string.IsNullOrEmpty(mydata.SelectedSourceGroup)) // otherwise just analyze the wind data
             {
                 if (zeitflag == true) // write mettime series for all receptor points
                 {
                     try
                     {
-                        string writerRecTimeSeries = Path.Combine(mydata.Projectname, "Computation","ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
+                        string writerRecTimeSeries = Path.Combine(mydata.ProjectName, "Computation","ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
                         if (File.Exists(writerRecTimeSeries))
                         {
                             try
@@ -478,14 +477,14 @@ namespace GralBackgroundworkers
                             
                             //read mettimeseries.dat
                             newpath = Path.Combine("Computation", "mettimeseries.dat");
-                            using (StreamReader readMetTimeSeries = new StreamReader(Path.Combine(mydata.Projectname, newpath)))
+                            using (StreamReader readMetTimeSeries = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                             {
                                 text2 = readMetTimeSeries.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
 
                                 //consider, if meteopgt.all represents a time series or a statistics
                                 int dispersionsituations = 0;
-                                if (mydata.Checkbox19 == true)
+                                if (mydata.MeteoNotClassified == true)
                                     dispersionsituations = numbwet + 1;
                                 else
                                     dispersionsituations = wrmet.Count;
@@ -498,7 +497,7 @@ namespace GralBackgroundworkers
                                     count_ws++;
                                     count_dispsit_in_mettime += 1;
 
-                                    if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true))
+                                    if ((count_dispsit_in_mettime > numbwet) && (mydata.MeteoNotClassified == true))
                                         break;
 
                                     month = text3[1];
@@ -550,7 +549,7 @@ namespace GralBackgroundworkers
                                                 //BackgroundThreadMessageBox(dummy);
 
                                                 //consider, if meteopgt.all represents a time series or a statistics
-                                                if (mydata.Checkbox19 == true)
+                                                if (mydata.MeteoNotClassified == true)
                                                     break;
                                             }
                                             n = dispersionsituations; // situation found -> stop searching
@@ -612,7 +611,7 @@ namespace GralBackgroundworkers
                         double windspeed_GRAL = 0;
                         double winddirection_GRAL = 0;
 
-                        string file = Path.Combine(mydata.Projectname, @"Metfiles", "GRAL" + Convert.ToString(k + 1) + "_" + rec_names[k] + ".met");
+                        string file = Path.Combine(mydata.ProjectName, @"Metfiles", "GRAL" + Convert.ToString(k + 1) + "_" + rec_names[k] + ".met");
                         if (File.Exists(file))
                         {
                             try
@@ -634,9 +633,9 @@ namespace GralBackgroundworkers
                                 try
                                 {
                                     recwrite.WriteLine(recname[k]);
-                                    recwrite.WriteLine(@"\\X=" + recX[k]);
-                                    recwrite.WriteLine(@"\\Y=" + recY[k]);
-                                    recwrite.WriteLine(@"\\Z=" + recZ[k]);
+                                    recwrite.WriteLine(@"//X=" + recX[k]);
+                                    recwrite.WriteLine(@"//Y=" + recY[k]);
+                                    recwrite.WriteLine(@"//Z=" + recZ[k]);
                                 }
                                 catch { }
                             }
@@ -644,7 +643,7 @@ namespace GralBackgroundworkers
                             string[] text6 = new string[2];
                             
                             //read mettimeseries.dat
-                            using (StreamReader read = new StreamReader(Path.Combine(mydata.Projectname, "Computation", "mettimeseries.dat")))
+                            using (StreamReader read = new StreamReader(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat")))
                             {
                                 text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
@@ -654,7 +653,7 @@ namespace GralBackgroundworkers
 
                                 //consider, if meteopgt.all represents a time series or a statistics
                                 int dispersionsituations = 0;
-                                if (mydata.Checkbox19 == true || transient == true)
+                                if (mydata.MeteoNotClassified == true || transient == true)
                                     dispersionsituations = numbwet + 1;
                                 else
                                     dispersionsituations = wrmet.Count;
@@ -664,7 +663,7 @@ namespace GralBackgroundworkers
                                 while (!string.IsNullOrEmpty(text2[0]))
                                 {
                                     count_dispsit_in_mettime++;
-                                    if ((count_dispsit_in_mettime > numbwet) && (mydata.Checkbox19 == true || transient == true))
+                                    if ((count_dispsit_in_mettime > numbwet) && (mydata.MeteoNotClassified == true || transient == true))
                                         break;
 
                                     month = text3[1];

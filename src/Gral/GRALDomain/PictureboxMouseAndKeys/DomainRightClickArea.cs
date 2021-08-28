@@ -94,14 +94,14 @@ namespace GralDomain
                 {
                     ItemNames = ItemNames,
                     StartPosition = FormStartPosition.Manual,
-                    Left = e.X,
+                    Left = e.X + this.Left,
                     Top = e.Y,
                     Owner = this
                 };
                 selectitem.ShowDialog();
                 int i = selectitem.SelectedIndex;
                 selectitem.Dispose();
-                if (i < ItemNumber.Count)
+                if (i >= 0 && i < ItemNumber.Count)
                 {
                     return ItemNumber[i];
                 }
@@ -135,19 +135,23 @@ namespace GralDomain
                 CopiedItem.AreaSource = null;
                 EditAndSaveAreaSourceData(null, null); // save changes
                 Picturebox1_Paint();
-                MouseControl = 19;
+                MouseControl = MouseMode.BuildingSel;
+                ContextMenuStrip m = sender as ContextMenuStrip;
+                if (m != null)
+                {
+                    m.Dispose();
+                }
             }
         }
-        
-		/// <summary>
-        /// Right mouse click to an area source -> show context menu
+
+
+        /// <summary>
+        /// ContextMenu Edit Area Source
         /// </summary>
-        private void RightClickArea(object sender, System.EventArgs e)
+        private void RightClickAreaEdit(object sender, EventArgs e)
         {
-            MenuItem mi = sender as MenuItem;
-            
-            
-            if (mi.Index == 0) // Edit Area Source
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
                 int i = Convert.ToInt32(mi.Tag);
                 EditAS.SetTrackBar(i + 1);
@@ -155,27 +159,41 @@ namespace GralDomain
                 EditAS.FillValues();
                 AreaSourcesToolStripMenuItemClick(null, null);
             }
-            if (mi.Index == 1) // Move edge point
+        }
+        /// <summary>
+		/// ContextMenu Move Edge Point Area Source
+		/// </summary>
+		private void RightClickAreaMoveEdge(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
-                PointD coor = (PointD) mi.Tag;
+                PointD coor = (PointD)mi.Tag;
                 textBox1.Text = coor.X.ToString();
                 textBox2.Text = coor.Y.ToString();
                 MoveEdgepointArea();
-                MouseControl = 1080;
+                MouseControl = MouseMode.AreaInlineEdit;
             }
-            if (mi.Index == 2) // Add edge point
+        }
+        /// <summary>
+		/// ContextMenu Add Edge Point Area Source
+		/// </summary>
+		private void RightClickAreaAddEdge(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
-                SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+                SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
                 int i = pt.Index;
-                
+
                 EditAS.SetTrackBar(i + 1);
                 EditAS.ItemDisplayNr = i;
                 EditAS.FillValues();
-                
+
                 int j = 0;
                 int indexmin = 0;
                 double min = 100000000;
-                foreach(PointD _pt in EditAS.ItemData[i].Pt)
+                foreach (PointD _pt in EditAS.ItemData[i].Pt)
                 {
                     double dx = pt.X - _pt.X;
                     double dy = pt.Y - _pt.Y;
@@ -196,42 +214,49 @@ namespace GralDomain
                     EditAS.ItemData[i].Pt.Insert(indexmin + 1, GetPointBetween(EditAS.ItemData[i].Pt[indexmin], EditAS.ItemData[i].Pt[indexnext]));
                 }
                 int count = 0;
-                foreach(PointD _pt in EditAS.ItemData[i].Pt)
+                foreach (PointD _pt in EditAS.ItemData[i].Pt)
                 {
                     EditAS.CornerAreaX[count] = _pt.X;
                     EditAS.CornerAreaY[count] = _pt.Y;
                     count++;
                 }
                 EditAS.SetNumberOfVerticesText(EditAS.ItemData[i].Pt.Count.ToString());
-                
+
                 EditAndSaveAreaSourceData(sender, null); // save changes
-                
+
                 if (EditAS.ItemData.Count > 0)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
 
                 Picturebox1_Paint();
             }
-            if (mi.Index == 3) // Delete edge point
+        }
+        /// <summary>
+		/// ContextMenu Delete Edge Point Area Source
+		/// </summary>
+		private void RightClickAreaDelEdge(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
-                SelectedPointNumber pt = (SelectedPointNumber) (mi.Tag);
+                SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
                 int i = pt.Index;
-                
+
                 EditAS.SetTrackBar(i + 1);
                 EditAS.ItemDisplayNr = i;
                 EditAS.FillValues();
-                
+
                 int j = 0;
                 int indexmin = 0;
                 double min = 100000000;
-                foreach(PointD _pt in EditAS.ItemData[i].Pt)
+                foreach (PointD _pt in EditAS.ItemData[i].Pt)
                 {
                     double dx = pt.X - _pt.X;
                     double dy = pt.Y - _pt.Y;
-                    if (Math.Sqrt(dx*dx+dy*dy) < min) // search min
+                    if (Math.Sqrt(dx * dx + dy * dy) < min) // search min
                     {
-                        min = Math.Sqrt(dx*dx+dy*dy);
+                        min = Math.Sqrt(dx * dx + dy * dy);
                         indexmin = j;
                     }
                     j++;
@@ -241,24 +266,30 @@ namespace GralDomain
                     EditAS.ItemData[i].Pt.RemoveAt(indexmin);
                 }
                 int count = 0;
-                foreach(PointD _pt in EditAS.ItemData[i].Pt)
+                foreach (PointD _pt in EditAS.ItemData[i].Pt)
                 {
                     EditAS.CornerAreaX[count] = _pt.X;
                     EditAS.CornerAreaY[count] = _pt.Y;
                     count++;
                 }
                 EditAS.SetNumberOfVerticesText(EditAS.ItemData[i].Pt.Count.ToString());
-                
+
                 EditAndSaveAreaSourceData(sender, null); // save changes
-                
+
                 if (EditAS.ItemData.Count > 0)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
-
                 Picturebox1_Paint();
             }
-            if (mi.Index == 4) // Delete Area Source
+        }
+        /// <summary>
+		/// ContextMenu Delete Area Source
+		/// </summary>
+		private void RightClickAreaDelete(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
                 int i = Convert.ToInt32(mi.Tag);
                 EditAS.SetTrackBar(i + 1);
@@ -269,16 +300,21 @@ namespace GralDomain
                 Picturebox1_Paint();
                 if (EditAS.ItemData.Count > 0)
                 {
-                    MouseControl = 9;
+                    MouseControl = MouseMode.AreaSourceSel;
                 }
             }
-            if (mi.Index == 5) // Copy source
+        }
+        /// <summary>
+		/// ContextMenu Copy Area Source
+		/// </summary>
+		private void RightClickAreaCopy(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
                 CopiedItem.AreaSource = new AreaSourceData(EditAS.ItemData[Convert.ToInt32(mi.Tag)]);
             }
-            
-            Menu m = sender as Menu;
-            m.Dispose ();
         }
+              
     }
 }

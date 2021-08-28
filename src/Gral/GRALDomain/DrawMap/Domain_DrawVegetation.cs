@@ -110,7 +110,7 @@ namespace GralDomain
                                     Array.Resize(ref myPoints, point_counter);
                                 }
 
-                                if ((n == EditVegetation.ItemDisplayNr) && ((MouseControl == 77) || (MouseControl == 79)))
+                                if ((n == EditVegetation.ItemDisplayNr) && ((MouseControl == MouseMode.VegetationSel) || (MouseControl == MouseMode.VegetationPosCorner)))
                                 {
                                     g.FillPolygon(SelectedBrush, myPoints);
                                     Brush edges = new SolidBrush(Color.Green);

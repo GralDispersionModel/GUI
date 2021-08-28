@@ -70,43 +70,64 @@ namespace GralDomain
 			CopiedItem.Receptor = null;
 			EditAndSaveReceptorData(null, null); // save changes
 			Picturebox1_Paint();
-			MouseControl = 25;
-		}
-		
-		/// <summary>
-        /// Right mouse click to a receptor -> show context menu
-        /// </summary>
-		private void RightClickReceptor(object sender, System.EventArgs e)
-		{
-			MenuItem mi = sender as MenuItem;
+			MouseControl = MouseMode.ReceptorSel;
+            ContextMenuStrip m = sender as ContextMenuStrip;
+            if (m != null)
+            {
+                m.Dispose();
+            }
+        }
 
-			int i = Convert.ToInt32(mi.Tag);
-			
-			if (mi.Index == 0) // Edit Receptor
-			{
-				ReceptorPointsToolStripMenuItemClick(null, null);
-			}
-			if (mi.Index == 1) // new Position of Receptor
-			{
-				MouseControl = 2400;
-			}
-			if (mi.Index == 2) // Delete Receptor
-			{
-				EditR.RemoveOne(true);
-				EditAndSaveReceptorData(null, null); // save changes
-				Picturebox1_Paint();
-				if (EditR.ItemData.Count > 0)
+
+        /// <summary>
+        /// ContextMenu Edit Receptor
+        /// </summary>
+        private void RightClickReceptorEdit(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                ReceptorPointsToolStripMenuItemClick(null, null);
+            }
+        }
+        /// <summary>
+		/// ContextMenu Move Receptor
+		/// </summary>
+		private void RightClickReceptorMove(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                MouseControl = MouseMode.ReceptorInlineEdit;
+            }
+        }
+        /// <summary>
+		/// ContextMenu Delete Receptor
+		/// </summary>
+		private void RightClickReceptorDelete(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                EditR.RemoveOne(true);
+                EditAndSaveReceptorData(null, null); // save changes
+                Picturebox1_Paint();
+                if (EditR.ItemData.Count > 0)
                 {
-                    MouseControl = 25;
+                    MouseControl = MouseMode.ReceptorSel;
                 }
             }
-			if (mi.Index == 3) // Copy receptor
-			{
-				CopiedItem.Receptor = new ReceptorData(EditR.ItemData[Convert.ToInt32(mi.Tag)]);
-			}
-
-			Menu m = sender as Menu;
-			m.Dispose ();
-		}
+        }
+        /// <summary>
+		/// ContextMenu Copy Receptor
+		/// </summary>
+		private void RightClickReceptorCopy(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                CopiedItem.Receptor = new ReceptorData(EditR.ItemData[Convert.ToInt32(mi.Tag)]);
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using System.IO;
 
 using Gral;
 using GralDomain;
@@ -50,14 +51,15 @@ namespace GralItemForms
 		public event ForceDomainRedraw BuildingRedraw;
 
         public bool AllowClosing = false;
-        //delegate to send a message, that user tries to close the form
-        public event ForceItemFormHide ItemFormHide;
+        //delegates to send a message, that user uses OK or Cancel button
+        public event ForceItemOK ItemFormOK;
+        public event ForceItemCancel ItemFormCancel;
 
         private CultureInfo ic = CultureInfo.InvariantCulture;
 		private int TextBox_x0 = 0;
 		private int TrackBar_x0 = 0;
 		private int Numericupdown_x0 = 0;
-		
+
         public EditBuildings()
         {
             InitializeComponent();
@@ -396,19 +398,14 @@ namespace GralItemForms
             }
             else
             {
+                if (((sender as Form).ActiveControl is Button) == false)
+                {
+                    // cancel if x has been pressed = restore old values!
+                    cancelButtonClick(null, null);
+                }
                 // Hide form and send message to caller when user tries to close this form
                 if (!AllowClosing)
                 {
-                    // send Message to domain Form, that redraw is necessary
-                    try
-                    {
-                        if (ItemFormHide != null)
-                        {
-                            ItemFormHide(this, e);
-                        }
-                    }
-                    catch
-                    { }
                     this.Hide();
                     e.Cancel = true;
                 }
@@ -444,11 +441,11 @@ namespace GralItemForms
 				bool enable = !Main.Project_Locked;
 				if (enable)
 				{
-					Text = "Edit buildings";
+				   labelTitle.Text = "Edit Buildings";
 				}
 				else
 				{
-					Text = "Building settings (project locked)";
+                    labelTitle.Text = "Building Settings (Project Locked)";
 				}
 				foreach (Control c in Controls)
 				{
@@ -458,6 +455,8 @@ namespace GralItemForms
 					}
 				}
 			}
+            Exit.Enabled = true;
+            panel1.Enabled = true;
         }
         void EditbuildingsResizeEnd(object sender, EventArgs e)
         {
@@ -470,7 +469,8 @@ namespace GralItemForms
 				textBox4.Width = dialog_width - TextBox_x0;
 				textBox5.Width = dialog_width - TextBox_x0;
 			}
-            button6.Left = (int)((dialog_width - button6.Width) * 0.5);
+            button4.Left = Math.Max(100, this.Width - 100);
+            panel1.Width = ClientSize.Width;
         }
         
         public void SetNumberOfVerticesText(string _s)
@@ -504,11 +504,32 @@ namespace GralItemForms
 			trackBar1.Maximum = Math.Max(ItemData.Count, 1);
 		}
 
+        /// <summary>
+		/// OK button
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
-            this.Close(); // does not close the form, because closing hides the form
+            SaveArray();
+            FillValues();
+            // send Message to domain Form, that OK button has been pressed
+            try
+            {
+                if (ItemFormOK != null)
+                {
+                    ItemFormOK(this, e);
+                }
+            }
+            catch
+            { }
         }
 
+        /// <summary>
+		/// Show edge point table
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void button8_Click(object sender, EventArgs e)
         {
             try
@@ -525,11 +546,11 @@ namespace GralItemForms
                 };
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    vert.Location = new Point(Right + 4, Top);
+                    vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
                 }
                 else
                 {
-                    vert.Location = new Point(Left - 250, Top);
+                    vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
                 }
 
                 vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
@@ -541,12 +562,64 @@ namespace GralItemForms
 
                 SaveArray();
                 vert.Dispose();
-
             }
             catch
             {
                 MessageBox.Show(this, "Nothing digitized", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Cancel button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cancelButtonClick(object sender, EventArgs e)
+        {
+            ReloadItemData();
+            // send Message to domain Form, that Cancel button has been pressed
+            try
+            {
+                if (ItemFormCancel != null)
+                {
+                    ItemFormCancel(this, e);
+                }
+            }
+            catch
+            { }
+        }
+        /// <summary>
+        /// Reset item data when cancelling the dialog
+        /// </summary>
+        public void ReloadItemData()
+        {
+            ItemData.Clear();
+            ItemData.TrimExcess();
+            BuildingDataIO _bd = new BuildingDataIO();
+            string _file = Path.Combine(Gral.Main.ProjectName, "Emissions", "Buildings.txt");
+            if (File.Exists(_file) == false) // try old Computation path
+            {
+                _file = Path.Combine(Gral.Main.ProjectName, "Computation", "Buildings.txt");
+            }
+            _bd.LoadBuildings(ItemData, _file);
+            _bd = null;
+            SetTrackBarMaximum();
+            FillValues();
+        }
+
+        /// <summary>
+        /// Use panel1 to move the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            const int WM_NCLBUTTONDOWN = 0x00A1;
+            const int HTCAPTION = 2;
+            panel1.Capture = false;
+            labelTitle.Capture = false;
+            Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+            this.DefWndProc(ref msg);
         }
     }
 }

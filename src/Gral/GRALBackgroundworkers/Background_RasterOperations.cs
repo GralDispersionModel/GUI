@@ -173,7 +173,7 @@ namespace GralBackgroundworkers
                                 }
                             }
 
-                            string mathtext = mydata.TextBox1.Replace(mydata.Decsep, ".");
+                            string mathtext = mydata.MathRasterEquation.Replace(mydata.DecSep, ".");
                             if (inside)
                             {
                                 F[x][y] = parser.Parse(mathtext, variables);

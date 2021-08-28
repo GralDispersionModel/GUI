@@ -74,6 +74,8 @@
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <StartAction>Project</StartAction>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
@@ -127,6 +129,12 @@
       <DependentUpon>BackgroundWorker.cs</DependentUpon>
     </Compile>
     <Compile Include="GRALBackgroundworkers\BackgroundWorkerData.cs" />
+    <Compile Include="GRALBackgroundworkers\Background_EvalTimeSeries.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALBackgroundworkers\Background_GRALMeteoFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GRALBackgroundworkers\Background_GRAMMExport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,6 +183,7 @@
     <Compile Include="GRALData\DomainArea.cs" />
     <Compile Include="GRALData\DouglasPeucker.cs" />
     <Compile Include="GRALData\DrawingObject.cs" />
+    <Compile Include="GRALData\Enumerations.cs" />
     <Compile Include="GRALData\EventArgsCoors.cs" />
     <Compile Include="GRALData\PGTAll.cs" />
     <Compile Include="GRALData\PointDStruct.cs" />
@@ -313,6 +322,13 @@
     <Compile Include="GRALDomForms\MatchMultipleObservations.Designer.cs">
       <DependentUpon>MatchMultipleObservations.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALDomForms\MatchMultipleObservationsAutoTune.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALDomForms\MatchMultipleObservationsData.cs" />
+    <Compile Include="GRALDomForms\MatchMultipleObservationsTuning.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GRALDomForms\Mathrasteroperation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -357,6 +373,12 @@
     </Compile>
     <Compile Include="GRALDomForms\SelectItem.Designer.cs">
       <DependentUpon>SelectItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GRALDomForms\SelectMultiplePoints.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALDomForms\SelectMultiplePoints.Designer.cs">
+      <DependentUpon>SelectMultiplePoints.cs</DependentUpon>
     </Compile>
     <Compile Include="GRALDomForms\VerticalProfileConcentration.cs">
       <SubType>Form</SubType>
@@ -542,6 +564,7 @@
     <Compile Include="GRALDomForms\WindFileData.cs" />
     <Compile Include="GRALIO\CreateGralTopography.cs" />
     <Compile Include="GRALIO\CreateGrammGrid.cs" />
+    <Compile Include="GRALIO\EsriGridHeader.cs" />
     <Compile Include="GRALIO\IO_GGEOM.cs" />
     <Compile Include="GRALIO\IO_InDat.cs" />
     <Compile Include="GRALIO\IO_InDatData.cs" />
@@ -677,6 +700,7 @@
     <Compile Include="GRALItemForms\ShowVertices.Designer.cs">
       <DependentUpon>ShowVertices.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALMainFunctions\Main_TerrainInterpolation.cs" />
     <Compile Include="GRALMainSubForms\Main_SpecialSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1070,6 +1094,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\SelectItem.resx">
       <DependentUpon>SelectItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GRALDomForms\SelectMultiplePoints.resx">
+      <DependentUpon>SelectMultiplePoints.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\VerticalProfileConcentration.resx">
       <DependentUpon>VerticalProfileConcentration.cs</DependentUpon>

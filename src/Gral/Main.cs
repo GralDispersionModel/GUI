@@ -22,6 +22,31 @@ using System.IO;
 using System.Windows.Forms;
 namespace Gral
 {
+    /// <summary>
+    /// Enumeration for input file button style
+    /// </summary>
+    public enum ButtonColorEnum
+    {
+        RedDot = 0, GreenDot = 1, BlackHook = 2, Invisible = -1,
+        ButtonControl = 10, ButtonMeteo = 11, ButtonEmission = 12, ButtonBuildings = 13
+    }
+
+    /// <summary>
+    /// Enumeration for building mode
+    /// </summary>
+    public enum BuildingModeEnum
+    {
+        None = 0, Diagnostic = 1, Prognostic = 2, GRAMM = 3
+    }
+
+    /// <summary>
+    /// Enumeration for Wind Data Handling for wind velocity = 0
+    /// </summary>
+    public enum WindData00Enum
+    {
+        All = 0, Reject00 = 1, Shuffle00 = 2
+    }
+
     public partial class Main : Form
     {
         /// <summary>
@@ -60,6 +85,10 @@ namespace Gral
         /// Keep compatibility to version 19.01 (file paths)?
         /// </summary>
         public static bool CompatibilityToVersion1901 = true;
+        /// <summary>
+        /// Automatic Scaling for Vector Maps?
+        /// </summary>
+        public static bool VectorMapAutoScaling = true;
         /// <summary>
         /// A time series of the recent meteorological data
         /// </summary>
@@ -276,6 +305,10 @@ namespace Gral
         /// Number of checkpoints to detect, if a building covers a cell
         /// </summary>
         private int BuildingCellCoverageThreshold = 5;
+        /// <summary>
+        /// Ignore 00 Vales at meteo import
+        /// </summary>
+        public static WindData00Enum IgnoreMeteo00Values = WindData00Enum.All;
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -326,7 +359,7 @@ namespace Gral
             CreateTextbox1(_y0, 80, 22, 0);
             TBox3[0].Value = 3;
             GRALSettings.HorSlices[0] = 3;
-            GRALSettings.BuildingMode = 0;
+            GRALSettings.BuildingMode = BuildingModeEnum.None;
             SetBuildingRadioButton();
 
             //define default pollutants
@@ -435,6 +468,20 @@ namespace Gral
                     if (!read.EndOfStream)
                     {
                         CalculationCoresPath = read.ReadLine();
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        VectorMapAutoScaling = Convert.ToBoolean(read.ReadLine());
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            IgnoreMeteo00Values = (Gral.WindData00Enum)Convert.ToInt32(read.ReadLine());
+                        }
+                        catch { }
                     }
                 }
             }
@@ -867,7 +914,7 @@ namespace Gral
                 }
                 message.Close();
                 message.Dispose();
-                Change_Label(2, 2); // Emission label green
+                ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.BlackHook); // Emission label green
             }
             catch
             {
@@ -986,7 +1033,7 @@ namespace Gral
         /// </summary>
         public void DeleteEmissionFiles()
         {
-            Change_Label(2, 0); // Emission label red
+            ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
             string newPath = Path.Combine(ProjectName, @"Computation", "point.dat");
             File.Delete(newPath);
             newPath = Path.Combine(ProjectName, @"Computation", "portals.dat");
@@ -1026,13 +1073,16 @@ namespace Gral
         {
             St_F.CheckInput(sender, e);
 
-            if (sender == numericUpDown45 && checkBox29.Checked) // optional adaptive roughness lenght
+            if (sender == numericUpDown45) // optional adaptive roughness lenght
             {
-                GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
-            }
-            else
-            {
-                GRALSettings.AdaptiveRoughness = 0;
+                if (checkBox29.Checked)
+                {
+                    GRALSettings.AdaptiveRoughness = (double)numericUpDown45.Value;
+                }
+                else
+                {
+                    GRALSettings.AdaptiveRoughness = 0;
+                }
             }
             ResetInDat();
         }
@@ -1077,7 +1127,7 @@ namespace Gral
         {
             if (radioButton3.Checked)
             {
-                GRALSettings.BuildingMode = 0;
+                GRALSettings.BuildingMode = BuildingModeEnum.None;
             }
             numericUpDown42.Enabled = false;
             SetBuildingMethode(sender, e);
@@ -1088,7 +1138,7 @@ namespace Gral
         {
             if (radioButton4.Checked)
             {
-                GRALSettings.BuildingMode = 1;
+                GRALSettings.BuildingMode = BuildingModeEnum.Diagnostic;
             }
             numericUpDown42.Enabled = false;
             SetBuildingMethode(sender, e);
@@ -1099,7 +1149,7 @@ namespace Gral
         {
             if (radioButton5.Checked)
             {
-                GRALSettings.BuildingMode = 2;
+                GRALSettings.BuildingMode = BuildingModeEnum.Prognostic;
                 numericUpDown42.Enabled = !Project_Locked;
             }
 
@@ -1180,7 +1230,7 @@ namespace Gral
         {
             if (IndatReset == true)
             {
-                Change_Label(0, 0); // red dot at control button
+                ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot); // red dot at control button
                 //				try
                 //				{
                 //					string newpath = Path.Combine(projectname, "Computation","in.dat");
@@ -1279,12 +1329,23 @@ namespace Gral
         // import GRAMM wind field, grid, landuse, and meteorology from existing project
         private void Button24_Click(object sender, EventArgs e)
         {
-            GRAMMSetReferenceToExitingWindfields(sender, e);
+            GRAMMSetReferenceToExistingWindfields(sender, e);
         }
         //load and create the GRAMM topography
         private void Button19_Click(object sender, EventArgs e)
         {
-            GRAMMLoadCreateTopography(sender, e);
+            //calculate top height for the GRAMM mesh
+            double top = Convert.ToDouble(numericUpDown17.Value);
+            for (int i = 2; i <= Convert.ToInt32(numericUpDown16.Value) + 1; i++)
+            {
+                top += Convert.ToDouble(numericUpDown17.Value) * Math.Pow(Convert.ToDouble(numericUpDown19.Value), i - 2);
+            }
+            if (top < 10000 || MessageBox.Show("A maximum layer height above 10000 m can lead to unstable GRAMM calculations due to low air pressure.\n" +
+                "It is recommended to reduce the number of vertical layers or the vertical stretching factor.\nWould you like to continue?", "Create GRAMM Topography", 
+                MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                GRAMMLoadCreateTopography(sender, e);
+            }    
         }
         //load and create the GRAMM landuse file
         private void Button20_Click(object sender, EventArgs e)
@@ -1483,7 +1544,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button9_Click(object sender, EventArgs e)
         {
-            if (GRALSettings.BuildingMode > 0)
+            if (GRALSettings.BuildingMode != BuildingModeEnum.None)
             {
                 Cursor = Cursors.WaitCursor;
                 try
@@ -1884,7 +1945,7 @@ namespace Gral
             if (enable == true)
             {
                 groupBox16.Visible = true; // GRAl-Start Group Box
-                if (GRALSettings.BuildingMode == 2) // Prognostic GRAL -> Online GroupBox visible
+                if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic) // Prognostic GRAL -> Online GroupBox visible
                 {
                     groupBox17.Visible = true;
                 }
@@ -2021,16 +2082,6 @@ namespace Gral
                     File.Delete(Path.Combine(ProjectName, @"Computation", "GRAL_topofile.txt"));
                 }
             }
-        }
-
-        /// <summary>
-        /// Update file size information every 120 seconds for intermediate GRAL files (*.con and *.gff)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Timer1Tick(object sender, EventArgs e)
-        {
-            GralFileSizes();
         }
 
         /// <summary>
@@ -2388,7 +2439,7 @@ namespace Gral
             numericUpDown39.Enabled = !locked; // Latidude
             numericUpDown43.Enabled = !locked; // Compressed mode for GRAL output
             
-            if (GRALSettings.BuildingMode == 2)
+            if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic)
             {
                 numericUpDown42.Enabled = !locked; // Sub domain factor
             }
@@ -2427,7 +2478,7 @@ namespace Gral
             button9.Enabled = !locked;
             button10.Enabled = !locked;
             //button12.Enabled = !locked;
-            button11.Enabled = !locked; // set *.gff File path
+            //button11.Enabled = !locked; // set *.gff File path
             button13.Enabled = !locked;
             button15.Enabled = !locked;
             button16.Enabled = !locked;
@@ -2656,7 +2707,7 @@ namespace Gral
                 try
                 {
                     // show number of cells
-                    if (CellsGralX > 0 && numericUpDown10.Value > 0 && GRALSettings.BuildingMode != 0)
+                    if (CellsGralX > 0 && numericUpDown10.Value > 0 && GRALSettings.BuildingMode != BuildingModeEnum.None)
                     {
                         n = Convert.ToDouble(numericUpDown10.Text);
                         double c = Convert.ToDouble(numericUpDown9.Text);
@@ -2691,6 +2742,8 @@ namespace Gral
             if (tabControl1.SelectedIndex == 6)
             {
                 CheckConFiles(); // check, if project is locked
+                GralFileSizes(); // calculate file sizes
+
                 // Check, if GRAMM Windfield exists
                 if (Directory.Exists(GRAMMwindfield))
                 {
@@ -2823,7 +2876,10 @@ namespace Gral
         /// </summary>
         void SetButton57Bitmap()
         {
-            if (GRALSettings.WriteESRIResult || File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) || !GRALSettings.WaitForKeyStroke)
+            if (GRALSettings.WriteESRIResult || 
+                File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) ||
+                !GRALSettings.WaitForKeyStroke ||
+                GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50)
             {
                 button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
             }
@@ -2910,7 +2966,7 @@ namespace Gral
         /// </summary>
         void NumericUpDown32ValueChanged(object sender, EventArgs e)
         {
-            if (ProjectName.Length >0) // if a project exists
+            if (ProjectName.Length > 0) // if a project exists
             {
                 //user defines maximum number of processors to be used in the simulations
                 string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");
@@ -2999,20 +3055,18 @@ namespace Gral
         /// </summary>
         public void SetEmissionFilesInvalid()
         {
-            Change_Label(2, 0); // Emission label red
+            ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
         }
         /// <summary>
         /// Change the label color for the computation buttons
         /// </summary>
-        /// <param name="button">0 = Control, 1= meteo, 2 = emission, 3 = building</param>
-        /// <param name="mode">0 = red dot, 1 = green dot, 2 = black hook, -1 invisible</param>
-        public void Change_Label(int button, int mode)
+        /// <param name="button">10 = Control, 11= meteo, 12 = emission, 13 = building</param>
+        /// <param name="Mode">0 = red dot, 1 = green dot, 2 = black hook, -1 invisible</param>
+        public void ChangeButtonLabel(ButtonColorEnum button, ButtonColorEnum Mode)
         {
-            // button: 0 = Control, 1= meteo, 2 = emission, 3 = building
-            // mode: 0 = red dot, 1 = green dot, 2 = black hook, -1 invisible
-            if (button == 0)
+            if (button == ButtonColorEnum.ButtonControl)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox1.Visible = false;
                     Control_OK  = false;
@@ -3022,25 +3076,25 @@ namespace Gral
                     pictureBox1.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.RedDot;
                     Control_OK = false;
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.GreenDot;
                     Control_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox1.Image = Gral.Properties.Resources.BlackHook;
                     Control_OK = true;
                 }
             }
-            if (button == 1)
+            if (button == ButtonColorEnum.ButtonMeteo)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox2.Visible = false;
                     Meteo_OK = false;
@@ -3050,25 +3104,25 @@ namespace Gral
                     pictureBox2.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.RedDot;
                     Meteo_OK = false;
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.GreenDot;
                     Meteo_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox2.Image = Gral.Properties.Resources.BlackHook;
                     Meteo_OK = true;
                 }
             }
-            if (button == 2)
+            if (button == ButtonColorEnum.ButtonEmission)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox3.Visible = false;
                     Emission_OK = false;
@@ -3078,25 +3132,25 @@ namespace Gral
                     pictureBox3.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.RedDot;
                     Emission_OK = false;
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.GreenDot;
                     Emission_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox3.Image = Gral.Properties.Resources.BlackHook;
                     Emission_OK = true;
                 }
             }
-            if (button == 3)
+            if (button == ButtonColorEnum.ButtonBuildings)
             {
-                if (mode == -1)
+                if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox4.Visible = false;
                     Building_OK = true; // no buildings!
@@ -3106,7 +3160,7 @@ namespace Gral
                     pictureBox4.Visible = true;
                 }
 
-                if (mode == 0)
+                if (Mode == ButtonColorEnum.RedDot)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.RedDot;
                     Building_OK = false;
@@ -3129,12 +3183,12 @@ namespace Gral
                     }
                     catch {}
                 }
-                if (mode == 1)
+                if (Mode == ButtonColorEnum.GreenDot)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.GreenDot;
                     Building_OK = false;
                 }
-                if (mode == 2)
+                if (Mode == ButtonColorEnum.BlackHook)
                 {
                     pictureBox4.Image = Gral.Properties.Resources.BlackHook;
                     Building_OK = true;
@@ -3343,28 +3397,35 @@ namespace Gral
         /// <param name="e"></param>
         void Button11Click(object sender, EventArgs e)
         {
-            string gff_filepath = St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation"));
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog
-                   {
-                       Description = "Select the path for gff files",
-                       SelectedPath = gff_filepath
-                   })
+            if (Project_Locked)
             {
-                dialog.ShowDialog();
-                gff_filepath = dialog.SelectedPath;
-                if (Directory.Exists(gff_filepath))
+                MessageBox.Show(this, St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation")), "GRAL GUI *.gff File path", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                string gff_filepath = St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation"));
+                using (FolderBrowserDialog dialog = new FolderBrowserDialog
                 {
-                    try
+                    Description = "Select the path for gff files",
+                    SelectedPath = gff_filepath
+                })
+                {
+                    dialog.ShowDialog();
+                    gff_filepath = dialog.SelectedPath;
+                    if (Directory.Exists(gff_filepath))
                     {
-                        using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, "Computation", "GFF_FilePath.txt")))
+                        try
                         {
-                            writer.WriteLine(gff_filepath);
+                            using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, "Computation", "GFF_FilePath.txt")))
+                            {
+                                writer.WriteLine(gff_filepath);
 #if __MonoCS__
-                            writer.WriteLine(gff_filepath);
+                                writer.WriteLine(gff_filepath);
 #endif
+                            }
                         }
+                        catch { }
                     }
-                    catch{}
                 }
             }
         }
@@ -3506,13 +3567,24 @@ namespace Gral
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
                     MSp.LogLevel = GRALSettings.Loglevel;
+                    MSp.RadiusForPrognosticFlowField = GRALSettings.PrognosticSubDomainsSizeSourceRadius;
+                    MSp.GRALOnlineFunctions = GRALSettings.UseGRALOnlineFunctions;
+
+                    MSp.StartPosition = FormStartPosition.Manual;
+                    MSp.Left = Left + 80;
+                    MSp.Top = Top + 40;
 
                     if (MSp.ShowDialog() == DialogResult.OK )
                     {
-                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke)
+                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || 
+                            MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke ||
+                            MSp.RadiusForPrognosticFlowField != GRALSettings.PrognosticSubDomainsSizeSourceRadius ||
+                            MSp.GRALOnlineFunctions != GRALSettings.UseGRALOnlineFunctions)
                         {
                             GRALSettings.WriteESRIResult = MSp.WriteASCiiOutput;
                             GRALSettings.WaitForKeyStroke = MSp.KeyStrokeWhenExitGRAL;
+                            GRALSettings.PrognosticSubDomainsSizeSourceRadius = MSp.RadiusForPrognosticFlowField;
+                            GRALSettings.UseGRALOnlineFunctions = MSp.GRALOnlineFunctions;
                             ResetInDat();
                         }
                         GRALSettings.Loglevel = MSp.LogLevel;
@@ -3572,6 +3644,11 @@ namespace Gral
             numericUpDown46.ValueChanged -= new System.EventHandler(this.NumericUpDown46_ValueChanged);
             numericUpDown46.Value = BuildingCellCoverageThreshold;
             numericUpDown46.ValueChanged += new System.EventHandler(this.NumericUpDown46_ValueChanged);
+        }
+
+        private void button58_Click(object sender, EventArgs e)
+        {
+            SaveMetData(MeteoTimeSeries);
         }
     }
 }

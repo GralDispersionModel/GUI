@@ -37,14 +37,22 @@ namespace GralItemData
     	
         public ShowFirstItem()
         {
-        	Ps = true;
-        	Ls = true;
-        	As = true;
-        	Ts = true;
-        	Bu = true;
-        	Re = true;
-        	Wa = true;
-        	Veg = true;
+            Reset();
+        }
+
+        /// <summary>
+        /// Reset the first visible item data
+        /// </summary>
+        public void Reset()
+        {
+            Ps = true;
+            Ls = true;
+            As = true;
+            Ts = true;
+            Bu = true;
+            Re = true;
+            Wa = true;
+            Veg = true;
         }
 	}
 }
