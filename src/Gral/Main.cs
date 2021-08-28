@@ -39,6 +39,14 @@ namespace Gral
         None = 0, Diagnostic = 1, Prognostic = 2, GRAMM = 3
     }
 
+    /// <summary>
+    /// Enumeration for Wind Data Handling for wind velocity = 0
+    /// </summary>
+    public enum WindData00Enum
+    {
+        All = 0, Reject00 = 1, Shuffle00 = 2
+    }
+
     public partial class Main : Form
     {
         /// <summary>
@@ -297,6 +305,10 @@ namespace Gral
         /// Number of checkpoints to detect, if a building covers a cell
         /// </summary>
         private int BuildingCellCoverageThreshold = 5;
+        /// <summary>
+        /// Ignore 00 Vales at meteo import
+        /// </summary>
+        public static WindData00Enum IgnoreMeteo00Values = WindData00Enum.All;
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -461,6 +473,15 @@ namespace Gral
                     if (!read.EndOfStream)
                     {
                         VectorMapAutoScaling = Convert.ToBoolean(read.ReadLine());
+                    }
+
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            IgnoreMeteo00Values = (Gral.WindData00Enum)Convert.ToInt32(read.ReadLine());
+                        }
+                        catch { }
                     }
                 }
             }
@@ -3623,6 +3644,11 @@ namespace Gral
             numericUpDown46.ValueChanged -= new System.EventHandler(this.NumericUpDown46_ValueChanged);
             numericUpDown46.Value = BuildingCellCoverageThreshold;
             numericUpDown46.ValueChanged += new System.EventHandler(this.NumericUpDown46_ValueChanged);
+        }
+
+        private void button58_Click(object sender, EventArgs e)
+        {
+            SaveMetData(MeteoTimeSeries);
         }
     }
 }

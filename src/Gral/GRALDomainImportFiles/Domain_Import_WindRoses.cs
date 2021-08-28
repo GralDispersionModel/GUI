@@ -157,7 +157,7 @@ namespace GralDomain
                     WindData = MeteoTimeSeries
                 };
 
-                readwindfile.ReadMeteoFiles(1000000, _wdata.RowSep, decsep, _wdata.DecSep);
+                readwindfile.ReadMeteoFiles(1000000, _wdata.RowSep, decsep, _wdata.DecSep, Gral.Main.IgnoreMeteo00Values);
 				AddWindDataToObjectList(MeteoTimeSeries, _dr, _wdata.MaxValue, _wdata.X0, _wdata.Y0);
 			}
 		}

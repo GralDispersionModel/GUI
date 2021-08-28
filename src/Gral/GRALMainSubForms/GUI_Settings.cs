@@ -59,6 +59,18 @@ namespace GralMainForms
                         
             checkBox1.Checked = Main.CompatibilityToVersion1901;
 			checkBox2.Checked = Main.VectorMapAutoScaling;
+            if (Main.IgnoreMeteo00Values == Gral.WindData00Enum.All)
+            {
+                radioButton10.Checked = true;
+            }
+            else if (Main.IgnoreMeteo00Values == Gral.WindData00Enum.Reject00)
+            {
+                radioButton11.Checked = true;
+            }
+            else
+            {
+                radioButton12.Checked = true;
+            }
             
             radioButton3.CheckedChanged += new EventHandler(RadioButton3Click);
             radioButton4.CheckedChanged += new EventHandler(RadioButton4Click);
@@ -212,6 +224,7 @@ namespace GralMainForms
                     write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                     write.WriteLine(Main.CalculationCoresPath);
 					write.WriteLine(Main.VectorMapAutoScaling.ToString());
+                    write.WriteLine(Main.IgnoreMeteo00Values.ToString("d"));
                 }
             }
             catch { }
@@ -238,5 +251,23 @@ namespace GralMainForms
 			Main.VectorMapAutoScaling = checkBox2.Checked;
 			RadioButton5_6Click(null, null); // write file
 		}
+
+        private void checkBox3_Click(object sender, EventArgs e)
+        {
+            if (radioButton10.Checked)
+            {
+                Main.IgnoreMeteo00Values = WindData00Enum.All;
+            }
+            else if (radioButton11.Checked)
+            {
+                Main.IgnoreMeteo00Values = WindData00Enum.Reject00;
+            }
+            else if (radioButton12.Checked)
+            {
+                Main.IgnoreMeteo00Values = WindData00Enum.Shuffle00;
+            }
+
+            RadioButton5_6Click(null, null); // write file
+        }
     }
 }

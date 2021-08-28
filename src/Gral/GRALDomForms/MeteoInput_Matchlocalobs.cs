@@ -65,7 +65,7 @@ namespace GralDomForms
                 WindDataFile = MetFile1,
                 WindData = winddata
             };
-            readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser);
+            readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser, Gral.Main.IgnoreMeteo00Values);
 			winddata = readwindfile.WindData;
 			readwindfile = null;
 			
@@ -169,7 +169,7 @@ namespace GralDomForms
                 WindDataFile = MetFile1,
                 WindData = winddata
             };
-            if (readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser) == false)
+            if (readwindfile.ReadMeteoFiles(1000000, RowSep, DecSep1, DecSepUser, Gral.Main.IgnoreMeteo00Values) == false)
 			{
 				MessageBox.Show(this, "Error when reading Meteo-File in line" + winddata.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				if (winddata.Count == 0)

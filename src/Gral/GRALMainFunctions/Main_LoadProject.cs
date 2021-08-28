@@ -135,6 +135,7 @@ namespace Gral
                         write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                         write.WriteLine(Main.CalculationCoresPath);
                         write.WriteLine(Main.VectorMapAutoScaling.ToString());
+                        write.WriteLine(Main.IgnoreMeteo00Values.ToString("d"));
                     }
                 }
                 catch
@@ -1204,7 +1205,7 @@ namespace Gral
                             MeteoDecSeperator = ".";
                         }
 
-                        if (readwindfile.ReadMeteoFiles(1000000, MetoColumnSeperator, DecimalSep, MeteoDecSeperator) == false)
+                        if (readwindfile.ReadMeteoFiles(1000000, MetoColumnSeperator, DecimalSep, MeteoDecSeperator, Main.IgnoreMeteo00Values) == false)
                         {
                             MessageBox.Show(this, "Error when reading Meteo-File" + newPath2 + " in line" + winddata.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }

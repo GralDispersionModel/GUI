@@ -934,7 +934,7 @@ namespace GralDomForms
                                             WindData = winddata
                                         };
 
-                                        if (readwindfile.ReadMeteoFiles(1000000, rowsep, decsep, decsepuser) == false)
+                                        if (readwindfile.ReadMeteoFiles(1000000, rowsep, decsep, decsepuser, Gral.Main.IgnoreMeteo00Values) == false)
                                         {
                                             MessageBox.Show(this, "Error when reading Meteo-File " + Path.GetFileName(windfilename) +
                                                             " in line" + winddata.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -176,6 +176,7 @@
             this.label30 = new System.Windows.Forms.Label();
             this.listBox4 = new System.Windows.Forms.ListBox();
             this.Meteorology = new System.Windows.Forms.TabPage();
+            this.button58 = new System.Windows.Forms.Button();
             this.groupBox23 = new System.Windows.Forms.GroupBox();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.label86 = new System.Windows.Forms.Label();
@@ -2590,6 +2591,7 @@
             // Meteorology
             // 
             this.Meteorology.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Meteorology.Controls.Add(this.button58);
             this.Meteorology.Controls.Add(this.groupBox23);
             this.Meteorology.Controls.Add(this.button106);
             this.Meteorology.Controls.Add(this.groupBox20);
@@ -2606,6 +2608,19 @@
             this.Meteorology.Size = new System.Drawing.Size(814, 539);
             this.Meteorology.TabIndex = 1;
             this.Meteorology.Text = "METEOROLOGY";
+            // 
+            // button58
+            // 
+            this.button58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button58.ForeColor = System.Drawing.Color.Black;
+            this.button58.Image = global::Gral.Properties.Resources.SaveSmall;
+            this.button58.Location = new System.Drawing.Point(139, 19);
+            this.button58.Name = "button58";
+            this.button58.Size = new System.Drawing.Size(34, 34);
+            this.button58.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.button58, "Save as new *.met file");
+            this.button58.UseVisualStyleBackColor = true;
+            this.button58.Click += new System.EventHandler(this.button58_Click);
             // 
             // groupBox23
             // 
@@ -5656,6 +5671,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown46;
         private System.Windows.Forms.Label label104;
         private System.Windows.Forms.CheckBox checkBox36;
+        private System.Windows.Forms.Button button58;
     }
 }
 

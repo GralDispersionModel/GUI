@@ -783,7 +783,7 @@ namespace GralIO
         /// <summary>
         /// Read meteo files *.met, *.akterm, *.akt
         /// </summary>	
-        public bool ReadMeteoFiles(int File_lenght, char rowsep, string decsep1, string decsepuser)
+        public bool ReadMeteoFiles(int File_lenght, char rowsep, string decsep1, string decsepuser, Gral.WindData00Enum Ignore00Values)
         {
             try
             {
@@ -807,7 +807,8 @@ namespace GralIO
                     string[] uhrzeit = new string[2];
                     string[] text = new string[50];
                     int counter = 0;
-                    
+                    double _dirOld = 0;
+
                     while(reader.EndOfStream == false && counter < File_lenght) // read all lines until file_lenght is reached
                     {
                         string readline = reader.ReadLine();
@@ -830,8 +831,18 @@ namespace GralIO
                                 {
                                     wd.Hour = 0;
                                 }
-
-                                _winddata.Add(wd);
+                                if (wd.Vel >= 0)
+                                {
+                                    if (wd.Vel < 0.000001 && Ignore00Values == Gral.WindData00Enum.Shuffle00)
+                                    {
+                                        wd.Dir = _dirOld; // keep previous direction
+                                    }
+                                    _dirOld = wd.Dir;
+                                    if (Ignore00Values != Gral.WindData00Enum.Reject00 || wd.Vel > 0.000001 || wd.Dir > 0.000001)
+                                    {
+                                        _winddata.Add(wd);
+                                    }
+                                }
                             }
                         }
                         
@@ -867,8 +878,18 @@ namespace GralIO
                                 {
                                     wd.StabClass -= 1;
                                 }
-
-                                _winddata.Add(wd);
+                                if (wd.Vel >= 0 && wd.Dir < 998)
+                                {
+                                    if (wd.Vel < 0.000001 && Ignore00Values == Gral.WindData00Enum.Shuffle00)
+                                    {
+                                        wd.Dir = _dirOld; // keep previous direction
+                                    }
+                                    _dirOld = wd.Dir;
+                                    if (Ignore00Values != Gral.WindData00Enum.Reject00 || wd.Vel > 0.000001 || wd.Dir > 0.000001)
+                                    {
+                                        _winddata.Add(wd);
+                                    }
+                                }
                             }
                         }
                         
@@ -887,12 +908,23 @@ namespace GralIO
                                 {
                                     wd.StabClass -= 1;
                                 }
-
-                                _winddata.Add(wd);
+                                if (wd.Vel >= 0 && wd.Dir < 998)
+                                {
+                                    if (wd.Vel < 0.000001 && Ignore00Values == Gral.WindData00Enum.Shuffle00)
+                                    {
+                                        wd.Dir = _dirOld; // keep previous direction
+                                    }
+                                    _dirOld = wd.Dir;
+                                    if (Ignore00Values != Gral.WindData00Enum.Reject00 || wd.Vel > 0.000001 || wd.Dir > 0.000001)
+                                    {
+                                        _winddata.Add(wd);
+                                    }
+                                }
                             }
                         }
 
                     } // Loop through the file
+
                 }
                 return true;
             }

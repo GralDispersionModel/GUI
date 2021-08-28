@@ -83,6 +83,7 @@ namespace GralIO
                             write.WriteLine(Main.CompatibilityToVersion1901.ToString());
                             write.WriteLine(Main.CalculationCoresPath);
                             write.WriteLine(Main.VectorMapAutoScaling.ToString());
+                            write.WriteLine(Main.IgnoreMeteo00Values.ToString("d"));
                         }
                         OK = true;
                     }
