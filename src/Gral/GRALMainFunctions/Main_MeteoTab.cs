@@ -1235,5 +1235,53 @@ namespace Gral
             }
         }
 
+        /// <summary>
+        /// Save recent met data as new *.met file
+        /// </summary>
+        /// <param name="MeteoTimeSeries">A Time series with meteo data</param>
+        private void SaveMetData(List<WindData> MeteoTimeSeries)
+        {
+            if (MeteoTimeSeries == null || MeteoTimeSeries.Count < 1)
+            {
+                MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                using (SaveFileDialog dialog = new SaveFileDialog
+                {
+                    Filter = "Met files (*.met)|*.met",
+                    Title = "Save new *.met file"
+                })
+                {
+                    if (Directory.Exists(MeteoDirectory))
+                    {
+                        dialog.InitialDirectory = MeteoDirectory;
+                    }
+                    else
+                    {
+                        dialog.InitialDirectory = Path.Combine(ProjectName, @"Metfiles");
+                    }
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            using (StreamWriter myWriter = new StreamWriter(dialog.FileName))
+                            {
+                                foreach (WindData _wnd in MeteoTimeSeries)
+                                {
+                                    myWriter.WriteLine(_wnd.ToString());
+                                }
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }
