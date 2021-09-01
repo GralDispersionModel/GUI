@@ -51,7 +51,7 @@ namespace GralDomain
             WriteGrammLog(3, "", "", ""); // write log-file
             MessageInfoForm = new MessageWindow
             {
-                Text = "GRAMM matching error",
+                Text = "GRAMM Match to Observation error",
                 ShowInTaskbar = false
             }; // Kuntner
             MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
@@ -259,17 +259,21 @@ namespace GralDomain
                         }
                         catch
                         {
-                            if (MessageInfoForm == null)
+                            try
                             {
-                                MessageInfoForm = new MessageWindow
+                                if (MessageInfoForm == null)
                                 {
-                                    Text = "GRAMM matching error",
-                                    ShowInTaskbar = false
-                                }; // Kuntner
-                                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                    MessageInfoForm = new MessageWindow
+                                    {
+                                        Text = "GRAMM Match to Observation error",
+                                        ShowInTaskbar = false
+                                    }; // Kuntner
+                                    MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                }
+                                MessageInfoForm.listBox1.Items.Add("Unable to read wind field nr. " + Convert.ToString(iiwet));
+                                MessageInfoForm.Show();
                             }
-                            MessageInfoForm.listBox1.Items.Add("Unable to read wind field nr. " + Convert.ToString(iiwet));
-                            MessageInfoForm.Show();
+                            catch { }
 
                             Application.DoEvents(); // Kuntner
                             windfield_OK = false;
@@ -495,17 +499,21 @@ namespace GralDomain
                         }
                         catch
                         {
-                            if (MessageInfoForm == null)
+                            try
                             {
-                                MessageInfoForm = new MessageWindow
+                                if (MessageInfoForm == null)
                                 {
-                                    Text = "GRAMM matching error",
-                                    ShowInTaskbar = false
-                                }; // Kuntner
-                                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                    MessageInfoForm = new MessageWindow
+                                    {
+                                        Text = "GRAMM Match to Observation error",
+                                        ShowInTaskbar = false
+                                    }; // Kuntner
+                                    MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                }
+                                MessageInfoForm.listBox1.Items.Add("Concatenate failed"); // Kuntner
+                                MessageInfoForm.Show();
                             }
-                            MessageInfoForm.listBox1.Items.Add("Concatenate failed"); // Kuntner
-                            MessageInfoForm.Show();
+                            catch { }
                         }
                         MatchData.PGT.Sort();
                         MatchData.PGT.Reverse();
@@ -604,9 +612,12 @@ namespace GralDomain
                                 i++;
                                 if (wait1 != null && wait1.Visible) // Kuntner form does exist and is visible
                                 {
-                                    wait1.Text = "Copying GRAMM flow field nr. " + Convert.ToString(a_Line.PGTNumber);
-                                    wait1.ProgressbarUpdate(this, 0);
-
+                                    try
+                                    {
+                                        wait1.Text = "Copying GRAMM flow field nr. " + Convert.ToString(a_Line.PGTNumber);
+                                        wait1.ProgressbarUpdate(this, 0);
+                                    }
+                                    catch { }
                                 }
                                 else // Cancel button
                                 {
@@ -619,17 +630,21 @@ namespace GralDomain
                     }
                     catch
                     {
-                        if (MessageInfoForm == null)
+                        try
                         {
-                            MessageInfoForm = new MessageWindow
+                            if (MessageInfoForm == null)
                             {
-                                Text = "GRAMM matching error",
-                                ShowInTaskbar = false
-                            }; // Kuntner
-                            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                MessageInfoForm = new MessageWindow
+                                {
+                                    Text = "GRAMM Match to Observation error",
+                                    ShowInTaskbar = false
+                                }; // Kuntner
+                                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                            }
+                            MessageInfoForm.listBox1.Items.Add("Flow field copying error/canceled"); // Kuntner
+                            MessageInfoForm.Show();
                         }
-                        MessageInfoForm.listBox1.Items.Add("Flow field copying error/canceled"); // Kuntner
-                        MessageInfoForm.Show();
+                        catch { }
                     }
 
                     if (wait1 != null)
@@ -840,11 +855,14 @@ namespace GralDomain
                     string error = "";
                     if (MessageInfoForm != null)
                     {
-                        for (int i = 0; i < MessageInfoForm.listBox1.Items.Count; i++)
+                        try
                         {
-                            error += MessageInfoForm.listBox1.Items[i].ToString() + Environment.NewLine;
+                            for (int i = 0; i < MessageInfoForm.listBox1.Items.Count; i++)
+                            {
+                                error += MessageInfoForm.listBox1.Items[i].ToString() + Environment.NewLine;
+                            }
                         }
-                        //MessageInfoForm.Close();
+                        catch { }
                     }
                     WriteGrammLog(4, error, "", ""); // write log-file
 
