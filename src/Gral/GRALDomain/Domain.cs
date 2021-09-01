@@ -2797,14 +2797,19 @@ namespace GralDomain
                 //read each of the files and extract the concentration at the selected location
                 for (int i = 0; i < files_conc.Length; i++)
                 {
-                    if (MessageInfoForm == null)
+                    try
                     {
-                        MessageInfoForm = new MessageWindow();
-                        MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
-                        MessageInfoForm.Show();
+                        if (MessageInfoForm == null)
+                        {
+                            MessageInfoForm = new MessageWindow();
+                            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                            MessageInfoForm.Show();
+                        }
+                        MessageInfoForm.listBox1.Items.Add("Reading file: " + files_conc[i].Name);
+                        MessageInfoForm.Refresh();
                     }
-                    MessageInfoForm.listBox1.Items.Add("Reading file: " + files_conc[i].Name);
-                    MessageInfoForm.Refresh();
+                    catch { }
+
                     string file = Path.Combine(files_conc[i].DirectoryName, files_conc[i].Name);
                     
                     try
