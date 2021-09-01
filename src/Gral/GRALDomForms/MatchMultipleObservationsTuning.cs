@@ -42,7 +42,7 @@ namespace GralDomForms
             {
                 MessageInfoForm = new MessageWindow
                 {
-                    Text = "GRAMM matching error",
+                    Text = "GRAMM Match to Observation error",
                     ShowInTaskbar = false
                 }; // Kuntner
             }
@@ -63,7 +63,7 @@ namespace GralDomForms
             if (!MatchSettings.AutomaticMode)
             {
                 wait.Hide();
-                wait.Text = "Matching GRAMM flow fields";
+                wait.Text = "Match to Observation for GRAMM flow fields";
                 wait.Show();
             }
 
@@ -124,7 +124,7 @@ namespace GralDomForms
                             //search for the GRAMM wind field, which fits best the observed wind data at the observation sites
                             //for (int n = 1; n <= NumberofWeatherSituations; n++) // n = number of calculated GRAMM fields
                             int _cores = Math.Max(1, Environment.ProcessorCount - 2);
-                            int range_parallel = (int)((NumberofWeatherSituations + 1)/ _cores);
+                            int range_parallel = (int) Math.Max(10, ((NumberofWeatherSituations + 1) / _cores));
                             range_parallel = Math.Min((NumberofWeatherSituations + 1), range_parallel); // if NumberofWeatherSituations < range_parallel
                             Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(1, (NumberofWeatherSituations + 1), range_parallel), range =>
                             {
@@ -238,13 +238,12 @@ namespace GralDomForms
                                             //just 1 times per met_count
                                             if (cmpSit == 1)
                                             {
-                                                if (!MatchSettings.AutomaticMode)
+                                                if (!MatchSettings.AutomaticMode && MatchSettings.WeightingAutoMode[j] > 0.000001)
                                                 {
                                                     lock (lockObj)
                                                     {
                                                         synchroErrorList.Add("No date sync with obs. station " + (j + 1).ToString() + " at line " + (met_count + 1).ToString() + " and orig. date " + date_station0.ToString()); // Kuntner
                                                     }
-
                                                 }
                                                 err_st[j] = 0;
                                             }
@@ -305,22 +304,26 @@ namespace GralDomForms
                             //show the messageinfo form if synchro errors occured
                             if (MessageInfoForm != null && !MatchSettings.AutomaticMode)
                             {
-                                if (synchroErrorList.Count > 0)
+                                try
                                 {
-                                    MessageInfoForm.Show();
+                                    if (synchroErrorList.Count > 0)
+                                    {
+                                        MessageInfoForm.Show();
+                                    }
+                                    foreach (string _err in synchroErrorList)
+                                    {
+                                        MessageInfoForm.listBox1.Items.Add(_err);
+                                    }
                                 }
-                                foreach (string _err in synchroErrorList)
-                                {
-                                    MessageInfoForm.listBox1.Items.Add(_err);
-                                }
+                                catch { }
                                 synchroErrorList.Clear();
                                 synchroErrorList.TrimExcess();
                             }
                             // write actual weather-situation of Mettimeseries.dat with the original data from meteopgt.all
                             metTimeSeries.Add(met_day + "." + met_month + "," + met_hour + ","
                                                       + Convert.ToString(WindVelMeteoPGT[bestFitSituation], ic) + "," +
-                                                      Convert.ToString(WindDirMeteoPGT[bestFitSituation], ic) + "," +
-                                                          Convert.ToString(StabClassMeteoPGT[bestFitSituation], ic));
+                                                        Convert.ToString(WindDirMeteoPGT[bestFitSituation], ic) + "," +
+                                                        Convert.ToString(StabClassMeteoPGT[bestFitSituation], ic));
 
                             if (MatchSettings.PGT[bestFitSituation - 1].PGTFrq < 0)
                             {
@@ -378,8 +381,8 @@ namespace GralDomForms
                                     {
                                         MatchSettings.VectorErrorSum[j, 3]++;
                                     }
-
-                                    err = Math.Abs(LocalStabilityClass[j, bestFitSituation] - StabilityClassObs[j][met_count]);
+                                    
+                                    err = Math.Abs(LocalStabilityClass[j, bestFitSituation] - StabilityClassObs[j][TimeSeriesPointer[j][met_count]]);
                                     if (err == 0)
                                     {
                                         MatchSettings.SCErrorSum[j, 0]++;
@@ -397,20 +400,25 @@ namespace GralDomForms
                         }
                         catch (Exception ex)
                         {
-                            if (MessageInfoForm == null && !MatchSettings.AutomaticMode)
+                            try
                             {
-                                MessageInfoForm = new MessageWindow
+                                if (MessageInfoForm == null && !MatchSettings.AutomaticMode)
                                 {
-                                    Text = "GRAMM matching error",
-                                    ShowInTaskbar = false
-                                }; // Kuntner
-                                Application.DoEvents();
+                                    MessageInfoForm = new MessageWindow
+                                    {
+                                        Text = "GRAMM Match to Observation error",
+                                        ShowInTaskbar = false
+                                    }; // Kuntner
+                                    Application.DoEvents();
+                                }
+                                if (MessageInfoForm != null && !MatchSettings.AutomaticMode)
+                                {
+                                    //int linenum = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                                    MessageInfoForm.listBox1.Items.Add(ex.Message + " Error when computing wind deviations Met-File line" + Convert.ToString(met_count)); // + "(" + linenum.ToString() + ")"); // Kuntner
+                                    MessageInfoForm.Show();
+                                }
                             }
-                            if (MessageInfoForm != null && !MatchSettings.AutomaticMode)
-                            {
-                                MessageInfoForm.listBox1.Items.Add(ex.Message + " Error when computing wind deviations Met-File line" + Convert.ToString(met_count)); // Kuntner
-                                MessageInfoForm.Show();
-                            }
+                            catch { }
                         }
                     } // Problem with time stamp of station 0
 
@@ -450,6 +458,7 @@ namespace GralDomForms
                 DateTime date_station0 = new DateTime(1800, 1, 1, 0, 0, 0);
                 DateTime date_stationj = new DateTime(1800, 1, 1, 0, 0, 0);
                 int met_year = 0, met_day = 0, met_month = 0, met_hour = 0;
+                Application.DoEvents();
 
                 try
                 {
@@ -480,14 +489,18 @@ namespace GralDomForms
                 {
                     if (MessageInfoForm == null && !MatchSettings.AutomaticMode)
                     {
-                        MessageInfoForm = new MessageWindow
+                        try
                         {
-                            Text = "GRAMM matching error",
-                            ShowInTaskbar = false
-                        }; // Kuntner
-                        Application.DoEvents();
-                        MessageInfoForm.listBox1.Items.Add("Can't parse date of obs. station 1 at line " + met_count.ToString()); // Kuntner
-                        MessageInfoForm.Show();
+                            MessageInfoForm = new MessageWindow
+                            {
+                                Text = "GRAMM Match to Observation error",
+                                ShowInTaskbar = false
+                            }; // Kuntner
+                            Application.DoEvents();
+                            MessageInfoForm.listBox1.Items.Add("Can't parse date of obs. station 1 at line " + met_count.ToString()); // Kuntner
+                            MessageInfoForm.Show();
+                        }
+                        catch { }
                     }
                     //set all pointers to -1 = error
                     for (int j = 0; j < MetFileNames.Count; j++)
@@ -501,7 +514,6 @@ namespace GralDomForms
                     //synchronizing date and time of all meteo-stations
                     for (int j = 1; j < MetFileNames.Count; j++) // loop over all Met-stations
                     {
-
                         //get year, month, and day regardless the separator character
                         pointer[j][met_count] = -1; // set pointer to error by default
 
@@ -534,19 +546,22 @@ namespace GralDomForms
                             }
                             catch
                             {
-                                if (MessageInfoForm == null && !MatchSettings.AutomaticMode)
+                                try
                                 {
-                                    MessageInfoForm = new MessageWindow
+                                    if (MessageInfoForm == null && !MatchSettings.AutomaticMode)
                                     {
-                                        Text = "GRAMM matching error",
-                                        ShowInTaskbar = false
-                                    }; // Kuntner
-                                    Application.DoEvents();
+                                        MessageInfoForm = new MessageWindow
+                                        {
+                                            Text = "GRAMM Match to Observation error",
+                                            ShowInTaskbar = false
+                                        }; // Kuntner
+                                        Application.DoEvents();
 
-                                    MessageInfoForm.listBox1.Items.Add("Can't parse date of obs. station " + (j + 1).ToString() + " at line " + timestep.ToString()); // Kuntner
-                                    MessageInfoForm.Show();
+                                        MessageInfoForm.listBox1.Items.Add("Can't parse date of obs. station " + (j + 1).ToString() + " at line " + timestep.ToString()); // Kuntner
+                                        MessageInfoForm.Show();
+                                    }
                                 }
-
+                                catch { }
                                 comp = -1;
                             }
 
