@@ -43,48 +43,48 @@ namespace GralDomForms
         public string GRAMMPath;
 
         /// <summary>
-        /// wind speed observations for all meteo-stations used for matching GRAMM wind fields
+        /// wind speed observations for all meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<double[]> WindVelocityObs = new List<double[]>();
         /// <summary>
-        /// wind direction observations for all meteo-stations used for matching GRAMM wind fields
+        /// wind direction observations for all meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<double[]> WindDirectionObs = new List<double[]>();      //
         /// <summary>
-        /// stability for all meteo-stations used for matching GRAMM wind fields
+        /// stability for all meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<int[]> StabilityClassObs = new List<int[]>();      //
         /// <summary>
-        /// names of meteo-stations used for matching GRAMM wind fields
+        /// names of meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<string> MetFileNames = new List<string>();      //
         /// <summary>
-        /// number of data points for all meteo-stations used for matching GRAMM wind fields
+        /// number of data points for all meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<int> MetFileLenght = new List<int>();      //
         /// <summary>
-        /// date of meteo-stations used for matching GRAMM wind fields
+        /// date of meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<string[]> DateObsMetFile = new List<string[]>();      //
         /// <summary>
-        /// hours of meteo-stations used for matching GRAMM wind fields
+        /// hours of meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<int[]> HourObsMetFile = new List<int[]>();      //
         /// <summary>
-        /// Decimal separator of meteo-stations used for matching GRAMM wind fields
+        /// Decimal separator of meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<int> DecsepUser = new List<int>();      //
         /// <summary>
-        /// Row separator of meteo-stations used for matching GRAMM wind fields
+        /// Row separator of meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<int> RowsepUser = new List<int>();      //
         /// <summary>
-        /// time stamps of meteo-stations used for matching GRAMM wind fields
+        /// time stamps of meteo-stations used for Match to Observation GRAMM wind fields
         /// </summary>
         public List<string[]> TimeStapmsMetTimeSeries = new List<string[]>();      //
 
         public bool LocalStabilityUsed = false;
-        public int Match_Mode; // mode 0 = start matching process, 1 = tune match process, -2 cancel
+        public int Match_Mode; // mode 0 = start Match to Observation process, 1 = tune match process, -2 cancel
 
         public bool Remove_Outliers;
 
@@ -143,7 +143,7 @@ namespace GralDomForms
         public List<string> MettimeSeriesTuned;
 
         /// <summary>
-        /// User or programmatically set matching data
+        /// User or programmatically set Match to Observation data
         /// </summary>
         public MatchMultipleObservationsData MatchingData;
 
@@ -303,7 +303,7 @@ namespace GralDomForms
         }
 
         /// <summary>
-        /// Start the matching process
+        /// Start the Match to Observation process
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -664,9 +664,9 @@ namespace GralDomForms
             {
                 checkBox4.Enabled = false;
                 button5.Text = "&Finish";
-                toolTip1.SetToolTip(button5, "Finish the matching process");
+                toolTip1.SetToolTip(button5, "Finish the Match to Observation process");
                 button7.Text = "&Repeat";
-                toolTip1.SetToolTip(button7, "Repeat the matching process");
+                toolTip1.SetToolTip(button7, "Repeat the Match to Observation process");
                 button4.Visible = false;
                 button2.Visible = false;
                 checkBox2.Visible = false;
