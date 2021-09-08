@@ -351,7 +351,7 @@ namespace GralBackgroundworkers
                                         }
                                     }
                                 }
-                                if (containedSourceGroups.Count() != sg_names.Count())
+                                if (containedSourceGroups.Count() != (computed_sourcegroups.Count() - 1))
                                 {
                                     BackgroundThreadMessageBox("The number of source groups between calculation and current project does not match!");
                                 }
@@ -461,16 +461,19 @@ namespace GralBackgroundworkers
                                 }
                             }
 
-                            //write source groups
-                            string[] text6 = new string[2];
-                            recwrite.Write("Date \t Time \t"); // Header Date, Time
-
-                            foreach (string hy in sg_names)
+                            //write source groups for old ReceptorConcentrations.dat file
+                            if (!NewFileFormat)
                             {
-                                for (int numbrec = 0; numbrec < NumberOfReceptors; numbrec++)
+                                string[] text6 = new string[2];
+                                recwrite.Write("Date \t Time \t"); // Header Date, Time
+
+                                foreach (string hy in sg_names)
                                 {
-                                    text6 = hy.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                                    recwrite.Write(text6[0] + "-Rec:" + Convert.ToString(numbrec + 1) + "\t"); // Header source-groups use Tabulator
+                                    for (int numbrec = 0; numbrec < NumberOfReceptors; numbrec++)
+                                    {
+                                        text6 = hy.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                                        recwrite.Write(text6[0] + "-Rec:" + Convert.ToString(numbrec + 1) + "\t"); // Header source-groups use Tabulator
+                                    }
                                 }
                             }
                             recwrite.WriteLine();
