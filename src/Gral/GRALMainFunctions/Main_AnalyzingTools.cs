@@ -253,6 +253,7 @@ namespace Gral
                 sel_sg.checkBox3.Visible = false;
 
                 sel_sg.Prefix = FilePrefix;
+                sel_sg.listBox1.Enabled = false;
 
                 if (sel_sg.ShowDialog() == DialogResult.OK)
                 {
