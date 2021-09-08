@@ -759,6 +759,7 @@ namespace GralMainForms
                 emfac[j-1] = Convert.ToDouble(text1[j].Replace(".", decsep));
                 emfacmax = Math.Max(emfacmax, emfac[j-1]);
             }
+            emfacmax = Math.Max(0.1, emfacmax);
             double scale = Convert.ToInt32(260 * pixel) / emfacmax;
             double div = Math.Round(emfacmax / 5, 1);
             for (int i = 0; i < 12;i++ )
@@ -808,6 +809,7 @@ namespace GralMainForms
                 emfac[j - 1] = Convert.ToDouble(text1[j].Replace(".", decsep));
                 emfacmax = Math.Max(emfacmax, emfac[j - 1]);
             }
+            emfacmax = Math.Max(0.1, emfacmax);
             double scale = Convert.ToInt32(260 * pixel) / emfacmax;
             double div = Math.Round(emfacmax / 5, 1);
             int counter = 3;
