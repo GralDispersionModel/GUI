@@ -59,6 +59,7 @@ namespace GralMainForms
                         
             checkBox1.Checked = Main.CompatibilityToVersion1901;
 			checkBox2.Checked = Main.VectorMapAutoScaling;
+            checkBox3.Checked = Main.FilesDeleteToRecyclingBin;
             if (Main.IgnoreMeteo00Values == Gral.WindData00Enum.All)
             {
                 radioButton10.Checked = true;
@@ -225,6 +226,7 @@ namespace GralMainForms
                     write.WriteLine(Main.CalculationCoresPath);
 					write.WriteLine(Main.VectorMapAutoScaling.ToString());
                     write.WriteLine(Main.IgnoreMeteo00Values.ToString("d"));
+                    write.WriteLine(Main.FilesDeleteToRecyclingBin.ToString());
                 }
             }
             catch { }
@@ -267,6 +269,12 @@ namespace GralMainForms
                 Main.IgnoreMeteo00Values = WindData00Enum.Shuffle00;
             }
 
+            RadioButton5_6Click(null, null); // write file
+        }
+
+        private void checkBox3_Click_1(object sender, EventArgs e)
+        {
+            Main.FilesDeleteToRecyclingBin = checkBox3.Checked;
             RadioButton5_6Click(null, null); // write file
         }
     }

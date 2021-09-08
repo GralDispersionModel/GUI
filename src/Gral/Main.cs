@@ -309,6 +309,10 @@ namespace Gral
         /// Ignore 00 Vales at meteo import
         /// </summary>
         public static WindData00Enum IgnoreMeteo00Values = WindData00Enum.All;
+        /// <summary>
+        /// Delete *.con, *.gff and *.wnd files permanently
+        /// </summary>
+        public static bool FilesDeleteToRecyclingBin  = true;
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -480,6 +484,14 @@ namespace Gral
                         try
                         {
                             IgnoreMeteo00Values = (Gral.WindData00Enum)Convert.ToInt32(read.ReadLine());
+                        }
+                        catch { }
+                    }
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            FilesDeleteToRecyclingBin = Convert.ToBoolean(read.ReadLine());
                         }
                         catch { }
                     }

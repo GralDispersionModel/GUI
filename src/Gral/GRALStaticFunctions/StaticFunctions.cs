@@ -811,5 +811,19 @@ namespace GralStaticFunctions
             return _a;
         }
 
+        /// <summary>
+        /// Delete a file to recycling bin if possible
+        /// </summary>
+        /// <param name="FileName">File name with path</param>
+        public static void FileDeleteRecyclingBin(string FileName)
+        {
+#if __MonoCS__
+            File.Delete(FileName);
+#else
+            FileDelete.DeleteFileToRecyclingBin(FileName);
+            Application.DoEvents();
+#endif
+        }
+
     }
 }

@@ -1018,6 +1018,7 @@
     <Compile Include="GRALSocialExplorer\DbfFile.cs" />
     <Compile Include="GRALSocialExplorer\DbfHeader.cs" />
     <Compile Include="GRALSocialExplorer\DbfRecord.cs" />
+    <Compile Include="GRALStaticFunctions\FileDelete.cs" />
     <Compile Include="GRALStaticFunctions\GetMetFileSectionWidth.cs" />
     <Compile Include="GRALStaticFunctions\Bresenham.cs" />
     <Compile Include="GRALStaticFunctions\StaticFunctions.cs" />

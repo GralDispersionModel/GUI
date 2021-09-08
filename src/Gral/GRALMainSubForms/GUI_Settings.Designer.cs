@@ -50,6 +50,7 @@ namespace GralMainForms
             this.radioButton12 = new System.Windows.Forms.RadioButton();
             this.radioButton11 = new System.Windows.Forms.RadioButton();
             this.radioButton10 = new System.Windows.Forms.RadioButton();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.groupBox25.SuspendLayout();
             this.groupBox26.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -116,7 +117,7 @@ namespace GralMainForms
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(192, 306);
+            this.button1.Location = new System.Drawing.Point(192, 338);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(116, 39);
             this.button1.TabIndex = 5;
@@ -161,11 +162,10 @@ namespace GralMainForms
             this.radioButton12.AutoSize = true;
             this.radioButton12.Location = new System.Drawing.Point(21, 60);
             this.radioButton12.Name = "radioButton12";
-            this.radioButton12.Size = new System.Drawing.Size(413, 17);
+            this.radioButton12.Size = new System.Drawing.Size(333, 17);
             this.radioButton12.TabIndex = 2;
             this.radioButton12.TabStop = true;
-            this.radioButton12.Text = "Assign the wind direction to the previous measured wind direction if Vel and Dir " +
-    "= 0";
+            this.radioButton12.Text = "Shuffle wind direction for lines with wind velocity and direction = 0";
             this.radioButton12.UseVisualStyleBackColor = true;
             this.radioButton12.CheckedChanged += new System.EventHandler(this.checkBox3_Click);
             // 
@@ -193,12 +193,24 @@ namespace GralMainForms
             this.radioButton10.UseVisualStyleBackColor = true;
             this.radioButton10.CheckedChanged += new System.EventHandler(this.checkBox3_Click);
             // 
+            // checkBox3
+            // 
+            this.checkBox3.Location = new System.Drawing.Point(12, 297);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(456, 24);
+            this.checkBox3.TabIndex = 9;
+            this.checkBox3.Text = "Delete *.con/*.grz/*.gff/*.wnd files to the recyling bin (safer but slower, Windo" +
+    "ws only)";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.Click += new System.EventHandler(this.checkBox3_Click_1);
+            // 
             // GUI_Settings
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 362);
+            this.ClientSize = new System.Drawing.Size(516, 400);
+            this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
@@ -229,5 +241,6 @@ namespace GralMainForms
         private System.Windows.Forms.RadioButton radioButton12;
         private System.Windows.Forms.RadioButton radioButton11;
         private System.Windows.Forms.RadioButton radioButton10;
+        private System.Windows.Forms.CheckBox checkBox3;
     }
 }
