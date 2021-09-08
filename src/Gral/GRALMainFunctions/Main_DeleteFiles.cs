@@ -58,12 +58,8 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            for (int i = 0; i < files_conc.Length; i++)
-                            {
-                                files_conc[i].Delete();
-                            }
-
-                            Project_Locked = false;                 // unlock project
+                            DeleteFiles(files_conc);
+                            Project_Locked = false;               // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
                         }
@@ -82,11 +78,7 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            for (int i = 0; i < files_conc.Length; i++)
-                            {
-                                files_conc[i].Delete();
-                            }
-
+                            DeleteFiles(files_conc);
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -106,11 +98,7 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            for (int i = 0; i < files_conc.Length; i++)
-                            {
-                                files_conc[i].Delete();
-                            }
-
+                            DeleteFiles(files_conc);
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -130,11 +118,7 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            for (int i = 0; i < files_conc.Length; i++)
-                            {
-                                files_conc[i].Delete();
-                            }
-
+                            DeleteFiles(files_conc);
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -159,6 +143,44 @@ namespace Gral
             }
             catch
             { }
+        }
+
+        /// <summary>
+        /// Delete FileInfo[] files to recycle bin or completely
+        /// </summary>
+        /// <param name="Files"></param>
+        private void DeleteFiles(FileInfo[] Files)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+#if __MonoCS__
+            File.Delete(FileName);
+#else
+            if (Gral.Main.FilesDeleteToRecyclingBin)
+            {
+                int i = 0;
+                for (; i < Files.Length - 40; i += 40)
+                {
+                    string collect = "";
+                    for (int j = 0; j < 40; j++)
+                    {
+                        collect += Files[i + j].FullName + '\0';
+                    }
+                    GralStaticFunctions.St_F.FileDeleteRecyclingBin(collect);
+                }
+                for (; i < Files.Length; i++)
+                {
+                    GralStaticFunctions.St_F.FileDeleteRecyclingBin(Files[i].FullName);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Files.Length; i++)
+                {
+                    File.Delete(Files[i].FullName);
+                }
+            }
+#endif
+            Cursor.Current = Cursors.Default;
         }
 
         private void DeleteTempGralFiles()
@@ -218,51 +240,36 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            for (int i = 0; i < files_wnd.Length; i++)
-                            {
-                                files_wnd[i].Delete();
-                            }
-
+                            DeleteFiles(files_wnd);
+                            
                             //delete *.scl files
                             files_wnd = di.GetFiles("*.scl");
                             if (files_wnd.Length > 0)
                             {
-                                for (int i = 0; i < files_wnd.Length; i++)
-                                {
-                                    files_wnd[i].Delete();
-                                }
+                                DeleteFiles(files_wnd);
                             }
 
                             //delete *.obl files
                             files_wnd = di.GetFiles("*.obl");
                             if (files_wnd.Length > 0)
                             {
-                                for (int i = 0; i < files_wnd.Length; i++)
-                                {
-                                    files_wnd[i].Delete();
-                                }
+                                DeleteFiles(files_wnd);
                             }
 
                             //delete *.ust files
                             files_wnd = di.GetFiles("*.ust");
                             if (files_wnd.Length > 0)
                             {
-                                for (int i = 0; i < files_wnd.Length; i++)
-                                {
-                                    files_wnd[i].Delete();
-                                }
+                                DeleteFiles(files_wnd);
                             }
 
                             //delete steady_state.txt files
                             files_wnd = di.GetFiles("?????_steady_state.txt");
                             if (files_wnd.Length > 0)
                             {
-                                for (int i = 0; i < files_wnd.Length; i++)
-                                {
-                                    files_wnd[i].Delete();
-                                }
+                                DeleteFiles(files_wnd);
                             }
-
+                            
                             GRAMM_Locked = false;                 // unlock GRAMM project
                             Gramm_locked_buttonClick(null, null); // change locked-Button
                         }
@@ -315,7 +322,8 @@ namespace Gral
         {
             try
             {
-                File.Delete(Path.Combine(ProjectName, @"Computation", "GRAL_geometries.txt"));
+                //File.Delete(Path.Combine(ProjectName, @"Computation", "GRAL_geometries.txt"));
+                GralStaticFunctions.St_F.FileDeleteRecyclingBin(Path.Combine(ProjectName, @"Computation", "GRAL_geometries.txt"));
             }
             catch
             { }
@@ -349,10 +357,7 @@ namespace Gral
 
                     if (fdm.ShowDialog() == DialogResult.OK)
                     {
-                        for (int i = 0; i < files_conc.Length; i++)
-                        {
-                            files_conc[i].Delete();
-                        }
+                        DeleteFiles(files_conc);
                         DeleteGralGeometries();
                     }
                 }
