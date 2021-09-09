@@ -7,12 +7,12 @@ Do not hesitate to contact the project maintainers at the beginning of your work
 
 ```
 -- master  : production and bug fixes
--- develop : release ready commits and bug fixes
+-- V2XXX   : release ready commits and bug fixes for the upcoming version
 -- features/feature-xx: always branch from develop and delete after merging to develop
 ```
 
 - *master* branch is inteded for production release. Keep it simple and easy to rollback
-- *develop* branch is for release preparation. Only for release ready commits.
+- *V2XXX*  branch is for release preparation. Only for release ready commits.
 
 
 ## Recommended Process
