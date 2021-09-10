@@ -30,14 +30,20 @@ namespace GralMessage
     /// </summary>
     public partial class WaitProgressbarCancel : Form
 	{
-		public ProgressbarUpdateDelegate UpdateProgressDelegate;
-		public WaitProgressbarCancel(string Title)
+        private System.Threading.CancellationTokenSource cts;
+        public ProgressbarUpdateDelegate UpdateProgressDelegate;
+		/// <summary>
+        /// Progress and Cancel form
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="CTS">Cancellation token source</param>
+        public WaitProgressbarCancel(string Title, ref System.Threading.CancellationTokenSource CTS)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
+            cts = CTS;
 			progressbar.Minimum = 1;
 			progressbar.Maximum = 100;
 			progressbar.Value = 100;
@@ -45,9 +51,15 @@ namespace GralMessage
 			UpdateProgressDelegate = new ProgressbarUpdateDelegate(ProgressbarUpdate);
             this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 60;
             this.Top = 60;
+            this.Text = Title;
         }
 		
-		public void ProgressbarUpdate(object sender, int max)
+		/// <summary>
+        /// Update the progress bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="max">0 = increment, >0 = set maximum</param>
+        public void ProgressbarUpdate(object sender, int max)
 		{
 			if (max == 0)
 			{
@@ -67,9 +79,9 @@ namespace GralMessage
 		/// <param name="e"></param>
 		void Cancel_buttonMouseClick(object sender, MouseEventArgs e)
 		{
-            if (GralDomain.Domain.CancellationTokenSource != null)
+            if (cts != null)
             {
-                GralDomain.Domain.CancellationTokenSource.Cancel();
+                cts.Cancel();
             }	
 		}
 	}

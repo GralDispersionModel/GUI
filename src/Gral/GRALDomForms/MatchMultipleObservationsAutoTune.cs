@@ -45,7 +45,7 @@ namespace GralDomForms
             }
 
             Domain.CancellationTokenReset();
-            GralMessage.WaitProgressbarCancel wait = new GralMessage.WaitProgressbarCancel("");
+            GralMessage.WaitProgressbarCancel wait = new GralMessage.WaitProgressbarCancel("", ref Domain.CancellationTokenSource);
 #if __MonoCS__
             wait.Width = 350;
 #endif

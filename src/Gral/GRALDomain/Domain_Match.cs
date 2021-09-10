@@ -66,7 +66,7 @@ namespace GralDomain
                 File.Delete(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat"));
             }
 
-            WaitProgressbarCancel wait = new WaitProgressbarCancel("Copying GRAMM flow fields");
+            WaitProgressbarCancel wait = new WaitProgressbarCancel("Copying GRAMM flow fields", ref Domain.CancellationTokenSource);
 #if __MonoCS__
             wait.Width = 350;
 #endif
@@ -410,11 +410,10 @@ namespace GralDomain
             if (MMO.StartMatch) // otherwise cancel matching process
             {
                 decimal concatenation = MMO.concatenate.Value;
-                WaitProgressbarCancel wait1 = new WaitProgressbarCancel("Copying GRAMM flow fields");
+                WaitProgressbarCancel wait1 = new WaitProgressbarCancel("Copying GRAMM flow fields", ref Domain.CancellationTokenSource);
 
                 try
                 {
-
                     //________________________________________________________________________________________________________________
                     Application.DoEvents(); // Kuntner
 
