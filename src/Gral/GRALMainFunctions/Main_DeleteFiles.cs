@@ -58,7 +58,10 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            DeleteFiles(files_conc);
+                            if (DeleteFiles(files_conc))
+                            {
+                                return;
+                            }
                             Project_Locked = false;               // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -78,7 +81,10 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            DeleteFiles(files_conc);
+                            if (DeleteFiles(files_conc))
+                            {
+                                return;
+                            }
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -98,7 +104,10 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            DeleteFiles(files_conc);
+                            if (DeleteFiles(files_conc))
+                            {
+                                return;
+                            }
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -118,7 +127,10 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            DeleteFiles(files_conc);
+                            if (DeleteFiles(files_conc))
+                            {
+                                return;
+                            }
                             Project_Locked = false;                 // unlock project
                             ProjectLockedButtonClick(null, null); // change locked-Button
                             DeleteTempGralFiles();
@@ -146,17 +158,56 @@ namespace Gral
         }
 
         /// <summary>
-        /// Delete FileInfo[] files to recycle bin or completely
+        /// Delete file to recycle bin or completely
         /// </summary>
-        /// <param name="Files"></param>
-        private void DeleteFiles(FileInfo[] Files)
+        /// <param name="File">One file string full path</param>
+        private void DeleteFile(string FileName)
         {
-            Cursor.Current = Cursors.WaitCursor;
 #if __MonoCS__
-            File.Delete(FileName);
+            if (File.Exists(FileName))
+            {
+                File.Delete(FileName);
+            }
 #else
             if (Gral.Main.FilesDeleteToRecyclingBin)
             {
+                if (File.Exists(FileName))
+                {
+                    GralStaticFunctions.St_F.FileDeleteRecyclingBin(FileName);
+                }
+            }
+            else
+            {
+                if (File.Exists(FileName))
+                {
+                    File.Delete(FileName);
+                }
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Delete FileInfo[] files to recycle bin or completely
+        /// </summary>
+        /// <param name="Files"></param>
+        private bool DeleteFiles(FileInfo[] Files)
+        {
+            bool cancel = false;
+            Cursor.Current = Cursors.WaitCursor;
+#if __MonoCS__
+            for (int i = 0; i < Files.Length; i++)
+            {
+                File.Delete(Files[i].FullName);
+            }
+#else
+            if (Gral.Main.FilesDeleteToRecyclingBin)
+            {
+                System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
+                WaitProgressbarCancel wait = new WaitProgressbarCancel("Move files to the recycling bin", ref cts);
+                wait.ProgressbarUpdate(this, Math.Max(2, Files.Length / 40 + Files.Length % 40));
+                wait.Show();
+
+                //Move multiple files to the recycling bin
                 int i = 0;
                 for (; i < Files.Length - 40; i += 40)
                 {
@@ -166,10 +217,33 @@ namespace Gral
                         collect += Files[i + j].FullName + '\0';
                     }
                     GralStaticFunctions.St_F.FileDeleteRecyclingBin(collect);
+                    wait.ProgressbarUpdate(this, 0);
+                    Application.DoEvents();
+                    if (cts.IsCancellationRequested)
+                    {
+                        cancel = true;
+                        break;
+                    }
                 }
+               
                 for (; i < Files.Length; i++)
                 {
+                    wait.ProgressbarUpdate(this, 0);
+                    Application.DoEvents();
+                    if (cts.IsCancellationRequested)
+                    {
+                        cancel = true;
+                        break;
+                    }
                     GralStaticFunctions.St_F.FileDeleteRecyclingBin(Files[i].FullName);
+                }
+                if (wait != null)
+                {
+                    wait.Close();
+                }
+                if (cts != null)
+                {
+                    cts.Dispose();
                 }
             }
             else
@@ -181,6 +255,7 @@ namespace Gral
             }
 #endif
             Cursor.Current = Cursors.Default;
+            return cancel;
         }
 
         private void DeleteTempGralFiles()
@@ -240,34 +315,48 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            DeleteFiles(files_wnd);
-                            
+                            if (DeleteFiles(files_wnd))
+                            {
+                                return;
+                            }
                             //delete *.scl files
                             files_wnd = di.GetFiles("*.scl");
                             if (files_wnd.Length > 0)
                             {
-                                DeleteFiles(files_wnd);
+                                if (DeleteFiles(files_wnd))
+                                {
+                                    return;
+                                }
                             }
 
                             //delete *.obl files
                             files_wnd = di.GetFiles("*.obl");
                             if (files_wnd.Length > 0)
                             {
-                                DeleteFiles(files_wnd);
+                                if (DeleteFiles(files_wnd))
+                                {
+                                    return;
+                                }
                             }
 
                             //delete *.ust files
                             files_wnd = di.GetFiles("*.ust");
                             if (files_wnd.Length > 0)
                             {
-                                DeleteFiles(files_wnd);
+                                if (DeleteFiles(files_wnd))
+                                {
+                                    return;
+                                }
                             }
 
                             //delete steady_state.txt files
                             files_wnd = di.GetFiles("?????_steady_state.txt");
                             if (files_wnd.Length > 0)
                             {
-                                DeleteFiles(files_wnd);
+                                if (DeleteFiles(files_wnd))
+                                {
+                                    return;
+                                }
                             }
                             
                             GRAMM_Locked = false;                 // unlock GRAMM project

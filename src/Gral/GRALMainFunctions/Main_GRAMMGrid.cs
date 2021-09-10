@@ -139,12 +139,16 @@ namespace Gral
                 //string file = Path.GetDirectoryName(Application.ExecutablePath);
                 //string newpath = Path.Combine(Path.GetDirectoryName(topofile), @"geom.in");
                 string newpath = Path.Combine(ProjectName, @"Computation", "geom.in");
-                using (StreamWriter mywriter = new StreamWriter(newpath))
+                try
                 {
-                    mywriter.WriteLine(Topofile);
-                    mywriter.WriteLine(Convert.ToString(numericUpDown17.Value, ic));
-                    mywriter.WriteLine(Convert.ToString(numericUpDown19.Value, ic));
+                    using (StreamWriter mywriter = new StreamWriter(newpath))
+                    {
+                        mywriter.WriteLine(Topofile);
+                        mywriter.WriteLine(Convert.ToString(numericUpDown17.Value, ic));
+                        mywriter.WriteLine(Convert.ToString(numericUpDown19.Value, ic));
+                    }
                 }
+                catch { MessageBox.Show("Error writing geom.in", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
                 Cursor = Cursors.WaitCursor;
 
@@ -252,8 +256,8 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
-                            File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
+                            DeleteFile(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
+                            DeleteFile(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
                         }
                     }
                 }
@@ -274,12 +278,16 @@ namespace Gral
             Cursor = Cursors.Default;
 
             //save file information
-            using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Topography.txt")))
+            try
             {
-                mywriter.WriteLine(Topofile);
-                mywriter.WriteLine(Convert.ToString(numericUpDown19.Value, ic));
-                mywriter.WriteLine(Convert.ToString(numericUpDown17.Value, ic));
+                using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Topography.txt")))
+                {
+                    mywriter.WriteLine(Topofile);
+                    mywriter.WriteLine(Convert.ToString(numericUpDown19.Value, ic));
+                    mywriter.WriteLine(Convert.ToString(numericUpDown17.Value, ic));
+                }
             }
+            catch { MessageBox.Show("Error writing Topography.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
             //save windfield information
             /*GRAMMwindfield = Path.Combine(projectname, @"Computation\");
@@ -322,6 +330,7 @@ namespace Gral
                 listBox2.Items.Clear();
                 Cursor = Cursors.Default;
 
+                DeleteFile(Path.Combine(ProjectName, @"Settings", "Topography.txt"));
                 //save file information
                 using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Topography.txt")))
                 {
@@ -372,9 +381,9 @@ namespace Gral
 
                         if (fdm.ShowDialog() == DialogResult.OK)
                         {
-                            File.Delete(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
-                            File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMM.geb"));
-                            File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
+                            DeleteFile(Path.Combine(ProjectName, @"Computation", "ggeom.asc"));
+                            DeleteFile(Path.Combine(ProjectName, @"Computation", "GRAMM.geb"));
+                            DeleteFile(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
                         }
                     }
                 }
@@ -405,7 +414,7 @@ namespace Gral
         //
         ///////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
-        /// generate GRAMM landuse file "landuse.asc"
+        /// Generate GRAMM landuse file "landuse.asc"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -530,9 +539,16 @@ namespace Gral
             Cursor = Cursors.Default;
 
             //save file information
-            using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
+            try
             {
-                mywriter.WriteLine(Landusefile);
+                using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
+                {
+                    mywriter.WriteLine(Landusefile);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Unable to write Landuse.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         
@@ -541,18 +557,38 @@ namespace Gral
         {
             if (EmifileReset == true)
             {
-                //show file name in listbox
+                //delete file if content is available
+                string landusefile = string.Empty;
+                try
+                {
+                    //read file information
+                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
+                    {
+                        if (!myreader.EndOfStream)
+                        {
+                            landusefile = myreader.ReadLine();
+                        }
+                    }
+                }
+                catch { }
+
+                if (!(String.IsNullOrEmpty(landusefile) || landusefile.Equals("None")))
+                {
+                    DeleteFile(Path.Combine(ProjectName, @"Computation", "landuse.asc"));
+                    DeleteFile(Path.Combine(Path.Combine(ProjectName, @"Settings", "Landuse.txt")));
+                }
+                //delete file name in listbox
                 listBox6.Items.Clear();
-                Cursor = Cursors.Default;
 
                 //save file information
-                using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
+                try
                 {
-                    mywriter.WriteLine("None");
+                    using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
+                    {
+                        mywriter.WriteLine("None");
+                    }
                 }
-
-                //delete file
-                File.Delete(Path.Combine(ProjectName, @"Computation", "landuse.asc"));
+                catch { MessageBox.Show("Error writing Landuse.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 //File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
             }
         }
@@ -564,8 +600,6 @@ namespace Gral
             {
                 HideLanduse();
             }
-        }
-
-        
+        }    
     }
 }
