@@ -225,18 +225,18 @@ namespace GralBackgroundworkers
             double wge = 0;
             double wr = 0;
             int ak = 0;
-            int fictiousyear = mydata.FictiousYear;
-            fictiousyear = Math.Max(1900, fictiousyear);
             string [] month=new string[2];
-            int monthold=-1;
-            //loop over mettimeseries.dat
             
+            //loop over mettimeseries.dat
             SetText("Writing meteofile");
             Thread.Sleep(500); // short delay
             
             int item_count = 0;
             foreach(Point_3D item in mydata.EvalPoints)
             {
+                int fictiousyear = Math.Max(1900, mydata.FictiousYear);
+                int monthold = -1;
+
                 string file = Path.Combine(mydata.ProjectName, @"Metfiles", Path.GetFileName(item.FileName));
                 if (File.Exists(file))
                 {
