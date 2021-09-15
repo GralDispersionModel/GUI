@@ -78,7 +78,7 @@ namespace GralMainForms
                     using (StreamReader read = new StreamReader(newpath))
                     {
                         // Header get source group numbers
-                        text10 = read.ReadLine().Split(new char[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                         _sg_number = text10.Length - 2;
                         if (_sg_number > 0)
                         {
@@ -104,11 +104,11 @@ namespace GralMainForms
                     using (StreamReader read = new StreamReader(newpath))
                     {
                         //Header
-                        text10 = read.ReadLine().Split(new char[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                         
                         while (read.EndOfStream == false)
                         {
-                            text10 = read.ReadLine().Split(new char[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                            text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                             
                             if (text10.Length >= _sg_number + 2)
                             {
