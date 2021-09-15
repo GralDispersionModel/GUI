@@ -67,6 +67,7 @@ namespace GralDomForms
         void ListBox1DoubleClick(object sender, EventArgs e)
         {
             Button1Click(null, null);
+            this.Close();
         }
     }
     
