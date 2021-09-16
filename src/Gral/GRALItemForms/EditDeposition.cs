@@ -351,7 +351,7 @@ namespace GralItemForms
                 label12.Text = Convert.ToString(Math.Round(em100 * p1 / 100, comma)); // PM 2,5
                 label13.Text = Convert.ToString(Math.Round(em100 * p2 / 100 - em100 * p1 / 100, comma));
                 label14.Text = Convert.ToString(Math.Round(em100 * (p3 - p2) / 100, comma));
-                er = Math.Round((em100 * p1 + em100 * p2 + em100 * (p3 - p2)) / 100, 3);
+                er = Math.Round((em100 * p1 + em100 * p2 - em100 * p1 + em100 * (p3 - p2)) / 100, 3);
             }
             label5.Text = er.ToString() + " kg/h";
         }
