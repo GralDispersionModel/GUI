@@ -151,8 +151,7 @@ namespace Gral
                                         {
                                             VelTimeSeries.Add(_psdata.VelocityTimeSeries);
                                         }
-                                    }
-                                    
+                                    }                                   
                                     myWriter.WriteLine(pqline);
                                     file = true;
                                 }
@@ -183,10 +182,8 @@ namespace Gral
                 TempTimeSeries.Clear();
                 TempTimeSeries.TrimExcess();
             }
-            catch
-            {
-            }// Point source
-            
+            catch (Exception ex) { MessageBox.Show(this, "Error writing point.dat \n" + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+          
             _psList.Clear();
             _psList.TrimExcess();
             _psList = null;
@@ -215,18 +212,15 @@ namespace Gral
                     string Header = "x,y,z,dx,dy,dz,";
                     Header += SelectedPollutant + "[kg/h],--,--,--,source group, deposition data";
                     myWriter.WriteLine(Header);
-
-                    double[] xcell = new double[1000000];
-                    double[] ycell = new double[1000000];
+                    //List for points inside area source polygons
+                    List<PointD> xyCell = new List<PointD>(10000);
                     
                     foreach (AreaSourceData _asdata in _asList)
-                    {
-                        //filter domain
+                    {                 
                         double xmin = double.MaxValue;
                         double xmax = double.MinValue;
                         double ymin = double.MaxValue;
                         double ymax = double.MinValue;
-                        
                         foreach (PointD _pt in _asdata.Pt)
                         {
                             xmin = Math.Min(xmin, _pt.X);
@@ -234,7 +228,8 @@ namespace Gral
                             ymin = Math.Min(ymin, _pt.Y);
                             ymax = Math.Max(ymax, _pt.Y);
                         }
-                        
+
+                        //filter domain
                         if ((xmin >= GralDomRect.West) && (xmax <= GralDomRect.East) &&
                             (ymin >= GralDomRect.South) && (ymax <= GralDomRect.North))
                         {
@@ -247,41 +242,41 @@ namespace Gral
                                     if (SelectedPollutant.Equals(PollutantList[_asdata.Poll.Pollutant[j]]) &&
                                         _asdata.Poll.EmissionRate[j] > 0)
                                     {
-                                        //raster area source
-                                        double yraster = ymax - _asdata.RasterSize * 0.5;
-                                        
-                                        int count = 0;
-                                        while ((yraster >= ymin) && (yraster <= ymax))
+                                        xyCell.Clear();
+                                        //raster area source -> todo: we should use a delauny triangulation in the future...
+                                        double rasterFactor = 2.2; //start using a factor of 1 -> the factor is reduced some lines below
+                                        //reduce raster size, if less than 2 points inside the area source have been found
+                                        while (xyCell.Count < 2 && rasterFactor > 0.0005)
                                         {
-                                            double xraster = xmin + _asdata.RasterSize * 0.5;
-                                            while ((xraster >= xmin) && (xraster <= xmax))
+                                            rasterFactor /= 2.2; // reduce raster size if not more than 1 point has been found, avoid testing the same points multiple times
+                                            double yraster = ymax - _asdata.RasterSize * 0.5 * rasterFactor;
+                                            while ((yraster >= ymin) && (yraster <= ymax))
                                             {
-                                                if (St_F.PointInPolygonD(new PointD(xraster, yraster), _asdata.Pt))
+                                                double xraster = xmin + _asdata.RasterSize * 0.5 * rasterFactor;
+                                                while ((xraster >= xmin) && (xraster <= xmax))
                                                 {
-                                                    if (count < xcell.Length)
+                                                    if (St_F.PointInPolygonD(new PointD(xraster, yraster), _asdata.Pt))
                                                     {
-                                                        xcell[count] = xraster;
-                                                        ycell[count] = yraster;
-                                                        count ++;
+                                                       xyCell.Add(new PointD(xraster, yraster));
                                                     }
+                                                    xraster += _asdata.RasterSize * rasterFactor;
                                                 }
-                                                xraster += _asdata.RasterSize;
+                                                yraster -= _asdata.RasterSize * rasterFactor;
                                             }
-                                            yraster -= _asdata.RasterSize;
                                         }
                                         
                                         //write file cadastre.dat
-                                        for (int l = 0; l < count; l++)
+                                        for (int l = 0; l < xyCell.Count; l++)
                                         {
                                             //write file cadestre.dat
                                             string cadestre =
-                                                Math.Round(xcell[l], 1).ToString(ic) + "," +
-                                                Math.Round(ycell[l], 1).ToString(ic) + "," +
+                                                Math.Round(xyCell[l].X, 1).ToString(ic) + "," +
+                                                Math.Round(xyCell[l].Y, 1).ToString(ic) + "," +
                                                 _asdata.Height.ToString(ic) + "," +
-                                                _asdata.RasterSize.ToString(ic) + "," +
-                                                _asdata.RasterSize.ToString(ic) + "," +
+                                                Math.Round(_asdata.RasterSize * rasterFactor, 3).ToString(ic) + "," +
+                                                Math.Round(_asdata.RasterSize * rasterFactor, 3).ToString(ic) + "," +
                                                 _asdata.VerticalExt.ToString(ic) + "," +
-                                                (_asdata.Poll.EmissionRate[j] / Convert.ToDouble(count)).ToString(ic) + "," +
+                                                (_asdata.Poll.EmissionRate[j] / Convert.ToDouble(xyCell.Count)).ToString(ic) + "," +
                                                 "0,0,0," +
                                                 _asdata.Poll.SourceGroup.ToString(ic);
                                             
@@ -296,8 +291,7 @@ namespace Gral
                                                     _asdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
                                                     _asdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
                                                     _asdata.GetDep()[j].Conc.ToString(ic);
-                                            }
-                                            
+                                            }                                         
                                             myWriter.WriteLine(cadestre);
                                             file = true;
                                         }
@@ -308,8 +302,8 @@ namespace Gral
                     }
                 }
             }
-            catch{}
-            
+            catch (Exception ex) { MessageBox.Show(this, "Error writing cadestre.dat \n" + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+
             _asList.Clear();
             _asList.TrimExcess();
             _asList = null;
@@ -415,11 +409,9 @@ namespace Gral
                                                         _lsdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
                                                         _lsdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
                                                         _lsdata.GetDep()[j].Conc.ToString(ic);
-                                                }
-                                                
+                                                }                                              
                                                 myWriter.WriteLine(line);
-                                                file = true;
-                                                
+                                                file = true;                                         
                                             }
                                         }
                                     }
@@ -429,7 +421,7 @@ namespace Gral
                     }
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { MessageBox.Show(this, "Error writing line.dat \n" +ex.Message , "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);}
             
             _lsList.Clear();
             _lsList.TrimExcess();
@@ -609,7 +601,7 @@ namespace Gral
                 TempTimeSeries.TrimExcess();
                 
             }
-            catch{}
+            catch (Exception ex) { MessageBox.Show(this, "Error writing portals.dat \n" + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
             if (file == false)
             {
