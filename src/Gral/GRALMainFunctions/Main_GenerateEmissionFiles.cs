@@ -248,6 +248,7 @@ namespace Gral
                                         //reduce raster size, if less than 2 points inside the area source have been found
                                         while (xyCell.Count < 2 && rasterFactor > 0.0005)
                                         {
+                                            xyCell.Clear();
                                             rasterFactor /= 2.2; // reduce raster size if not more than 1 point has been found, avoid testing the same points multiple times
                                             double yraster = ymax - _asdata.RasterSize * 0.5 * rasterFactor;
                                             while ((yraster >= ymin) && (yraster <= ymax))
