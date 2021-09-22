@@ -103,7 +103,7 @@ namespace GralDomain
             {
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditVegetation.SaveArray();
+                    EditVegetation.SaveArray(false);
                 }
                 //save Vegetation input to file
                 VegetationDataIO _veg = new VegetationDataIO();

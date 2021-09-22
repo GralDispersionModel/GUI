@@ -103,7 +103,7 @@ namespace GralDomain
                 //save line sources input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditLS.SaveArray();
+                    EditLS.SaveArray(false);
                 }
 
                 LineSourceDataIO _ls = new LineSourceDataIO();

@@ -34,7 +34,7 @@ namespace GralDomain
 			EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
 			EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
 			
-			EditAS.SaveArray();
+			EditAS.SaveArray(false);
 			
 			EditAS.CornerAreaCount = 0;
 			// Reset Rubber-Line Drawing
@@ -61,7 +61,7 @@ namespace GralDomain
 			EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToSingle(textBox1.Text.Replace(".",decsep));
 			EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToSingle(textBox2.Text.Replace(".",decsep));
 			
-			EditLS.SaveArray();
+			EditLS.SaveArray(false);
 
 			EditLS.CornerLineSource = 0;
 			// Reset Rubber-Line Drawing
@@ -87,7 +87,7 @@ namespace GralDomain
 		{
 			EditWall.CornerWallX[EditWall.CornerWallCount] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
 			EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			EditWall.SaveArray();
+			EditWall.SaveArray(false);
 			
 			EditWall.CornerWallCount = 0;
 			// Reset Rubber-Line Drawing
@@ -113,7 +113,7 @@ namespace GralDomain
 		{
 			EditB.CornerBuildingX[EditB.CornerBuilding] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
 			EditB.CornerBuildingY[EditB.CornerBuilding] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			EditB.SaveArray();
+			EditB.SaveArray(false);
 			
 			EditB.CornerBuilding = 0;
 			// Reset Rubber-Line Drawing
@@ -139,7 +139,7 @@ namespace GralDomain
 		{
 			EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
 			EditVegetation.CornerVegY[EditVegetation.CornerVegetation]  = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			EditVegetation.SaveArray();
+			EditVegetation.SaveArray(false);
 			
 			EditVegetation.CornerVegetation = 0;
 			// Reset Rubber-Line Drawing

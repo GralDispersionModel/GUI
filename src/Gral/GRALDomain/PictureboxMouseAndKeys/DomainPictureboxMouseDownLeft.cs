@@ -157,7 +157,7 @@ namespace GralDomain
                         //get x,y coordinates
                         EditPS.SetXCoorText(textBox1.Text);
                         EditPS.SetYCoorText(textBox2.Text);
-                        EditPS.SaveArray();
+                        EditPS.SaveArray(false);
                         if (MouseControl == MouseMode.PointSourceInlineEdit) // set new position inline editing
                         {
                             EditAndSavePointSourceData(sender, null);
@@ -451,7 +451,7 @@ namespace GralDomain
                         //get x,y coordinates
                         EditR.SetXCoorText(textBox1.Text);
                         EditR.SetYCoorText(textBox2.Text);
-                        EditR.SaveArray();
+                        EditR.SaveArray(false);
                         if (MouseControl == MouseMode.ReceptorInlineEdit) // set new position inline editing
                         {
                             EditAndSaveReceptorData(sender, null);

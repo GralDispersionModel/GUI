@@ -109,7 +109,7 @@ namespace GralDomain
                 //save buildings input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditWall.SaveArray();
+                    EditWall.SaveArray(false);
                 }
 
                 string newPath = Path.Combine(Gral.Main.ProjectName, @"Emissions", "Walls.txt");

@@ -105,7 +105,7 @@ namespace GralDomain
                 //save tunnel portal input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditPortals.SaveArray();
+                    EditPortals.SaveArray(false);
                 }
                 PortalsDataIO _ps = new PortalsDataIO();
                 _ps.SavePortalSources(EditPortals.ItemData, Gral.Main.ProjectName);

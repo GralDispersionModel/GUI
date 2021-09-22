@@ -49,7 +49,6 @@ namespace GralItemForms
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.button5 = new System.Windows.Forms.Button();
             this.Exit = new System.Windows.Forms.Button();
@@ -59,10 +58,13 @@ namespace GralItemForms
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.labelTitle = new System.Windows.Forms.Label();
+            this.ScrollLeft = new System.Windows.Forms.Button();
+            this.ScrollRight = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBox1
@@ -181,19 +183,6 @@ namespace GralItemForms
             this.label5.Text = "Height [m]";
             this.toolTip1.SetToolTip(this.label5, "Height above ground level [m]");
             // 
-            // trackBar1
-            // 
-            this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(6, 47);
-            this.trackBar1.Maximum = 1;
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(200, 19);
-            this.trackBar1.TabIndex = 60;
-            this.toolTip1.SetToolTip(this.trackBar1, "Select walls");
-            this.trackBar1.Value = 1;
-            this.trackBar1.Scroll += new System.EventHandler(this.TrackBar1Scroll);
-            // 
             // trackBar2
             // 
             this.trackBar2.AutoSize = false;
@@ -293,6 +282,47 @@ namespace GralItemForms
             this.labelTitle.Text = "Edit Walls";
             this.labelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
+            // ScrollLeft
+            // 
+            this.ScrollLeft.BackgroundImage = global::Gral.Properties.Resources.ArrowLeft;
+            this.ScrollLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollLeft.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollLeft.Location = new System.Drawing.Point(2, 40);
+            this.ScrollLeft.Name = "ScrollLeft";
+            this.ScrollLeft.Size = new System.Drawing.Size(20, 20);
+            this.ScrollLeft.TabIndex = 88;
+            this.toolTip1.SetToolTip(this.ScrollLeft, "Prev. item");
+            this.ScrollLeft.UseVisualStyleBackColor = true;
+            this.ScrollLeft.Click += new System.EventHandler(this.ScrollLeft_Click);
+            // 
+            // ScrollRight
+            // 
+            this.ScrollRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScrollRight.BackgroundImage = global::Gral.Properties.Resources.ArrowRight;
+            this.ScrollRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollRight.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollRight.Location = new System.Drawing.Point(190, 40);
+            this.ScrollRight.Name = "ScrollRight";
+            this.ScrollRight.Size = new System.Drawing.Size(20, 20);
+            this.ScrollRight.TabIndex = 87;
+            this.toolTip1.SetToolTip(this.ScrollRight, "Next item");
+            this.ScrollRight.UseVisualStyleBackColor = true;
+            this.ScrollRight.Click += new System.EventHandler(this.ScrollRight_Click);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.AutoSize = false;
+            this.trackBar1.Location = new System.Drawing.Point(21, 40);
+            this.trackBar1.Maximum = 1;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(163, 19);
+            this.trackBar1.TabIndex = 86;
+            this.trackBar1.Value = 1;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.TrackBar1Scroll);
+            // 
             // EditWalls
             // 
             this.AcceptButton = this.button6;
@@ -301,8 +331,11 @@ namespace GralItemForms
             this.CancelButton = this.button4;
             this.ClientSize = new System.Drawing.Size(218, 361);
             this.ControlBox = false;
+            this.Controls.Add(this.ScrollLeft);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.ScrollRight);
             this.Controls.Add(this.button4);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.trackBar2);
@@ -316,7 +349,6 @@ namespace GralItemForms
             this.Controls.Add(this.button1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
             this.MaximizeBox = false;
@@ -330,9 +362,9 @@ namespace GralItemForms
             this.ResizeEnd += new System.EventHandler(this.EditWallsResizeEnd);
             this.VisibleChanged += new System.EventHandler(this.EditWallsVisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,7 +373,6 @@ namespace GralItemForms
 		private System.Windows.Forms.TrackBar trackBar2;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.TrackBar trackBar1;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.NumericUpDown numericUpDown1;
 		private System.Windows.Forms.Button button1;
@@ -358,5 +389,8 @@ namespace GralItemForms
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button Exit;
         private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.Button ScrollLeft;
+        private System.Windows.Forms.Button ScrollRight;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }

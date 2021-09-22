@@ -104,7 +104,7 @@ namespace GralItemForms
         {
             if ((textBox1.Text != "") && (textBox2.Text != ""))
             {
-                SaveArray();
+                SaveArray(true);
                 trackBar1.Maximum += 1;
                 trackBar1.Value = trackBar1.Maximum;
                 ItemDisplayNr = trackBar1.Maximum - 1;
@@ -115,7 +115,7 @@ namespace GralItemForms
         //scroll between the buildings
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            SaveArray();
+            SaveArray(false);
             ItemDisplayNr = trackBar1.Value - 1;
             FillValues();
             RedrawDomain(this, null);
@@ -125,7 +125,7 @@ namespace GralItemForms
         /// <summary>
     	/// Saves the recent dialog data in the item object and the item list
     	/// </summary> 
-        public void SaveArray()
+        public void SaveArray(bool redraw)
         {
         	BuildingData _bdata; 
 			if (ItemDisplayNr >= ItemData.Count) // new item
@@ -178,7 +178,10 @@ namespace GralItemForms
                 	}
                 }
             }
-            RedrawDomain(this, null);
+            if (redraw)
+            {
+                RedrawDomain(this, null);
+            }
         }
         
         //fill actual values
@@ -449,7 +452,7 @@ namespace GralItemForms
 				}
 				foreach (Control c in Controls)
 				{
-					if (c != trackBar1)
+					if (c != trackBar1 && c != ScrollRight && c != ScrollLeft)
 					{
 						c.Enabled = enable;
 					}
@@ -464,7 +467,7 @@ namespace GralItemForms
         	if (dialog_width > 130)
 			{
 				dialog_width -= 12;
-				trackBar1.Width = dialog_width - TrackBar_x0;
+				trackBar1.Width = ScrollRight.Left - TrackBar_x0;
 				textBox1.Width = dialog_width - TextBox_x0;
 				textBox4.Width = dialog_width - TextBox_x0;
 				textBox5.Width = dialog_width - TextBox_x0;
@@ -511,7 +514,7 @@ namespace GralItemForms
 		/// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
-            SaveArray();
+            SaveArray(true);
             FillValues();
             // send Message to domain Form, that OK button has been pressed
             try
@@ -560,7 +563,7 @@ namespace GralItemForms
                     SetNumberOfVerticesText(cornerCount.ToString());
                 }
 
-                SaveArray();
+                SaveArray(true);
                 vert.Dispose();
             }
             catch
@@ -620,6 +623,24 @@ namespace GralItemForms
             labelTitle.Capture = false;
             Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
             this.DefWndProc(ref msg);
+        }
+
+        private void ScrollRight_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value < trackBar1.Maximum)
+            {
+                trackBar1.Value++;
+                trackBar1_Scroll(null, null);
+            }
+        }
+
+        private void ScrollLeft_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value > trackBar1.Minimum)
+            {
+                trackBar1.Value--;
+                trackBar1_Scroll(null, null);
+            }
         }
     }
 }

@@ -35,26 +35,28 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
+            this.Exit = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.Exit = new System.Windows.Forms.Button();
             this.labelTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ScrollLeft = new System.Windows.Forms.Button();
+            this.ScrollRight = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
@@ -121,18 +123,6 @@
             this.numericUpDown1.TabIndex = 5;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Receptor height\r\nabove ground level in [m]");
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(12, 52);
-            this.trackBar1.Maximum = 1;
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(169, 19);
-            this.trackBar1.TabIndex = 1;
-            this.trackBar1.Value = 1;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // button1
             // 
@@ -204,6 +194,20 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4Click);
             // 
+            // Exit
+            // 
+            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
+            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Exit.Location = new System.Drawing.Point(169, 3);
+            this.Exit.Name = "Exit";
+            this.Exit.Size = new System.Drawing.Size(24, 24);
+            this.Exit.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.Exit, "Close form");
+            this.Exit.UseVisualStyleBackColor = true;
+            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(81, 77);
@@ -260,20 +264,6 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.cancelButtonClick);
             // 
-            // Exit
-            // 
-            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
-            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Exit.Location = new System.Drawing.Point(169, 3);
-            this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(24, 24);
-            this.Exit.TabIndex = 57;
-            this.toolTip1.SetToolTip(this.Exit, "Close form");
-            this.Exit.UseVisualStyleBackColor = true;
-            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
-            // 
             // labelTitle
             // 
             this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -296,6 +286,47 @@
             this.panel1.TabIndex = 80;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
+            // ScrollLeft
+            // 
+            this.ScrollLeft.BackgroundImage = global::Gral.Properties.Resources.ArrowLeft;
+            this.ScrollLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollLeft.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollLeft.Location = new System.Drawing.Point(5, 48);
+            this.ScrollLeft.Name = "ScrollLeft";
+            this.ScrollLeft.Size = new System.Drawing.Size(20, 20);
+            this.ScrollLeft.TabIndex = 85;
+            this.toolTip1.SetToolTip(this.ScrollLeft, "Prev. item");
+            this.ScrollLeft.UseVisualStyleBackColor = true;
+            this.ScrollLeft.Click += new System.EventHandler(this.ScrollLeft_Click);
+            // 
+            // ScrollRight
+            // 
+            this.ScrollRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScrollRight.BackgroundImage = global::Gral.Properties.Resources.ArrowRight;
+            this.ScrollRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollRight.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollRight.Location = new System.Drawing.Point(170, 48);
+            this.ScrollRight.Name = "ScrollRight";
+            this.ScrollRight.Size = new System.Drawing.Size(20, 20);
+            this.ScrollRight.TabIndex = 84;
+            this.toolTip1.SetToolTip(this.ScrollRight, "Next item");
+            this.ScrollRight.UseVisualStyleBackColor = true;
+            this.ScrollRight.Click += new System.EventHandler(this.ScrollRight_Click);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.AutoSize = false;
+            this.trackBar1.Location = new System.Drawing.Point(25, 48);
+            this.trackBar1.Maximum = 1;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(140, 19);
+            this.trackBar1.TabIndex = 83;
+            this.trackBar1.Value = 1;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // EditReceptors
             // 
             this.AcceptButton = this.button6;
@@ -304,8 +335,11 @@
             this.CancelButton = this.button5;
             this.ClientSize = new System.Drawing.Size(200, 348);
             this.ControlBox = false;
+            this.Controls.Add(this.ScrollLeft);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.ScrollRight);
             this.Controls.Add(this.button5);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label6);
@@ -316,7 +350,6 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox3);
@@ -335,9 +368,9 @@
             this.ResizeEnd += new System.EventHandler(this.EditReceptorsResizeEnd);
             this.VisibleChanged += new System.EventHandler(this.EditReceptorsVisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -352,7 +385,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
@@ -367,5 +399,8 @@
         private System.Windows.Forms.Button Exit;
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button ScrollLeft;
+        private System.Windows.Forms.Button ScrollRight;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }

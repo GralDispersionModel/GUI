@@ -104,7 +104,7 @@ namespace GralDomain
                 //save receptor input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditR.SaveArray();
+                    EditR.SaveArray(false);
                 }
 
                 ReceptorDataIO _rd = new ReceptorDataIO();

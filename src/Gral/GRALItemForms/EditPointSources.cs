@@ -279,7 +279,7 @@ namespace GralItemForms
         {
             if ((textBox1.Text != "") && (textBox2.Text != ""))
             {
-                SaveArray();
+                SaveArray(true);
                 textBox2.Text = "";
                 textBox3.Text = "";
                 trackBar1.Maximum += 1;
@@ -291,7 +291,7 @@ namespace GralItemForms
         //scroll between the point sources
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            SaveArray();
+            SaveArray(false);
             ItemDisplayNr = trackBar1.Value - 1;
             FillValues();
             RedrawDomain(this, null);
@@ -301,7 +301,7 @@ namespace GralItemForms
         /// <summary>
         /// Saves the recent dialog data in the item object and the item list
         /// </summary>
-        public void SaveArray()
+        public void SaveArray(bool redraw)
         {
             PointSourceData _pdata;
             if (ItemDisplayNr >= ItemData.Count) // new item
@@ -370,9 +370,10 @@ namespace GralItemForms
                 {
                     ItemData[ItemDisplayNr] = _pdata;
                 }
-
-                RedrawDomain(this, null);
-
+                if (redraw)
+                {
+                    RedrawDomain(this, null);
+                }
             }
         }
 
@@ -637,7 +638,7 @@ namespace GralItemForms
                 dialog_width -= 12;
                 groupBox1.Width = dialog_width - TabControl_x0;
 
-                trackBar1.Width = dialog_width - TrackBar_x0;
+                trackBar1.Width = ScrollRight.Left - TrackBar_x0;
                 textBox1.Width = dialog_width - TextBox_x0;
                 textBox2.Width = dialog_width - TextBox_x0;
                 textBox3.Width = dialog_width - TextBox_x0;
@@ -731,7 +732,7 @@ namespace GralItemForms
                     but1[nr].BackColor = SystemColors.ButtonFace;
                 }
 
-                SaveArray(); // save values
+                SaveArray(true); // save values
             }
         }
 
@@ -814,7 +815,7 @@ namespace GralItemForms
         // store and reload the settings
         void Button4Click(object sender, EventArgs e)
         {
-            SaveArray();
+            SaveArray(true);
             FillValues();
         }
 
@@ -837,7 +838,7 @@ namespace GralItemForms
 
                 foreach (Control c in Controls)
                 {
-                    if (c != trackBar1 && c!= groupBox1)
+                    if (c != trackBar1 && c!= groupBox1 && c != ScrollRight && c != ScrollLeft)
                     {
                         c.Enabled = enable;
                     }
@@ -975,7 +976,7 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void button7_Click(object sender, EventArgs e)
         {
-            SaveArray();
+            SaveArray(true);
             FillValues();
             // send Message to domain Form, that OK button has been pressed
             try
@@ -1036,6 +1037,24 @@ namespace GralItemForms
             labelTitle.Capture = false;
             Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
             this.DefWndProc(ref msg);
+        }
+
+        private void ScrollRight_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value < trackBar1.Maximum)
+            {
+                trackBar1.Value++;
+                trackBar1_Scroll(null, null);
+            }
+        }
+
+        private void ScrollLeft_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value > trackBar1.Minimum)
+            {
+                trackBar1.Value--;
+                trackBar1_Scroll(null, null);
+            }
         }
 
     }

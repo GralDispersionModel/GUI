@@ -292,7 +292,7 @@ namespace GralItemForms
         {
             if ((textBox1.Text != "") && (textBox2.Text != ""))
             {
-                SaveArray();
+                SaveArray(true);
                 for (int i = 0; i < 10; i++)
                 {
                     lineemission[i].Text = "0";
@@ -309,7 +309,7 @@ namespace GralItemForms
         //scroll between the line sources
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            SaveArray();
+            SaveArray(false);
             ItemDisplayNr = trackBar1.Value - 1;
             FillValues();
             RedrawDomain(this, null);
@@ -319,7 +319,7 @@ namespace GralItemForms
         /// <summary>
         /// Saves the recent dialog data in the item object and the item list
         /// </summary> 
-        public void SaveArray()
+        public void SaveArray(bool redraw)
         {
             if (Main.Project_Locked)
             {
@@ -441,8 +441,10 @@ namespace GralItemForms
                     {
                         ItemData[ItemDisplayNr] = _ls;
                     }
-
-                    RedrawDomain(this, null);
+                    if (redraw)
+                    {
+                        RedrawDomain(this, null);
+                    }
                 }
             }
             else
@@ -753,7 +755,7 @@ namespace GralItemForms
             }
 
             UpdateNewSourcegroupEmission();
-            SaveArray();
+            SaveArray(true);
         }
 
         private void UpdateNewSourcegroupEmission()
@@ -905,7 +907,7 @@ namespace GralItemForms
             if (dialog_width > 200)
             {
                 dialog_width -= 12;
-                trackBar1.Width = dialog_width - TrackBar_x0;
+                trackBar1.Width = ScrollRight.Left - TrackBar_x0;
                 trackBar2.Width = dialog_width - TrackBar_x0;
                 textBox1.Width = dialog_width - TextBox_x0;
                 textBox2.Width = dialog_width - button8.Right - 5;
@@ -965,7 +967,7 @@ namespace GralItemForms
                 }
                 foreach (Control c in Controls)
                 {
-                    if (c != trackBar1 && c != groupBox2 && c != tabControl1 && c != trackBar2)
+                    if (c != trackBar1 && c != groupBox2 && c != tabControl1 && c != trackBar2 && c != ScrollRight && c != ScrollLeft)
                     {
                         c.Enabled = enable;
                     }
@@ -1067,7 +1069,7 @@ namespace GralItemForms
                         SetNumberOfVerticesText(cornerCount.ToString());
                     }
 
-                    SaveArray();
+                    SaveArray(true);
                     vert.Dispose();
                 }
                 catch
@@ -1120,7 +1122,7 @@ namespace GralItemForms
                     but1[nr].BackColor = SystemColors.ButtonFace;
                 }
 
-                SaveArray(); // save values
+                SaveArray(true); // save values
             }
         }
 
@@ -1232,7 +1234,7 @@ namespace GralItemForms
                 SourceGroupEmission.RemoveAt(indexold);
                 listBox2.Items.RemoveAt(listBox2.SelectedIndex);
             }
-            SaveArray();
+            SaveArray(true);
             // fill in new values
         }
 
@@ -1364,7 +1366,7 @@ namespace GralItemForms
 
                     SourceGroupEmission.Add(_poll);
                     listBox2.Items.Add(sgsel.SelectedSourceGroup);
-                    SaveArray();
+                    SaveArray(true);
                     //FillValues();
                     listBox2.SelectedIndex = listBox2.Items.Count - 1;
                 }
@@ -1387,7 +1389,7 @@ namespace GralItemForms
                             }
                         }
                         listBox2.Items.Add(sgsel.SelectedSourceGroup);
-                        SaveArray();
+                        SaveArray(true);
                         listBox2.SelectedIndex = listBox2.Items.Count - 1;
                         //FillValues();
                     }
@@ -1641,6 +1643,24 @@ namespace GralItemForms
             labelTitle.Capture = false;
             Message msg = Message.Create(this.Handle, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
             this.DefWndProc(ref msg);
+        }
+
+        private void ScrollRight_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value < trackBar1.Maximum)
+            {
+                trackBar1.Value++;
+                trackBar1_Scroll(null, null);
+            }
+        }
+
+        private void ScrollLeft_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value > trackBar1.Minimum)
+            {
+                trackBar1.Value--;
+                trackBar1_Scroll(null, null);
+            }
         }
     }
 }

@@ -589,7 +589,7 @@ namespace GralDomain
 
                         double areapolygon = St_F.CalcArea(EditAS.CornerAreaCount + 1, mypoint);
                         EditAS.SetRasterSize(Convert.ToDecimal(Math.Max(Math.Round(Math.Sqrt(areapolygon / 25), 1), 0.5)));
-                        EditAS.SaveArray();
+                        EditAS.SaveArray(false);
                         for (int i = 0; i <= EditAS.CornerAreaCount; i++)
                         {
                             CornerAreaSource[i] = new Point();
@@ -612,7 +612,7 @@ namespace GralDomain
                         EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
 
                         EditVegetation.SetNumberOfVerticesText(Convert.ToString(EditVegetation.CornerVegetation + 1));
-                        EditVegetation.SaveArray();
+                        EditVegetation.SaveArray(false);
                         for (int i = 0; i <= EditVegetation.CornerVegetation; i++)
                         {
                             CornerAreaSource[i] = new Point();
@@ -640,7 +640,7 @@ namespace GralDomain
                             mypoint[i] = new PointD(EditB.CornerBuildingX[i], EditB.CornerBuildingY[i]);
                         }
 
-                        EditB.SaveArray();
+                        EditB.SaveArray(false);
                         for (int i = 0; i <= EditB.CornerBuilding; i++)
                         {
                             CornerAreaSource[i] = new Point();
@@ -668,7 +668,7 @@ namespace GralDomain
                         EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                         EditLS.SetNumberOfVerticesText(Convert.ToString(EditLS.CornerLineSource + 1));
-                        EditLS.SaveArray();
+                        EditLS.SaveArray(false);
                         for (int i = 0; i <= EditLS.CornerLineSource; i++)
                         {
                             CornerAreaSource[i] = new Point();
@@ -702,7 +702,7 @@ namespace GralDomain
                         }
 
                         EditWall.SetNumberOfVerticesText(Convert.ToString(EditWall.CornerWallCount + 1));
-                        EditWall.SaveArray();
+                        EditWall.SaveArray(false);
                         for (int i = 0; i <= EditWall.CornerWallCount; i++)
                         {
                             CornerAreaSource[i] = new Point();
@@ -728,7 +728,7 @@ namespace GralDomain
                         //get x,y coordinates
                         EditPortals.CornerPortalX[1] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
                         EditPortals.CornerPortalY[1] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
-                        EditPortals.SaveArray();
+                        EditPortals.SaveArray(false);
                         //abstand der eckpunkte und fläche berechnen
                         try
                         {

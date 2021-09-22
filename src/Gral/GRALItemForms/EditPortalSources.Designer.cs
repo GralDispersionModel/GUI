@@ -34,7 +34,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -60,6 +59,7 @@
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.Exit = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -77,11 +77,12 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.Exit = new System.Windows.Forms.Button();
             this.labelTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ScrollLeft = new System.Windows.Forms.Button();
+            this.ScrollRight = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -95,6 +96,7 @@
             this.tabPage2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -150,19 +152,6 @@
             0,
             0});
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(6, 89);
-            this.trackBar1.Maximum = 1;
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(260, 19);
-            this.trackBar1.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.trackBar1, "Use this trackbar to\r\nswitch between the different\r\nstreets.");
-            this.trackBar1.Value = 1;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // label6
             // 
@@ -464,6 +453,20 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
             // 
+            // Exit
+            // 
+            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
+            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Exit.Location = new System.Drawing.Point(242, 3);
+            this.Exit.Name = "Exit";
+            this.Exit.Size = new System.Drawing.Size(24, 24);
+            this.Exit.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.Exit, "Close form");
+            this.Exit.UseVisualStyleBackColor = true;
+            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textBox3);
@@ -692,20 +695,6 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.cancelButtonClick);
             // 
-            // Exit
-            // 
-            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
-            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Exit.Location = new System.Drawing.Point(242, 3);
-            this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(24, 24);
-            this.Exit.TabIndex = 57;
-            this.toolTip1.SetToolTip(this.Exit, "Close form");
-            this.Exit.UseVisualStyleBackColor = true;
-            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
-            // 
             // labelTitle
             // 
             this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -728,6 +717,47 @@
             this.panel1.TabIndex = 80;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
+            // ScrollLeft
+            // 
+            this.ScrollLeft.BackgroundImage = global::Gral.Properties.Resources.ArrowLeft;
+            this.ScrollLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollLeft.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollLeft.Location = new System.Drawing.Point(2, 87);
+            this.ScrollLeft.Name = "ScrollLeft";
+            this.ScrollLeft.Size = new System.Drawing.Size(20, 20);
+            this.ScrollLeft.TabIndex = 91;
+            this.toolTip1.SetToolTip(this.ScrollLeft, "Prev. item");
+            this.ScrollLeft.UseVisualStyleBackColor = true;
+            this.ScrollLeft.Click += new System.EventHandler(this.ScrollLeft_Click);
+            // 
+            // ScrollRight
+            // 
+            this.ScrollRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScrollRight.BackgroundImage = global::Gral.Properties.Resources.ArrowRight;
+            this.ScrollRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollRight.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollRight.Location = new System.Drawing.Point(246, 87);
+            this.ScrollRight.Name = "ScrollRight";
+            this.ScrollRight.Size = new System.Drawing.Size(20, 20);
+            this.ScrollRight.TabIndex = 90;
+            this.toolTip1.SetToolTip(this.ScrollRight, "Next item");
+            this.ScrollRight.UseVisualStyleBackColor = true;
+            this.ScrollRight.Click += new System.EventHandler(this.ScrollRight_Click);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.AutoSize = false;
+            this.trackBar1.Location = new System.Drawing.Point(27, 87);
+            this.trackBar1.Maximum = 1;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(213, 19);
+            this.trackBar1.TabIndex = 89;
+            this.trackBar1.Value = 1;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // EditPortalSources
             // 
             this.AcceptButton = this.button10;
@@ -736,8 +766,11 @@
             this.CancelButton = this.button11;
             this.ClientSize = new System.Drawing.Size(273, 807);
             this.ControlBox = false;
+            this.Controls.Add(this.ScrollLeft);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.ScrollRight);
             this.Controls.Add(this.button11);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.numericUpDown5);
@@ -757,7 +790,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox1);
@@ -774,7 +806,6 @@
             this.ResizeEnd += new System.EventHandler(this.EditportalsourcesResizeEnd);
             this.VisibleChanged += new System.EventHandler(this.EditportalsourcesVisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -790,6 +821,7 @@
             this.tabPage2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -818,7 +850,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown6;
@@ -847,5 +878,8 @@
         private System.Windows.Forms.Button Exit;
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button ScrollLeft;
+        private System.Windows.Forms.Button ScrollRight;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }

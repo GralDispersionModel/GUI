@@ -99,7 +99,7 @@ namespace GralDomain
                 //save buildings input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditB.SaveArray();
+                    EditB.SaveArray(false);
                 }
                 BuildingDataIO _bui = new BuildingDataIO();
                 _bui.SaveBuildings(EditB.ItemData, Gral.Main.ProjectName, Gral.Main.CompatibilityToVersion1901);

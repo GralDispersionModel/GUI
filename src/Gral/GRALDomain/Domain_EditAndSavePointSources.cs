@@ -89,7 +89,7 @@ namespace GralDomain
                 //save point sources input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditPS.SaveArray();
+                    EditPS.SaveArray(false);
                 }
 
                 PointSourceDataIO _ps = new PointSourceDataIO();

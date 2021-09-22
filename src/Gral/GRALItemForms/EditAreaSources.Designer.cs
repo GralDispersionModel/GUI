@@ -47,6 +47,7 @@
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.Exit = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -55,9 +56,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.Exit = new System.Windows.Forms.Button();
             this.labelTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ScrollRight = new System.Windows.Forms.Button();
+            this.ScrollLeft = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -162,14 +164,15 @@
             // trackBar1
             // 
             this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(13, 74);
+            this.trackBar1.Location = new System.Drawing.Point(31, 74);
             this.trackBar1.Maximum = 1;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(187, 19);
+            this.trackBar1.Size = new System.Drawing.Size(153, 19);
             this.trackBar1.TabIndex = 1;
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // button1
             // 
@@ -272,6 +275,20 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.TextBox2Click);
             // 
+            // Exit
+            // 
+            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
+            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Exit.Location = new System.Drawing.Point(180, 3);
+            this.Exit.Name = "Exit";
+            this.Exit.Size = new System.Drawing.Size(24, 24);
+            this.Exit.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.Exit, "Close form");
+            this.Exit.UseVisualStyleBackColor = true;
+            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -349,20 +366,6 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.cancelButtonClick);
             // 
-            // Exit
-            // 
-            this.Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Exit.BackgroundImage = global::Gral.Properties.Resources.DeleteSmall;
-            this.Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Exit.Location = new System.Drawing.Point(180, 3);
-            this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(24, 24);
-            this.Exit.TabIndex = 57;
-            this.toolTip1.SetToolTip(this.Exit, "Close form");
-            this.Exit.UseVisualStyleBackColor = true;
-            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
-            // 
             // labelTitle
             // 
             this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -385,6 +388,35 @@
             this.panel1.TabIndex = 80;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
+            // ScrollRight
+            // 
+            this.ScrollRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScrollRight.BackgroundImage = global::Gral.Properties.Resources.ArrowRight;
+            this.ScrollRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollRight.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollRight.Location = new System.Drawing.Point(184, 74);
+            this.ScrollRight.Name = "ScrollRight";
+            this.ScrollRight.Size = new System.Drawing.Size(20, 20);
+            this.ScrollRight.TabIndex = 81;
+            this.toolTip1.SetToolTip(this.ScrollRight, "Next item");
+            this.ScrollRight.UseVisualStyleBackColor = true;
+            this.ScrollRight.Click += new System.EventHandler(this.ScrollRight_Click);
+            // 
+            // ScrollLeft
+            // 
+            this.ScrollLeft.BackgroundImage = global::Gral.Properties.Resources.ArrowLeft;
+            this.ScrollLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ScrollLeft.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ScrollLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ScrollLeft.Location = new System.Drawing.Point(12, 74);
+            this.ScrollLeft.Name = "ScrollLeft";
+            this.ScrollLeft.Size = new System.Drawing.Size(20, 20);
+            this.ScrollLeft.TabIndex = 82;
+            this.toolTip1.SetToolTip(this.ScrollLeft, "Prev. item");
+            this.ScrollLeft.UseVisualStyleBackColor = true;
+            this.ScrollLeft.Click += new System.EventHandler(this.ScrollLeft_Click);
+            // 
             // EditAreaSources
             // 
             this.AcceptButton = this.button6;
@@ -393,6 +425,8 @@
             this.CancelButton = this.button7;
             this.ClientSize = new System.Drawing.Size(212, 675);
             this.ControlBox = false;
+            this.Controls.Add(this.ScrollLeft);
+            this.Controls.Add(this.ScrollRight);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -469,5 +503,7 @@
         private System.Windows.Forms.Button Exit;
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button ScrollRight;
+        private System.Windows.Forms.Button ScrollLeft;
     }
 }

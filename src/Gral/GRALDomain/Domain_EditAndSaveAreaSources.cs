@@ -92,7 +92,7 @@ namespace GralDomain
                 //save area sources input to file
                 if (sender != null) // do not use the dialogue data, if data has been changed outisde the EditPortals dialogue
                 {
-                    EditAS.SaveArray();
+                    EditAS.SaveArray(false);
                 }
 
                 AreaSourceDataIO _as = new AreaSourceDataIO();
