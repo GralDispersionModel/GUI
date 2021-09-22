@@ -265,7 +265,17 @@ namespace Gral
                                                 yraster -= _asdata.RasterSize * rasterFactor;
                                             }
                                         }
-                                        
+
+                                        int decPlaces = 3;
+                                        if (_asdata.RasterSize * rasterFactor > 10)
+                                        {
+                                            decPlaces = 1;
+                                        }
+                                        else if (_asdata.RasterSize * rasterFactor > 5)
+                                        {
+                                            decPlaces = 2;
+                                        }
+
                                         //write file cadastre.dat
                                         for (int l = 0; l < xyCell.Count; l++)
                                         {
@@ -274,8 +284,8 @@ namespace Gral
                                                 Math.Round(xyCell[l].X, 1).ToString(ic) + "," +
                                                 Math.Round(xyCell[l].Y, 1).ToString(ic) + "," +
                                                 _asdata.Height.ToString(ic) + "," +
-                                                Math.Round(_asdata.RasterSize * rasterFactor, 3).ToString(ic) + "," +
-                                                Math.Round(_asdata.RasterSize * rasterFactor, 3).ToString(ic) + "," +
+                                                Math.Round(_asdata.RasterSize * rasterFactor, decPlaces).ToString(ic) + "," +
+                                                Math.Round(_asdata.RasterSize * rasterFactor, decPlaces).ToString(ic) + "," +
                                                 _asdata.VerticalExt.ToString(ic) + "," +
                                                 (_asdata.Poll.EmissionRate[j] / Convert.ToDouble(xyCell.Count)).ToString(ic) + "," +
                                                 "0,0,0," +
