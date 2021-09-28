@@ -67,7 +67,7 @@ namespace GralDomain
                 }
                 else
                 {
-                    width = Math.Max (1, Math.Min(200, Convert.ToInt32(1.5 / BmpScale / MapSize.SizeX))); // 6 m diameter
+                    width = Convert.ToInt32(Math.Max (1, Math.Min(200, 1.5 / BmpScale / MapSize.SizeX))); // 6 m diameter
                 }
             }
             else

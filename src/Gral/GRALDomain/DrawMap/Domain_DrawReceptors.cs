@@ -72,12 +72,12 @@ namespace GralDomain
                 }
                 else
                 {
-                    width = Math.Max (1, Math.Min(200, Convert.ToInt32(1 / BmpScale / MapSize.SizeX))); // 4 m lenght
+                    width = Convert.ToInt32(Math.Max (1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
                 }
             }
             else
             {
-                width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 8 * factor_x)));
+                width = Convert.ToInt32(Math.Max (1, Math.Min(200, (double) _drobj.LineWidth / 8 * factor_x)));
             }
 
             //width = 3;
