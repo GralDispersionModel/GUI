@@ -594,11 +594,18 @@ namespace GralIO
 
                             _meteofrequ = 0;
                             double _temp = 0;
-
+                            if (_dispsituationfrequ == null)
+                            {
+                                _dispsituationfrequ = new double[100000];
+                            }
                             for (int n = 0; n < 100000; n++)
                             {
                                 try
                                 {
+                                    if (meteopgt.EndOfStream)
+                                    {
+                                        break;
+                                    }
                                     temp = meteopgt.ReadLine();
                                     if (!string.IsNullOrEmpty(temp))
                                     {
@@ -632,23 +639,28 @@ namespace GralIO
                     //correct the header in meteopgt.all
                     try
                     {
-                        File.Delete(Path.Combine(_projectname, @"Computation", "meteopgt.all"));
-                        using (StreamWriter _meteopgt = new StreamWriter(Path.Combine(_projectname, @"Computation", "meteopgt.all")))
+                        //check if meteopgt was read completely
+                        int lines = (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(_projectname, @"Computation", "meteopgt.all"));
+                        if (lines == text1.Count)
                         {
-                            string[] _text = text1[0].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            File.Delete(Path.Combine(_projectname, @"Computation", "meteopgt.all"));
+                            using (StreamWriter _meteopgt = new StreamWriter(Path.Combine(_projectname, @"Computation", "meteopgt.all")))
+                            {
+                                string[] _text = text1[0].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                            if (text1.Count > 2)
-                            {
-                                _meteopgt.WriteLine(_text[0] + ",0," + _text[2]);
-                            }
-                            else
-                            {
-                                _meteopgt.WriteLine("10,0,10");
-                            }
+                                if (text1.Count > 2)
+                                {
+                                    _meteopgt.WriteLine(_text[0] + ",0," + _text[2]);
+                                }
+                                else
+                                {
+                                    _meteopgt.WriteLine("10,0,10");
+                                }
 
-                            for (int n = 1; n < text1.Count - 1; n++)
-                            {
-                                _meteopgt.WriteLine(text1[n]);
+                                for (int n = 1; n < text1.Count; n++)
+                                {
+                                    _meteopgt.WriteLine(text1[n]);
+                                }
                             }
                         }
                     }
