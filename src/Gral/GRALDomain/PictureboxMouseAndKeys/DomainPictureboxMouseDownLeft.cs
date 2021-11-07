@@ -628,7 +628,7 @@ namespace GralDomain
 
                                         if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                                         {
-                                            EditAS.SetTrackBar(i + 1);
+                                            //EditAS.SetTrackBar(i + 1);
                                             EditAS.ItemDisplayNr = i;
                                             SelectedItems.Add(i);
                                             EditAS.FillValues();
