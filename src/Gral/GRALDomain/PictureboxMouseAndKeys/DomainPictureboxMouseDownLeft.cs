@@ -486,7 +486,7 @@ namespace GralDomain
 
                             if ((e.X >= x1 - 10) && (e.X <= x1 + 10) && (e.Y >= y1 - 10) && (e.Y <= y1 + 10))
                             {
-                                EditPS.SetTrackBar(i + 1);
+                                //EditPS.SetTrackBar(i + 1);
                                 EditPS.ItemDisplayNr = i;
                                 SelectedItems.Add(i);
                                 EditPS.FillValues();
@@ -564,7 +564,7 @@ namespace GralDomain
                             int y1 = Convert.ToInt32((_rd.Pt.Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
                             if ((e.X >= x1 - 10) && (e.X <= x1 + 10) && (e.Y >= y1 - 10) && (e.Y <= y1 + 10))
                             {
-                                EditR.SetTrackBar(i + 1);
+                                //EditR.SetTrackBar(i + 1);
                                 EditR.ItemDisplayNr = i;
                                 SelectedItems.Add(i);
                                 EditR.FillValues();
@@ -714,7 +714,7 @@ namespace GralDomain
 
                             if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                             {
-                                EditVegetation.SetTrackBar(i + 1);
+                                //EditVegetation.SetTrackBar(i + 1);
                                 EditVegetation.ItemDisplayNr = i;
                                 SelectedItems.Add(i);
                                 EditVegetation.FillValues();
@@ -760,7 +760,7 @@ namespace GralDomain
 
                             if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                             {
-                                EditB.SetTrackBar(i + 1);
+                                //EditB.SetTrackBar(i + 1);
                                 EditB.ItemDisplayNr = i;
                                 SelectedItems.Add(i);
                                 EditB.FillValues();
@@ -831,7 +831,7 @@ namespace GralDomain
 
                                 if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                                 {
-                                    EditLS.SetTrackBar(i + 1);
+                                    //EditLS.SetTrackBar(i + 1);
                                     EditLS.ItemDisplayNr = i;
                                     SelectedItems.Add(i);
                                     EditLS.FillValues();
@@ -923,7 +923,7 @@ namespace GralDomain
                             int ymean = Convert.ToInt32((y1 + y2) * 0.5);
                             if ((e.X >= xmean - 10) && (e.X <= xmean + 10) && (e.Y >= ymean - 10) && (e.Y <= ymean + 10))
                             {
-                                EditPortals.SetTrackBar(i + 1);
+                                //EditPortals.SetTrackBar(i + 1);
                                 EditPortals.ItemDisplayNr = i;
                                 SelectedItems.Add(i);
                                 EditPortals.FillValues();
@@ -1026,7 +1026,7 @@ namespace GralDomain
 
                                 if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                                 {
-                                    EditWall.SetTrackBar(i + 1);
+                                    //EditWall.SetTrackBar(i + 1);
                                     EditWall.ItemDisplayNr = i;
                                     SelectedItems.Add(i);
                                     EditWall.FillValues();
