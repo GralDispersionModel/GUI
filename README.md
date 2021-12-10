@@ -1,8 +1,8 @@
 # GRAL Dispersion Model GUI .NET6beta1<br>
-Here you can find the .NET6 beta version of the graphical user interface. Since the .NETFramework is no longer being developed by Microsoft, this is why we expect the following advantages from the changeover in the long term:
+This is the repository for the .NET6 beta version of the graphical user interface. Since the .NETFramework is no longer developed by Microsoft, we expect the following advantages from the migration in the future:
 * High dpi support
 * Performance improvements
-* Publishing of single files with the complete required framework
+* Publishing of single files with the entire required framework
 * Improvements due to future developments by Microsoft<br>
 
 The migration from .NETFramework to .NET6 results in significant code adjustments for an application as large as the GUI. For this reason, numerous bugs are still to be expected here. Therefore, GUI version 21.09 is recommended for current users.<br>
