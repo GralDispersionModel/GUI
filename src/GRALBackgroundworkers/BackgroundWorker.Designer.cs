@@ -33,6 +33,7 @@
             this.usertext = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BGW_Done
@@ -53,13 +54,15 @@
             this.usertext.Multiline = true;
             this.usertext.Name = "usertext";
             this.usertext.ReadOnly = true;
-            this.usertext.Size = new System.Drawing.Size(638, 74);
+            this.usertext.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.usertext.Size = new System.Drawing.Size(638, 115);
             this.usertext.TabIndex = 1;
             this.usertext.TabStop = false;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(298, 158);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(571, 194);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -74,23 +77,39 @@
             this.progressBar1.Size = new System.Drawing.Size(634, 23);
             this.progressBar1.TabIndex = 3;
             // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(12, 194);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "C&lose";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // ProgressFormBackgroundworker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(660, 195);
+            this.ClientSize = new System.Drawing.Size(660, 229);
             this.ControlBox = false;
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.usertext);
             this.Controls.Add(this.BGW_Done);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.MinimumSize = new System.Drawing.Size(676, 234);
             this.Name = "ProgressFormBackgroundworker";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProgressFormBackgroundworker_FormClosed);
             this.Load += new System.EventHandler(this.Progress_FormLoad);
             this.Shown += new System.EventHandler(this.Progress_FormShown);
+            this.SizeChanged += new System.EventHandler(this.ProgressFormBackgroundworker_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -100,5 +119,6 @@
 		private System.Windows.Forms.TextBox usertext;
 		private System.ComponentModel.BackgroundWorker Rechenknecht;
 		private System.Windows.Forms.Label BGW_Done;
-	}
+        private System.Windows.Forms.Button button2;
+    }
 }

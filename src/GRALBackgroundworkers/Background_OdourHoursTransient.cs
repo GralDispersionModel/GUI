@@ -33,6 +33,8 @@ namespace GralBackgroundworkers
             string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
 
+            AddInfoText(Environment.NewLine + "Transient simulation -> override emission modulation to 1 in the post processing" + Environment.NewLine);
+
             //get source group numbers
             int ij = 0;
             try
@@ -569,8 +571,8 @@ namespace GralBackgroundworkers
                 Result.TwoDim = Conc_standard;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
-                
             }
+            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
         }
     }
 }

@@ -83,6 +83,7 @@ namespace GralBackgroundworkers
                                 emifac_mon[j, itm] = 1;
                         }
                     }
+                    AddInfoText(Environment.NewLine + "Transient simulation -> override emission modulation to 1 in the post processing" + Environment.NewLine);
                 }
             }
             catch (Exception ex)
@@ -90,7 +91,27 @@ namespace GralBackgroundworkers
                 BackgroundThreadMessageBox(ex.Message);
                 return;
             }
-            
+
+            AddInfoText(Environment.NewLine + "Using diurnal and annual factors for the emission modulation" + Environment.NewLine);
+            for (int n = 0; n < maxsource; n++)
+            {
+                int count = 0;
+                double sum = 0;
+                for (int j = 0; j < 24; j++)
+                {
+                    sum += emifac_day[j, n];
+                    count++;
+                }
+                for (int j = 0; j < 12; j++)
+                {
+                    sum += emifac_mon[j, n];
+                    count++;
+                }
+                if (n < sg_names.Length)
+                {
+                    AddInfoText("Mean modulation factor for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2) + Environment.NewLine);
+                }
+            }
 
             //read mettimeseries.dat
             List<string> wgmettime = new List<string>();
@@ -441,10 +462,8 @@ namespace GralBackgroundworkers
                     Result.WriteFloatResult();
                 }
             }
-            
-            Computation_Completed = true; // set flag, that computation was successful
-            
+            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
+            Computation_Completed = true; // set flag, that computation was successful          
         }
-        
     }
 }

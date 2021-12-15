@@ -203,6 +203,7 @@ namespace GralBackgroundworkers
             {
                 BackgroundThreadMessageBox("Error when reading raster A");
             }
+            AddInfoText(Environment.NewLine + "Process finished ");
         }
 
         /// <summary>

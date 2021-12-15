@@ -181,14 +181,34 @@ namespace GralBackgroundworkers
             // hier wird der text an das Fortschritt-Form geschickt
             // InvokeRequired fragt ab, ob Thread-ID der Thread-ID des aktuellen Prozesses entspricht
             // Bei unterschiedlichen Threads=true
-            if (BGW_Done.InvokeRequired)
+            if (BGW_Done != null)
             {
-                SetTextCallback d = new SetTextCallback(SetText);
-                Invoke(d, new object[] { text }); // text über Callback schicken bei unterschiedlichen threads
+                if (BGW_Done.InvokeRequired)
+                {
+                    SetTextCallback d = new SetTextCallback(SetText);
+                    Invoke(d, new object[] { text }); // text über Callback schicken bei unterschiedlichen threads
+                }
+                else
+                {
+                    BGW_Done.Text = text; // text direkt zuweisen bei gleichem thread
+                }
             }
-            else
+        }
+
+        private void AddInfoText(string text)
+        {
+            if (usertext != null)
             {
-                BGW_Done.Text = text; // text direkt zuweisen bei gleichem thread
+                if (usertext.InvokeRequired)
+                {
+                    SetTextCallback d = new SetTextCallback(AddInfoText);
+                    text = usertext.Text + text;
+                    Invoke(d, new object[] { text }); // text über Callback schicken bei unterschiedlichen threads
+                }
+                else
+                {
+                    usertext.Text = text; // text direkt zuweisen bei gleichem thread
+                }
             }
         }
         
@@ -196,8 +216,11 @@ namespace GralBackgroundworkers
         void RechenknechtRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // jetzt bin ich aus dem Rechenknecht-Thread wieder draußen
-            Hide();   // this = aktives Fenster = form, wird geschlossen, damit läuft das Hauptprogramm wieder
-            
+            //Hide();   // this = aktives Fenster = form, wird geschlossen, damit läuft das Hauptprogramm wieder
+            button1.Enabled = false;
+            button2.Enabled = true;
+            progressBar1.Value = progressBar1.Maximum;
+
             if (e.Error != null)
             {
                 MessageBox.Show(e.Error.Message);
@@ -206,6 +229,7 @@ namespace GralBackgroundworkers
             {
                 MessageBoxTemporary Box = new MessageBoxTemporary("Process cancelled", Location);
                 Box.Show();
+                this.Close();
             }
             else
             {
@@ -215,18 +239,21 @@ namespace GralBackgroundworkers
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".", Location);
                     Box.Show();
+                    this.Close();
                 }
                 if (MyBackData.BackgroundWorkerFunction == BWMode.ReOrder) // Re-Order
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Re-ordering finished!", Location);
                     Box.Show();
+                    this.Close();
                 }
                 if (MyBackData.BackgroundWorkerFunction == BWMode.GralMetFile) // GRAL Meteo Files
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
                     MessageBoxTemporary Box = new MessageBoxTemporary("Process finished. Meteodata can now be analysed in the menu \"Meteorology\".", Location);
                     Box.Show();
+                    this.Close();
                 }
 
                 if (MyBackData.BackgroundWorkerFunction == BWMode.MeanMaxTimeSeries) // Mean, Max, daily Max
@@ -297,6 +324,7 @@ namespace GralBackgroundworkers
                         MessageBoxTemporary Box = new MessageBoxTemporary("Calculation finished: contour plots can now be created in the menu Domain", Location);
                         Box.Show();
                     }
+                    this.Close();
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
                 
@@ -341,6 +369,7 @@ namespace GralBackgroundworkers
                         MessageBoxTemporary Box = new MessageBoxTemporary("Calculations finished", Location);
                         Box.Show();
                     }
+                    this.Close();
                     //MessageBox.Show("Calculations finished.");
                 }
 
@@ -352,6 +381,7 @@ namespace GralBackgroundworkers
                         MessageBoxTemporary Box = new MessageBoxTemporary("GRAMM export finished", Location);
                         Box.Show();
                     }
+                    this.Close();
                 }
             }
             Rechenknecht.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted);
@@ -1141,5 +1171,14 @@ namespace GralBackgroundworkers
             });
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ProgressFormBackgroundworker_SizeChanged(object sender, EventArgs e)
+        {
+            usertext.Height = Math.Max(10, button1.Top - usertext.Top - 20);
+        }
     }
 }

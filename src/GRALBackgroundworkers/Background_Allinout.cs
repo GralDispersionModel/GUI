@@ -35,7 +35,9 @@ namespace GralBackgroundworkers
             string newpath;
             string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
-            
+            double[] sg_mean_modulation_sum = new double[maxsource];
+            int[] sg_mean_modulation_count = new int[maxsource];
+
             // int allin_index=0; // Kuntner never used 
             float[] freq = new float[maxsource];
 
@@ -68,7 +70,24 @@ namespace GralBackgroundworkers
                 BackgroundThreadMessageBox (ex.Message);
                 return;
             }
-
+            {
+                double sum = 0;
+                int count = 0;
+                for (int n = 0; n < maxsource; n++)
+                {
+                    for (int j = 0; j < 24; j++)
+                    {
+                        sum += emifac_day[j, n];
+                        count++;
+                    }
+                    for (int j = 0; j < 12; j++)
+                    {
+                        sum += emifac_mon[j, n];
+                        count++;
+                    }
+                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
+                }
+            }
             //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
             try
             {
@@ -798,6 +817,7 @@ namespace GralBackgroundworkers
                 Result.FileName = file5;
                 Result.WriteFloatResult();
             }
+            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
             Computation_Completed = true; // set flag, that computation was successful
         }	
     }

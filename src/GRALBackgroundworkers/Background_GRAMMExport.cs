@@ -138,7 +138,7 @@ namespace GralBackgroundworkers
             {
                 BackgroundThreadMessageBox(ex.Message);
             }
-
+            AddInfoText(Environment.NewLine + "Process finished");
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

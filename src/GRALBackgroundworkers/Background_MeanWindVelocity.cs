@@ -215,6 +215,7 @@ namespace GralBackgroundworkers
                 BackgroundThreadMessageBox("Compute Mean Wind Velocity IO Error");
                 return;
             }
+            AddInfoText(Environment.NewLine + "Process finished ");
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

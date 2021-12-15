@@ -66,6 +66,24 @@ namespace GralBackgroundworkers
                 BackgroundThreadMessageBox (ex.Message);
                 return;
             }
+            {
+                double sum = 0;
+                int count = 0;
+                for (int n = 0; n < maxsource; n++)
+                {
+                    for (int j = 0; j < 24; j++)
+                    {
+                        sum += emifac_day[j, n];
+                        count++;
+                    }
+                    for (int j = 0; j < 12; j++)
+                    {
+                        sum += emifac_mon[j, n];
+                        count++;
+                    }
+                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
+                }
+            }
 
             //read mettimeseries.dat
             List<string> wgmettime = new List<string>();
@@ -562,7 +580,7 @@ namespace GralBackgroundworkers
                 Result.WriteFloatResult();
                 
             }
-            
+            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
             Computation_Completed = true; // set flag, that computation was successful
         }
     }
