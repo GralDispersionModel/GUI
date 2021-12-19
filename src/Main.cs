@@ -2021,6 +2021,7 @@ namespace Gral
                 {
                     label84.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
                 }
+                label57.Text = files_conc.Length.ToString() + " files";
             }
             catch { }
 
@@ -2042,6 +2043,7 @@ namespace Gral
                 {
                     label85.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
                 }
+                label72.Text = files_gff.Length.ToString() + " files";
             }
             catch
             { }
@@ -2059,12 +2061,13 @@ namespace Gral
                 }
                 if (file_size < 1000000000)
                 {
-                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte in " + files_wnd.Length.ToString() + " files";
+                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
                 }
                 else
                 {
-                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte in " + files_wnd.Length.ToString() + " files";
+                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
                 }
+                label96.Text = files_wnd.Length.ToString() + " files";
             }
             catch { }
         }

@@ -340,6 +340,9 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label72 = new System.Windows.Forms.Label();
+            this.label96 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.Project.SuspendLayout();
             this.Comments.SuspendLayout();
@@ -4020,7 +4023,7 @@
             this.groupBox15.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBox15.Location = new System.Drawing.Point(212, 11);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(227, 427);
+            this.groupBox15.Size = new System.Drawing.Size(217, 427);
             this.groupBox15.TabIndex = 30;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "GRAMM";
@@ -4028,12 +4031,13 @@
             // 
             // groupBox30
             // 
+            this.groupBox30.Controls.Add(this.label96);
             this.groupBox30.Controls.Add(this.button45);
             this.groupBox30.Controls.Add(this.label97);
             this.groupBox30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox30.Location = new System.Drawing.Point(5, 200);
+            this.groupBox30.Location = new System.Drawing.Point(5, 170);
             this.groupBox30.Name = "groupBox30";
-            this.groupBox30.Size = new System.Drawing.Size(180, 87);
+            this.groupBox30.Size = new System.Drawing.Size(192, 117);
             this.groupBox30.TabIndex = 38;
             this.groupBox30.TabStop = false;
             this.groupBox30.Text = "GRAMM file size";
@@ -4043,7 +4047,7 @@
             this.button45.BackColor = System.Drawing.Color.Gainsboro;
             this.button45.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button45.BackgroundImage")));
             this.button45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button45.Location = new System.Drawing.Point(151, 24);
+            this.button45.Location = new System.Drawing.Point(160, 30);
             this.button45.Name = "button45";
             this.button45.Size = new System.Drawing.Size(26, 25);
             this.button45.TabIndex = 37;
@@ -4054,7 +4058,7 @@
             // label97
             // 
             this.label97.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label97.Location = new System.Drawing.Point(5, 28);
+            this.label97.Location = new System.Drawing.Point(14, 25);
             this.label97.Name = "label97";
             this.label97.Size = new System.Drawing.Size(138, 23);
             this.label97.TabIndex = 16;
@@ -4098,20 +4102,20 @@
             // label67
             // 
             this.label67.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label67.Location = new System.Drawing.Point(4, 104);
+            this.label67.Location = new System.Drawing.Point(4, 118);
             this.label67.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(138, 15);
             this.label67.TabIndex = 13;
-            this.label67.Text = "Actual flow situation: 0%";
+            this.label67.Text = "Actual situation: 0%";
             // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(3, 125);
+            this.progressBar2.Location = new System.Drawing.Point(4, 140);
             this.progressBar2.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar2.Maximum = 101;
             this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(165, 18);
+            this.progressBar2.Size = new System.Drawing.Size(170, 18);
             this.progressBar2.Step = 1;
             this.progressBar2.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar2.TabIndex = 34;
@@ -4119,20 +4123,20 @@
             // label66
             // 
             this.label66.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label66.Location = new System.Drawing.Point(4, 60);
+            this.label66.Location = new System.Drawing.Point(4, 62);
             this.label66.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label66.Name = "label66";
             this.label66.Size = new System.Drawing.Size(120, 15);
             this.label66.TabIndex = 11;
-            this.label66.Text = "Flow situation: 1 / 0%";
+            this.label66.Text = "Situation: 1 / 0%";
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(4, 80);
+            this.progressBar1.Location = new System.Drawing.Point(4, 82);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar1.Maximum = 101;
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(165, 18);
+            this.progressBar1.Size = new System.Drawing.Size(170, 18);
             this.progressBar1.Step = 1;
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 33;
@@ -4372,25 +4376,27 @@
             // label68
             // 
             this.label68.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label68.Location = new System.Drawing.Point(8, 106);
+            this.label68.Location = new System.Drawing.Point(8, 118);
             this.label68.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label68.Name = "label68";
             this.label68.Size = new System.Drawing.Size(169, 15);
             this.label68.TabIndex = 13;
-            this.label68.Text = "Actual dispersion situation: 0%";
+            this.label68.Text = "Actual situation: 0%";
             // 
             // progressBar3
             // 
-            this.progressBar3.Location = new System.Drawing.Point(8, 125);
+            this.progressBar3.Location = new System.Drawing.Point(8, 140);
             this.progressBar3.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar3.Name = "progressBar3";
-            this.progressBar3.Size = new System.Drawing.Size(173, 18);
+            this.progressBar3.Size = new System.Drawing.Size(170, 18);
             this.progressBar3.Step = 1;
             this.progressBar3.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar3.TabIndex = 44;
             // 
             // groupBox18
             // 
+            this.groupBox18.Controls.Add(this.label72);
+            this.groupBox18.Controls.Add(this.label57);
             this.groupBox18.Controls.Add(this.label85);
             this.groupBox18.Controls.Add(this.label84);
             this.groupBox18.Controls.Add(this.button42);
@@ -4398,9 +4404,9 @@
             this.groupBox18.Controls.Add(this.label83);
             this.groupBox18.Controls.Add(this.label82);
             this.groupBox18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox18.Location = new System.Drawing.Point(5, 200);
+            this.groupBox18.Location = new System.Drawing.Point(5, 170);
             this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(176, 87);
+            this.groupBox18.Size = new System.Drawing.Size(176, 117);
             this.groupBox18.TabIndex = 8;
             this.groupBox18.TabStop = false;
             this.groupBox18.Text = "GRAL file size";
@@ -4409,7 +4415,7 @@
             // 
             this.label85.AutoSize = true;
             this.label85.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label85.Location = new System.Drawing.Point(5, 54);
+            this.label85.Location = new System.Drawing.Point(5, 70);
             this.label85.Name = "label85";
             this.label85.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label85.Size = new System.Drawing.Size(50, 15);
@@ -4421,7 +4427,7 @@
             // 
             this.label84.AutoSize = true;
             this.label84.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label84.Location = new System.Drawing.Point(5, 28);
+            this.label84.Location = new System.Drawing.Point(5, 25);
             this.label84.Name = "label84";
             this.label84.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label84.Size = new System.Drawing.Size(50, 15);
@@ -4435,7 +4441,7 @@
             this.button42.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button42.BackgroundImage")));
             this.button42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button42.ForeColor = System.Drawing.Color.Black;
-            this.button42.Location = new System.Drawing.Point(141, 53);
+            this.button42.Location = new System.Drawing.Point(141, 74);
             this.button42.Name = "button42";
             this.button42.Size = new System.Drawing.Size(26, 25);
             this.button42.TabIndex = 9;
@@ -4449,7 +4455,7 @@
             this.button41.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button41.BackgroundImage")));
             this.button41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button41.ForeColor = System.Drawing.Color.Black;
-            this.button41.Location = new System.Drawing.Point(141, 24);
+            this.button41.Location = new System.Drawing.Point(141, 34);
             this.button41.Name = "button41";
             this.button41.Size = new System.Drawing.Size(26, 25);
             this.button41.TabIndex = 8;
@@ -4461,7 +4467,7 @@
             // 
             this.label83.AutoSize = true;
             this.label83.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label83.Location = new System.Drawing.Point(79, 57);
+            this.label83.Location = new System.Drawing.Point(79, 79);
             this.label83.Name = "label83";
             this.label83.Size = new System.Drawing.Size(54, 15);
             this.label83.TabIndex = 1;
@@ -4471,7 +4477,7 @@
             // 
             this.label82.AutoSize = true;
             this.label82.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label82.Location = new System.Drawing.Point(79, 28);
+            this.label82.Location = new System.Drawing.Point(79, 38);
             this.label82.Name = "label82";
             this.label82.Size = new System.Drawing.Size(59, 15);
             this.label82.TabIndex = 0;
@@ -4631,14 +4637,14 @@
             this.label69.Name = "label69";
             this.label69.Size = new System.Drawing.Size(150, 15);
             this.label69.TabIndex = 11;
-            this.label69.Text = "Dispersion situation: 1 / 0%";
+            this.label69.Text = "Situation: 1 / 0%";
             // 
             // progressBar4
             // 
-            this.progressBar4.Location = new System.Drawing.Point(8, 80);
+            this.progressBar4.Location = new System.Drawing.Point(8, 82);
             this.progressBar4.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar4.Name = "progressBar4";
-            this.progressBar4.Size = new System.Drawing.Size(173, 18);
+            this.progressBar4.Size = new System.Drawing.Size(170, 18);
             this.progressBar4.Step = 1;
             this.progressBar4.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar4.TabIndex = 43;
@@ -4980,6 +4986,39 @@
             0,
             0,
             0});
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label57.Location = new System.Drawing.Point(5, 45);
+            this.label57.Name = "label57";
+            this.label57.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label57.Size = new System.Drawing.Size(16, 15);
+            this.label57.TabIndex = 10;
+            this.label57.Text = "0 ";
+            this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label72.Location = new System.Drawing.Point(5, 90);
+            this.label72.Name = "label72";
+            this.label72.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label72.Size = new System.Drawing.Size(13, 15);
+            this.label72.TabIndex = 11;
+            this.label72.Text = "0";
+            this.label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label96
+            // 
+            this.label96.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label96.Location = new System.Drawing.Point(14, 45);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(138, 23);
+            this.label96.TabIndex = 38;
+            this.label96.Text = "0";
             // 
             // Main
             // 
@@ -5425,6 +5464,9 @@
         public System.Windows.Forms.TextBox textBoxGrammLandUseFile;
         private System.Windows.Forms.Button button59;
         private System.Windows.Forms.GroupBox groupBox30;
+        private System.Windows.Forms.Label label72;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.Label label96;
     }
 }
 
