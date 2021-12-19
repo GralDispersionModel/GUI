@@ -43,6 +43,8 @@ namespace GralBackgroundworkers
             int[] sg_numbers = new int[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
             string[] computed_sourcegroups = mydata.ComputedSourceGroup.Split(',');
+            double[] sg_mean_modulation_sum = new double[maxsource];
+            int[] sg_mean_modulation_count = new int[maxsource];
 
             //in transient GRAL mode, it is simply to read the File GRAL_meteozeitreihe.dat and convert it to .met files
             bool transient = false;
@@ -55,6 +57,7 @@ namespace GralBackgroundworkers
                 if (data.Transientflag == 0)
                 {
                     transient = true;
+                    AddInfoText(Environment.NewLine + "Transient simulation -> emission modulation was considered in GRAL" + Environment.NewLine);
                 }
             }
 
@@ -128,7 +131,7 @@ namespace GralBackgroundworkers
             //if file emissions_timeseries.txt exists, these modulation factors will be used
             int[] sg_time = new int[maxsource];
             double[,] emifac_timeseries = new double[mettimefilelength + 1, maxsource];
-
+            bool timeseries = false;
             if (!string.IsNullOrEmpty(mydata.SelectedSourceGroup)) // otherwise just analyze the wind data
             {
                 //it is necessary to set all values of the array emifac_timeseries equal to 1
@@ -142,10 +145,13 @@ namespace GralBackgroundworkers
 
                 // read value from emissions_timeseries.txt -> emifac_day[] and emifac_mon[] not used
                 newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
-                if (File.Exists(newpath) == true)
+                // modulation = 1 in transient mode
+                if (File.Exists(newpath) == true && !transient)
                 {
                     try
                     {
+                        Array.Clear(sg_mean_modulation_count);
+                        Array.Clear(sg_mean_modulation_sum);
                         //read timeseries of emissions
                         string[] text10 = new string[1];
                         using (StreamReader read1 = new StreamReader(newpath))
@@ -182,15 +188,38 @@ namespace GralBackgroundworkers
                                     if (sg_time[n] == 0)
                                     {
                                         emifac_timeseries[i, n] = 1;
+                                        for (int j = 0; j < 24; j++)
+                                        {
+                                            sg_mean_modulation_sum[n] += emifac_day[j, n];
+                                            sg_mean_modulation_count[n]++;
+                                        }
+                                        for (int j = 0; j < 12; j++)
+                                        {
+                                            sg_mean_modulation_sum[n] += emifac_mon[j, n];
+                                            sg_mean_modulation_count[n]++;
+                                        }
                                     }
                                     else
                                     {
                                         emifac_timeseries[i, n] = Convert.ToDouble(text10[sg_time[n]].Replace(".", decsep));
+                                        sg_mean_modulation_count[n]++;
+                                        sg_mean_modulation_sum[n] += emifac_timeseries[i, n];
                                     }
                                 }
                             }
                         }
-
+                        for (int n = 0; n < sg_names.Length; n++)
+                        {
+                            if (sg_time[n] == 0)
+                            {
+                                AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors)  for source group  " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
+                            }
+                            else
+                            {
+                                AddInfoText(Environment.NewLine + "Mean modulation factor (emissionstimeseries.txt) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
+                            }
+                        }
+                        timeseries = true;
                     }
                     catch (Exception ex)
                     {
@@ -198,6 +227,33 @@ namespace GralBackgroundworkers
                         return;
                     }
                 } // read value from emissions_timeseries.txt
+            }
+            if (!timeseries)
+            {
+                double sum = 0;
+                int count = 0;
+                for (int n = 0; n < maxsource; n++)
+                {
+                    for (int j = 0; j < 24; j++)
+                    {
+                        if (transient)
+                        {
+                            emifac_day[j, n] = 1;
+                        }
+                        sum += emifac_day[j, n];
+                        count++;
+                    }
+                    for (int j = 0; j < 12; j++)
+                    {
+                        if (transient)
+                        {
+                            emifac_mon[j, n] = 1;
+                        }
+                        sum += emifac_mon[j, n];
+                        count++;
+                    }
+                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
+                }
             }
 
             List<string> wgmet = new List<string>();

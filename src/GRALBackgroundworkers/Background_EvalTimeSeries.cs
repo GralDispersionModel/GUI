@@ -43,7 +43,7 @@ namespace GralBackgroundworkers
                 if (transientMode)
                 {
                     meteoInput = meteoTimeSeries;
-                    AddInfoText(Environment.NewLine + "Transient simulation -> override emission modulation to 1 in the post processing" + Environment.NewLine);
+                    AddInfoText(Environment.NewLine + "Transient simulation -> emission modulation was considered in GRAL" + Environment.NewLine);
                 }
 
                 //Read Emission modulation

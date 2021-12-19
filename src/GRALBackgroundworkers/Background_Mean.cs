@@ -29,67 +29,30 @@ namespace GralBackgroundworkers
             //reading emission variations
             int maxsource = mydata.MaxSource;
             string decsep = mydata.DecSep;
-            double[,] emifac_day = new double[24, maxsource];
-            double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
-            string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
             bool deposition_files_exists = false;
-           
-            //get variation for source group
-            int itm=0;
-            try
-            {
-                foreach (string source_group_name in sg_names)
-                {
-                    sg_numbers[itm] = GetSgNumbers(source_group_name);
-                    newpath = Path.Combine("Computation", "emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
+            int itm = 0;
 
-                    using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
-                    {
-                        for (int j = 0; j < 24; j++)
-                        {
-                            text = myreader.ReadLine().Split(new char[] { ',' });
-                            emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
-                            if (j < 12)
-                                emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-                        }
-                    }
-                    itm++;
-                }
-            }
-            catch(Exception ex)
-            {
-                BackgroundThreadMessageBox (ex.Message);
-                return;
-            }
+            //get emission modulations for all source groups
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
 
             //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
-            try
+            bool transientMode = CheckForTransientMode(mydata.ProjectName);
+            if (transientMode)
             {
-                InDatVariables data = new InDatVariables();
-                InDatFileIO ReadInData = new InDatFileIO();
-                data.InDatPath = Path.Combine(mydata.ProjectName, "Computation","in.dat");
-                ReadInData.Data = data;
-                if (ReadInData.ReadInDat() == true)
+                AddInfoText(Environment.NewLine + "Transient simulation -> emission modulation was considered in GRAL" + Environment.NewLine);
+                //set emifac_day and emifac_mon equal one in transient mode
+                for (int itm1 = 0; itm1 < maxsource; itm1++)
                 {
-                    if (data.Transientflag == 0)
+                    for (int j = 0; j < 24; j++)
                     {
-                        for (int j = 0; j < 24; j++)
-                        {
-                            emifac_day[j, itm] = 1;
-                            if (j < 12)
-                                emifac_mon[j, itm] = 1;
-                        }
+                        emifac_day[j, itm1] = 1;
+                        if (j < 12)
+                            emifac_mon[j, itm1] = 1;
                     }
-                    AddInfoText(Environment.NewLine + "Transient simulation -> override emission modulation to 1 in the post processing" + Environment.NewLine);
                 }
-            }
-            catch (Exception ex)
-            {
-                BackgroundThreadMessageBox(ex.Message);
-                return;
             }
 
             AddInfoText(Environment.NewLine + "Using diurnal and annual factors for the emission modulation" + Environment.NewLine);
@@ -176,6 +139,7 @@ namespace GralBackgroundworkers
             double frequency;
             int wl = 0;
             int nnn = 0;
+            int situationCount = 0;
             double ntot = 0;
             
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
@@ -248,6 +212,7 @@ namespace GralBackgroundworkers
                     {
                         //set variables to zero
                         itm = 0;
+                        situationCount++;
                         foreach (string source_group_name in sg_names)
                         {
                             emmit[itm] = 0;
@@ -462,7 +427,7 @@ namespace GralBackgroundworkers
                     Result.WriteFloatResult();
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
+            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
             Computation_Completed = true; // set flag, that computation was successful          
         }
     }

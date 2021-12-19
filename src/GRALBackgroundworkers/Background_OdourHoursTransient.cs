@@ -33,7 +33,7 @@ namespace GralBackgroundworkers
             string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
 
-            AddInfoText(Environment.NewLine + "Transient simulation -> override emission modulation to 1 in the post processing" + Environment.NewLine);
+            AddInfoText(Environment.NewLine + "Transient simulation -> emission modulation was considered in GRAL" + Environment.NewLine);
 
             //get source group numbers
             int ij = 0;
@@ -113,6 +113,7 @@ namespace GralBackgroundworkers
             }
 
             int nnn = 0;
+            int situationCount = 0;
             int n_daytime = 0;
             int n_nighttime = 0;
             int n_evening = 0;
@@ -223,6 +224,7 @@ namespace GralBackgroundworkers
                     if (exist == true)
                     {
                         nnn += 1;
+                        situationCount++;
                         int std = Convert.ToInt32(hour[i]);
                         int mon = Convert.ToInt32(month[i]) - 1;
 
@@ -572,7 +574,7 @@ namespace GralBackgroundworkers
                 Result.FileName = file5;
                 Result.WriteFloatResult();
             }
-            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
+            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
         }
     }
 }

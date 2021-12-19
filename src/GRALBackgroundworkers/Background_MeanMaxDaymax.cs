@@ -29,44 +29,16 @@ namespace GralBackgroundworkers
             //reading emission variations
             int maxsource = mydata.MaxSource;
             string decsep = mydata.DecSep;
-            double[,] emifac_day = new double[24, maxsource];
-            double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
-            string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
             double[] sg_mean_modulation_sum = new double[maxsource];
             int[] sg_mean_modulation_count = new int[maxsource];
             bool deposition_files_exists = false;
             bool no_classification = mydata.MeteoNotClassified;
 
-            //get variation for source group
-            int itm=0;
-            try
-            {
-                foreach (string source_group_name in sg_names)
-                {
-                    sg_numbers[itm] = GetSgNumbers(source_group_name);
-                    newpath = Path.Combine("Computation", "emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
-
-                    using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
-                    {
-                        for (int j = 0; j < 24; j++)
-                        {
-                            text = myreader.ReadLine().Split(new char[] { ',' });
-                            emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
-                            if (j < 12)
-                                emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-                        }
-                    }
-                    itm++;
-                }
-            }
-            catch(Exception ex)
-            {
-                BackgroundThreadMessageBox (ex.Message);
-                return;
-            }
+            //get emission modulations for all source groups
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
             
             List<string> wgmet = new List<string>();
             List<string> wrmet = new List<string>();
@@ -84,6 +56,7 @@ namespace GralBackgroundworkers
             string hour;
             int WeatherSituationsOfThisDay = 1;
             int nnn = 0;
+            int situationCount = 0;
             //int indexi = 0;
             //int indexj = 0;
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
@@ -148,9 +121,25 @@ namespace GralBackgroundworkers
                 return;
             }
             //mettimefilelength--;
-            
+
+            //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
+            bool transientMode = CheckForTransientMode(mydata.ProjectName);
+            if (transientMode)
+            {
+                AddInfoText(Environment.NewLine + "Transient simulation -> emission modulation was considered in GRAL" + Environment.NewLine);
+                //set emifac_day and emifac_mon equal one in transient mode
+                for (int itm1 = 0; itm1 < maxsource; itm1++)
+                {
+                    for (int j = 0; j < 24; j++)
+                    {
+                        emifac_day[j, itm1] = 1;
+                        if (j < 12)
+                            emifac_mon[j, itm1] = 1;
+                    }
+                }
+            }
+
             //if file emissions_timeseries.txt exists, these modulation factors will be used
-            int[] sg_time = new int[maxsource];
             double[,] emifac_timeseries = new double[mettimefilelength + 1, maxsource];
             
             //it is necessary to set all values of the array emifac_timeseries equal to 1
@@ -162,148 +151,11 @@ namespace GralBackgroundworkers
                 }
             }
 
-            newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
-            bool timeseries = false;
-            if (File.Exists(newpath) == true)
+            // modulation = 1 in transient mode
+            if (!transientMode)
             {
-                try
-                {
-                    Array.Clear(sg_mean_modulation_count);
-                    Array.Clear(sg_mean_modulation_sum);
-                    //read timeseries of emissions
-                    string[] text10 = new string[1];
-                    using (StreamReader read1 = new StreamReader(newpath))
-                    {
-                        //get source group numbers
-                        text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        for (int i = 2; i < text10.Length; i++)
-                        {
-                            //get the column corresponding with the source group number stored in sg_numbers
-                            string sg_temp = text10[i];
-                            for (int itm1 = 0; itm1 < maxsource; itm1++)
-                            {
-                                if (sg_numbers[itm1] == sg_temp)
-                                {
-                                    sg_time[itm1] = i;
-
-                                    //set emifac_day and emifac_mon equal one -> only for those source groups that are defined in emissions_timeseries.txt
-                                    for (int j = 0; j < 24; j++)
-                                    {
-                                        emifac_day[j, itm1] = 1;
-                                        if (j < 12)
-                                            emifac_mon[j, itm1] = 1;
-                                    }
-                                }
-                            }
-
-                        }
-
-
-                        for (int i = 0; i < mettimefilelength; i++)
-                        {
-                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                            for (int n = 0; n < maxsource; n++)
-                            {
-                                if (sg_time[n] == 0)
-                                {
-                                    emifac_timeseries[i, n] = 1;
-                                    for (int j = 0; j < 24; j++)
-                                    {
-                                        sg_mean_modulation_sum[n] += emifac_day[j, n];
-                                        sg_mean_modulation_count[n]++;
-                                    }
-                                    for (int j = 0; j < 12; j++)
-                                    {
-                                        sg_mean_modulation_sum[n] += emifac_mon[j, n];
-                                        sg_mean_modulation_count[n]++;
-                                    }
-                                }
-                                else
-                                {
-                                    emifac_timeseries[i, n] = Convert.ToDouble(text10[sg_time[n]].Replace(".", decsep));
-                                    sg_mean_modulation_count[n]++;
-                                    sg_mean_modulation_sum[n] += emifac_timeseries[i, n];
-                                }
-                            }
-                        }
-                    }
-                    for (int n = 0; n < sg_names.Length; n++)
-                    {
-                        if (sg_time[n] == 0)
-                        {
-                            AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors)  for source group  " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
-                        }
-                        else 
-                        {
-                            AddInfoText(Environment.NewLine + "Mean modulation factor (emissionstimeseries.txt) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
-                        }
-                    }
-                    timeseries = true;
-                }
-                catch (Exception ex)
-                {
-                    BackgroundThreadMessageBox(ex.Message + " Can´t read emissions_timeseries.txt - evaluation stopped");
-                    AddInfoText(Environment.NewLine + "Can´t read emissions_timeseries.txt - evaluation stopped");
-                    return;
-                }
-            }
-            if (!timeseries)
-            {
-                double sum = 0;
-                int count = 0;
-                for (int n = 0; n < maxsource; n++)
-                {
-                    for (int j = 0; j < 24; j++)
-                    {
-                        sum += emifac_day[j, n];
-                        count++;
-                    }
-                    for (int j = 0; j < 12; j++)
-                    {
-                        sum += emifac_mon[j, n];
-                        count++;
-                    }
-                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
-                }
-            }
-
-            //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
-            int transient = 1;
-            try
-            {
-                InDatVariables data = new InDatVariables();
-                InDatFileIO ReadInData = new InDatFileIO();
-                data.InDatPath = Path.Combine(mydata.ProjectName, "Computation","in.dat");
-                ReadInData.Data = data;
-                if (ReadInData.ReadInDat() == true)
-                {
-                    if (data.Transientflag == 0)
-                    {
-                        transient = 0;
-                        for (int n = 0; n < maxsource; n++)
-                        {
-                            for (int j = 0; j < 24; j++)
-                            {
-                                emifac_day[j, n] = 1;
-                                if (j < 12)
-                                    emifac_mon[j, n] = 1;
-                            }
-                        }
-                        for (int i = 0; i < mettimefilelength; i++)
-                        {
-                            for (int n = 0; n < maxsource; n++)
-                            {
-                                emifac_timeseries[i, n] = 1;
-                            }
-                        }
-                    }
-                    AddInfoText(Environment.NewLine + "Transient simulation -> override emission modulation to 1 in the post processing" + Environment.NewLine);
-                }
-            }
-            catch (Exception ex)
-            {
-                BackgroundThreadMessageBox(ex.Message);
-                return;
+                emifac_timeseries = ReadEmissionModulationTimeSeries(mettimefilelength, maxsource, mydata.ProjectName,
+                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names);
             }
 
             //read mettimeseries.dat
@@ -345,7 +197,7 @@ namespace GralBackgroundworkers
 
                 //in case of transient simulation there is no need to loop over meteopgt.all
                 int meteo_loop = wrmet.Count;
-                if (transient == 0 || no_classification == true)
+                if (!transientMode || no_classification == true)
                 {
                     meteo_loop = 1;
                 }
@@ -355,7 +207,7 @@ namespace GralBackgroundworkers
                 {
                     //in case of transient simulation there is no need to loop over meteopgt.all
                     bool meteo_situation_found = false;                    
-                    if (transient == 0 || no_classification==true)
+                    if (!transientMode || no_classification==true)
                     {
                         meteo_situation_found = true;
                     }
@@ -375,7 +227,7 @@ namespace GralBackgroundworkers
 
                         //get correct weather number in dependence on steady-state or transient simulation
                         int weanumb = n;
-                        if (transient == 0 || no_classification == true)
+                        if (!transientMode || no_classification == true)
                         {
                             weanumb = count_ws;
                         }
@@ -461,6 +313,7 @@ namespace GralBackgroundworkers
                         {
                             //number of dispersion situation
                             nnn += 1;
+                            situationCount++;
                             //number of hours of specific day
                             WeatherSituationsOfThisDay += 1;
                             int std = Convert.ToInt32(hour);
@@ -561,7 +414,7 @@ namespace GralBackgroundworkers
             //final computations
             if (nnn > 0)
             {
-                itm = 0;
+                int itm = 0;
                 foreach (string source_group_name in sg_names)
                 {
                     for (int i = 0; i <= mydata.CellsGralX; i++)
@@ -598,7 +451,7 @@ namespace GralBackgroundworkers
             //write mean concentration hour files for each source group
             if (mydata.CalculateMean == true)
             {
-                itm = 0;
+                int itm = 0;
                 foreach (string source_group_name in sg_names)
                 {
                     if (Rechenknecht.CancellationPending)
@@ -676,7 +529,7 @@ namespace GralBackgroundworkers
             //write max concentration files for each source group
             if (mydata.CalculateMaxHour == true)
             {
-                itm = 0;
+                int itm = 0;
                 string depo_name="";
                 foreach (string source_group_name in sg_names)
                 {
@@ -755,11 +608,10 @@ namespace GralBackgroundworkers
                 }
             }
 
-
             //write max daily concentration files for each source group
             if (mydata.CalculateDayMax == true)
             {
-                itm = 0;
+                int itm = 0;
                 string depo_name;
                 foreach (string source_group_name in sg_names)
                 {
@@ -836,7 +688,7 @@ namespace GralBackgroundworkers
                     Result.WriteFloatResult();
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
+            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

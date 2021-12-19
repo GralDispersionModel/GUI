@@ -29,11 +29,8 @@ namespace GralBackgroundworkers
             //reading emission variations
             int maxsource = mydata.MaxSource;
             string decsep = mydata.DecSep;
-            double[,] emifac_day = new double[24, maxsource];
-            double[,] emifac_mon = new double[12, maxsource];
             string[] text = new string[5];
             string newpath;
-            string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
             double[] sg_mean_modulation_sum = new double[maxsource];
             int[] sg_mean_modulation_count = new int[maxsource];
@@ -41,81 +38,26 @@ namespace GralBackgroundworkers
             // int allin_index=0; // Kuntner never used 
             float[] freq = new float[maxsource];
 
-            //get variation for source group
-            int itm=0;
-            try
-            {
-                foreach (string source_group_name in sg_names)
-                {
-                    sg_numbers[itm] = GetSgNumbers(source_group_name);
-                    newpath = Path.Combine("Computation","emissions" + sg_numbers[itm].PadLeft(3,'0') + ".dat");
+            //get emission modulations for all source groups
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
 
-                    using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
-                    {
-                        for (int j = 0; j < 24; j++)
-                        {
-                            text = myreader.ReadLine().Split(new char[] { ',' });
-                            emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
-                            if (j < 12)
-                            {
-                                emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-                            }
-                        }
-                    }
-                    itm++;
-                }
-            }
-            catch(Exception ex)
+            //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
+            bool transientMode = CheckForTransientMode(mydata.ProjectName);
+            if (transientMode)
             {
-                BackgroundThreadMessageBox (ex.Message);
-                return;
-            }
-            {
-                double sum = 0;
-                int count = 0;
-                for (int n = 0; n < maxsource; n++)
+                AddInfoText(Environment.NewLine + "Transient simulation -> emission modulation was considered in GRAL" + Environment.NewLine);
+                //set emifac_day and emifac_mon equal one in transient mode
+                for (int itm1 = 0; itm1 < maxsource; itm1++)
                 {
                     for (int j = 0; j < 24; j++)
                     {
-                        sum += emifac_day[j, n];
-                        count++;
-                    }
-                    for (int j = 0; j < 12; j++)
-                    {
-                        sum += emifac_mon[j, n];
-                        count++;
-                    }
-                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
-                }
-            }
-            //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
-            try
-            {
-                InDatVariables data = new InDatVariables();
-                InDatFileIO ReadInData = new InDatFileIO();
-                data.InDatPath = Path.Combine(mydata.ProjectName, "Computation","in.dat");
-                ReadInData.Data = data;
-                if (ReadInData.ReadInDat() == true)
-                {
-                    if (data.Transientflag == 0)
-                    {
-                        for (int j = 0; j < 24; j++)
-                        {
-                            emifac_day[j, itm] = 1;
-                            if (j < 12)
-                            {
-                                emifac_mon[j, itm] = 1;
-                            }
-                        }
+                        emifac_day[j, itm1] = 1;
+                        if (j < 12)
+                            emifac_mon[j, itm1] = 1;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                BackgroundThreadMessageBox(ex.Message);
-                return;
-            }
-            
+
             //read mettimeseries.dat
             List<string> wgmettime = new List<string>();
             List<string> wrmettime = new List<string>();
@@ -183,7 +125,7 @@ namespace GralBackgroundworkers
             emptytimes = mydata.Emptytimes;
 
             //source group specifications for all in all out systems
-            itm = 0;
+            int itm = 0;
             foreach (string source_group_name in sg_names)
             {
                 //define frequencies for odour emissions for each source group
@@ -213,6 +155,7 @@ namespace GralBackgroundworkers
             double frequency;
             int wl = 0;
             int nnn = 0;
+            int situationCount = 0;
             int n_daytime = 0;
             int n_nighttime = 0;
             int n_evening = 0;
@@ -324,6 +267,7 @@ namespace GralBackgroundworkers
                     if (exist == true)
                     {
                         ntot += frequency / 10;
+                        situationCount++;
 
                         for (int i = 0; i < hour.Count; i++)
                         {
@@ -817,7 +761,7 @@ namespace GralBackgroundworkers
                 Result.FileName = file5;
                 Result.WriteFloatResult();
             }
-            AddInfoText(Environment.NewLine + "Process finished " + nnn.ToString() + " situations processed");
+            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
             Computation_Completed = true; // set flag, that computation was successful
         }	
     }
