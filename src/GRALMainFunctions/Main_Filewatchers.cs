@@ -46,7 +46,7 @@ namespace Gral
                     {
                         UpdateProgressBar3(Math.Max(0, Math.Min(100, trackbar)));
                     }
-                    UpdateLabel68("Actual dispersion situation: " + Convert.ToString(trackbar) + "%");
+                    UpdateLabel68("Actual situation: " + Convert.ToString(trackbar) + "%");
                 }
             }
             catch
@@ -63,7 +63,7 @@ namespace Gral
             UpdateProgressBar3(0);
             progressBar4.Minimum = 0;
 
-            UpdateLabel68("Actual dispersion situation: 0%");
+            UpdateLabel68("Actual situation: 0%");
             double frequency = 0;
             int trackbar = -1;
             //check if GRAL is operated in transient mode
@@ -131,7 +131,7 @@ namespace Gral
                         }
                     }
 
-                    UpdateLabel69("Dispersion situation: " + Convert.ToString(trackbar) + "/" + Convert.ToString(Math.Round(frequency / 10.0, 1)) + "%");
+                    UpdateLabel69("Situation: " + Convert.ToString(trackbar) + "/" + Convert.ToString(Math.Round(frequency / 10.0, 1)) + "%");
                 }
             }
             catch
@@ -240,7 +240,7 @@ namespace Gral
                 try
                 {
                     UpdateProgressBar2(Math.Max(0, Math.Min(100, Convert.ToInt32(Math.Round((float)trackbar / (float)numericUpDown21.Value * 100, 0)))));
-                    UpdateLabel67("Actual flow situation: " + Convert.ToString(Math.Round((float)trackbar / (float)numericUpDown21.Value * 100, 0)) + "%");
+                    UpdateLabel67("Actual situation: " + Convert.ToString(Math.Round((float)trackbar / (float)numericUpDown21.Value * 100, 0)) + "%");
                 }
                 catch
                 { }
@@ -248,7 +248,7 @@ namespace Gral
             else
             {
                 UpdateProgressBar2(0);
-                UpdateLabel67("Actual flow situation: 0 %");
+                UpdateLabel67("Actual situation: 0 %");
             }
         }
 
@@ -282,7 +282,7 @@ namespace Gral
                     {
                         UpdateProgressBar1(Math.Max(0, Convert.ToInt32(frequency)));
                     }
-                    UpdateLabel66("Flow situation: " + Convert.ToString(trackbar - 1) + "/" + Convert.ToString(Math.Round(frequency / 10, 1)) + "%");
+                    UpdateLabel66("Situation: " + Convert.ToString(trackbar - 1) + "/" + Convert.ToString(Math.Round(frequency / 10, 1)) + "%");
                 }
                 catch
                 {
@@ -292,7 +292,7 @@ namespace Gral
             else
             {
                 UpdateProgressBar1(0);
-                UpdateLabel66("Flow situation: 0 / 0 %");
+                UpdateLabel66("Situation: 0 / 0 %");
             }
         }
 
