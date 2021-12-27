@@ -47,6 +47,9 @@ namespace GralIO
 		public float[,] TwoDim;
 		public double [,] DblArr;
 		private readonly CultureInfo ic = CultureInfo.InvariantCulture;
+
+        
+
 		// Write float result files to disc
 		/// <summary>
 		/// Write an ESRII ASCII File with header and unit for 2 or 3 dimensional float arrays Values or TwoDim
