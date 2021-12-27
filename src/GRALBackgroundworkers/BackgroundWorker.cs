@@ -1179,6 +1179,8 @@ namespace GralBackgroundworkers
         private void ProgressFormBackgroundworker_SizeChanged(object sender, EventArgs e)
         {
             usertext.Height = Math.Max(10, button1.Top - usertext.Top - 20);
+            usertext.Width = this.ClientSize.Width - 20;
+            progressBar1.Width = this.ClientSize.Width - 20;
         }
     }
 }
