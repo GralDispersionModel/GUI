@@ -480,7 +480,7 @@ namespace GralBackgroundworkers
                 Result.Values = concmit;
                 Result.FileName = file;
                 Result.WriteFloatResult();
-                
+                AddInfoText(Environment.NewLine + "Writing result file " + file);
                 itm1++;
             }
 
@@ -497,6 +497,7 @@ namespace GralBackgroundworkers
             Result.Values = concmit;
             Result.FileName = file;
             Result.WriteFloatResult();
+            AddInfoText(Environment.NewLine + "Writing result file " + file);
 
             //write mean total daytime odour hour file
             /*
@@ -531,7 +532,7 @@ namespace GralBackgroundworkers
             Result.FileName = file;
             Result.Write_Result();
              */
-                        
+
             if (mydata.Peakmean < 0 && mydata.WriteDepositionOrOdourData) // use new odour model and additional odour data
             {
                 if (Rechenknecht.CancellationPending)
@@ -548,6 +549,7 @@ namespace GralBackgroundworkers
                 Result.TwoDim = R90_array;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file5);
 
                 if (Rechenknecht.CancellationPending)
                 {
@@ -560,6 +562,7 @@ namespace GralBackgroundworkers
                 Result.TwoDim = CFI;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file5);
 
                 if (Rechenknecht.CancellationPending)
                 {
@@ -573,8 +576,9 @@ namespace GralBackgroundworkers
                 Result.TwoDim = Conc_standard;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file5);
             }
-            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
         }
     }
 }

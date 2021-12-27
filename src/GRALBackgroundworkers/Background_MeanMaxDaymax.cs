@@ -39,7 +39,7 @@ namespace GralBackgroundworkers
 
             //get emission modulations for all source groups
             (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
-            
+
             List<string> wgmet = new List<string>();
             List<string> wrmet = new List<string>();
             List<string> akmet = new List<string>();
@@ -197,7 +197,7 @@ namespace GralBackgroundworkers
 
                 //in case of transient simulation there is no need to loop over meteopgt.all
                 int meteo_loop = wrmet.Count;
-                if (!transientMode || no_classification == true)
+                if (transientMode || no_classification == true)
                 {
                     meteo_loop = 1;
                 }
@@ -207,7 +207,7 @@ namespace GralBackgroundworkers
                 {
                     //in case of transient simulation there is no need to loop over meteopgt.all
                     bool meteo_situation_found = false;                    
-                    if (!transientMode || no_classification==true)
+                    if (transientMode || no_classification==true)
                     {
                         meteo_situation_found = true;
                     }
@@ -227,7 +227,7 @@ namespace GralBackgroundworkers
 
                         //get correct weather number in dependence on steady-state or transient simulation
                         int weanumb = n;
-                        if (!transientMode || no_classification == true)
+                        if (transientMode || no_classification == true)
                         {
                             weanumb = count_ws;
                         }
@@ -477,7 +477,8 @@ namespace GralBackgroundworkers
                     Result.Values = concmit;
                     Result.FileName = file;
                     Result.WriteFloatResult();
-                                                            
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
+
                     if (deposition_files_exists)
                     {
                         file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" +name + ".txt");
@@ -487,6 +488,7 @@ namespace GralBackgroundworkers
                         Result.Values = depmit;
                         Result.FileName = file;
                         Result.WriteFloatResult();
+                        AddInfoText(Environment.NewLine + "Writing result file " + file);
                     }
 
                     itm++;
@@ -507,6 +509,7 @@ namespace GralBackgroundworkers
                 Result.Values = concmit;
                 Result.FileName = file;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file);
 
                 if (Rechenknecht.CancellationPending)
                 {
@@ -523,6 +526,7 @@ namespace GralBackgroundworkers
                     Result.Values = depmit;
                     Result.FileName = file;
                     Result.WriteFloatResult();
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
 
@@ -559,7 +563,8 @@ namespace GralBackgroundworkers
                     Result.Values = concmax;
                     Result.FileName = file;
                     Result.WriteFloatResult();
-                                        
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
+
                     if (deposition_files_exists)
                     {
                         file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Max" + depo_name + ".txt");
@@ -569,6 +574,7 @@ namespace GralBackgroundworkers
                         Result.Values = depmax;
                         Result.FileName = file;
                         Result.WriteFloatResult();
+                        AddInfoText(Environment.NewLine + "Writing result file " + file);
                     }
 
                     itm++;
@@ -589,6 +595,7 @@ namespace GralBackgroundworkers
                 Result.Values = concmax;
                 Result.FileName = file;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file);
 
                 if (Rechenknecht.CancellationPending)
                 {
@@ -604,7 +611,8 @@ namespace GralBackgroundworkers
                     Result.Z = maxsource;
                     Result.Values = depmax;
                     Result.FileName = file;
-                    Result.WriteFloatResult();		
+                    Result.WriteFloatResult();
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
 
@@ -640,7 +648,8 @@ namespace GralBackgroundworkers
                     Result.Values = concdaymax;
                     Result.FileName = file;
                     Result.WriteFloatResult();
-                                        
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
+
                     if (deposition_files_exists)
                     {
                         file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_DayMax_" + depo_name + ".txt");
@@ -650,6 +659,7 @@ namespace GralBackgroundworkers
                         Result.Values = depdaymax;
                         Result.FileName = file;
                         Result.WriteFloatResult();
+                        AddInfoText(Environment.NewLine + "Writing result file " + file);
                     }
 
                     itm++;
@@ -670,6 +680,7 @@ namespace GralBackgroundworkers
                 Result.Values = concdaymax;
                 Result.FileName = file;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file);
 
                 if (Rechenknecht.CancellationPending)
                 {
@@ -686,9 +697,10 @@ namespace GralBackgroundworkers
                     Result.Values = depdaymax;
                     Result.FileName = file;
                     Result.WriteFloatResult();
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

@@ -195,7 +195,7 @@ namespace GralBackgroundworkers
 
                 //in case of transient simulation there is no need to loop over meteopgt.all
                 int meteo_loop = wrmet.Count;
-                if (!transientMode || no_classification == true)
+                if (transientMode || no_classification == true)
                 {
                     meteo_loop = 1;
                 }
@@ -206,7 +206,7 @@ namespace GralBackgroundworkers
                     //in case of transient simulation there is no need to loop over meteopgt.all
                     bool meteo_situation_found = false;
 
-                    if (!transientMode || no_classification == true)
+                    if (transientMode || no_classification == true)
                     {
                         meteo_situation_found = true;
                     }
@@ -226,7 +226,7 @@ namespace GralBackgroundworkers
 
                         //get correct weather number in dependence on steady-state or transient simulation
                         int weanumb = n;
-                        if (!transientMode || no_classification == true)
+                        if (transientMode || no_classification == true)
                         {
                             weanumb = count_ws;
                         }
@@ -451,13 +451,14 @@ namespace GralBackgroundworkers
                             mywriter.WriteLine();
                         }
                     }
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
                 catch(Exception ex)
                 {
                     BackgroundThreadMessageBox ("Write total result file " + ex.Message);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
 

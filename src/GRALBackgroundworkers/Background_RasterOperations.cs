@@ -196,6 +196,7 @@ namespace GralBackgroundworkers
                     return;
                 }
                 _writer = null;
+                AddInfoText(Environment.NewLine + "Writing result file " + mydata.RasterF);
 
                 Computation_Completed = true; // set flag, that computation was successful
             }

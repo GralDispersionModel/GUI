@@ -478,7 +478,8 @@ namespace GralBackgroundworkers
                 Result.Values = concmit;
                 Result.FileName = file;
                 Result.WriteFloatResult();
-                
+                AddInfoText(Environment.NewLine + "Writing result file " + file);
+
                 itm++;
             }
 
@@ -527,16 +528,17 @@ namespace GralBackgroundworkers
                 Result.TwoDim = R90_array;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
-                
+                AddInfoText(Environment.NewLine + "Writing result file " + file5);
+
                 //write mean total concentration flucutation intensity
                 name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
                 file5 = Path.Combine(mydata.ProjectName, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
                 Result.TwoDim = CFI;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
-                
+                AddInfoText(Environment.NewLine + "Writing result file " + file5);
             }
-            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

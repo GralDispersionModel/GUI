@@ -376,7 +376,8 @@ namespace GralBackgroundworkers
                     Result.Values = concmit;
                     Result.FileName = file;
                     Result.WriteFloatResult();
-                    
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
+
                     if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
                     {
                         file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" + name + ".txt");
@@ -387,6 +388,7 @@ namespace GralBackgroundworkers
                         Result.Values = depmit;
                         Result.FileName = file;
                         Result.WriteFloatResult();
+                        AddInfoText(Environment.NewLine + "Writing result file " + file);
                     }
 
                     itm++;
@@ -408,6 +410,7 @@ namespace GralBackgroundworkers
                 Result.Values = concmit;
                 Result.FileName = file;
                 Result.WriteFloatResult();
+                AddInfoText(Environment.NewLine + "Writing result file " + file);
 
                 if (Rechenknecht.CancellationPending)
                 {
@@ -425,9 +428,10 @@ namespace GralBackgroundworkers
                     Result.Values = depmit;
                     Result.FileName = file;
                     Result.WriteFloatResult();
+                    AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished " + situationCount.ToString() + " *.con files processed");
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful          
         }
     }

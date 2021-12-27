@@ -460,17 +460,20 @@ namespace GralBackgroundworkers
                 int count = 0;
                 for (int n = 0; n < MaxSource; n++)
                 {
-                    for (int j = 0; j < 24; j++)
+                    if (!string.IsNullOrEmpty(SGNumbers[n]))
                     {
-                        sum += emifac_day[j, n];
-                        count++;
+                        for (int j = 0; j < 24; j++)
+                        {
+                            sum += emifac_day[j, n];
+                            count++;
+                        }
+                        for (int j = 0; j < 12; j++)
+                        {
+                            sum += emifac_mon[j, n];
+                            count++;
+                        }
+                        AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + SGNumbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                     }
-                    for (int j = 0; j < 12; j++)
-                    {
-                        sum += emifac_mon[j, n];
-                        count++;
-                    }
-                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + SGNumbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                 }
             }
 
