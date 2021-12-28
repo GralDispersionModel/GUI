@@ -64,6 +64,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.button10 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.concatenate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -75,13 +76,13 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.BackColor = System.Drawing.Color.Blue;
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(783, 355);
+            this.button2.BackColor = System.Drawing.SystemColors.Control;
+            this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button2.Location = new System.Drawing.Point(770, 355);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(80, 26);
+            this.button2.Size = new System.Drawing.Size(120, 30);
             this.button2.TabIndex = 2;
-            this.button2.Text = "&Remove st.";
+            this.button2.Text = "&Remove station";
             this.toolTip1.SetToolTip(this.button2, "Remove the selected observation site");
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -89,11 +90,11 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.BackColor = System.Drawing.Color.Blue;
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(894, 315);
+            this.button3.BackColor = System.Drawing.SystemColors.Control;
+            this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button3.Location = new System.Drawing.Point(897, 315);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 26);
+            this.button3.Size = new System.Drawing.Size(120, 30);
             this.button3.TabIndex = 3;
             this.button3.Text = "Orig. &Windrose";
             this.toolTip1.SetToolTip(this.button3, "Show the wind-rose of the selected observational site");
@@ -103,11 +104,11 @@
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button5.BackColor = System.Drawing.Color.Blue;
-            this.button5.ForeColor = System.Drawing.Color.White;
-            this.button5.Location = new System.Drawing.Point(1025, 394);
+            this.button5.BackColor = System.Drawing.SystemColors.Control;
+            this.button5.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button5.Location = new System.Drawing.Point(1025, 392);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(80, 26);
+            this.button5.Size = new System.Drawing.Size(120, 30);
             this.button5.TabIndex = 8;
             this.button5.Text = "&Start";
             this.toolTip1.SetToolTip(this.button5, "Start the procedure");
@@ -117,11 +118,11 @@
             // button6
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button6.BackColor = System.Drawing.Color.Blue;
-            this.button6.ForeColor = System.Drawing.Color.White;
-            this.button6.Location = new System.Drawing.Point(783, 394);
+            this.button6.BackColor = System.Drawing.SystemColors.Control;
+            this.button6.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button6.Location = new System.Drawing.Point(770, 392);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(80, 26);
+            this.button6.Size = new System.Drawing.Size(120, 30);
             this.button6.TabIndex = 7;
             this.button6.Text = "&Cancel";
             this.toolTip1.SetToolTip(this.button6, "Cancel the procedure");
@@ -144,7 +145,7 @@
             0,
             0});
             this.concatenate.Name = "concatenate";
-            this.concatenate.Size = new System.Drawing.Size(63, 20);
+            this.concatenate.Size = new System.Drawing.Size(63, 23);
             this.concatenate.TabIndex = 4;
             this.concatenate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.concatenate, "Set limit for concatenated situations; 0 = no concatenation");
@@ -152,11 +153,11 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.BackColor = System.Drawing.Color.Blue;
-            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.button1.Location = new System.Drawing.Point(1025, 355);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(80, 26);
+            this.button1.Size = new System.Drawing.Size(120, 30);
             this.button1.TabIndex = 6;
             this.button1.Text = "Sa&ve";
             this.toolTip1.SetToolTip(this.button1, "Save Match to Observation Settings");
@@ -166,11 +167,11 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button4.BackColor = System.Drawing.Color.Blue;
-            this.button4.ForeColor = System.Drawing.Color.White;
+            this.button4.BackColor = System.Drawing.SystemColors.Control;
+            this.button4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.button4.Location = new System.Drawing.Point(1025, 315);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(80, 26);
+            this.button4.Size = new System.Drawing.Size(120, 30);
             this.button4.TabIndex = 5;
             this.button4.Text = "&Load";
             this.toolTip1.SetToolTip(this.button4, "Load Match to Observation Settings");
@@ -180,11 +181,11 @@
             // button7
             // 
             this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button7.BackColor = System.Drawing.Color.Blue;
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(783, 315);
+            this.button7.BackColor = System.Drawing.SystemColors.Control;
+            this.button7.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button7.Location = new System.Drawing.Point(770, 315);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(80, 26);
+            this.button7.Size = new System.Drawing.Size(120, 30);
             this.button7.TabIndex = 1;
             this.button7.Text = "&Add station";
             this.toolTip1.SetToolTip(this.button7, "Add a station - set the position at the map");
@@ -266,11 +267,11 @@
             // button8
             // 
             this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button8.BackColor = System.Drawing.Color.Blue;
-            this.button8.ForeColor = System.Drawing.Color.White;
-            this.button8.Location = new System.Drawing.Point(204, 78);
+            this.button8.BackColor = System.Drawing.SystemColors.Control;
+            this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button8.Location = new System.Drawing.Point(190, 78);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(80, 26);
+            this.button8.Size = new System.Drawing.Size(100, 30);
             this.button8.TabIndex = 14;
             this.button8.Text = "A&uto start";
             this.toolTip1.SetToolTip(this.button8, "Start the automatic tuning \r\n -auto optimization");
@@ -300,7 +301,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(52, 23);
             this.numericUpDown1.TabIndex = 13;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Set the number of iterations for the auto tuning");
@@ -313,11 +314,11 @@
             // button9
             // 
             this.button9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button9.BackColor = System.Drawing.Color.Blue;
-            this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(894, 355);
+            this.button9.BackColor = System.Drawing.SystemColors.Control;
+            this.button9.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button9.Location = new System.Drawing.Point(897, 355);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(100, 26);
+            this.button9.Size = new System.Drawing.Size(120, 30);
             this.button9.TabIndex = 4;
             this.button9.Text = "&Match Windrose";
             this.toolTip1.SetToolTip(this.button9, "Preview for the matched windrose of the selectet obs. site");
@@ -334,7 +335,7 @@
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(46, 20);
+            this.numericUpDown2.Size = new System.Drawing.Size(46, 23);
             this.numericUpDown2.TabIndex = 21;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown2, "Reduce the number of situations\r\n0 = no reduction\r\n90 = max. reduction");
@@ -347,7 +348,7 @@
             this.checkBox5.ForeColor = System.Drawing.Color.Black;
             this.checkBox5.Location = new System.Drawing.Point(12, 20);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(33, 17);
+            this.checkBox5.Size = new System.Drawing.Size(33, 19);
             this.checkBox5.TabIndex = 9;
             this.checkBox5.Text = "V";
             this.toolTip1.SetToolTip(this.checkBox5, "Vectorial tuning");
@@ -359,7 +360,7 @@
             this.checkBox6.ForeColor = System.Drawing.Color.Black;
             this.checkBox6.Location = new System.Drawing.Point(12, 46);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(33, 17);
+            this.checkBox6.Size = new System.Drawing.Size(34, 19);
             this.checkBox6.TabIndex = 10;
             this.checkBox6.Text = "C";
             this.toolTip1.SetToolTip(this.checkBox6, "Components tuning");
@@ -375,7 +376,7 @@
             this.checkBox7.ForeColor = System.Drawing.Color.Black;
             this.checkBox7.Location = new System.Drawing.Point(12, 70);
             this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(29, 17);
+            this.checkBox7.Size = new System.Drawing.Size(29, 19);
             this.checkBox7.TabIndex = 11;
             this.checkBox7.Text = "I";
             this.toolTip1.SetToolTip(this.checkBox7, "Iterative tuning");
@@ -395,18 +396,18 @@
             this.dataGridView1.Location = new System.Drawing.Point(12, 37);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(1125, 267);
+            this.dataGridView1.Size = new System.Drawing.Size(1133, 267);
             this.dataGridView1.TabIndex = 7;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.DataGridView1SelectionChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(412, 16);
+            this.label1.Size = new System.Drawing.Size(411, 16);
             this.label1.TabIndex = 8;
             this.label1.Text = "The first meteo station defines the stability classes and the time span";
             // 
@@ -497,7 +498,7 @@
             this.label5.ForeColor = System.Drawing.Color.Black;
             this.label5.Location = new System.Drawing.Point(61, 80);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 13);
+            this.label5.Size = new System.Drawing.Size(56, 15);
             this.label5.TabIndex = 6;
             this.label5.Text = "Iterations";
             // 
@@ -507,7 +508,7 @@
             this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(241, 44);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(43, 13);
+            this.label4.Size = new System.Drawing.Size(49, 15);
             this.label4.TabIndex = 1;
             this.label4.Text = "Stability";
             // 
@@ -517,9 +518,24 @@
             this.label3.ForeColor = System.Drawing.Color.Black;
             this.label3.Location = new System.Drawing.Point(59, 44);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.Size = new System.Drawing.Size(40, 15);
             this.label3.TabIndex = 1;
             this.label3.Text = "Vector";
+            // 
+            // button10
+            // 
+            this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button10.BackColor = System.Drawing.SystemColors.Control;
+            this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button10.Location = new System.Drawing.Point(897, 392);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(120, 30);
+            this.button10.TabIndex = 13;
+            this.button10.Text = "Match me&teo file";
+            this.toolTip1.SetToolTip(this.button10, "Create a preview meteo timeseries in the subfolder Metfiles for the matched wind " +
+        "field and the selected meteo station");
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button3_Click);
             // 
             // MatchMultipleObservations
             // 
@@ -527,8 +543,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(1149, 432);
+            this.ClientSize = new System.Drawing.Size(1162, 432);
             this.ControlBox = false;
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button4);
@@ -596,5 +613,6 @@
         private System.Windows.Forms.CheckBox checkBox5;
         public System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.Button button10;
     }
 }

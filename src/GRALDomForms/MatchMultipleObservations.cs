@@ -457,7 +457,7 @@ namespace GralDomForms
                 {
                     // October 2020: Kuntner: analyze and show matched wind rose
                     Button _btn = (Button)sender;
-                    if (_btn == button9)
+                    if (_btn == button9 || _btn == button10)
                     {
                         this.Cursor = Cursors.WaitCursor;
                         try
@@ -474,60 +474,89 @@ namespace GralDomForms
                                 if (bgw.ReadMettimeseries(Path.Combine(Gral.Main.ProjectName, "Computation", "mettimeseries.dat"), ref _mettimeSeries) &&
                                     bgw.ReadMeteopgtAll(Path.Combine(GRAMMPath, @"meteopgt.all"), ref _meteopgt))
                                 {
-                                    for (int i = 0; i < _mettimeSeries.Count; i++)
+                                    // create windclasses for the meteo preview
+                                    if (_btn == button9)
                                     {
-                                        int index = bgw.SearchCorrespondingMeteopgtAllSituation(_mettimeSeries, _meteopgt, i) + 1; //+1 because match arrays are starting with index 1
-                                        double uGramm = UGramm[RemoveLine, index];
-                                        double vGramm = VGramm[RemoveLine, index];
-                                        if (uGramm > -999 && vGramm > -999)
+                                        for (int i = 0; i < _mettimeSeries.Count; i++)
                                         {
-                                            double vel = WGramm[RemoveLine, index];
-                                            float dir = bgw.WindDirection(uGramm, vGramm);
-                                            int sektor = Convert.ToInt32(Math.Round(dir / 22.5, 0));
-                                            int wklass = 0;
-
-                                            for (int c = 0; c < 6; c++)
+                                            int index = bgw.SearchCorrespondingMeteopgtAllSituation(_mettimeSeries, _meteopgt, i) + 1; //+1 because match arrays are starting with index 1
+                                            double uGramm = UGramm[RemoveLine, index];
+                                            double vGramm = VGramm[RemoveLine, index];
+                                            if (uGramm > -999 && vGramm > -999)
                                             {
-                                                if (vel > wndclasses[c] && vel <= wndclasses[c + 1])
+                                                double vel = WGramm[RemoveLine, index];
+                                                float dir = bgw.WindDirection(uGramm, vGramm);
+                                                int sektor = Convert.ToInt32(Math.Round(dir / 22.5, 0));
+                                                int wklass = 0;
+
+                                                for (int c = 0; c < 6; c++)
                                                 {
-                                                    wklass = c + 1;
+                                                    if (vel > wndclasses[c] && vel <= wndclasses[c + 1])
+                                                    {
+                                                        wklass = c + 1;
+                                                    }
+                                                }
+                                                if (vel <= wndclasses[0])
+                                                {
+                                                    wklass = 0;
+                                                }
+                                                if (vel > wndclasses[6])
+                                                {
+                                                    wklass = 7;
+                                                }
+                                                if (sektor > 15)
+                                                {
+                                                    sektor = 0;
+                                                }
+                                                count += 1;
+                                                sectFrequency[sektor, wklass]++;
+                                                WindData date = new WindData
+                                                {
+                                                    Date = DateObsMetFile[0][i],
+                                                    Vel = vel,
+                                                    Dir = dir,
+                                                    Hour = HourObsMetFile[0][i]
+                                                };
+                                                if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
+                                                {
+                                                    date.Hour = 0;
+                                                }
+                                                date.StabClass = LocalStabilityClass[RemoveLine, index];
+                                                wind.Add(date);
+                                            }
+                                        }
+                                    }
+                                    else if (_btn == button10)
+                                    {
+                                        // create a meteo file 
+                                        string filename = "MatchPreview_" + Path.GetFileName(MetFileNames[RemoveLine]);
+                                        
+                                        System.Globalization.CultureInfo ic = System.Globalization.CultureInfo.InvariantCulture;
+                                        //write new meteo file
+                                        using (StreamWriter writer = new StreamWriter(Path.Combine(Gral.Main.ProjectName, "Metfiles", filename)))
+                                        {
+                                            string[] text;
+                                            string[] date;
+                                            for (int i = 0; i < _mettimeSeries.Count; i++)
+                                            {
+                                                int index = bgw.SearchCorrespondingMeteopgtAllSituation(_mettimeSeries, _meteopgt, i) + 1; //+1 because match arrays are starting with index 1
+                                                double uGramm = UGramm[RemoveLine, index];
+                                                double vGramm = VGramm[RemoveLine, index];
+                                                if (uGramm > -999 && vGramm > -999)
+                                                {
+                                                    double vel = WGramm[RemoveLine, index];
+                                                    float dir = bgw.WindDirection(uGramm, vGramm);
+                                                    int stabClass = LocalStabilityClass[RemoveLine, index];
+                                                    text = _mettimeSeries[i].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                                                    date = text[0].Split('.');
+                                                    DateTime _date = new DateTime(DateTime.Now.Year, Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(text[1]), 0, 0);
+                                                    writer.WriteLine(_date.ToString("d", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
+                                                                     _date.ToString("t", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
+                                                                     Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
                                                 }
                                             }
-
-                                            if (vel <= wndclasses[0])
-                                            {
-                                                wklass = 0;
-                                            }
-
-                                            if (vel > wndclasses[6])
-                                            {
-                                                wklass = 7;
-                                            }
-
-                                            if (sektor > 15)
-                                            {
-                                                sektor = 0;
-                                            }
-
-                                            count += 1;
-
-                                            sectFrequency[sektor, wklass]++;
-
-                                            WindData date = new WindData
-                                            {
-                                                Date = DateObsMetFile[0][i],
-                                                Vel = vel,
-                                                Dir = dir,
-                                                Hour = HourObsMetFile[0][i]
-                                            };
-                                            if (date.Hour == 24) // if met-file contains 24:00 instead of 00:00
-                                            {
-                                                date.Hour = 0;
-                                            }
-
-                                            date.StabClass = LocalStabilityClass[RemoveLine, index];
-                                            wind.Add(date);
                                         }
+                                        count = 0;
                                     }
                                 }
                                 _bwdata = null;
