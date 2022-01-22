@@ -24,7 +24,10 @@ namespace Gral
         static void Main()
         {
 #if NET6_0_OR_GREATER
-            ApplicationConfiguration.Initialize();
+            //ApplicationConfiguration.Initialize();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 #else
             Application.EnableVisualStyles();
