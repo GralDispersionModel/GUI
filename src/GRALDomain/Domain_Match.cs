@@ -524,7 +524,7 @@ namespace GralDomain
                         //save met data to file meteopgt.all
                         string filename = Path.Combine("Computation", "meteopgt.all");
                         string newPath = Path.Combine(Gral.Main.ProjectName, filename);
-
+                        int numberOfMatchedSituations = 1;
                         try
                         {
                             using (StreamWriter myWriter = File.CreateText(newPath))
@@ -557,6 +557,7 @@ namespace GralDomain
                                     if (a_Line.PGTFrq >= 0) // otherwise this Situation didn´t fit
                                     {
                                         myWriter.WriteLine(a); // write sortet PGT_ALL
+                                        numberOfMatchedSituations++;
                                     }
                                 }
                             }
@@ -569,7 +570,7 @@ namespace GralDomain
                         if (wait1 != null)
                         {
                             wait1.Show();
-                            wait1.ProgressbarUpdate(this, MatchData.PGT.Count);
+                            wait1.ProgressbarUpdate(this, numberOfMatchedSituations + 1);
                         }
                         int i = 0;
                         foreach (GralData.PGTAll a_Line in MatchData.PGT)
