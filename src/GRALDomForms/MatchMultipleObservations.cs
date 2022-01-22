@@ -762,7 +762,7 @@ namespace GralDomForms
                             sr.WriteLine("MMO Settings3");
                             sr.WriteLine(checkBox1.Checked.ToString());
                             sr.WriteLine(checkBox2.Checked.ToString());
-                            sr.WriteLine(concatenate.Value.ToString());
+                            sr.WriteLine(concatenate.Value.ToString(CultureInfo.InvariantCulture));
                             sr.WriteLine(radioButton1.Checked.ToString());
                             sr.WriteLine(radioButton2.Checked.ToString());
                             sr.WriteLine(checkBox3.Checked.ToString());
@@ -777,7 +777,14 @@ namespace GralDomForms
                                 {
                                     if (i < 9)
                                     {
-                                        sr.Write(cell.Value.ToString() + "\t");
+                                        if (double.TryParse(cell.Value.ToString(), out double _val))
+                                        {
+                                            sr.Write(_val.ToString(CultureInfo.InvariantCulture) + "\t");
+                                        }
+                                        else
+                                        {
+                                            sr.Write(cell.Value.ToString() + "\t");
+                                        }
                                     }
                                     i++;
                                 }
@@ -848,7 +855,7 @@ namespace GralDomForms
                             bool.TryParse(temp, out t);
                             checkBox2.Checked = t;
 
-                            temp = sr.ReadLine();
+                            temp = sr.ReadLine().Replace(".", decsep);
                             decimal.TryParse(temp, out v);
                             concatenate.Value = v;
 
@@ -872,7 +879,7 @@ namespace GralDomForms
 
                             if (MMOFileFormat > 2)
                             {
-                                temp = sr.ReadLine();
+                                temp = sr.ReadLine().Replace(".", decsep); 
                                 decimal.TryParse(temp, out v);
                                 numericUpDown2.Value = v;
                             }
