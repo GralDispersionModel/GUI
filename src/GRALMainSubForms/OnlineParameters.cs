@@ -1,9 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace GralMainForms
 {
+    /// <summary>
+    /// Show all online parameters for GRAMM or GRAL online view
+    /// </summary>
     public partial class OnlineParameters : Form
     {
         public int NumberOfGRAMMLayers;
@@ -13,6 +17,7 @@ namespace GralMainForms
         public int OnlineRefreshInterval = 1;
         public string ProjectName = string.Empty;
         public Int32 OnlineCheckBoxes = 0;
+        private List<string> FileNames = new List<string>();
 
         public OnlineParameters()
         {
@@ -23,99 +28,175 @@ namespace GralMainForms
             // initialize checkboxes
             string computationPath = Path.Combine(ProjectName, @"Computation");
             OnlineCheckBoxes = 0;
-            if (File.Exists(Path.Combine(computationPath, "uv.txt")))
+            string filename = Path.Combine(computationPath, "uv.txt");
+            if (File.Exists(filename))
             {
                 checkBox1.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1<<1);
             }
-            if (File.Exists(Path.Combine(computationPath, "u.txt")))
+            filename = Path.Combine(computationPath, "u.txt");
+            if (File.Exists(filename))
             {
                 checkBox2.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 2);
             }
-            if (File.Exists(Path.Combine(computationPath, "speed.txt")))
+            filename = Path.Combine(computationPath, "speed.txt");
+            if (File.Exists(filename))
             {
                 checkBox16.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 16);
             }
-            if (File.Exists(Path.Combine(computationPath, "v.txt")))
+            filename = Path.Combine(computationPath, "v.txt");
+            if (File.Exists(filename))
             {
                 checkBox3.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 3);
             }
-            if (File.Exists(Path.Combine(computationPath, "w.txt")))
+            filename = Path.Combine(computationPath, "w.txt");
+            if (File.Exists(filename))
             {
                 checkBox4.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 4);
             }
-            if (File.Exists(Path.Combine(computationPath, "tabs.txt")))
+            filename = Path.Combine(computationPath, "tabs.txt");
+            if (File.Exists(filename))
             {
                 checkBox5.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 5);
             }
-            if (File.Exists(Path.Combine(computationPath, "tpot.txt")))
+            filename = Path.Combine(computationPath, "tpot.txt");
+            if (File.Exists(filename))
             {
                 checkBox6.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 6);
             }
-            if (File.Exists(Path.Combine(computationPath, "hum.txt")))
+            filename = Path.Combine(computationPath, "hum.txt");
+            if (File.Exists(filename))
             {
                 checkBox7.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 7);
             }
-            if (File.Exists(Path.Combine(computationPath, "nhp.txt")))
+            filename = Path.Combine(computationPath, "nhp.txt");
+            if (File.Exists(filename))
             {
                 checkBox8.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 8);
             }
-            if (File.Exists(Path.Combine(computationPath, "glob.txt")))
+            filename = Path.Combine(computationPath, "glob.txt");
+            if (File.Exists(filename))
             {
                 checkBox9.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 9);
             }
-            if (File.Exists(Path.Combine(computationPath, "terr.txt")))
+            filename = Path.Combine(computationPath, "terr.txt");
+            if (File.Exists(filename))
             {
                 checkBox10.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 10);
             }
-            if (File.Exists(Path.Combine(computationPath, "sensheat.txt")))
+            filename = Path.Combine(computationPath, "sensheat.txt");
+            if (File.Exists(filename))
             {
                 checkBox11.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 11);
             }
-            if (File.Exists(Path.Combine(computationPath, "latheat.txt")))
+            filename = Path.Combine(computationPath, "latheat.txt");
+            if (File.Exists(filename))
             {
                 checkBox12.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 12);
             }
-            if (File.Exists(Path.Combine(computationPath, "fricvel.txt")))
+            filename = Path.Combine(computationPath, "fricvel.txt");
+            if (File.Exists(filename))
             {
                 checkBox13.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 13);
             }
-            if (File.Exists(Path.Combine(computationPath, "inverseMO.txt")))
+            filename = Path.Combine(computationPath, "inverseMO.txt");
+            if (File.Exists(filename))
             {
                 checkBox14.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 14);
             }
-            if (File.Exists(Path.Combine(computationPath, "surfTemp.txt")))
+            filename = Path.Combine(computationPath, "surfTemp.txt");
+            if (File.Exists(filename))
             {
                 checkBox15.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 15);
             }
-            if (File.Exists(Path.Combine(computationPath, "stabilityclass.txt")))
+            filename = Path.Combine(computationPath, "stabilityclass.txt");
+            if (File.Exists(filename))
             {
                 checkBox28.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 28);
             }
-            if (File.Exists(Path.Combine(computationPath, "tke.txt")))
+            filename = Path.Combine(computationPath, "tke.txt");
+            if (File.Exists(filename))
             {
                 checkBox17.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 17);
             }
-            if (File.Exists(Path.Combine(computationPath, "dis.txt")))
+            filename = Path.Combine(computationPath, "dis.txt");
+            if (File.Exists(filename))
             {
                 checkBox18.Checked = true;
+                (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+                numericUpDown1.Value = sit;
+                FileNames.Add(filename);
                 OnlineCheckBoxes |= (1 << 18);
             }
 
@@ -155,7 +236,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "uv.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 1);
                     }
@@ -184,7 +265,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "u.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 2);
                     }
@@ -213,7 +294,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "speed.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 16);
                     }
@@ -242,7 +323,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "v.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 3);
                     }
@@ -271,7 +352,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "w.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 4);
                     }
@@ -300,7 +381,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "tabs.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 5);
                     }
@@ -329,7 +410,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "tpot.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 6);
                     }
@@ -358,7 +439,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "hum.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 7);
                     }
@@ -387,7 +468,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "nhp.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 8);
                     }
@@ -412,7 +493,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "glob.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 9);
             }
@@ -433,7 +514,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "terr.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 10);
             }
@@ -454,7 +535,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "sensheat.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 11);
             }
@@ -475,7 +556,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "latheat.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 12);
             }
@@ -496,7 +577,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "fricvel.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 13);
             }
@@ -517,7 +598,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "inverseMO.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 14);
             }
@@ -538,7 +619,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "surfTemp.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 15);
             }
@@ -559,7 +640,7 @@ namespace GralMainForms
                 //save layer information to file
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "stabilityclass.txt")))
                 {
-                    writer.WriteLine(Convert.ToString(layer));
+                    writer.WriteLine(LayerAndSituation(layer));
                 }
                 OnlineCheckBoxes |= (1 << 28);
             }
@@ -584,7 +665,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "tke.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 17);
                     }
@@ -613,7 +694,7 @@ namespace GralMainForms
                         //save layer information to file
                         using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectName, @"Computation", "dis.txt")))
                         {
-                            writer.WriteLine(Convert.ToString(layer));
+                            writer.WriteLine(LayerAndSituation(layer));
                         }
                         OnlineCheckBoxes |= (1 << 18);
                     }
@@ -671,6 +752,56 @@ namespace GralMainForms
             }
         }
 
+        /// <summary>
+        /// Combine layer and (if needed) the situation number for GRAMM online 
+        /// </summary>
+        private string LayerAndSituation(int layer)
+        {
+            string layerString = Convert.ToString(layer);
+            
+            //add situation number if > 0
+            if (numericUpDown1.Value > 0)
+            {
+                layerString += "," + Convert.ToString(numericUpDown1.Value);
+            }
+            return layerString;
+        }
+        
+        /// <summary>
+        /// Read layer and (if available) the situation number for GRAMM online 
+        /// </summary>
+        private (int, int, int) ReadLayerAndSituation(string filename)
+        {
+            int layer = 1;
+            int LY = 1; // default
+            int situation = 0;
+            string config1 = string.Empty;
+            string config2 = string.Empty;
+            try
+            {
+                using (StreamReader rd = new StreamReader(filename))
+                {
+                    config1 = rd.ReadLine();
+                    if (!rd.EndOfStream)
+                    {
+                        config2 = rd.ReadLine();
+                    }
+                }
+                string[] textSplit = config1.Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                Int32.TryParse(textSplit[0], out layer); // Layer 
+                if (textSplit.Length > 1)
+                {
+                    Int32.TryParse(textSplit[1], out situation); // situation that should be shown
+                }
+                
+                Int32.TryParse(config2, out LY); // immer LY
+            }
+            catch
+            { }
+
+            return (layer, situation, LY);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             checkBox1.CheckedChanged -= CheckBox1_CheckedChanged;
@@ -695,6 +826,25 @@ namespace GralMainForms
             this.Close();
         }
 
-        
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            foreach(string filename in FileNames)
+            {
+                if (File.Exists(filename))
+                {
+                    (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
+
+                    if (layer > 0)
+                    {
+                        using (StreamWriter writer = new StreamWriter(filename))
+                        {
+                            writer.WriteLine(LayerAndSituation(layer));
+                            writer.WriteLine(LY);
+                        }
+                    }
+
+                }
+            }
+        }
     }
 }
