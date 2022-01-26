@@ -1406,26 +1406,40 @@ namespace Gral
                     
                     if(missing) // write windfeld.txt if last Seperator character is missed
                     {
-                        try
-                        {
-                            using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Computation","windfeld.txt")))
-                            {
-                                GRAMMwrite.WriteLine(GRAMMwindfield);
-                                #if __MonoCS__
-                                GRAMMwrite.WriteLine(GRAMMwindfield);
-                                #endif
-                            }
-                        }
-                        catch{}
+                        WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false);
                     }
-                    
-                    Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
+
                     //check if directory still exists
-                    
                     if (Directory.Exists(GRAMMwindfield) == false)
                     {
-                        alright = false;
+                            alright = false;
                     }
+
+                    //check if local Computation folder contains *.wnd files -> ask user if this folder should be used
+                    //search for flow files
+                    if (!Path.GetFullPath(Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar).Equals(Path.GetFullPath(GRAMMwindfield)))
+                    {
+                        FileInfo[] files_flow = null;
+                        try
+                        {
+                            DirectoryInfo di = new DirectoryInfo(Path.Combine(ProjectName, @"Computation"));
+                            files_flow = di.GetFiles("*.wnd");
+                        }
+                        catch { }
+                        if (files_flow.Length > 0)
+                        {
+                            //ask, if Computation folder should be used
+                            if (MessageBox.Show(this, "Are you supposed to use the GRAMM wind fields in the project Computation folder?", "GRAL GUI",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                            {
+                                GRAMMwindfield = Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar;
+                                WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false);
+                                alright = true;
+                            }
+                        }
+                    }
+
+                    Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
 
                     if (alright == true)
                     {
@@ -1524,13 +1538,8 @@ namespace Gral
                             if (alright)
                             {
                                 //write file information for GRAMM windfield
-                                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, "Computation", "windfeld.txt")))
-                                {
-                                    GRAMMwrite.WriteLine(GRAMMwindfield);
-#if __MonoCS__
-                                    GRAMMwrite.WriteLine(GRAMMwindfield);
-#endif
-                                }
+                                WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false);
+                                
                                 Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
 
                                 //write file information for landuse file
@@ -1653,6 +1662,34 @@ namespace Gral
             {
                 //MessageBox.Show(this, ex.Message.ToString());
             }
+        }
+
+        /// <summary>
+        /// Write the file windfile.txt -> this file contains the absolute path to the GRAMM wind *.wnd data
+        /// </summary>
+        /// <param name="GRAMMwindfield">path to the GRAMM wind fields</param>
+        /// <returns></returns>
+        public bool WriteFileGRAMMWindfeld_txt(string GRAMMwindfield, bool message)
+        {
+            try
+            {
+                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                {
+                    GRAMMwrite.WriteLine(GRAMMwindfield);
+#if __MonoCS__
+                                GRAMMwrite.WriteLine(GRAMMwindfield);
+#endif
+                }
+            }
+            catch(Exception ex) 
+            {
+                if (message)
+                {
+                    MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                return false;
+            }
+            return true;
         }
 
         private void SetBuildingRadioButton()
