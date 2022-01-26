@@ -436,17 +436,8 @@ namespace Gral
                     }
 
                     //pointer for wind field files
-                    using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
-                    {
-                        mywriter.WriteLine(Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar);
-                        GRAMMwindfield = Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar;
-                        #if __MonoCS__
-                        mywriter.WriteLine(Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar);
-                        #endif
-                    }
-
+                    WriteFileGRAMMWindfeld_txt(Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar, true);
                     Textbox16_Set("GRAMM Windfield: " + Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar); // write metfile to tab "Computation"
-
                 }
                 catch (Exception ex)
                 {

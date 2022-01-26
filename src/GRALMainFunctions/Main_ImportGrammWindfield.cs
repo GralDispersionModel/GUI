@@ -342,25 +342,15 @@ namespace Gral
                 }
 
                 //import GRAMM windfield file "windfeld.txt"
-                try
+                GRAMMwindfield = GRAMMproject;
+                if (WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false))
                 {
-                    GRAMMwindfield = GRAMMproject;
-                    //File.Delete(Path.Combine(projectname, @"Computation", "windfeld.txt"));
-                    using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
-                    {
-                        mywriter.WriteLine(GRAMMwindfield);
-#if __MonoCS__
-                        mywriter.WriteLine(GRAMMwindfield);
-#endif
-                    }
-
                     Textbox16_Set("GRAMM: " + GRAMMwindfield); // the actual met data are from a GRAMMProject
                 }
-                catch
+                else
                 {
-                    MessageBox.Show("Could not copy GRAMM landuse file 'windfeld.txt'.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Could not update 'windfeld.txt'.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
             Cursor = Cursors.Default;
 

@@ -127,21 +127,10 @@ namespace GralDomain
 					//generate pointer for location of new wind field files
 					string GRAMMwindfield = Path.Combine(projectname, "Computation") + Path.DirectorySeparatorChar;
 					
-					try
-					{
-						using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(projectname, @"Computation","windfeld.txt")))
-						{
-							GRAMMwrite.WriteLine(GRAMMwindfield);
-#if __MonoCS__
-							GRAMMwrite.WriteLine(GRAMMwindfield);
-#endif
-						}
-					}
-					catch(Exception ex)
-					{
-						MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					if (MainForm.WriteFileGRAMMWindfeld_txt(GRAMMwindfield, true) == false)
+                    {
 						return;
-					}
+                    }
 					
 					string GRAMMoriginal = string.Empty;
 					//generate pointer for location of original GRAMM wind-field files

@@ -181,14 +181,8 @@ namespace Gral
                 }
                 //generate pointer for location of wind field files
                 GRAMMwindfield = Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar;
-                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
-                {
-                    GRAMMwrite.WriteLine(GRAMMwindfield);
-                    #if __MonoCS__
-                    GRAMMwrite.WriteLine(GRAMMwindfield);
-                    #endif
-                }
-
+                WriteFileGRAMMWindfeld_txt(GRAMMwindfield, true);
+                
                 Cursor = Cursors.Default;
                 Textbox16_Set("GRAMM: " + GRAMMwindfield);
                 label95.Text = "Number of cells used for smoothing orography laterally: " + Convert.ToString(CellNrTopographySmooth); // show number of smooth cells
