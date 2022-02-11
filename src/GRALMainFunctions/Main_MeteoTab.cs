@@ -178,11 +178,6 @@ namespace Gral
             Enable_GRAMM();
         }
 
-        /// <summary>
-        /// Compute and show wind rose velocity
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ShowWindRoseVelocity(object sender, EventArgs e)
         {
             int WindSectCount = 16;
@@ -261,6 +256,10 @@ namespace Gral
                                 {
                                     double SectAngle = 360D / WindSectCount;
                                     int sektor = (int)(Math.Round(data.Dir / SectAngle, 0));
+                                    if (sektor > WindSectCount - 1)
+                                    {
+                                        sektor = 0;
+                                    }
                                     int wklass = 0; //Convert.ToInt32(Math.Truncate(windge[i])) + 1;
 
                                     for (int c = 0; c < 6; c++)
@@ -270,20 +269,13 @@ namespace Gral
                                             wklass = c + 1;
                                         }
                                     }
-
                                     if (data.Vel <= wndclasses[0])
                                     {
                                         wklass = 0;
                                     }
-
                                     if (data.Vel > wndclasses[6])
                                     {
                                         wklass = 7;
-                                    }
-
-                                    if (sektor > WindSectCount - 1)
-                                    {
-                                        sektor = 0;
                                     }
 
                                     if (biascorrection && sectorWidth > 1)
@@ -388,7 +380,7 @@ namespace Gral
             int count = 0;
             int startstunde = 0;
             int endstunden = 23;
-            
+
             List<WindData> wind = new List<WindData>();
             int maxvelocity = WindroseSetting.MaxVelocity;
             WindroseSetting.MaxVelocity = 0;
@@ -435,12 +427,10 @@ namespace Gral
                                 {
                                     double SectAngle = 360D / WindSectCount;
                                     int sektor = (int)(Math.Round(data.Dir / SectAngle, 0));
-
                                     if (sektor > WindSectCount - 1)
                                     {
                                         sektor = 0;
                                     }
-
                                     if (biascorrection && sectorWidth > 1)
                                     {
                                         double start = data.Dir - sectorWidth * 0.49F;
@@ -466,12 +456,13 @@ namespace Gral
                                             {
                                                 _sect -= 360;
                                             }
-                                            sektor = (int)(_sect / SectAngle);
-                                            if (sektor >= 0 && sektor < WindSectCount)
+                                            sektor = (int)(Math.Round(_sect / SectAngle, 0));
+                                            if (sektor > WindSectCount - 1)
                                             {
-                                                count++;
-                                                sectFrequency[sektor, data.StabClass]++;
+                                                sektor = 0;
                                             }
+                                            count++;
+                                            sectFrequency[sektor, data.StabClass]++;
                                         }
                                     }
                                     else
