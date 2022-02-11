@@ -23,7 +23,7 @@ namespace GralStaticFunctions
 		/// <summary>
 		/// Returns the section width of a MettimeSeries
 		/// </summary>
-		///<returns>Yields a new Point or break</returns>  
+		///<returns>Section width of a binned meteo time series or 1 if the time series is not binned</returns>  
 		public static float GetMetSectionWidth(List<GralData.WindData> MeteoTimeSeries)
 		{
             float sectionWidth = 10;
@@ -33,7 +33,7 @@ namespace GralStaticFunctions
                 return 1;
             }
 
-            // Analyze the minimum and maximum width of all entries in MeteoTimeSeries
+            // store all available directions in a hash set
             HashSet<int> directionValues = new HashSet<int>();
             foreach (GralData.WindData data in MeteoTimeSeries)
             {
@@ -53,7 +53,7 @@ namespace GralStaticFunctions
             }
             sorted.Sort();
 
-            // calculate min and max value of directions
+            // calculate min and mean value of direction delta
             int min = 1000000;
             int mean = 0;
             for(int i = 0; i < sorted.Count - 1; i++)
@@ -69,7 +69,8 @@ namespace GralStaticFunctions
             directionValues.Clear();
             directionValues.TrimExcess();
             //System.Windows.MessageBox.Show(min.ToString() + "/" + mean.ToString());
-
+            
+            // meteo is binned or classified, if min value equals mean value
             if (Math.Abs(min - mean) > 0.1)
             {
                 sectionWidth = 1;  // not classified??
