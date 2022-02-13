@@ -45,4 +45,4 @@ using System.Resources;
 [assembly: AssemblyVersion("22.09.0.1")]
 [assembly: AssemblyFileVersion("22.09.0.1")]
 [assembly: NeutralResourcesLanguageAttribute("")]
-[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
+//[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
