@@ -181,7 +181,7 @@ namespace Gral
                 }
                 //generate pointer for location of wind field files
                 GRAMMwindfield = Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar;
-                WriteFileGRAMMWindfeld_txt(GRAMMwindfield, true);
+                WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, true);
                 
                 Cursor = Cursors.Default;
                 Textbox16_Set("GRAMM: " + GRAMMwindfield);
