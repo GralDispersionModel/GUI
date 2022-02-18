@@ -1406,7 +1406,7 @@ namespace Gral
                     
                     if(missing) // write windfeld.txt if last Seperator character is missed
                     {
-                        WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false);
+                        WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
                     }
 
                     //check if directory still exists
@@ -1433,7 +1433,7 @@ namespace Gral
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                             {
                                 GRAMMwindfield = Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar;
-                                WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false);
+                                WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
                                 alright = true;
                             }
                         }
@@ -1538,7 +1538,7 @@ namespace Gral
                             if (alright)
                             {
                                 //write file information for GRAMM windfield
-                                WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false);
+                                WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
                                 
                                 Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
 
@@ -1667,13 +1667,14 @@ namespace Gral
         /// <summary>
         /// Write the file windfile.txt -> this file contains the absolute path to the GRAMM wind *.wnd data
         /// </summary>
+        /// <param name="ProjectDir">Project Directory</param>
         /// <param name="GRAMMwindfield">path to the GRAMM wind fields</param>
         /// <returns></returns>
-        public bool WriteFileGRAMMWindfeld_txt(string GRAMMwindfield, bool message)
+        public bool WriteFileGRAMMWindfeld_txt(string ProjectDir, string GRAMMwindfield, bool message)
         {
             try
             {
-                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectName, @"Computation", "windfeld.txt")))
+                using (StreamWriter GRAMMwrite = new StreamWriter(Path.Combine(ProjectDir, @"Computation", "windfeld.txt")))
                 {
                     GRAMMwrite.WriteLine(GRAMMwindfield);
 #if __MonoCS__

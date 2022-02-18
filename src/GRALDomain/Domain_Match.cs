@@ -816,7 +816,7 @@ namespace GralDomain
 
                         //update pointer for new wind field files
                         MainForm.GRAMMwindfield = Path.Combine(Gral.Main.ProjectName, @"Computation") + Path.DirectorySeparatorChar;
-                        MainForm.WriteFileGRAMMWindfeld_txt(MainForm.GRAMMwindfield, true);
+                        MainForm.WriteFileGRAMMWindfeld_txt(Gral.Main.ProjectName, MainForm.GRAMMwindfield, true);
                     }
 
                     catch (Exception ex)

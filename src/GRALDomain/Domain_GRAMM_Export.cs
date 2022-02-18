@@ -127,7 +127,7 @@ namespace GralDomain
 					//generate pointer for location of new wind field files
 					string GRAMMwindfield = Path.Combine(projectname, "Computation") + Path.DirectorySeparatorChar;
 					
-					if (MainForm.WriteFileGRAMMWindfeld_txt(GRAMMwindfield, true) == false)
+					if (MainForm.WriteFileGRAMMWindfeld_txt(projectname, GRAMMwindfield, true) == false)
                     {
 						return;
                     }

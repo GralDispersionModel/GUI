@@ -436,7 +436,7 @@ namespace Gral
                     }
 
                     //pointer for wind field files
-                    WriteFileGRAMMWindfeld_txt(Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar, true);
+                    WriteFileGRAMMWindfeld_txt(ProjectName, Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar, true);
                     Textbox16_Set("GRAMM Windfield: " + Path.Combine(ProjectName, "Computation") + Path.DirectorySeparatorChar); // write metfile to tab "Computation"
                 }
                 catch (Exception ex)
