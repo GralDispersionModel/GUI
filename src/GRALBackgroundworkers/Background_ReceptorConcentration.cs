@@ -150,8 +150,8 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        Array.Clear(sg_mean_modulation_count);
-                        Array.Clear(sg_mean_modulation_sum);
+                        Array.Clear(sg_mean_modulation_count, 0, sg_mean_modulation_count.Length);
+                        Array.Clear(sg_mean_modulation_sum, 0, sg_mean_modulation_sum.Length);
                         //read timeseries of emissions
                         string[] text10 = new string[1];
                         using (StreamReader read1 = new StreamReader(newpath))
