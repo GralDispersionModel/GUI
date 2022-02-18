@@ -343,7 +343,7 @@ namespace Gral
 
                 //import GRAMM windfield file "windfeld.txt"
                 GRAMMwindfield = GRAMMproject;
-                if (WriteFileGRAMMWindfeld_txt(GRAMMwindfield, false))
+                if (WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false))
                 {
                     Textbox16_Set("GRAMM: " + GRAMMwindfield); // the actual met data are from a GRAMMProject
                 }
