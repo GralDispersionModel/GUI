@@ -7,6 +7,8 @@ This is the repository for the .NET6 beta version of the graphical user interfac
 
 The migration from .NETFramework to .NET6 results in significant code adjustments for an application as large as the GUI. For this reason, numerous bugs are still to be expected here. Therefore, GUI version 21.09 is recommended for current users.<br>
 
+The MonoDevelop branch contains a version of the GUI that is intended to be used with MonoDevelop under LINUX (the distribution we use is Debian 11).<br>
+
 This application is a graphical user interface (GUI), designed to simplify the numerous input values for GRAL (atmospheric dispersion model) and GRAMM (non-hydrostatic mesoscale wind-field model), [edit sources and obstacles](ReadMe/Items.md), import data from shape files, [analyze and display results](ReadMe/Maps.md) as contour lines, visualize wind vectors, and verify the input and output of the GRAL and GRAMM model. It is also possible to visualize and classify [meteorological input data](ReadMe/WindAnalysis.md) (wind roses, stability or velocity classes, diurnal frequencies of wind directions, diurnal mean wind velocity).<br>
 There is also a [youtube](https://www.youtube.com/watch?v=vfEVl-j4P5s) tutorial that shows and explains some basic functions of the GUI.<br>
 
