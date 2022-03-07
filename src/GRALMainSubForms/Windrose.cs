@@ -108,6 +108,33 @@ namespace GralMainForms
             Refresh();
         }
 
+        void form_MouseWheel(object sender, MouseEventArgs e) // Kuntner
+        {
+            if (e.Delta > 0)
+            {
+                if ((Control.ModifierKeys & Keys.Shift) != Keys.None)
+                {
+                    button1_Click(null, null); // Scrollrad Up
+                }
+                else
+                {
+                    button5_Click(null, null);
+                }
+            }
+
+            if (e.Delta < 0)
+            {
+                if ((Control.ModifierKeys & Keys.Shift) != Keys.None)
+                {
+                    button2_Click(null, null);// Scrollrad Down
+                }
+                else
+                {
+                    button4_Click(null, null);
+                }
+            }
+        }
+
         private void Form3_Load(object sender, EventArgs e)
         {
             WindRosePoints = new Point[WindSectorCount * 3 + 1];
@@ -134,6 +161,7 @@ namespace GralMainForms
             pictureBox1.Height = Math.Max(1, ClientRectangle.Height - 1);
             LegendPosition = St_F.WindRoseLegend;
             InfoPosition = St_F.WindRoseInfo;
+            MouseWheel += new MouseEventHandler(form_MouseWheel); 
         }
 
         void PictureBox1Paint(object sender, PaintEventArgs e)
@@ -804,6 +832,7 @@ namespace GralMainForms
             BrushYellow.Dispose();
             BrushBlack.Dispose();
             BrushLightBlue.Dispose();
+            MouseWheel -= new MouseEventHandler(form_MouseWheel);
         }
 
         /// <summary>
