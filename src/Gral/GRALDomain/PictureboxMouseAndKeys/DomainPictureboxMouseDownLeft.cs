@@ -10,14 +10,6 @@
 ///</remarks>
 #endregion
 
-/*
- * Created by SharpDevelop.
- * User: U0178969
- * Date: 21.01.2019
- * Time: 17:05
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -359,9 +351,9 @@ namespace GralDomain
                             //Skip double click on same coor
                             if (EditLS.CornerLineSource > 1 && Math.Abs(x - EditLS.CornerLineX[EditLS.CornerLineSource - 1]) < 0.01 &&
                                                                Math.Abs(y - EditLS.CornerLineY[EditLS.CornerLineSource - 1]) < 0.01)
-                            {}
+                            { }
                             else
-                            { 
+                            {
                                 // set new line-source edge point - get x,y coordinates
                                 CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
                                 EditLS.CornerLineX[EditLS.CornerLineSource] = x;
@@ -464,80 +456,78 @@ namespace GralDomain
                     }
                     break;
 
-                    // Tooltip for picturebox1
+                // Tooltip for picturebox1
 
                 case MouseMode.PointSourceSel:
                     //select point sources
                     {
                         int i = 0;
-                        bool stop = false;
-                        double[] emission = new double[Gral.Main.PollutantList.Count];
+                        int found = -1;
+                        PointSourceData _foundobj = null;
 
                         foreach (PointSourceData _psdata in EditPS.ItemData)
                         {
-                            Array.Clear(emission, 0, emission.Length);
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             int x1 = (int)((_psdata.Pt.X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
                             int y1 = (int)((_psdata.Pt.Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
 
                             if ((e.X >= x1 - 10) && (e.X <= x1 + 10) && (e.Y >= y1 - 10) && (e.Y <= y1 + 10))
                             {
-                                //EditPS.SetTrackBar(i + 1);
-                                EditPS.ItemDisplayNr = i;
-                                SelectedItems.Add(i);
-                                EditPS.FillValues();
-
-                                double height = _psdata.Height;
-
-                                // show info in a Tooltip
-                                string infotext = "'" + _psdata.Name + "'\n";
-                                if (height >= 0)
-                                {
-                                    infotext += "Height (rel) [m]: " + Math.Round(height, 1).ToString() + "\n";
-                                }
-                                else
-                                {
-                                    infotext += "Height (abs) [m]: " + Math.Abs(Math.Round(height,1)).ToString() + "\n";
-                                }
-
-                                infotext += "Exit velocity [m/s]:  " + Math.Round(_psdata.Velocity, 1).ToString() + "\n";
-                                infotext += "Exit temperature [K]: " + Math.Round(_psdata.Temperature, 1).ToString() + "\n";
-                                infotext += "Diameter [m]: " + Math.Round(_psdata.Diameter, 2).ToString() + "\n";
-                                infotext += "Source group: " + Convert.ToString(_psdata.Poll.SourceGroup) + "\n";
-                                for (int r = 0; r < 10; r++)
-                                {
-                                    try
-                                    {
-                                        int index = _psdata.Poll.Pollutant[r];
-                                        emission[index] = emission[index] + Convert.ToDouble(_psdata.Poll.EmissionRate[r]);
-                                    }
-                                    catch { }
-                                }
-                                for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
-                                {
-                                    if (emission[r] > 0)
-                                    {
-                                        if (Gral.Main.PollutantList[r] != "Odour")
-                                        {
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                        }
-                                        else
-                                        {
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                        }
-                                    }
-                                }
-
-                                AddItemInfoToDrawingObject(infotext, _psdata.Pt.X, _psdata.Pt.Y);
-                                
-                                stop = true;
+                                found = i;
+                                _foundobj = _psdata;
                                 break;
                             }
                             i += 1;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditPS.SetTrackBar(found + 1);
+                            EditPS.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditPS.FillValues();
+
+                            double height = _foundobj.Height;
+
+                            // show info in a Tooltip
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            if (height >= 0)
+                            {
+                                infotext += "Height (rel) [m]: " + Math.Round(height, 1).ToString() + "\n";
+                            }
+                            else
+                            {
+                                infotext += "Height (abs) [m]: " + Math.Abs(Math.Round(height, 1)).ToString() + "\n";
+                            }
+
+                            infotext += "Exit velocity [m/s]:  " + Math.Round(_foundobj.Velocity, 1).ToString() + "\n";
+                            infotext += "Exit temperature [K]: " + Math.Round(_foundobj.Temperature, 1).ToString() + "\n";
+                            infotext += "Diameter [m]: " + Math.Round(_foundobj.Diameter, 2).ToString() + "\n";
+                            infotext += "Source group: " + Convert.ToString(_foundobj.Poll.SourceGroup) + "\n";
+
+                            double[] emission = new double[Gral.Main.PollutantList.Count];
+                            for (int r = 0; r < 10; r++)
+                            {
+                                try
+                                {
+                                    int index = _foundobj.Poll.Pollutant[r];
+                                    emission[index] = emission[index] + Convert.ToDouble(_foundobj.Poll.EmissionRate[r]);
+                                }
+                                catch { }
+                            }
+                            for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
+                            {
+                                if (emission[r] > 0)
+                                {
+                                    if (Gral.Main.PollutantList[r] != "Odour")
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
+                                    else
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
+                                }
+                            }
+                            AddItemInfoToDrawingObject(infotext, _foundobj.Pt.X, _foundobj.Pt.Y);
                         }
                         Focus();
                     }
@@ -552,33 +542,30 @@ namespace GralDomain
                     //select receptors
                     {
                         int i = 0;
-                        bool stop = false;
+                        int found = -1;
+                        ReceptorData _foundobj = null;
                         foreach (ReceptorData _rd in EditR.ItemData)
                         {
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             int x1 = Convert.ToInt32((_rd.Pt.X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
                             int y1 = Convert.ToInt32((_rd.Pt.Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
                             if ((e.X >= x1 - 10) && (e.X <= x1 + 10) && (e.Y >= y1 - 10) && (e.Y <= y1 + 10))
                             {
-                                //EditR.SetTrackBar(i + 1);
-                                EditR.ItemDisplayNr = i;
-                                SelectedItems.Add(i);
-                                EditR.FillValues();
-
-                                //Ausgabe der Info in Infobox
-                                string infotext = "'" + _rd.Name + "'\n";
-                                infotext += "Height [m]: " + Math.Round(_rd.Height, 1).ToString();
-
-                                AddItemInfoToDrawingObject(infotext, _rd.Pt.X, _rd.Pt.Y);
-
-                                stop = true;
+                                found = i;
+                                _foundobj = _rd;
                                 break;
                             }
                             i++;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditR.SetTrackBar(found + 1);
+                            EditR.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditR.FillValues();
+                            //Ausgabe der Info in Infobox
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            infotext += "Height [m]: " + Math.Round(_foundobj.Height, 1).ToString();
+                            AddItemInfoToDrawingObject(infotext, _foundobj.Pt.X, _foundobj.Pt.Y);
                         }
                         Focus();
                     }
@@ -593,96 +580,84 @@ namespace GralDomain
                     //select area sources
                     {
                         int i = 0;
-                        bool stop = false;
-                        double[] emission = new double[Gral.Main.PollutantList.Count];
+                        int found = -1;
+                        AreaSourceData _foundobj = null;
+                        List<Point> poly = new List<Point>();
 
                         foreach (AreaSourceData _as in EditAS.ItemData)
                         {
-                            Array.Clear(emission, 0, emission.Length);
-                            if (stop)
+                            poly.Clear();
+
+                            List<PointD> _points = _as.Pt;
+                            int x1 = 0;
+                            int y1 = 0;
+                            for (int j = 0; j < _points.Count; j++)
                             {
+                                x1 = Convert.ToInt32((_points[j].X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
+                                y1 = Convert.ToInt32((_points[j].Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
+                                poly.Add(new Point(x1, y1));
+                            }
+
+                            if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
+                            {
+                                found = i;
+                                _foundobj = _as;
                                 break;
                             }
+                            i += 1;
+                        }
 
-                            //filter source group
-                            List<Point> poly = new List<Point>();
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditAS.SetTrackBar(found + 1);
+                            EditAS.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditAS.FillValues();
 
-                            foreach (DrawingObjects _drobj in ItemOptions)
+                            double height = _foundobj.Height;
+
+                            //Ausgabe der Info in Infobox
+
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            if (height >= 0)
                             {
-                                poly.Clear();
+                                infotext += "Mean height (rel) [m]:  " + Math.Round(height, 1).ToString() + "\n";
+                            }
+                            else
+                            {
+                                infotext += "Mean height (abs) [m]:  " + Math.Abs(Math.Round(height, 1)).ToString() + "\n";
+                            }
 
-                                if (_drobj.Name == "AREA SOURCES")
+                            infotext += "Vertical extension [m]: " + Math.Round(_foundobj.VerticalExt, 1).ToString() + "\n";
+                            infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_foundobj.Area, 1).ToString() + "\n";
+                            infotext += "Source group: " + _foundobj.Poll.SourceGroup + "\n";
+                            double[] emission = new double[Gral.Main.PollutantList.Count];
+                            for (int r = 0; r < 10; r++)
+                            {
+                                try
                                 {
-                                    if ((_drobj.SourceGroup == _as.Poll.SourceGroup) || (_drobj.SourceGroup == -1))
+                                    int index = _foundobj.Poll.Pollutant[r];
+                                    emission[index] = emission[index] + _foundobj.Poll.EmissionRate[r];
+                                }
+                                catch { }
+                            }
+                            for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
+                            {
+                                if (emission[r] > 0)
+                                {
+                                    if (Gral.Main.PollutantList[r] != "Odour")
                                     {
-                                        poly.Clear();
-                                        List<PointD> _points = _as.Pt;
-                                        int x1 = 0;
-                                        int y1 = 0;
-                                        for (int j = 0; j < _points.Count; j++)
-                                        {
-                                            x1 = Convert.ToInt32((_points[j].X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
-                                            y1 = Convert.ToInt32((_points[j].Y - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
-                                            poly.Add(new Point(x1, y1));
-                                        }
-
-                                        if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
-                                        {
-                                            //EditAS.SetTrackBar(i + 1);
-                                            EditAS.ItemDisplayNr = i;
-                                            SelectedItems.Add(i);
-                                            EditAS.FillValues();
-
-                                            double height = _as.Height;
-
-                                            //Ausgabe der Info in Infobox
-
-                                            string infotext = "'" + _as.Name + "'\n";
-                                            if (height >= 0)
-                                            {
-                                                infotext += "Mean height (rel) [m]:  " + Math.Round(height, 1).ToString() + "\n";
-                                            }
-                                            else
-                                            {
-                                                infotext += "Mean height (abs) [m]:  " + Math.Abs(Math.Round(height, 1)).ToString() + "\n";
-                                            }
-
-                                            infotext +=     "Vertical extension [m]: " + Math.Round(_as.VerticalExt, 1).ToString() + "\n";
-                                            infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_as.Area, 1).ToString() + "\n";
-                                            infotext += "Source group: " + _as.Poll.SourceGroup + "\n";
-                                            for (int r = 0; r < 10; r++)
-                                            {
-                                                try
-                                                {
-                                                    int index = _as.Poll.Pollutant[r];
-                                                    emission[index] = emission[index] + _as.Poll.EmissionRate[r];
-                                                }
-                                                catch { }
-                                            }
-                                            for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
-                                            {
-                                                if (emission[r] > 0)
-                                                {
-                                                    if (Gral.Main.PollutantList[r] != "Odour")
-                                                    {
-                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                                    }
-                                                    else
-                                                    {
-                                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                                    }
-                                                }
-                                            }
-
-                                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
-                                            
-                                        }
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
                                     }
-                                    i += 1;
+                                    else
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
                                 }
                             }
+
+                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                         }
-                        
                         Focus();
                     }
                     break;
@@ -691,18 +666,14 @@ namespace GralDomain
                     //select vegetation
                     {
                         int i = 0;
-                        bool stop = false;
+                        int found = -1;
+                        VegetationData _foundobj = null;
                         int x1 = 0;
                         int y1 = 0;
                         List<Point> poly = new List<Point>();
 
                         foreach (VegetationData _vdata in EditVegetation.ItemData)
                         {
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             poly.Clear();
                             List<PointD> _points = _vdata.Pt;
                             for (int j = 0; j < _points.Count; j++)
@@ -714,21 +685,25 @@ namespace GralDomain
 
                             if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                             {
-                                //EditVegetation.SetTrackBar(i + 1);
-                                EditVegetation.ItemDisplayNr = i;
-                                SelectedItems.Add(i);
-                                EditVegetation.FillValues();
-                                double height = _vdata.VerticalExt;
-
-                                //Ausgabe der Info in Infobox
-                                string infotext = "'" + _vdata.Name + "'\n";
-                                infotext += "Height (rel) [m]: " + Math.Abs(Math.Round(height, 1)) + "\n";
-                                infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_vdata.Area) + "\n";
-                                AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
-                                stop = true;
+                                found = i;
+                                _foundobj = _vdata;
                                 break;
                             }
                             i += 1;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditVegetation.SetTrackBar(found + 1);
+                            EditVegetation.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditVegetation.FillValues();
+                            double height = _foundobj.VerticalExt;
+
+                            //Ausgabe der Info in Infobox
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            infotext += "Height (rel) [m]: " + Math.Abs(Math.Round(height, 1)) + "\n";
+                            infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_foundobj.Area) + "\n";
+                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                         }
                         Focus();
                     }
@@ -738,17 +713,13 @@ namespace GralDomain
                     //select buildings
                     {
                         int i = 0;
-                        bool stop = false;
+                        int found = -1;
+                        BuildingData _foundobj = null;
                         int x1 = 0;
                         int y1 = 0;
                         List<Point> poly = new List<Point>();
                         foreach (BuildingData _bd in EditB.ItemData)
                         {
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             List<PointD> _pt = _bd.Pt;
                             poly.Clear();
                             for (int j = 0; j < _pt.Count; j++)
@@ -760,30 +731,34 @@ namespace GralDomain
 
                             if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                             {
-                                //EditB.SetTrackBar(i + 1);
-                                EditB.ItemDisplayNr = i;
-                                SelectedItems.Add(i);
-                                EditB.FillValues();
-                                double height = _bd.Height;
-
-                                //Ausgabe der Info in Infobox
-                                string infotext = "'" + _bd.Name + "'\n";
-                                if (height >= 0)
-                                {
-                                    infotext += "Height (rel) [m]: " + Math.Round(_bd.Height, 1).ToString() + "\n";
-                                }
-                                else
-                                {
-                                    infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(Math.Round(height, 1))) + "\n";
-                                }
-
-                                //infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
-                                infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_bd.Area, 1).ToString() + "\n";
-                                AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
-                                stop = true;
+                                found = i;
+                                _foundobj = _bd;
                                 break;
                             }
                             i += 1;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditB.SetTrackBar(found + 1);
+                            EditB.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditB.FillValues();
+                            double height = _foundobj.Height;
+
+                            //Ausgabe der Info in Infobox
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            if (height >= 0)
+                            {
+                                infotext += "Height (rel) [m]: " + Math.Round(_foundobj.Height, 1).ToString() + "\n";
+                            }
+                            else
+                            {
+                                infotext += "Height (abs) [m]: " + St_F.DblToIvarTxt(Math.Abs(Math.Round(height, 1))) + "\n";
+                            }
+
+                            //infotext += "Lower bound [m]: " + _bd.LowerBound + "\n";
+                            infotext += @"Area [m" + Gral.Main.SquareString + "]: " + Math.Round(_foundobj.Area, 1).ToString() + "\n";
+                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                         }
                         Focus();
                     }
@@ -793,17 +768,11 @@ namespace GralDomain
                     //select line sources
                     {
                         int i = 0;
-                        bool stop = false;
-                        double[] emission = new double[Gral.Main.PollutantList.Count];
+                        int found = -1;
+                        LineSourceData _foundobj = null;
                         List<Point> poly = new List<Point>();
                         foreach (LineSourceData _ls in EditLS.ItemData)
                         {
-                            Array.Clear(emission, 0, emission.Length);
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             poly.Clear();
                             //Point[] poly = new Point[4];
 
@@ -831,69 +800,72 @@ namespace GralDomain
 
                                 if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                                 {
-                                    //EditLS.SetTrackBar(i + 1);
-                                    EditLS.ItemDisplayNr = i;
-                                    SelectedItems.Add(i);
-                                    EditLS.FillValues();
-                                    stop = true;
-
-                                    //Ausgabe der Info in Infobox
-                                    string infotext = "'" + _ls.Name + "'\n";
-                                    if (_ls.Height >= 0)
-                                    {
-                                        infotext += "Height (rel) [m]: \t" + Math.Abs(Math.Round(_ls.Height, 1)).ToString() + "\n";
-                                    }
-                                    else
-                                    {
-                                        infotext += "Height (abs) [m]: \t" + Math.Abs(Math.Round(_ls.Height, 1)).ToString() + "\n";
-                                    }
-                                    infotext += "Vert. extension [m]: \t" + Math.Round(_ls.VerticalExt, 1).ToString() + "\n";
-                                    infotext += "Width [m]: \t" + Math.Round(_ls.Width, 1).ToString() + "\n";
-
-                                    if (_ls.Nemo.AvDailyTraffic > 0)
-                                    {
-                                        infotext += "Veh/Day:            " + _ls.Nemo.AvDailyTraffic.ToString() + "\n";
-                                        infotext += "Heavy Duty Veh [%]: " + _ls.Nemo.ShareHDV.ToString() + "\n";
-                                        infotext += "Slope [%]:          " + _ls.Nemo.Slope.ToString() + "\n";
-                                        infotext += "Reference Year:     " + _ls.Nemo.BaseYear.ToString() + "\n";
-                                        infotext += "Traffic Situation:  " + EditLS.GetSelectedListBox1Item() + "\n";
-                                    }
-
-                                    length = St_F.CalcLenght(_ls.Pt);
-                                    infotext += "Length [km]: \t" + Convert.ToString(Math.Round(length / 1000, 3)) + "\n";
-                                    
-                                    foreach (PollutantsData _poll in _ls.Poll)
-                                    {
-                                        for (int r = 0; r < 10; r++)
-                                        {
-                                            int index = Convert.ToInt32(_poll.Pollutant[r]);
-                                            try
-                                            {
-                                                emission[index] += _poll.EmissionRate[r];
-                                            }
-                                            catch { }
-                                        }
-                                    }
-                                    for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
-                                    {
-                                        if (emission[r] > 0)
-                                        {
-                                            if (Gral.Main.PollutantList[r] != "Odour")
-                                            {
-                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                            }
-                                            else
-                                            {
-                                                infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                            }
-                                        }       
-                                    }
-                                    AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
-                                    
+                                    found = i;
+                                    _foundobj = _ls;
                                     break;
                                 }
                             }
                             i += 1;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditLS.SetTrackBar(found + 1);
+                            EditLS.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditLS.FillValues();
+
+                            //Ausgabe der Info in Infobox
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            if (_foundobj.Height >= 0)
+                            {
+                                infotext += "Height (rel) [m]: \t" + Math.Abs(Math.Round(_foundobj.Height, 1)).ToString() + "\n";
+                            }
+                            else
+                            {
+                                infotext += "Height (abs) [m]: \t" + Math.Abs(Math.Round(_foundobj.Height, 1)).ToString() + "\n";
+                            }
+                            infotext += "Vert. extension [m]: \t" + Math.Round(_foundobj.VerticalExt, 1).ToString() + "\n";
+                            infotext += "Width [m]: \t" + Math.Round(_foundobj.Width, 1).ToString() + "\n";
+
+                            if (_foundobj.Nemo.AvDailyTraffic > 0)
+                            {
+                                infotext += "Veh/Day:            " + _foundobj.Nemo.AvDailyTraffic.ToString() + "\n";
+                                infotext += "Heavy Duty Veh [%]: " + _foundobj.Nemo.ShareHDV.ToString() + "\n";
+                                infotext += "Slope [%]:          " + _foundobj.Nemo.Slope.ToString() + "\n";
+                                infotext += "Reference Year:     " + _foundobj.Nemo.BaseYear.ToString() + "\n";
+                                infotext += "Traffic Situation:  " + EditLS.GetSelectedListBox1Item() + "\n";
+                            }
+
+                            double length = St_F.CalcLenght(_foundobj.Pt);
+                            infotext += "Length [km]: \t" + Convert.ToString(Math.Round(length / 1000, 3)) + "\n";
+                            double[] emission = new double[Gral.Main.PollutantList.Count];
+                            foreach (PollutantsData _poll in _foundobj.Poll)
+                            {
+                                for (int r = 0; r < 10; r++)
+                                {
+                                    int index = Convert.ToInt32(_poll.Pollutant[r]);
+                                    try
+                                    {
+                                        emission[index] += _poll.EmissionRate[r];
+                                    }
+                                    catch { }
+                                }
+                            }
+                            for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
+                            {
+                                if (emission[r] > 0)
+                                {
+                                    if (Gral.Main.PollutantList[r] != "Odour")
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
+                                    else
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h/km]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
+                                }
+                            }
+                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                         }
                         Focus();
                     }
@@ -903,16 +875,11 @@ namespace GralDomain
                     //select portal sources
                     {
                         int i = 0;
-                        bool stop = false;
-                        double[] emission = new double[Gral.Main.PollutantList.Count];
+                        int found = -1;
+                        PortalsData _foundobj = null;
 
                         foreach (PortalsData _po in EditPortals.ItemData)
                         {
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             int sourcegroups = _po.Poll.Count;
                             double x1 = (_po.Pt1.X - MapSize.West) / BmpScale / MapSize.SizeX + TransformX;
                             double y1 = (_po.Pt1.Y - MapSize.North) / BmpScale / MapSize.SizeY + TransformY;
@@ -923,64 +890,69 @@ namespace GralDomain
                             int ymean = Convert.ToInt32((y1 + y2) * 0.5);
                             if ((e.X >= xmean - 10) && (e.X <= xmean + 10) && (e.Y >= ymean - 10) && (e.Y <= ymean + 10))
                             {
-                                //EditPortals.SetTrackBar(i + 1);
-                                EditPortals.ItemDisplayNr = i;
-                                SelectedItems.Add(i);
-                                EditPortals.FillValues();
-
-                                //Ausgabe der Info in Infobox
-                                string infotext = "'" + _po.Name + "'\n";
-                                if (_po.BaseHeight >= 0)
-                                {
-                                    infotext += "Base height (rel)[m]: " + Math.Abs(Math.Round(_po.BaseHeight, 1)).ToString() + "\n";
-                                }
-                                else
-                                {
-                                    infotext += "Base height (abs)[m]: " + Math.Abs(Math.Round(_po.BaseHeight, 1)).ToString() + "\n";
-                                }
-                                infotext += "Height [m]: " + Math.Round(_po.Height, 1).ToString() + "\n";
-                                int crosssection = Convert.ToInt32(_po.Height * Math.Sqrt(Math.Pow(_po.Pt1.X - _po.Pt2.X, 2) + Math.Pow(_po.Pt1.Y - _po.Pt2.Y, 2)));
-                                infotext += "Section [m²]: " + crosssection.ToString() + "\n";
-                                if (_po.Direction.Contains("1"))
-                                {
-                                    infotext += "Bidirectional \n";
-                                }
-                                else
-                                {
-                                    infotext += "Unidirectional \n";
-                                }
-
-                                foreach (PollutantsData _poll in _po.Poll)
-                                {
-                                    for (int r = 0; r < 10; r++)
-                                    {
-                                        int index = Convert.ToInt32(_poll.Pollutant[r]);
-                                        try
-                                        {
-                                            emission[index] += _poll.EmissionRate[r];
-                                        }
-                                        catch { }
-                                    }
-                                }
-                                for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
-                                {
-                                    if (emission[r] > 0)
-                                    {
-                                        if (Gral.Main.PollutantList[r] != "Odour")
-                                        {
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                        }
-                                        else
-                                        {
-                                            infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
-                                        }
-                                    }               
-                                }
-                                AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
-                                stop = true;
+                                found = i;
+                                _foundobj = _po;
                                 break;
                             }
                             i += 1;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditPortals.SetTrackBar(found + 1);
+                            EditPortals.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditPortals.FillValues();
+
+                            //Ausgabe der Info in Infobox
+                            string infotext = "'" + _foundobj.Name + "'\n";
+                            if (_foundobj.BaseHeight >= 0)
+                            {
+                                infotext += "Base height (rel)[m]: " + Math.Abs(Math.Round(_foundobj.BaseHeight, 1)).ToString() + "\n";
+                            }
+                            else
+                            {
+                                infotext += "Base height (abs)[m]: " + Math.Abs(Math.Round(_foundobj.BaseHeight, 1)).ToString() + "\n";
+                            }
+                            infotext += "Height [m]: " + Math.Round(_foundobj.Height, 1).ToString() + "\n";
+                            int crosssection = Convert.ToInt32(_foundobj.Height * Math.Sqrt(Math.Pow(_foundobj.Pt1.X - _foundobj.Pt2.X, 2) + Math.Pow(_foundobj.Pt1.Y - _foundobj.Pt2.Y, 2)));
+                            infotext += "Section [m²]: " + crosssection.ToString() + "\n";
+                            if (_foundobj.Direction.Contains("1"))
+                            {
+                                infotext += "Bidirectional \n";
+                            }
+                            else
+                            {
+                                infotext += "Unidirectional \n";
+                            }
+                            double[] emission = new double[Gral.Main.PollutantList.Count];
+                            foreach (PollutantsData _poll in _foundobj.Poll)
+                            {
+                                for (int r = 0; r < 10; r++)
+                                {
+                                    int index = Convert.ToInt32(_poll.Pollutant[r]);
+                                    try
+                                    {
+                                        emission[index] += _poll.EmissionRate[r];
+                                    }
+                                    catch { }
+                                }
+                            }
+                            for (int r = 0; r < Gral.Main.PollutantList.Count; r++)
+                            {
+                                if (emission[r] > 0)
+                                {
+                                    if (Gral.Main.PollutantList[r] != "Odour")
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[kg/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
+                                    else
+                                    {
+                                        infotext += Convert.ToString(Gral.Main.PollutantList[r]) + "[MOU/h]: \t" + Convert.ToString(Math.Round(emission[r], 4)) + "\n";
+                                    }
+                                }
+                            }
+                            AddItemInfoToDrawingObject(infotext, (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
+                            break;
                         }
                         Focus();
                     }
@@ -990,16 +962,12 @@ namespace GralDomain
                     //select walls
                     {
                         int i = 0;
-                        bool stop = false;
+                        int found = -1;
+                        WallData _foundobj = null;
 
                         List<Point> poly = new List<Point>();
                         foreach (WallData _wd in EditWall.ItemData)
                         {
-                            if (stop)
-                            {
-                                break;
-                            }
-
                             poly.Clear();
 
                             for (int j = 0; j < _wd.Pt.Count - 1; j++)
@@ -1026,18 +994,20 @@ namespace GralDomain
 
                                 if (St_F.PointInPolygon(new Point(e.X, e.Y), poly))
                                 {
-                                    //EditWall.SetTrackBar(i + 1);
-                                    EditWall.ItemDisplayNr = i;
-                                    SelectedItems.Add(i);
-                                    EditWall.FillValues();
-                                    stop = true;
-                                  
-                                    AddItemInfoToDrawingObject("'" + _wd.Name + "'", (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
-
+                                    found = i;
+                                    _foundobj = _wd;
                                     break;
                                 }
                             }
                             i += 1;
+                        }
+                        if (found > -1 && _foundobj != null)
+                        {
+                            EditWall.SetTrackBar(found + 1);
+                            EditWall.ItemDisplayNr = found;
+                            SelectedItems.Add(found);
+                            EditWall.FillValues();
+                            AddItemInfoToDrawingObject("'" + _foundobj.Name + "'", (float)St_F.TxtToDbl(textBox1.Text, false), (float)St_F.TxtToDbl(textBox2.Text, false));
                         }
                         Picturebox1_Paint(); // 
                         Focus();
@@ -1450,7 +1420,7 @@ namespace GralDomain
             {
                 _drobj.ItemInfo = new List<string>();
             }
-            _drobj.ShpPoints.Add(new PointF((float) x1, (float) y1));
+            _drobj.ShpPoints.Add(new PointF((float)x1, (float)y1));
             _drobj.ItemInfo.Add(info);
             Picturebox1_Paint();
         }
