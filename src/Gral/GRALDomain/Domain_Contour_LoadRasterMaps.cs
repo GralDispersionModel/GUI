@@ -116,7 +116,7 @@ namespace GralDomain
 								float max_h = 0;
 								try
 								{
-								  max_h = Convert.ToSingle(data[data.Length - 2]);
+								  max_h = Convert.ToSingle(data[data.Length - 2], ic);
 								}
 								catch{}
 								
