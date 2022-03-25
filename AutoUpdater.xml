@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item>
-  <version>22.03.0.1</version>
+  <version>2.2.3.1</version>
   <url>https://github.com/GralDispersionModel/GRAL/releases/download/V22.03/V2203.zip</url>
   <changelog>https://github.com/GralDispersionModel/GUI/releases</changelog>
   <mandatory>false</mandatory>
