@@ -43,6 +43,7 @@
             this.radioButton11 = new System.Windows.Forms.RadioButton();
             this.radioButton10 = new System.Windows.Forms.RadioButton();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.groupBox25.SuspendLayout();
             this.groupBox26.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -117,7 +118,7 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(224, 390);
+            this.button1.Location = new System.Drawing.Point(224, 433);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(135, 45);
@@ -213,12 +214,24 @@
             this.checkBox3.UseVisualStyleBackColor = true;
             this.checkBox3.Click += new System.EventHandler(this.checkBox3_Click_1);
             // 
+            // checkBox4
+            // 
+            this.checkBox4.Location = new System.Drawing.Point(38, 371);
+            this.checkBox4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(390, 28);
+            this.checkBox4.TabIndex = 10;
+            this.checkBox4.Text = "Search for updates when starting the application";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.Click += new System.EventHandler(this.checkBox4_Click);
+            // 
             // GUI_Settings
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 462);
+            this.ClientSize = new System.Drawing.Size(602, 499);
+            this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.checkBox2);
@@ -252,5 +265,6 @@
         private System.Windows.Forms.RadioButton radioButton11;
         private System.Windows.Forms.RadioButton radioButton10;
         private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
