@@ -1051,14 +1051,17 @@ namespace Gral
 
             WindSpeedClasses = Convert.ToInt32(numericUpDown2.Value);
 
+            int y0 = numericUpDown2.Bottom + 20;
+            int ydelta = numericUpDown2.Height + 5;
+
             for (int i = 0; i < WindSpeedClasses - 1; i++)
             {
-                CreateTextbox(9, 65 + i * 30, 53, 22, i);
+                CreateTextbox(9, y0 + i * ydelta, 53, 22, i);
             }
             //create last box and labels
             TBox[WindSpeedClasses - 1] = new TextBox
             {
-                Location = new System.Drawing.Point(9 + 105, 65 + (WindSpeedClasses - 1) * 30),
+                Location = new System.Drawing.Point(9 + 105, y0 + (WindSpeedClasses - 1) * ydelta),
                 Size = new System.Drawing.Size(53, 22),
                 ReadOnly = true,
                 TextAlign = System.Windows.Forms.HorizontalAlignment.Right,
@@ -1072,7 +1075,7 @@ namespace Gral
             {
                 AutoSize = true,
                 Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-                Location = new System.Drawing.Point(9 + 80, 65 + 3 + (WindSpeedClasses - 1) * 30),
+                Location = new System.Drawing.Point(9 + 80, y0 + 3 + (WindSpeedClasses - 1) * ydelta),
                 Size = new System.Drawing.Size(46, 16),
                 Text = ">"
             };
@@ -1082,7 +1085,7 @@ namespace Gral
             {
                 AutoSize = true,
                 Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-                Location = new System.Drawing.Point(9 + 160, 65 + 3 + (WindSpeedClasses - 1) * 30),
+                Location = new System.Drawing.Point(9 + 160, y0 + 3 + (WindSpeedClasses - 1) * ydelta),
                 Size = new System.Drawing.Size(46, 16),
                 Text = "m/s"
             };

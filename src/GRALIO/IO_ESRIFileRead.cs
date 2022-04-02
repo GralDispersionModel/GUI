@@ -349,7 +349,7 @@ namespace GralIO
                 {
                     try
                     {
-                        _maxHeight = Convert.ToSingle(data[data.Length - 2]);
+                        _maxHeight = Convert.ToSingle(data[data.Length - 2], ic);
                     }
                     catch { }
 

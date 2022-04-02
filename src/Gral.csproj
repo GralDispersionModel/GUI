@@ -111,6 +111,7 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GRALBackgroundworkers\BackgroundWorker.cs">
@@ -835,6 +836,12 @@
     <Compile Include="GRALMainSubForms\TotalEmissions.Designer.cs">
       <DependentUpon>TotalEmissions.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALMainSubForms\UpdateNotification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALMainSubForms\UpdateNotification.Designer.cs">
+      <DependentUpon>UpdateNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="GRALMainSubForms\VerticalLayerHeights.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1270,6 +1277,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>TotalEmissions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GRALMainSubForms\UpdateNotification.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UpdateNotification.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GRALMainSubForms\Windclasses.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Windclasses.cs</DependentUpon>
@@ -1562,4 +1573,26 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Compile Remove="GRALBackgroundworkers\CheckZipCRC23.cs" />
+    <Compile Remove="GRALData\Domain.cs" />
+    <Compile Remove="GRALDomain\MatchMultipleObservations.Designer.cs" />
+    <Compile Remove="GRAMMERA5Forcing\GRAMM_ERA5.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="GRALMainFunctions\Main_LoadProject.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  
 </Project>

@@ -231,29 +231,35 @@ namespace GralBackgroundworkers
             }
             if (!timeseries)
             {
-                double sum = 0;
-                int count = 0;
                 for (int n = 0; n < maxsource; n++)
                 {
-                    for (int j = 0; j < 24; j++)
+                    for (int sg = 0; sg < sg_names.Length; sg++) // check all selected source groups
                     {
-                        if (transient)
+                        double sum = 0;
+                        int count = 0;
+                        if ((n + 1) == Convert.ToInt32(GetSgNumbers(sg_names[sg]))) // sourcegroup selected?
                         {
-                            emifac_day[j, n] = 1;
+                            for (int j = 0; j < 24; j++)
+                            {
+                                if (transient)
+                                {
+                                    emifac_day[j, n] = 1;
+                                }
+                                sum += emifac_day[j, n];
+                                count++;
+                            }
+                            for (int j = 0; j < 12; j++)
+                            {
+                                if (transient)
+                                {
+                                    emifac_mon[j, n] = 1;
+                                }
+                                sum += emifac_mon[j, n];
+                                count++;
+                            }
+                            AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                         }
-                        sum += emifac_day[j, n];
-                        count++;
                     }
-                    for (int j = 0; j < 12; j++)
-                    {
-                        if (transient)
-                        {
-                            emifac_mon[j, n] = 1;
-                        }
-                        sum += emifac_mon[j, n];
-                        count++;
-                    }
-                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                 }
             }
 
@@ -402,7 +408,7 @@ namespace GralBackgroundworkers
                                 }
                                 if (containedSourceGroups.Count() != (computed_sourcegroups.Count() - 1))
                                 {
-                                    BackgroundThreadMessageBox("The number of source groups between calculation and current project does not match!");
+                                    BackgroundThreadMessageBox("The number of source groups of calculation and current project does not match!");
                                 }
 
                                 //if the project has been changed - who knows what user are doing...
@@ -490,6 +496,7 @@ namespace GralBackgroundworkers
                         }
 
                         //write results to file ReceptorTimeSeries.txt in Unicode encoding
+                        AddInfoText(Environment.NewLine + "Writing result file " + writerRecTimeSeries);
                         using (StreamWriter recwrite = new StreamWriter(writerRecTimeSeries, false, System.Text.Encoding.Unicode))
                         {
                             //write header line
@@ -568,7 +575,7 @@ namespace GralBackgroundworkers
                                         if ((wgmet[n].Equals(wgmettime)) && (wrmet[n].Equals(wrmettime)) && (akmet[n].Equals(akmettime)))
                                         {
                                             //take care if not all dispersion situations have been computed
-                                            if (n >= numbwet - 1)
+                                            if (n > numbwet - 1)
                                             {
                                                 //write results
                                                 recwrite.WriteLine(string.Empty);
@@ -672,7 +679,7 @@ namespace GralBackgroundworkers
                             }
                             catch { }
                         }
-
+                        AddInfoText(Environment.NewLine + "Writing meteorological file " + file);
                         using (StreamWriter recwrite = new StreamWriter(file))
                         {
                             //write header lines

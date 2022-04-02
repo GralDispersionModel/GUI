@@ -61,6 +61,10 @@ namespace GralData
         /// Delete *.con, *.gff and *.wnd files permanently
         /// </summary>
         public bool DeleteFilesToRecyclingBin;
+        /// <summary>
+        /// Check for an update at each start of the GUI
+        /// </summary>
+        public bool AutoCheckForUpdates;
 
         private CultureInfo ic = CultureInfo.InvariantCulture;
 
@@ -86,6 +90,11 @@ namespace GralData
             VectorMapAutoScaling = true;
             IgnoreMeteo00Values = Gral.WindData00Enum.All;
             DeleteFilesToRecyclingBin = true;
+#if NET6_0_OR_GREATER
+            AutoCheckForUpdates = true;
+#else
+            AutoCheckForUpdates = false;
+#endif
         }
 
         /// <summary>
@@ -108,6 +117,7 @@ namespace GralData
                     write.WriteLine(IgnoreMeteo00Values.ToString("d"));
                     write.WriteLine(DeleteFilesToRecyclingBin.ToString(ic));
                     write.WriteLine(DefaultPathForGRAMM);
+                    write.WriteLine(AutoCheckForUpdates.ToString(ic));
                 }
             }
             catch
@@ -184,6 +194,15 @@ namespace GralData
                     {
                         DefaultPathForGRAMM = DefaultPathForGRAL;
                     }
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            AutoCheckForUpdates = Convert.ToBoolean(read.ReadLine(), ic);
+                        }
+                        catch { }
+                    }
+
                 }
             }
             catch

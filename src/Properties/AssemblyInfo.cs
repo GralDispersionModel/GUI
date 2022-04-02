@@ -42,7 +42,7 @@ using System.Resources;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("22.09.0.1")]
-[assembly: AssemblyFileVersion("22.09.0.1")]
+[assembly: AssemblyVersion("2.2.0.9")]
+[assembly: AssemblyFileVersion("2.2.0.9")]
 [assembly: NeutralResourcesLanguageAttribute("")]
 //[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]

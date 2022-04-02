@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+
 namespace Gral
 {
     /// <summary>
@@ -407,6 +408,10 @@ namespace Gral
             //initialize the GUI Settings
             GUISettings = new GralData.GuiSettings();
             GUISettings.ReadFromFile();
+            if (GUISettings.AutoCheckForUpdates)
+            {
+                AutoUpdateStart(false);
+            }
 
             button14.Tag = 0; // allow calls to the GIS window
         }
@@ -2896,6 +2901,7 @@ namespace Gral
         /// </summary>
         void MainLoad(object sender, EventArgs e)
         {
+
         }
 
         /// <summary>
@@ -3594,5 +3600,179 @@ namespace Gral
             OnlineRefreshInterval = online.OnlineRefreshInterval;
             OnlineParmeters = online.OnlineCheckBoxes;
         }
+
+
+        /// <summary>
+        /// Check for an update of a new GUI/GRAL version
+        /// </summary>
+        /// <param name="ReportError">Show "error" and "No update available" messages?</param>
+        public static void AutoUpdateStart(bool ReportError)
+        {
+            GralMainForms.UpdateNotification upd = new GralMainForms.UpdateNotification()
+            {
+                RecentVersion = Application.ProductVersion,
+                ShowUserInfo = ReportError
+            };
+            upd.LoadUpdateFile();
+
+
+            //try
+            //{
+            //    using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
+            //    {
+            //        Uri baseUri = new Uri("https://github.com/GralDispersionModel/GUI/releases/download/V22.03/AutoUpdater.xml");
+
+            //        using (var response = client.GetAsync(baseUri).Result)
+            //        {
+            //            if (response.IsSuccessStatusCode)
+            //            {
+            //                var customerJsonString =  response.Content.ReadAsStringAsync().Result;
+            //                //var cust = JsonConvert.DeserializeObject<Response>(customerJsonString);
+            //                MessageBox.Show(customerJsonString);
+
+            //                System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            //                doc.LoadXml(customerJsonString);
+
+            //                System.Xml.XmlNodeList version = doc.GetElementsByTagName("version");
+            //                if (version.Count > 0)
+            //                {
+            //                    MessageBox.Show(version[0].InnerText);
+            //                }
+            //                version = doc.GetElementsByTagName("url");
+            //                if (version.Count > 0)
+            //                {
+            //                    MessageBox.Show(version[0].InnerText);
+            //                }
+            //                version = doc.GetElementsByTagName("changelog");
+            //                if (version.Count > 0)
+            //                {
+            //                    MessageBox.Show(version[0].InnerText);
+            //                }
+
+
+
+            //            }
+            //            else
+            //            {
+            //                MessageBox.Show("Error" + response.ReasonPhrase);
+            //            }
+
+            //        }
+            //        //string xml_File = client.GetStringAsync(baseUri);
+
+            //    }
+            //}
+            //catch (Exception exception)
+            //{
+            //    MessageBox.Show(exception.Message, exception.GetType().ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+
+            //#if NET6_0_OR_GREATER
+            //            AutoUpdater.InstalledVersion = new Version("2.2.0.3");
+            //            AutoUpdater.ReportErrors = ReportError;
+            //            AutoUpdater.RunUpdateAsAdmin = false;
+            //            //AutoUpdater.OpenDownloadPage = true;
+            //            string app_settings_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "GRAL_Update");
+            //            try
+            //            {
+            //                if (!Directory.Exists(app_settings_path))
+            //                {
+            //                    Directory.CreateDirectory(app_settings_path);
+            //                }
+            //            }
+            //            catch(Exception exception)
+            //            {
+            //                if (ReportError)
+            //                {
+            //                    MessageBox.Show(exception.Message, exception.GetType().ToString(), MessageBoxButtons.OK,
+            //                                MessageBoxIcon.Error);
+            //                }
+            //            }
+            //            AutoUpdater.DownloadPath = app_settings_path;
+            //            AutoUpdater.OpenDownloadPage = true;
+            //            AutoUpdater.AppTitle = "GRAL/GRAMM System";
+            //            // AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
+
+            //            AutoUpdater.Start("https://github.com/GralDispersionModel/GUI/releases/download/V22.03/AutoUpdater.xml");
+            //#endif
+        }
+
+        /// <summary>
+        /// Custom messages for the update checker
+        /// </summary>
+        /// <param name="args"></param>
+        private static void AutoUpdaterOnCheckForUpdateEvent()
+        {
+//#if NET6_0_OR_GREATER
+//            if (args.Error == null)
+//            {
+//                if (args.IsUpdateAvailable)
+//                {
+//                    DialogResult dialogResult;
+//                    if (args.Mandatory.Value)
+//                    {
+//                        dialogResult =
+//                            MessageBox.Show(
+//                                $@"There is new version {args.CurrentVersion} available. You are using version {args.InstalledVersion}. This is required update. Press Ok to begin the download of the latest version." + Environment.NewLine +
+//                                "Download folder: " + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "GRAL_Update"), @"Update Available",
+//                                MessageBoxButtons.OK,
+//                                MessageBoxIcon.Information);
+//                    }
+//                    else
+//                    {
+//                        dialogResult =
+//                            MessageBox.Show(
+//                                $@"There is new version {args.CurrentVersion} available. You are using version {
+//                                        args.InstalledVersion
+//                                    }. Do you want to download the latest version now?" + Environment.NewLine + 
+//                                    "Download folder: "  + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "GRAL_Update"), @"Update Available",
+//                                MessageBoxButtons.YesNo,
+//                                MessageBoxIcon.Information);
+//                    }
+
+//                    // Uncomment the following line if you want to show standard update dialog instead.
+//                    // AutoUpdater.ShowUpdateForm(args);
+
+//                    if (dialogResult.Equals(DialogResult.Yes) || dialogResult.Equals(DialogResult.OK))
+//                    {
+//                        try
+//                        {
+//                            if (AutoUpdater.DownloadUpdate(args))
+//                            {
+//                                //Application.Exit();
+//                            }
+//                        }
+//                        catch (Exception exception)
+//                        {
+//                            MessageBox.Show(exception.Message, exception.GetType().ToString(), MessageBoxButtons.OK,
+//                                MessageBoxIcon.Error);
+//                        }
+//                    }
+//                }
+//                else if (AutoUpdater.ReportErrors == true)
+//                {
+//                    MessageBox.Show(@"This version is up to date. Please try again later.", @"No update available",
+//                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+//                }
+//            }
+//            else
+//            {
+//                if (args.Error is System.Net.WebException)
+//                {
+//                    MessageBox.Show(
+//                        @"There is a problem reaching the update server. Please check your internet connection and try again later.",
+//                        @"Update Check Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+//                }
+//                else
+//                {
+//                    MessageBox.Show(args.Error.Message,
+//                        args.Error.GetType().ToString(), MessageBoxButtons.OK,
+//                        MessageBoxIcon.Error);
+//                }
+//            }
+//#endif
+        }
+
+
     }
 }

@@ -158,7 +158,11 @@ namespace GralDomain
                 
                 if (RectWhite.Right > 50) // if right edge inside actual view
                 {
-                    int _y0_ = (int) (x_step * (int)(maxh / x_step + 1));
+                    int _y0_ = 0;
+                    if (x_step >= 0)
+                    {
+                        _y0_ = (int)(x_step * (int)(maxh / x_step));
+                    }
                     int _yc = 0;
                     i = 0;
                     if (_y0_ == 0)
