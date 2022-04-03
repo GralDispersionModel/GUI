@@ -1,5 +1,11 @@
 # GRAL Dispersion Model GUI .NET6beta1<br>
-This is the MonoDevelop (LINUX) repository for the .NET6 version of the graphical user interface running on Mono (Winforms). 
+This is the repository for the .NET6 beta version of the graphical user interface. Since the .NETFramework is no longer developed by Microsoft, we expect the following advantages from the migration in the future:
+* High dpi support
+* Performance improvements
+* Publishing of single files including the entire required framework
+* Improvements due to future developments by Microsoft<br>
+
+The migration from .NETFramework to .NET6 results in significant code adjustments for an application as large as the GUI. For this reason, numerous bugs are still to be expected here. Therefore, GUI version 21.09 is recommended for current users.<br>
 
 The MonoDevelop branch contains a version of the GUI that is intended to be used with MonoDevelop under LINUX (the distribution we use is Debian 11).<br>
 
@@ -7,7 +13,7 @@ This application is a graphical user interface (GUI), designed to simplify the n
 There is also a [youtube](https://www.youtube.com/watch?v=vfEVl-j4P5s) tutorial that shows and explains some basic functions of the GUI.<br>
 
 ## Built With
-Windows [MonoDevelop](https://www.monodevelop.com/) <br>
+Windows [Visual Studio 2022 or higher](https://visualstudio.microsoft.com/de/downloads/) <br>
 
 ## Official Release and Documentation
 The current validated GUI versions for Windows and a comprehensive manual are available at the [GRAL homepage](http://lampz.tugraz.at/~gral/)

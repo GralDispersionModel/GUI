@@ -35,10 +35,9 @@ namespace GralMainForms
 
             (string XMLFile, string Error) = LoadUpdateFileHttp(uri);
 
-            string Error2 = String.Empty;
             if (!String.IsNullOrEmpty(Error))
             {
-                (XMLFile, Error2) = LoadUpdateFileWeb(uri);
+                (XMLFile, string Error2) = LoadUpdateFileWeb(uri);
             }
 
             if (!string.IsNullOrEmpty(XMLFile))
@@ -63,19 +62,18 @@ namespace GralMainForms
                 }
 
                 int versionDifference = (Convert.ToInt32(version.Replace(".", String.Empty)) - Convert.ToInt32(RecentVersion.Replace(".", String.Empty)));
-
                 if ( versionDifference == 0)
                 {
                     if (ShowUserInfo)
                     {
-                        MessageBox.Show(this, "The application is up to date, there is no update available. Please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(@"The application is up to date, there is no update available. Please try again later.", @"No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else if (versionDifference < 0)
                 {
                     if (ShowUserInfo)
                     {
-                        MessageBox.Show(this, "The application is more recent than the official release, there is no update available. Please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(@"The application is up newer than the official release, there is no update available. Please try again later.", @"No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else
@@ -91,18 +89,7 @@ namespace GralMainForms
             }
             else
             {
-                if (String.IsNullOrEmpty(Error))
-                {
-                    if (String.IsNullOrEmpty(Error2))
-                    {
-                        Error2 = "Update notification not available";
-                    }
-                    MessageBox.Show(this, Error2);
-                }
-                else
-                {
-                    MessageBox.Show(this, Error);
-                }
+                MessageBox.Show(Error);
             }
         }
 
@@ -110,7 +97,6 @@ namespace GralMainForms
         {
             string error = string.Empty;
             string XMLFile = string.Empty;
-
             try
             {
                 using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
@@ -135,7 +121,6 @@ namespace GralMainForms
             {
                 error = exception.Message + Environment.NewLine + exception.GetType().ToString();
             }
-
             return (XMLFile, error);
         }
 

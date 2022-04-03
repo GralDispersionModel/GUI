@@ -35,6 +35,10 @@ namespace GralMainForms
                  "the Free Software Foundation, either version 3 of the License." + Environment.NewLine;
             a += "You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.";
             textBox1.Text = a;
+#if NET6_0_OR_GREATER
+#else
+            button2.Visible = false;
+#endif
         }
 
         private void button1_Click(object sender, EventArgs e)
