@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+
 namespace Gral
 {
     /// <summary>
@@ -407,6 +408,10 @@ namespace Gral
             //initialize the GUI Settings
             GUISettings = new GralData.GuiSettings();
             GUISettings.ReadFromFile();
+            if (GUISettings.AutoCheckForUpdates)
+            {
+                AutoUpdateStart(false);
+            }
 
             button14.Tag = 0; // allow calls to the GIS window
         }
@@ -2896,6 +2901,7 @@ namespace Gral
         /// </summary>
         void MainLoad(object sender, EventArgs e)
         {
+
         }
 
         /// <summary>
@@ -3593,6 +3599,20 @@ namespace Gral
             GralMainForms.OnlineParameters online = (GralMainForms.OnlineParameters) sender;
             OnlineRefreshInterval = online.OnlineRefreshInterval;
             OnlineParmeters = online.OnlineCheckBoxes;
+        }
+       
+        /// <summary>
+        /// Check for an update of a new GUI/GRAL version
+        /// </summary>
+        /// <param name="ReportError">Show "error" and "No update available" messages?</param>
+        public static void AutoUpdateStart(bool ReportError)
+        {
+            GralMainForms.UpdateNotification upd = new GralMainForms.UpdateNotification()
+            {
+                RecentVersion = Application.ProductVersion,
+                ShowUserInfo = ReportError
+            };
+            upd.LoadUpdateFile();
         }
     }
 }

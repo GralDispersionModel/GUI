@@ -13,6 +13,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Gral;
 
 namespace GralMainForms
 {
@@ -48,12 +49,12 @@ namespace GralMainForms
 
         private void label5_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(label5.Text);
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = label5.Text, UseShellExecute = true }); 
         }
 
         private void label4_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(label4.Text);
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = label4.Text, UseShellExecute = true });
         }
 
         private void label5_MouseHover(object sender, EventArgs e)
@@ -66,6 +67,12 @@ namespace GralMainForms
         {
             Label _l = (Label)sender;
             _l.ForeColor = Color.Blue;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //set Main.GUISettings.AutoCheckForUpdates to false -> force output if the version is still up to date
+            Main.AutoUpdateStart(true);
         }
     }
 
