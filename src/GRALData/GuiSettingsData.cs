@@ -90,11 +90,7 @@ namespace GralData
             VectorMapAutoScaling = true;
             IgnoreMeteo00Values = Gral.WindData00Enum.All;
             DeleteFilesToRecyclingBin = true;
-#if NET6_0_OR_GREATER
-            AutoCheckForUpdates = true;
-#else
             AutoCheckForUpdates = false;
-#endif
         }
 
         /// <summary>
