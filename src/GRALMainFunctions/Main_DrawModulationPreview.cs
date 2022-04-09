@@ -272,7 +272,7 @@ namespace Gral
         void Panel1Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;			
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;			
             
             Font titlefont = new Font("Arial", 19, FontStyle.Bold);
             Font subtitlefont = new Font("Arial", 11, FontStyle.Bold);
@@ -287,8 +287,13 @@ namespace Gral
             int x = panel1.Width / 2;
             int distance =  (int) (g.MeasureString("J", titlefont, 200).Height);
             int distance2 =  (int) (g.MeasureString("J", subtitlefont, 200).Height);
-            
-            g.DrawString("GRAL GUI V" + Application.ProductVersion + "Beta2 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            string version = Application.ProductVersion.Replace(".", string.Empty);
+
+            if (version.Length > 3)
+            {
+                version = version.Substring(0, 2) + "." + version.Substring(2);
+            }
+            g.DrawString("GRAL GUI V" + version + "Beta2 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
