@@ -47,12 +47,6 @@ namespace GralMainForms
 
             (string XMLFile, string Error) = LoadUpdateFileHttp(uri);
 
-            string Error2 = String.Empty;
-            if (!String.IsNullOrEmpty(Error))
-            {
-                (XMLFile, Error2) = LoadUpdateFileWeb(uri);
-            }
-
             try
             {
                 if (!string.IsNullOrEmpty(XMLFile))
@@ -103,29 +97,15 @@ namespace GralMainForms
                         this.TopMost = true;
                     }
                 }
-                else
+                else if (!String.IsNullOrEmpty(Error))
                 {
-                    if (String.IsNullOrEmpty(Error))
+                    if (ShowUserInfo)
                     {
-                        if (String.IsNullOrEmpty(Error2))
-                        {
-                            Error2 = "Update notification not available";
-                        }
-                        if (ShowUserInfo)
-                        {
-                            MessageBox.Show(this, Error2, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        if (ShowUserInfo)
-                        {
-                            MessageBox.Show(this, Error, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        MessageBox.Show(this, Error, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ShowUserInfo)
                 {
@@ -143,51 +123,21 @@ namespace GralMainForms
         {
             string error = string.Empty;
             string XMLFile = string.Empty;
-
             try
             {
-                using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
+                System.Net.Http.HttpClientHandler handler = new System.Net.Http.HttpClientHandler();
+                handler.UseProxy = true;
+                handler.Proxy = null;
+                //handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+                handler.DefaultProxyCredentials = System.Net.CredentialCache.DefaultNetworkCredentials;
+                handler.UseDefaultCredentials = true;
+                handler.AllowAutoRedirect = true;
+                handler.PreAuthenticate = true;
+
+                using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient(handler))
                 {
                     Uri baseUri = new Uri(Url);
-
-                    using (var response = client.GetAsync(baseUri).Result)
-                    {
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string temp = response.Content.ReadAsStringAsync().Result;
-                            XMLFile = temp;
-                        }
-                        else
-                        {
-                            error = "Error" + response.ReasonPhrase;
-                        }
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                error = exception.Message + Environment.NewLine + exception.GetType().ToString();
-            }
-            return (XMLFile, error);
-        }
-
-        /// <summary>
-        /// Use the old System.Net.WebClient class -> on some machines it is possible using the default proxy settings using this class
-        /// </summary>
-        /// <param name="Url">The web adress containing the xml file</param>
-        /// <returns>The string with the xml file, a string with the error message</returns>
-        private (string, string) LoadUpdateFileWeb(string Url)
-        {
-            string error = string.Empty;
-            string XMLFile = string.Empty;
-            try
-            {
-                System.Net.WebRequest.DefaultWebProxy.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials;
-                using (System.Net.WebClient client = new System.Net.WebClient())
-                {
-                    Uri baseUri = new Uri(Url);
-                    string xml_File = client.DownloadString(baseUri);
-                    XMLFile = xml_File;
+                    XMLFile = client.GetStringAsync(baseUri).Result;
                 }
             }
             catch (Exception exception)
@@ -213,7 +163,7 @@ namespace GralMainForms
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = linkLabel1.Text, UseShellExecute = true });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -230,7 +180,7 @@ namespace GralMainForms
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = linkLabel2.Text, UseShellExecute = true });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
