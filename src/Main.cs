@@ -415,7 +415,7 @@ namespace Gral
 
             button14.Tag = 0; // allow calls to the GIS window
         }
-        
+
         /// <summary>
         /// Get all control item of the type T
         /// </summary>

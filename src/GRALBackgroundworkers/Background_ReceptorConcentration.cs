@@ -150,7 +150,6 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        //use MONO and .NET6 compatible Array.Clear function
                         Array.Clear(sg_mean_modulation_count, 0, sg_mean_modulation_count.Length);
                         Array.Clear(sg_mean_modulation_sum, 0, sg_mean_modulation_sum.Length);
                         //read timeseries of emissions

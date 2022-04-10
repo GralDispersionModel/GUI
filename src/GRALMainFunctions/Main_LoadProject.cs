@@ -1382,37 +1382,15 @@ namespace Gral
                 // A windfield has been defined previously....
                 if (File.Exists(Path.Combine(ProjectName, "Computation","windfeld.txt")))
                 {
-                    bool alright=true;
-                    
+                    bool GRAMMWindFieldsAvailable = true;
+
                     //get path of wind field files from windfeld.txt
-                    bool missing = false;
-                    using (StreamReader sr = new StreamReader (Path.Combine (ProjectName, @"Computation", "windfeld.txt")))
-                    {
-                        if (!sr.EndOfStream)
-                        {
-                            GRAMMwindfield = sr.ReadLine();
-                        }
-                        //Catch empty string
-                        if (string.IsNullOrEmpty(GRAMMwindfield))
-                        {
-                            GRAMMwindfield = string.Empty;
-                        }
-                        if (GRAMMwindfield.Length > 1 && GRAMMwindfield [GRAMMwindfield.Length - 1] != Path.DirectorySeparatorChar)
-                        {
-                            GRAMMwindfield += Path.DirectorySeparatorChar;
-                            missing = true;
-                        }
-                    }
-                    
-                    if(missing) // write windfeld.txt if last Seperator character is missed
-                    {
-                        WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
-                    }
+                    GRAMMwindfield = ReadFileGRAMMWindfeld_txt(ProjectName);
 
                     //check if directory still exists
                     if (Directory.Exists(GRAMMwindfield) == false)
                     {
-                            alright = false;
+                        GRAMMWindFieldsAvailable = false;
                     }
 
                     //check if local Computation folder contains *.wnd files -> ask user if this folder should be used
@@ -1434,14 +1412,14 @@ namespace Gral
                             {
                                 GRAMMwindfield = Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar;
                                 WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
-                                alright = true;
+                                GRAMMWindFieldsAvailable = true;
                             }
                         }
                     }
 
                     Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
 
-                    if (alright == true)
+                    if (GRAMMWindFieldsAvailable == true)
                     {
                         //search for flow files
                         FileInfo[] files_flow = null;
@@ -1453,7 +1431,7 @@ namespace Gral
                         catch {}
                         if (files_flow.Length == 0)
                         {
-                            alright = false;
+                            GRAMMWindFieldsAvailable = false;
                             GRAMM_Locked = false; 					// unlock GRAMM project
                         }
                         else
@@ -1462,7 +1440,7 @@ namespace Gral
                         }
                     }
                     //Directory not valid or no wind field files available
-                    if (alright == false)
+                    if (GRAMMWindFieldsAvailable == false)
                     {
                         try
                         {
@@ -1516,13 +1494,13 @@ namespace Gral
                                                         if (vL == OpenNewGrammIn.GRAMMvertlayers && Math.Abs(dW - OpenNewGrammIn.West) < 0.1 && Math.Abs(dE - OpenNewGrammIn.East) < 0.1 &&
                                                             Math.Abs(dS - OpenNewGrammIn.South) < 0.1 && Math.Abs(dN - OpenNewGrammIn.North) < 0.1)
                                                         {
-                                                            alright = true;
+                                                            GRAMMWindFieldsAvailable = true;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        if (!alright)
+                                        if (!GRAMMWindFieldsAvailable)
                                         {
                                             if (MessageBox.Show(this, "Selected GRAMM folder does not match the current project! \nTry another folder (OK) or set a new reference to the wind field in the Topography tab (Cancel)",
                                                                     "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
@@ -1535,7 +1513,7 @@ namespace Gral
                             }
 
                             // found a valid and matching GRAMM wind field 
-                            if (alright)
+                            if (GRAMMWindFieldsAvailable)
                             {
                                 //write file information for GRAMM windfield
                                 WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
@@ -1605,7 +1583,7 @@ namespace Gral
                                 catch { }
                                 if (files_flow.Length == 0)
                                 {
-                                    alright = false;
+                                    GRAMMWindFieldsAvailable = false;
                                     GRAMM_Locked = false;                   // unlock GRAMM project
                                 }
                                 else
@@ -1691,6 +1669,42 @@ namespace Gral
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Read the file windfile.txt -> this file contains the absolute path to the GRAMM wind *.wnd data
+        /// </summary>
+        /// <param name="ProjectDir"></param>
+        /// <returns>the path to the wind fields</returns>
+        public string ReadFileGRAMMWindfeld_txt(string ProjectDir)
+        {
+            string GRAMMWindfieldPath = string.Empty;
+            try
+            {
+                using (StreamReader sr = new StreamReader(Path.Combine(ProjectDir, @"Computation", "windfeld.txt")))
+                {
+                    if (!sr.EndOfStream)
+                    {
+                        GRAMMWindfieldPath = sr.ReadLine();
+                    }
+                    //Catch empty string
+                    if (string.IsNullOrEmpty(GRAMMWindfieldPath))
+                    {
+                        GRAMMWindfieldPath = string.Empty;
+                    }
+                }
+                //repair files without Path.DirectorySeparatorChar as final character
+                if (GRAMMWindfieldPath.Length > 1 && GRAMMWindfieldPath[GRAMMWindfieldPath.Length - 1] != Path.DirectorySeparatorChar)
+                {
+                    GRAMMWindfieldPath += Path.DirectorySeparatorChar;
+                    WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMWindfieldPath, false);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            return GRAMMWindfieldPath;
         }
 
         private void SetBuildingRadioButton()

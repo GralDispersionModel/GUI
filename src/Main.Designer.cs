@@ -271,6 +271,7 @@
             this.gramm_locked_button = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.groupBox30 = new System.Windows.Forms.GroupBox();
+            this.label96 = new System.Windows.Forms.Label();
             this.button45 = new System.Windows.Forms.Button();
             this.label97 = new System.Windows.Forms.Label();
             this.label98 = new System.Windows.Forms.Label();
@@ -297,6 +298,8 @@
             this.label68 = new System.Windows.Forms.Label();
             this.progressBar3 = new System.Windows.Forms.ProgressBar();
             this.groupBox18 = new System.Windows.Forms.GroupBox();
+            this.label72 = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
             this.label85 = new System.Windows.Forms.Label();
             this.label84 = new System.Windows.Forms.Label();
             this.button42 = new System.Windows.Forms.Button();
@@ -340,9 +343,6 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
-            this.label57 = new System.Windows.Forms.Label();
-            this.label72 = new System.Windows.Forms.Label();
-            this.label96 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.Project.SuspendLayout();
             this.Comments.SuspendLayout();
@@ -436,9 +436,6 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.Project);
             this.tabControl1.Controls.Add(this.Comments);
             this.tabControl1.Controls.Add(this.Domain);
@@ -446,11 +443,12 @@
             this.tabControl1.Controls.Add(this.Meteorology);
             this.tabControl1.Controls.Add(this.Topography);
             this.tabControl1.Controls.Add(this.Computation);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(822, 579);
+            this.tabControl1.Size = new System.Drawing.Size(819, 569);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.TabControl1Deselected);
             this.tabControl1.Click += new System.EventHandler(this.TabControl1Click);
@@ -469,8 +467,9 @@
             this.Project.Controls.Add(this.label87);
             this.Project.Controls.Add(this.button8);
             this.Project.Location = new System.Drawing.Point(4, 26);
+            this.Project.Margin = new System.Windows.Forms.Padding(0);
             this.Project.Name = "Project";
-            this.Project.Size = new System.Drawing.Size(814, 549);
+            this.Project.Size = new System.Drawing.Size(811, 539);
             this.Project.TabIndex = 3;
             this.Project.Text = "   PROJECT   ";
             // 
@@ -570,7 +569,7 @@
             this.button38.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button38.BackColor = System.Drawing.Color.Gainsboro;
             this.button38.ForeColor = System.Drawing.Color.Black;
-            this.button38.Location = new System.Drawing.Point(266, 16);
+            this.button38.Location = new System.Drawing.Point(263, 6);
             this.button38.Margin = new System.Windows.Forms.Padding(2);
             this.button38.Name = "button38";
             this.button38.Size = new System.Drawing.Size(116, 28);
@@ -613,13 +612,13 @@
             this.Comments.Location = new System.Drawing.Point(4, 26);
             this.Comments.Margin = new System.Windows.Forms.Padding(2);
             this.Comments.Name = "Comments";
-            this.Comments.Size = new System.Drawing.Size(814, 549);
+            this.Comments.Size = new System.Drawing.Size(811, 539);
             this.Comments.TabIndex = 6;
             this.Comments.Text = "GRAL Settings";
             // 
             // button101
             // 
-            this.button101.Location = new System.Drawing.Point(795, 0);
+            this.button101.Location = new System.Drawing.Point(790, 0);
             this.button101.Name = "button101";
             this.button101.Size = new System.Drawing.Size(20, 20);
             this.button101.TabIndex = 8;
@@ -1968,7 +1967,7 @@
             this.Domain.Controls.Add(this.groupBox7);
             this.Domain.Location = new System.Drawing.Point(4, 26);
             this.Domain.Name = "Domain";
-            this.Domain.Size = new System.Drawing.Size(814, 549);
+            this.Domain.Size = new System.Drawing.Size(811, 539);
             this.Domain.TabIndex = 2;
             this.Domain.Text = "DOMAIN";
             // 
@@ -2267,7 +2266,7 @@
             this.Sources.Location = new System.Drawing.Point(4, 26);
             this.Sources.Name = "Sources";
             this.Sources.Padding = new System.Windows.Forms.Padding(3);
-            this.Sources.Size = new System.Drawing.Size(814, 549);
+            this.Sources.Size = new System.Drawing.Size(811, 539);
             this.Sources.TabIndex = 0;
             this.Sources.Text = "     SOURCES     ";
             // 
@@ -2448,7 +2447,7 @@
             // 
             // button104
             // 
-            this.button104.Location = new System.Drawing.Point(794, 0);
+            this.button104.Location = new System.Drawing.Point(790, 0);
             this.button104.Name = "button104";
             this.button104.Size = new System.Drawing.Size(20, 20);
             this.button104.TabIndex = 19;
@@ -2460,7 +2459,6 @@
             this.button13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button13.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button13.BackgroundImage")));
             this.button13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button13.Cursor = System.Windows.Forms.Cursors.Default;
             this.button13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button13.Location = new System.Drawing.Point(647, 144);
             this.button13.Name = "button13";
@@ -2599,7 +2597,7 @@
             this.Meteorology.Location = new System.Drawing.Point(4, 26);
             this.Meteorology.Name = "Meteorology";
             this.Meteorology.Padding = new System.Windows.Forms.Padding(3);
-            this.Meteorology.Size = new System.Drawing.Size(814, 549);
+            this.Meteorology.Size = new System.Drawing.Size(811, 539);
             this.Meteorology.TabIndex = 1;
             this.Meteorology.Text = "METEOROLOGY";
             // 
@@ -2684,7 +2682,7 @@
             // 
             // button106
             // 
-            this.button106.Location = new System.Drawing.Point(794, 0);
+            this.button106.Location = new System.Drawing.Point(790, 0);
             this.button106.Name = "button106";
             this.button106.Size = new System.Drawing.Size(20, 20);
             this.button106.TabIndex = 20;
@@ -3043,7 +3041,7 @@
             this.Topography.Location = new System.Drawing.Point(4, 26);
             this.Topography.Name = "Topography";
             this.Topography.Padding = new System.Windows.Forms.Padding(3);
-            this.Topography.Size = new System.Drawing.Size(814, 549);
+            this.Topography.Size = new System.Drawing.Size(811, 539);
             this.Topography.TabIndex = 4;
             this.Topography.Text = "TOPOGRAPHY";
             // 
@@ -3264,7 +3262,7 @@
             // 
             // button105
             // 
-            this.button105.Location = new System.Drawing.Point(794, 0);
+            this.button105.Location = new System.Drawing.Point(790, 0);
             this.button105.Name = "button105";
             this.button105.Size = new System.Drawing.Size(20, 20);
             this.button105.TabIndex = 20;
@@ -3294,7 +3292,7 @@
             this.button24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.button24.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button24.ForeColor = System.Drawing.Color.Black;
-            this.button24.Location = new System.Drawing.Point(678, 25);
+            this.button24.Location = new System.Drawing.Point(670, 25);
             this.button24.Name = "button24";
             this.button24.Size = new System.Drawing.Size(133, 108);
             this.button24.TabIndex = 31;
@@ -3915,7 +3913,7 @@
             this.Computation.Controls.Add(this.project_locked_button);
             this.Computation.Location = new System.Drawing.Point(4, 26);
             this.Computation.Name = "Computation";
-            this.Computation.Size = new System.Drawing.Size(814, 549);
+            this.Computation.Size = new System.Drawing.Size(811, 539);
             this.Computation.TabIndex = 5;
             this.Computation.Text = "COMPUTATION";
             // 
@@ -4041,6 +4039,15 @@
             this.groupBox30.TabIndex = 38;
             this.groupBox30.TabStop = false;
             this.groupBox30.Text = "GRAMM file size";
+            // 
+            // label96
+            // 
+            this.label96.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label96.Location = new System.Drawing.Point(14, 45);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(138, 23);
+            this.label96.TabIndex = 38;
+            this.label96.Text = "0";
             // 
             // button45
             // 
@@ -4287,7 +4294,6 @@
             // button18
             // 
             this.button18.BackColor = System.Drawing.Color.Gainsboro;
-            this.button18.Cursor = System.Windows.Forms.Cursors.Default;
             this.button18.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button18.ForeColor = System.Drawing.Color.Black;
             this.button18.Location = new System.Drawing.Point(13, 123);
@@ -4304,7 +4310,6 @@
             // button9
             // 
             this.button9.BackColor = System.Drawing.Color.Gainsboro;
-            this.button9.Cursor = System.Windows.Forms.Cursors.Default;
             this.button9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button9.ForeColor = System.Drawing.Color.Black;
             this.button9.Location = new System.Drawing.Point(13, 164);
@@ -4320,7 +4325,6 @@
             // button7
             // 
             this.button7.BackColor = System.Drawing.Color.Gainsboro;
-            this.button7.Cursor = System.Windows.Forms.Cursors.Default;
             this.button7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button7.ForeColor = System.Drawing.Color.Black;
             this.button7.Location = new System.Drawing.Point(13, 83);
@@ -4410,6 +4414,30 @@
             this.groupBox18.TabIndex = 8;
             this.groupBox18.TabStop = false;
             this.groupBox18.Text = "GRAL file size";
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label72.Location = new System.Drawing.Point(5, 90);
+            this.label72.Name = "label72";
+            this.label72.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label72.Size = new System.Drawing.Size(13, 15);
+            this.label72.TabIndex = 11;
+            this.label72.Text = "0";
+            this.label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label57.Location = new System.Drawing.Point(5, 45);
+            this.label57.Name = "label57";
+            this.label57.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label57.Size = new System.Drawing.Size(16, 15);
+            this.label57.TabIndex = 10;
+            this.label57.Text = "0 ";
+            this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label85
             // 
@@ -4986,39 +5014,6 @@
             0,
             0,
             0});
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label57.Location = new System.Drawing.Point(5, 45);
-            this.label57.Name = "label57";
-            this.label57.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label57.Size = new System.Drawing.Size(16, 15);
-            this.label57.TabIndex = 10;
-            this.label57.Text = "0 ";
-            this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label72
-            // 
-            this.label72.AutoSize = true;
-            this.label72.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label72.Location = new System.Drawing.Point(5, 90);
-            this.label72.Name = "label72";
-            this.label72.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label72.Size = new System.Drawing.Size(13, 15);
-            this.label72.TabIndex = 11;
-            this.label72.Text = "0";
-            this.label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label96
-            // 
-            this.label96.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label96.Location = new System.Drawing.Point(14, 45);
-            this.label96.Name = "label96";
-            this.label96.Size = new System.Drawing.Size(138, 23);
-            this.label96.TabIndex = 38;
-            this.label96.Text = "0";
             // 
             // Main
             // 
