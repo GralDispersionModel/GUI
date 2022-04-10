@@ -129,7 +129,10 @@ namespace GralMainForms
                 handler.UseProxy = true;
                 handler.Proxy = null;
                 //handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+#if __MonoCS__
+#else
                 handler.DefaultProxyCredentials = System.Net.CredentialCache.DefaultNetworkCredentials;
+#endif
                 handler.UseDefaultCredentials = true;
                 handler.AllowAutoRedirect = true;
                 handler.PreAuthenticate = true;
