@@ -151,10 +151,6 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Sources = new System.Windows.Forms.TabPage();
-            this.groupBox27 = new System.Windows.Forms.GroupBox();
-            this.button51 = new System.Windows.Forms.Button();
-            this.button49 = new System.Windows.Forms.Button();
-            this.button48 = new System.Windows.Forms.Button();
             this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.button54 = new System.Windows.Forms.Button();
             this.groupBox21 = new System.Windows.Forms.GroupBox();
@@ -175,6 +171,10 @@
             this.label31 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.listBox4 = new System.Windows.Forms.ListBox();
+            this.groupBox27 = new System.Windows.Forms.GroupBox();
+            this.button51 = new System.Windows.Forms.Button();
+            this.button49 = new System.Windows.Forms.Button();
+            this.button48 = new System.Windows.Forms.Button();
             this.Meteorology = new System.Windows.Forms.TabPage();
             this.textBoxMeteoFile = new System.Windows.Forms.TextBox();
             this.button58 = new System.Windows.Forms.Button();
@@ -381,12 +381,12 @@
             this.groupBox9.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.Sources.SuspendLayout();
-            this.groupBox27.SuspendLayout();
             this.groupBox24.SuspendLayout();
             this.groupBox21.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            this.groupBox27.SuspendLayout();
             this.Meteorology.SuspendLayout();
             this.groupBox23.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
@@ -2247,7 +2247,6 @@
             // Sources
             // 
             this.Sources.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.Sources.Controls.Add(this.groupBox27);
             this.Sources.Controls.Add(this.groupBox24);
             this.Sources.Controls.Add(this.groupBox21);
             this.Sources.Controls.Add(this.pictureBox5);
@@ -2262,6 +2261,7 @@
             this.Sources.Controls.Add(this.label31);
             this.Sources.Controls.Add(this.label30);
             this.Sources.Controls.Add(this.listBox4);
+            this.Sources.Controls.Add(this.groupBox27);
             this.Sources.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Sources.Location = new System.Drawing.Point(4, 26);
             this.Sources.Name = "Sources";
@@ -2270,69 +2270,14 @@
             this.Sources.TabIndex = 0;
             this.Sources.Text = "     SOURCES     ";
             // 
-            // groupBox27
-            // 
-            this.groupBox27.Controls.Add(this.button51);
-            this.groupBox27.Controls.Add(this.button49);
-            this.groupBox27.Controls.Add(this.button48);
-            this.groupBox27.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox27.Location = new System.Drawing.Point(460, 218);
-            this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(251, 45);
-            this.groupBox27.TabIndex = 24;
-            this.groupBox27.TabStop = false;
-            this.groupBox27.Text = "Emission-time-series";
-            // 
-            // button51
-            // 
-            this.button51.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button51.ForeColor = System.Drawing.Color.Black;
-            this.button51.Location = new System.Drawing.Point(168, 16);
-            this.button51.Name = "button51";
-            this.button51.Size = new System.Drawing.Size(75, 25);
-            this.button51.TabIndex = 14;
-            this.button51.Text = "&Delete";
-            this.toolTip1.SetToolTip(this.button51, "Delete emission time series file");
-            this.button51.UseVisualStyleBackColor = true;
-            this.button51.Visible = false;
-            this.button51.Click += new System.EventHandler(this.DeleteEmissionTimeseriesFile_Click);
-            // 
-            // button49
-            // 
-            this.button49.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button49.ForeColor = System.Drawing.Color.Black;
-            this.button49.Location = new System.Drawing.Point(87, 16);
-            this.button49.Name = "button49";
-            this.button49.Size = new System.Drawing.Size(75, 25);
-            this.button49.TabIndex = 13;
-            this.button49.Text = "&Show";
-            this.toolTip1.SetToolTip(this.button49, "Show emission time series");
-            this.button49.UseVisualStyleBackColor = true;
-            this.button49.Visible = false;
-            this.button49.Click += new System.EventHandler(this.Button49Click);
-            // 
-            // button48
-            // 
-            this.button48.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button48.ForeColor = System.Drawing.Color.Black;
-            this.button48.Location = new System.Drawing.Point(6, 16);
-            this.button48.Name = "button48";
-            this.button48.Size = new System.Drawing.Size(75, 25);
-            this.button48.TabIndex = 12;
-            this.button48.Text = "&Create";
-            this.toolTip1.SetToolTip(this.button48, "Create a time series based on the modulation settings");
-            this.button48.UseVisualStyleBackColor = true;
-            this.button48.Visible = false;
-            this.button48.Click += new System.EventHandler(this.Button48Click);
-            // 
             // groupBox24
             // 
             this.groupBox24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.groupBox24.Controls.Add(this.button54);
-            this.groupBox24.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox24.Location = new System.Drawing.Point(724, 212);
+            this.groupBox24.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.groupBox24.Location = new System.Drawing.Point(717, 185);
             this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(80, 51);
+            this.groupBox24.Size = new System.Drawing.Size(75, 45);
             this.groupBox24.TabIndex = 11;
             this.groupBox24.TabStop = false;
             this.groupBox24.Text = "Decay rate";
@@ -2341,7 +2286,7 @@
             // button54
             // 
             this.button54.ForeColor = System.Drawing.Color.Black;
-            this.button54.Location = new System.Drawing.Point(5, 24);
+            this.button54.Location = new System.Drawing.Point(0, 17);
             this.button54.Name = "button54";
             this.button54.Size = new System.Drawing.Size(66, 23);
             this.button54.TabIndex = 11;
@@ -2360,7 +2305,7 @@
             this.groupBox21.Controls.Add(this.label32);
             this.groupBox21.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.groupBox21.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox21.Location = new System.Drawing.Point(716, 35);
+            this.groupBox21.Location = new System.Drawing.Point(714, 25);
             this.groupBox21.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox21.Name = "groupBox21";
             this.groupBox21.Padding = new System.Windows.Forms.Padding(2);
@@ -2579,6 +2524,63 @@
             this.listBox4.Size = new System.Drawing.Size(190, 424);
             this.listBox4.TabIndex = 1;
             this.toolTip1.SetToolTip(this.listBox4, "If no source groups are visible,\r\ncheck the GRAL domain area");
+            // 
+            // groupBox27
+            // 
+            this.groupBox27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.groupBox27.Controls.Add(this.button51);
+            this.groupBox27.Controls.Add(this.button49);
+            this.groupBox27.Controls.Add(this.button48);
+            this.groupBox27.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBox27.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.groupBox27.Location = new System.Drawing.Point(454, 218);
+            this.groupBox27.Name = "groupBox27";
+            this.groupBox27.Size = new System.Drawing.Size(351, 45);
+            this.groupBox27.TabIndex = 24;
+            this.groupBox27.TabStop = false;
+            this.groupBox27.Text = "Emission-time-series";
+            // 
+            // button51
+            // 
+            this.button51.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button51.ForeColor = System.Drawing.Color.Black;
+            this.button51.Location = new System.Drawing.Point(168, 16);
+            this.button51.Name = "button51";
+            this.button51.Size = new System.Drawing.Size(75, 25);
+            this.button51.TabIndex = 14;
+            this.button51.Text = "&Delete";
+            this.toolTip1.SetToolTip(this.button51, "Delete emission time series file");
+            this.button51.UseVisualStyleBackColor = true;
+            this.button51.Visible = false;
+            this.button51.Click += new System.EventHandler(this.DeleteEmissionTimeseriesFile_Click);
+            // 
+            // button49
+            // 
+            this.button49.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button49.ForeColor = System.Drawing.Color.Black;
+            this.button49.Location = new System.Drawing.Point(87, 16);
+            this.button49.Name = "button49";
+            this.button49.Size = new System.Drawing.Size(75, 25);
+            this.button49.TabIndex = 13;
+            this.button49.Text = "&Show";
+            this.toolTip1.SetToolTip(this.button49, "Show emission time series");
+            this.button49.UseVisualStyleBackColor = true;
+            this.button49.Visible = false;
+            this.button49.Click += new System.EventHandler(this.Button49Click);
+            // 
+            // button48
+            // 
+            this.button48.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button48.ForeColor = System.Drawing.Color.Black;
+            this.button48.Location = new System.Drawing.Point(6, 16);
+            this.button48.Name = "button48";
+            this.button48.Size = new System.Drawing.Size(75, 25);
+            this.button48.TabIndex = 12;
+            this.button48.Text = "&Create";
+            this.toolTip1.SetToolTip(this.button48, "Create a time series based on the modulation settings");
+            this.button48.UseVisualStyleBackColor = true;
+            this.button48.Visible = false;
+            this.button48.Click += new System.EventHandler(this.Button48Click);
             // 
             // Meteorology
             // 
@@ -5078,12 +5080,12 @@
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.Sources.ResumeLayout(false);
-            this.groupBox27.ResumeLayout(false);
             this.groupBox24.ResumeLayout(false);
             this.groupBox21.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            this.groupBox27.ResumeLayout(false);
             this.Meteorology.ResumeLayout(false);
             this.Meteorology.PerformLayout();
             this.groupBox23.ResumeLayout(false);
