@@ -51,7 +51,7 @@ namespace GralIO
             {
                 if (_stabClassesInt16 != null)
                 {
-                    _Stabclasses = CreateDoubleArray(_stabClassesInt16);
+                    CreateDoubleArray(_stabClassesInt16);
                 }
                 return _Stabclasses;
             }
@@ -75,29 +75,32 @@ namespace GralIO
                     {
                         using (FileStream fs = new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                         {
-                            using (ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Read, false)) //open Zip archive
+                            using (BufferedStream bs = new BufferedStream(fs, 32768))
                             {
-                                foreach (ZipArchiveEntry entry in archive.Entries)  // search for a scl file
+                                using (ZipArchive archive = new ZipArchive(bs, ZipArchiveMode.Read, false)) //open Zip archive
                                 {
-                                    if (entry.FullName.Contains("scl"))
+                                    foreach (ZipArchiveEntry entry in archive.Entries)  // search for a scl file
                                     {
-                                        using (BinaryReader stability = new BinaryReader(entry.Open())) //Open zip entry
+                                        if (entry.FullName.Contains("scl"))
                                         {
-                                            ReadValues(stability, ref _stabClassesInt16);
+                                            using (BinaryReader stability = new BinaryReader(entry.Open())) //Open zip entry
+                                            {
+                                                ReadValues(stability, ref _stabClassesInt16);
+                                            }
                                         }
-                                    }
-                                    if (entry.FullName.Contains("ust"))
-                                    {
-                                        using (BinaryReader stability = new BinaryReader(entry.Open())) //Open zip entry
+                                        if (entry.FullName.Contains("ust"))
                                         {
-                                            ReadValues(stability, ref _Ustar);
+                                            using (BinaryReader stability = new BinaryReader(entry.Open())) //Open zip entry
+                                            {
+                                                ReadValues(stability, ref _Ustar);
+                                            }
                                         }
-                                    }
-                                    if (entry.FullName.Contains("obl"))
-                                    {
-                                        using (BinaryReader stability = new BinaryReader(entry.Open())) //Open zip entry
+                                        if (entry.FullName.Contains("obl"))
                                         {
-                                            ReadValues(stability, ref _MOlength);
+                                            using (BinaryReader stability = new BinaryReader(entry.Open())) //Open zip entry
+                                            {
+                                                ReadValues(stability, ref _MOlength);
+                                            }
                                         }
                                     }
                                 }
@@ -126,25 +129,28 @@ namespace GralIO
         }
 
         /// <summary>
-        /// Create and return a double[,] array, created and copied from an int16[,] array
+        /// Create and return a double[,] array, created and copied from an int16[,] array - reduce array allocations
         /// </summary>
-        private double[,] CreateDoubleArray(Int16[,] _int16Array)
+        private void CreateDoubleArray(Int16[,] _int16Array)
         {
-            double[,] _dblArray = new double[_int16Array.GetLength(0), _int16Array.GetLength(1)];
+            if (_Stabclasses == null || _Stabclasses.GetLength(0) != _int16Array.GetLength(0) || _Stabclasses.GetLength(1) != _int16Array.GetLength(1))
+            {
+                _Stabclasses = new double[_int16Array.GetLength(0), _int16Array.GetLength(1)];
+            }
             for (int i = 0; i < _int16Array.GetLength(0); i++)
             {
                 for (int j = 0; j < _int16Array.GetLength(1); j++)
                 {
-                    _dblArray[i, j] = (double)_int16Array[i, j];
+                    _Stabclasses[i, j] = (double)_int16Array[i, j];
                 }
             }
-            return _dblArray;
+            //return _Stabclasses;
         }
 
         /// <summary>
         /// Read entire GRAMM dispersion classes/MO Lenght or USt from "*.scl" files
         /// </summary>
-        private bool ReadValues(BinaryReader stability, ref Int16[,] Scl_Array)
+        private bool ReadValues(BinaryReader stability, ref Int16[,] scl_Array)
         {
             try
             {
@@ -155,15 +161,26 @@ namespace GralIO
                 int NK = stability.ReadInt32();
 
                 _GRAMMhorgridsize = stability.ReadSingle();
-                Scl_Array = null; // delete array -
-                Scl_Array = new Int16[NI, NJ]; // create new array
+                if (scl_Array == null || scl_Array.GetLength(0) != NI || scl_Array.GetLength(1) != NJ)
+                {
+                    scl_Array = new Int16[NI, NJ]; // create new array
+                }
+                else
+                {
+#if NET6_0_OR_GREATER
+                    Array.Clear(scl_Array);
+#else
+                    Array.Clear(Scl_Array, 0, NI * NJ);                    
+#endif
+                }
+
                 byte[] _row = new byte[NJ * 2];
                 for (int i = 0; i < NI; i++)
                 {
                     _row = stability.ReadBytes(NJ * 2);
                     for (int j = 0; j < NJ; j++)
                     {
-                        Scl_Array[i, j] = BitConverter.ToInt16(_row, j * 2);
+                        scl_Array[i, j] = BitConverter.ToInt16(_row, j * 2);
                     }
                 }
                 return true;
@@ -186,33 +203,39 @@ namespace GralIO
                 {
                     if (ReadFlowFieldFiles.CheckIfFileIsZipped(_filename)) // file zipped?
                     {
-                        using (ZipArchive archive = ZipFile.OpenRead(_filename)) //open Zip archive
+                        using (FileStream fs = new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                         {
-                            foreach (ZipArchiveEntry entry in archive.Entries) // search for a scl file
+                            using (BufferedStream bs = new BufferedStream(fs, 32768))
                             {
-                                if (entry.FullName.Contains("scl"))
+                                using (ZipArchive archive = new ZipArchive(bs, ZipArchiveMode.Read, false)) //open Zip archive
                                 {
-                                    using (BinaryReader stability = new BinaryReader(entry.Open())) //OPen Zip entry
+                                    foreach (ZipArchiveEntry entry in archive.Entries) // search for a scl file
                                     {
-                                        // read the header
-                                        stability.ReadInt32();
-                                        int NI = stability.ReadInt32();
-                                        int NJ = stability.ReadInt32();
-                                        int NK = stability.ReadInt32();
-                                        _GRAMMhorgridsize = stability.ReadSingle();
-
-                                        long position = (x * NJ + y); // Position in bytes 20 Bytes = Header
-
-                                        if (x < NI && y < NJ)
+                                        if (entry.FullName.Contains("scl"))
                                         {
-                                            // Seek doesn't work in zipped files
-                                            // stability.BaseStream.Seek(position, SeekOrigin.Begin);
-                                            for (int i = 0; i < position; i++) // seek manually
+                                            using (BinaryReader stability = new BinaryReader(entry.Open())) //Open Zip entry
                                             {
-                                                stability.ReadInt16();
-                                            }
+                                                // read the header
+                                                stability.ReadInt32();
+                                                int NI = stability.ReadInt32();
+                                                int NJ = stability.ReadInt32();
+                                                int NK = stability.ReadInt32();
+                                                _GRAMMhorgridsize = stability.ReadSingle();
 
-                                            temp = stability.ReadInt16(); // read this value
+                                                long position = (x * NJ + y); // Position in bytes 20 Bytes = Header
+
+                                                if (x < NI && y < NJ)
+                                                {
+                                                    // Seek doesn't work in zipped files
+                                                    // stability.BaseStream.Seek(position, SeekOrigin.Begin);
+                                                    for (int i = 0; i < position; i++) // seek manually
+                                                    {
+                                                        stability.ReadInt16();
+                                                    }
+
+                                                    temp = stability.ReadInt16(); // read this value
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -328,62 +351,65 @@ namespace GralIO
 
                     using (FileStream zipToOpen = new FileStream(stabclassfilename, FileMode.Create))
                     {
-                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                        using (BufferedStream bufZipFile = new BufferedStream(zipToOpen, 32768))
                         {
-                            string ustarfilename = (Path.GetFileNameWithoutExtension(_filename) + ".ust");
-                            ZipArchiveEntry write_entry1 = archive.CreateEntry(ustarfilename);
-                            using (BinaryWriter writer = new BinaryWriter(write_entry1.Open()))
+                            using (ZipArchive archive = new ZipArchive(bufZipFile, ZipArchiveMode.Update))
                             {
-                                writer.Write(header);
-                                writer.Write(_NX - _X0);
-                                writer.Write(_NY - _Y0);
-                                writer.Write(_NZ);
-                                writer.Write(_GRAMMhorgridsize);
-                                for (int i = _X0; i < _NX; i++)
+                                string ustarfilename = (Path.GetFileNameWithoutExtension(_filename) + ".ust");
+                                ZipArchiveEntry write_entry1 = archive.CreateEntry(ustarfilename);
+                                using (BinaryWriter writer = new BinaryWriter(write_entry1.Open()))
                                 {
-                                    for (int j = _Y0; j < _NY; j++)
+                                    writer.Write(header);
+                                    writer.Write(_NX - _X0);
+                                    writer.Write(_NY - _Y0);
+                                    writer.Write(_NZ);
+                                    writer.Write(_GRAMMhorgridsize);
+                                    for (int i = _X0; i < _NX; i++)
                                     {
-                                        dummy = _Ustar[i, j];
-                                        writer.Write(dummy);
+                                        for (int j = _Y0; j < _NY; j++)
+                                        {
+                                            dummy = _Ustar[i, j];
+                                            writer.Write(dummy);
+                                        }
                                     }
                                 }
-                            }
 
-                            string obukhovfilename = (Path.GetFileNameWithoutExtension(_filename) + ".obl");
-                            ZipArchiveEntry write_entry2 = archive.CreateEntry(obukhovfilename);
-                            using (BinaryWriter writer = new BinaryWriter(write_entry2.Open()))
-                            {
-                                writer.Write(header);
-                                writer.Write(_NX - _X0);
-                                writer.Write(_NY - _Y0);
-                                writer.Write(_NZ);
-                                writer.Write(_GRAMMhorgridsize);
-                                for (int i = _X0; i < _NX; i++)
+                                string obukhovfilename = (Path.GetFileNameWithoutExtension(_filename) + ".obl");
+                                ZipArchiveEntry write_entry2 = archive.CreateEntry(obukhovfilename);
+                                using (BinaryWriter writer = new BinaryWriter(write_entry2.Open()))
                                 {
-                                    for (int j = _Y0; j < _NY; j++)
+                                    writer.Write(header);
+                                    writer.Write(_NX - _X0);
+                                    writer.Write(_NY - _Y0);
+                                    writer.Write(_NZ);
+                                    writer.Write(_GRAMMhorgridsize);
+                                    for (int i = _X0; i < _NX; i++)
                                     {
-                                        dummy = _MOlength[i, j];
-                                        writer.Write(dummy);
+                                        for (int j = _Y0; j < _NY; j++)
+                                        {
+                                            dummy = _MOlength[i, j];
+                                            writer.Write(dummy);
+                                        }
                                     }
                                 }
-                            }
 
-                            //computation and ouput of stability classes
-                            string stabilityfile = (Path.GetFileNameWithoutExtension(_filename) + ".scl");
-                            ZipArchiveEntry write_entry3 = archive.CreateEntry(stabilityfile);
-                            using (BinaryWriter writer = new BinaryWriter(write_entry3.Open()))
-                            {
-                                writer.Write(header);
-                                writer.Write(_NX - _X0);
-                                writer.Write(_NY - _Y0);
-                                writer.Write(_NZ);
-                                writer.Write(_GRAMMhorgridsize);
-                                for (int i = _X0; i < _NX; i++)
+                                //computation and ouput of stability classes
+                                string stabilityfile = (Path.GetFileNameWithoutExtension(_filename) + ".scl");
+                                ZipArchiveEntry write_entry3 = archive.CreateEntry(stabilityfile);
+                                using (BinaryWriter writer = new BinaryWriter(write_entry3.Open()))
                                 {
-                                    for (int j = _Y0; j < _NY; j++)
+                                    writer.Write(header);
+                                    writer.Write(_NX - _X0);
+                                    writer.Write(_NY - _Y0);
+                                    writer.Write(_NZ);
+                                    writer.Write(_GRAMMhorgridsize);
+                                    for (int i = _X0; i < _NX; i++)
                                     {
-                                        dummy =  _stabClassesInt16[i, j];
-                                        writer.Write(dummy);
+                                        for (int j = _Y0; j < _NY; j++)
+                                        {
+                                            dummy = _stabClassesInt16[i, j];
+                                            writer.Write(dummy);
+                                        }
                                     }
                                 }
                             }
@@ -398,7 +424,6 @@ namespace GralIO
             {
                 return false;
             }
-
         }
 
         public bool close()

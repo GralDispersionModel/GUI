@@ -90,7 +90,9 @@ namespace GralBackgroundworkers
             float[, ,] UWI = new float[NX + 1, NY + 1, NZ + 1];
             float[, ,] VWI = new float[NX + 1, NY + 1, NZ + 1];
             float[, ,] WWI = new float[NX + 1, NY + 1, NZ + 1];
-            
+            ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses();
+            Windfield_Reader Reader = new Windfield_Reader();
+
             int n = 1;
             foreach(string line_meteopgt in data_meteopgt)
             {
@@ -123,7 +125,6 @@ namespace GralBackgroundworkers
                 {
                     //read wind fields
                     string wndfilename = Path.Combine(mydata.Path_GRAMMwindfield, Convert.ToString(iiwet).PadLeft(5, '0') + ".wnd");
-                    Windfield_Reader Reader = new Windfield_Reader();
                     if (Reader.Windfield_read(wndfilename, NX, NY, NZ, ref UWI, ref VWI, ref WWI) == false)
                     {
                         throw new IOException();
@@ -134,7 +135,6 @@ namespace GralBackgroundworkers
                     break;
                 }
                 
-                ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses();
                 bool local_stability_OK = false;
                 if (mydata.LocalStability) // use local stability?
                 {
@@ -185,7 +185,6 @@ namespace GralBackgroundworkers
                             local_akla[item_number][n] = iakla[n];
                         }
 
-
                         Uoben = UWI[ix, iy, ischnitt];
                         Voben = VWI[ix, iy, ischnitt];
                         if (ischnitt > 1)
@@ -207,13 +206,12 @@ namespace GralBackgroundworkers
                         wgi[item_number][n] = (float)Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
                     }
                     item_number++;
-                }
-                
-                ReadStablity = null; // Release memory of SCL file
-            
+                }            
                 n++; // next line
             } // loop over all met situations
-            
+            ReadStablity = null; // Release memory of SCL file
+            Reader = null; //Release windfield reader
+
             double wge = 0;
             double wr = 0;
             int ak = 0;

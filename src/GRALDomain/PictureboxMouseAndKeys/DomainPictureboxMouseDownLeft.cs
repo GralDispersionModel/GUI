@@ -1346,7 +1346,6 @@ namespace GralDomain
                         {
                             FileName = Path.Combine(Gral.Main.ProjectName, @"Computation", Convert.ToString(sel).PadLeft(5, '0') + ".scl")
                         };
-                        double[,] arr = new double[1, 1];
                         int x1 = 1;
                         int y1 = 1;
                         int xDomain = Convert.ToInt32(Convert.ToDouble(textBox1.Text.Replace(".", decsep)));
@@ -1376,7 +1375,12 @@ namespace GralDomain
 
                         if (result > 0)
                         {
-                            MessageBox.Show(this, "Stability: " + Convert.ToString(result), "GRAL GUI - Stability class", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            if (CheckForExistingDrawingObject("ITEM INFO") > 0) // set item info to the top of the object stack
+                            {
+                                RemoveItemFromItemOptions("ITEM INFO");
+                            }
+                            AddItemInfoToDrawingObject("Stability: " + Convert.ToString(result), xDomain, yDomain);
+                            //MessageBox.Show(this, "Stability: " + Convert.ToString(result), "GRAL GUI - Stability class", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         reader.close();
                     }

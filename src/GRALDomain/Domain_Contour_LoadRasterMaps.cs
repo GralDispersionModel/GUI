@@ -55,7 +55,7 @@ namespace GralDomain
                         ReadSclUstOblClasses reader = new ReadSclUstOblClasses
                         {
                             FileName = file,
-                            Stabclasses = zlevel
+                            Stabclasses = null
                         };
 
                         if (reader.ReadSclFile()) // true => reader = OK

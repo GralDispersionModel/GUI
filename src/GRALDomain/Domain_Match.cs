@@ -183,8 +183,10 @@ namespace GralDomain
                 wait.ProgressbarUpdate(this, (int) NumberofWeatherSituations + 1);
 
                 // Read original Meteo-Data
-                //loop over all weather situations
                 Windfield_Reader Reader = new Windfield_Reader();
+                ReadSclUstOblClasses ReadStability = new ReadSclUstOblClasses();
+                double[,] zlevel = null;
+                // loop over all weather situations
                 for (int n = 1; n < NumberofWeatherSituations + 1; n++) // n = loop over all meteopgt.all lines
                 {
                     iiwet += 1;
@@ -229,18 +231,15 @@ namespace GralDomain
                             // read stability class and set MMO.LocalStabilityClass[n] to a local value
                             if (MMO.LocalStabilityUsed)
                             {
-                                double[,] zlevel = new double[1, 1];
                                 //wait.Text = "Match - Reading GRAMM stability field " + Convert.ToString(iiwet);
                                 string stabilityfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
-                                ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses
-                                {
-                                    FileName = stabilityfilename,
-                                    Stabclasses = zlevel
-                                };
 
-                                if (ReadStablity.ReadSclFile()) // true => reader = OK
+                                ReadStability.FileName = stabilityfilename;
+                                ReadStability.Stabclasses = zlevel;
+                                
+                                if (ReadStability.ReadSclFile()) // true => reader = OK
                                 {
-                                    zlevel = ReadStablity.Stabclasses;
+                                    zlevel = ReadStability.Stabclasses;
                                     //								mess.listBox1.Items.Add(Convert.ToString(MMO.LocalStabilityClass[n]) + "/" + Convert.ToString(result));
                                     //								mess.Show();
                                     //								Application.DoEvents();
@@ -249,7 +248,7 @@ namespace GralDomain
                                         if (ix[met] > 0 && iy[met] > 0 && ix[met] < NX && iy[met] < NY)
                                         {
                                             //int result = (int) zlevel[ix[met] - 1, iy[met] - 1]; // use coordinates of the 1st station
-                                            int result = ReadStablity.SclMean(ix[met] - 1, iy[met] - 1);
+                                            int result = ReadStability.SclMean(ix[met] - 1, iy[met] - 1);
                                             MMO.LocalStabilityClass[met, n] = result;
                                         }
                                     }
@@ -389,6 +388,8 @@ namespace GralDomain
                 } // loopover all classified meteo-data in the orginal meteopgt.all
                 meteopgt_ori.Close(); // Close original "meteopgt.all"
                 meteopgt_ori.Dispose();
+                Reader = null;
+                ReadStability = null;
             }
             catch
             { }
