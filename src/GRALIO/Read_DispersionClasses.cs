@@ -170,7 +170,7 @@ namespace GralIO
 #if NET6_0_OR_GREATER
                     Array.Clear(scl_Array);
 #else
-                    Array.Clear(Scl_Array, 0, NI * NJ);                    
+                    Array.Clear(scl_Array, 0, NI * NJ);
 #endif
                 }
 
