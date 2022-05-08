@@ -5,7 +5,7 @@ This is the repository for the .NET6 beta version of the graphical user interfac
 * Publishing of single files including the entire required framework
 * Improvements due to future developments by Microsoft<br>
 
-The migration from .NETFramework to .NET6 results in significant code adjustments for an application as large as the GUI. Many problems of the migration have been fixed and this version is already being used productively internally, although Version 22.03 is still recommended for unexerienced or new users.<br>
+The migration from .NETFramework to .NET6 results in significant code adjustments for an application as large as the GUI. Many problems of the migration have been fixed and this version is already being used productively internally, although Version 22.03 is still recommended for unexperienced or new users.<br>
 
 The MonoDevelop branch contains a version of the GUI that is intended to be used with MonoDevelop under Linux (the distribution we use is Debian 11).<br>
 
