@@ -129,29 +129,18 @@ namespace GralDomain
 					
 					if (MainForm.WriteFileGRAMMWindfeld_txt(projectname, GRAMMwindfield, true) == false)
                     {
-						return;
+                        MessageBox.Show(this, "Writing to path failed" + Environment.NewLine + GRAMMwindfield, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
                     }
-					
-					string GRAMMoriginal = string.Empty;
-					//generate pointer for location of original GRAMM wind-field files
-					try
-					{
-						using (StreamReader GRAMMori = new StreamReader(Path.Combine(Gral.Main.ProjectName, @"Computation","windfeld.txt")))
-						{
-							GRAMMoriginal = GRAMMori.ReadLine();
-							if(GRAMMoriginal.Length > 1 && GRAMMoriginal[GRAMMoriginal.Length -1] != Path.DirectorySeparatorChar)
-							{
-								GRAMMoriginal += Path.DirectorySeparatorChar;
-							}
-						}
-					}
-					catch(Exception ex)
-					{
-						MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-						return;
-					}
-					
 
+                    //generate pointer for location of original GRAMM wind-field files
+                    string GRAMMoriginal = MainForm.ReadFileGRAMMWindfeld_txt(Gral.Main.ProjectName);
+                    if(!Directory.Exists(GRAMMoriginal))
+                    {
+                        MessageBox.Show(this, "Path to GRAMM wind data not valid", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    
 					//create GRAMM.geb
 					message.listBox1.Items.Add("Creating new GRAMM.geb");
 					message.Refresh();

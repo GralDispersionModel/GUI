@@ -136,226 +136,227 @@ namespace GralIO
                 string ggeomfile = Path.Combine(_pathwindfield, @"ggeom.asc");
                 using (FileStream fs = new FileStream(ggeomfile, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    using (BinaryReader readbin = new BinaryReader(fs))
+                    using (BufferedStream bs = new BufferedStream(fs, 32768))
                     {
-                        // read 1st line inclusive carriage return and line feed
-                        byte[] header;
-                        header = readbin.ReadBytes(6);
-
-                        //obtain array size in x,y,z direction
-                        _NX = readbin.ReadInt32();
-                        _NY = readbin.ReadInt32();
-                        _NZ = readbin.ReadInt32();
-
-                        if (mode < 2) // read further details
+                        using (BinaryReader readbin = new BinaryReader(bs))
                         {
-                            //obtain surface heights
-                            _AHmin = 10000000; _AHmax = 0;
-                            _AH = new double[_NX + 1, _NY + 1];
+                            // read 1st line inclusive carriage return and line feed
+                            byte[] header;
+                            header = readbin.ReadBytes(6);
 
-                            // read AH[] array
-                            for (int j = 1; j < _NY + 1; j++)
+                            //obtain array size in x,y,z direction
+                            _NX = readbin.ReadInt32();
+                            _NY = readbin.ReadInt32();
+                            _NZ = readbin.ReadInt32();
+
+                            if (mode < 2) // read further details
                             {
-                                for (int i = 1; i < _NX + 1; i++)
-                                {
-                                    _AH[i, j] = readbin.ReadSingle();
-                                    _AHmin = Math.Min(_AHmin, _AH[i, j]);
-                                    _AHmax = Math.Max(_AHmax, _AH[i, j]);
-                                }
-                            }
+                                //obtain surface heights
+                                _AHmin = 10000000; _AHmax = 0;
+                                _AH = new double[_NX + 1, _NY + 1];
 
-                            if (mode < 1) // read also ZSP
-                            {
-                                //obtain cell heights
-                                _ZSP = new double[_NX + 1, _NY + 1, _NZ + 1];
-
-                                // read ZSP[] array
-                                for (int k = 1; k < _NZ + 1; k++)
+                                // read AH[] array
+                                for (int j = 1; j < _NY + 1; j++)
                                 {
-                                    for (int j = 1; j < _NY + 1; j++)
+                                    for (int i = 1; i < _NX + 1; i++)
                                     {
-                                        byte[] chunk = readbin.ReadBytes(_NX * 4);
+                                        _AH[i, j] = readbin.ReadSingle();
+                                        _AHmin = Math.Min(_AHmin, _AH[i, j]);
+                                        _AHmax = Math.Max(_AHmax, _AH[i, j]);
+                                    }
+                                }
+
+                                if (mode < 1) // read also ZSP
+                                {
+                                    //obtain cell heights
+                                    _ZSP = new double[_NX + 1, _NY + 1, _NZ + 1];
+
+                                    // read ZSP[] array
+                                    for (int k = 1; k < _NZ + 1; k++)
+                                    {
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            byte[] chunk = readbin.ReadBytes(_NX * 4);
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                //_ZSP[i, j, k] = readbin.ReadSingle();
+                                                _ZSP[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                            }
+                                        }
+                                    }
+
+                                    if (mode < 0) // read complete file
+                                    {
+                                        _X = new double[_NX + 2];
+                                        _Y = new double[_NY + 2];
+                                        _Z = new double[_NZ + 2];
+                                        _VOL = new double[_NX + 1, _NY + 1, _NZ + 1];
+                                        _AREAX = new double[_NX + 2, _NY + 1, _NZ + 1];
+                                        _AREAY = new double[_NX + 1, _NY + 2, _NZ + 1];
+                                        _AREAZ = new double[_NX + 1, _NY + 1, _NZ + 2];
+                                        _AREAZX = new double[_NX + 1, _NY + 1, _NZ + 2];
+                                        _AREAZY = new double[_NX + 1, _NY + 1, _NZ + 2];
+                                        _AHE = new double[_NX + 2, _NY + 2, _NZ + 2];
+                                        _DDX = new double[_NX + 1];
+                                        _DDY = new double[_NY + 1];
+                                        _ZAX = new double[_NX + 1];
+                                        _ZAY = new double[_NY + 1];
+
+                                        //obtain X, Y, and Z
+                                        byte[] chunk = readbin.ReadBytes((_NX + 1) * 4);
+                                        for (int i = 1; i < _NX + 2; i++)
+                                        {
+                                            //_X[i] = readbin.ReadSingle();
+                                            _X[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                        }
+                                        chunk = readbin.ReadBytes((_NY + 1) * 4);
+                                        for (int i = 1; i < _NY + 2; i++)
+                                        {
+                                            //_Y[i] = readbin.ReadSingle();
+                                            _Y[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                        }
+                                        chunk = readbin.ReadBytes((_NZ + 1) * 4);
+                                        for (int i = 1; i < _NZ + 2; i++)
+                                        {
+                                            //_Z[i] = readbin.ReadSingle();
+                                            _Z[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                        }
+
+                                        //obtain grid volumes
+                                        for (int k = 1; k < _NZ + 1; k++)
+                                        {
+                                            for (int j = 1; j < _NY + 1; j++)
+                                            {
+                                                chunk = readbin.ReadBytes(_NX * 4);
+                                                for (int i = 1; i < _NX + 1; i++)
+                                                {
+                                                    // _VOL[i, j, k] = readbin.ReadSingle();
+                                                    _VOL[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
+                                            }
+                                        }
+
+                                        //obtain areas in x-direction
+                                        for (int k = 1; k < _NZ + 1; k++)
+                                        {
+                                            for (int j = 1; j < _NY + 1; j++)
+                                            {
+                                                chunk = readbin.ReadBytes((_NX + 1) * 4);
+                                                for (int i = 1; i < _NX + 2; i++)
+                                                {
+                                                    //_AREAX[i, j, k] = readbin.ReadSingle();
+                                                    _AREAX[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
+                                            }
+                                        }
+
+                                        //obtain areas in y-direction
+                                        for (int k = 1; k < _NZ + 1; k++)
+                                        {
+                                            for (int j = 1; j < _NY + 2; j++)
+                                            {
+                                                chunk = readbin.ReadBytes(_NX * 4);
+                                                for (int i = 1; i < _NX + 1; i++)
+                                                {
+                                                    //_AREAY[i, j, k] = readbin.ReadSingle();
+                                                    _AREAY[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
+                                            }
+                                        }
+
+                                        //obtain projection of z-area in x-direction
+                                        for (int k = 1; k < _NZ + 2; k++)
+                                        {
+                                            for (int j = 1; j < _NY + 1; j++)
+                                            {
+                                                chunk = readbin.ReadBytes(_NX * 4);
+                                                for (int i = 1; i < _NX + 1; i++)
+                                                {
+                                                    //_AREAZX[i, j, k] = readbin.ReadSingle();
+                                                    _AREAZX[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
+                                            }
+                                        }
+
+                                        //obtain projection of z-area in y-direction
+                                        for (int k = 1; k < _NZ + 2; k++)
+                                        {
+                                            for (int j = 1; j < _NY + 1; j++)
+                                            {
+                                                chunk = readbin.ReadBytes(_NX * 4);
+                                                for (int i = 1; i < _NX + 1; i++)
+                                                {
+                                                    //_AREAZY[i, j, k] = readbin.ReadSingle();
+                                                    _AREAZY[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
+                                            }
+                                        }
+
+                                        //obtain area in z-direction
+                                        for (int k = 1; k < _NZ + 2; k++)
+                                        {
+                                            for (int j = 1; j < _NY + 1; j++)
+                                            {
+                                                chunk = readbin.ReadBytes(_NX * 4);
+                                                for (int i = 1; i < _NX + 1; i++)
+                                                {
+                                                    //_AREAZ[i, j, k] = readbin.ReadSingle();
+                                                    _AREAZ[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
+                                            }
+                                        }
+                                        //obtain grid cells sizes in x-direction
+                                        chunk = readbin.ReadBytes(_NX * 4);
                                         for (int i = 1; i < _NX + 1; i++)
                                         {
-                                            //_ZSP[i, j, k] = readbin.ReadSingle();
-                                            _ZSP[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                            //_DDX[i] = readbin.ReadSingle();
+                                            _DDX[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
                                         }
-                                    }
-                                }
-
-                                if (mode < 0) // read complete file
-                                {
-                                    _X = new double[_NX + 2];
-                                    _Y = new double[_NY + 2];
-                                    _Z = new double[_NZ + 2];
-                                    _VOL = new double[_NX + 1, _NY + 1, _NZ + 1];
-                                    _AREAX = new double[_NX + 2, _NY + 1, _NZ + 1];
-                                    _AREAY = new double[_NX + 1, _NY + 2, _NZ + 1];
-                                    _AREAZ = new double[_NX + 1, _NY + 1, _NZ + 2];
-                                    _AREAZX = new double[_NX + 1, _NY + 1, _NZ + 2];
-                                    _AREAZY = new double[_NX + 1, _NY + 1, _NZ + 2];
-                                    _AHE = new double[_NX + 2, _NY + 2, _NZ + 2];
-                                    _DDX = new double[_NX + 1];
-                                    _DDY = new double[_NY + 1];
-                                    _ZAX = new double[_NX + 1];
-                                    _ZAY = new double[_NY + 1];
-
-                                    //obtain X, Y, and Z
-                                    byte[] chunk = readbin.ReadBytes((_NX + 1) * 4);
-                                    for (int i = 1; i < _NX + 2; i++)
-                                    {
-                                        //_X[i] = readbin.ReadSingle();
-                                        _X[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-                                    chunk = readbin.ReadBytes((_NY + 1) * 4);
-                                    for (int i = 1; i < _NY + 2; i++)
-                                    {
-                                        //_Y[i] = readbin.ReadSingle();
-                                        _Y[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-                                    chunk = readbin.ReadBytes((_NZ + 1) * 4);
-                                    for (int i = 1; i < _NZ + 2; i++)
-                                    {
-                                        //_Z[i] = readbin.ReadSingle();
-                                        _Z[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-
-                                    //obtain grid volumes
-                                    for (int k = 1; k < _NZ + 1; k++)
-                                    {
-                                        for (int j = 1; j < _NY + 1; j++)
+                                        //obtain grid cells sizes in y-direction
+                                        chunk = readbin.ReadBytes(_NY * 4);
+                                        for (int i = 1; i < _NY + 1; i++)
                                         {
-                                            chunk = readbin.ReadBytes(_NX * 4);
-                                            for (int i = 1; i < _NX + 1; i++)
+                                            //_DDY[i] = readbin.ReadSingle();
+                                            _DDY[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                        }
+                                        //obtain distances of neighbouring grid cells in x-direction
+                                        chunk = readbin.ReadBytes(_NX * 4);
+                                        for (int i = 1; i < _NX + 1; i++)
+                                        {
+                                            //_ZAX[i] = readbin.ReadSingle();
+                                            _ZAX[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                        }
+                                        //obtain distances of neighbouring grid cells in y-direction
+                                        chunk = readbin.ReadBytes(_NY * 4);
+                                        for (int i = 1; i < _NY + 1; i++)
+                                        {
+                                            //_ZAY[i] = readbin.ReadSingle();
+                                            _ZAY[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                        }
+
+                                        //obtain western and southern borders of the model domain and the angle (not used anymore) between the main model domain axis and north
+                                        _IKOOA = readbin.ReadInt32();
+                                        _JKOOA = readbin.ReadInt32();
+                                        _winkel = readbin.ReadDouble(); // angle not used
+
+                                        for (int k = 1; k < _NZ + 2; k++)
+                                        {
+                                            Application.DoEvents(); // Kuntner
+                                            for (int j = 1; j < _NY + 2; j++)
                                             {
-                                                // _VOL[i, j, k] = readbin.ReadSingle();
-                                                _VOL[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                chunk = readbin.ReadBytes((_NX + 1) * 4);
+                                                for (int i = 1; i < _NX + 2; i++)
+                                                {
+                                                    //_AHE[i, j, k] = readbin.ReadSingle();
+                                                    _AHE[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
+                                                }
                                             }
                                         }
-                                    }
-
-                                    //obtain areas in x-direction
-                                    for (int k = 1; k < _NZ + 1; k++)
-                                    {
-                                        for (int j = 1; j < _NY + 1; j++)
-                                        {
-                                            chunk = readbin.ReadBytes((_NX + 1) * 4);
-                                            for (int i = 1; i < _NX + 2; i++)
-                                            {
-                                                //_AREAX[i, j, k] = readbin.ReadSingle();
-                                                _AREAX[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                            }
-                                        }
-                                    }
-
-                                    //obtain areas in y-direction
-                                    for (int k = 1; k < _NZ + 1; k++)
-                                    {
-                                        for (int j = 1; j < _NY + 2; j++)
-                                        {
-                                            chunk = readbin.ReadBytes(_NX * 4);
-                                            for (int i = 1; i < _NX + 1; i++)
-                                            {
-                                                //_AREAY[i, j, k] = readbin.ReadSingle();
-                                                _AREAY[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                            }
-                                        }
-                                    }
-
-                                    //obtain projection of z-area in x-direction
-                                    for (int k = 1; k < _NZ + 2; k++)
-                                    {
-                                        for (int j = 1; j < _NY + 1; j++)
-                                        {
-                                            chunk = readbin.ReadBytes(_NX * 4);
-                                            for (int i = 1; i < _NX + 1; i++)
-                                            {
-                                                //_AREAZX[i, j, k] = readbin.ReadSingle();
-                                                _AREAZX[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                            }
-                                        }
-                                    }
-
-                                    //obtain projection of z-area in y-direction
-                                    for (int k = 1; k < _NZ + 2; k++)
-                                    {
-                                        for (int j = 1; j < _NY + 1; j++)
-                                        {
-                                            chunk = readbin.ReadBytes(_NX * 4);
-                                            for (int i = 1; i < _NX + 1; i++)
-                                            {
-                                                //_AREAZY[i, j, k] = readbin.ReadSingle();
-                                                _AREAZY[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                            }
-                                        }
-                                    }
-
-                                    //obtain area in z-direction
-                                    for (int k = 1; k < _NZ + 2; k++)
-                                    {
-                                        for (int j = 1; j < _NY + 1; j++)
-                                        {
-                                            chunk = readbin.ReadBytes(_NX * 4);
-                                            for (int i = 1; i < _NX + 1; i++)
-                                            {
-                                                //_AREAZ[i, j, k] = readbin.ReadSingle();
-                                                _AREAZ[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                            }
-                                        }
-                                    }
-                                    //obtain grid cells sizes in x-direction
-                                    chunk = readbin.ReadBytes(_NX * 4);
-                                    for (int i = 1; i < _NX + 1; i++)
-                                    {
-                                        //_DDX[i] = readbin.ReadSingle();
-                                        _DDX[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-                                    //obtain grid cells sizes in y-direction
-                                    chunk = readbin.ReadBytes(_NY * 4);
-                                    for (int i = 1; i < _NY + 1; i++)
-                                    {
-                                        //_DDY[i] = readbin.ReadSingle();
-                                        _DDY[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-                                    //obtain distances of neighbouring grid cells in x-direction
-                                    chunk = readbin.ReadBytes(_NX * 4);
-                                    for (int i = 1; i < _NX + 1; i++)
-                                    {
-                                        //_ZAX[i] = readbin.ReadSingle();
-                                        _ZAX[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-                                    //obtain distances of neighbouring grid cells in y-direction
-                                    chunk = readbin.ReadBytes(_NY * 4);
-                                    for (int i = 1; i < _NY + 1; i++)
-                                    {
-                                        //_ZAY[i] = readbin.ReadSingle();
-                                        _ZAY[i] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                    }
-
-                                    //obtain western and southern borders of the model domain and the angle (not used anymore) between the main model domain axis and north
-                                    _IKOOA = readbin.ReadInt32();
-                                    _JKOOA = readbin.ReadInt32();
-                                    _winkel = readbin.ReadDouble(); // angle not used
-
-                                    for (int k = 1; k < _NZ + 2; k++)
-                                    {
-                                        Application.DoEvents(); // Kuntner
-                                        for (int j = 1; j < _NY + 2; j++)
-                                        {
-                                            chunk = readbin.ReadBytes((_NX + 1) * 4);
-                                            for (int i = 1; i < _NX + 2; i++)
-                                            {
-                                                //_AHE[i, j, k] = readbin.ReadSingle();
-                                                _AHE[i, j, k] = BitConverter.ToSingle(chunk, (i - 1) * 4);
-                                            }
-                                        }
-                                    }
-
-
-                                }// mode -1
-                            } // mode 0
-                        } // mode 1
-                    } 
+                                    }// mode -1
+                                } // mode 0
+                            } // mode 1
+                        }
+                    }
 				} // file stream
 				return true;
 			}
@@ -844,160 +845,166 @@ namespace GralIO
                     try
                     {
                         string ggeom = Path.Combine(_projectname, @"Computation","ggeom.asc");
-                        using (BinaryWriter writebin = new BinaryWriter(File.Open(ggeom, FileMode.Create)))
+                        using (FileStream fs_ggeom = new FileStream(ggeom, FileMode.Create, FileAccess.Write))
                         {
-                            // write first Line = -99 +chr(13) +chr(10)
-                            writebin.Write((byte)45);
-                            writebin.Write((byte)57);
-                            writebin.Write((byte)57);
-                            writebin.Write((byte)32);
-                            writebin.Write((byte)13);
-                            writebin.Write((byte)10);
-
-                            // write Header values
-                            writebin.Write((int)_NX);
-                            writebin.Write((int)_NY);
-                            writebin.Write((int)_NZ);
-
-                            // write AH[] array
-                            for (int j = 1; j < _NY + 1; j++)
+                            using (BufferedStream buf_ggeom = new BufferedStream(fs_ggeom, 32768))
                             {
-                                Application.DoEvents(); // Kuntner
-                                for (int i = 1; i < _NX + 1; i++)
+                                using (BinaryWriter writebin = new BinaryWriter(buf_ggeom))
                                 {
-                                    writebin.Write((float)Math.Round(_AH[i, j], 2));
-                                }
-                            }
-                            // write ZSP[] array
-                            for (int k = 1; k < _NZ + 1; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 1; j++)
-                                {
-                                    for (int i = 1; i < _NX + 1; i++)
+                                    // write first Line = -99 +chr(13) +chr(10)
+                                    writebin.Write((byte)45);
+                                    writebin.Write((byte)57);
+                                    writebin.Write((byte)57);
+                                    writebin.Write((byte)32);
+                                    writebin.Write((byte)13);
+                                    writebin.Write((byte)10);
+
+                                    // write Header values
+                                    writebin.Write((int)_NX);
+                                    writebin.Write((int)_NY);
+                                    writebin.Write((int)_NZ);
+
+                                    // write AH[] array
+                                    for (int j = 1; j < _NY + 1; j++)
                                     {
-                                        writebin.Write((float)Math.Round(_ZSP[i, j, k], 2));
+                                        Application.DoEvents(); // Kuntner
+                                        for (int i = 1; i < _NX + 1; i++)
+                                        {
+                                            writebin.Write((float)Math.Round(_AH[i, j], 2));
+                                        }
                                     }
-                                }
-                            }
-
-                            for (int i = 1; i < _NX + 2; i++)
-                            {
-                                writebin.Write((float)Math.Round(_X[i], 2));
-                            }
-                            for (int i = 1; i < _NY + 2; i++)
-                            {
-                                writebin.Write((float)Math.Round(_Y[i], 2));
-                            }
-                            for (int i = 1; i < _NZ + 2; i++)
-                            {
-                                writebin.Write((float)Math.Round(_Z[i], 2));
-                            }
-
-                            for (int k = 1; k < _NZ + 1; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 1; j++)
-                                {
-                                    for (int i = 1; i < _NX + 1; i++)
+                                    // write ZSP[] array
+                                    for (int k = 1; k < _NZ + 1; k++)
                                     {
-                                        writebin.Write((float)_VOL[i, j, k]);
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                writebin.Write((float)Math.Round(_ZSP[i, j, k], 2));
+                                            }
+                                        }
                                     }
-                                }
-                            }
 
-                            for (int k = 1; k < _NZ + 1; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 1; j++)
-                                {
                                     for (int i = 1; i < _NX + 2; i++)
                                     {
-                                        writebin.Write((float)_AREAX[i, j, k]);
+                                        writebin.Write((float)Math.Round(_X[i], 2));
                                     }
-                                }
-                            }
+                                    for (int i = 1; i < _NY + 2; i++)
+                                    {
+                                        writebin.Write((float)Math.Round(_Y[i], 2));
+                                    }
+                                    for (int i = 1; i < _NZ + 2; i++)
+                                    {
+                                        writebin.Write((float)Math.Round(_Z[i], 2));
+                                    }
 
-                            for (int k = 1; k < _NZ + 1; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 2; j++)
-                                {
+                                    for (int k = 1; k < _NZ + 1; k++)
+                                    {
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                writebin.Write((float)_VOL[i, j, k]);
+                                            }
+                                        }
+                                    }
+
+                                    for (int k = 1; k < _NZ + 1; k++)
+                                    {
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 2; i++)
+                                            {
+                                                writebin.Write((float)_AREAX[i, j, k]);
+                                            }
+                                        }
+                                    }
+
+                                    for (int k = 1; k < _NZ + 1; k++)
+                                    {
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 2; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                writebin.Write((float)_AREAY[i, j, k]);
+                                            }
+                                        }
+                                    }
+
+                                    for (int k = 1; k < _NZ + 2; k++)
+                                    {
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                writebin.Write((float)_AREAZX[i, j, k]);
+                                            }
+                                        }
+                                    }
+
+                                    for (int k = 1; k < _NZ + 2; k++)
+                                    {
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                writebin.Write((float)_AREAZY[i, j, k]);
+                                            }
+                                        }
+                                    }
+
+                                    for (int k = 1; k < _NZ + 2; k++)
+                                    {
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 1; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 1; i++)
+                                            {
+                                                writebin.Write((float)_AREAZ[i, j, k]);
+                                            }
+                                        }
+                                    }
+
                                     for (int i = 1; i < _NX + 1; i++)
                                     {
-                                        writebin.Write((float)_AREAY[i, j, k]);
+                                        writebin.Write((float)_DDX[i]);
                                     }
-                                }
-                            }
 
-                            for (int k = 1; k < _NZ + 2; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 1; j++)
-                                {
+                                    for (int i = 1; i < _NY + 1; i++)
+                                    {
+                                        writebin.Write((float)_DDY[i]);
+                                    }
+
                                     for (int i = 1; i < _NX + 1; i++)
                                     {
-                                        writebin.Write((float)_AREAZX[i, j, k]);
+                                        writebin.Write((float)_ZAX[i]);
                                     }
-                                }
-                            }
 
-                            for (int k = 1; k < _NZ + 2; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 1; j++)
-                                {
-                                    for (int i = 1; i < _NX + 1; i++)
+                                    for (int i = 1; i < _NY + 1; i++)
                                     {
-                                        writebin.Write((float)_AREAZY[i, j, k]);
+                                        writebin.Write((float)_ZAY[i]);
                                     }
-                                }
-                            }
 
-                            for (int k = 1; k < _NZ + 2; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 1; j++)
-                                {
-                                    for (int i = 1; i < _NX + 1; i++)
+                                    writebin.Write((int)_IKOOA);
+                                    writebin.Write((int)_JKOOA);
+                                    writebin.Write((double)_winkel);
+
+                                    for (int k = 1; k < _NZ + 2; k++)
                                     {
-                                        writebin.Write((float)_AREAZ[i, j, k]);
-                                    }
-                                }
-                            }
-
-                            for (int i = 1; i < _NX + 1; i++)
-                            {
-                                writebin.Write((float)_DDX[i]);
-                            }
-
-                            for (int i = 1; i < _NY + 1; i++)
-                            {
-                                writebin.Write((float)_DDY[i]);
-                            }
-
-                            for (int i = 1; i < _NX + 1; i++)
-                            {
-                                writebin.Write((float)_ZAX[i]);
-                            }
-
-                            for (int i = 1; i < _NY + 1; i++)
-                            {
-                                writebin.Write((float)_ZAY[i]);
-                            }
-
-                            writebin.Write((int)_IKOOA);
-                            writebin.Write((int)_JKOOA);
-                            writebin.Write((double)_winkel);
-
-                            for (int k = 1; k < _NZ + 2; k++)
-                            {
-                                Application.DoEvents(); // Kuntner
-                                for (int j = 1; j < _NY + 2; j++)
-                                {
-                                    for (int i = 1; i < _NX + 2; i++)
-                                    {
-                                        writebin.Write((float)_AHE[i, j, k]);
+                                        Application.DoEvents(); // Kuntner
+                                        for (int j = 1; j < _NY + 2; j++)
+                                        {
+                                            for (int i = 1; i < _NX + 2; i++)
+                                            {
+                                                writebin.Write((float)_AHE[i, j, k]);
+                                            }
+                                        }
                                     }
                                 }
                             }

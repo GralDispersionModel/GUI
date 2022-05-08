@@ -1,0 +1,6 @@
+{
+  "configProperties": 
+  {
+    "System.Net.DisableIPv6": "true" 
+  }
+}

@@ -12,6 +12,7 @@
 
 using System;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace GralMainForms
 {
@@ -31,7 +32,12 @@ namespace GralMainForms
         private string version;
         private string downloadUri;
         private string changelogUri;
-                
+        private BackgroundWorker CheckForUpdates = null;
+        private string Url;
+        private string Error = string.Empty;
+        private string XMLFile = string.Empty;
+        private object obj = new object();
+
         public UpdateNotification()
         {
             this.Hide();
@@ -39,84 +45,84 @@ namespace GralMainForms
         }
 
         /// <summary>
-        /// Load the update file from GitHub and compare the recent version with the version in the update file
+        /// Load the update file from GitHub
         /// </summary>
         public void LoadUpdateFile()
         {
-            string uri = "https://github.com/GralDispersionModel/GUI/releases/download/V22.03/AutoUpdater.xml";
+            Url = "https://github.com/GralDispersionModel/GUI/releases/download/V22.03/AutoUpdater.xml";
 
-            (string XMLFile, string Error) = LoadUpdateFileHttp(uri);
-
-            string Error2 = String.Empty;
-            if (!String.IsNullOrEmpty(Error))
+            if (CheckForUpdates == null)
             {
-                (XMLFile, Error2) = LoadUpdateFileWeb(uri);
-            }
+                CheckForUpdates = new BackgroundWorker();
+                CheckForUpdates.DoWork += new System.ComponentModel.DoWorkEventHandler(this.LoadUpdateFileHttp);
+                CheckForUpdates.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CheckForUpdatesCompleted);
+                CheckForUpdates.WorkerSupportsCancellation = true;
 
+                if (CheckForUpdates.IsBusy != true)
+                {
+                    CheckForUpdates.RunWorkerAsync();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compare the recent version with the version in the update file
+        /// </summary>
+        private void CheckForUpdatesCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
             try
             {
-                if (!string.IsNullOrEmpty(XMLFile))
+                if (CheckForUpdates.CancellationPending == false)
                 {
-                    System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                    doc.LoadXml(XMLFile);
+                    if (!string.IsNullOrEmpty(XMLFile))
+                    {
+                        System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+                        doc.LoadXml(XMLFile);
 
-                    System.Xml.XmlNodeList xmlNode = doc.GetElementsByTagName("version");
-                    if (xmlNode.Count > 0)
-                    {
-                        version = xmlNode[0].InnerText;
-                    }
-                    xmlNode = doc.GetElementsByTagName("url");
-                    if (xmlNode.Count > 0)
-                    {
-                        downloadUri = xmlNode[0].InnerText;
-                    }
-                    xmlNode = doc.GetElementsByTagName("changelog");
-                    if (xmlNode.Count > 0)
-                    {
-                        changelogUri = xmlNode[0].InnerText;
-                    }
+                        System.Xml.XmlNodeList xmlNode = doc.GetElementsByTagName("version");
+                        if (xmlNode.Count > 0)
+                        {
+                            version = xmlNode[0].InnerText;
+                        }
+                        xmlNode = doc.GetElementsByTagName("url");
+                        if (xmlNode.Count > 0)
+                        {
+                            downloadUri = xmlNode[0].InnerText;
+                        }
+                        xmlNode = doc.GetElementsByTagName("changelog");
+                        if (xmlNode.Count > 0)
+                        {
+                            changelogUri = xmlNode[0].InnerText;
+                        }
 
-                    int versionDifference = (Convert.ToInt32(version.Replace(".", String.Empty)) - Convert.ToInt32(RecentVersion.Replace(".", String.Empty)));
+                        int versionDifference = (Convert.ToInt32(version.Replace(".", String.Empty)) - Convert.ToInt32(RecentVersion.Replace(".", String.Empty)));
 
-                    if (versionDifference == 0)
-                    {
-                        if (ShowUserInfo)
+                        if (versionDifference == 0)
                         {
-                            MessageBox.Show(this, "The application is up to date, there is no update available. Please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            if (ShowUserInfo)
+                            {
+                                MessageBox.Show(this, "The application is up to date, there is no update available. Please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        else if (versionDifference < 0)
+                        {
+                            if (ShowUserInfo)
+                            {
+                                MessageBox.Show(this, "The application is more recent than the official release, there is no update available. Please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        else
+                        {
+                            label1.Text = "You are using version V" + RecentVersion;
+                            label2.Text = "There is new version V" + version + " available";
+                            linkLabel1.Text = downloadUri;
+                            linkLabel2.Text = changelogUri;
+                            this.Show();
+                            this.TopLevel = true;
+                            this.TopMost = true;
                         }
                     }
-                    else if (versionDifference < 0)
-                    {
-                        if (ShowUserInfo)
-                        {
-                            MessageBox.Show(this, "The application is more recent than the official release, there is no update available. Please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                    else
-                    {
-                        label1.Text = "You are using version V" + RecentVersion;
-                        label2.Text = "There is new version V" + version + " available";
-                        linkLabel1.Text = downloadUri;
-                        linkLabel2.Text = changelogUri;
-                        this.Show();
-                        this.TopLevel = true;
-                        this.TopMost = true;
-                    }
-                }
-                else
-                {
-                    if (String.IsNullOrEmpty(Error))
-                    {
-                        if (String.IsNullOrEmpty(Error2))
-                        {
-                            Error2 = "Update notification not available";
-                        }
-                        if (ShowUserInfo)
-                        {
-                            MessageBox.Show(this, Error2, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else
+                    else if (!String.IsNullOrEmpty(Error))
                     {
                         if (ShowUserInfo)
                         {
@@ -125,76 +131,61 @@ namespace GralMainForms
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ShowUserInfo)
                 {
                     MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            CheckForUpdates.DoWork -= new System.ComponentModel.DoWorkEventHandler(this.LoadUpdateFileHttp);
+            CheckForUpdates.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(CheckForUpdatesCompleted);
+            CheckForUpdates = null;
+            if (!this.Visible)
+            {
+                this.Close();
+            }
         }
 
-        /// <summary>
-        /// Try to load the update file using the System.Net.Http class
-        /// </summary>
-        /// <param name="Url">The web adress containing the xml file</param>
-        /// <returns>The string with the xml file, a string with the error message</returns>
-        private (string, string) LoadUpdateFileHttp(string Url)
+/// <summary>
+/// Try to load the update file using the System.Net.Http class
+/// </summary>
+/// <param name="Url">The web adress containing the xml file</param>
+/// <returns>The string with the xml file, a string with the error message</returns>
+private void LoadUpdateFileHttp(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            string error = string.Empty;
-            string XMLFile = string.Empty;
-
             try
             {
-                using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
+                System.Net.Http.HttpClientHandler handler = new System.Net.Http.HttpClientHandler();
+                handler.UseProxy = true;
+                handler.Proxy = null;
+                //handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+#if __MonoCS__
+#else
+                handler.DefaultProxyCredentials = System.Net.CredentialCache.DefaultNetworkCredentials;
+#endif
+                handler.UseDefaultCredentials = true;
+                handler.AllowAutoRedirect = true;
+                handler.PreAuthenticate = true;
+
+                using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient(handler))
                 {
                     Uri baseUri = new Uri(Url);
-
-                    using (var response = client.GetAsync(baseUri).Result)
+                    string xmlFile = client.GetStringAsync(baseUri).Result;
+                    lock (obj)
                     {
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string temp = response.Content.ReadAsStringAsync().Result;
-                            XMLFile = temp;
-                        }
-                        else
-                        {
-                            error = "Error" + response.ReasonPhrase;
-                        }
+                        XMLFile = xmlFile;
                     }
                 }
             }
             catch (Exception exception)
             {
-                error = exception.Message + Environment.NewLine + exception.GetType().ToString();
-            }
-            return (XMLFile, error);
-        }
-
-        /// <summary>
-        /// Use the old System.Net.WebClient class -> on some machines it is possible using the default proxy settings using this class
-        /// </summary>
-        /// <param name="Url">The web adress containing the xml file</param>
-        /// <returns>The string with the xml file, a string with the error message</returns>
-        private (string, string) LoadUpdateFileWeb(string Url)
-        {
-            string error = string.Empty;
-            string XMLFile = string.Empty;
-            try
-            {
-                System.Net.WebRequest.DefaultWebProxy.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials;
-                using (System.Net.WebClient client = new System.Net.WebClient())
+                lock (obj)
                 {
-                    Uri baseUri = new Uri(Url);
-                    string xml_File = client.DownloadString(baseUri);
-                    XMLFile = xml_File;
+                    Error = exception.Message + Environment.NewLine + exception.GetType().ToString();
                 }
             }
-            catch (Exception exception)
-            {
-                error = exception.Message + Environment.NewLine + exception.GetType().ToString();
-            }
-            return (XMLFile, error);
         }
 
         private void UpdateNotification_Load(object sender, EventArgs e)
@@ -213,7 +204,7 @@ namespace GralMainForms
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = linkLabel1.Text, UseShellExecute = true });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -230,7 +221,7 @@ namespace GralMainForms
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = linkLabel2.Text, UseShellExecute = true });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -243,7 +234,20 @@ namespace GralMainForms
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (CheckForUpdates == null || CheckForUpdates.IsBusy != true)
+            {
+                obj = null;
+                CheckForUpdates = null;
+                this.Close();
+            }
+            else
+            {
+                this.Hide();
+                if (CheckForUpdates != null && CheckForUpdates.IsBusy)
+                {
+                    CheckForUpdates.CancelAsync();
+                }
+            }
         }
     }
 }
