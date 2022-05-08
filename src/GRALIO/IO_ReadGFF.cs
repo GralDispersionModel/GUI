@@ -62,27 +62,40 @@ namespace GralIO
         /// </summary>
         public bool ReadGffFile(System.Threading.CancellationToken cts)
         {
+            if (!File.Exists(_filename))
+            {
+                return false;
+            }
             try
             {
                 if (CheckIfFileIsZipped(_filename)) // file zipped?
                 {
                     using (FileStream fs = new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        using (ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Read, false)) //open Zip archive
+                        using (BufferedStream bs = new BufferedStream(fs, 32768))
                         {
-                            string filename = archive.Entries[0].FullName;
-                            using (BinaryReader reader = new BinaryReader(archive.Entries[0].Open())) //OPen Zip entry
+                            using (ZipArchive archive = new ZipArchive(bs, ZipArchiveMode.Read, false)) //open Zip archive
                             {
-                                return ReadGffData(reader, _filename, cts);
+                                string filename = archive.Entries[0].FullName;
+                                using (BinaryReader reader = new BinaryReader(archive.Entries[0].Open())) //OPen Zip entry
+                                {
+                                    return ReadGffData(reader, _filename, cts);
+                                }
                             }
                         }
                     }
                 }
                 else // read uncompressed file
                 {
-                    using (BinaryReader reader = new BinaryReader(File.Open(_filename, FileMode.Open)))
+                    using (FileStream fs = new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        return ReadGffData(reader, _filename, cts);
+                        using (BufferedStream bs = new BufferedStream(fs, 32768))
+                        {
+                            using (BinaryReader reader = new BinaryReader(bs))
+                            {
+                                return ReadGffData(reader, _filename, cts);
+                            }
+                        }
                     }
                 }
             }

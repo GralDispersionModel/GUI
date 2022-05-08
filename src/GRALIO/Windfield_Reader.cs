@@ -20,7 +20,7 @@ namespace GralIO
     /// Windfield_Reader: read a GRAMM wind field "*.wnd" and write GRAMM windfields (for the GRAMM export function)
     /// </summary>
     public class Windfield_Reader
-	{
+    {
         private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private string _pathWindfield;
         public string PathWindfield { set { _pathWindfield = value; } }
@@ -46,157 +46,167 @@ namespace GralIO
         ///Called from await - async! 
         /// </summary>
         public bool Windfield_read(string filename, int NX, int NY, int NZ, ref float[, ,] UWI, ref float[, ,] VWI, ref float[, ,] WWI)
-		{
-			try
-			{
-				string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-				string[] text = new string[1];
+        {
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
 
+            try
+            {
                 using (FileStream str_windfield = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    BinaryReader windfieldb = new BinaryReader(str_windfield);
-                    int dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = "Header"
-                    if (dummy == -1) // Compact wnd File-format
+                    using (BufferedStream buf_windfield = new BufferedStream(str_windfield, 32768))
                     {
-                        dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Nx
-                        dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Ny
-                        dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Nz
-                        float temp = windfieldb.ReadInt32(); // read 4 bytes from stream = DXX
-
-                        byte[] _row = new byte[NZ * 6];
-
-                        for (int i = 1; i <= NX; i++)
+                        BinaryReader windfieldb = new BinaryReader(buf_windfield);
+                        int dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = "Header"
+                        if (dummy == -1) // Compact wnd File-format
                         {
-                            for (int j = 1; j <= NY; j++)
+                            dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Nx
+                            dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Ny
+                            dummy = windfieldb.ReadInt32(); // read 4 bytes from stream = Nz
+                            float temp = windfieldb.ReadInt32(); // read 4 bytes from stream = DXX
+
+                            byte[] _row = new byte[NZ * 6];
+
+                            for (int i = 1; i <= NX; i++)
                             {
-                                _row = windfieldb.ReadBytes(NZ * 6);
-                                for (int k = 1; k <= NZ; k++)
+                                for (int j = 1; j <= NY; j++)
                                 {
-                                    int index = (k - 1) * 6;
-                                    //UWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F; // 2 Bytes  = word integer value;
-                                    //VWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F;
-                                    //WWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F;
-                                    UWI[i, j, k] = BitConverter.ToInt16(_row, index) * 0.01F; 
-                                    VWI[i, j, k] = BitConverter.ToInt16(_row, index + 2) * 0.01F;
-                                    WWI[i, j, k] = BitConverter.ToInt16(_row, index + 4) * 0.01F;
+                                    _row = windfieldb.ReadBytes(NZ * 6);
+                                    for (int k = 1; k <= NZ; k++)
+                                    {
+                                        int index = (k - 1) * 6;
+                                        //UWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F; // 2 Bytes  = word integer value;
+                                        //VWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F;
+                                        //WWI[i, j, k] = (float)windfieldb.ReadInt16() * 0.01F;
+                                        UWI[i, j, k] = BitConverter.ToInt16(_row, index) * 0.01F;
+                                        VWI[i, j, k] = BitConverter.ToInt16(_row, index + 2) * 0.01F;
+                                        WWI[i, j, k] = BitConverter.ToInt16(_row, index + 4) * 0.01F;
+                                    }
+                                }
+                            }
+                            windfieldb.Close(); windfieldb.Dispose();
+                        }
+                        else // classic windfield file format
+                        {
+                            windfieldb.Close(); windfieldb.Dispose();
+                            string[] text = new string[1];
+                            string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+
+                            using (StreamReader windfield = new StreamReader(filename))
+                            {
+                                for (int i = 1; i <= NX; i++)
+                                {
+                                    for (int j = 1; j <= NY; j++)
+                                    {
+                                        for (int k = 1; k <= NZ; k++)
+                                        {
+                                            text = windfield.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                                            UWI[i, j, k] = (float)Convert.ToDouble(text[0].Replace(".", decsep));
+                                            VWI[i, j, k] = (float)Convert.ToDouble(text[1].Replace(".", decsep));
+                                            WWI[i, j, k] = (float)Convert.ToDouble(text[2].Replace(".", decsep));
+                                        }
+                                    }
                                 }
                             }
                         }
-
-                        windfieldb.Close(); windfieldb.Dispose(); 
-                    }
-                    else // classic windfield file format
-                    {
-                        windfieldb.Close(); windfieldb.Dispose(); 
-
-                        StreamReader windfield = new StreamReader(filename);
-                        for (int i = 1; i <= NX; i++)
-                        {
-                            for (int j = 1; j <= NY; j++)
-                            {
-                                for (int k = 1; k <= NZ; k++)
-                                {
-                                    text = windfield.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                                    UWI[i, j, k] = (float)Convert.ToDouble(text[0].Replace(".", decsep));
-                                    VWI[i, j, k] = (float)Convert.ToDouble(text[1].Replace(".", decsep));
-                                    WWI[i, j, k] = (float)Convert.ToDouble(text[2].Replace(".", decsep));
-                                }
-                            }
-                        }
-
-                        windfield.Close();
                     }
                 }
-				return true; // Reader OK
-			}
-			catch
-			{
-				return false; // Reader Error
-			}
-			
-		}
+                return true; // Reader OK
+            }
+            catch
+            {
+                return false; // Reader Error
+            }          
+        }
 
         // methode to export windfield-data for sub-domains
         /// <summary>
-		/// Write a GRAMM wind field "*.wnd" for GRAMM sub-domains
-		/// </summary>
+        /// Write a GRAMM wind field "*.wnd" for GRAMM sub-domains
+        /// </summary>
         public bool Windfield_export()
         {
             try
             {
-                using (BinaryWriter writer = new BinaryWriter(File.Open(_pathWindfield, FileMode.Create)))
+                using (FileStream str_windfield = new FileStream(_pathWindfield, FileMode.Create, FileAccess.Write))
                 {
-                    int header = -1;
-                    Int16 dummy;
-                    float GRAMMhorgridsize = (float)_DDX;
-
-                    //there are two different formats: IOUTPUT = 0 (standard output for GRAL-GUI users) and IOUTPUT = 3 for SOUNDPLAN USERS
-                    writer.Write(header);
-                    writer.Write(_NI);
-                    writer.Write(_NJ);
-                    writer.Write(_NK);
-                    writer.Write(GRAMMhorgridsize);
-
-                    for (int i = 1; i <= _NI; i++)
+                    using (BufferedStream buf_windfield = new BufferedStream(str_windfield, 32768))
                     {
-                        for (int j = 1; j <= _NJ; j++)
+                        using (BinaryWriter writer = new BinaryWriter(buf_windfield))
                         {
-                            for (int k = 1; k <= _NK; k++)
-                            {
-                                try
-                                {
-                                    dummy = Convert.ToInt16(_U[i, j, k] * 100);
-                                }
-                                catch
-                                {
-                                    if (_U[i, j, k] > 0)
-                                    {
-                                        dummy = Int16.MaxValue;
-                                    }
-                                    else
-                                    {
-                                        dummy = Int16.MinValue;
-                                    }
-                                }
-                                writer.Write(dummy);
+                            int header = -1;
+                            Int16 dummy;
+                            float GRAMMhorgridsize = (float)_DDX;
 
-                                try
+                            //there are two different formats: IOUTPUT = 0 (standard output for GRAL-GUI users) and IOUTPUT = 3 for SOUNDPLAN USERS
+                            writer.Write(header);
+                            writer.Write(_NI);
+                            writer.Write(_NJ);
+                            writer.Write(_NK);
+                            writer.Write(GRAMMhorgridsize);
+
+                            for (int i = 1; i <= _NI; i++)
+                            {
+                                for (int j = 1; j <= _NJ; j++)
                                 {
-                                    dummy = Convert.ToInt16(_V[i, j, k] * 100);
-                                }
-                                catch
-                                {
-                                    if (_V[i, j, k] > 0)
+                                    for (int k = 1; k <= _NK; k++)
                                     {
-                                        dummy = Int16.MaxValue;
-                                    }
-                                    else
-                                    {
-                                        dummy = Int16.MinValue;
+                                        try
+                                        {
+                                            dummy = Convert.ToInt16(_U[i, j, k] * 100);
+                                        }
+                                        catch
+                                        {
+                                            if (_U[i, j, k] > 0)
+                                            {
+                                                dummy = Int16.MaxValue;
+                                            }
+                                            else
+                                            {
+                                                dummy = Int16.MinValue;
+                                            }
+                                        }
+                                        writer.Write(dummy);
+
+                                        try
+                                        {
+                                            dummy = Convert.ToInt16(_V[i, j, k] * 100);
+                                        }
+                                        catch
+                                        {
+                                            if (_V[i, j, k] > 0)
+                                            {
+                                                dummy = Int16.MaxValue;
+                                            }
+                                            else
+                                            {
+                                                dummy = Int16.MinValue;
+                                            }
+                                        }
+                                        writer.Write(dummy);
+                                        try
+                                        {
+                                            dummy = Convert.ToInt16(_W[i, j, k] * 100);
+                                        }
+                                        catch
+                                        {
+                                            if (_W[i, j, k] > 0)
+                                            {
+                                                dummy = Int16.MaxValue;
+                                            }
+                                            else
+                                            {
+                                                dummy = Int16.MinValue;
+                                            }
+                                        }
+                                        writer.Write(dummy);
                                     }
                                 }
-                                writer.Write(dummy);
-                                try
-                                {
-                                    dummy = Convert.ToInt16(_W[i, j, k] * 100);
-                                }
-                                catch
-                                {
-                                    if (_W[i, j, k] > 0)
-                                    {
-                                        dummy = Int16.MaxValue;
-                                    }
-                                    else
-                                    {
-                                        dummy = Int16.MinValue;
-                                    }
-                                }
-                                writer.Write(dummy);
                             }
                         }
                     }
                 }
-
                 return true; // Writer OK
             }
             catch
@@ -205,5 +215,5 @@ namespace GralIO
             }
 
         }
-	}
+    }
 }
