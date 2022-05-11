@@ -109,6 +109,7 @@ namespace GralBackgroundworkers
                 }
                 
                 iiwet += 1;
+                bool fileOK = true;
                 try
                 {
                     text = line_meteopgt.Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -118,7 +119,7 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    break;
+                    fileOK = false;
                 }
                 
                 try
@@ -132,81 +133,84 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    break;
+                    fileOK = false;
                 }
-                
-                bool local_stability_OK = false;
-                if (mydata.LocalStability) // use local stability?
-                {
-                    string stabilityfilename = Path.Combine(mydata.Path_GRAMMwindfield, Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
-                    ReadStablity.FileName = stabilityfilename;
-                    local_stability_OK = ReadStablity.ReadSclFile(); // Read entire file
-                }
-                
-                int item_number = 0;
-                foreach(Point_3D item in mydata.EvalPoints)
-                {
-                    //MessageBox.Show(item.X.ToString() + "/" +item.Y.ToString() +"/" +item.Z.ToString() +"/"+ item.filename);
-                    double xsi = item.X - mydata.GrammWest;
-                    double eta = item.Y - mydata.GrammSouth;
 
-                    //obtain indices of selected point
-                    int ix = Convert.ToInt32(Math.Floor(xsi/mydata.GRAMMhorgridsize)) + 1;
-                    int iy = Convert.ToInt32(Math.Floor(eta / mydata.GRAMMhorgridsize)) + 1;
-
-                    if (ix > 0 && iy > 0 && ix < NX && iy < NY)
+                if (fileOK)
+                {
+                    bool local_stability_OK = false;
+                    if (mydata.LocalStability) // use local stability?
                     {
-                        double schnittZ = item.Z;
+                        string stabilityfilename = Path.Combine(mydata.Path_GRAMMwindfield, Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
+                        ReadStablity.FileName = stabilityfilename;
+                        local_stability_OK = ReadStablity.ReadSclFile(); // Read entire file
+                    }
 
-                        //obtain index in the vertical direction
-                        for (int k = 1; k <= NZ; k++)
-                        {
-                            if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
-                            {
-                                ischnitt = k;
-                                break;
-                            }
-                        }
+                    int item_number = 0;
+                    foreach (Point_3D item in mydata.EvalPoints)
+                    {
+                        //MessageBox.Show(item.X.ToString() + "/" +item.Y.ToString() +"/" +item.Z.ToString() +"/"+ item.filename);
+                        double xsi = item.X - mydata.GrammWest;
+                        double eta = item.Y - mydata.GrammSouth;
 
-                        if (mydata.LocalStability && local_stability_OK) // use local stability?
+                        //obtain indices of selected point
+                        int ix = Convert.ToInt32(Math.Floor(xsi / mydata.GRAMMhorgridsize)) + 1;
+                        int iy = Convert.ToInt32(Math.Floor(eta / mydata.GRAMMhorgridsize)) + 1;
+
+                        if (ix > 0 && iy > 0 && ix < NX && iy < NY)
                         {
-                            int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
-                            if (result > 0) // valid result
+                            double schnittZ = item.Z;
+
+                            //obtain index in the vertical direction
+                            for (int k = 1; k <= NZ; k++)
                             {
-                                local_akla[item_number][n] = result;
+                                if (ZSP[ix, iy, k] - AH[ix, iy] >= schnittZ)
+                                {
+                                    ischnitt = k;
+                                    break;
+                                }
                             }
-                            else
+
+                            if (mydata.LocalStability && local_stability_OK) // use local stability?
+                            {
+                                int result = ReadStablity.SclMean(ix - 1, iy - 1); // get local SCL
+                                if (result > 0) // valid result
+                                {
+                                    local_akla[item_number][n] = result;
+                                }
+                                else
+                                {
+                                    local_akla[item_number][n] = iakla[n];
+                                }
+                            }
+                            else // use global stability
                             {
                                 local_akla[item_number][n] = iakla[n];
                             }
-                        }
-                        else // use global stability
-                        {
-                            local_akla[item_number][n] = iakla[n];
-                        }
 
-                        Uoben = UWI[ix, iy, ischnitt];
-                        Voben = VWI[ix, iy, ischnitt];
-                        if (ischnitt > 1)
-                        {
-                            Uunten = UWI[ix, iy, ischnitt - 1];
-                            Vunten = VWI[ix, iy, ischnitt - 1];
-                            Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
-                                (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
-                            Vmittel = Vunten + ((Voben - Vunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
-                                (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]));
-                        }
-                        else
-                        {
-                            Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
-                            Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
-                        }
+                            Uoben = UWI[ix, iy, ischnitt];
+                            Voben = VWI[ix, iy, ischnitt];
+                            if (ischnitt > 1)
+                            {
+                                Uunten = UWI[ix, iy, ischnitt - 1];
+                                Vunten = VWI[ix, iy, ischnitt - 1];
+                                Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
+                                    (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
+                                Vmittel = Vunten + ((Voben - Vunten) / (ZSP[ix, iy, ischnitt] - ZSP[ix, iy, ischnitt - 1]) *
+                                    (schnittZ + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]));
+                            }
+                            else
+                            {
+                                Umittel = Uoben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
+                                Vmittel = Voben / (ZSP[ix, iy, ischnitt] - AH[ix, iy]) * schnittZ;
+                            }
 
-                        iwr[item_number][n] = WindDirection(Umittel, Vmittel);
-                        wgi[item_number][n] = (float)Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
+                            iwr[item_number][n] = WindDirection(Umittel, Vmittel);
+                            wgi[item_number][n] = (float)Math.Sqrt(Umittel * Umittel + Vmittel * Vmittel);
+                        }
+                        item_number++;
                     }
-                    item_number++;
-                }            
+                }
                 n++; // next line
             } // loop over all met situations
             ReadStablity = null; // Release memory of SCL file
