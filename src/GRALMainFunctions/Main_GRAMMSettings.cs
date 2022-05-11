@@ -46,6 +46,7 @@ namespace Gral
                 button19.Visible = false;
                 textBoxGrammLandUseFile.Visible = false;
                 button20.Visible = false;
+                checkBox36.Visible = false;
                 button43.Visible = false;
                 button22.Visible = false;
                 button23.Visible = false;

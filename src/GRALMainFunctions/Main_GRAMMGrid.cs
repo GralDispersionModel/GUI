@@ -288,6 +288,7 @@ namespace Gral
             if (GRALSettings.BuildingMode != BuildingModeEnum.GRAMM)
             {
                 button20.Visible = true;
+                checkBox36.Visible = true;
                 button43.Visible = true;
                 textBoxGrammLandUseFile.Visible = true;
                 button23.Visible = true;
@@ -329,6 +330,7 @@ namespace Gral
 
                 //hide controls for landuse file generation
                 button20.Visible = false;
+                checkBox36.Visible = false;
                 button43.Visible = false;
                 button22.Visible = false;
                 button23.Visible = false;
