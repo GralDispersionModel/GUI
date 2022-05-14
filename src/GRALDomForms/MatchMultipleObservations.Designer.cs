@@ -53,6 +53,7 @@
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.button10 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.groupbox1 = new System.Windows.Forms.GroupBox();
@@ -64,7 +65,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button10 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.concatenate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -198,9 +198,9 @@
             this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox3.Location = new System.Drawing.Point(276, 38);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(151, 24);
+            this.checkBox3.Size = new System.Drawing.Size(167, 24);
             this.checkBox3.TabIndex = 20;
-            this.checkBox3.Text = "SC1/7 weighted stronger";
+            this.checkBox3.Text = "SC1/7 higher weighting";
             this.toolTip1.SetToolTip(this.checkBox3, "Stronger weighting of stability classes 1 and 7");
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
@@ -211,7 +211,7 @@
             this.checkBox2.ForeColor = System.Drawing.Color.Black;
             this.checkBox2.Location = new System.Drawing.Point(108, 38);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(157, 24);
+            this.checkBox2.Size = new System.Drawing.Size(162, 24);
             this.checkBox2.TabIndex = 18;
             this.checkBox2.Text = "Use local stability classes";
             this.toolTip1.SetToolTip(this.checkBox2, "Use the GRAMM computed local stability classes");
@@ -258,7 +258,7 @@
             this.checkBox4.ForeColor = System.Drawing.Color.Black;
             this.checkBox4.Location = new System.Drawing.Point(276, 15);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(151, 24);
+            this.checkBox4.Size = new System.Drawing.Size(161, 24);
             this.checkBox4.TabIndex = 19;
             this.checkBox4.Text = "3 x 3 average vector";
             this.toolTip1.SetToolTip(this.checkBox4, "Use an average wind vector of 3x3 cells");
@@ -381,6 +381,21 @@
             this.checkBox7.Text = "I";
             this.toolTip1.SetToolTip(this.checkBox7, "Iterative tuning");
             this.checkBox7.UseVisualStyleBackColor = true;
+            // 
+            // button10
+            // 
+            this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button10.BackColor = System.Drawing.SystemColors.Control;
+            this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button10.Location = new System.Drawing.Point(897, 392);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(120, 30);
+            this.button10.TabIndex = 13;
+            this.button10.Text = "Match me&teo file";
+            this.toolTip1.SetToolTip(this.button10, "Create a preview meteo timeseries in the subfolder Metfiles for the matched wind " +
+        "field and the selected meteo station");
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button3_Click);
             // 
             // dataGridView1
             // 
@@ -521,21 +536,6 @@
             this.label3.Size = new System.Drawing.Size(40, 15);
             this.label3.TabIndex = 1;
             this.label3.Text = "Vector";
-            // 
-            // button10
-            // 
-            this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button10.BackColor = System.Drawing.SystemColors.Control;
-            this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button10.Location = new System.Drawing.Point(897, 392);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(120, 30);
-            this.button10.TabIndex = 13;
-            this.button10.Text = "Match me&teo file";
-            this.toolTip1.SetToolTip(this.button10, "Create a preview meteo timeseries in the subfolder Metfiles for the matched wind " +
-        "field and the selected meteo station");
-            this.button10.UseVisualStyleBackColor = false;
-            this.button10.Click += new System.EventHandler(this.button3_Click);
             // 
             // MatchMultipleObservations
             // 
