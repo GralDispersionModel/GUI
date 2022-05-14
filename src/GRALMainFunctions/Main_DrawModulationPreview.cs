@@ -293,7 +293,7 @@ namespace Gral
             {
                 version = version.Substring(0, 2) + "." + version.Substring(2);
             }
-            g.DrawString("GRAL GUI V" + version + "Beta2 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            g.DrawString("GRAL GUI V" + version + "RC1 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else

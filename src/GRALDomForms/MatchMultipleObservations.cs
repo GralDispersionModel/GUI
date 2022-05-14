@@ -912,7 +912,7 @@ namespace GralDomForms
                                     dataGridView1.Rows[zeilenindex].Cells[3].Value = Convert.ToDouble(data[3].Replace(".", decsep));
                                     dataGridView1.Rows[zeilenindex].Cells[4].Value = data[4];
                                     dataGridView1.Rows[zeilenindex].Cells[5].Value = data[5];
-                                    dataGridView1.Rows[zeilenindex].Cells[6].Value = Convert.ToDouble(data[6]);
+                                    dataGridView1.Rows[zeilenindex].Cells[6].Value = Convert.ToDouble(data[6].Replace(".", decsep));
                                     int line = 7;
                                     if (MMOFileFormat > 0)
                                     {

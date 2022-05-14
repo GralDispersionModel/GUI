@@ -77,6 +77,7 @@ namespace Gral
                 textBoxGrammTerrain.Visible = false;
                 button19.Visible = false;
                 button20.Visible = false;
+                checkBox36.Visible = false;
                 button43.Visible = false;
                 button22.Visible = false;
                 button23.Visible = false;
@@ -1321,6 +1322,7 @@ namespace Gral
                             radioButton2.Checked = true;
                             checkBox25.Visible = true;
                             button20.Visible = true;
+                            checkBox36.Visible = true;
                             button43.Visible = true;
                             button23.Visible = true;
                             //check if GRAL_topofile.txt exists
@@ -1341,6 +1343,7 @@ namespace Gral
                     {
                         textBoxGrammLandUseFile.Visible = false;
                         button20.Visible = false;
+                        checkBox36.Visible = false;
                         button43.Visible = false;
                         //button22.Visible = false;
                         button23.Visible = false;

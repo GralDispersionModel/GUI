@@ -3082,6 +3082,7 @@
             this.checkBox36.TabIndex = 61;
             this.checkBox36.Text = "Use landuse presets for GRAMM V19.01 or previous versions";
             this.checkBox36.UseVisualStyleBackColor = true;
+            this.checkBox36.Visible = false;
             // 
             // groupBox25
             // 
