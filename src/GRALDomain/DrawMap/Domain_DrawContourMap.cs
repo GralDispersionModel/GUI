@@ -32,18 +32,18 @@ namespace GralDomain
             int maxy;
             
             int pb1_height = picturebox1.Height;
-			int pb1_width  = picturebox1.Width;
-			
+            int pb1_width  = picturebox1.Width;
+            
             int[,] contourcolor_name 	= _drobj.ContourColor;
             int transparancy_name 		= _drobj.Transparancy;
             GralDomain.DrawingObjects.ContourGeometries contourgeometry_name = _drobj.ContourGeometry;
             
             StringFormat StringFormat1 = new StringFormat(); //format for names of sources
-			StringFormat StringFormat2 = new StringFormat(); //format for names of line sources
-			StringFormat1.LineAlignment = StringAlignment.Center;
-			StringFormat1.Alignment = StringAlignment.Center;
-			StringFormat2.LineAlignment = StringAlignment.Far;
-			StringFormat2.Alignment = StringAlignment.Center;
+            StringFormat StringFormat2 = new StringFormat(); //format for names of line sources
+            StringFormat1.LineAlignment = StringAlignment.Center;
+            StringFormat1.Alignment = StringAlignment.Center;
+            StringFormat2.LineAlignment = StringAlignment.Far;
+            StringFormat2.Alignment = StringAlignment.Center;
 
             #region Draw_Vertical_Concentration
             if (_drobj.ShpPoints.Count > 2 ) // draw white box & Axes
