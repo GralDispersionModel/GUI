@@ -43,7 +43,7 @@ namespace Gral
                 if (Directory.Exists(MeteoDirectory))
                 {
                     dialog.InitialDirectory = MeteoDirectory;
-                 }
+                }
                 else
                 {
                     dialog.InitialDirectory = Path.Combine(ProjectName, @"Metfiles");
@@ -1246,7 +1246,7 @@ namespace Gral
                     Title = "Save new *.met file",
                     ShowHelp = true
 #if NET6_0_OR_GREATER
-                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
                 })
                 {
