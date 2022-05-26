@@ -3564,6 +3564,12 @@ namespace Gral
             numericUpDown46.ValueChanged += new System.EventHandler(this.NumericUpDown46_ValueChanged);
         }
 
+
+        /// <summary>
+        /// Save meteo time series as new *.met file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button58_Click(object sender, EventArgs e)
         {
             SaveMetData(MeteoTimeSeries);
