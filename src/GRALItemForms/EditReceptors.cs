@@ -330,17 +330,18 @@ namespace GralItemForms
         {
             if (e.KeyData == (Keys.Control | Keys.V))
             {
-                 string txt = Clipboard.GetText();
-                 double val = 0;
-                 try
-                 {
-                     if (double.TryParse(txt, out val))
-                     {
-                         TextBox tbox = sender as TextBox;
-                         tbox.Text = txt;
-                     }
-                 }
-                 catch{}
+                string txt = Clipboard.GetText();
+                double val = 0;
+                try
+                {
+                    if (double.TryParse(txt, out val))
+                    {
+                        TextBox tbox = sender as TextBox;
+                        tbox.Text = txt;
+                        tbox.SelectAll();
+                    }
+                }
+                catch { }
             }
         }
 
