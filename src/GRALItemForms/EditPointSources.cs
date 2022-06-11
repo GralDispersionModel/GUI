@@ -228,12 +228,13 @@ namespace GralItemForms
                  double val = 0;
                  try
                  {
-                     if (double.TryParse(txt, out val))
-                     {
-                         TextBox tbox = sender as TextBox;
-                         tbox.Text = txt;
-                     }
-                 }
+                    if (double.TryParse(txt, out val))
+                    {
+                        TextBox tbox = sender as TextBox;
+                        tbox.Text = txt;
+                        tbox.SelectAll();
+                    }
+                }
                  catch{}
             }
         }
