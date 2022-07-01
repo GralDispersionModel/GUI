@@ -492,12 +492,12 @@ namespace GralDomForms
 
         void Search_ItemResizeEnd(object sender, EventArgs e)
         {
-            int h = Height - 60 - (Height - button1.Top);
+            int h = button1.Top - 20 - dataGridView1.Top;
             if (h > 0)
             {
                 dataGridView1.Height = h;
             }
-            dataGridView1.Width = Math.Max(400, Width - SystemInformation.VerticalScrollBarWidth);
+            dataGridView1.Width = Math.Max(400, this.ClientRectangle.Width - 2);
             if (sender != null && WindowState != FormWindowState.Maximized && WindowState != FormWindowState.Minimized)
             {
                 FormSize = this.Size;
