@@ -276,6 +276,8 @@ namespace Gral
             
             Font titlefont = new Font("Arial", 19, FontStyle.Bold);
             Font subtitlefont = new Font("Arial", 11, FontStyle.Bold);
+            Font subtitlefontUnderlined = new Font("Arial", 11, FontStyle.Bold | FontStyle.Underline);
+
             StringFormat format1 = new StringFormat
             {
                 LineAlignment = StringAlignment.Near,
@@ -304,11 +306,21 @@ namespace Gral
 #endif
 #endif
             g.DrawString("Development Team: Dietmar Oettl and Markus Kuntner", subtitlefont, Solid_black, x, 25 + 2 * distance, format1);
-            g.DrawString("Support and Training: Christian Kurz (kurz@ivt.tugraz.at)", subtitlefont, Solid_black, x, 25 + 2 * distance + distance2, format1);
-            
+
+            int stringlen = (int)(g.MeasureString("Support and Training: Technical University of Graz vuu@ivt.tugraz.at", subtitlefont).Width);
+            g.DrawString("Support and Training: Technical University of Graz", subtitlefont, Solid_black, x - stringlen / 2, 25 + 2 * distance + distance2);
+            int stringlen2 = (int)(g.MeasureString("Support and Training: Technical University of Graz ", subtitlefont).Width);
+            g.DrawString("vuu@ivt.tugraz.at", subtitlefontUnderlined, Solid_blue, x - stringlen / 2 + stringlen2, 25 + 2 * distance + distance2);
+
+            OpenMailToIVT = new Rectangle(x - stringlen / 2 + stringlen2, 
+                                          25 + 2 * distance + distance2, 
+                                          (int)(g.MeasureString("vuu@ivt.tugraz.at", subtitlefontUnderlined).Width), 
+                                          distance);
+
             format1.Dispose();
             titlefont.Dispose();
             subtitlefont.Dispose();
+            subtitlefontUnderlined.Dispose();
             Solid_black.Dispose();
             Solid_blue.Dispose();
             g.Dispose();	
