@@ -1070,7 +1070,7 @@
             this.numericUpDown5.TabIndex = 4;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown5, "Start the calculation with that dispersion situation\r\nThis option is not availabl" +
-        "e for transient calculations");
+        "e in the transient calculation mode");
             this.numericUpDown5.Value = new decimal(new int[] {
             1,
             0,
@@ -1241,7 +1241,7 @@
             this.numericUpDown9.Size = new System.Drawing.Size(49, 25);
             this.numericUpDown9.TabIndex = 13;
             this.numericUpDown9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown9, "Hoizontal resolution of the concentration grid");
+            this.toolTip1.SetToolTip(this.numericUpDown9, "Horizontal resolution of the concentration grid");
             this.numericUpDown9.Value = new decimal(new int[] {
             10,
             0,
@@ -1292,8 +1292,7 @@
             this.numericUpDown8.Size = new System.Drawing.Size(49, 25);
             this.numericUpDown8.TabIndex = 14;
             this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown8, "Vertical extension of concentration grids\r\nThe larger the value, the more accurat" +
-        "e the result will be with averaging");
+            this.toolTip1.SetToolTip(this.numericUpDown8, "Vertical extension for the concentration grids");
             this.numericUpDown8.Value = new decimal(new int[] {
             2,
             0,
