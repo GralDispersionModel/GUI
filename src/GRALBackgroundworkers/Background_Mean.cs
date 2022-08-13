@@ -60,15 +60,13 @@ namespace GralBackgroundworkers
             {
                 int count = 0;
                 double sum = 0;
-                for (int j = 0; j < 24; j++)
+                for (int h = 0; h < 24; h++)
                 {
-                    sum += emifac_day[j, n];
-                    count++;
-                }
-                for (int j = 0; j < 12; j++)
-                {
-                    sum += emifac_mon[j, n];
-                    count++;
+                    for (int m = 0; m < 12; m++)
+                    {
+                        sum += emifac_mon[m, n] * emifac_day[h, n];
+                        count++;
+                    }
                 }
                 if (n < sg_names.Length)
                 {
@@ -91,29 +89,32 @@ namespace GralBackgroundworkers
             {
                 using (StreamReader read = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
                 {
-                    text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                    text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    while (text2[0] != "")
+                    if (!read.EndOfStream)
                     {
-                        month.Add(text3[1]);
-                        hour.Add(text2[1]);
-                        if (hour[hour.Count - 1] == "24")
-                            hourplus = 1;
-                        wgmettime.Add(text2[2]);
-                        wrmettime.Add(text2[3]);
-                        akmettime.Add(text2[4]);
-                        if (read.EndOfStream)
+                        text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                        while (text2[0] != "")
                         {
-                            break;
-                        }
-                        try
-                        {
-                            text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                            text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
-                        }
-                        catch
-                        {
-                            break;
+                            month.Add(text3[1]);
+                            hour.Add(text2[1]);
+                            if (hour[hour.Count - 1] == "24")
+                                hourplus = 1;
+                            wgmettime.Add(text2[2]);
+                            wrmettime.Add(text2[3]);
+                            akmettime.Add(text2[4]);
+                            if (read.EndOfStream)
+                            {
+                                break;
+                            }
+                            try
+                            {
+                                text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                            }
+                            catch
+                            {
+                                break;
+                            }
                         }
                     }
                 }

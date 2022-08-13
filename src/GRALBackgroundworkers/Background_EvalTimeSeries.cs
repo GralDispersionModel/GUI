@@ -414,15 +414,13 @@ namespace GralBackgroundworkers
                                 if (sg_time[n] == 0)
                                 {
                                     emifac_timeseries[i, n] = 1;
-                                    for (int j = 0; j < 24; j++)
+                                    for (int h = 0; h < 24; h++)
                                     {
-                                        sg_mean_modulation_sum[n] += emifac_day[j, n];
-                                        sg_mean_modulation_count[n]++;
-                                    }
-                                    for (int j = 0; j < 12; j++)
-                                    {
-                                        sg_mean_modulation_sum[n] += emifac_mon[j, n];
-                                        sg_mean_modulation_count[n]++;
+                                        for (int m = 0; m < 12; m++)
+                                        {
+                                            sg_mean_modulation_sum[n] += emifac_mon[m, n] * emifac_day[h, n];
+                                            sg_mean_modulation_count[n]++;
+                                        }
                                     }
                                 }
                                 else
@@ -456,21 +454,19 @@ namespace GralBackgroundworkers
 
             if (!timeseries)
             {
-                double sum = 0;
-                int count = 0;
                 for (int n = 0; n < MaxSource; n++)
                 {
+                    double sum = 0;
+                    int count = 0;
                     if (!string.IsNullOrEmpty(SGNumbers[n]))
                     {
-                        for (int j = 0; j < 24; j++)
+                        for (int h = 0; h < 24; h++)
                         {
-                            sum += emifac_day[j, n];
-                            count++;
-                        }
-                        for (int j = 0; j < 12; j++)
-                        {
-                            sum += emifac_mon[j, n];
-                            count++;
+                            for (int m = 0; m < 12; m++)
+                            {
+                                sum += emifac_mon[m, n] * emifac_day[h, n];
+                                count++;
+                            }
                         }
                         AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + SGNumbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                     }

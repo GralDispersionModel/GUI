@@ -550,6 +550,7 @@
             this.panel1.Size = new System.Drawing.Size(610, 425);
             this.panel1.TabIndex = 1;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1Paint);
+            this.panel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseClick);
             // 
             // button44
             // 
@@ -569,7 +570,7 @@
             this.button38.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button38.BackColor = System.Drawing.Color.Gainsboro;
             this.button38.ForeColor = System.Drawing.Color.Black;
-            this.button38.Location = new System.Drawing.Point(263, 6);
+            this.button38.Location = new System.Drawing.Point(263, 18);
             this.button38.Margin = new System.Windows.Forms.Padding(2);
             this.button38.Name = "button38";
             this.button38.Size = new System.Drawing.Size(116, 28);
@@ -1069,7 +1070,7 @@
             this.numericUpDown5.TabIndex = 4;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown5, "Start the calculation with that dispersion situation\r\nThis option is not availabl" +
-        "e for transient calculations");
+        "e in the transient calculation mode");
             this.numericUpDown5.Value = new decimal(new int[] {
             1,
             0,
@@ -1240,7 +1241,7 @@
             this.numericUpDown9.Size = new System.Drawing.Size(49, 25);
             this.numericUpDown9.TabIndex = 13;
             this.numericUpDown9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown9, "Hoizontal resolution of the concentration grid");
+            this.toolTip1.SetToolTip(this.numericUpDown9, "Horizontal resolution of the concentration grid");
             this.numericUpDown9.Value = new decimal(new int[] {
             10,
             0,
@@ -1291,8 +1292,7 @@
             this.numericUpDown8.Size = new System.Drawing.Size(49, 25);
             this.numericUpDown8.TabIndex = 14;
             this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown8, "Vertical extension of concentration grids\r\nThe larger the value, the more accurat" +
-        "e the result will be with averaging");
+            this.toolTip1.SetToolTip(this.numericUpDown8, "Vertical extension for the concentration grids");
             this.numericUpDown8.Value = new decimal(new int[] {
             2,
             0,

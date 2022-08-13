@@ -286,6 +286,10 @@ namespace Gral
         /// Number of checkpoints to detect, if a building covers a cell
         /// </summary>
         private int BuildingCellCoverageThreshold = 5;
+        /// <summary>
+        /// Rectangle with coordinates for opeining the mail to function
+        /// </summary>
+        private Rectangle OpenMailToIVT;
         
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -3619,6 +3623,32 @@ namespace Gral
                 ShowUserInfo = ReportError
             };
             upd.LoadUpdateFile();
+        }
+
+        /// <summary>
+        /// Open mail application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel2_MouseClick(object sender, MouseEventArgs e)
+        {
+            Point point = panel1.PointToClient(Cursor.Position);
+            MessageBox.Show(point.ToString());
+        }
+
+        /// <summary>
+        /// Check for mouse click on mail adress of IVT
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panel1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Point point = panel1.PointToClient(Cursor.Position);
+            if (OpenMailToIVT.Contains(point))
+            {
+                Clipboard.SetText("vuu@ivt.tugraz.at");
+                MessageBox.Show("The mail address was copied to the clipboard");
+            }
         }
     }
 }
