@@ -292,7 +292,7 @@ namespace GralDomain
         /// Send a event with clicked coordinates to all registered forms
         /// </summary>
         private event SendCoordinates SendCoors;
-
+        
         /// <summary>
         /// Start the Domain (GIS) Form of this application
         /// </summary>
@@ -2365,11 +2365,7 @@ namespace GralDomain
             {
                 ObjectManagerForm = new Objectmanager(this);
                 ObjectManagerForm.Object_redraw += DomainRedrawDelegate; // Redraw from Edit Point Sources
-                
-                foreach(DrawingObjects _dr in ItemOptions)
-                {
-                    ObjectManagerForm.listBox1.Items.Add(_dr.Name);
-                }
+                ObjectmanagerUpdateListbox();
                 ObjectManagerForm.Show();
             }
             else
@@ -2384,19 +2380,16 @@ namespace GralDomain
         /// </summary>
         private void ObjectmanagerUpdateListbox()
         {
+            // send Message to object manager, that an update is needed
             try
             {
                 if (ObjectManagerForm != null)
                 {
-                    ObjectManagerForm.Layout_Close_Forms();
-                    ObjectManagerForm.listBox1.Items.Clear();
-                    foreach(DrawingObjects _dr in ItemOptions)
-                    {
-                        ObjectManagerForm.listBox1.Items.Add(_dr.Name);
-                    }
+                    ObjectManagerForm.UpdateListbox(this, null);
                 }
             }
-            catch{}
+            catch
+            { }
         }
         
         /// <summary>
