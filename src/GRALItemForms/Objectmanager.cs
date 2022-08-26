@@ -22,12 +22,21 @@ using GralDomain;
 
 namespace GralItemForms
 {
+    public delegate void ForceObjectManagerUpdate(object sender, EventArgs e);
+
+    /// <summary>
+    /// The form for the object manager - layer management
+    /// </summary>
     public partial class Objectmanager : Form
     {
         private readonly GralDomain.Domain domain = null;
         private readonly String decsep;
 		// delegate to send Message, that redraw is needed!
-		public event ForceDomainRedraw Object_redraw;   
+		public event ForceDomainRedraw Object_redraw;
+        /// <summary>
+        /// Delegate to force an update from child forms
+        /// </summary>
+        public event ForceObjectManagerUpdate ListboxUpdate;
 
         public Objectmanager(GralDomain.Domain f)
         {
@@ -37,9 +46,33 @@ namespace GralItemForms
                  new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
             listBox1.ItemHeight = listBox1.Font.Height;
             decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-     	}
+            ListboxUpdate = new ForceObjectManagerUpdate(UpdateListbox);
+        }
 
-        //OK button
+        /// <summary>
+        /// Clear and fill the listbox using the available layers
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void UpdateListbox(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            foreach (DrawingObjects _dr in domain.ItemOptions)
+            {
+                string drawingObject = _dr.Name;
+                if (!string.IsNullOrEmpty(_dr.ContourFilename) && _dr.ContourFilename != "x" && !_dr.Name.StartsWith("WINDROSE"))
+                {
+                    drawingObject += "     (" + Path.GetFileName(_dr.ContourFilename) +")";
+                }
+                listBox1.Items.Add(drawingObject);
+            }
+        }
+
+        /// <summary>
+        /// OK Button: hide the object manager form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Button5_Click(object sender, EventArgs e)
         {
             domain.SaveDomainSettings(0);
@@ -51,8 +84,12 @@ namespace GralItemForms
             //this.Close();
             //domain.objectmanager = null; // Kuntner release objectmanager!
         }
-	
-        //move selected object and all corresponding properties up
+
+        /// <summary>
+        /// move the selected object (layer) and all corresponding properties 1 line up
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button1_Click(object sender, EventArgs e)
         {
             try
@@ -88,7 +125,11 @@ namespace GralItemForms
             }
         }
 
-        //move selected object and all corresponding properties down
+        /// <summary>
+        /// move the selected object (layer) and all corresponding properties 1 step down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button2_Click(object sender, EventArgs e)
         {
             try
@@ -108,8 +149,13 @@ namespace GralItemForms
 					
 					domain.ItemOptions.Insert(index + 2, _drobj);
 					domain.ItemOptions.RemoveAt(index);
-					
-					listBox1.Items.Insert(index + 2, _drobj.Name);
+
+                    string drawingObject = _drobj.Name;
+                    if (!string.IsNullOrEmpty(_drobj.ContourFilename) && _drobj.ContourFilename != "x")
+                    {
+                        drawingObject += " Filname: " + Path.GetFileName(_drobj.ContourFilename);
+                    }
+					listBox1.Items.Insert(index + 2, drawingObject);
                     listBox1.Items.RemoveAt(index);
                     
                     listBox1.SelectedIndex = index + 1;
@@ -120,7 +166,11 @@ namespace GralItemForms
             }
         }
 
-        //apply button
+        /// <summary>
+        /// Apply button - force a redraw at the domain form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button3_Click(object sender, EventArgs e)
         {
             domain.button8.Visible = false;
@@ -172,6 +222,11 @@ namespace GralItemForms
            RedrawDomain(this, null);
         }
 
+        /// <summary>
+        /// Open the Layout-Manager using the button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Button6Click(object sender, EventArgs e)
         {
         	if (listBox1.SelectedIndex > -1)
@@ -180,7 +235,11 @@ namespace GralItemForms
             }
         }
 
-        //open layout manager
+        /// <summary>
+        /// Open the Layout-Manager using a double click to the layer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBox1_DoubleClick(object sender, EventArgs e)
         {
         	if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
@@ -206,9 +265,9 @@ namespace GralItemForms
             layout.DrawObject = domain.ItemOptions[listBox1.SelectedIndex];
             
             Cursor = Cursors.WaitCursor;
-            layout.Text = "Layout" +  "  " + Convert.ToString(listBox1.SelectedItem);           
-            
-                        
+            layout.Text = "Layout" +  "  " + Convert.ToString(listBox1.SelectedItem);
+            layout.UpdateListbox += ListboxUpdate; // update of listbox entries
+
             if (Convert.ToString(listBox1.SelectedItem) == "AREA SOURCES")
             {
                 layout.label1.Visible = true;
@@ -440,7 +499,11 @@ namespace GralItemForms
             layout.Show();
         }
 
-        //show/hide selected layer
+        /// <summary>
+        /// Show or hide the selected layers
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             try
@@ -465,7 +528,11 @@ namespace GralItemForms
             }
         }
 
-        //select layer
+        /// <summary>
+        /// Select one or multiple layers
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -549,6 +616,11 @@ namespace GralItemForms
             }
         }
 
+        /// <summary>
+        /// Show the objectmanager form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Objectmanager_Load(object sender, EventArgs e)
         {
             if (domain.ItemOptions.Count == 0)
@@ -577,30 +649,35 @@ namespace GralItemForms
             }
         }
 
-        //change the color of the font when an object is hided or shown
+        /// <summary>
+        /// Change the color of the font when an object is hided 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (domain.ItemOptions.Count > 0)
             {
                 e.DrawBackground();
-                Brush myBrush = Brushes.Black;
                 if (e.Index < domain.ItemOptions.Count)
                 {
                     if (domain.ItemOptions[e.Index].Show == false)
                     {
-                        myBrush = Brushes.Gray;
-                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds);
+                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Gray, e.Bounds);
                     }
                     else
                     {
-                        myBrush = Brushes.Black;
-                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds);
+                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Black, e.Bounds);
                     }
                 }
             }
         }
-        
-        //update source groups within the model domain
+
+        /// <summary>
+        /// Update the source groups within the model domain
+        /// </summary>
+        /// <param name="SGNumber"></param>
+        /// <param name="layout"></param>
         public void Updatecombobox1(int SGNumber, Layout layout)
         {
             bool exist = false;
@@ -643,8 +720,12 @@ namespace GralItemForms
                 }
             }
         }
-        
-        //search for the correct source group within the defined source groups
+
+        /// <summary>
+        /// Search for the correct source group within the defined source groups
+        /// </summary>
+        /// <param name="SGNumber"></param>
+        /// <param name="index"></param>
         private void Combo(int SGNumber, ref int index)
         {
             int i = 0;
@@ -660,6 +741,11 @@ namespace GralItemForms
             }
         }
 
+        /// <summary>
+        /// Delete a layer (del key), change visibilty (space) or enter the layout manager (enter key)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ListBox1KeyDown(object sender, KeyEventArgs e)
         {
         	if (e.KeyCode == Keys.Delete)
@@ -692,7 +778,12 @@ namespace GralItemForms
                     break;
             }
         }
-        //remove selected maps
+
+        /// <summary>
+        /// Remove all selected maps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button4_Click(object sender, EventArgs e)
         {
         	//int index = listBox1.SelectedIndex;
@@ -755,11 +846,16 @@ namespace GralItemForms
         	}
         }
         
+        /// <summary>
+        /// Close the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ObjectmanagerFormClosed(object sender, FormClosedEventArgs e)
         {
         	// Close all Layout-Forms
 			Layout_Close_Forms();
-			listBox1.DrawItem -=
+			listBox1.DrawItem -= 
                  new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
 			listBox1.Items.Clear();
 			listBox1.Dispose();
@@ -767,7 +863,10 @@ namespace GralItemForms
         	domain.ObjectManagerForm = null; // Kuntner release objectmanager!
         }
        
-		public void Layout_Close_Forms()
+		/// <summary>
+        /// close all layout forms
+        /// </summary>
+        public void Layout_Close_Forms()
 		{
 			for(int i = Application.OpenForms.Count-1; i >=0; i--)
 			{
@@ -777,10 +876,14 @@ namespace GralItemForms
                 }
             }
 		}
-		
-		private void RedrawDomain(object sender, EventArgs e)
+
+        /// <summary>
+        /// Send Message to domain Form, that redraw is necessary
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RedrawDomain(object sender, EventArgs e)
 		{
-			// send Message to domain Form, that redraw is necessary
 			try
 			{
 				if (Object_redraw != null)
