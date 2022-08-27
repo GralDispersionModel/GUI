@@ -327,6 +327,12 @@
     <Compile Include="GRALDomForms\Mathrasteroperation.Designer.cs">
       <DependentUpon>Mathrasteroperation.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALDomForms\MathrasterNOxConversion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALDomForms\MathrasterNOxConversion.Designer.cs">
+      <DependentUpon>MathrasterNOxConversion.cs</DependentUpon>
+    </Compile>
     <Compile Include="GRALDomForms\MeteoInput_Matchlocalobs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1079,6 +1085,10 @@
     <EmbeddedResource Include="GRALDomForms\Mathrasteroperation.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Mathrasteroperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GRALDomForms\MathrasterNOxConversion.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MathrasterNOxConversion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\MeteoInput_Matchlocalobs.resx">
       <DependentUpon>MeteoInput_Matchlocalobs.cs</DependentUpon>

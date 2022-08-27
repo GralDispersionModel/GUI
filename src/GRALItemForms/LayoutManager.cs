@@ -23,7 +23,7 @@ using Gral.GRALItemForms;
 using GralDomain;
 using GralItemData;
 using GralStaticFunctions;
-using WinRT;
+
 using static System.Net.WebRequestMethods;
 
 namespace GralItemForms
