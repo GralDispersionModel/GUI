@@ -45,9 +45,10 @@
             // 
             this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(12, 111);
+            this.button1.Location = new System.Drawing.Point(14, 128);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(40, 40);
+            this.button1.Size = new System.Drawing.Size(47, 46);
             this.button1.TabIndex = 6;
             this.toolTip1.SetToolTip(this.button1, "increase the display order of the selected item");
             this.button1.UseVisualStyleBackColor = true;
@@ -57,9 +58,10 @@
             // 
             this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.Location = new System.Drawing.Point(12, 155);
+            this.button2.Location = new System.Drawing.Point(14, 179);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(40, 40);
+            this.button2.Size = new System.Drawing.Size(47, 46);
             this.button2.TabIndex = 7;
             this.toolTip1.SetToolTip(this.button2, "decrease the display order of the selected item");
             this.button2.UseVisualStyleBackColor = true;
@@ -68,9 +70,10 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 69);
+            this.checkBox1.Location = new System.Drawing.Point(7, 80);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(78, 17);
+            this.checkBox1.Size = new System.Drawing.Size(83, 19);
             this.checkBox1.TabIndex = 5;
             this.checkBox1.Text = "Show/hide";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -80,9 +83,10 @@
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button5.Location = new System.Drawing.Point(280, 320);
+            this.button5.Location = new System.Drawing.Point(327, 369);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.Size = new System.Drawing.Size(88, 27);
             this.button5.TabIndex = 4;
             this.button5.Text = "&Close";
             this.button5.UseVisualStyleBackColor = true;
@@ -91,9 +95,10 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(87, 320);
+            this.button3.Location = new System.Drawing.Point(102, 369);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(88, 27);
             this.button3.TabIndex = 2;
             this.button3.Text = "&Apply";
             this.toolTip1.SetToolTip(this.button3, "Apply the new drawing options");
@@ -106,14 +111,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.listBox1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBox1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listBox1.FormattingEnabled = true;
             this.listBox1.HorizontalScrollbar = true;
             this.listBox1.ItemHeight = 16;
-            this.listBox1.Location = new System.Drawing.Point(87, 7);
+            this.listBox1.Location = new System.Drawing.Point(102, 8);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(268, 276);
+            this.listBox1.Size = new System.Drawing.Size(312, 308);
             this.listBox1.TabIndex = 1;
             this.toolTip1.SetToolTip(this.listBox1, "Double click for layout settings\r\nDelete key to remove an item\r\nSpace key to togg" +
         "le show/hide");
@@ -127,9 +133,10 @@
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button4.BackgroundImage = global::Gral.Properties.Resources.Rueckgaenging;
             this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button4.Location = new System.Drawing.Point(6, 320);
+            this.button4.Location = new System.Drawing.Point(7, 369);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(25, 25);
+            this.button4.Size = new System.Drawing.Size(29, 29);
             this.button4.TabIndex = 8;
             this.toolTip1.SetToolTip(this.button4, "Remove the selected items");
             this.button4.UseVisualStyleBackColor = true;
@@ -139,9 +146,10 @@
             // button6
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.Location = new System.Drawing.Point(184, 320);
+            this.button6.Location = new System.Drawing.Point(215, 369);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.Size = new System.Drawing.Size(88, 27);
             this.button6.TabIndex = 3;
             this.button6.Text = "&Layout";
             this.toolTip1.SetToolTip(this.button6, "Open the layout manager");
@@ -152,10 +160,10 @@
             // Objectmanager
             // 
             this.AcceptButton = this.button3;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button5;
-            this.ClientSize = new System.Drawing.Size(364, 350);
+            this.ClientSize = new System.Drawing.Size(425, 404);
             this.ControlBox = false;
             this.Controls.Add(this.button4);
             this.Controls.Add(this.listBox1);
@@ -165,6 +173,7 @@
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Objectmanager";
             this.Text = "Objectmanager";
             this.TopMost = true;
@@ -183,8 +192,8 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button3;
-        public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
