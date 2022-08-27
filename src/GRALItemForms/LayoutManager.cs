@@ -11,7 +11,6 @@
 #endregion
 
 using System;
-using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -20,11 +19,8 @@ using System.IO;
 using System.Windows.Forms;
 using Gral;
 using Gral.GRALItemForms;
-using GralDomain;
 using GralItemData;
 using GralStaticFunctions;
-using WinRT;
-using static System.Net.WebRequestMethods;
 
 namespace GralItemForms
 {
@@ -36,8 +32,7 @@ namespace GralItemForms
         readonly GralDomain.Domain domain = null;
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
         private bool init = false;               //flag that prevents overwriting data fields during the initialisation procedure
-        private readonly string decsep;          //global decimal separator of the system
-
+       
         /// <summary>
         /// Settings of recent DrawingObject
         /// </summary>
@@ -52,8 +47,6 @@ namespace GralItemForms
             InitializeComponent();
             listBox1.DrawItem +=  new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
             
-            decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;//get current DPI of the Windows Display Properties
-          
             #if __MonoCS__
                 var allNumUpDowns  = Main.GetAllControls<NumericUpDown>(this);
                 foreach (NumericUpDown nu in allNumUpDowns)
@@ -62,10 +55,8 @@ namespace GralItemForms
                 }
             #endif
          
-            listBox1.ItemHeight = listBox1.Font.Height;
-            
+            listBox1.ItemHeight = listBox1.Font.Height;        
             listsep = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;   
         }
 
         /// <summary>

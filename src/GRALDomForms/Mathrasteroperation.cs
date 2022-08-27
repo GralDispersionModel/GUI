@@ -56,12 +56,6 @@ namespace GralDomForms
             }
             catch
             { }
-#if __MonoCS__
-            // set Numericupdowns-Alignement to Left in Linux
-            numericUpDown1.TextAlign = HorizontalAlignment.Left;
-#else
-#endif
-
         }
         
         private string OpenFileDialogRaster(ListBox listbox)

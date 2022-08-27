@@ -25,6 +25,11 @@ namespace Gral.GRALDomForms
         {
             InitializeComponent();
             radioButton1.Checked = true;
+#if __MonoCS__
+            // set Numericupdowns-Alignement to Left in Linux
+            numericUpDown1.TextAlign = HorizontalAlignment.Left;
+#else
+#endif
         }
 
         /// <summary>
