@@ -235,7 +235,7 @@ namespace GralMainForms
                                         if (sg_numbers[i] == sg_Listbox[j])
                                         {
                                             EmissionFactor[j] += _val;
-                                            TimeSeriesUsed[sg_Listbox[j]] = true;
+                                            TimeSeriesUsed[i] = true;
                                             //MessageBox.Show(emifac[sg_numbers[i]].ToString());
                                         }
                                     }
