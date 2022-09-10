@@ -16,6 +16,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 using GralIO;
+using Gral.GRALDomForms;
+using System.Drawing;
 
 namespace GralDomForms
 {
@@ -54,12 +56,6 @@ namespace GralDomForms
             }
             catch
             { }
-#if __MonoCS__
-            // set Numericupdowns-Alignement to Left in Linux
-            numericUpDown1.TextAlign = HorizontalAlignment.Left;
-#else
-#endif
-
         }
         
         private string OpenFileDialogRaster(ListBox listbox)
@@ -217,13 +213,18 @@ namespace GralDomForms
         //set default equation to NOx conversion function according to Baechlin 2008
         private void button6_Click(object sender, EventArgs e)
         {
-            string NOx=Convert.ToString(numericUpDown1.Value);
-            textBox1.Text = "29*(A+" + NOx + ")/(35+A+" + NOx + ")+0.217*(A+" + NOx + ")";
-            
-            double temp = Convert.ToDouble(numericUpDown1.Value);
-            temp = 29*temp/(35+temp)+0.217*temp;
-            
-            NO2_V.Text = "NO2: " +  Convert.ToString(Math.Round(temp,1)) + " " + Gral.Main.My_p_m3;
+            using (MathrasterNOxConversion mathNox = new MathrasterNOxConversion())
+            {
+                mathNox.StartPosition = FormStartPosition.Manual;
+                mathNox.Location = new Point(this.Left + 80, this.Top + 50);
+                mathNox.Owner = this;
+                mathNox.ShowDialog();
+
+                if (mathNox.SelectedEquation != String.Empty)
+                {
+                    textBox1.Text = mathNox.SelectedEquation;
+                }
+            }
         }
 
         //only defined characters are allowed as input in textbox1

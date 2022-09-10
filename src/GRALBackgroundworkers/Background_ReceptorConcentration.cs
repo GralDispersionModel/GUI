@@ -177,7 +177,6 @@ namespace GralBackgroundworkers
                                         }
                                     }
                                 }
-
                             }
 
                             for (int i = 0; i < mettimefilelength; i++)
@@ -188,15 +187,13 @@ namespace GralBackgroundworkers
                                     if (sg_time[n] == 0)
                                     {
                                         emifac_timeseries[i, n] = 1;
-                                        for (int j = 0; j < 24; j++)
+                                        for (int h = 0; h < 24; h++)
                                         {
-                                            sg_mean_modulation_sum[n] += emifac_day[j, n];
-                                            sg_mean_modulation_count[n]++;
-                                        }
-                                        for (int j = 0; j < 12; j++)
-                                        {
-                                            sg_mean_modulation_sum[n] += emifac_mon[j, n];
-                                            sg_mean_modulation_count[n]++;
+                                            for (int m = 0; m < 12; m++)
+                                            {
+                                                sg_mean_modulation_sum[n] += emifac_mon[m, n] * emifac_day[h, n];
+                                                sg_mean_modulation_count[n]++;
+                                            }
                                         }
                                     }
                                     else
@@ -208,15 +205,19 @@ namespace GralBackgroundworkers
                                 }
                             }
                         }
-                        for (int n = 0; n < sg_names.Length; n++)
+
+                        for (int n = 0; n < maxsource; n++)
                         {
-                            if (sg_time[n] == 0)
+                            if (sg_numbers[n] > 0) // does source group exist?
                             {
-                                AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors)  for source group  " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
-                            }
-                            else
-                            {
-                                AddInfoText(Environment.NewLine + "Mean modulation factor (emissionstimeseries.txt) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
+                                if (sg_time[n] == 0)
+                                {
+                                    AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors)  for source group  " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
+                                }
+                                else
+                                {
+                                    AddInfoText(Environment.NewLine + "Mean modulation factor (emissionstimeseries.txt) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sg_mean_modulation_sum[n] / Math.Max(sg_mean_modulation_count[n], 1), 2));
+                                }
                             }
                         }
                         timeseries = true;

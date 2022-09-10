@@ -673,7 +673,7 @@ namespace GralBackgroundworkers
 
                 //write max daily total concentration file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Daymax_" + name + ".txt");
+                file = Path.Combine(mydata.ProjectName, @"Maps", "DayMax_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -690,7 +690,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Daymax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_DayMax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;

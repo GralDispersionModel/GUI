@@ -544,7 +544,7 @@ namespace Gral
 
             ComputeTotalEmissions(totalemissions);
 
-            GralMainForms.TotalEmissions totemi = new GralMainForms.TotalEmissions(totalemissions, this, Pollmod[listBox5.SelectedIndex]);
+            GralMainForms.TotalEmissions totemi = new GralMainForms.TotalEmissions(totalemissions, this, Pollmod[listBox5.SelectedIndex], checkBox32.Checked);
             totemi.Show();
 
             Cursor = Cursors.Default;

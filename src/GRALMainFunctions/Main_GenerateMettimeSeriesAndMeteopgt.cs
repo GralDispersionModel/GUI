@@ -247,10 +247,10 @@ namespace Gral
                     {
                         filename = Path.GetFileNameWithoutExtension(MetfileName);
                         newPath = Path.Combine(ProjectName, @"Metfiles" + Path.DirectorySeparatorChar);
-                        foreach (string path in Directory.GetFiles(newPath, "*.*", SearchOption.AllDirectories))
-                        {
-                            File.Delete(path);
-                        }
+                        //foreach (string path in Directory.GetFiles(newPath, "*.*", SearchOption.AllDirectories))
+                        //{
+                        //    File.Delete(path);
+                        //}
 
                         newPath = Path.Combine(ProjectName, @"Metfiles", filename + ".met");
                         using (StreamWriter myWriter = new StreamWriter(newPath))

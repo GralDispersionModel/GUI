@@ -1056,37 +1056,70 @@ namespace GralDomForms
         {
             try
             {
-                spaltenbezeichnungen.Clear();
-                spaltenbezeichnungen.TrimExcess();
-                WindVelocityObs.Clear();
-                WindVelocityObs.TrimExcess();
-                WindDirectionObs.Clear();
-                WindDirectionObs.TrimExcess();
-
-                StabilityClassObs.Clear();
-                StabilityClassObs.TrimExcess();
-
-                MetFileNames.Clear();
-                MetFileNames.TrimExcess();
-                MetFileLenght.Clear();
-                MetFileLenght.TrimExcess();
-                DateObsMetFile.Clear();
-                DateObsMetFile.TrimExcess();
-                HourObsMetFile.Clear();
-                HourObsMetFile.TrimExcess();
-                DecsepUser.Clear();
-                DecsepUser.TrimExcess();
-                RowsepUser.Clear();
-                RowsepUser.TrimExcess();
-                TimeStapmsMetTimeSeries.Clear();
-                TimeStapmsMetTimeSeries.TrimExcess();
-                dataGridView1.Columns.Clear();
-                dataGridView1.Dispose();
+                if (spaltenbezeichnungen != null)
+                {
+                    spaltenbezeichnungen.Clear();
+                    spaltenbezeichnungen.TrimExcess();
+                }
+                if (WindVelocityObs != null)
+                {
+                    WindVelocityObs.Clear();
+                    WindVelocityObs.TrimExcess();
+                }
+                if (WindDirectionObs != null)
+                {
+                    WindDirectionObs.Clear();
+                    WindDirectionObs.TrimExcess();
+                }
+                if (StabilityClassObs != null)
+                {
+                    StabilityClassObs.Clear();
+                    StabilityClassObs.TrimExcess();
+                }
+                if (MetFileNames != null)
+                {
+                    MetFileNames.Clear();
+                    MetFileNames.TrimExcess();
+                }
+                if (MetFileLenght != null)
+                {
+                    MetFileLenght.Clear();
+                    MetFileLenght.TrimExcess();
+                }
+                if (DateObsMetFile != null)
+                {
+                    DateObsMetFile.Clear();
+                    DateObsMetFile.TrimExcess();
+                }
+                if (HourObsMetFile != null)
+                {
+                    HourObsMetFile.Clear();
+                    HourObsMetFile.TrimExcess();
+                }
+                if (DecsepUser != null)
+                {
+                    DecsepUser.Clear();
+                    DecsepUser.TrimExcess();
+                }
+                if (RowsepUser != null)
+                {
+                    RowsepUser.Clear();
+                    RowsepUser.TrimExcess();
+                }
+                if (TimeStapmsMetTimeSeries != null)
+                {
+                    TimeStapmsMetTimeSeries.Clear();
+                    TimeStapmsMetTimeSeries.TrimExcess();
+                }
+                if (dataGridView1 != null)
+                {
+                    dataGridView1.Columns.Clear();
+                    dataGridView1.Dispose();
+                }
             }
             catch
             { }
             toolTip1.Dispose();
-
         }
 
         /// <summary>
