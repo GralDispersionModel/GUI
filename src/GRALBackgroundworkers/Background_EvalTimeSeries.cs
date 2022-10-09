@@ -47,7 +47,7 @@ namespace GralBackgroundworkers
                 }
 
                 //Read Emission modulation
-                (double[,] EmissionFactHour, double[,] EmissionFactMonth, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+                (double[,] EmissionFactHour, double[,] EmissionFactMonth, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
                 if (sg_numbers == null)
                 {
                     throw new Exception("Error reading the emission modulation factors");
@@ -293,9 +293,9 @@ namespace GralBackgroundworkers
         /// </summary>
         /// <param name="MaxSource">Max count of source groups</param>
         /// <param name="SourceGroupNames">Source group names</param>
-        /// <param name="ProjectName">Path to the project</param>
+        /// <param name="PathToModulation">Path to the project</param>
         /// <returns>arrays for daily and annual emission modulation factors</returns>
-        private (double[,], double[,], string[]) ReadEmissionModulationFactors(int MaxSource, string[] SourceGroupNames, string ProjectName)
+        private (double[,], double[,], string[]) ReadEmissionModulationFactors(int MaxSource, string[] SourceGroupNames, string PathToModulation)
         {
             double[,] emifacHours = new double[24, MaxSource];
             double[,] emifacMonths = new double[12, MaxSource];
@@ -318,9 +318,9 @@ namespace GralBackgroundworkers
                     }
 
                     SourceGroupNumbers[itm] = GetSgNumbers(sourceGroupName);
-                    string newpath = Path.Combine("Computation", "emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
+                    string newpath = Path.Combine("emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
 
-                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, newpath)))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(PathToModulation, newpath)))
                     {
                         for (int j = 0; j < 24; j++)
                         {

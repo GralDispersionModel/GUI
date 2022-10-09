@@ -44,7 +44,7 @@ namespace GralBackgroundworkers
             bool no_classification = mydata.MeteoNotClassified;
 
             //get emission modulations for all source groups
-            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
             
             //reading emission variations
             List<string> wgmet = new List<string>();
@@ -358,7 +358,7 @@ namespace GralBackgroundworkers
                         name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
                     }
 
-                    file = Path.Combine(mydata.ProjectName, @"Maps", name + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, name + ".txt");
                     
                     try
                     {
@@ -413,7 +413,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration
                 name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, name + ".txt");
                 
                 try
                 {

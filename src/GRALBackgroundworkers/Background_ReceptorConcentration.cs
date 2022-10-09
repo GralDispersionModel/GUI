@@ -76,8 +76,8 @@ namespace GralBackgroundworkers
                                 sg_numbers[itm] = Convert.ToInt32(GetSgNumbers(sg_names[sg])); // Get number of the Source-group
                                 // MessageBox.Show(itm.ToString()+"/"+sg_numbers[itm]);
                                 // Read modulation of that source-group
-                                newpath = Path.Combine("Computation", "emissions" + Convert.ToString(itm + 1).PadLeft(3, '0') + ".dat");
-                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
+                                newpath = Path.Combine("emissions" + Convert.ToString(itm + 1).PadLeft(3, '0') + ".dat");
+                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.PathEmissionModulation, newpath)))
                                 {
                                     for (int j = 0; j < 24; j++)
                                     {
@@ -144,7 +144,7 @@ namespace GralBackgroundworkers
                 }
 
                 // read value from emissions_timeseries.txt -> emifac_day[] and emifac_mon[] not used
-                newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
+                newpath = Path.Combine(mydata.PathEmissionModulation, "emissions_timeseries.txt");
                 // modulation = 1 in transient mode
                 if (File.Exists(newpath) == true && !transient)
                 {
@@ -485,7 +485,7 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        string writerRecTimeSeries = Path.Combine(mydata.ProjectName, "Computation","ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
+                        string writerRecTimeSeries = Path.Combine(mydata.PathEvaluationResults, "ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
                         if (File.Exists(writerRecTimeSeries))
                         {
                             try
