@@ -145,7 +145,10 @@ namespace Gral
                     MessageBox.Show(this, "Can't open this project. Are the folders write protected?", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                
+
+                PathToEmissionModulation = System.IO.Path.Combine(ProjectName, "Computation");
+                PathToEvaluationResultFiles = System.IO.Path.Combine(ProjectName, "Maps");
+
                 MaxProcFileRead(); // read and set the count of max processors
                 listBox4.Items.Clear(); // delete sourcegroups
                 listView1.Clear(); // delete sourcegroups

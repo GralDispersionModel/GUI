@@ -13,6 +13,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Drawing;
 using GralIO;
 using System.Collections.Generic;
 
@@ -43,8 +44,9 @@ namespace Gral
 
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
+                    int backgroundNumber = 0;
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0))
+                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0, PathToEmissionModulation, PathToEvaluationResultFiles, checkBox32.Checked))
                     {
                         sel_sg.checkBox3.Visible = false;
                         sel_sg.checkBox1.Visible = false;
@@ -52,6 +54,8 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
+                            PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                            PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
                             bool depositionOutput = true; // write deposition at the 1st slice but not at other slices
                             foreach (int slice in sel_slice.SelectedSlices)
                             {
@@ -87,7 +91,6 @@ namespace Gral
                                 DataCollection.CalculateDayMax = sel_sg.checkBox3.Checked;
                                 DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
                                 DataCollection.Slicename = sel_slice.HorSlices[slice];
-
                                 DataCollection.Caption = "Compute Mean concentrations";
                                 DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                     "Source-Groups: " + DataCollection.SelectedSourceGroup + Environment.NewLine;
@@ -100,6 +103,8 @@ namespace Gral
                                 {
                                     DataCollection.UserText += "Max. concentrations / ";
                                 }
+                                DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                                DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
 
                                 WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                 DataCollection.UserText += Environment.NewLine + "Result file name: Mean_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
@@ -113,6 +118,9 @@ namespace Gral
                                 {
                                     Text = DataCollection.Caption
                                 };
+                                BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                backgroundNumber++;
                                 BackgroundStart.Show();
                                 // now the backgroundworker works
                             }
@@ -137,8 +145,9 @@ namespace Gral
 
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
+                    int backgroundNumber = 0;
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0))
+                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0, PathToEmissionModulation, PathToEvaluationResultFiles, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = true;
                         sel_sg.checkBox2.Visible = true;
@@ -147,6 +156,8 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
+                            PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                            PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
                             bool depositionOutput = true; // write deposition at the 1st slice but not at other slices
                             foreach (int slice in sel_slice.SelectedSlices)
                             {
@@ -183,6 +194,8 @@ namespace Gral
                                 DataCollection.MeteoNotClassified = checkBox19.Checked;
                                 DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
                                 DataCollection.Slicename = sel_slice.HorSlices[slice];
+                                DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                                DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
 
                                 DataCollection.Caption = "Compute Mean, Max, Daily Max.";
                                 DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
@@ -214,6 +227,9 @@ namespace Gral
                                 {
                                     Text = DataCollection.Caption
                                 };
+                                BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                backgroundNumber++;
                                 BackgroundStart.Show();
                                 // now the backgroundworker works
                             }
@@ -238,7 +254,7 @@ namespace Gral
             }
 
             //select source groups
-            using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0))
+            using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0, PathToEmissionModulation, Path.Combine(ProjectName, "Computation"), checkBox32.Checked))
             {
                 sel_sg.checkBox1.Visible = false;
                 sel_sg.checkBox2.Visible = false;
@@ -249,6 +265,9 @@ namespace Gral
 
                 if (sel_sg.ShowDialog() == DialogResult.OK)
                 {
+                    PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                    PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
+                    int backgroundNumber = 0;
                     int maxsource = Math.Max(DefinedSourceGroups.Count, 1);
                     // now start the backgroundworker to calculate the percentils
                     GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData();
@@ -283,13 +302,12 @@ namespace Gral
                         DataCollection.MaxSource = maxsource;
                         DataCollection.MaxSourceComputed = Math.Max(listView1.Items.Count, 1);
                         DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
-
                         DataCollection.CalculateMaxHour = checkBox19.Checked;
-
                         DataCollection.Caption = "Compute time series at the receptorpoints";
                         DataCollection.UserText = "Compute " + "time series at the receptorpoints " + Environment.NewLine +
                             "Source-Groups: " + DataCollection.SelectedSourceGroup;
-
+                        DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                        DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
                         WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                         DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
                         DataCollection.BackgroundWorkerFunction = GralBackgroundworkers.BWMode.ReceptorTimeSeries; // 37 = Time series
@@ -298,6 +316,9 @@ namespace Gral
                         {
                             Text = DataCollection.Caption
                         };
+                        BackgroundStart.StartPosition = FormStartPosition.Manual;
+                        BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                        backgroundNumber++;
                         BackgroundStart.Show();
                         // now the backgroundworker works
                     }
@@ -343,6 +364,8 @@ namespace Gral
             {
                 Text = DataCollection.Caption
             };
+            BackgroundStart.StartPosition = FormStartPosition.Manual;
+            BackgroundStart.Location = new Point(this.Left + 30, this.Top + 60);
             BackgroundStart.Show();
             // now the backgroundworker works
         }
@@ -361,7 +384,7 @@ namespace Gral
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 1))
+                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 1, PathToEmissionModulation, PathToEvaluationResultFiles, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
@@ -370,6 +393,9 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
+                            PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                            PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
+                            int backgroundNumber = 0;
                             foreach (int slice in sel_slice.SelectedSlices)
                             {
                                 int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
@@ -409,7 +435,8 @@ namespace Gral
                                 DataCollection.Slicename = sel_slice.HorSlices[slice];
                                 DataCollection.Unit = "µg/m³";
                                 DataCollection.EmissionFactor = 1.0F;
-
+                                DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                                DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
                                 DataCollection.Caption = "Compute High Percentiles  ";
                                 DataCollection.UserText = "Compute " + Convert.ToString(percentile) + " Percentile " + Environment.NewLine + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                     "Source-Groups: " + DataCollection.SelectedSourceGroup;
@@ -424,6 +451,9 @@ namespace Gral
                                 {
                                     Text = DataCollection.Caption
                                 };
+                                BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                backgroundNumber++;
                                 BackgroundStart.Show();
                                 // now the backgroundworker works
                             }
@@ -448,7 +478,7 @@ namespace Gral
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 2))
+                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 2, PathToEmissionModulation, PathToEvaluationResultFiles, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
@@ -457,6 +487,9 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
+                            PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                            PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
+                            int backgroundNumber = 0;
                             int maxsource = Math.Max(DefinedSourceGroups.Count, sel_sg.listBox1.Items.Count);
 
                             //evaluation of odour-hour frequencies
@@ -543,13 +576,13 @@ namespace Gral
                                         DataCollection.Slicename = sel_slice.HorSlices[slice];
                                         DataCollection.OdourThreshold = odourthreshold;
                                         DataCollection.Peakmean = peakmean;
-
                                         DataCollection.Caption = "Compute Odour hours";
                                         DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                             "Source-Groups: " + DataCollection.SelectedSourceGroup + Environment.NewLine +
                                             "Odour threshold: " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
                                             "90percentile/mean ratio" + Convert.ToString(peakmean);
-
+                                        DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                                        DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
                                         WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                         DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename + ".txt";
                                         DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
@@ -578,6 +611,9 @@ namespace Gral
                                         {
                                             Text = DataCollection.Caption
                                         };
+                                        BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                        BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                        backgroundNumber++;
                                         BackgroundStart.Show();
                                         // now the backgroundworker works
                                     }
@@ -655,6 +691,9 @@ namespace Gral
                                     {
                                         Text = DataCollection.Caption
                                     };
+                                    BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                    BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                    backgroundNumber++;
                                     BackgroundStart.Show();
                                     // now the backgroundworker works
                                 }
@@ -681,7 +720,7 @@ namespace Gral
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3))
+                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3, PathToEmissionModulation, PathToEvaluationResultFiles, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
@@ -691,6 +730,9 @@ namespace Gral
                         
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
+                            PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                            PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
+                            int backgroundNumber = 0;
                             //select source groups
                             GralMainForms.Kompost komp = new GralMainForms.Kompost()
                             {
@@ -806,7 +848,6 @@ namespace Gral
                                         DataCollection.Odemi = odemi;
                                         DataCollection.OdFreq = odfreq;
                                         DataCollection.Scale = scale;
-
                                         DataCollection.Caption = "Compute Odour hours";
                                         DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                             "Source-Groups: " + DataCollection.SelectedSourceGroup +
@@ -817,6 +858,8 @@ namespace Gral
                                             DataCollection.UserText += "Process " + Convert.ToString(i + 1) + ": Emission = " + Convert.ToString(DataCollection.Odemi[i]) +
                                                 " MOU/h  Frequency = " + Convert.ToString(DataCollection.OdFreq[i] * 100) + " %" + Environment.NewLine;
                                         }
+                                        DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                                        DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
                                         WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                         DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
@@ -827,6 +870,9 @@ namespace Gral
                                         {
                                             Text = DataCollection.Caption
                                         };
+                                        BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                        BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                        backgroundNumber++;
                                         BackgroundStart.Show();
                                         // now the backgroundworker works
                                     }
@@ -855,7 +901,7 @@ namespace Gral
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3))
+                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3, PathToEmissionModulation, PathToEvaluationResultFiles, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
@@ -864,6 +910,9 @@ namespace Gral
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
+                            PathToEmissionModulation = sel_sg.PathToEmissionModulation;
+                            PathToEvaluationResultFiles = sel_sg.PathForResultFiles;
+                            int backgroundNumber = 0;
                             //select source group with "all in all out" system
                             GralMainForms.Allinallout allin = new GralMainForms.Allinallout()
                             {
@@ -971,7 +1020,8 @@ namespace Gral
                                         DataCollection.Division = (float)allin.numericUpDown1.Value; //breeding cylce in days
                                         DataCollection.Emptytimes = (float)allin.numericUpDown2.Value;   //empty times between two breeding cycles in days
                                         DataCollection.AllInnSelSourceGroup = Convert.ToString(allin.comboBox1.SelectedItem);
-
+                                        DataCollection.PathEmissionModulation = PathToEmissionModulation;
+                                        DataCollection.PathEvaluationResults = PathToEvaluationResultFiles;
                                         DataCollection.Caption = "Compute Odour hours for 'All in all out' stables";
                                         DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                             "Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
@@ -989,6 +1039,9 @@ namespace Gral
                                         {
                                             Text = DataCollection.Caption
                                         };
+                                        BackgroundStart.StartPosition = FormStartPosition.Manual;
+                                        BackgroundStart.Location = new Point(this.Left + 30 + 30 * backgroundNumber, this.Top + 60 + 30 * backgroundNumber);
+                                        backgroundNumber++;
                                         BackgroundStart.Show();
                                         // now the backgroundworker works
                                     }

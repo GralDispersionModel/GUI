@@ -14,6 +14,8 @@ using System;
 using System.Windows.Forms;
 using System.IO;
 using Gral;
+using GralStaticFunctions;
+using WinRT;
 
 namespace GralMainForms
 {
@@ -25,7 +27,9 @@ namespace GralMainForms
         private Main form1 = null;
         private string _prefix = "";
         private int Mode = 0;
-        
+        private bool transientMode = false;
+        public string PathToEmissionModulation = string.Empty;
+        public string PathForResultFiles = string.Empty;             
 		public string Prefix
 		{ get 
         	{ if (_prefix.Length > 0)
@@ -37,12 +41,29 @@ namespace GralMainForms
                     return String.Empty;
                 }
             } set {_prefix = value;}
-		} // Filename
+		}
 
-		public SelectSourcegroups (Main f, int _mode)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="f">Main form reference</param>
+        /// <param name="_mode"> 0 = default, 1 = Percentile, 2 = Odour</param>
+        /// <param name="_PathToEmissionModulation"></param>
+        /// <param name="_PathForResultFiles"></param>
+        public SelectSourcegroups (Main f, int _mode, string _PathToEmissionModulation, string _PathForResultFiles, bool TransientMode)
 		{
 			Mode = _mode; // 0 = standard, 1 = Percentile, 2 = Odour
-			
+            transientMode = TransientMode;
+
+			if (!string.IsNullOrEmpty(_PathToEmissionModulation))
+            {
+                PathToEmissionModulation = _PathToEmissionModulation;
+            }
+            if (!string.IsNullOrEmpty(_PathForResultFiles))
+            {
+                PathForResultFiles = _PathForResultFiles;
+            }
+
 			InitializeComponent ();
 			form1 = f;
 						
@@ -87,7 +108,14 @@ namespace GralMainForms
             }
 
             textBox1.Text = _prefix;
-            
+            SetPathTextBoxes();
+            if (transientMode)
+            {
+                textBox2.Enabled = false;
+                buttonModulationPath.Enabled = false;  
+                label6.Enabled = false;
+            }
+
             if (Mode == 0) // do not show odour group box
 			{
 				groupBox1.Visible = false;
@@ -113,12 +141,26 @@ namespace GralMainForms
             {
                 groupBox1.Visible = true;
                 groupBox2.Visible = false;
+
+                buttonModulationPath.Enabled = false;
+                buttonResultPath.Enabled = false;
+                textBox2.Visible = false;
+                textBox3.Visible = false;
+
                 radioButton2.Visible = false;
                 radioButton1.Visible = false;
                 numericUpDown1.Visible = false;
                 label2.Visible = false;
                 numericUpDown3.Enabled = true;
             }        
+        }
+
+        private void SetPathTextBoxes()
+        {
+            float l1 = TextRenderer.MeasureText(PathToEmissionModulation, textBox2.Font).Width;
+            textBox2.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathToEmissionModulation, (int) (PathToEmissionModulation.Length * (textBox2.Width / l1)));
+            l1 = TextRenderer.MeasureText(PathForResultFiles, textBox3.Font).Width;
+            textBox3.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathForResultFiles, (int)(PathForResultFiles.Length * (textBox3.Width / l1)));
         }
              
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -128,8 +170,16 @@ namespace GralMainForms
         
         void SelectSourcegroupsResizeEnd(object sender, EventArgs e)
         {
-        	listBox1.Width = ClientSize.Width-5;
+        	listBox1.Width = ClientSize.Width - 5;
         	listBox1.Height = Math.Max(30, label1.Top - 5);
+            groupBox3.Width = Math.Max(10, ClientSize.Width - groupBox3.Left - 15);
+            textBox1.Width = Math.Max(10, groupBox3.Width - textBox1.Left - 5);
+            textBox2.Width = Math.Max(10, groupBox3.Width - textBox2.Left - 5);
+            textBox3.Width = Math.Max(10, groupBox3.Width - textBox3.Left - 5);
+            float l1 = TextRenderer.MeasureText(PathToEmissionModulation, textBox2.Font).Width;
+            textBox2.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathToEmissionModulation, (int)(PathToEmissionModulation.Length * (textBox2.Width / l1)));
+            l1 = TextRenderer.MeasureText(PathForResultFiles, textBox3.Font).Width;
+            textBox3.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathForResultFiles, (int)(PathForResultFiles.Length * (textBox3.Width / l1)));
         }
         
         void TextBox1TextChanged(object sender, EventArgs e)
@@ -171,5 +221,51 @@ namespace GralMainForms
                 numericUpDown3.Enabled = false;
             }
         }
+
+        /// <summary>
+        /// Select a directory for result files or the emission modulation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonSelectPath_Click(object sender, EventArgs e)
+        {
+            string path = PathForResultFiles;
+            string descripton = "Select the path for the evaluation result files";
+            if (sender == buttonModulationPath)
+            {
+                path = PathToEmissionModulation;
+                descripton = "Select the path to the emission modulation files";
+            }
+            if (!path.EndsWith(Path.DirectorySeparatorChar))
+            {
+                path += Path.DirectorySeparatorChar;
+            }
+
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog
+            {
+                Description = descripton,
+                SelectedPath = path
+            })
+            {
+#if NET6_0_OR_GREATER
+                dialog.UseDescriptionForTitle = true;
+#endif
+                dialog.ShowDialog();
+                path = dialog.SelectedPath;
+                if (Directory.Exists(path))
+                {
+                    if (sender == buttonModulationPath)
+                    {
+                        PathToEmissionModulation = path;
+                    }
+                    else if (sender == buttonResultPath)
+                    {
+                        PathForResultFiles = path;
+                    }
+                    SetPathTextBoxes();
+                }
+            }
+        }
+
     }
 }

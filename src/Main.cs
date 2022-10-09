@@ -290,7 +290,15 @@ namespace Gral
         /// Rectangle with coordinates for opeining the mail to function
         /// </summary>
         private Rectangle OpenMailToIVT;
-        
+        /// <summary>
+        /// Path to the emission modulation
+        /// </summary>
+        private string PathToEmissionModulation;
+        /// <summary>
+        /// Path for evaluation result files
+        /// </summary>
+        private string PathToEvaluationResultFiles;
+
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
         public static readonly string CubeString = "³";
