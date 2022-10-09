@@ -808,10 +808,10 @@ namespace GralStaticFunctions
                 }
                 else
                 {
-                    int _diff = Lenght - _nameLenght - 3;
+                    int _diff = Lenght - _nameLenght - 4;
                     if (_diff > 0)
                     {
-                        _a = Path.GetDirectoryName(FileName).Substring(0, _diff) + "..." + Path.GetFileName(FileName);
+                        _a = Path.GetDirectoryName(FileName).Substring(0, _diff) + "..." + Path.DirectorySeparatorChar + Path.GetFileName(FileName);
                     }
                     else
                     {
