@@ -3654,7 +3654,7 @@ namespace Gral
             Point point = panel1.PointToClient(Cursor.Position);
             if (OpenMailToIVT.Contains(point))
             {
-                Clipboard.SetText("vuu@ivt.tugraz.at");
+                Clipboard.SetText("gral@ivt.tugraz.at");
                 MessageBox.Show("The mail address was copied to the clipboard");
             }
         }

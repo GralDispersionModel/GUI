@@ -307,14 +307,14 @@ namespace Gral
 #endif
             g.DrawString("Development Team: Dietmar Oettl and Markus Kuntner", subtitlefont, Solid_black, x, 25 + 2 * distance, format1);
 
-            int stringlen = (int)(g.MeasureString("Support and Training: Technical University of Graz vuu@ivt.tugraz.at", subtitlefont).Width);
+            int stringlen = (int)(g.MeasureString("Support and Training: Technical University of Graz gral@ivt.tugraz.at", subtitlefont).Width);
             g.DrawString("Support and Training: Technical University of Graz", subtitlefont, Solid_black, x - stringlen / 2, 25 + 2 * distance + distance2);
             int stringlen2 = (int)(g.MeasureString("Support and Training: Technical University of Graz ", subtitlefont).Width);
-            g.DrawString("vuu@ivt.tugraz.at", subtitlefontUnderlined, Solid_blue, x - stringlen / 2 + stringlen2, 25 + 2 * distance + distance2);
+            g.DrawString("gral@ivt.tugraz.at", subtitlefontUnderlined, Solid_blue, x - stringlen / 2 + stringlen2, 25 + 2 * distance + distance2);
 
             OpenMailToIVT = new Rectangle(x - stringlen / 2 + stringlen2, 
                                           25 + 2 * distance + distance2, 
-                                          (int)(g.MeasureString("vuu@ivt.tugraz.at", subtitlefontUnderlined).Width), 
+                                          (int)(g.MeasureString("gral@ivt.tugraz.at", subtitlefontUnderlined).Width), 
                                           distance);
 
             format1.Dispose();
