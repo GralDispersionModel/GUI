@@ -53,7 +53,7 @@ namespace GralBackgroundworkers
                     throw new Exception("Error reading the emission modulation factors");
                 }
                 double[,] EmissionFacTimeSeries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName, 
-                                                                               sg_numbers, ref EmissionFactHour, ref EmissionFactMonth, sg_names);
+                                                                               sg_numbers, ref EmissionFactHour, ref EmissionFactMonth, sg_names, mydata.PathEmissionModulation);
 
                 if (meteoPGTALL.Count == 0) // no data available
                 {
@@ -354,7 +354,7 @@ namespace GralBackgroundworkers
         /// <param name="emifac_mon"></param>
         /// <returns>Emission time series</returns>
         private double[,] ReadEmissionModulationTimeSeries(int MettimeFileLength, int MaxSource, string ProjectName, 
-                                                           string[] SGNumbers, ref double[,] emifac_day, ref double[,] emifac_mon, string[] sg_names)
+                                                           string[] SGNumbers, ref double[,] emifac_day, ref double[,] emifac_mon, string[] sg_names, string ModulationPath)
         {
             double[,] emifac_timeseries = new double[MettimeFileLength + 1, MaxSource];
             int[] sg_time = new int[MaxSource];
@@ -369,7 +369,8 @@ namespace GralBackgroundworkers
                     emifac_timeseries[i, n] = 1;
                 }
             }
-            string newpath = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+            string newpath = Path.Combine(ModulationPath, "emissions_timeseries.txt");
+            
             bool timeseries = false;
             if (File.Exists(newpath) == true)
             {
@@ -447,7 +448,7 @@ namespace GralBackgroundworkers
                 }
                 catch (Exception ex)
                 {
-                    BackgroundThreadMessageBox(ex.Message + " Error reading emissions_timeseries.txt");
+                    BackgroundThreadMessageBox(ex.Message + " Error reading " + newpath);
                     return null;
                 }
             }

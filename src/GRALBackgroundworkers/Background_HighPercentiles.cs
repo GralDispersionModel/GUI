@@ -146,7 +146,7 @@ namespace GralBackgroundworkers
             if (!transientMode)
             {
                 emifac_timeseries = ReadEmissionModulationTimeSeries(mettimefilelength, maxsource, mydata.ProjectName,
-                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names);
+                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
             int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100));   

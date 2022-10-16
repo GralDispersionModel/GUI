@@ -117,7 +117,7 @@ namespace GralBackgroundworkers
             if (!transientMode)
             {
                 emifac_timeseries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName,
-                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names);
+                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
             //read meteopgt.all
