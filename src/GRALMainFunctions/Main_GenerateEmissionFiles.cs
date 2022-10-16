@@ -21,6 +21,7 @@ using GralDomain;
 using GralIO;
 using GralItemData;
 using GralStaticFunctions;
+using Windows.Devices.Geolocation;
 
 namespace Gral
 {
@@ -759,6 +760,11 @@ namespace Gral
         private bool Write_Emission_Timeseries()
         {
             string emission_ts = Path.Combine(ProjectName, @"Computation","emissions_timeseries.txt");
+            if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+            {
+                emission_ts = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+            }
+
             string mettimeseries = Path.Combine(ProjectName, @"Computation","mettimeseries.dat");
             DialogResult dr;
             CultureInfo ic = CultureInfo.InvariantCulture;

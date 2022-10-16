@@ -98,7 +98,7 @@ namespace Gral
                 
                 //set header in main window
                 Text = "GRAL GUI  / " + Path.GetFileName(ProjectName);
-                label87.Text = ProjectName;
+                GralStaticFunctions.St_F.SetTrimmedTextToTextBox(label87, ProjectName);
                 
                 //remove start up banner
                 //this.panel1.Visible = false;
@@ -146,17 +146,17 @@ namespace Gral
                     return;
                 }
 
-                PathToEmissionModulation = System.IO.Path.Combine(ProjectName, "Computation");
-                PathToEvaluationResultFiles = System.IO.Path.Combine(ProjectName, "Maps");
-
+                // load paths for evaluations results and the emission modulation
+                ProjectSetting = new GralData.ProjectSettings(ProjectName);
+                ProjectSetting.ReadFromFile();
+                
                 MaxProcFileRead(); // read and set the count of max processors
                 listBox4.Items.Clear(); // delete sourcegroups
                 listView1.Clear(); // delete sourcegroups
-
-
+                
                 //start file watcher for Percent.txt
-                #if __MonoCS__
-                #else
+#if __MonoCS__
+#else
                 try
                 {
                     percentGRAL.Path = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
@@ -953,6 +953,10 @@ namespace Gral
                         }
                         name = name.Substring(name.Length - 3);
                         newPath = Path.Combine(ProjectName, @"Computation","emissions" + name + ".dat");
+                        if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+                        {
+                            newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + name + ".dat");
+                        }
                         if (File.Exists(newPath))
                         {
                             listView1.Items[index].SubItems[0].BackColor = Color.LightGreen;

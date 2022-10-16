@@ -41,6 +41,7 @@ namespace GralMainForms
         
         private int _SGShow;
         public int SG_Show { set { _SGShow = value; } }
+        public string ModulationPath; 
         
         public ShowEmissionTimeseries()
         {
@@ -54,6 +55,11 @@ namespace GralMainForms
         void ShowEmissionTimeseriesLoad(object sender, EventArgs e)
         {
             string newpath = Path.Combine(Gral.Main.ProjectName, "Computation", "emissions_timeseries.txt");
+            if (Directory.Exists(ModulationPath))
+            {
+                newpath = Path.Combine(ModulationPath, "emissions_timeseries.txt");
+            }
+
             if (File.Exists(newpath) == true)
             {
                 try

@@ -157,10 +157,8 @@ namespace GralMainForms
 
         private void SetPathTextBoxes()
         {
-            float l1 = TextRenderer.MeasureText(PathToEmissionModulation, textBox2.Font).Width;
-            textBox2.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathToEmissionModulation, (int) (PathToEmissionModulation.Length * (textBox2.Width / l1)));
-            l1 = TextRenderer.MeasureText(PathForResultFiles, textBox3.Font).Width;
-            textBox3.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathForResultFiles, (int)(PathForResultFiles.Length * (textBox3.Width / l1)));
+            GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox2, PathToEmissionModulation);
+            GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox3, PathForResultFiles);
         }
              
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -263,6 +261,7 @@ namespace GralMainForms
                         PathForResultFiles = path;
                     }
                     SetPathTextBoxes();
+                    Main.ProjectSetting.WriteToFile();
                 }
             }
         }

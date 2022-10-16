@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectSourcegroups));
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -55,6 +56,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -73,6 +75,7 @@
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.listBox1.Size = new System.Drawing.Size(413, 199);
             this.listBox1.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.listBox1, "Calculated source groups");
             // 
             // button1
             // 
@@ -141,6 +144,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(219, 23);
             this.textBox1.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.textBox1, "A file prefix for the result files");
             this.textBox1.TextChanged += new System.EventHandler(this.TextBox1TextChanged);
             // 
             // groupBox1
@@ -228,6 +232,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(56, 23);
             this.numericUpDown1.TabIndex = 6;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown1, "Percentile to be evaluated");
             this.numericUpDown1.Value = new decimal(new int[] {
             98,
             0,
@@ -303,6 +308,7 @@
             this.numericUpDown2.Size = new System.Drawing.Size(56, 23);
             this.numericUpDown2.TabIndex = 5;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.toolTip1.SetToolTip(this.numericUpDown2, "Percentile to be evaluated");
             this.numericUpDown2.Value = new decimal(new int[] {
             98,
             0,
@@ -349,6 +355,7 @@
             this.buttonResultPath.Name = "buttonResultPath";
             this.buttonResultPath.Size = new System.Drawing.Size(32, 32);
             this.buttonResultPath.TabIndex = 47;
+            this.toolTip1.SetToolTip(this.buttonResultPath, "Set the path for the result files");
             this.buttonResultPath.UseVisualStyleBackColor = false;
             this.buttonResultPath.Click += new System.EventHandler(this.buttonSelectPath_Click);
             // 
@@ -362,6 +369,7 @@
             this.buttonModulationPath.Name = "buttonModulationPath";
             this.buttonModulationPath.Size = new System.Drawing.Size(32, 32);
             this.buttonModulationPath.TabIndex = 46;
+            this.toolTip1.SetToolTip(this.buttonModulationPath, "Set the path with emission modulation files for one evaluation");
             this.buttonModulationPath.UseVisualStyleBackColor = false;
             this.buttonModulationPath.Click += new System.EventHandler(this.buttonSelectPath_Click);
             // 
@@ -470,5 +478,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button buttonResultPath;
         private System.Windows.Forms.Button buttonModulationPath;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

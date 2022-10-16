@@ -13,6 +13,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using GralData;
 using GralMessage;
 
 namespace Gral
@@ -456,6 +457,11 @@ namespace Gral
         void DeleteEmissionTimeseriesFile(object sender, EventArgs e)
         {
             string newpath = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+            if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+            {
+                newpath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+            }
+
             if (File.Exists(newpath) == true && MessageBox.Show(this, "Delete emissions_timeseries.txt ?",
                                                                 "GRAL Message", MessageBoxButtons.OKCancel,
                                                                 MessageBoxIcon.Question) == DialogResult.OK)
