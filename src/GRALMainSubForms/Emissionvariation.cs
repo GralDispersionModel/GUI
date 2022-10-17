@@ -252,9 +252,10 @@ namespace GralMainForms
 			
             //load information about the selected diurnal and seasonal modulation for this source group
             string newPath = Path.Combine(Main.ProjectName, @"Settings", "emissionmodulations.txt");
-            if (! string.IsNullOrEmpty(emissionModulationPath) && File.Exists(Path.Combine(emissionModulationPath, "emissionmodulations.txt")))
+            // in case of an emissionmodulation variation use the emissionmodulations.txt from the variation folder
+            if (!string.Equals(Path.Combine(Main.ProjectName, @"Computation"), Main.ProjectSetting.EmissionModulationPath))
             {
-                newPath = Path.Combine(emissionModulationPath, "emissionmodulations.txt");
+                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
             }
 
             string[] text2 = new string[26];

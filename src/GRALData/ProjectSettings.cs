@@ -116,14 +116,12 @@ namespace GralData
                 }
                 catch
                 {
-                    SetDefaultValues();
                     return false;
                 }
                 return true;
             }
             else
             {
-                SetDefaultValues();
                 return false;
             }
         }
