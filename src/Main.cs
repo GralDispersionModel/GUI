@@ -2560,7 +2560,8 @@ namespace Gral
                     {
                         groupBox27.Text = "Emission-time-series (mandatory - transient mode)";
                         button60.Enabled = false;
-                        ProjectSetting.EmissionModulationPath = string.Empty;
+                        ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                        ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
                     }
                     else
                     {
@@ -2569,12 +2570,7 @@ namespace Gral
                     }
                     CheckIfAllSourcegroupsHaveDefinedEmissionModulations(false);
 
-                    string emissionMoudulationPath = Path.Combine(ProjectName, @"Computation");
-                    if (Directory.Exists(ProjectSetting.EmissionModulationPath))
-                    {
-                        emissionMoudulationPath = ProjectSetting.EmissionModulationPath;
-                    }
-                    GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionMoudulationPath);
+                    GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, ProjectSetting.EmissionModulationPath);
 
                     string newpath = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
                     if (Directory.Exists(ProjectSetting.EmissionModulationPath))
@@ -3181,7 +3177,8 @@ namespace Gral
                         numericUpDown5.Value = 1;  // lock setting of start dispersion situtation
                         numericUpDown5.Enabled = false; // lock setting of start dispersion situtation
                         button60.Enabled = false;
-                        ProjectSetting.EmissionModulationPath = string.Empty;
+                        ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                        ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
                     }
                     else
                     {
@@ -3721,38 +3718,53 @@ namespace Gral
 #if NET6_0_OR_GREATER
                 dialog.UseDescriptionForTitle = true;
 #endif
-                dialog.ShowDialog();
-                emissionModulation = dialog.SelectedPath;
-                if (Directory.Exists(emissionModulation))
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    ProjectSetting.EmissionModulationPath = emissionModulation;
-                    ProjectSetting.WriteToFile();
-                    GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulation);
-
-                    //Copy emission files to the new folder
-                    if (!string.Equals(ProjectSetting.EmissionModulationPath, Path.Combine(ProjectName, "Computation")))
+                    emissionModulation = dialog.SelectedPath;
+                    if (Directory.Exists(emissionModulation))
                     {
-                        string src, dest;
-                        for (int itm = 1; itm < 100; itm++)
+                        ProjectSetting.EmissionModulationPath = emissionModulation;
+                        ProjectSetting.EvaluationPath = emissionModulation;
+                        ProjectSetting.WriteToFile();
+                        GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulation);
+
+                        //Copy emission files to the new folder
+                        if (!string.Equals(ProjectSetting.EmissionModulationPath, Path.Combine(ProjectName, "Computation")))
                         {
-                            src = Path.Combine(ProjectName, "Computation", "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
-                            dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
+                            string src, dest;
+                            for (int itm = 1; itm < 100; itm++)
+                            {
+                                src = Path.Combine(ProjectName, "Computation", "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
+                                dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
+                                CopyFilesIfNotExistant(src, dest);
+                            }
+                            src = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+                            dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+                            CopyFilesIfNotExistant(src, dest);
+                            src = Path.Combine(ProjectName, "Settings", "emissionmodulations.txt");
+                            dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
                             CopyFilesIfNotExistant(src, dest);
                         }
-                        src = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
-                        dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
-                        CopyFilesIfNotExistant(src, dest);
-                        src = Path.Combine(ProjectName, "Settings", "emissionmodulations.txt");
-                        dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
-                        CopyFilesIfNotExistant(src, dest);
+                        else
+                        {
+                            string emissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                            ProjectSetting.EmissionModulationPath = emissionModulationPath;
+                            ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                            ProjectSetting.WriteToFile();
+                            GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulationPath);
+                        }
                     }
-                }
-                else
-                {
-                    string emissionModulationPath = Path.Combine(ProjectName, @"Computation");
-                    ProjectSetting.EmissionModulationPath = string.Empty; 
-                    ProjectSetting.WriteToFile();
-                    GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulationPath);
+                    else
+                    {
+                        //Default values
+                        string emissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                        ProjectSetting.EmissionModulationPath = emissionModulationPath;
+                        ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                        ProjectSetting.WriteToFile();
+                        GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulationPath);
+                    }
+                    //force a redraw of the preview
+                    RedrawPreviewOfModulation(sender, e);
                 }
             }
         }
