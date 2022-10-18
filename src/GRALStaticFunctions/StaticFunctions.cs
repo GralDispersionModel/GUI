@@ -857,5 +857,77 @@ namespace GralStaticFunctions
 #endif
         }
 
+        /// <summary>
+        /// Search a file at an absolute path; if not found, search within the recent project at the same sub-folder as in the original project or in a default sub folder
+        /// </summary>
+        /// <param name="ProjectPath">The recent project path</param>
+        /// <param name="FilePath">The file with path to be searched</param>
+        /// <param name="defaultSubFolder">The default folder for such files</param>
+        /// <returns>(The path for the file, true if this is a new valid path - otherwise false)</returns>
+        public static (string, bool) SearchAbsoluteAndRelativeFilePath(string ProjectPath, string FilePath, string defaultSubFolder)
+        {
+            if (File.Exists(FilePath))
+            {
+                return (FilePath, false);
+            }
+            else
+            {
+                // search File in the sub-directory of the recent project
+                string result = string.Empty;
+                string resultPath = string.Empty;
+                string filename = Path.GetFileName(FilePath);
+                bool saveNewFilePath = false;
+                try
+                {
+                    DirectoryInfo di = new DirectoryInfo(ProjectPath);
+                    string project = di.Name.ToString();
+                    // if the file is in the project root folder
+                    if (string.Equals(project, Directory.GetParent(FilePath).Name))
+                    {
+                        result = Path.Combine(ProjectPath, filename);
+                        saveNewFilePath = true;
+                    }
+                    // find the file in a sub folder?
+                    else
+                    {
+                        while (!string.IsNullOrWhiteSpace(FilePath))
+                        {
+                            DirectoryInfo parentFolder = Directory.GetParent(FilePath);
+                            if (parentFolder == null)
+                            {
+                                resultPath = string.Empty;
+                                break;
+                            }
+                            if (!string.Equals(project, parentFolder.Name.ToString()))
+                            {
+                                resultPath = Path.Combine(parentFolder.Name.ToString(), resultPath);
+                            }
+                            else
+                            {
+                                break;
+                            }
+
+                            FilePath = Directory.GetParent(FilePath).FullName;
+                        }
+                        if (!string.IsNullOrEmpty(resultPath))
+                        {
+                            result = Path.Combine(ProjectPath, resultPath, filename);
+                            saveNewFilePath = true;
+                        }
+                    }
+                }
+                catch
+                {
+                    result = string.Empty;
+                }
+                // and finally check at the default folder
+                if (string.IsNullOrEmpty(result) && File.Exists(Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath))))
+                {
+                    return (Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath)), true);
+                }
+                return (result, saveNewFilePath);
+            }
+        }
+
     }
 }
