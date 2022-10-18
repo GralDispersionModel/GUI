@@ -18,6 +18,7 @@ using System.Globalization;
 using GralIO;
 using GralDomForms;
 using GralData;
+using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -135,22 +136,24 @@ namespace GralDomain
                 string _filename = _wdata.Filename;
                 if (! System.IO.File.Exists(_filename))
                 {
-                    // check if file exists in the meteo folder
-                    if (System.IO.File.Exists(System.IO.Path.Combine(
-                        Gral.Main.ProjectName, "Meteo", System.IO.Path.GetFileName(_filename))))
+                    // check if file exists in a sub folder of this project
+                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _wdata.Filename, "Metfiles");
+                    if (System.IO.File.Exists(tempfilename))
                     {
-                        _filename = System.IO.Path.Combine(Gral.Main.ProjectName, "Meteo", System.IO.Path.GetFileName(_filename));
+                        _filename = tempfilename;
                     }
                 }
-
-                IO_ReadFiles readwindfile = new IO_ReadFiles
+                if (System.IO.File.Exists(_filename))
                 {
-                    WindDataFile = _filename,
-                    WindData = MeteoTimeSeries
-                };
+                    IO_ReadFiles readwindfile = new IO_ReadFiles
+                    {
+                        WindDataFile = _filename,
+                        WindData = MeteoTimeSeries
+                    };
 
-                readwindfile.ReadMeteoFiles(1000000, _wdata.RowSep, decsep, _wdata.DecSep, Gral.Main.GUISettings.IgnoreMeteo00Values);
-				AddWindDataToObjectList(MeteoTimeSeries, _dr, _wdata.MaxValue, _wdata.X0, _wdata.Y0);
+                    readwindfile.ReadMeteoFiles(1000000, _wdata.RowSep, decsep, _wdata.DecSep, Gral.Main.GUISettings.IgnoreMeteo00Values);
+                    AddWindDataToObjectList(MeteoTimeSeries, _dr, _wdata.MaxValue, _wdata.X0, _wdata.Y0);
+                }
 			}
 		}
 		

@@ -37,6 +37,15 @@ namespace GralDomain
                 CultureInfo ic = CultureInfo.InvariantCulture;
                 try
                 {
+                    if (!File.Exists(file))
+                    {
+                        (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, file, "Maps");
+                        if (File.Exists(tempfilename))
+                        {
+                            file = tempfilename;
+                        }
+                    }
+
                     if (File.Exists(file))
                     {
                         using (StreamReader myReader = new StreamReader(file))

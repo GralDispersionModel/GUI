@@ -542,12 +542,15 @@ namespace GralDomain
                                 //check if contour map file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //check first, if map is located in the directory \Maps..
-                                    string tempfilename = Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                    if (File.Exists(tempfilename) == true)
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;
-                                        SaveDomainSettings(1);
+                                        if (saveNewFilePath)
+                                        {
+                                            SaveDomainSettings(1);
+                                        }
                                     }
                                     else
                                     {
@@ -591,12 +594,15 @@ namespace GralDomain
                                 //check if vector map file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //check first, if map is located in the directory \Maps..
-                                    string tempfilename=Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                    if (File.Exists(tempfilename) == true)
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;
-                                        SaveDomainSettings(1);
+                                        if (saveNewFilePath)
+                                        {
+                                            SaveDomainSettings(1);
+                                        }
                                     }
                                     else
                                     {
@@ -646,58 +652,74 @@ namespace GralDomain
                                 //check if shape file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //user can define new location of the file
-                                    using (OpenFileDialog dialog = new OpenFileDialog
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
-                                        Filter = "(*.shp)|*.shp",
-                                        InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
-                                        Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                        ShowHelp = true
-#if NET6_0_OR_GREATER
-                                        ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
-#endif
-                                    })
-                                    {
-                                        dialog.HelpRequest += new System.EventHandler(LoadSettingsAndMaps_HelpRequest);
-                                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                                        _drobj.ContourFilename = tempfilename;
+                                        if (saveNewFilePath)
                                         {
-                                            _drobj.ContourFilename = dialog.FileName;
                                             SaveDomainSettings(1);
                                         }
                                     }
+                                    else
+                                    {
+                                        //user can define new location of the file
+                                        using (OpenFileDialog dialog = new OpenFileDialog
+                                        {
+                                            Filter = "(*.shp)|*.shp",
+                                            InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
+                                            Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
+                                            ShowHelp = true
+#if NET6_0_OR_GREATER
+                                            , ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+#endif
+                                        })
+                                        {
+                                            dialog.HelpRequest += new System.EventHandler(LoadSettingsAndMaps_HelpRequest);
+                                            if (dialog.ShowDialog(this) == DialogResult.OK)
+                                            {
+                                                _drobj.ContourFilename = dialog.FileName;
+                                                SaveDomainSettings(1);
+                                            }
+                                        }
+                                    }
                                 }
-                                
-                                int count = 0;
-                                foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
+
+                                if (File.Exists(_drobj.ContourFilename))
                                 {
-                                    if (shp is GralShape.SHPLine)
+                                    int count = 0;
+                                    foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
                                     {
-                                        _drobj.ShpLines.Add((GralShape.SHPLine) shp);
-                                    }
+                                        if (shp is GralShape.SHPLine)
+                                        {
+                                            _drobj.ShpLines.Add((GralShape.SHPLine)shp);
+                                        }
 
-                                    if (shp is GralShape.SHPPolygon)
-                                    {
-                                        _drobj.ShpPolygons.Add((GralShape.SHPPolygon) shp);
-                                    }
+                                        if (shp is GralShape.SHPPolygon)
+                                        {
+                                            _drobj.ShpPolygons.Add((GralShape.SHPPolygon)shp);
+                                        }
 
-                                    if (shp is PointF)
-                                    {
-                                        _drobj.ShpPoints.Add((PointF) shp);
-                                    }
+                                        if (shp is PointF)
+                                        {
+                                            _drobj.ShpPoints.Add((PointF)shp);
+                                        }
 
-                                    if (count == 0)
-                                    {
-                                        _drobj.West = shape.West;
-                                        _drobj.North = shape.North;
-                                        _drobj.PixelMx = shape.PixelMx;
-                                        _drobj.Picture = new Bitmap(100, Math.Abs(shape.PixelMy));
-                                    }
+                                        if (count == 0)
+                                        {
+                                            _drobj.West = shape.West;
+                                            _drobj.North = shape.North;
+                                            _drobj.PixelMx = shape.PixelMx;
+                                            _drobj.Picture = new Bitmap(100, Math.Abs(shape.PixelMy));
+                                        }
 
-                                    count++;
+                                        count++;
 
-                                    if (count % 200 == 0)
-                                    {
-                                        wait.Text = "Loading shape file " + count.ToString();
+                                        if (count % 200 == 0)
+                                        {
+                                            wait.Text = "Loading shape file " + count.ToString();
+                                        }
                                     }
                                 }
                                 

@@ -452,8 +452,9 @@ namespace GralDomain
                             //check if base map file exists
                             if (File.Exists(_drobj.ContourFilename) == false) // check if file exists in the folder "maps"
                             {
-                                string tempfilename=Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                if (File.Exists(tempfilename) == true)
+                                // check if file exists in a sub folder of this project
+                                (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                if (File.Exists(tempfilename))
                                 {
                                     _drobj.ContourFilename = tempfilename;
                                 }
