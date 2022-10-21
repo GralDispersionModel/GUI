@@ -543,7 +543,7 @@ namespace GralDomain
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
                                     //check first, if map is located in a sub directory of this project
-                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "");
                                     if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;

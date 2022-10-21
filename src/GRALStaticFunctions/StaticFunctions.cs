@@ -862,7 +862,7 @@ namespace GralStaticFunctions
         /// </summary>
         /// <param name="ProjectPath">The recent project path</param>
         /// <param name="FilePath">The file with path to be searched</param>
-        /// <param name="defaultSubFolder">The default folder for such files</param>
+        /// <param name="defaultSubFolder">The default folder for such files or string.empty = no defalut folder</param>
         /// <returns>(The path for the file, true if this is a new valid path - otherwise false)</returns>
         public static (string, bool) SearchAbsoluteAndRelativeFilePath(string ProjectPath, string FilePath, string defaultSubFolder)
         {
@@ -920,8 +920,8 @@ namespace GralStaticFunctions
                 {
                     result = string.Empty;
                 }
-                // and finally check at the default folder
-                if (string.IsNullOrEmpty(result) && File.Exists(Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath))))
+                // and finally check at the default folder, except if defaultDubFolder == string.empty
+                if (string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(defaultSubFolder) && File.Exists(Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath))))
                 {
                     return (Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath)), true);
                 }
