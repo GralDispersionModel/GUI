@@ -782,7 +782,9 @@ namespace Gral
                             ScClassFrequency = sclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind,
-                            WindRoseSetting = WindroseSetting
+                            WindRoseSetting = WindroseSetting,
+                            StartHour = startstunde,
+                            FinalHour = endstunden
                         };
                         if (MeteoTimeSeries.Count > 0)
                         {

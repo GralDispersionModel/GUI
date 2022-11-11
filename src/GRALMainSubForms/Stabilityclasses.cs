@@ -10,6 +10,7 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -29,6 +30,11 @@ namespace GralMainForms
         public GralData.WindRoseSettings WindRoseSetting;
         private const float HorSize = 762F;
         private const float VertSize = 508F;
+        public int StartHour;
+        public int FinalHour;
+        private Rectangle LegendPosition;
+        private Point MousedXdY = new Point();
+        private bool MoveLegend = false;
 
         public Stabilityclasses()
         {
@@ -58,24 +64,21 @@ namespace GralMainForms
             format1.LineAlignment = StringAlignment.Near;
             format1.Alignment = StringAlignment.Near;
             
+            // draw legend
             SizeF _lenght = g.MeasureString(MetFile, _smallFont);
             int distance = (int) _lenght.Height + 2;
-            
-            float _x = Math.Max(0, HorSize - _lenght.Width - 5);
-            g.DrawString(MetFile, _smallFont, _blackBrush, _x, 2, format1);
-            
+            g.DrawString(MetFile, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top, format1);
             string _data = "Data points: " + Convert.ToString(Wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
-            _x = Math.Max(0, HorSize - _lenght.Width - 5);
-            g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + distance, format1);
-            
+            g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + distance, format1);
             if (Wind.Count > 1)
 			{
 			    _data = Wind[0].Date + " - " + Wind[Wind.Count - 1].Date;
-			   _lenght = g.MeasureString(_data, _smallFont);
-			    _x = Math.Max(0, HorSize - _lenght.Width - 5);
-			    g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
-			}
+			    g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + 2 * distance, format1);
+                _data = StartHour.ToString() + ":00 - " + FinalHour.ToString()+":00";
+                _lenght = g.MeasureString(_data, _smallFont);
+                g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + 3 * distance, format1);
+            }
             
 			//scaling factor
             double classmax = 0;
@@ -88,8 +91,6 @@ namespace GralMainForms
                 classmax = WindRoseSetting.MaxScaleVertical / 10D;
             }
             double scale = 400 / classmax;
-
-            
 
             //draw diagram
             for (int i = 0; i < 7; i++)
@@ -156,6 +157,11 @@ namespace GralMainForms
         private void Form5_Load(object sender, EventArgs e)
         {
         	Text = "Frequency distribution stability classes   -  " + MetFile; // Kuntner
+            Font _smallFont = new Font("Arial", 8);
+            SizeF _fontsize = TextRenderer.MeasureText(MetFile, _smallFont);
+            int distance = (int)_fontsize.Height + 2;
+            LegendPosition = new Rectangle((int) Math.Max(0, HorSize - _fontsize.Width - 5), 5, (int) _fontsize.Width, distance * 4);
+            _smallFont.Dispose();
         }
 
         //save image to clipboard
@@ -209,6 +215,46 @@ namespace GralMainForms
             {
                 StabilityclassesResizeEnd(null, null);
                 // Restored!
+            }
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (LegendPosition.Contains(e.Location))
+            {
+                MoveLegend = true;
+                MousedXdY = new Point(e.X - LegendPosition.X, e.Y - LegendPosition.Y);
+            }
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (MoveLegend)
+            {
+                MoveLegend = false;
+                panel1.Cursor = Cursors.Arrow;
+            }
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            //show SizeAll cursor when moving mouse above legend or info box
+            if (LegendPosition.Contains(e.Location))
+            {
+                panel1.Cursor = Cursors.SizeAll;
+            }
+            else if (panel1.Cursor != Cursors.Arrow)
+            {
+                panel1.Cursor = Cursors.Arrow;
+            }
+
+            if (MoveLegend)
+            {
+                LegendPosition.X = e.X - MousedXdY.X;
+                LegendPosition.Y = e.Y - MousedXdY.Y;
+                St_F.WindRoseLegend.X = LegendPosition.X;
+                St_F.WindRoseLegend.Y = LegendPosition.Y;
+                panel1.Refresh();
             }
         }
     }
