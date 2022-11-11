@@ -16,7 +16,7 @@ Windows [Visual Studio 2022 or higher](https://visualstudio.microsoft.com/de/dow
 Linux [MonoDevelop](https://www.monodevelop.com/)<br>
 
 ## Official Release and Documentation
-The current validated GUI versions for Windows and a comprehensive manual are available at the [GRAL homepage](http://lampz.tugraz.at/~gral/)
+The current validated GUI versions for Windows and a comprehensive manual are available at the [GRAL homepage](https://gral.tugraz.at/)
 
 ## Contributing
 Everyone is invited to contribute to the project [Contributing](Contributing.md)
