@@ -52,7 +52,7 @@ namespace GralShape
             //read file
             Byte[] data;
             long fileLength;
-            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 fileLength = fs.Length;
                 data = new Byte[fileLength];
