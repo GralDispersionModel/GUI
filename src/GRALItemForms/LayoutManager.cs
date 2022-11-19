@@ -821,7 +821,6 @@ namespace GralItemForms
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {        
             e.DrawBackground();
-            Brush myBrush = Brushes.Black;
             try
             {
                 StringFormat drawFormat = new StringFormat
@@ -831,31 +830,25 @@ namespace GralItemForms
 
                 int width = (int)(e.Bounds.Width / 5D * 2);
                 RectangleF textColumn = new RectangleF(e.Bounds.Left, e.Bounds.Top, width, e.Bounds.Height);
-                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, textColumn, drawFormat);
+                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Black, textColumn, drawFormat);
 
-                myBrush = new SolidBrush(DrawObject.FillColors[e.Index]);
                 int graphwidth = (e.Bounds.Width - width) / 2;
                 int x0 = width  + graphwidth + 4;
                 int y0 = e.Bounds.Top + 1;
                 int height = Math.Max(1, e.Bounds.Height - 2);
-                e.Graphics.FillRectangle(myBrush, x0, y0, Math.Max(1, graphwidth - 8), height);
+                e.Graphics.FillRectangle(new SolidBrush(DrawObject.FillColors[e.Index]), x0, y0, Math.Max(1, graphwidth - 8), height);
 
                 x0 = width + 4;
                 y0 = e.Bounds.Top + e.Bounds.Height / 2;
-                Pen myPen = new Pen(DrawObject.LineColors[e.Index], 3);
-                e.Graphics.DrawLine(myPen, x0, y0, x0 + Math.Max(1, graphwidth - 8), y0);
-                myPen.Dispose();
-
-                myPen = new Pen(Color.LightGray, 1);
+                e.Graphics.DrawLine(new Pen(DrawObject.LineColors[e.Index], 3), x0, y0, x0 + Math.Max(1, graphwidth - 8), y0);
+                
+                Pen myPen = new Pen(Color.LightGray, 1);
                 myPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                 e.Graphics.DrawLine(myPen, e.Bounds.Left + 4, e.Bounds.Bottom - 1, e.Bounds.Right - 8, e.Bounds.Bottom - 1);
-                myPen.Dispose();
-                //  drawFormat.Dispose();
             }
             catch
             {
             }
-             myBrush.Dispose();
         }
 
         /// <summary>
