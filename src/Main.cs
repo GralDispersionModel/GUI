@@ -3329,7 +3329,7 @@ namespace Gral
                 dialog.InitialDirectory = Path.Combine(ProjectName, "Computation");
                 dialog.Filter = "(Logfile*.txt)|Logfile*.txt";
                 dialog.Title = "Select Logfile";
-                dialog.ShowHelp = true;
+                // dialog.ShowHelp = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -3779,6 +3779,11 @@ namespace Gral
                 }
             }
             catch { }
+        }
+
+        private void listBox5_DoubleClick(object sender, EventArgs e)
+        {
+            ShowTotalEmissions(sender, e);
         }
     }
 }

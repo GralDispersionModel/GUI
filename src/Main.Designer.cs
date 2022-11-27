@@ -2477,6 +2477,7 @@
             this.listBox5.TabIndex = 5;
             this.toolTip1.SetToolTip(this.listBox5, "Select the pollutant");
             this.listBox5.SelectedIndexChanged += new System.EventHandler(this.ListBox5_SelectedIndexChanged);
+            this.listBox5.DoubleClick += new System.EventHandler(this.listBox5_DoubleClick);
             // 
             // listView1
             // 
