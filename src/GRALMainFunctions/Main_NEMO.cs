@@ -44,8 +44,7 @@ namespace Gral
                 OpenFileDialog dialog = new OpenFileDialog
                 {
                     Filter = "(Nemo*.exe)|Nemo*.exe",
-                    Title = "Select NEMO executable",
-                    ShowHelp = true
+                    Title = "Select NEMO executable"
                 };
                 string inputfile;
                 string newPath;

@@ -51,8 +51,7 @@ namespace GralIO
             using (OpenFileDialog dialog1 = new OpenFileDialog
             {
                 Filter = "Topo files (*.txt;*.dat)|*.txt;*.dat",
-                Title = "Select topography",
-                ShowHelp = true
+                Title = "Select topography"
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif

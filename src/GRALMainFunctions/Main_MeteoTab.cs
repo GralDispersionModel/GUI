@@ -33,8 +33,7 @@ namespace Gral
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm;*.akt)|*.akterm;*.akt",
-                Title = "Select meteorological data",
-                ShowHelp = true
+                Title = "Select meteorological data"
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
@@ -990,12 +989,15 @@ namespace Gral
                 TBox[WindSpeedClasses - 1].Text = NumUpDown[WindSpeedClasses - 2].Value.ToString();
 
                 // Delete GRAMIn.dat
-                try
+                if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat")))
                 {
-                    File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat"));
+                    try
+                    {
+                        File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat"));
+                    }
+                    catch
+                    { }
                 }
-                catch
-                { }
                 //enable/disable GRAL simulations
                 Enable_GRAL();
                 //enable/disable GRAMM simulations
@@ -1245,8 +1247,7 @@ namespace Gral
                 using (SaveFileDialog dialog = new SaveFileDialog
                 {
                     Filter = "Met files (*.met)|*.met",
-                    Title = "Save new *.met file",
-                    ShowHelp = true
+                    Title = "Save new *.met file"
 #if NET6_0_OR_GREATER
                     ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif

@@ -738,8 +738,7 @@ namespace GralDomForms
             {
                 Filter = "MMO-Files (*.mmo)|*.mmo",
                 Title = "Save match to oberservation data",
-                InitialDirectory = _settings_path,
-                ShowHelp = true
+                InitialDirectory = _settings_path
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
@@ -815,8 +814,7 @@ namespace GralDomForms
             {
                 Filter = "MMO-Files (*.mmo)|*.mmo",
                 Title = "Load match to oberservation data",
-                InitialDirectory = _settings_path,
-                ShowHelp = true
+                InitialDirectory = _settings_path
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
@@ -957,8 +955,7 @@ namespace GralDomForms
                                         {
                                             Title = Path.GetFileName(windfilename) +
                                                 " file not found - please select the file",
-                                            FileName = Path.GetFileName(windfilename),
-                                            ShowHelp = true
+                                            FileName = Path.GetFileName(windfilename)
 #if NET6_0_OR_GREATER
                                             ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif

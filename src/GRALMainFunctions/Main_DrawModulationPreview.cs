@@ -325,8 +325,10 @@ namespace Gral
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
-#if NET6_0_OR_GREATER
+#if NET6_0
             g.DrawString("Compiled for Windows .NET6", subtitlefont, Solid_blue, x, 25 + distance, format1);
+#elif NET7_0
+            g.DrawString("Compiled for Windows .NET7", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
             g.DrawString("Compiled for Windows", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #endif

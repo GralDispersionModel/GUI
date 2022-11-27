@@ -570,6 +570,7 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void Button1_Click(object sender, EventArgs e)
         {
+            this.Hide();
             
             if(DrawObject.LabelInterval !=0)
             {
@@ -696,8 +697,8 @@ namespace GralItemForms
                     DrawObject.LabelFont = new Font(DrawObject.LabelFont.FontFamily, Math.Min(16000, (int) (DrawObject.ContourLabelDist / 5)));
                 }
             }
-            
-            Close();
+
+            this.Close();
         }
 
         /// <summary>
@@ -1617,7 +1618,6 @@ namespace GralItemForms
             dialog.Filter = "*.lay|*.lay";
             dialog.Title = "Save color scale";
             dialog.InitialDirectory = newPath;
-            dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSettings;
 #endif
@@ -2555,24 +2555,25 @@ namespace GralItemForms
         private void button15_Click(object sender, EventArgs e)
         {
             string filename = string.Empty;
+            string folder = Path.Combine(Main.ProjectName, "Maps");
             if (System.IO.File.Exists(DrawObject.ContourFilename))
             {
                 filename = DrawObject.ContourFilename;
+                folder = Path.GetFullPath(DrawObject.ContourFilename);
             }
             else
             {
-                filename = Path.Combine(Gral.Main.ProjectName, "Maps", Path.GetFileName(DrawObject.Name));
+                filename =  Path.GetFileName(DrawObject.Name);
             }
 
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.dat;*.txt)|*.dat;*.txt",
                 Title = "Select raster data (ASCII Format)",
-                FileName = filename,
-                ShowHelp = true
+                FileName = Path.GetFileName(filename),
+                InitialDirectory = folder
 #if NET6_0_OR_GREATER
-                   ,
-                ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                , ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
             })
             {

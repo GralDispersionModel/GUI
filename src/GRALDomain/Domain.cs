@@ -560,7 +560,8 @@ namespace GralDomain
                                             Filter = "(*.txt;*.dat)|*.txt;*.dat",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Contour map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Convert.ToString(Path.GetFileName(_drobj.ContourFilename))
+                                            //ShowHelp = true
 #if NET6_0_OR_GREATER
                                             ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -612,9 +613,10 @@ namespace GralDomain
                                             Filter = "(*.txt;*.dat)|*.txt;*.dat",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Vector map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Path.GetFileName(_drobj.ContourFilename)
 #if NET6_0_OR_GREATER
-                                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                                            ,
+                                            ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
                                         })
                                         {
@@ -670,7 +672,7 @@ namespace GralDomain
                                             Filter = "(*.shp)|*.shp",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Path.GetFileName(_drobj.ContourFilename)
 #if NET6_0_OR_GREATER
                                             , ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -1453,8 +1455,7 @@ namespace GralDomain
             {
                 Filter = "(*.bmpw;*.gifw;*.jpgw;*.pngw;*.tfw;*.shp;*.bmp;*.gif;*.jpg;*.png;*.tif;*.tiff;*.jgw;*.pgw;*.gfw;*.bpw)|*.bmpw;*.gifw;*.jpgw;*.pngw;*.tfw;*.shp;*.bmp;*.gif;*.jpg;*.png;*.tif;*.tiff;*.jgw;*.pgw;*.gfw;*.bpw",
                 Title = "Select georeferenced image map",
-                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar),
-                ShowHelp = true
+                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar)
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -2239,7 +2240,7 @@ namespace GralDomain
             dialog.Filter = "*.gif|*.gif|*.jpeg|*.jpeg|*.png|*.png|*.bmp|*.bmp|*.emf|*.emf|*.tiff|*.tiff|*.wmf|*.wmf";
             dialog.Title = "Save map";
             dialog.InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar);
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -2808,9 +2809,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(Mean*_total_*.txt)|Mean*_total_*.txt",
-                Title = "Select File",
-                InitialDirectory = files,
-                ShowHelp = true
+                Title = "Select concentration file",
+                InitialDirectory = files
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -2930,9 +2930,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.dat;*.txt)|*.dat;*.txt",
-                Title = "Select a Concentration File",
-                InitialDirectory = files,
-                ShowHelp = true
+                Title = "Select a concentration file",
+                InitialDirectory = files
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -3217,9 +3216,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.con)|*.con",
-                Title = "Select Concentration File",
-                InitialDirectory = tempPath,
-                ShowHelp = true
+                Title = "Select a concentration file",
+                InitialDirectory = tempPath
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif

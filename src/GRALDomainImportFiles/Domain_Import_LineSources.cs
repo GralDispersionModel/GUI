@@ -31,7 +31,7 @@ namespace GralDomain
             dialog.Filter = "(Lsources.txt;LineSourceData.txt,line.dat;*.shp)|Lsources.txt;LineSourceData.txt,line*.dat;*.shp";
             dialog.Title = "Select existing line source data";
             dialog.FileName = "";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif

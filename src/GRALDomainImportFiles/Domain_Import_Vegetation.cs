@@ -28,7 +28,7 @@ namespace GralDomain
             dialog.Filter = "(Vegetation.dat;*.shp)|Vegetation.dat;*.shp";
             dialog.Title = "Select existing vegetation areas";
             dialog.FileName = "";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif

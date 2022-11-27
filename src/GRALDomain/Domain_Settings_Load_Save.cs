@@ -465,12 +465,13 @@ namespace GralDomain
                                 //user can define new location of the file
                                 OpenFileDialog dialog = new OpenFileDialog
                                 {
-                                    Filter = "(*.bmp;*.gif;*.jpg;*.png)|*.bmp;*.gif;*.jpg;*.png",
+                                    Filter = "(*.bmp;*.gif;*.jpg;*.png;*.tiff;*.png;*.tif)|*.gif;*.jpeg;*.png;*.jpg;*.bmp;*.tiff;*.tif",
                                     Title = "Base map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
                                     InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps"),
-                                    ShowHelp = true
+                                    FileName = Path.GetFileName(_drobj.ContourFilename)
 #if NET6_0_OR_GREATER
-                                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                                    ,
+                                    ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
                                 };
                                 if (dialog.ShowDialog() == DialogResult.OK)
