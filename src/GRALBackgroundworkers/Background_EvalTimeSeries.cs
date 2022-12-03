@@ -318,19 +318,33 @@ namespace GralBackgroundworkers
                     }
 
                     SourceGroupNumbers[itm] = GetSgNumbers(sourceGroupName);
-                    string newpath = Path.Combine("emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
+                    string newpath = Path.Combine(ModulationPath, "emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
 
-                    using (StreamReader myreader = new StreamReader(Path.Combine(ModulationPath, newpath)))
+                    if (File.Exists(newpath))
                     {
-                        for (int j = 0; j < 24; j++)
+                        try
                         {
-                            string[] text = myreader.ReadLine().Split(new char[] { ',' });
-                            emifacHours[j, itm] = Convert.ToDouble(text[1], ic);
-                            if (j < 12)
+                            using (StreamReader myreader = new StreamReader(newpath))
                             {
-                                emifacMonths[j, itm] = Convert.ToDouble(text[2], ic);
+                                for (int j = 0; j < 24; j++)
+                                {
+                                    string[] text = myreader.ReadLine().Split(new char[] { ',' });
+                                    emifacHours[j, itm] = Convert.ToDouble(text[1], ic);
+                                    if (j < 12)
+                                    {
+                                        emifacMonths[j, itm] = Convert.ToDouble(text[2], ic);
+                                    }
+                                }
                             }
                         }
+                        catch
+                        {
+                            AddInfoText(Environment.NewLine + "Error reading file: " + newpath);
+                        }
+                    }
+                    else
+                    {
+                        AddInfoText(Environment.NewLine + "The file " + newpath + " does not exist");
                     }
                     itm++;
                 }
