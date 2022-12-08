@@ -4776,8 +4776,9 @@ namespace GralDomain
                     MaxSource = MainForm.listView1.Items.Count,
                     Prefix = _prefix,
                     MeteoNotClassified = MainForm.checkBox19.Checked,
+                    PathEmissionModulation = Gral.Main.ProjectSetting.EmissionModulationPath,
                     FictiousYear = _timeSeriesYear
-            };
+                };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                 {
