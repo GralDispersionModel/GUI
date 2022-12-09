@@ -3217,10 +3217,7 @@ namespace GralDomain
             {
                 Filter = "(*.con)|*.con",
                 Title = "Select a concentration file",
-                InitialDirectory = tempPath
-#if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
-#endif
+                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Computation")
             };
 
             if (dialog.ShowDialog(this) == DialogResult.OK)
@@ -3490,7 +3487,7 @@ namespace GralDomain
 
                 //write ESRI-ASCII File
                 string name = Path.GetFileNameWithoutExtension(filename);
-                string file = Path.Combine(Gral.Main.ProjectName, @"Maps", name + ".txt");
+                string file = Path.Combine(Gral.Main.ProjectSetting.EvaluationPath, name + ".txt");
                 if (!string.IsNullOrEmpty(filenameESRI))
                 {
                     file = filenameESRI;
