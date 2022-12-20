@@ -146,7 +146,7 @@ namespace GralBackgroundworkers
                 // read value from emissions_timeseries.txt -> emifac_day[] and emifac_mon[] not used
                 newpath = Path.Combine(mydata.PathEmissionModulation, "emissions_timeseries.txt");
                 // modulation = 1 in transient mode
-                if (File.Exists(newpath) == true && !transient)
+                if (File.Exists(newpath) && !transient)
                 {
                     try
                     {
@@ -229,33 +229,23 @@ namespace GralBackgroundworkers
                     }
                 } // read value from emissions_timeseries.txt
             }
-            if (!timeseries)
+            if (!timeseries && !transient)
             {
                 for (int n = 0; n < maxsource; n++)
                 {
                     for (int sg = 0; sg < sg_names.Length; sg++) // check all selected source groups
                     {
-                        double sum = 0;
-                        int count = 0;
                         if ((n + 1) == Convert.ToInt32(GetSgNumbers(sg_names[sg]))) // sourcegroup selected?
                         {
-                            for (int j = 0; j < 24; j++)
+                            int count = 0;
+                            double sum = 0;
+                            for (int h = 0; h < 24; h++)
                             {
-                                if (transient)
+                                for (int m = 0; m < 12; m++)
                                 {
-                                    emifac_day[j, n] = 1;
+                                    sum += emifac_mon[m, n] * emifac_day[h, n];
+                                    count++;
                                 }
-                                sum += emifac_day[j, n];
-                                count++;
-                            }
-                            for (int j = 0; j < 12; j++)
-                            {
-                                if (transient)
-                                {
-                                    emifac_mon[j, n] = 1;
-                                }
-                                sum += emifac_mon[j, n];
-                                count++;
                             }
                             AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                         }
@@ -553,6 +543,13 @@ namespace GralBackgroundworkers
 
                                 while (!string.IsNullOrEmpty(text2[0]))
                                 {
+
+                                    if (Rechenknecht.CancellationPending)
+                                    {
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
                                     count_ws++;
                                     count_dispsit_in_mettime += 1;
 
