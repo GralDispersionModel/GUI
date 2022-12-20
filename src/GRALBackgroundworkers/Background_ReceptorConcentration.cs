@@ -539,7 +539,7 @@ namespace GralBackgroundworkers
                                     dispersionsituations = wrmet.Count;
 
                                 int count_dispsit_in_mettime = 0;
-                                int count_ws = -1;
+                                int count_ws = -1; // recent line in mettimeseries.dat
 
                                 while (!string.IsNullOrEmpty(text2[0]))
                                 {
@@ -559,9 +559,13 @@ namespace GralBackgroundworkers
                                     month = text3[1];
                                     day = text3[0];
                                     hour = text2[1];
-                                    
-                                    if (hour == "24")
+
+                                    //if a time series uses hours from 1 to 24 instead the default 0 to 23
+                                    if (hour == "24") 
+                                    {
                                         hourplus = 1;
+                                    }
+                                    
                                     wgmettime = text2[2];
                                     wrmettime = text2[3];
                                     akmettime = text2[4];
