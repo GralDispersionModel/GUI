@@ -169,7 +169,7 @@ namespace GralMainForms
         void SelectSourcegroupsResizeEnd(object sender, EventArgs e)
         {
         	listBox1.Width = ClientSize.Width - 5;
-        	listBox1.Height = Math.Max(30, label1.Top - 5);
+        	listBox1.Height = Math.Max(30, groupBox3.Top - 10);
             groupBox3.Width = Math.Max(10, ClientSize.Width - groupBox3.Left - 15);
             textBox1.Width = Math.Max(10, groupBox3.Width - textBox1.Left - 5);
             textBox2.Width = Math.Max(10, groupBox3.Width - textBox2.Left - 5);
