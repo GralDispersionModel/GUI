@@ -672,7 +672,7 @@ namespace GralMainForms
             }
                       
             //fill form1.listbox5 with available pollutants
-            if (check == 1)
+            if (check == 1 && !Main.Project_Locked)
             {
                 form1.listBox5.Items.Clear();
                 form1.button18.Visible = false;
