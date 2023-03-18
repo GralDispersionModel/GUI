@@ -113,9 +113,13 @@ namespace Gral
         /// </summary>
         public Label[] LbTbox2 = new Label[10];
         /// <summary>
-        /// Height of wind observations
+        /// Height of classified wind observations
         /// </summary>
         public double Anemometerheight = 10;
+        /// <summary>
+        /// Height of recent wind observations
+        /// </summary>
+        private double AnemometerheightRecent = 10;
         /// <summary>
         /// Numericupdown for input of horizontal slices for concentration grids in GRAL
         /// </summary>
@@ -292,10 +296,6 @@ namespace Gral
         /// Rectangle with coordinates for opeining the mail to function
         /// </summary>
         private Rectangle OpenMailToIVT;
-        /// <summary>
-        /// Path for evaluation result files
-        /// </summary>
-        private string PathToEvaluationResultFiles;
         /// <summary>
         /// Project settings and project paths
         /// </summary>

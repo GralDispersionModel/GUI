@@ -104,6 +104,16 @@ namespace Gral
                         while (streamreader.EndOfStream == false)
                         {
                             reihe = streamreader.ReadLine();
+                            
+                            if (filelength < 5 && reihe.ToUpper().Contains("Z="))
+                            {
+                                AnemometerheightRecent = GralDomain.Domain.EvalMetFileHeader(reihe);
+                                if (AnemometerheightRecent == double.MaxValue)
+                                {
+                                    AnemometerheightRecent = 10;
+                                }
+                            }
+
                             int ret;
                             if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
                             {
@@ -980,6 +990,7 @@ namespace Gral
                 NumUpDown[1].Value = 1.0M;
                 NumUpDown[2].Value = 2.0M;
                 NumUpDown[3].Value = 3.0M;
+                numericUpDown7.Value = (decimal) AnemometerheightRecent;
 
                 for (int i = 1; i < WindSpeedClasses; i++)
                 {

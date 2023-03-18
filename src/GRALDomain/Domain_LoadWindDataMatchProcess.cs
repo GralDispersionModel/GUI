@@ -14,6 +14,7 @@ using System;
 using System.Windows.Forms;
 using System.IO;
 using GralDomForms;
+using System.Globalization;
 
 namespace GralDomain
 {
@@ -237,7 +238,7 @@ namespace GralDomain
             MMO.TopMost = false;
         }
         
-        private double EvalMetFileHeader(string s)
+        public static double EvalMetFileHeader(string s)
         {
             string[] _st = s.Split(new char[] { '='});
             double x = double.MaxValue;
@@ -245,7 +246,7 @@ namespace GralDomain
             {
                 try
                 {
-                    x = Convert.ToDouble(_st[1], ic);
+                    x = Convert.ToDouble(_st[1], CultureInfo.InvariantCulture);
                 }
                 catch
                 {}
