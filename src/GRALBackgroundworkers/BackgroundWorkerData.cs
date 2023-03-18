@@ -58,6 +58,14 @@ namespace GralBackgroundworkers
         /// </summary>
         public string DecSep { get; set; }
         /// <summary>
+        /// Path to the emission modulation path
+        /// </summary>
+        public string PathEmissionModulation { get; set; }
+        /// <summary>
+        /// Path for the evaluation result files
+        /// </summary>
+        public string PathEvaluationResults { get; set; }
+        /// <summary>
         /// Meteo file for reorder or mean wind velocity result
         /// </summary>
         public string MeteoFileName { get; set; }

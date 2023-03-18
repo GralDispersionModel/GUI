@@ -17,6 +17,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Globalization;
 using System.Collections.Generic;
+using GralData;
 
 namespace GralMainForms
 {
@@ -39,7 +40,7 @@ namespace GralMainForms
         private List<string> Date_Time = new List<string>();
         private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private bool transientMode = false;
-
+        
         public TotalEmissions(double[] totemi, Gral.Main f, string poll, bool TransientMode)
         {
             totalemissions = totemi;
@@ -55,7 +56,7 @@ namespace GralMainForms
             //compute mean emission factor for each source group based on the chosen diurnal/seasonal variation
             string[] selpoll = new string[2];
             int sgroup = 0;
-            string newpath;
+            string newPath;
             string snumb;
             string[] text = new string[3];
             double emifac_diurnal = 0;
@@ -101,14 +102,17 @@ namespace GralMainForms
                         }
 
                         //get variation for source group
-                        newpath = Path.Combine("Computation", "emissions" + snumb + ".dat");
-
+                        newPath = Path.Combine("Computation", "emissions" + snumb + ".dat");
+                        if (Directory.Exists(Gral.Main.ProjectSetting.EmissionModulationPath))
+                        {
+                            newPath = Path.Combine(Gral.Main.ProjectSetting.EmissionModulationPath, "emissions" + snumb + ".dat");
+                        }
                         if (sgroup < moddiurnal.GetUpperBound(0))
                         {
-                            newpath = Path.Combine(Gral.Main.ProjectName, newpath);
-                            if (File.Exists(newpath))
+                            newPath = Path.Combine(Gral.Main.ProjectName, newPath);
+                            if (File.Exists(newPath))
                             {
-                                using (StreamReader myreader = new StreamReader(newpath))
+                                using (StreamReader myreader = new StreamReader(newPath))
                                 {
                                     for (int j = 0; j < 24; j++)
                                     {
@@ -185,6 +189,11 @@ namespace GralMainForms
 
 
             string newpath = Path.Combine(Gral.Main.ProjectName, "Computation", "emissions_timeseries.txt");
+            if (Directory.Exists(Gral.Main.ProjectSetting.EmissionModulationPath))
+            {
+                newpath = Path.Combine(Gral.Main.ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+            }
+
             if (File.Exists(newpath) == true)
             {
                 try

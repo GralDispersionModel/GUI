@@ -60,7 +60,8 @@ namespace GralIO
 			{
 				if (File.Exists(_filename))
 				{
-					try{
+					try
+                    {
 						File.Delete(_filename);
 					}
 					catch{}

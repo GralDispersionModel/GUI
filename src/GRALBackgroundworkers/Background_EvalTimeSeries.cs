@@ -47,13 +47,13 @@ namespace GralBackgroundworkers
                 }
 
                 //Read Emission modulation
-                (double[,] EmissionFactHour, double[,] EmissionFactMonth, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+                (double[,] EmissionFactHour, double[,] EmissionFactMonth, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
                 if (sg_numbers == null)
                 {
                     throw new Exception("Error reading the emission modulation factors");
                 }
                 double[,] EmissionFacTimeSeries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName, 
-                                                                               sg_numbers, ref EmissionFactHour, ref EmissionFactMonth, sg_names);
+                                                                               sg_numbers, ref EmissionFactHour, ref EmissionFactMonth, sg_names, mydata.PathEmissionModulation);
 
                 if (meteoPGTALL.Count == 0) // no data available
                 {
@@ -293,9 +293,9 @@ namespace GralBackgroundworkers
         /// </summary>
         /// <param name="MaxSource">Max count of source groups</param>
         /// <param name="SourceGroupNames">Source group names</param>
-        /// <param name="ProjectName">Path to the project</param>
-        /// <returns>arrays for daily and annual emission modulation factors</returns>
-        private (double[,], double[,], string[]) ReadEmissionModulationFactors(int MaxSource, string[] SourceGroupNames, string ProjectName)
+        /// <param name="ModulationPath">Path to the emission modulationt</param>
+        /// <returns>Arrays for daily and monthly emission modulation factors</returns>
+        private (double[,], double[,], string[]) ReadEmissionModulationFactors(int MaxSource, string[] SourceGroupNames, string ModulationPath)
         {
             double[,] emifacHours = new double[24, MaxSource];
             double[,] emifacMonths = new double[12, MaxSource];
@@ -318,25 +318,41 @@ namespace GralBackgroundworkers
                     }
 
                     SourceGroupNumbers[itm] = GetSgNumbers(sourceGroupName);
-                    string newpath = Path.Combine("Computation", "emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
+                    string newpath = Path.Combine(ModulationPath, "emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
 
-                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, newpath)))
+                    if (File.Exists(newpath))
                     {
-                        for (int j = 0; j < 24; j++)
+                        try
                         {
-                            string[] text = myreader.ReadLine().Split(new char[] { ',' });
-                            emifacHours[j, itm] = Convert.ToDouble(text[1], ic);
-                            if (j < 12)
+                            using (StreamReader myreader = new StreamReader(newpath))
                             {
-                                emifacMonths[j, itm] = Convert.ToDouble(text[2], ic);
+                                for (int j = 0; j < 24; j++)
+                                {
+                                    string[] text = myreader.ReadLine().Split(new char[] { ',' });
+                                    emifacHours[j, itm] = Convert.ToDouble(text[1], ic);
+                                    if (j < 12)
+                                    {
+                                        emifacMonths[j, itm] = Convert.ToDouble(text[2], ic);
+                                    }
+                                }
                             }
                         }
+                        catch
+                        {
+                            AddInfoText(Environment.NewLine + "Error reading file: " + newpath);
+                        }
+                    }
+                    else
+                    {
+                        AddInfoText(Environment.NewLine + "The file " + newpath + " does not exist");
                     }
                     itm++;
                 }
+                AddInfoText(Environment.NewLine + Environment.NewLine + "Reading emission modulation factors from: " + ModulationPath);
             }
             catch 
             {
+                AddInfoText(Environment.NewLine + Environment.NewLine + "Error reading the emission modulation factors from: " + ModulationPath);
                 return (null, null, null);
             }
 
@@ -346,15 +362,16 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Read the emission time series file
         /// </summary>
-        /// <param name="MettimeFileLength"></param>
-        /// <param name="MaxSource"></param>
-        /// <param name="ProjectName"></param>
-        /// <param name="SGNumbers"></param>
-        /// <param name="emifac_day"></param>
-        /// <param name="emifac_mon"></param>
+        /// <param name="MettimeFileLength">Langht of the meteo time series</param>
+        /// <param name="MaxSource">Maximum number of source groups</param>
+        /// <param name="ProjectName">Project path</param>
+        /// <param name="SGNumbers">Numbers of used source groups</param>
+        /// <param name="emifac_day">diurnal emission factors</param>
+        /// <param name="emifac_mon">monthly emission factors</param>
+        /// <param name="ModulationPath">Path to an emission timeseries file</param>
         /// <returns>Emission time series</returns>
         private double[,] ReadEmissionModulationTimeSeries(int MettimeFileLength, int MaxSource, string ProjectName, 
-                                                           string[] SGNumbers, ref double[,] emifac_day, ref double[,] emifac_mon, string[] sg_names)
+                                                           string[] SGNumbers, ref double[,] emifac_day, ref double[,] emifac_mon, string[] sg_names, string ModulationPath)
         {
             double[,] emifac_timeseries = new double[MettimeFileLength + 1, MaxSource];
             int[] sg_time = new int[MaxSource];
@@ -369,7 +386,8 @@ namespace GralBackgroundworkers
                     emifac_timeseries[i, n] = 1;
                 }
             }
-            string newpath = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+            string newpath = Path.Combine(ModulationPath, "emissions_timeseries.txt");
+            
             bool timeseries = false;
             if (File.Exists(newpath) == true)
             {
@@ -432,6 +450,8 @@ namespace GralBackgroundworkers
                             }
                         }
                     }
+
+                    AddInfoText(Environment.NewLine + "Reading emissionstimeseries.txt from: " + ModulationPath);
                     for (int n = 0; n < sg_names.Length; n++)
                     {
                         if (sg_time[n] == 0)
@@ -447,7 +467,7 @@ namespace GralBackgroundworkers
                 }
                 catch (Exception ex)
                 {
-                    BackgroundThreadMessageBox(ex.Message + " Error reading emissions_timeseries.txt");
+                    BackgroundThreadMessageBox(ex.Message + " Error reading " + newpath);
                     return null;
                 }
             }

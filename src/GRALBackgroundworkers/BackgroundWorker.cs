@@ -69,10 +69,10 @@ namespace GralBackgroundworkers
 
         void Progress_FormLoad(object sender, EventArgs e)
         {
-            if (Gral.Main.ActiveForm != null)
-            {
-                Location = Gral.Main.ActiveForm.Location;
-            }
+            //if (Gral.Main.ActiveForm != null)
+            //{
+            //    Location = Gral.Main.ActiveForm.Location;
+            //}
             // local MyData for Backgroundworker
             //Gral.Backgroundworker_Data MyData = new Backgroundworker_Data();
         }

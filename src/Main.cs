@@ -10,6 +10,7 @@
 ///</remarks>
 #endregion
 
+using GralData;
 using GralIO;
 using GralMessage;
 using GralStaticFunctions;
@@ -20,6 +21,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using static System.Windows.Forms.DataFormats;
 
 namespace Gral
 {
@@ -111,9 +113,13 @@ namespace Gral
         /// </summary>
         public Label[] LbTbox2 = new Label[10];
         /// <summary>
-        /// Height of wind observations
+        /// Height of classified wind observations
         /// </summary>
         public double Anemometerheight = 10;
+        /// <summary>
+        /// Height of recent wind observations
+        /// </summary>
+        private double AnemometerheightRecent = 10;
         /// <summary>
         /// Numericupdown for input of horizontal slices for concentration grids in GRAL
         /// </summary>
@@ -290,7 +296,11 @@ namespace Gral
         /// Rectangle with coordinates for opeining the mail to function
         /// </summary>
         private Rectangle OpenMailToIVT;
-        
+        /// <summary>
+        /// Project settings and project paths
+        /// </summary>
+        public static ProjectSettings ProjectSetting = new ProjectSettings("");
+
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
         public static readonly string CubeString = "³";
@@ -412,6 +422,7 @@ namespace Gral
             //initialize the GUI Settings
             GUISettings = new GralData.GuiSettings();
             GUISettings.ReadFromFile();
+            
             if (GUISettings.AutoCheckForUpdates)
             {
                 AutoUpdateStart(false);
@@ -755,7 +766,13 @@ namespace Gral
         /// </summary>
         private void ListView1_DoubleClick(object sender, EventArgs e)
         {
-            GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this) {
+            string newPath = Path.Combine(Main.ProjectName, @"Settings", "emissionmodulations.txt");
+            if (File.Exists(Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt")))
+            {
+                newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
+            }
+            GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath) 
+            {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left, this.Top),
                 Owner = this
@@ -1686,8 +1703,12 @@ namespace Gral
                     }
                     else
                     {
-                        // mean-routine does not fit for non-classified meteorological situations (wront results!)
-                        // & not, if an emissions_timeseries.txt exist
+                        // mean-routine does not work for non-classified meteorological situations and not for emission-timeseries.txt files
+                        string emissionPath = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+                        if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+                        {
+                            emissionPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+                        }
                         if (checkBox19.Checked == false
                             && (File.Exists(Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt")) == false))
                         {
@@ -2521,31 +2542,52 @@ namespace Gral
             }
             if (tabControl1.SelectedIndex == 3) // Emissions
             {
-                if (listView1.Items.Count == 0)
+                if (listView1.Items.Count > 0)
                 {
-                    return;
-                }
 
-                listView1.Items[0].Selected = true;
-                listView1.Select();
-                ListView1ItemActivate(null, null);
-                if (Convert.ToString(listBox5.SelectedItem) == "Bioaerosols" || Convert.ToString(listBox5.SelectedItem) == "Unknown")
-                {
-                    groupBox24.Visible = true;
+                    listView1.Items[0].Selected = true;
+                    listView1.Select();
+                    ListView1ItemActivate(null, null);
+                    if (Convert.ToString(listBox5.SelectedItem) == "Bioaerosols" || Convert.ToString(listBox5.SelectedItem) == "Unknown")
+                    {
+                        groupBox24.Visible = true;
+                    }
+                    else
+                    {
+                        groupBox24.Visible = false;
+                    }
+                    if (checkBox32.Checked) // GRAL Transient mode
+                    {
+                        groupBox27.Text = "Emission-time-series (mandatory - transient mode)";
+                        button60.Enabled = false;
+                        ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                        ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                    }
+                    else
+                    {
+                        groupBox27.Text = "Emission-time-series (optional)";
+                        button60.Enabled = true;
+                    }
+                    CheckIfAllSourcegroupsHaveDefinedEmissionModulations(false);
+
+                    GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, ProjectSetting.EmissionModulationPath);
+
+                    string newpath = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+                    if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+                    {
+                        newpath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+                    }
+                    if (File.Exists(newpath)) // emission_timeseries is used instead of modulation settings
+                    {
+                        button49.Visible = true; // show the button for emissions_timeseries
+                        button51.Visible = true; // show the button for emissions_timeseries
+                    }
+                    else
+                    {
+                        button49.Visible = false;
+                        button51.Visible = false;
+                    }
                 }
-                else
-                {
-                    groupBox24.Visible = false;
-                }
-                if (checkBox32.Checked) // GRAL Transient mode
-                {
-                    groupBox27.Text = "Emission-time-series (mandatory - transient mode)";
-                }
-                else
-                {
-                    groupBox27.Text = "Emission-time-series (optional)";
-                }
-                CheckIfAllSourcegroupsHaveDefinedEmissionModulations(false);
             }
             if (tabControl1.SelectedIndex == 4) // Meteorology
             {
@@ -2764,11 +2806,11 @@ namespace Gral
         {
             if (textBoxGrammTerrain.Text.Length == 0)
             {
-                textBox16.Text = a;
+                GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox16, a);
             }
             else
             {
-                textBox16.Text = GRAMMwindfield;
+                GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox16, GRAMMwindfield);
             }
         }
 
@@ -3134,6 +3176,9 @@ namespace Gral
                         groupBox24.Visible = true; // Decay rate
                         numericUpDown5.Value = 1;  // lock setting of start dispersion situtation
                         numericUpDown5.Enabled = false; // lock setting of start dispersion situtation
+                        button60.Enabled = false;
+                        ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                        ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
                     }
                     else
                     {
@@ -3201,6 +3246,7 @@ namespace Gral
                 SG_Show = -1
             };
 
+            ets.ModulationPath = ProjectSetting.EmissionModulationPath;
             ets.StartPosition = FormStartPosition.Manual;
             ets.Left = St_F.GetScreenAtMousePosition() + 20;
             ets.Show();
@@ -3283,7 +3329,7 @@ namespace Gral
                 dialog.InitialDirectory = Path.Combine(ProjectName, "Computation");
                 dialog.Filter = "(Logfile*.txt)|Logfile*.txt";
                 dialog.Title = "Select Logfile";
-                dialog.ShowHelp = true;
+                // dialog.ShowHelp = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -3649,6 +3695,95 @@ namespace Gral
                 Clipboard.SetText("gral@ivt.tugraz.at");
                 MessageBox.Show("The mail address was copied to the clipboard");
             }
+        }
+
+        /// <summary>
+        /// Set a directory for the emission modulation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button60_Click(object sender, EventArgs e)
+        {
+            string emissionModulation = Path.Combine(ProjectName, "Computation");
+            if (Directory.Exists(Main.ProjectSetting.EmissionModulationPath))
+            {
+                emissionModulation = Main.ProjectSetting.EmissionModulationPath;
+            }
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog
+            {
+                Description = "Select the path for the emission modulation",
+                SelectedPath = emissionModulation
+            })
+            {
+#if NET6_0_OR_GREATER
+                dialog.UseDescriptionForTitle = true;
+#endif
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    emissionModulation = dialog.SelectedPath;
+                    if (Directory.Exists(emissionModulation))
+                    {
+                        ProjectSetting.EmissionModulationPath = emissionModulation;
+                        ProjectSetting.EvaluationPath = emissionModulation;
+                        ProjectSetting.WriteToFile();
+                        GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulation);
+
+                        //Copy emission files to the new folder
+                        if (!string.Equals(ProjectSetting.EmissionModulationPath, Path.Combine(ProjectName, "Computation")))
+                        {
+                            string src, dest;
+                            for (int itm = 1; itm < 100; itm++)
+                            {
+                                src = Path.Combine(ProjectName, "Computation", "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
+                                dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
+                                CopyFilesIfNotExistant(src, dest);
+                            }
+                            src = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
+                            dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+                            CopyFilesIfNotExistant(src, dest);
+                            src = Path.Combine(ProjectName, "Settings", "emissionmodulations.txt");
+                            dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
+                            CopyFilesIfNotExistant(src, dest);
+                        }
+                        else
+                        {
+                            string emissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                            ProjectSetting.EmissionModulationPath = emissionModulationPath;
+                            ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                            ProjectSetting.WriteToFile();
+                            GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulationPath);
+                        }
+                    }
+                    else
+                    {
+                        //Default values
+                        string emissionModulationPath = Path.Combine(ProjectName, @"Computation");
+                        ProjectSetting.EmissionModulationPath = emissionModulationPath;
+                        ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                        ProjectSetting.WriteToFile();
+                        GralStaticFunctions.St_F.SetTrimmedTextToTextBox(LabelEmissionPath, emissionModulationPath);
+                    }
+                    //force a redraw of the preview
+                    RedrawPreviewOfModulation(sender, e);
+                }
+            }
+        }
+
+        private void CopyFilesIfNotExistant(string src, string dest)
+        {
+            try
+            {
+                if (File.Exists(src) && !File.Exists(dest)) 
+                {
+                    File.Copy(src, dest);
+                }
+            }
+            catch { }
+        }
+
+        private void listBox5_DoubleClick(object sender, EventArgs e)
+        {
+            ShowTotalEmissions(sender, e);
         }
     }
 }

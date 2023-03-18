@@ -36,7 +36,7 @@ namespace GralBackgroundworkers
             int itm = 0;
 
             //get emission modulations for all source groups
-            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
 
             //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
             bool transientMode = CheckForTransientMode(mydata.ProjectName);
@@ -370,7 +370,7 @@ namespace GralBackgroundworkers
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] ;
                     }
 
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + "_" + mydata.Slicename + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -381,7 +381,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" + name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" + name + ".txt");
                         
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
@@ -403,7 +403,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration and deposition file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
                 
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
@@ -421,7 +421,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists && mydata.WriteDepositionOrOdourData) 
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;

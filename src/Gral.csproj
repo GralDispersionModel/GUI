@@ -1378,6 +1378,7 @@
     <Compile Include="GRALIO\IO_ESRIFileRead.cs" />
     <Compile Include="GRALIO\IO_ESRIFileWrite.cs" />
     <Compile Include="GRALData\GuiSettingsData.cs" />
+    <Compile Include="GRALData\ProjectSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\favicon1.ico" />

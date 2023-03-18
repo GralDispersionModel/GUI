@@ -31,7 +31,7 @@ namespace GralDomain
             dialog.Filter = "(Psources.txt;point.dat;*.shp)|Psources.txt;point.dat;*.shp";
             dialog.Title = "Select existing point source data";
             dialog.FileName = "";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif

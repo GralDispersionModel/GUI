@@ -38,7 +38,7 @@ namespace GralBackgroundworkers
             bool no_classification = mydata.MeteoNotClassified;
 
             //get emission modulations for all source groups
-            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
 
             List<string> wgmet = new List<string>();
             List<string> wrmet = new List<string>();
@@ -155,7 +155,7 @@ namespace GralBackgroundworkers
             if (!transientMode)
             {
                 emifac_timeseries = ReadEmissionModulationTimeSeries(mettimefilelength, maxsource, mydata.ProjectName,
-                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names);
+                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
             //read mettimeseries.dat
@@ -469,7 +469,7 @@ namespace GralBackgroundworkers
                     else
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + "_" + mydata.Slicename + ".txt");
                     
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
@@ -481,7 +481,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" +name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" +name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -502,7 +502,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -519,7 +519,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;
@@ -556,7 +556,7 @@ namespace GralBackgroundworkers
                         depo_name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     }
                     
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Max_" + name + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Max_" + name + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -567,7 +567,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Max" + depo_name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Max" + depo_name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -588,7 +588,7 @@ namespace GralBackgroundworkers
 
                 //write max total concentration file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Max_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Max_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -605,7 +605,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Max" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Max" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;
@@ -641,7 +641,7 @@ namespace GralBackgroundworkers
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
                         depo_name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     }
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "DayMax_" + name + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "DayMax_" + name + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -652,7 +652,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_DayMax_" + depo_name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_DayMax_" + depo_name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -673,7 +673,7 @@ namespace GralBackgroundworkers
 
                 //write max daily total concentration file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "DayMax_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "DayMax_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -690,7 +690,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_DayMax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_DayMax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;

@@ -542,12 +542,15 @@ namespace GralDomain
                                 //check if contour map file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //check first, if map is located in the directory \Maps..
-                                    string tempfilename = Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                    if (File.Exists(tempfilename) == true)
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "");
+                                    if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;
-                                        SaveDomainSettings(1);
+                                        if (saveNewFilePath)
+                                        {
+                                            SaveDomainSettings(1);
+                                        }
                                     }
                                     else
                                     {
@@ -557,7 +560,8 @@ namespace GralDomain
                                             Filter = "(*.txt;*.dat)|*.txt;*.dat",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Contour map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Convert.ToString(Path.GetFileName(_drobj.ContourFilename))
+                                            //ShowHelp = true
 #if NET6_0_OR_GREATER
                                             ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -591,12 +595,15 @@ namespace GralDomain
                                 //check if vector map file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //check first, if map is located in the directory \Maps..
-                                    string tempfilename=Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                    if (File.Exists(tempfilename) == true)
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;
-                                        SaveDomainSettings(1);
+                                        if (saveNewFilePath)
+                                        {
+                                            SaveDomainSettings(1);
+                                        }
                                     }
                                     else
                                     {
@@ -606,9 +613,10 @@ namespace GralDomain
                                             Filter = "(*.txt;*.dat)|*.txt;*.dat",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Vector map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Path.GetFileName(_drobj.ContourFilename)
 #if NET6_0_OR_GREATER
-                                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                                            ,
+                                            ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
                                         })
                                         {
@@ -646,58 +654,74 @@ namespace GralDomain
                                 //check if shape file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //user can define new location of the file
-                                    using (OpenFileDialog dialog = new OpenFileDialog
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
-                                        Filter = "(*.shp)|*.shp",
-                                        InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
-                                        Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                        ShowHelp = true
-#if NET6_0_OR_GREATER
-                                        ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
-#endif
-                                    })
-                                    {
-                                        dialog.HelpRequest += new System.EventHandler(LoadSettingsAndMaps_HelpRequest);
-                                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                                        _drobj.ContourFilename = tempfilename;
+                                        if (saveNewFilePath)
                                         {
-                                            _drobj.ContourFilename = dialog.FileName;
                                             SaveDomainSettings(1);
                                         }
                                     }
+                                    else
+                                    {
+                                        //user can define new location of the file
+                                        using (OpenFileDialog dialog = new OpenFileDialog
+                                        {
+                                            Filter = "(*.shp)|*.shp",
+                                            InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
+                                            Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
+                                            FileName = Path.GetFileName(_drobj.ContourFilename)
+#if NET6_0_OR_GREATER
+                                            , ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+#endif
+                                        })
+                                        {
+                                            dialog.HelpRequest += new System.EventHandler(LoadSettingsAndMaps_HelpRequest);
+                                            if (dialog.ShowDialog(this) == DialogResult.OK)
+                                            {
+                                                _drobj.ContourFilename = dialog.FileName;
+                                                SaveDomainSettings(1);
+                                            }
+                                        }
+                                    }
                                 }
-                                
-                                int count = 0;
-                                foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
+
+                                if (File.Exists(_drobj.ContourFilename))
                                 {
-                                    if (shp is GralShape.SHPLine)
+                                    int count = 0;
+                                    foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
                                     {
-                                        _drobj.ShpLines.Add((GralShape.SHPLine) shp);
-                                    }
+                                        if (shp is GralShape.SHPLine)
+                                        {
+                                            _drobj.ShpLines.Add((GralShape.SHPLine)shp);
+                                        }
 
-                                    if (shp is GralShape.SHPPolygon)
-                                    {
-                                        _drobj.ShpPolygons.Add((GralShape.SHPPolygon) shp);
-                                    }
+                                        if (shp is GralShape.SHPPolygon)
+                                        {
+                                            _drobj.ShpPolygons.Add((GralShape.SHPPolygon)shp);
+                                        }
 
-                                    if (shp is PointF)
-                                    {
-                                        _drobj.ShpPoints.Add((PointF) shp);
-                                    }
+                                        if (shp is PointF)
+                                        {
+                                            _drobj.ShpPoints.Add((PointF)shp);
+                                        }
 
-                                    if (count == 0)
-                                    {
-                                        _drobj.West = shape.West;
-                                        _drobj.North = shape.North;
-                                        _drobj.PixelMx = shape.PixelMx;
-                                        _drobj.Picture = new Bitmap(100, Math.Abs(shape.PixelMy));
-                                    }
+                                        if (count == 0)
+                                        {
+                                            _drobj.West = shape.West;
+                                            _drobj.North = shape.North;
+                                            _drobj.PixelMx = shape.PixelMx;
+                                            _drobj.Picture = new Bitmap(100, Math.Abs(shape.PixelMy));
+                                        }
 
-                                    count++;
+                                        count++;
 
-                                    if (count % 200 == 0)
-                                    {
-                                        wait.Text = "Loading shape file " + count.ToString();
+                                        if (count % 200 == 0)
+                                        {
+                                            wait.Text = "Loading shape file " + count.ToString();
+                                        }
                                     }
                                 }
                                 
@@ -1431,8 +1455,7 @@ namespace GralDomain
             {
                 Filter = "(*.bmpw;*.gifw;*.jpgw;*.pngw;*.tfw;*.shp;*.bmp;*.gif;*.jpg;*.png;*.tif;*.tiff;*.jgw;*.pgw;*.gfw;*.bpw)|*.bmpw;*.gifw;*.jpgw;*.pngw;*.tfw;*.shp;*.bmp;*.gif;*.jpg;*.png;*.tif;*.tiff;*.jgw;*.pgw;*.gfw;*.bpw",
                 Title = "Select georeferenced image map",
-                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar),
-                ShowHelp = true
+                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar)
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -2217,7 +2240,7 @@ namespace GralDomain
             dialog.Filter = "*.gif|*.gif|*.jpeg|*.jpeg|*.png|*.png|*.bmp|*.bmp|*.emf|*.emf|*.tiff|*.tiff|*.wmf|*.wmf";
             dialog.Title = "Save map";
             dialog.InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar);
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -2786,9 +2809,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(Mean*_total_*.txt)|Mean*_total_*.txt",
-                Title = "Select File",
-                InitialDirectory = files,
-                ShowHelp = true
+                Title = "Select concentration file",
+                InitialDirectory = files
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -2908,9 +2930,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.dat;*.txt)|*.dat;*.txt",
-                Title = "Select a Concentration File",
-                InitialDirectory = files,
-                ShowHelp = true
+                Title = "Select a concentration file",
+                InitialDirectory = files
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -3195,12 +3216,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.con)|*.con",
-                Title = "Select Concentration File",
-                InitialDirectory = tempPath,
-                ShowHelp = true
-#if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
-#endif
+                Title = "Select a concentration file",
+                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Computation")
             };
 
             if (dialog.ShowDialog(this) == DialogResult.OK)
@@ -3470,7 +3487,7 @@ namespace GralDomain
 
                 //write ESRI-ASCII File
                 string name = Path.GetFileNameWithoutExtension(filename);
-                string file = Path.Combine(Gral.Main.ProjectName, @"Maps", name + ".txt");
+                string file = Path.Combine(Gral.Main.ProjectSetting.EvaluationPath, name + ".txt");
                 if (!string.IsNullOrEmpty(filenameESRI))
                 {
                     file = filenameESRI;
@@ -4756,8 +4773,9 @@ namespace GralDomain
                     MaxSource = MainForm.listView1.Items.Count,
                     Prefix = _prefix,
                     MeteoNotClassified = MainForm.checkBox19.Checked,
+                    PathEmissionModulation = Gral.Main.ProjectSetting.EmissionModulationPath,
                     FictiousYear = _timeSeriesYear
-            };
+                };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                 {

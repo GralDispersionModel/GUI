@@ -55,14 +55,14 @@
             this.usertext.Name = "usertext";
             this.usertext.ReadOnly = true;
             this.usertext.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.usertext.Size = new System.Drawing.Size(638, 115);
+            this.usertext.Size = new System.Drawing.Size(638, 261);
             this.usertext.TabIndex = 1;
             this.usertext.TabStop = false;
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(571, 194);
+            this.button1.Location = new System.Drawing.Point(571, 341);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -81,7 +81,7 @@
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(12, 194);
+            this.button2.Location = new System.Drawing.Point(12, 341);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
@@ -93,7 +93,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(660, 229);
+            this.ClientSize = new System.Drawing.Size(660, 376);
             this.ControlBox = false;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.progressBar1);

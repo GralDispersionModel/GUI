@@ -67,7 +67,7 @@ namespace GralDomForms
                 Title = "Select raster data (ASCII Format)",
                 InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps" + Path.DirectorySeparatorChar),
                 FileName = String.Empty,
-                ShowHelp = true,
+                //ShowHelp = true,
                 RestoreDirectory = true
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
@@ -152,7 +152,7 @@ namespace GralDomForms
                 dialog.Filter = "(*.dat;*.txt)|*.dat;*.txt";
                 dialog.Title = "Define output raster data (ASCII Format)";
                 dialog.InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps" + Path.DirectorySeparatorChar);
-                dialog.ShowHelp = true;
+                // dialog.ShowHelp = true;
                 dialog.RestoreDirectory = true;
 #if NET6_0_OR_GREATER
                 dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;

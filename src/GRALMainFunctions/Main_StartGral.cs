@@ -142,7 +142,7 @@ namespace Gral
             #endif
 
             dialog.Title = "Select GRAL executable";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 
             if (GUISettings.CopyCoresToProject)
             {

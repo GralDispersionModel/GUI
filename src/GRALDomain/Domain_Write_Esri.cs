@@ -36,7 +36,7 @@ namespace GralDomain
             dialog.Title = "Export line source to .shp file";
             dialog.InitialDirectory = Gral.Main.ProjectName;
             dialog.FileName = "LineSources.shp";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -163,7 +163,7 @@ namespace GralDomain
                 dialog.Title = "Export contour line to .shp file";
                 dialog.InitialDirectory = Gral.Main.ProjectName;
                 dialog.FileName = "ContourLine.shp";
-                dialog.ShowHelp = true;
+                // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
                 dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -236,7 +236,7 @@ namespace GralDomain
             dialog.Title = "Export area source to .shp file";
             dialog.InitialDirectory = Gral.Main.ProjectName;
             dialog.FileName = "AreaSources.shp";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -326,7 +326,7 @@ namespace GralDomain
             dialog.Title = "Export point source to .shp file";
             dialog.InitialDirectory = Gral.Main.ProjectName;
             dialog.FileName = "PointSources.shp";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -417,7 +417,7 @@ namespace GralDomain
             dialog.Title = "Export receptor points to .shp file";
             dialog.InitialDirectory = Gral.Main.ProjectName;
             dialog.FileName = "ReceptorPoints.shp";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif

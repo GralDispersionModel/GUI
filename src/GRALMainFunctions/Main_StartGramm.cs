@@ -91,7 +91,7 @@ namespace Gral
             dialog.Filter = "GRAMM executable (GRAMM*.exe;GRAMM*.bat)|GRAMM*.exe;GRAMM*.bat";
             #endif
             dialog.Title = "Select GRAMM executable";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 
             if (GUISettings.CopyCoresToProject)
             {

@@ -307,8 +307,7 @@ namespace GralDomForms
                 Title = "Set the result file name",
                 AddExtension = true,
                 OverwritePrompt = true,
-                CheckPathExists = true,
-                ShowHelp = true
+                CheckPathExists = true
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif

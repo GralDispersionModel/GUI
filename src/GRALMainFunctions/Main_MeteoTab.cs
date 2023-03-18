@@ -33,8 +33,7 @@ namespace Gral
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm;*.akt)|*.akterm;*.akt",
-                Title = "Select meteorological data",
-                ShowHelp = true
+                Title = "Select meteorological data"
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
@@ -105,6 +104,16 @@ namespace Gral
                         while (streamreader.EndOfStream == false)
                         {
                             reihe = streamreader.ReadLine();
+                            
+                            if (filelength < 5 && reihe.ToUpper().Contains("Z="))
+                            {
+                                AnemometerheightRecent = GralDomain.Domain.EvalMetFileHeader(reihe);
+                                if (AnemometerheightRecent == double.MaxValue)
+                                {
+                                    AnemometerheightRecent = 10;
+                                }
+                            }
+
                             int ret;
                             if (Int32.TryParse(reihe.Substring(0, 1), out ret) == true)
                             {
@@ -782,7 +791,9 @@ namespace Gral
                             ScClassFrequency = sclassFrequency,
                             MetFile = Path.GetFileName(MetfileName),
                             Wind = wind,
-                            WindRoseSetting = WindroseSetting
+                            WindRoseSetting = WindroseSetting,
+                            StartHour = startstunde,
+                            FinalHour = endstunden
                         };
                         if (MeteoTimeSeries.Count > 0)
                         {
@@ -979,6 +990,7 @@ namespace Gral
                 NumUpDown[1].Value = 1.0M;
                 NumUpDown[2].Value = 2.0M;
                 NumUpDown[3].Value = 3.0M;
+                numericUpDown7.Value = (decimal) AnemometerheightRecent;
 
                 for (int i = 1; i < WindSpeedClasses; i++)
                 {
@@ -988,12 +1000,15 @@ namespace Gral
                 TBox[WindSpeedClasses - 1].Text = NumUpDown[WindSpeedClasses - 2].Value.ToString();
 
                 // Delete GRAMIn.dat
-                try
+                if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat")))
                 {
-                    File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat"));
+                    try
+                    {
+                        File.Delete(Path.Combine(ProjectName, @"Computation", "GRAMMin.dat"));
+                    }
+                    catch
+                    { }
                 }
-                catch
-                { }
                 //enable/disable GRAL simulations
                 Enable_GRAL();
                 //enable/disable GRAMM simulations
@@ -1243,8 +1258,7 @@ namespace Gral
                 using (SaveFileDialog dialog = new SaveFileDialog
                 {
                     Filter = "Met files (*.met)|*.met",
-                    Title = "Save new *.met file",
-                    ShowHelp = true
+                    Title = "Save new *.met file"
 #if NET6_0_OR_GREATER
                     ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif

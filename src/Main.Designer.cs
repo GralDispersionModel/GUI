@@ -151,6 +151,8 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Sources = new System.Windows.Forms.TabPage();
+            this.LabelEmissionPath = new System.Windows.Forms.Label();
+            this.button60 = new System.Windows.Forms.Button();
             this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.button54 = new System.Windows.Forms.Button();
             this.groupBox21 = new System.Windows.Forms.GroupBox();
@@ -2247,6 +2249,8 @@
             // Sources
             // 
             this.Sources.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.Sources.Controls.Add(this.LabelEmissionPath);
+            this.Sources.Controls.Add(this.button60);
             this.Sources.Controls.Add(this.groupBox24);
             this.Sources.Controls.Add(this.groupBox21);
             this.Sources.Controls.Add(this.pictureBox5);
@@ -2269,6 +2273,30 @@
             this.Sources.Size = new System.Drawing.Size(811, 539);
             this.Sources.TabIndex = 0;
             this.Sources.Text = "     SOURCES     ";
+            // 
+            // LabelEmissionPath
+            // 
+            this.LabelEmissionPath.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LabelEmissionPath.Location = new System.Drawing.Point(500, 268);
+            this.LabelEmissionPath.Name = "LabelEmissionPath";
+            this.LabelEmissionPath.Size = new System.Drawing.Size(304, 20);
+            this.LabelEmissionPath.TabIndex = 47;
+            this.LabelEmissionPath.Text = "Path";
+            this.toolTip1.SetToolTip(this.LabelEmissionPath, "Path for the emission modulation settings");
+            // 
+            // button60
+            // 
+            this.button60.BackColor = System.Drawing.Color.Gainsboro;
+            this.button60.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button60.BackgroundImage")));
+            this.button60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button60.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button60.Location = new System.Drawing.Point(460, 262);
+            this.button60.Name = "button60";
+            this.button60.Size = new System.Drawing.Size(32, 32);
+            this.button60.TabIndex = 46;
+            this.toolTip1.SetToolTip(this.button60, "Optional: set a directory for emission modulation variations");
+            this.button60.UseVisualStyleBackColor = false;
+            this.button60.Click += new System.EventHandler(this.button60_Click);
             // 
             // groupBox24
             // 
@@ -2384,9 +2412,9 @@
             // 
             // pictureBox5
             // 
-            this.pictureBox5.Location = new System.Drawing.Point(460, 269);
+            this.pictureBox5.Location = new System.Drawing.Point(460, 296);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(346, 254);
+            this.pictureBox5.Size = new System.Drawing.Size(346, 227);
             this.pictureBox5.TabIndex = 20;
             this.pictureBox5.TabStop = false;
             // 
@@ -2449,6 +2477,7 @@
             this.listBox5.TabIndex = 5;
             this.toolTip1.SetToolTip(this.listBox5, "Select the pollutant");
             this.listBox5.SelectedIndexChanged += new System.EventHandler(this.ListBox5_SelectedIndexChanged);
+            this.listBox5.DoubleClick += new System.EventHandler(this.listBox5_DoubleClick);
             // 
             // listView1
             // 
@@ -2535,7 +2564,7 @@
             this.groupBox27.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox27.Location = new System.Drawing.Point(454, 218);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(351, 45);
+            this.groupBox27.Size = new System.Drawing.Size(329, 45);
             this.groupBox27.TabIndex = 24;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "Emission-time-series";
@@ -5465,6 +5494,8 @@
         private System.Windows.Forms.Label label72;
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.Label label96;
+        private System.Windows.Forms.Button button60;
+        private System.Windows.Forms.Label LabelEmissionPath;
     }
 }
 

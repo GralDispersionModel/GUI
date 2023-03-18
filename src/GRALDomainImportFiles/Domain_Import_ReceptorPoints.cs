@@ -30,7 +30,7 @@ namespace GralDomain
                 dialog.Filter = "(Receptor.dat;*.shp)|Receptor.dat;*.shp";
                 dialog.Title = "Select existing receptors";
                 dialog.FileName = "";
-                dialog.ShowHelp = true;
+                // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
                 dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif

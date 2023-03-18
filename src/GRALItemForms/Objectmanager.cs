@@ -152,7 +152,7 @@ namespace GralItemForms
                     string drawingObject = _drobj.Name;
                     if (!string.IsNullOrEmpty(_drobj.ContourFilename) && _drobj.ContourFilename != "x")
                     {
-                        drawingObject += " Filname: " + Path.GetFileName(_drobj.ContourFilename);
+                        drawingObject += " Filename: " + Path.GetFileName(_drobj.ContourFilename);
                     }
 					listBox1.Items.Insert(index + 2, drawingObject);
                     listBox1.Items.RemoveAt(index);
