@@ -10,18 +10,16 @@
 ///</remarks>
 #endregion
 
+using GralDomain;
+using GralIO;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-
-using GralDomain;
-using GralIO;
-using GralItemData;
-using GralStaticFunctions;
-using Windows.Devices.Geolocation;
 
 namespace Gral
 {

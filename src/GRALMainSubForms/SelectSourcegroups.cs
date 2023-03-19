@@ -10,16 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
 using Gral;
-using GralStaticFunctions;
-using WinRT;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Select a source group
     /// </summary>
     public partial class SelectSourcegroups : Form
