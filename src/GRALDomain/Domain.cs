@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -3599,9 +3600,11 @@ namespace GralDomain
         /// </summary>
         private void button57_Click(object sender, EventArgs e)
         {
+            Point pt = new Point(Math.Max(0, Right - 700), Math.Min(Screen.FromControl(button57).Bounds.Height - 200, Top + 250));
             using (GralDomForms.ViewFrameSaveAndLoad viewframe = new ViewFrameSaveAndLoad())
             {
-                viewframe.Location = GetScreenPositionForNewDialog(1);
+                viewframe.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+                viewframe.Location = pt;
                 if (viewframe.ShowDialog() == DialogResult.OK)
                 {
                     if (viewframe.SelText.Length > 0)

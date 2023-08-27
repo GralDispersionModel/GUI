@@ -10,15 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
 using Gral;
-using GralStaticFunctions;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Select a source group
     /// </summary>
     public partial class SelectSourcegroups : Form
@@ -233,7 +232,7 @@ namespace GralMainForms
                 path = PathToEmissionModulation;
                 descripton = "Select the path to the emission modulation files";
             }
-            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.InvariantCulture))
             {
                 path += Path.DirectorySeparatorChar;
             }

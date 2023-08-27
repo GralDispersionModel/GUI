@@ -10,13 +10,13 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Drawing;
 using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -320,7 +320,7 @@ namespace Gral
             {
                 version = version.Substring(0, 2) + "." + version.Substring(2);
             }
-            g.DrawString("GRAL GUI V" + version + "Beta2 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            g.DrawString("GRAL GUI V" + version + "Beta3 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else

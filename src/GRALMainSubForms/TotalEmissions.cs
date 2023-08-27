@@ -11,13 +11,12 @@
 #endregion
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using System.IO;
-using System.Globalization;
 using System.Collections.Generic;
-using GralData;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
