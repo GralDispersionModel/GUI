@@ -232,7 +232,7 @@ namespace GralMainForms
                 path = PathToEmissionModulation;
                 descripton = "Select the path to the emission modulation files";
             }
-            if (!path.EndsWith(Path.DirectorySeparatorChar))
+            if(!path.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.InvariantCulture)) 
             {
                 path += Path.DirectorySeparatorChar;
             }
