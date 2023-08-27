@@ -167,8 +167,11 @@ namespace GralBackgroundworkers
             }
 
             int count_ws = -1;
+            int prevMeteoSituation = -1;
+            bool exist = true;
+            bool existdep = true;
             //while (text2[0] != "")
-            foreach(string mettimeseries in data_mettimeseries)
+            foreach (string mettimeseries in data_mettimeseries)
             {
                 //MessageBox.Show(mettimeseries);
                 text2 = mettimeseries.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -220,9 +223,9 @@ namespace GralBackgroundworkers
                     if (meteo_situation_found == true)
                     {
                         //GRAL filenames
-                        bool exist = true;
+                        exist = true;
                         string[] con_files = new string[100];
-                        bool existdep = true;
+                        existdep = true;
                         string[] dep_files = new string[100];
 
                         //get correct weather number in dependence on steady-state or transient simulation
@@ -231,81 +234,86 @@ namespace GralBackgroundworkers
                         {
                             weanumb = count_ws;
                         }
-                        
-                        int itmp = 0;
-                        Object thisLock = new Object();
-                        foreach (string source_group_name in sg_names)
-                        //						Parallel.For(0, sg_names.Length, itmp =>
+
+                        if (weanumb == prevMeteoSituation)
                         {
-                            bool parallel_existdep = true;
-                            
-                            if (sg_names.Length > 0)
-                            {
-                                con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
-                                dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + sg_numbers[itmp].PadLeft(2, '0') + ".dep";
-                            }
-                            else
-                            {
-                                con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
-                                dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".dep";
-                            }
+                            // the previous weather situation once again -> do not read the con and dep files
+                        }
+                        else
+                        {
+                            exist = true;
+                            existdep = true;
+                            prevMeteoSituation = weanumb;
+                            int itmp = 0;
 
-                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp])) == false &&
-                                File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                            foreach (string source_group_name in sg_names)
+                            //						Parallel.For(0, sg_names.Length, itmp =>
                             {
-                                lock(thisLock)
-                                {
-                                    existdep = false;
-                                }
-                                parallel_existdep = false;
-                            }
+                                bool parallel_existdep = true;
 
-                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
-                                File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
-                            {
-                                lock(thisLock)
+                                if (sg_names.Length > 0)
                                 {
-                                    exist = false;
-                                } 
-                                // break;
-                            }
-                            
-                            //set variables to zero
-                            for (int i = 0; i <= mydata.CellsGralX; i++)
-                            {
-                                for (int j = 0; j <= mydata.CellsGralY; j++)
-                                {
-                                    conc[i][j][itmp] = 0;
-                                    dep[i][j][itmp] = 0;
+                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
+                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + sg_numbers[itmp].PadLeft(2, '0') + ".dep";
                                 }
-                            }
-                            
-                            //read GRAL concentration files
-                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
-                            if (!ReadConFiles(filename, mydata, itmp, ref conc))
-                            {
-                                // Error reading one *.con file
-                                exist = false;
-                                existdep = false;
-                            }
-                            
-                            if (parallel_existdep)
-                            {
-                                //read GRAL deposition files
-                                filename = Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp]);
-                                bool depo_files_exists = ReadConFiles(filename, mydata, itmp, ref dep);
-                                if (depo_files_exists)
+                                else
                                 {
-                                    lock(thisLock)
+                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
+                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".dep";
+                                }
+
+                                if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp])) == false &&
+                                    File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                                {
                                     {
-                                        deposition_files_exists = true;
+                                        existdep = false;
+                                    }
+                                    parallel_existdep = false;
+                                }
+
+                                if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
+                                    File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                                {
+                                    {
+                                        exist = false;
+                                    }
+                                    // break;
+                                }
+
+                                //set variables to zero
+                                for (int i = 0; i <= mydata.CellsGralX; i++)
+                                {
+                                    for (int j = 0; j <= mydata.CellsGralY; j++)
+                                    {
+                                        conc[i][j][itmp] = 0;
+                                        dep[i][j][itmp] = 0;
                                     }
                                 }
-                            }
-                            itmp++;
-                        }//);
-                        
-                        thisLock = null;
+
+                                //read GRAL concentration files
+                                string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
+                                if (!ReadConFiles(filename, mydata, itmp, ref conc))
+                                {
+                                    // Error reading one *.con file
+                                    exist = false;
+                                    existdep = false;
+                                }
+
+                                if (parallel_existdep)
+                                {
+                                    //read GRAL deposition files
+                                    filename = Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp]);
+                                    bool depo_files_exists = ReadConFiles(filename, mydata, itmp, ref dep);
+                                    if (depo_files_exists)
+                                    {
+                                        {
+                                            deposition_files_exists = true;
+                                        }
+                                    }
+                                }
+                                itmp++;
+                            }//);
+                        }
 
                         SetText("Day.Month: " + day + "." + month);
 
