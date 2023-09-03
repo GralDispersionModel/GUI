@@ -681,6 +681,7 @@ namespace GralDomain
 
 			}
 			ReDrawContours = false;
+            _drobj.Rendered = true;
 		}
 
 		//sub routine needed for contour mapping

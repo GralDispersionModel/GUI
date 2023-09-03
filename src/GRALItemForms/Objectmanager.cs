@@ -513,6 +513,22 @@ namespace GralItemForms
             		{
             			if (checkBox1.Checked == true)
             			{
+                            // Render map?
+                            if (!domain.ItemOptions[index].Rendered)
+                            {
+                                if (domain.ItemOptions[index].Name.Substring(0, 3) == "CM:" || domain.ItemOptions[index].Name.Substring(0, 3) == "PM:")
+                                {
+                                    domain.ReDrawContours = true;
+                                    domain.Contours(domain.ItemOptions[index].ContourFilename, domain.ItemOptions[index]);
+                                }
+                                //enable re-calculation of vectors
+                                if (domain.ItemOptions[index].Name.Substring(0, 3) == "VM:")
+                                {
+                                    domain.ReDrawVectors = true;
+                                    domain.LoadVectors(domain.ItemOptions[index].ContourFilename, domain.ItemOptions[index]);
+                                }
+
+                            }
             				domain.ItemOptions[index].Show = true;
             			}
             			else
@@ -649,7 +665,7 @@ namespace GralItemForms
         }
 
         /// <summary>
-        /// Change the color of the font when an object is hided 
+        /// Change the color of the font when an object is hidden 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

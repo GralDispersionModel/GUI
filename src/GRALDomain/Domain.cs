@@ -578,7 +578,7 @@ namespace GralDomain
                                     }
                                 }
                                 ReDrawContours = true;
-                                if (File.Exists(_drobj.ContourFilename))
+                                if (File.Exists(_drobj.ContourFilename) && _drobj.Show)
                                 {
                                     Contours(_drobj.ContourFilename, _drobj);
                                 }
@@ -3175,6 +3175,7 @@ namespace GralDomain
                     ShowConcentrationFiles = true,
                     GRZPath = files
                 };
+                
                 disp.StartPosition = FormStartPosition.Manual;
                 disp.Location = GetScreenPositionForNewDialog(1);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
@@ -4543,7 +4544,8 @@ namespace GralDomain
         private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
-            
+            Point pt = new Point(Math.Max(0, Right - 700), Math.Min(Screen.FromControl(button57).Bounds.Height - 200, Top + 250));
+
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
                 if (Mode == 0)
@@ -4564,7 +4566,7 @@ namespace GralDomain
                 }
             }
             x = Math.Max(10, x);
-            return new System.Drawing.Point(x, 60);
+            return new System.Drawing.Point(x, pt.Y);
         }
 
         /// <summary>

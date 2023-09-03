@@ -209,6 +209,10 @@ namespace GralDomain
         /// list of strings for item infos
         /// </summary>
         public List<string> ItemInfo { get; set; }
+        /// <summary>
+        /// Is this contour map already rendered?
+        /// </summary>
+        public bool Rendered = false;
 
         private bool disposed = false;
 

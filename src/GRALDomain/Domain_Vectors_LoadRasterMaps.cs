@@ -252,6 +252,7 @@ namespace GralDomain
                 }
             }
             ReDrawVectors = false;
+            _drobj.Rendered = true;
         }
 
         /// <summary>
