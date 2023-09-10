@@ -790,6 +790,15 @@ namespace GralStaticFunctions
         }
 
         /// <summary>
+        /// Retrieve the bottom position in pixels of the current screen
+        /// </summary>
+        public static int GetBottomScreenAtMousePosition()
+        {
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            return screen.Bounds.Bottom;
+        }
+
+        /// <summary>
         /// Reduce the lenght of a file name inclusive path
         /// </summary>
         /// <param name="FileName">File name with path</param>

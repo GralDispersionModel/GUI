@@ -14,6 +14,7 @@ using System;
 using System.Windows.Forms;
 using System.Linq;
 
+
 namespace GralMessage
 {
 	/// <summary>
@@ -27,8 +28,13 @@ namespace GralMessage
         public MessageWindow()
         {
             InitializeComponent();
-            this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-            this.Top = 80;
+            System.Drawing.Point pt = new System.Drawing.Point(Math.Max(0, Gral.Main.ActiveForm.Right - 400), Math.Min(Gral.Main.ActiveForm.Top + 50, 200)); 
+            if (GralDomain.Domain.ActiveForm != null)
+            {
+                 pt = new System.Drawing.Point(Math.Max(0, GralDomain.Domain.ActiveForm.Right - 400), Math.Min(GralDomain.Domain.ActiveForm.Top + 50, 200));
+            }
+            this.Left = pt.X;
+            this.Top = pt.Y;
         }
 
         private void Messagewindow_Load(object sender, EventArgs e)

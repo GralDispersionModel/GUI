@@ -4544,7 +4544,7 @@ namespace GralDomain
         private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
-            Point pt = new Point(Math.Max(0, Right - 700), Math.Min(Screen.FromControl(button57).Bounds.Height - 200, Top + 250));
+            Point pt = new Point(Math.Max(0, Right - 700), Math.Min(panel1.Top + 10, Top + 120));
 
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {

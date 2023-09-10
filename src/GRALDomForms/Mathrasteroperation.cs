@@ -51,7 +51,7 @@ namespace GralDomForms
         {
             try
             {
-                Left = domain.Left + 40;
+                Left = Math.Max(10, domain.Left + (int) (domain.Width * 0.5F) - 360);
                 Top = domain.Top + 80;
             }
             catch
