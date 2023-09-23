@@ -626,14 +626,14 @@ namespace GralStaticFunctions
                 label.SetBounds(9, 20, 372, 13);
                 buttonOk.SetBounds(228, 72, 75, 23);
                 buttonCancel.SetBounds(309, 72, 75, 23);
+                label.Top = 20; label.Left = 9; buttonOk.Top = 72; buttonOk.Left = 30; buttonCancel.Top = 72; buttonCancel.Left = 150;
 
                 label.AutoSize = true;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                //buttonOk.Anchor = AnchorStyles.Top| AnchorStyles.Left;
+                //buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
-                form.ClientSize = new Size(396, 107);
+                form.ClientSize = new Size(252, 107);
                 form.Controls.AddRange(new Control[] { label, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.MinimizeBox = false;
@@ -796,6 +796,15 @@ namespace GralStaticFunctions
         {
             Screen screen = Screen.FromPoint(Cursor.Position);
             return screen.Bounds.Bottom;
+        }
+
+        /// <summary>
+        /// Retrieve the Top position in pixels of the current screen
+        /// </summary>
+        public static int GetTopScreenAtMousePosition()
+        {
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            return screen.Bounds.Top;
         }
 
         /// <summary>

@@ -99,7 +99,7 @@ namespace GralDomain
                             DialogResult dial = new DialogResult();
                             shp.StartPosition = FormStartPosition.Manual;
                             shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                            shp.Top = 80;
+                            shp.Top = this.Top + 80;
                             dial = shp.ShowDialog();
                             
                             EditWall.SetTrackBarMaximum();

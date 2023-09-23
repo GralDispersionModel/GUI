@@ -301,8 +301,8 @@ namespace GralDomain
                     Meteo_Ext = ".vec",
                     Meteo_Model = windfieldenable,
                     Meteo_Height = 10,
-                    X1 = Left + 70,
-                    Y1 = Top + 50,
+                    X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
+                    Y1 = panel1.Top + 10,
                     Xs = 0,
                     Ys = 0,
                     ShowAbsHeightBox = true

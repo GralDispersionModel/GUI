@@ -844,6 +844,7 @@ namespace GralDomain
                         section.Form_Section_Closed += new Section_Closed(section_Form_Section_Closed);
                         section.StartPosition = FormStartPosition.Manual;
                         section.Left = St_F.GetScreenAtMousePosition() + 20;
+                        section.Top = this.Top + 90;
                         section.Show();
                         //						#endif
 

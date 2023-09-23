@@ -43,8 +43,8 @@ namespace GralDomain
                     Meteo_Ext = ".txt",
                     Meteo_Height = 200,
                     Meteo_Model = 32,   // Show height & filename only
-                    X1 = Left + 70,
-                    Y1 = Top + 50,
+                    X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
+                    Y1 = panel1.Top + 10,
                     X0 = x0,
                     Y0 = y0,
                     Xs = x1,

@@ -57,7 +57,7 @@ namespace GralDomain
 				_wrose.DrawingObject = _dr;
                 _wrose.StartPosition = FormStartPosition.Manual;
                 _wrose.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                _wrose.Top = 80;
+                _wrose.Top = this.Top + 50;
 
 				DialogResult wroseResult = _wrose.ShowDialog();
 				
