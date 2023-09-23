@@ -321,6 +321,10 @@ namespace GralItemForms
             {
                 valid_coors = false;
             }
+            if (Double.IsNaN(Convert.ToDouble(textBox2.Text, CultureInfo.CurrentCulture)) || Double.IsNaN(Convert.ToDouble(textBox3.Text, CultureInfo.CurrentCulture)))
+            {
+                valid_coors = false;
+            }
 
             if ((textBox1.Text != "") && valid_coors) // Name + valid coordinates
             {
