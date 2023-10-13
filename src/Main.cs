@@ -1601,15 +1601,30 @@ namespace Gral
                 buttonCancel.Text = "Cancel";
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
+
+                label.AutoSize = false;
                 label.SetBounds(9, 10, 372, 13);
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 13);
+
                 numdown.SetBounds(12, 36, 372, 20);
+                numdown.Location = new Point(12, 36);
+                numdown.Size = new System.Drawing.Size(372, 20);
+
                 buttonOk.SetBounds(228, 72, 75, 23);
                 buttonCancel.SetBounds(309, 72, 75, 23);
-                label.AutoSize = true;
-                numdown.Anchor |= AnchorStyles.Right;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                buttonOk.Location = new Point(228, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(309, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
+
+                numdown.Anchor |= AnchorStyles.Top;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
                 form.ClientSize = new Size(396, 107);
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
                 form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
                 form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -1647,17 +1662,33 @@ namespace Gral
                 buttonCancel.Text = "Cancel";
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
+
+                label.AutoSize = false;
                 label.SetBounds(9, 10, 372, 13);
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 13);
+
                 numdown.SetBounds(12, 36, 372, 20);
+                numdown.Location = new Point(12, 36);
+                numdown.Size = new System.Drawing.Size(372, 20);
+
                 buttonOk.SetBounds(228, 72, 75, 23);
                 buttonCancel.SetBounds(309, 72, 75, 23);
-                label.AutoSize = true;
-                numdown.Anchor |= AnchorStyles.Right;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                buttonOk.Location = new Point(228, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(309, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
+
+                numdown.Anchor |= AnchorStyles.Left;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
                 form.ClientSize = new Size(396, 107);
                 form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
                 form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.MinimizeBox = false;

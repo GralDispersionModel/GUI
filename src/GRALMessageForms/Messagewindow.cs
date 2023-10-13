@@ -28,13 +28,7 @@ namespace GralMessage
         public MessageWindow()
         {
             InitializeComponent();
-            System.Drawing.Point pt = new System.Drawing.Point(Math.Max(0, Gral.Main.ActiveForm.Right - 400), Math.Min(Gral.Main.ActiveForm.Top + 50, 200)); 
-            if (GralDomain.Domain.ActiveForm != null)
-            {
-                 pt = new System.Drawing.Point(Math.Max(0, GralDomain.Domain.ActiveForm.Right - 400), Math.Min(GralDomain.Domain.ActiveForm.Top + 50, 200));
-            }
-            this.Left = pt.X;
-            this.Top = pt.Y;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void Messagewindow_Load(object sender, EventArgs e)
