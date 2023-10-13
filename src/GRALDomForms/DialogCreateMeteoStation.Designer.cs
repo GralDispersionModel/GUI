@@ -207,7 +207,7 @@
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(254, 24);
             this.checkBox2.TabIndex = 5;
-            this.checkBox2.Text = "Compute wind statistics at all receptor points";
+            this.checkBox2.Text = "Calculate wind statistics at all receptor points";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
             // 
@@ -295,7 +295,7 @@
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(254, 24);
             this.checkBox4.TabIndex = 5;
-            this.checkBox4.Text = "Compute wind statistics at all receptor points";
+            this.checkBox4.Text = "Calculate wind statistics at all receptor points";
             this.checkBox4.UseVisualStyleBackColor = true;
             this.checkBox4.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
             // 
@@ -337,7 +337,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DialogCreateMeteoStation";
-            this.Text = "GRAL GUI Compute wind statistics";
+            this.Text = "GRAL GUI Calculate wind statistics";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dialog_CreateMeteoStationFormClosed);
             this.Load += new System.EventHandler(this.Form1Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

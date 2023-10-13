@@ -37,7 +37,7 @@ namespace GralDomain
 			{
 				MessageWindow message = new MessageWindow();
 				message.Show();
-				message.listBox1.Items.Add("Compute contour lines...");
+				message.listBox1.Items.Add("Calculate contour lines...");
 				message.Refresh();
 				message.listBox1.Items.Add("Reading data...");
 				Application.DoEvents();

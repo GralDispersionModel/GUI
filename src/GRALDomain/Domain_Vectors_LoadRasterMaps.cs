@@ -296,13 +296,13 @@ namespace GralDomain
             {
                 DialogCreateMeteoStation met_st = new DialogCreateMeteoStation
                 {
-                    Meteo_Title = "GRAL GUI Compute vector map",
+                    Meteo_Title = "GRAL GUI Calculate a vector map",
                     Meteo_Init = "Vectormap",
                     Meteo_Ext = ".vec",
                     Meteo_Model = windfieldenable,
                     Meteo_Height = 10,
                     X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
-                    Y1 = panel1.Top + 10,
+                    Y1 = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150,
                     Xs = 0,
                     Ys = 0,
                     ShowAbsHeightBox = true
@@ -349,7 +349,7 @@ namespace GralDomain
                                 
                                 MessageWindow message = new MessageWindow();
                                 message.Show();
-                                message.listBox1.Items.Add("Compute vector map...");
+                                message.listBox1.Items.Add("Calculate vector map...");
                                 message.Refresh();
 
                                 //reading geometry file "ggeom.asc"

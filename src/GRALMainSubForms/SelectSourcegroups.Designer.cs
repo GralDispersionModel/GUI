@@ -98,7 +98,7 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(150, 36);
             this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "Compute\r\nmax. concentrations";
+            this.checkBox1.Text = "Calculate\r\nmax. concentrations";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // checkBox2
@@ -111,7 +111,7 @@
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(150, 36);
             this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Compute\r\nmean concentrations";
+            this.checkBox2.Text = "Calculate\r\nmean concentrations";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
@@ -125,7 +125,7 @@
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(150, 36);
             this.checkBox3.TabIndex = 4;
-            this.checkBox3.Text = "Compute daily\r\nmax. concentrations";
+            this.checkBox3.Text = "Calculate daily\r\nmax. concentrations";
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
             // label1
