@@ -23,6 +23,13 @@ namespace Gral.GRALDomForms
         public MapScaleInput()
         {
             InitializeComponent();
+#if __MonoCS__
+            var allNumUpDowns = Main.GetAllControls<NumericUpDown>(this);
+            foreach (NumericUpDown nu in allNumUpDowns)
+            {
+                nu.TextAlign = HorizontalAlignment.Left;
+            }
+#endif
         }
 
         private void MapScaleInput_Load(object sender, EventArgs e)
