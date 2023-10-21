@@ -243,7 +243,7 @@ namespace GralDomain
                 {
                     if ((obname == "SCALE BAR") && (_drobj.Show == true))
                     {
-                        DrawScaleBar(g, _drobj, _bmppbx_save, LabelFont, LabelBrush);
+                        DrawScaleBar(g, _drobj, _bmppbx_save, LabelFont, LabelBrush, factor_x, factor_y, form1_west, form1_north);
                     }
                 }
                 catch{}

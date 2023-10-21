@@ -24,6 +24,9 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Generate a time series for one or multiple points from *.con files
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void GenerateTimeSeries(GralBackgroundworkers.BackgroundworkerData mydata,
                                        System.ComponentModel.DoWorkEventArgs e)
         {

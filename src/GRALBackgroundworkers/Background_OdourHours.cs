@@ -23,6 +23,9 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Calculate odour hours based on several approaches
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void OdourHours(GralBackgroundworkers.BackgroundworkerData mydata,
                                 System.ComponentModel.DoWorkEventArgs e)
         {

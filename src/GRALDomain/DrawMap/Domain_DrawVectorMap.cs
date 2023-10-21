@@ -21,6 +21,9 @@ namespace GralDomain
         /// <summary>
         /// Draw the Vector Maps
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void DrawVectorMap(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north, double factor_x, double factor_y)
         {
             int pb1_height = picturebox1.Height;

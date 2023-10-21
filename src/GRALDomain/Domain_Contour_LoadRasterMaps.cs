@@ -25,10 +25,13 @@ namespace GralDomain
 {
     public partial class Domain
 	{
-		/// <summary>
+        /// <summary>
         /// Load and create contour maps
         /// </summary>
-		public void Contours(string file, DrawingObjects _drobj)
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
+        public void Contours(string file, DrawingObjects _drobj)
 		{
 			CultureInfo ic = CultureInfo.InvariantCulture;
 			int nodata = -9999;
