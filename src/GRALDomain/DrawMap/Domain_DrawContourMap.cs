@@ -23,6 +23,9 @@ namespace GralDomain
         /// <summary>
         /// Draw Contour Maps
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void DrawContourMap(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north, 
                                     double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {

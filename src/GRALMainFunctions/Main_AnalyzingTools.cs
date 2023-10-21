@@ -90,8 +90,8 @@ namespace Gral
                                 DataCollection.CalculateDayMax = sel_sg.checkBox3.Checked;
                                 DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
                                 DataCollection.Slicename = sel_slice.HorSlices[slice];
-                                DataCollection.Caption = "Compute Mean concentrations";
-                                DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                DataCollection.Caption = "Calculate Mean concentrations";
+                                DataCollection.UserText = "Calculate " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                     "Source-Groups: " + DataCollection.SelectedSourceGroup + Environment.NewLine;
                                 if (DataCollection.CalculateMean)
                                 {
@@ -195,8 +195,8 @@ namespace Gral
                                 DataCollection.PathEmissionModulation = sel_sg.PathToEmissionModulation;
                                 DataCollection.PathEvaluationResults = ProjectSetting.EvaluationPath;
 
-                                DataCollection.Caption = "Compute Mean, Max, Daily Max.";
-                                DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                DataCollection.Caption = "Calculate Mean, Max, Daily Max.";
+                                DataCollection.UserText = "Calculate " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                     "Source-Groups: " + DataCollection.SelectedSourceGroup + Environment.NewLine;
                                 if (DataCollection.CalculateMean)
                                 {
@@ -300,8 +300,8 @@ namespace Gral
                         DataCollection.MaxSourceComputed = Math.Max(listView1.Items.Count, 1);
                         DataCollection.Pollutant = Convert.ToString(listBox5.SelectedItem);
                         DataCollection.CalculateMaxHour = checkBox19.Checked;
-                        DataCollection.Caption = "Compute time series at the receptorpoints";
-                        DataCollection.UserText = "Compute " + "time series at the receptorpoints " + Environment.NewLine +
+                        DataCollection.Caption = "Calculate time series at the receptorpoints";
+                        DataCollection.UserText = "Calculate " + "time series at the receptorpoints " + Environment.NewLine +
                             "Source-Groups: " + DataCollection.SelectedSourceGroup;
                         DataCollection.PathEmissionModulation = sel_sg.PathToEmissionModulation;
                         DataCollection.PathEvaluationResults = ProjectSetting.EvaluationPath;
@@ -350,8 +350,8 @@ namespace Gral
 
             DataCollection.CalculateMaxHour = checkBox19.Checked;
 
-            DataCollection.Caption = "Compute met files at the receptorpoints";
-            DataCollection.UserText = "Compute met files at the receptorpoints ";
+            DataCollection.Caption = "Calculate met files at the receptorpoints";
+            DataCollection.UserText = "Calculate met files at the receptorpoints ";
 
             WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
             DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
@@ -433,8 +433,8 @@ namespace Gral
                                 DataCollection.EmissionFactor = 1.0F;
                                 DataCollection.PathEmissionModulation = sel_sg.PathToEmissionModulation;
                                 DataCollection.PathEvaluationResults = ProjectSetting.EvaluationPath;
-                                DataCollection.Caption = "Compute High Percentiles  ";
-                                DataCollection.UserText = "Compute " + Convert.ToString(percentile) + " Percentile " + Environment.NewLine + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                DataCollection.Caption = "Calculate High Percentiles  ";
+                                DataCollection.UserText = "Calculate " + Convert.ToString(percentile) + " Percentile " + Environment.NewLine + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                     "Source-Groups: " + DataCollection.SelectedSourceGroup;
 
                                 WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
@@ -571,8 +571,8 @@ namespace Gral
                                         DataCollection.Slicename = sel_slice.HorSlices[slice];
                                         DataCollection.OdourThreshold = odourthreshold;
                                         DataCollection.Peakmean = peakmean;
-                                        DataCollection.Caption = "Compute Odour hours";
-                                        DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                        DataCollection.Caption = "Calculate Odour hours";
+                                        DataCollection.UserText = "Calculate " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                             "Source-Groups: " + DataCollection.SelectedSourceGroup + Environment.NewLine +
                                             "Odour threshold: " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
                                             "90percentile/mean ratio" + Convert.ToString(peakmean);
@@ -654,8 +654,8 @@ namespace Gral
                                     DataCollection.Slicename = sel_slice.HorSlices[slice];
                                     DataCollection.Percentile = (decimal)sel_sg.numericUpDown1.Value;
 
-                                    DataCollection.Caption = "Compute Odour concentration";
-                                    DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                    DataCollection.Caption = "Calculate Odour concentration";
+                                    DataCollection.UserText = "Calculate " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                         "Source-Groups: " + DataCollection.SelectedSourceGroup + Environment.NewLine +
                                         "Percentile: " + Convert.ToString(DataCollection.Percentile);
 
@@ -842,8 +842,8 @@ namespace Gral
                                         DataCollection.Odemi = odemi;
                                         DataCollection.OdFreq = odfreq;
                                         DataCollection.Scale = scale;
-                                        DataCollection.Caption = "Compute Odour hours";
-                                        DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                        DataCollection.Caption = "Calculate Odour hours";
+                                        DataCollection.UserText = "Calculate " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                             "Source-Groups: " + DataCollection.SelectedSourceGroup +
                                             "  / Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
                                             "  / 90percentile/mean ratio = " + Convert.ToString(peakmean) + " / Scaling factor = " + Convert.ToString(DataCollection.Scale) + Environment.NewLine;
@@ -1015,8 +1015,8 @@ namespace Gral
                                         DataCollection.AllInnSelSourceGroup = Convert.ToString(allin.comboBox1.SelectedItem);
                                         DataCollection.PathEmissionModulation = sel_sg.PathToEmissionModulation;
                                         DataCollection.PathEvaluationResults = ProjectSetting.EvaluationPath;
-                                        DataCollection.Caption = "Compute Odour hours for 'All in all out' stables";
-                                        DataCollection.UserText = "Compute " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
+                                        DataCollection.Caption = "Calculate Odour hours for 'All in all out' stables";
+                                        DataCollection.UserText = "Calculate " + "Slice: " + DataCollection.Slicename + Environment.NewLine +
                                             "Odour threshold = " + Convert.ToString(odourthreshold) + @" OU/m" + CubeString +
                                             "    90percentile/mean ratio = " + Convert.ToString(peakmean) + Environment.NewLine +
                                             "Breeding cycle defined for source group : " + DataCollection.AllInnSelSourceGroup + Environment.NewLine +

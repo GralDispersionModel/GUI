@@ -25,10 +25,13 @@ namespace GralDomain
 {
     public partial class Domain
 	{
-		/// <summary>
+        /// <summary>
         /// Load and create contour maps
         /// </summary>
-		public void Contours(string file, DrawingObjects _drobj)
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
+        public void Contours(string file, DrawingObjects _drobj)
 		{
 			CultureInfo ic = CultureInfo.InvariantCulture;
 			int nodata = -9999;
@@ -37,7 +40,7 @@ namespace GralDomain
 			{
 				MessageWindow message = new MessageWindow();
 				message.Show();
-				message.listBox1.Items.Add("Compute contour lines...");
+				message.listBox1.Items.Add("Calculate contour lines...");
 				message.Refresh();
 				message.listBox1.Items.Add("Reading data...");
 				Application.DoEvents();
@@ -681,6 +684,7 @@ namespace GralDomain
 
 			}
 			ReDrawContours = false;
+            _drobj.Rendered = true;
 		}
 
 		//sub routine needed for contour mapping

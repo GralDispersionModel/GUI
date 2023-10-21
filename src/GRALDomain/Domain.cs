@@ -16,16 +16,15 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Gral.GRALDomForms;
 using GralDomForms;
 using GralIO;
 using GralItemData;
 using GralItemForms;
 using GralMessage;
 using GralStaticFunctions;
+using SocialExplorer.IO.FastDBF;
 
 namespace GralDomain
 {
@@ -578,7 +577,7 @@ namespace GralDomain
                                     }
                                 }
                                 ReDrawContours = true;
-                                if (File.Exists(_drobj.ContourFilename))
+                                if (File.Exists(_drobj.ContourFilename) && _drobj.Show)
                                 {
                                     Contours(_drobj.ContourFilename, _drobj);
                                 }
@@ -2096,19 +2095,31 @@ namespace GralDomain
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
 
+                label.AutoSize = false;
                 label.SetBounds(9, 10, 372, 13);
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 13);
+
                 numdown.SetBounds(12, 36, 372, 20);
-                buttonOk.SetBounds(228, 72, 75, 23);
-                buttonCancel.SetBounds(309, 72, 75, 23);
+                numdown.Location = new Point(12, 36);
+                numdown.Size = new System.Drawing.Size(372, 20);
 
-                label.AutoSize = true;
-                numdown.Anchor |= AnchorStyles.Right;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                buttonOk.SetBounds(9, 72, 75, 23);
+                buttonCancel.SetBounds(109, 72, 75, 23);
+                buttonOk.Location = new Point(9, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(109, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
 
-                form.ClientSize = new Size(396, 107);
+                numdown.Anchor |= AnchorStyles.Left;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
                 form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.ClientSize = new Size(Math.Max(300, label.Width + 20), 110);
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.MinimizeBox = false;
@@ -2163,30 +2174,19 @@ namespace GralDomain
         private void Button19_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = MouseMode.ViewScaleBarPos;
-            int trans = MapScale.Division;
-            if (InputBox1("Define the divisions of the map scale bar", "Number of divisions:", 1, 10, ref trans) == DialogResult.OK)
+
+            MapScaleInput msi = new MapScaleInput()
             {
-                MapScale.Division = trans;
-            }
-            
-            trans = MapScale.Length;
-            foreach (DrawingObjects _drobj in ItemOptions)
+                Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260,
+                Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 180
+            };
+            msi.MapScale = MapScale;
+            if (msi.ShowDialog() == DialogResult.OK)
             {
-                if (_drobj.Name.Equals("SCALE BAR"))
-                {
-                    trans = _drobj.ContourLabelDist;
-                    break;
-                }
+                MouseControl = MouseMode.ViewScaleBarPos;
+                SaveDomainSettings(1);
             }
-            
-            if (InputBox1("Length of the map scale bar", "Length in [m]:", 1, 100000, ref trans) == DialogResult.OK)
-            {
-                MapScale.Length = trans;
-            }
-            SaveDomainSettings(1);
             Picturebox1_Paint();
-            MouseControl = MouseMode.ViewScaleBarPos;
             Cursor = Cursors.Cross;
         }
 
@@ -2467,7 +2467,7 @@ namespace GralDomain
             }
 
             _selmp.StartPosition = FormStartPosition.Manual;
-            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, this.Top + 90);
             _selmp.Owner = this;
             _selmp.Show();
 
@@ -2909,7 +2909,7 @@ namespace GralDomain
                     Concentration = conc,
                     StartPosition = FormStartPosition.Manual
                 };
-                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, Top + 400);
+                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, this.Top + 90);
                 pie.Show();
                 Cursor = Cursors.Default;
                 if (MessageInfoForm != null)
@@ -3175,6 +3175,7 @@ namespace GralDomain
                     ShowConcentrationFiles = true,
                     GRZPath = files
                 };
+                
                 disp.StartPosition = FormStartPosition.Manual;
                 disp.Location = GetScreenPositionForNewDialog(1);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
@@ -3322,6 +3323,10 @@ namespace GralDomain
                 FrameDelay = FrameDelay
             })
             {
+                animgifs.StartPosition = FormStartPosition.Manual;
+                animgifs.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
+                animgifs.Top = this.Top + 90;
+
                 if (animgifs.ShowDialog(this) == DialogResult.OK)
                 {
                     ResultFile = animgifs.GIFFileName;
@@ -3889,6 +3894,10 @@ namespace GralDomain
                 GRAL_Topo = GRAL_Topo
             })
             {
+                dial.StartPosition = FormStartPosition.Manual;
+                dial.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
+                dial.Top = this.Top + 90;
+
                 if (dial.ShowDialog() == DialogResult.Cancel)
                 {
                     dial.Dispose();
@@ -4414,7 +4423,7 @@ namespace GralDomain
                 StartPosition = FormStartPosition.Manual
             })
             {
-                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, Top + 200);
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, this.Top + 90);
                 if (mod.ShowDialog() == DialogResult.OK)
                 {
                     TopoModify = mod.modify;
@@ -4543,7 +4552,8 @@ namespace GralDomain
         private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
-            
+            Point pt = new Point(Math.Max(0, Right - 700), GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 80);
+
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
                 if (Mode == 0)
@@ -4564,7 +4574,7 @@ namespace GralDomain
                 }
             }
             x = Math.Max(10, x);
-            return new System.Drawing.Point(x, 60);
+            return new System.Drawing.Point(x, pt.Y);
         }
 
         /// <summary>
@@ -4702,7 +4712,7 @@ namespace GralDomain
             
             _selmp.MeteoModel = 0;
             _selmp.StartPosition = FormStartPosition.Manual;
-            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, this.Top + 90);
             _selmp.Owner = this;
             _selmp.MeteoInitFileName = Path.Combine(Gral.Main.ProjectName, "TimeSeries.txt");
             _selmp.Show();

@@ -26,6 +26,9 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Compute high percentiles of pollutant concentrations of a time series
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void HighPercentiles(GralBackgroundworkers.BackgroundworkerData mydata,
                                      System.ComponentModel.DoWorkEventArgs e)
         {

@@ -41,8 +41,8 @@ namespace GralMessage
 			progressbar.Value = 100;
 			progressbar.Step = 1;
 			UpdateProgressDelegate = new ProgressbarUpdateDelegate(ProgressbarUpdate);
-            this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 60;
-            this.Top = 60;
+            this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
+            this.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 140;
             this.Text = Title;
         }
 		

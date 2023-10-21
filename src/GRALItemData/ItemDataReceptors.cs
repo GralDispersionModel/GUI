@@ -35,8 +35,8 @@ namespace GralItemData
 		/// </summary>
 		public ReceptorData()
 		{
-			Name = "Rec";
-			Pt = new PointD(0, 0);
+			Name = "Receptor";
+			Pt = new PointD(Double.NaN, Double.NaN);
 		}
 		
 		/// <summary>

@@ -619,7 +619,7 @@
             this.button30.Name = "button30";
             this.button30.Size = new System.Drawing.Size(26, 25);
             this.button30.TabIndex = 40;
-            this.toolTip1.SetToolTip(this.button30, "Compute wind statistics at\r\na specific point.\r\nWindroses etc. can be viewed\r\nin t" +
+            this.toolTip1.SetToolTip(this.button30, "Calculate wind statistics at\r\na specific point.\r\nWindroses etc. can be viewed\r\nin t" +
         "he menu tab \"Meteorology\"");
             this.button30.UseVisualStyleBackColor = true;
             this.button30.Click += new System.EventHandler(this.Button30_Click);
@@ -632,7 +632,7 @@
             this.button31.Name = "button31";
             this.button31.Size = new System.Drawing.Size(26, 25);
             this.button31.TabIndex = 41;
-            this.toolTip1.SetToolTip(this.button31, "Compute mean wind\r\nspeed at a given height.");
+            this.toolTip1.SetToolTip(this.button31, "Calculate mean wind\r\nspeed at a given height.");
             this.button31.UseVisualStyleBackColor = true;
             this.button31.Click += new System.EventHandler(this.Button31_Click);
             // 
@@ -644,7 +644,7 @@
             this.button32.Name = "button32";
             this.button32.Size = new System.Drawing.Size(26, 25);
             this.button32.TabIndex = 42;
-            this.toolTip1.SetToolTip(this.button32, "Compute horizontal\r\nwind field at a given height.");
+            this.toolTip1.SetToolTip(this.button32, "Calculate horizontal\r\nwind field at a given height.");
             this.button32.UseVisualStyleBackColor = true;
             this.button32.Click += new System.EventHandler(this.Button32_Click);
             // 

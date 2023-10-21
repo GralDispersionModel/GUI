@@ -4556,7 +4556,7 @@
             this.groupBox13.Size = new System.Drawing.Size(159, 170);
             this.groupBox13.TabIndex = 50;
             this.groupBox13.TabStop = false;
-            this.groupBox13.Text = "Compute concentrations";
+            this.groupBox13.Text = "Calculate concentrations";
             this.groupBox13.Visible = false;
             // 
             // button40
@@ -4569,7 +4569,7 @@
             this.button40.Size = new System.Drawing.Size(145, 30);
             this.button40.TabIndex = 53;
             this.button40.Text = "&Percentiles";
-            this.toolTip1.SetToolTip(this.button40, "Computes high percentiles of concentrations.\r\n\r\n!!Caution: Computation times\r\ncan" +
+            this.toolTip1.SetToolTip(this.button40, "Calculate high percentiles of concentrations.\r\n\r\n!!Caution: Computation times\r\ncan" +
         " be extremely long!!");
             this.button40.UseVisualStyleBackColor = false;
             this.button40.Click += new System.EventHandler(this.Button40_Click);
@@ -4584,7 +4584,7 @@
             this.button37.Size = new System.Drawing.Size(145, 30);
             this.button37.TabIndex = 52;
             this.button37.Text = "&Receptor Conc.";
-            this.toolTip1.SetToolTip(this.button37, "Computes time series of concentrations at\r\nreceptor points");
+            this.toolTip1.SetToolTip(this.button37, "Calculate time series of concentrations at\r\nreceptor points");
             this.button37.UseVisualStyleBackColor = false;
             this.button37.Click += new System.EventHandler(this.Button37_Click);
             // 
@@ -4598,7 +4598,7 @@
             this.button25.Size = new System.Drawing.Size(145, 30);
             this.button25.TabIndex = 51;
             this.button25.Text = "Mean, Max, &Day Max";
-            this.toolTip1.SetToolTip(this.button25, "Computes average, maximum, and\r\nmaximum daily concentrations.\r\n\r\n!!Caution: Compu" +
+            this.toolTip1.SetToolTip(this.button25, "Calculate average, maximum, and\r\nmaximum daily concentrations.\r\n\r\n!!Caution: Compu" +
         "tation times\r\ncan be extremely long!!");
             this.button25.UseVisualStyleBackColor = false;
             this.button25.Click += new System.EventHandler(this.Button25_Click);
@@ -4613,7 +4613,7 @@
             this.button28.Size = new System.Drawing.Size(145, 30);
             this.button28.TabIndex = 50;
             this.button28.Text = "Mean";
-            this.toolTip1.SetToolTip(this.button28, "Computes average concentrations");
+            this.toolTip1.SetToolTip(this.button28, "Calculate average concentrations");
             this.button28.UseVisualStyleBackColor = false;
             this.button28.Click += new System.EventHandler(this.Button28_Click);
             // 
@@ -4629,7 +4629,7 @@
             this.groupBox14.Size = new System.Drawing.Size(159, 170);
             this.groupBox14.TabIndex = 60;
             this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "Compute odour hours";
+            this.groupBox14.Text = "Calculate odour hours";
             this.groupBox14.Visible = false;
             // 
             // button29
@@ -4642,7 +4642,7 @@
             this.button29.Size = new System.Drawing.Size(145, 30);
             this.button29.TabIndex = 62;
             this.button29.Text = "&All in all out stables";
-            this.toolTip1.SetToolTip(this.button29, "Computes odour hours for\r\nstables with an \"all in all out\"\r\nprocedure");
+            this.toolTip1.SetToolTip(this.button29, "Calculate odour hours for\r\nstables with an \"all in all out\"\r\nprocedure");
             this.button29.UseVisualStyleBackColor = false;
             this.button29.Click += new System.EventHandler(this.Button29_Click);
             // 
@@ -4656,7 +4656,7 @@
             this.button47.Size = new System.Drawing.Size(145, 30);
             this.button47.TabIndex = 63;
             this.button47.Text = "&Receptor met files";
-            this.toolTip1.SetToolTip(this.button47, "Computes met files at receptor points\r\n");
+            this.toolTip1.SetToolTip(this.button47, "Calculate met files at receptor points\r\n");
             this.button47.UseVisualStyleBackColor = false;
             this.button47.Click += new System.EventHandler(this.Button47Click);
             // 
@@ -4670,7 +4670,7 @@
             this.button26.Size = new System.Drawing.Size(145, 30);
             this.button26.TabIndex = 61;
             this.button26.Text = "C&ompost";
-            this.toolTip1.SetToolTip(this.button26, "Computes odour hours for\r\na single source group with up\r\nto 3 different odour str" +
+            this.toolTip1.SetToolTip(this.button26, "Calculate odour hours for\r\na single source group with up\r\nto 3 different odour str" +
         "enghts\r\nwith different frequencies");
             this.button26.UseVisualStyleBackColor = false;
             this.button26.Click += new System.EventHandler(this.Button26_Click);
@@ -4685,7 +4685,7 @@
             this.button27.Size = new System.Drawing.Size(145, 30);
             this.button27.TabIndex = 60;
             this.button27.Text = "Mu&ltiple Sources";
-            this.toolTip1.SetToolTip(this.button27, "Computes odour hours\r\nfor all defined source groups");
+            this.toolTip1.SetToolTip(this.button27, "Calculate odour hours\r\nfor all defined source groups");
             this.button27.UseVisualStyleBackColor = false;
             this.button27.Click += new System.EventHandler(this.Button27_Click);
             // 

@@ -57,9 +57,9 @@ namespace GralItemData
 			Temperature = 20;
 			Diameter = 0.2F;
 			Height = 10;
-			Pt = new PointD(0, 0);
-			
-			for (int i = 0; i < 10; i++)
+			Pt = new PointD(Double.NaN, Double.NaN);
+
+            for (int i = 0; i < 10; i++)
 			{
 				GetDep()[i] = new Deposition(); // initialize Deposition array
 				GetDep()[i].init();

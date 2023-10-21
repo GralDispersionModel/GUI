@@ -308,6 +308,12 @@
     <Compile Include="GRALDomForms\InputCoordinates.Designer.cs">
       <DependentUpon>InputCoordinates.cs</DependentUpon>
     </Compile>
+    <Compile Include="GRALDomForms\MapScaleInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GRALDomForms\MapScaleInput.Designer.cs">
+      <DependentUpon>MapScaleInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="GRALDomForms\MatchMultipleObservations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -356,15 +362,6 @@
     </Compile>
     <Compile Include="GRALDomForms\SectionDrawing.Designer.cs">
       <DependentUpon>SectionDrawing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GRALDomForms\SectionDrawing.Designer1.cs">
-      <DependentUpon>SectionDrawing.cs</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="GRALDomForms\SectionDrawing1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SectionDrawing.resx</DependentUpon>
     </Compile>
     <Compile Include="GRALDomForms\SelectItem.cs">
       <SubType>Form</SubType>
@@ -1078,6 +1075,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\InputCoordinates.resx">
       <DependentUpon>InputCoordinates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GRALDomForms\MapScaleInput.resx">
+      <DependentUpon>MapScaleInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\MatchMultipleObservations.resx">
       <DependentUpon>MatchMultipleObservations.cs</DependentUpon>
@@ -1103,8 +1104,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\SectionDrawing.resx">
       <DependentUpon>SectionDrawing.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SectionDrawing1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="GRALDomForms\SelectItem.resx">
       <DependentUpon>SelectItem.cs</DependentUpon>

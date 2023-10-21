@@ -573,6 +573,10 @@ namespace GralDomForms
                 VertFactor = vert_fac
             })
             {
+                dial.StartPosition = FormStartPosition.Manual;
+                dial.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
+                dial.Top = GralStaticFunctions.St_F.GetBottomScreenAtMousePosition() - 400; ;
+
                 if (GRAL_surface.Count > 0 && show_gral.Checked == true) // Allow GRAL selection
                 {
                     dial.GRAL_Topo = true;

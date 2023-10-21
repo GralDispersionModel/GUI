@@ -1134,6 +1134,7 @@ namespace GralBackgroundworkers
         {
             Rechenknecht.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted);
             Rechenknecht.ProgressChanged -= new ProgressChangedEventHandler(SetProgressbar);
+            GC.Collect();
         }
 
         ///<summary>
