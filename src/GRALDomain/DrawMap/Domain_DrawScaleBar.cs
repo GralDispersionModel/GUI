@@ -10,6 +10,7 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Drawing;
 
@@ -20,7 +21,7 @@ namespace GralDomain
         /// <summary>
         /// Draw the Scale Bar
         /// </summary>
-		private void DrawScaleBar(Graphics g, DrawingObjects _drobj, double _bmppbx_save, Font LabelFont, Brush LabelBrush)
+		private void DrawScaleBar(Graphics g, DrawingObjects _drobj, double _bmppbx_save, Font LabelFont, Brush LabelBrush, double factor_x, double factor_y, double form1_west, double form1_north)
 		{
 			Pen raster = new Pen(_drobj.LineColors[0], 1);
 			int pb1_height = picturebox1.Height;
@@ -33,6 +34,12 @@ namespace GralDomain
                 {
                     int mapscalex = MapScale.X;
                     int mapscaley = MapScale.Y;
+
+                    if (MapScale.RelativeTo == MapScaleData.ToMap)
+                    {
+                        mapscalex = (int) ((MapScale.X - form1_west) * factor_x + TransformX);
+                        mapscaley = (int) ((MapScale.Y - form1_north) * factor_y + TransformY);
+                    }
 
                     int xpos1 = Convert.ToInt32(Math.Min(32000, Convert.ToDouble(mapscalex / _bmppbx_save - Convert.ToInt32(linelength * 0.5))));
                     int ypos1 = Convert.ToInt32(Math.Min(32000, Convert.ToDouble(mapscaley) / _bmppbx_save));

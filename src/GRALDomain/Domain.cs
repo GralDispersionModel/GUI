@@ -16,16 +16,15 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Gral.GRALDomForms;
 using GralDomForms;
 using GralIO;
 using GralItemData;
 using GralItemForms;
 using GralMessage;
 using GralStaticFunctions;
+using SocialExplorer.IO.FastDBF;
 
 namespace GralDomain
 {
@@ -2175,30 +2174,19 @@ namespace GralDomain
         private void Button19_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = MouseMode.ViewScaleBarPos;
-            int trans = MapScale.Division;
-            if (InputBox1("Define the divisions of the map scale bar", "Number of divisions:", 1, 10, ref trans) == DialogResult.OK)
+
+            MapScaleInput msi = new MapScaleInput()
             {
-                MapScale.Division = trans;
-            }
-            
-            trans = MapScale.Length;
-            foreach (DrawingObjects _drobj in ItemOptions)
+                Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260,
+                Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 180
+            };
+            msi.MapScale = MapScale;
+            if (msi.ShowDialog() == DialogResult.OK)
             {
-                if (_drobj.Name.Equals("SCALE BAR"))
-                {
-                    trans = _drobj.ContourLabelDist;
-                    break;
-                }
+                MouseControl = MouseMode.ViewScaleBarPos;
+                SaveDomainSettings(1);
             }
-            
-            if (InputBox1("Length of the map scale bar", "Length in [m]:", 1, 100000, ref trans) == DialogResult.OK)
-            {
-                MapScale.Length = trans;
-            }
-            SaveDomainSettings(1);
             Picturebox1_Paint();
-            MouseControl = MouseMode.ViewScaleBarPos;
             Cursor = Cursors.Cross;
         }
 

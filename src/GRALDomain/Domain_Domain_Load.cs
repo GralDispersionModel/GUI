@@ -207,7 +207,6 @@ namespace GralDomain
             EditPortals.ItemDisplayNr = 0;
             EditB.ItemDisplayNr = 0;
             EditWall.ItemDisplayNr = 0;
-            MapScale.Division = 2;
 
             //import source group definitions to source dialogs
             LoadSourceGroups();

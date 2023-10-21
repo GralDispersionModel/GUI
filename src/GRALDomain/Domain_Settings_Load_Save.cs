@@ -115,10 +115,19 @@ namespace GralDomain
                                     
                                     myWriter.WriteLine(bol.ConvertToString(_drobj.Fill));
                                     myWriter.WriteLine(bol.ConvertToString(_drobj.FillYesNo));
-                                    
-                                    myWriter.WriteLine("R"); // R = reserved for future use
-                                    myWriter.WriteLine("R");
-                                    myWriter.WriteLine("R");
+
+                                    if (_drobj.Name.Equals("SCALE BAR"))
+                                    {
+                                        myWriter.WriteLine(Convert.ToString(MapScale.RelativeTo)); // Write Map Scale relative value
+                                        myWriter.WriteLine(Convert.ToString(MapScale.Length));
+                                        myWriter.WriteLine("R");
+                                    }
+                                    else
+                                    {
+                                        myWriter.WriteLine("R"); // R = reserved for future use
+                                        myWriter.WriteLine("R"); // R = reserved for future use
+                                        myWriter.WriteLine("R"); // R = reserved for future use
+                                    }
                                     myWriter.WriteLine(Convert.ToString(_drobj.LabelInterval));
                                     myWriter.WriteLine(Convert.ToString(_drobj.ContourAreaMin));
                                     
@@ -361,9 +370,26 @@ namespace GralDomain
                 string label_distance = "1";
                 if (version > 0) //compatibility to old projects
                 {
-                    dummy = myReader.ReadLine(); // not used at the moment
-                    dummy = myReader.ReadLine();
-                    dummy = myReader.ReadLine();
+                    if (_drobj.Name.Equals("SCALE BAR"))
+                    {
+                        dummy = myReader.ReadLine(); // Read Map Scale relative value
+                        if (Int32.TryParse(dummy, out int value))
+                        {
+                            MapScale.RelativeTo = value;
+                        }
+                        dummy = myReader.ReadLine();
+                        if (Int32.TryParse(dummy, out value))
+                        {
+                            MapScale.Length = value;
+                        }
+                        dummy = myReader.ReadLine(); // not used at the moment
+                    }
+                    else
+                    {
+                        dummy = myReader.ReadLine(); // not used at the moment
+                        dummy = myReader.ReadLine(); // not used at the moment
+                        dummy = myReader.ReadLine(); // not used at the moment
+                    }
                     label_distance = myReader.ReadLine(); // cotour_label interval
                     int label_d = 1;
                     if (Int32.TryParse(label_distance, out label_d) == false)
