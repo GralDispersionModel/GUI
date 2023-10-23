@@ -305,7 +305,7 @@ namespace GralShape
             };
             dbf_reader.StartPosition = FormStartPosition.Manual;
             dbf_reader.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-            dbf_reader.Top = 80;
+            dbf_reader.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
             dbf_reader.ReadDBF(ShapeFileName.Replace(".shp", ".dbf"));
             dt = dbf_reader.dt;
             dbf_reader.Close();

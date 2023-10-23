@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using System.IO;
 using GralItemData;
 using GralMessage;
+using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -177,7 +178,7 @@ namespace GralDomain
                         Cursor = Cursors.Default;
                         shp.StartPosition = FormStartPosition.Manual;
                         shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                        shp.Top = this.Top + 80;
+                        shp.Top = St_F.GetTopScreenAtMousePosition() + 150;
                         dial = shp.ShowDialog();
                         
                         EditAS.SetTrackBarMaximum();

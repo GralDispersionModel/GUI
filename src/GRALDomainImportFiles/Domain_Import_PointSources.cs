@@ -201,7 +201,7 @@ namespace GralDomain
                         Cursor = Cursors.Default;
                         shp.StartPosition = FormStartPosition.Manual;
                         shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                        shp.Top = this.Top + 80;
+                        shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                         dial = shp.ShowDialog();
                         {
                         }
