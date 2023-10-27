@@ -2547,7 +2547,7 @@ namespace GralDomain
             using (SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm))
             {
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog(1);
+                disp.Location = GetScreenPositionForNewDialog(2);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
                 if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
@@ -2671,7 +2671,8 @@ namespace GralDomain
             MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
             MMO.StartPosition = FormStartPosition.Manual;
-            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog(1).X - 1200);
+            MMO.Left = Math.Max(150, St_F.GetScreenAtMousePosition() + 150);
+            MMO.Top = St_F.GetTopScreenAtMousePosition() + 150;
             MMO.Show();
         }
 
@@ -2768,7 +2769,7 @@ namespace GralDomain
                     }
 
                     disp.StartPosition = FormStartPosition.Manual;
-                    disp.Location = GetScreenPositionForNewDialog(1);
+                    disp.Location = GetScreenPositionForNewDialog(2);
                     if (disp.ShowDialog() == DialogResult.OK)
                     {
                         ProfileConcentration.DispersionSituation = disp.selected_situation;
@@ -3177,7 +3178,7 @@ namespace GralDomain
                 };
                 
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog(1);
+                disp.Location = GetScreenPositionForNewDialog(2);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
                 {
                     int dissit = disp.selected_situation; // selected situation
@@ -4552,7 +4553,12 @@ namespace GralDomain
         private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
-            Point pt = new Point(Math.Max(0, Right - 700), 60);
+            int y = 60;
+
+            if (Mode == 2)
+            {
+                y = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
+            }
 
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
@@ -4573,8 +4579,12 @@ namespace GralDomain
                     x += panel1.Left - 350;
                 }
             }
+            if (Mode == 2)
+            {
+                x = St_F.GetScreenAtMousePosition() + 250;
+            }
             x = Math.Max(10, x);
-            return new System.Drawing.Point(x, pt.Y);
+            return new System.Drawing.Point(x, y);
         }
 
         /// <summary>
