@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using System.IO;
 using GralDomForms;
 using System.Data;
+using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -147,7 +148,7 @@ namespace GralDomain
                 Meteo_Height = 10,
                 Meteo_Model = 4, // just Filename & Height
                 X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
-                Y1 = this.Top + 90,
+                Y1 = St_F.GetTopScreenAtMousePosition() + 150,
                 Xs = 0,
                 Ys = 0
             })

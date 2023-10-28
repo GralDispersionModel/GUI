@@ -44,7 +44,7 @@ namespace GralDomain
                     Meteo_Height = 200,
                     Meteo_Model = 32,   // Show height & filename only
                     X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
-                    Y1 = panel1.Top + 10,
+                    Y1 = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150,
                     X0 = x0,
                     Y0 = y0,
                     Xs = x1,

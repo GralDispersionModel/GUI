@@ -485,7 +485,7 @@ namespace GralItemForms
             // if ask = false do not ask and delete immediality
             if (ask == true)
             {
-                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 450) == DialogResult.Yes)
                 {
                     ask = false;
                 }

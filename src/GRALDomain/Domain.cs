@@ -1067,7 +1067,7 @@ namespace GralDomain
                     a = Convert.ToString(SelectedItems.Count) + " " + a + "s?";
                 }
 
-                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete " + a, St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete " + a, St_F.GetScreenAtMousePosition() + 340, St_F.GetTopScreenAtMousePosition() + 150) == DialogResult.Yes)
                 {
                     int i_alt = -1;
                     SelectedItems.Sort(new SortIntDescending()); // sort descending
@@ -2467,7 +2467,7 @@ namespace GralDomain
             }
 
             _selmp.StartPosition = FormStartPosition.Manual;
-            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, this.Top + 90);
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 150);
             _selmp.Owner = this;
             _selmp.Show();
 
@@ -2547,7 +2547,7 @@ namespace GralDomain
             using (SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm))
             {
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog(1);
+                disp.Location = GetScreenPositionForNewDialog(2);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
                 if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
@@ -2671,7 +2671,8 @@ namespace GralDomain
             MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
             MMO.StartPosition = FormStartPosition.Manual;
-            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog(1).X - 1200);
+            MMO.Left = Math.Max(150, St_F.GetScreenAtMousePosition() + 150);
+            MMO.Top = St_F.GetTopScreenAtMousePosition() + 150;
             MMO.Show();
         }
 
@@ -2768,7 +2769,7 @@ namespace GralDomain
                     }
 
                     disp.StartPosition = FormStartPosition.Manual;
-                    disp.Location = GetScreenPositionForNewDialog(1);
+                    disp.Location = GetScreenPositionForNewDialog(2);
                     if (disp.ShowDialog() == DialogResult.OK)
                     {
                         ProfileConcentration.DispersionSituation = disp.selected_situation;
@@ -2909,7 +2910,7 @@ namespace GralDomain
                     Concentration = conc,
                     StartPosition = FormStartPosition.Manual
                 };
-                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, this.Top + 90);
+                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, St_F.GetTopScreenAtMousePosition() + 150);
                 pie.Show();
                 Cursor = Cursors.Default;
                 if (MessageInfoForm != null)
@@ -3177,7 +3178,7 @@ namespace GralDomain
                 };
                 
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog(1);
+                disp.Location = GetScreenPositionForNewDialog(2);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
                 {
                     int dissit = disp.selected_situation; // selected situation
@@ -3325,7 +3326,7 @@ namespace GralDomain
             {
                 animgifs.StartPosition = FormStartPosition.Manual;
                 animgifs.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
-                animgifs.Top = this.Top + 90;
+                animgifs.Top = St_F.GetTopScreenAtMousePosition() + 150;
 
                 if (animgifs.ShowDialog(this) == DialogResult.OK)
                 {
@@ -3896,7 +3897,7 @@ namespace GralDomain
             {
                 dial.StartPosition = FormStartPosition.Manual;
                 dial.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
-                dial.Top = this.Top + 90;
+                dial.Top = St_F.GetTopScreenAtMousePosition() + 150;
 
                 if (dial.ShowDialog() == DialogResult.Cancel)
                 {
@@ -4423,7 +4424,7 @@ namespace GralDomain
                 StartPosition = FormStartPosition.Manual
             })
             {
-                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, this.Top + 90);
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, St_F.GetTopScreenAtMousePosition() + 150);
                 if (mod.ShowDialog() == DialogResult.OK)
                 {
                     TopoModify = mod.modify;
@@ -4552,7 +4553,12 @@ namespace GralDomain
         private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
-            Point pt = new Point(Math.Max(0, Right - 700), GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 80);
+            int y = 60;
+
+            if (Mode == 2)
+            {
+                y = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
+            }
 
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
@@ -4573,8 +4579,12 @@ namespace GralDomain
                     x += panel1.Left - 350;
                 }
             }
+            if (Mode == 2)
+            {
+                x = St_F.GetScreenAtMousePosition() + 250;
+            }
             x = Math.Max(10, x);
-            return new System.Drawing.Point(x, pt.Y);
+            return new System.Drawing.Point(x, y);
         }
 
         /// <summary>
@@ -4712,7 +4722,7 @@ namespace GralDomain
             
             _selmp.MeteoModel = 0;
             _selmp.StartPosition = FormStartPosition.Manual;
-            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, this.Top + 90);
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 150);
             _selmp.Owner = this;
             _selmp.MeteoInitFileName = Path.Combine(Gral.Main.ProjectName, "TimeSeries.txt");
             _selmp.Show();

@@ -3280,6 +3280,7 @@ namespace Gral
             ets.ModulationPath = ProjectSetting.EmissionModulationPath;
             ets.StartPosition = FormStartPosition.Manual;
             ets.Left = St_F.GetScreenAtMousePosition() + 20;
+            ets.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
             ets.Show();
         }
 
