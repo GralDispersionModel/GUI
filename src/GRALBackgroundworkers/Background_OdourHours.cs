@@ -639,7 +639,17 @@ namespace GralBackgroundworkers
                 AddInfoText(Environment.NewLine + "Writing result file " + file5);
 
             }
-            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
+            string errorText = string.Empty;
+            if (wl > situationCount)
+            {
+                errorText = " -- " + (wl - situationCount).ToString() + " situation";
+                if (wl - situationCount > 1)
+                {
+                    errorText += "s";
+                }
+                errorText += " not available or not readable ";
+            }
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

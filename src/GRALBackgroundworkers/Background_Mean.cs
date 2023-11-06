@@ -216,7 +216,6 @@ namespace GralBackgroundworkers
                     {
                         //set variables to zero
                         itm = 0;
-                        situationCount++;
                         foreach (string source_group_name in sg_names)
                         {
                             emmit[itm] = 0;
@@ -270,6 +269,7 @@ namespace GralBackgroundworkers
                             if (itm == 0  && ConFileOK) 
                             {
                                 nnn += wl_freq;
+                                situationCount++;
                             }
 
                             //read GRAL deposition files
@@ -435,7 +435,17 @@ namespace GralBackgroundworkers
                     AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
+            string errorText = string.Empty;
+            if (wl > situationCount)
+            {
+                errorText = " -- " + (wl - situationCount).ToString() + " situation";
+                if (wl - situationCount > 1) 
+                {
+                    errorText += "s";
+                }
+                errorText += " not available or not readable ";
+            }
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful          
         }
     }
