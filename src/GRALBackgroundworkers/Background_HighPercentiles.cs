@@ -461,7 +461,17 @@ namespace GralBackgroundworkers
                     BackgroundThreadMessageBox ("Write total result file " + ex.Message);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
+            string errorText = string.Empty;
+            if (count_ws > situationCount)
+            {
+                errorText = " -- " + (count_ws - situationCount).ToString() + " situation";
+                if (count_ws - situationCount > 1)
+                {
+                    errorText += "s";
+                }
+                errorText += " not available or not readable ";
+            }
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
 
