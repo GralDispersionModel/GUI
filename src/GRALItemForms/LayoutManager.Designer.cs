@@ -62,6 +62,7 @@
             numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             label8 = new System.Windows.Forms.Label();
             groupBox4 = new System.Windows.Forms.GroupBox();
+            checkBox8 = new System.Windows.Forms.CheckBox();
             numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             label7 = new System.Windows.Forms.Label();
             textBox2 = new System.Windows.Forms.TextBox();
@@ -491,6 +492,7 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(checkBox8);
             groupBox4.Controls.Add(numericUpDown2);
             groupBox4.Controls.Add(label7);
             groupBox4.Controls.Add(textBox2);
@@ -506,6 +508,19 @@
             groupBox4.TabStop = false;
             groupBox4.Text = "Color scale";
             toolTip1.SetToolTip(groupBox4, "The location of the top/left corner\r\nof the color scale can be\r\nchanged by left clicking on the map.\r\n");
+            // 
+            // checkBox8
+            // 
+            checkBox8.AutoSize = true;
+            checkBox8.Location = new System.Drawing.Point(192, 35);
+            checkBox8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            checkBox8.Name = "checkBox8";
+            checkBox8.Size = new System.Drawing.Size(50, 19);
+            checkBox8.TabIndex = 32;
+            checkBox8.Text = "Map";
+            toolTip1.SetToolTip(checkBox8, "Move and zoom the color scale with the map");
+            checkBox8.UseVisualStyleBackColor = true;
+            checkBox8.CheckedChanged += checkBox8_CheckedChanged;
             // 
             // numericUpDown2
             // 
@@ -525,7 +540,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(203, 51);
+            label7.Location = new System.Drawing.Point(203, 54);
             label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new System.Drawing.Size(33, 15);
@@ -543,7 +558,7 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new System.Drawing.Point(10, 18);
+            textBox1.Location = new System.Drawing.Point(10, 16);
             textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
@@ -554,7 +569,7 @@
             // 
             // label6
             // 
-            label6.Location = new System.Drawing.Point(7, 75);
+            label6.Location = new System.Drawing.Point(7, 78);
             label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new System.Drawing.Size(30, 15);
@@ -1095,5 +1110,6 @@
         private System.Windows.Forms.GroupBox groupBox7;
         public System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.CheckBox checkBox8;
     }
 }

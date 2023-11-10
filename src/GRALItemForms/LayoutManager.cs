@@ -571,6 +571,8 @@ namespace GralItemForms
             listBox1.Refresh();
             listBox1.BackColor = Color.White;
             init = true;
+
+            checkBox8.Checked = DrawObject.BasedOnMap;
         }
 
         /// <summary>
@@ -1875,47 +1877,40 @@ namespace GralItemForms
 
             if (DrawObject.FillColors.Count > 2)
             {
-                // default colors
-                if (comboBox3.SelectedIndex <= 0)
+                // default color gradient
+                int r1 = DrawObject.FillColors[0].R;
+                int g1 = DrawObject.FillColors[0].G;
+                int b1 = DrawObject.FillColors[0].B;
+                int r2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].R;
+                int g2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].G;
+                int b2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].B;
+
+
+                int r11 = DrawObject.LineColors[0].R;
+                int g11 = DrawObject.LineColors[0].G;
+                int b11 = DrawObject.LineColors[0].B;
+                int r21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].R;
+                int g21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].G;
+                int b21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].B;
+
+                for (int i = 1; i < DrawObject.FillColors.Count - 1; i++)
                 {
-                    int r1 = DrawObject.FillColors[0].R;
-                    int g1 = DrawObject.FillColors[0].G;
-                    int b1 = DrawObject.FillColors[0].B;
-                    int r2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].R;
-                    int g2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].G;
-                    int b2 = DrawObject.FillColors[DrawObject.FillColors.Count - 1].B;
+                    int intr = r1 + (r2 - r1) / DrawObject.FillColors.Count * i;
+                    int intg = g1 + (g2 - g1) / DrawObject.FillColors.Count * i;
+                    int intb = b1 + (b2 - b1) / DrawObject.FillColors.Count * i;
 
+                    int intr1 = r11 + (r21 - r11) / DrawObject.LineColors.Count * i;
+                    int intg1 = g11 + (g21 - g11) / DrawObject.LineColors.Count * i;
+                    int intb1 = b11 + (b21 - b11) / DrawObject.LineColors.Count * i;
 
-                    int r11 = DrawObject.LineColors[0].R;
-                    int g11 = DrawObject.LineColors[0].G;
-                    int b11 = DrawObject.LineColors[0].B;
-                    int r21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].R;
-                    int g21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].G;
-                    int b21 = DrawObject.LineColors[DrawObject.FillColors.Count - 1].B;
-
-                    for (int i = 1; i < DrawObject.FillColors.Count - 1; i++)
+                    if (bt == button9)
                     {
-                        int intr = r1 + (r2 - r1) / DrawObject.FillColors.Count * i;
-                        int intg = g1 + (g2 - g1) / DrawObject.FillColors.Count * i;
-                        int intb = b1 + (b2 - b1) / DrawObject.FillColors.Count * i;
-
-                        int intr1 = r11 + (r21 - r11) / DrawObject.LineColors.Count * i;
-                        int intg1 = g11 + (g21 - g11) / DrawObject.LineColors.Count * i;
-                        int intb1 = b11 + (b21 - b11) / DrawObject.LineColors.Count * i;
-
-                        if (bt == button9)
-                        {
-                            DrawObject.FillColors[i] = Color.FromArgb(intr, intg, intb);
-                        }
-                        else if (bt == button13)
-                        {
-                            DrawObject.LineColors[i] = Color.FromArgb(intr1, intg1, intb1);
-                        }
+                        DrawObject.FillColors[i] = Color.FromArgb(intr, intg, intb);
                     }
-                }
-                else // use pre defined HCL colors
-                {
-                    comboBox3_SelectedIndexChanged(null, null);
+                    else if (bt == button13)
+                    {
+                        DrawObject.LineColors[i] = Color.FromArgb(intr1, intg1, intb1);
+                    }
                 }
                 listBox1.Refresh();
             }
@@ -1935,21 +1930,10 @@ namespace GralItemForms
             int hclType = Math.Min(comboBox3.SelectedIndex, HCLColor.HCLColor.GetLength(0) - 1);
             if (hclType > 0)
             {
-                Button bt = null;
-                if (sender is Button)
-                {
-                    bt = sender as Button;
-                }
                 for (int i = 0; i < DrawObject.FillColors.Count; i++)
                 {
-                    if (sender is ComboBox || (bt != null && bt == button9))
-                    {
-                        DrawObject.FillColors[i] = HCLColor.HCLColor[hclType, Math.Min(i, HCLColor.HCLColor.GetLength(1) - 1)];
-                    }
-                    if (sender is ComboBox || (bt != null && bt == button9))
-                    {
-                        DrawObject.LineColors[i] = HCLColor.HCLColor[hclType, Math.Min(i, HCLColor.HCLColor.GetLength(1) - 1)];
-                    }
+                    DrawObject.FillColors[i] = HCLColor.HCLColor[hclType, Math.Min(i, HCLColor.HCLColor.GetLength(1) - 1)];
+                    DrawObject.LineColors[i] = HCLColor.HCLColor[hclType, Math.Min(i, HCLColor.HCLColor.GetLength(1) - 1)];
                 }
             }
             if (e != null)
@@ -1991,6 +1975,16 @@ namespace GralItemForms
                     domain.Cursor = System.Windows.Forms.Cursors.Default;
                 }
             }
+        }
+
+        /// <summary>
+        /// Move the scale along with the map
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+            DrawObject.BasedOnMap = checkBox8.Checked;
         }
 
         /// <summary>
