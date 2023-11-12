@@ -17,12 +17,10 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Gral;
 using Gral.GRALItemForms;
 using GralItemData;
 using GralStaticFunctions;
-using WinRT;
 
 namespace GralItemForms
 {
@@ -33,7 +31,7 @@ namespace GralItemForms
     {
         readonly GralDomain.Domain domain = null;
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        private bool init = false;               //flag that prevents overwriting data fields during the initialisation procedure
+        private bool init = false;               //flag that prevents overwriting data fields during the initialization procedure
 
         /// <summary>
         /// Settings of recent DrawingObject
@@ -252,11 +250,11 @@ namespace GralItemForms
                 checkBox1.Checked = true;
             }
 
-            //fill text boxes with legendtitle and legendunit
+            //fill text boxes with legendtitle and legend unit
             textBox1.Text = DrawObject.LegendTitle;
             textBox2.Text = DrawObject.LegendUnit;
 
-            //enableor disable color scale 
+            //enable or disable color scale 
             if (DrawObject.ColorScale != "-999,-999,-999")
             {
                 //scale of legend
@@ -294,7 +292,7 @@ namespace GralItemForms
                 comboBox2.SelectedIndex = 3;
             }
 
-            //selected source group/bezugsjahr
+            //selected source group
             try
             {
                 if (DrawObject.SourceGroup == -1)
@@ -640,7 +638,7 @@ namespace GralItemForms
             {
             }
 
-            //changes in postmap
+            //changes in post map
             try
             {
                 if (DrawObject.Name.Substring(0, 3) == "PM:")
@@ -898,7 +896,7 @@ namespace GralItemForms
                         {
                             domain.ReDrawContours = true;
                         }
-                        //enable re-calculation of postmaps
+                        //enable re-calculation of post maps
                         if (DrawObject.Name.Substring(0, 3) == "PM:")
                         {
                             domain.ReDrawContours = true;
