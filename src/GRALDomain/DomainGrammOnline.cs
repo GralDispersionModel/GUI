@@ -792,7 +792,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.Closing += new System.ComponentModel.CancelEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 460, St_F.GetTopScreenAtMousePosition() + 100); 
+                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100); 
                 ProfileConcentration.VertProfileVelocity.Show();
 
                 //write text files with vertical profiles
@@ -839,7 +839,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.FileName = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 460, St_F.GetTopScreenAtMousePosition() + 100);
+                ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 520, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileDirection.Show();
             }
             catch { }
@@ -1032,7 +1032,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.Closing += new System.ComponentModel.CancelEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 460, St_F.GetTopScreenAtMousePosition() + 100);
+                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileVelocity.Show();
 
                 //write text files with vertical profiles
@@ -1083,7 +1083,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.FileName = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 460, St_F.GetTopScreenAtMousePosition() + 100);
+                ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 520, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileDirection.Show();
 
             }

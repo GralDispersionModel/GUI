@@ -217,6 +217,11 @@ namespace GralDomain
         private bool disposed = false;
 
         /// <summary>
+        /// Element based on the map or screen
+        /// </summary>
+        public bool BasedOnMap = false;
+
+        /// <summary>
         /// Default settings for the drawing object
         /// </summary>
         public DrawingObjects(string _name)

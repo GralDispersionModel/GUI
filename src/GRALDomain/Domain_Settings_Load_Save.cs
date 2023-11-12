@@ -124,7 +124,7 @@ namespace GralDomain
                                     }
                                     else
                                     {
-                                        myWriter.WriteLine("R"); // R = reserved for future use
+                                        myWriter.WriteLine(bol.ConvertToString(_drobj.BasedOnMap)); 
                                         myWriter.WriteLine("R"); // R = reserved for future use
                                         myWriter.WriteLine("R"); // R = reserved for future use
                                     }
@@ -386,7 +386,11 @@ namespace GralDomain
                     }
                     else
                     {
-                        dummy = myReader.ReadLine(); // not used at the moment
+                        dummy = myReader.ReadLine(); // Coordinates based on screen or map?
+                        if (!dummy.Equals("R") && dummy.Length > 2)
+                        {
+                            _drobj.BasedOnMap = (bool)bol.ConvertFromString(dummy);
+                        }
                         dummy = myReader.ReadLine(); // not used at the moment
                         dummy = myReader.ReadLine(); // not used at the moment
                     }

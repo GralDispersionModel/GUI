@@ -1167,7 +1167,17 @@ namespace GralDomain
                         {
                             string[] dummy = new string[3];
                             dummy = ActualEditedDrawingObject.ColorScale.Split(new char[] { ',' });
-                            ActualEditedDrawingObject.ColorScale = Convert.ToString(e.X) + "," + Convert.ToString(e.Y) + "," + dummy[2];
+                            
+                            // RemoveSpikes ist used for Map based coordinates, otherwise there are screen based coordinates
+                            if (ActualEditedDrawingObject.BasedOnMap)
+                            {
+                                ActualEditedDrawingObject.ColorScale = Convert.ToString(Math.Round(Convert.ToDouble(textBox1.Text.Replace(".", decsep)))) + ","
+                                                                     + Convert.ToString(Math.Round(Convert.ToDouble(textBox2.Text.Replace(".", decsep)))) + "," + dummy[2];
+                            }
+                            else
+                            {
+                                ActualEditedDrawingObject.ColorScale = Convert.ToString(e.X) + "," + Convert.ToString(e.Y) + "," + dummy[2];
+                            }
                             Picturebox1_Paint();
                         }
                     }

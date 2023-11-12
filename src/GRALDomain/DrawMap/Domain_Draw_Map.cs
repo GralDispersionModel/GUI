@@ -476,7 +476,7 @@ namespace GralDomain
             pz.Dispose();
             
             //draw color scales
-            DrawColorScales(g, _bmppbx_save);
+            DrawColorScales(g, _bmppbx_save, factor_x, factor_y, form1_west, form1_north);
             
             // draw section Lines
             if (sectionpoints.Count > 1)
