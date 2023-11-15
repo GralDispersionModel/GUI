@@ -524,12 +524,12 @@
             // 
             // numericUpDown2
             // 
-            numericUpDown2.DecimalPlaces = 1;
+            numericUpDown2.DecimalPlaces = 2;
             numericUpDown2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numericUpDown2.Location = new System.Drawing.Point(197, 73);
             numericUpDown2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             numericUpDown2.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
-            numericUpDown2.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown2.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numericUpDown2.Name = "numericUpDown2";
             numericUpDown2.Size = new System.Drawing.Size(57, 23);
             numericUpDown2.TabIndex = 28;

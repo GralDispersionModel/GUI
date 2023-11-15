@@ -261,6 +261,7 @@ namespace GralItemForms
                 string[] dummy = new string[3];
                 dummy = DrawObject.ColorScale.Split(new char[] { ',' });
                 numericUpDown2.Value = Convert.ToDecimal(dummy[2], ic);
+                SetNumericupDownIncrement(numericUpDown2.Value, 1m);
                 domain.ActualEditedDrawingObject = DrawObject;
                 domain.MouseControl = GralDomain.MouseMode.ViewLegendPos;
                 domain.Cursor = System.Windows.Forms.Cursors.Cross;
@@ -1996,8 +1997,24 @@ namespace GralItemForms
             {
                 string[] dummy = new string[3];
                 dummy = DrawObject.ColorScale.Split(new char[] { ',' });
+                decimal oldValue = Convert.ToDecimal(dummy[2], ic);
                 double s = Convert.ToDouble(numericUpDown2.Value, ic);
                 DrawObject.ColorScale = dummy[0] + "," + dummy[1] + "," + Convert.ToString(s, ic);
+
+                SetNumericupDownIncrement(numericUpDown2.Value, oldValue);
+            }
+        }
+
+        private void SetNumericupDownIncrement(decimal value, decimal oldValue)
+        {
+            if (value <= 0.1m)
+            {
+                numericUpDown2.Increment = 0.01m;
+            }
+            
+            if (value > 0.09m && oldValue < 0.1m)
+            {
+                numericUpDown2.Increment = 0.1m;
             }
         }
 
