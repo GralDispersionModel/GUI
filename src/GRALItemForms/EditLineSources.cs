@@ -1055,11 +1055,11 @@ namespace GralItemForms
 
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                     {
-                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                     }
                     else
                     {
-                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, St_F.GetTopScreenAtMousePosition() + 150);
                     }
 
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
@@ -1097,11 +1097,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(lineemission[nr].Text, true);
