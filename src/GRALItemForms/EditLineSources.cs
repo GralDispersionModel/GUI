@@ -1325,11 +1325,11 @@ namespace GralItemForms
             };
             if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
             {
-                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 350);
             }
             else
             {
-                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, St_F.GetTopScreenAtMousePosition() + 350);
             }
 
             sgsel.SourceGroup = SG_List;

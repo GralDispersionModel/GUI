@@ -716,11 +716,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 
                 edit.Dep = dep[nr]; // set actual values
@@ -940,11 +940,11 @@ namespace GralItemForms
 
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150 );
                 }
 
                 if (edT.ShowDialog() == DialogResult.OK)

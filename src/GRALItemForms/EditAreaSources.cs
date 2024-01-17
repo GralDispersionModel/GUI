@@ -687,7 +687,6 @@ namespace GralItemForms
 
                     VerticesEditDialog vert = new VerticesEditDialog(number_of_vertices, ref CornerAreaX, ref CornerAreaY)
                     {
-                        Location = new System.Drawing.Point(Right - 180 - 280, Top + 60),
                         StartPosition = FormStartPosition.Manual
                     };
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
@@ -732,11 +731,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(areaemission[nr].Text,true);
