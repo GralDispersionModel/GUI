@@ -268,7 +268,7 @@ namespace GralDomain
 				search.Data = data;
                 search.StartPosition = FormStartPosition.Manual;
                 search.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                search.Top = 80;
+                search.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                 search.Size = SearchFormSize;
                 search.FormSize = SearchFormSize;
                 

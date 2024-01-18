@@ -23,6 +23,9 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Calculat Mean and/or Max and DayMax values 
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void MeanMaxDaymax(GralBackgroundworkers.BackgroundworkerData mydata,
                                    System.ComponentModel.DoWorkEventArgs e)
         {
@@ -38,7 +41,7 @@ namespace GralBackgroundworkers
             bool no_classification = mydata.MeteoNotClassified;
 
             //get emission modulations for all source groups
-            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
 
             List<string> wgmet = new List<string>();
             List<string> wrmet = new List<string>();
@@ -155,7 +158,7 @@ namespace GralBackgroundworkers
             if (!transientMode)
             {
                 emifac_timeseries = ReadEmissionModulationTimeSeries(mettimefilelength, maxsource, mydata.ProjectName,
-                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names);
+                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
             //read mettimeseries.dat
@@ -167,8 +170,11 @@ namespace GralBackgroundworkers
             }
 
             int count_ws = -1;
+            int prevMeteoSituation = -1;
+            bool exist = true;
+            bool existdep = true;
             //while (text2[0] != "")
-            foreach(string mettimeseries in data_mettimeseries)
+            foreach (string mettimeseries in data_mettimeseries)
             {
                 //MessageBox.Show(mettimeseries);
                 text2 = mettimeseries.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -220,9 +226,9 @@ namespace GralBackgroundworkers
                     if (meteo_situation_found == true)
                     {
                         //GRAL filenames
-                        bool exist = true;
+                        exist = true;
                         string[] con_files = new string[100];
-                        bool existdep = true;
+                        existdep = true;
                         string[] dep_files = new string[100];
 
                         //get correct weather number in dependence on steady-state or transient simulation
@@ -231,81 +237,86 @@ namespace GralBackgroundworkers
                         {
                             weanumb = count_ws;
                         }
-                        
-                        int itmp = 0;
-                        Object thisLock = new Object();
-                        foreach (string source_group_name in sg_names)
-                        //						Parallel.For(0, sg_names.Length, itmp =>
+
+                        if (weanumb == prevMeteoSituation)
                         {
-                            bool parallel_existdep = true;
-                            
-                            if (sg_names.Length > 0)
-                            {
-                                con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
-                                dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + sg_numbers[itmp].PadLeft(2, '0') + ".dep";
-                            }
-                            else
-                            {
-                                con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
-                                dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".dep";
-                            }
+                            // the previous weather situation once again -> do not read the con and dep files
+                        }
+                        else
+                        {
+                            exist = true;
+                            existdep = true;
+                            prevMeteoSituation = weanumb;
+                            int itmp = 0;
 
-                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp])) == false &&
-                                File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                            foreach (string source_group_name in sg_names)
+                            //						Parallel.For(0, sg_names.Length, itmp =>
                             {
-                                lock(thisLock)
-                                {
-                                    existdep = false;
-                                }
-                                parallel_existdep = false;
-                            }
+                                bool parallel_existdep = true;
 
-                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
-                                File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
-                            {
-                                lock(thisLock)
+                                if (sg_names.Length > 0)
                                 {
-                                    exist = false;
-                                } 
-                                // break;
-                            }
-                            
-                            //set variables to zero
-                            for (int i = 0; i <= mydata.CellsGralX; i++)
-                            {
-                                for (int j = 0; j <= mydata.CellsGralY; j++)
-                                {
-                                    conc[i][j][itmp] = 0;
-                                    dep[i][j][itmp] = 0;
+                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
+                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + sg_numbers[itmp].PadLeft(2, '0') + ".dep";
                                 }
-                            }
-                            
-                            //read GRAL concentration files
-                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
-                            if (!ReadConFiles(filename, mydata, itmp, ref conc))
-                            {
-                                // Error reading one *.con file
-                                exist = false;
-                                existdep = false;
-                            }
-                            
-                            if (parallel_existdep)
-                            {
-                                //read GRAL deposition files
-                                filename = Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp]);
-                                bool depo_files_exists = ReadConFiles(filename, mydata, itmp, ref dep);
-                                if (depo_files_exists)
+                                else
                                 {
-                                    lock(thisLock)
+                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
+                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".dep";
+                                }
+
+                                if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp])) == false &&
+                                    File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                                {
                                     {
-                                        deposition_files_exists = true;
+                                        existdep = false;
+                                    }
+                                    parallel_existdep = false;
+                                }
+
+                                if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
+                                    File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
+                                {
+                                    {
+                                        exist = false;
+                                    }
+                                    // break;
+                                }
+
+                                //set variables to zero
+                                for (int i = 0; i <= mydata.CellsGralX; i++)
+                                {
+                                    for (int j = 0; j <= mydata.CellsGralY; j++)
+                                    {
+                                        conc[i][j][itmp] = 0;
+                                        dep[i][j][itmp] = 0;
                                     }
                                 }
-                            }
-                            itmp++;
-                        }//);
-                        
-                        thisLock = null;
+
+                                //read GRAL concentration files
+                                string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
+                                if (!ReadConFiles(filename, mydata, itmp, ref conc))
+                                {
+                                    // Error reading one *.con file
+                                    exist = false;
+                                    existdep = false;
+                                }
+
+                                if (parallel_existdep)
+                                {
+                                    //read GRAL deposition files
+                                    filename = Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp]);
+                                    bool depo_files_exists = ReadConFiles(filename, mydata, itmp, ref dep);
+                                    if (depo_files_exists)
+                                    {
+                                        {
+                                            deposition_files_exists = true;
+                                        }
+                                    }
+                                }
+                                itmp++;
+                            }//);
+                        }
 
                         SetText("Day.Month: " + day + "." + month);
 
@@ -469,7 +480,7 @@ namespace GralBackgroundworkers
                     else
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + "_" + mydata.Slicename + ".txt");
                     
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
@@ -481,7 +492,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" +name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" +name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -502,7 +513,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -519,7 +530,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;
@@ -556,7 +567,7 @@ namespace GralBackgroundworkers
                         depo_name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     }
                     
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Max_" + name + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Max_" + name + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -567,7 +578,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Max" + depo_name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Max" + depo_name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -588,7 +599,7 @@ namespace GralBackgroundworkers
 
                 //write max total concentration file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Max_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Max_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -605,7 +616,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Max" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Max" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;
@@ -641,7 +652,7 @@ namespace GralBackgroundworkers
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
                         depo_name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     }
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "DayMax_" + name + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "DayMax_" + name + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -652,7 +663,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_DayMax_" + depo_name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_DayMax_" + depo_name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -673,7 +684,7 @@ namespace GralBackgroundworkers
 
                 //write max daily total concentration file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "DayMax_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "DayMax_" + name + ".txt");
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -690,7 +701,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists)
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_DayMax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_DayMax_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;
@@ -700,7 +711,17 @@ namespace GralBackgroundworkers
                     AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
+            string errorText = string.Empty;
+            if (count_ws > situationCount)
+            {
+                errorText = " -- " + (count_ws - situationCount).ToString() + " situation";
+                if (count_ws - situationCount > 1)
+                {
+                    errorText += "s";
+                }
+                errorText += " not available or not readable ";
+            }
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

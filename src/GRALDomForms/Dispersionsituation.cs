@@ -200,7 +200,14 @@ namespace GralDomForms
                             }
                             try
                             {
-                                text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
+                                if (!myreader.EndOfStream)
+                                {
+                                    text = myreader.ReadLine().Split(new char[] { ' ', ';', ',', '\t' });
+                                }
+                                else
+                                {
+                                    break;
+                                }
                             }
                             catch
                             {

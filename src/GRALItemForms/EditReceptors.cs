@@ -136,6 +136,10 @@ namespace GralItemForms
             {
                 valid_coors = false;
             }
+            if (Double.IsNaN(x) || Double.IsNaN(y))
+            {
+                valid_coors = false;
+            }
 
             ReceptorData _rdata;
             if (ItemDisplayNr >= ItemData.Count) // new item

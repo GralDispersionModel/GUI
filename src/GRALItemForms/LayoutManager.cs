@@ -31,8 +31,8 @@ namespace GralItemForms
     {
         readonly GralDomain.Domain domain = null;
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        private bool init = false;               //flag that prevents overwriting data fields during the initialisation procedure
-       
+        private bool init = false;               //flag that prevents overwriting data fields during the initialization procedure
+
         /// <summary>
         /// Settings of recent DrawingObject
         /// </summary>
@@ -40,22 +40,23 @@ namespace GralItemForms
         private readonly string listsep;
         private bool UpdateObjectManager = false;
         public event ForceObjectManagerUpdate UpdateListbox;
+        private HCLColorMap HCLColor;
 
         public Layout(GralDomain.Domain f)
         {
             domain = f;
             InitializeComponent();
-            listBox1.DrawItem +=  new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
-            
-            #if __MonoCS__
+            listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
+
+#if __MonoCS__
                 var allNumUpDowns  = Main.GetAllControls<NumericUpDown>(this);
                 foreach (NumericUpDown nu in allNumUpDowns)
                 {
                     nu.TextAlign = HorizontalAlignment.Left;
                 }
-            #endif
-         
-            listBox1.ItemHeight = listBox1.Font.Height;        
+#endif
+
+            listBox1.ItemHeight = listBox1.Font.Height;
             listsep = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
         }
 
@@ -69,15 +70,15 @@ namespace GralItemForms
             CheckBox3.Visible = true;
             groupBox1.Visible = true;
             groupBox5.Visible = true;
-            
+
             trackBar1.Value = Math.Max(0, Math.Min(100, (int)(100 - DrawObject.Transparancy / 2.55)));
-           
+
             //number of decimal places
             numericUpDown4.Value = 15;
             numericUpDown4.Value = DrawObject.DecimalPlaces;
-            
+
             numericUpDown5.Value = DrawObject.ContourAreaMin;
-            
+
             //labels/names hide/show
             if (DrawObject.Label == 2)
             {
@@ -88,7 +89,7 @@ namespace GralItemForms
                 CheckBox3.Checked = true;
                 CheckBox3.CheckState = CheckState.Indeterminate;
             }
-            else if(DrawObject.Label == 1)
+            else if (DrawObject.Label == 1)
             {
                 CheckBox3.Checked = false;
             }
@@ -101,17 +102,17 @@ namespace GralItemForms
                 label11.Visible = false;
                 numericUpDown6.Visible = false;
             }
-            
+
             checkBox7.Checked = DrawObject.ScaleLabelFont;
-             
+
             if (DrawObject.Name == "POINT SOURCES")
             {
                 groupBox2.Text = "Symbol properties";
                 button11.Text = "Size";
                 toolTip1.SetToolTip(button11, "Enter the size of point-symbols\r\n 0 = no zoom, 1=standard width\r\n 2 and above = width in m");
                 checkBox7.Visible = true;
-            }  
-            
+            }
+
             if (DrawObject.Name == "RECEPTORS")
             {
                 groupBox2.Text = "Symbol properties";
@@ -119,7 +120,7 @@ namespace GralItemForms
                 toolTip1.SetToolTip(button11, "Enter the size of receptor-symbols\r\n 0 = no zoom, 1=standard width\r\n 2 and above = width in m");
                 checkBox7.Visible = true;
                 CheckBox3.Visible = true;
-            }  
+            }
 
             if (DrawObject.Name == "TUNNEL PORTALS")
             {
@@ -127,15 +128,15 @@ namespace GralItemForms
                 button11.Text = "Size";
                 toolTip1.SetToolTip(button11, "Enter the size of tunnel-symbols");
                 checkBox7.Visible = true;
-            }                
-            
-            if (DrawObject.Name.StartsWith("LINE SOURCES") || DrawObject.Name.Equals("WALLS") || 
+            }
+
+            if (DrawObject.Name.StartsWith("LINE SOURCES") || DrawObject.Name.Equals("WALLS") ||
                 DrawObject.Name.Equals("AREA SOURCES") || DrawObject.Name.Equals("VEGETATION"))
             {
                 checkBox7.Visible = true;
             }
-            
-            if (DrawObject.Name == "WALLS" || 
+
+            if (DrawObject.Name == "WALLS" ||
                 DrawObject.Name == "GRAL DOMAIN" ||
                 DrawObject.Name == "GRAMM DOMAIN")
             {
@@ -143,8 +144,8 @@ namespace GralItemForms
                 label9.Visible = false;
                 numericUpDown4.Visible = false;
                 checkBox5.Visible = false;
-            }  
-            
+            }
+
             //show vector scale when layer is vector map
             if (DrawObject.Name.StartsWith("VM:"))
             {
@@ -154,7 +155,7 @@ namespace GralItemForms
                 checkBox4.Text = "Smart draw";
                 toolTip1.SetToolTip(checkBox4, "Draw faster but less accurate");
             }
-            
+
             //line properties
             groupBox2.Visible = true;
             if (DrawObject.LineColor == Color.Transparent)
@@ -186,13 +187,13 @@ namespace GralItemForms
                 label4.Visible = true;
                 numericUpDown1.Visible = true;
                 numericUpDown1.Value = Math.Max(1, DrawObject.ContourLabelDist);
-                
+
                 if (DrawObject.Name.StartsWith("CM:")) // show label distance at CM only
                 {
                     label11.Visible = true;
                     numericUpDown6.Visible = true;
                     numericUpDown6.Value = Math.Max(1, Math.Min(10, DrawObject.LabelInterval));
-                    
+
                     if (DrawObject.DrawSimpleContour)
                     {
                         radioButton2.Checked = true;
@@ -208,12 +209,12 @@ namespace GralItemForms
                     radioButton1.Visible = true;
                     radioButton2.Visible = true;
                     checkBox6.Visible = true;
-                    
+
                     label12.Visible = true;
                     label13.Visible = true;
                     checkBox6.Checked = DrawObject.ContourDrawBorder;
-                    numericUpDown7.Value = (decimal) (Math.Round(DrawObject.ContourFilter, 1));
-                    numericUpDown8.Value = (decimal) (Math.Round(DrawObject.ContourTension, 1));
+                    numericUpDown7.Value = (decimal)(Math.Round(DrawObject.ContourFilter, 1));
+                    numericUpDown8.Value = (decimal)(Math.Round(DrawObject.ContourTension, 1));
                     numericUpDown10.Value = (decimal)(DrawObject.RemoveSpikes);
                     groupBox6.Visible = true;
                     label3.Visible = true;
@@ -231,38 +232,39 @@ namespace GralItemForms
                 checkBox1.Visible = true;
                 groupBox3.Visible = true;
             }
-              
+
             // fill box on GRAL and GRAMM Domain = Show Raster
             if (DrawObject.Name == "GRAMM DOMAIN" || DrawObject.Name == "GRAL DOMAIN")
             {
                 checkBox1.Text = "Show Raster";
-                checkBox1.Visible = true;	
+                checkBox1.Visible = true;
             }
-            
+
             //objects filled or not
             if (DrawObject.FillYesNo == false)
             {
-                checkBox1.Checked=false;
+                checkBox1.Checked = false;
             }
             else
             {
                 checkBox1.Checked = true;
             }
 
-            //fill text boxes with legendtitle and legendunit
+            //fill text boxes with legendtitle and legend unit
             textBox1.Text = DrawObject.LegendTitle;
             textBox2.Text = DrawObject.LegendUnit;
 
-            //enableor disable color scale 
+            //enable or disable color scale 
             if (DrawObject.ColorScale != "-999,-999,-999")
             {
                 //scale of legend
                 string[] dummy = new string[3];
                 dummy = DrawObject.ColorScale.Split(new char[] { ',' });
                 numericUpDown2.Value = Convert.ToDecimal(dummy[2], ic);
+                SetNumericupDownIncrement(numericUpDown2.Value, 1m);
                 domain.ActualEditedDrawingObject = DrawObject;
                 domain.MouseControl = GralDomain.MouseMode.ViewLegendPos;
-                domain.Cursor = Cursors.Cross;
+                domain.Cursor = System.Windows.Forms.Cursors.Cross;
             }
             else
             {
@@ -291,7 +293,7 @@ namespace GralItemForms
                 comboBox2.SelectedIndex = 3;
             }
 
-            //selected source group/bezugsjahr
+            //selected source group
             try
             {
                 if (DrawObject.SourceGroup == -1)
@@ -302,7 +304,7 @@ namespace GralItemForms
             catch
             {
             }
-          
+
             //values
             if (listBox1.Items.Count == 0)
             {
@@ -381,7 +383,7 @@ namespace GralItemForms
                     button2.Visible = true;
                     button12.Visible = true;
                 }
-                
+
                 if (DrawObject.Name.StartsWith("CONCENTRATION VALUES") || DrawObject.Name.StartsWith("ITEM INFO"))
                 {
                     groupBox4.Visible = false;
@@ -396,7 +398,7 @@ namespace GralItemForms
                     checkBox7.Visible = true;
                     numericUpDown2.Enabled = false;
                     label7.Visible = false;
-                    
+
                     listBox1.Visible = false;
                     groupBox5.Visible = false;
 
@@ -474,7 +476,7 @@ namespace GralItemForms
                 }
 
                 trackBar1.Value = DrawObject.Transparancy;
-                
+
                 label4.Text = "Raster size";
                 if (DrawObject.LabelInterval == 0)
                 {
@@ -483,23 +485,23 @@ namespace GralItemForms
                     DrawObject.LineColors[0] = Color.Gray;
                     DrawObject.LabelFont = new Font("ARIAL", 8);
                 }
-                
+
                 if (DrawObject.LineColors[0] != null)
                 {
-                    
+
                 }
-            
+
                 CheckBox3.Text = "Show raster";
                 toolTip1.SetToolTip(CheckBox3, "Draw a grid raster");
                 CheckBox3.Visible = true;
-                if (DrawObject.ContourLabelDist >= numericUpDown1.Minimum &&  DrawObject.ContourLabelDist <= numericUpDown1.Maximum)
+                if (DrawObject.ContourLabelDist >= numericUpDown1.Minimum && DrawObject.ContourLabelDist <= numericUpDown1.Maximum)
                 {
                     numericUpDown1.Value = DrawObject.ContourLabelDist;
                 }
                 label4.Visible = true;
                 numericUpDown1.Visible = true;
                 toolTip1.SetToolTip(CheckBox3, "Show grid with fixed size");
-                
+
                 checkBox4.Visible = false;
                 groupBox2.Visible = true;
                 button11.Visible = false;
@@ -507,15 +509,15 @@ namespace GralItemForms
                 button7.Visible = false; // font-color = line color at coordinate grid
                 //domain.picture[_object_index] = SetImageOpacity(domain.picture[_object_index], 0.4F);
             }
-            
+
             if (DrawObject.Name == "WINDROSE")
             {
                 checkBox7.Visible = true;
                 label4.Text = "Size [m]";
-//				label11.Text = "Max. wind vel [m/s]";
-//				label11.Visible = true;
-//				numericUpDown6.Visible = true;
-//				numericUpDown6.Value = Math.Max(6, Math.Min(12, DrawObject.LabelInterval));
+                //				label11.Text = "Max. wind vel [m/s]";
+                //				label11.Visible = true;
+                //				numericUpDown6.Visible = true;
+                //				numericUpDown6.Value = Math.Max(6, Math.Min(12, DrawObject.LabelInterval));
                 checkBox4.Visible = false;
                 groupBox5.Visible = true;
                 label10.Top = numericUpDown1.Bottom + 20;
@@ -523,19 +525,19 @@ namespace GralItemForms
                 label10.Visible = true;
                 numericUpDown5.Visible = true;
                 label10.Text = "Max. scale [%]\n 0 = auto";
-                numericUpDown5.Value = (decimal) (DrawObject.ContourAreaMin);
+                numericUpDown5.Value = (decimal)(DrawObject.ContourAreaMin);
                 groupBox2.Visible = false;
             }
-            
+
             if (DrawObject.Name == "SCALE BAR")
             {
                 checkBox7.Visible = true;
                 if (DrawObject.LabelFont.Height < DrawObject.ContourLabelDist / 20)
                 {
-                    DrawObject.LabelFont = new Font(DrawObject.LabelFont.FontFamily, Math.Min(16000, (int) (DrawObject.ContourLabelDist / 20)));
+                    DrawObject.LabelFont = new Font(DrawObject.LabelFont.FontFamily, Math.Min(16000, (int)(DrawObject.ContourLabelDist / 20)));
                 }
             }
-            
+
             if (DrawObject.Name.Equals("NORTH ARROW"))
             {
                 label4.Text = "Scale [%]";
@@ -557,10 +559,19 @@ namespace GralItemForms
                 rect.Height = button1.Bottom + 20;
                 ClientSize = rect;
             }
-            
+
+            HCLColor = new HCLColorMap();
+            for (int i = 0; i < HCLColor.HCLName.Length; i++)
+            {
+                comboBox3.Items.Add(HCLColor.HCLName[i]);
+            }
+            comboBox3.SelectedIndex = 0;
+
             listBox1.Refresh();
             listBox1.BackColor = Color.White;
             init = true;
+
+            checkBox8.Checked = DrawObject.BasedOnMap;
         }
 
         /// <summary>
@@ -570,17 +581,18 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void Button1_Click(object sender, EventArgs e)
         {
-            
-            if(DrawObject.LabelInterval !=0)
+            this.Hide();
+
+            if (DrawObject.LabelInterval != 0)
             {
                 DrawObject.ContourLabelDist = Convert.ToInt32(numericUpDown1.Value);
             }
 
             DrawObject.LabelInterval = Convert.ToInt32(numericUpDown6.Value);
-            
+
             DrawObject.ContourDrawBorder = checkBox6.Checked;
-            
-            if (Math.Abs(DrawObject.ContourFilter  - Convert.ToSingle(numericUpDown7.Value)) > 0.01) // new value
+
+            if (Math.Abs(DrawObject.ContourFilter - Convert.ToSingle(numericUpDown7.Value)) > 0.01) // new value
             {
                 DrawObject.ContourFilter = Convert.ToSingle(numericUpDown7.Value);
                 domain.ReDrawContours = true;
@@ -612,29 +624,29 @@ namespace GralItemForms
 #endif
 
             DrawObject.ScaleLabelFont = checkBox7.Checked;
-            
+
             //changes in contour map
             try
             {
                 if (DrawObject.Name.Substring(0, 3) == "CM:")
                 {
-                    Cursor = Cursors.WaitCursor;
+                    Cursor = System.Windows.Forms.Cursors.WaitCursor;
                     domain.Contours(DrawObject.ContourFilename, DrawObject);
-                    Cursor = Cursors.Default;
+                    Cursor = System.Windows.Forms.Cursors.Default;
                 }
             }
             catch
             {
             }
 
-            //changes in postmap
+            //changes in post map
             try
             {
                 if (DrawObject.Name.Substring(0, 3) == "PM:")
                 {
-                    Cursor = Cursors.WaitCursor;
+                    Cursor = System.Windows.Forms.Cursors.WaitCursor;
                     domain.Contours(DrawObject.ContourFilename, DrawObject);
-                    Cursor = Cursors.Default;
+                    Cursor = System.Windows.Forms.Cursors.Default;
                 }
             }
             catch
@@ -646,15 +658,15 @@ namespace GralItemForms
             {
                 if (DrawObject.Name.Substring(0, 3) == "VM:")
                 {
-                    Cursor = Cursors.WaitCursor;
+                    Cursor = System.Windows.Forms.Cursors.WaitCursor;
                     domain.LoadVectors(DrawObject.ContourFilename, DrawObject);
-                    Cursor = Cursors.Default;
+                    Cursor = System.Windows.Forms.Cursors.Default;
                 }
             }
             catch
             {
             }
-            
+
             // Changes at the opacity of a bitmap
             try
             {
@@ -672,9 +684,9 @@ namespace GralItemForms
                         StreamReader SR = new StreamReader(DrawObject.ContourFilename);
                         DrawObject.Picture = new Bitmap(SR.BaseStream);
                         SR.Close();
-                                                
-                        float opacity = ((float) trackBar1.Value) / 100; // 0 - 100 %
- //                		domain.picture[_object_index] = SetImageOpacity(domain.picture[_object_index], opacity);
+
+                        float opacity = ((float)trackBar1.Value) / 100; // 0 - 100 %
+                                                                        //                		domain.picture[_object_index] = SetImageOpacity(domain.picture[_object_index], opacity);
                         if (opacity < 1)
                         {
                             DrawObject.Picture.MakeTransparent(Color.White);
@@ -683,21 +695,21 @@ namespace GralItemForms
                     }
                 }
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 MessageBox.Show(this, err.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
             if (DrawObject.Name.Equals("SCALE BAR"))
             {
                 //MessageBox.Show(DrawObject.LabelFont.Height.ToString() + "/" + DrawObject.ContourLabelDist.ToString());
                 if (DrawObject.ScaleLabelFont && (DrawObject.LabelFont.Height < (DrawObject.ContourLabelDist / 10)))
                 {
-                    DrawObject.LabelFont = new Font(DrawObject.LabelFont.FontFamily, Math.Min(16000, (int) (DrawObject.ContourLabelDist / 5)));
+                    DrawObject.LabelFont = new Font(DrawObject.LabelFont.FontFamily, Math.Min(16000, (int)(DrawObject.ContourLabelDist / 5)));
                 }
             }
-            
-            Close();
+
+            this.Close();
         }
 
         /// <summary>
@@ -706,7 +718,7 @@ namespace GralItemForms
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void CheckBox3CheckStateChanged(object sender, EventArgs e)
-         {
+        {
             if (init == true)
             {
                 if (CheckBox3.Checked == true)
@@ -766,7 +778,7 @@ namespace GralItemForms
                     }
                     else
                     {
-                        DrawObject.LineColors[0] = ct.Color;	
+                        DrawObject.LineColors[0] = ct.Color;
                     }
                 }
             }
@@ -819,9 +831,8 @@ namespace GralItemForms
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
-        {        
+        {
             e.DrawBackground();
-            Brush myBrush = Brushes.Black;
             try
             {
                 StringFormat drawFormat = new StringFormat
@@ -831,31 +842,25 @@ namespace GralItemForms
 
                 int width = (int)(e.Bounds.Width / 5D * 2);
                 RectangleF textColumn = new RectangleF(e.Bounds.Left, e.Bounds.Top, width, e.Bounds.Height);
-                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, myBrush, textColumn, drawFormat);
+                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Black, textColumn, drawFormat);
 
-                myBrush = new SolidBrush(DrawObject.FillColors[e.Index]);
                 int graphwidth = (e.Bounds.Width - width) / 2;
-                int x0 = width  + graphwidth + 4;
+                int x0 = width + graphwidth + 4;
                 int y0 = e.Bounds.Top + 1;
                 int height = Math.Max(1, e.Bounds.Height - 2);
-                e.Graphics.FillRectangle(myBrush, x0, y0, Math.Max(1, graphwidth - 8), height);
+                e.Graphics.FillRectangle(new SolidBrush(DrawObject.FillColors[e.Index]), x0, y0, Math.Max(1, graphwidth - 8), height);
 
                 x0 = width + 4;
                 y0 = e.Bounds.Top + e.Bounds.Height / 2;
-                Pen myPen = new Pen(DrawObject.LineColors[e.Index], 3);
-                e.Graphics.DrawLine(myPen, x0, y0, x0 + Math.Max(1, graphwidth - 8), y0);
-                myPen.Dispose();
+                e.Graphics.DrawLine(new Pen(DrawObject.LineColors[e.Index], 3), x0, y0, x0 + Math.Max(1, graphwidth - 8), y0);
 
-                myPen = new Pen(Color.LightGray, 1);
+                Pen myPen = new Pen(Color.LightGray, 1);
                 myPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                 e.Graphics.DrawLine(myPen, e.Bounds.Left + 4, e.Bounds.Bottom - 1, e.Bounds.Right - 8, e.Bounds.Bottom - 1);
-                myPen.Dispose();
-                //  drawFormat.Dispose();
             }
             catch
             {
             }
-             myBrush.Dispose();
         }
 
         /// <summary>
@@ -892,7 +897,7 @@ namespace GralItemForms
                         {
                             domain.ReDrawContours = true;
                         }
-                        //enable re-calculation of postmaps
+                        //enable re-calculation of post maps
                         if (DrawObject.Name.Substring(0, 3) == "PM:")
                         {
                             domain.ReDrawContours = true;
@@ -923,8 +928,8 @@ namespace GralItemForms
             {
                 for (int j = i + 1; j < listBox1.Items.Count; j++)
                 {
-                    x = (double) listBox1.Items[i];
-                    y = (double) listBox1.Items[j];
+                    x = (double)listBox1.Items[i];
+                    y = (double)listBox1.Items[j];
                     if (x > y)
                     {
                         listBox1.Items[i] = listBox1.Items[j];
@@ -944,7 +949,7 @@ namespace GralItemForms
             DrawObject.ItemValues.Clear();
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
-                DrawObject.ItemValues.Add((double) listBox1.Items[i]);
+                DrawObject.ItemValues.Add((double)listBox1.Items[i]);
             }
 
             if (DrawObject.ItemValues.Count == 0)
@@ -960,7 +965,7 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
+            Cursor = System.Windows.Forms.Cursors.WaitCursor;
             if (init == true)
             {
                 DrawObject.SourceGroup = -1; // reset
@@ -1081,7 +1086,7 @@ namespace GralItemForms
 
                         DrawObject.LineColors.Add(Color.LightGreen);
                         DrawObject.FillColors.Add(Color.LightGreen);
-                        
+
                         listBox1.Items.Add(30);
 
                         DrawObject.LineColors.Add(Color.YellowGreen);
@@ -1089,7 +1094,7 @@ namespace GralItemForms
 
                         for (int i = 0; i < 3; i++)
                         {
-                            int val =  5 * (4 - i);
+                            int val = 5 * (4 - i);
 
                             listBox1.Items.Insert(2, val);
                         }
@@ -1106,7 +1111,7 @@ namespace GralItemForms
                 if ((DrawObject.Name == "RECEPTORS") && (comboBox2.SelectedIndex > 0))
                 {
                     DrawObject.Item = comboBox2.SelectedIndex;
-                    
+
                     double display_value;
                     double max = -1000000;
                     double min = 1000000;
@@ -1119,7 +1124,7 @@ namespace GralItemForms
                     DrawObject.FillColors.Clear();
                     DrawObject.LineColors.Clear();
                     listBox1.Items.Clear();
-                    
+
                     if (checkBox5.Checked)
                     {
                         listBox1.Items.Insert(0, Normalize(min, double.MinValue));
@@ -1166,12 +1171,12 @@ namespace GralItemForms
                     double poll;
                     double max = -10000000;
                     double min = 10000000;
-                    
+
                     foreach (AreaSourceData _as in domain.EditAS.ItemData)
                     {
                         bool exist = false;
                         //filter source groups
-                        string selpoll = Convert.ToString(comboBox1.SelectedItem,ic);
+                        string selpoll = Convert.ToString(comboBox1.SelectedItem, ic);
                         if (comboBox1.SelectedIndex == 0)
                         {
                             exist = true;
@@ -1187,7 +1192,7 @@ namespace GralItemForms
                             if (_sg == _as.Poll.SourceGroup)
                             {
                                 exist = true;
-                                DrawObject.SourceGroup = Convert.ToInt32(dummy[1],ic);
+                                DrawObject.SourceGroup = Convert.ToInt32(dummy[1], ic);
                             }
                         }
                         else
@@ -1198,10 +1203,10 @@ namespace GralItemForms
                             if (_sg == _as.Poll.SourceGroup)
                             {
                                 exist = true;
-                                DrawObject.SourceGroup = Convert.ToInt32(dummy[0],ic);
+                                DrawObject.SourceGroup = Convert.ToInt32(dummy[0], ic);
                             }
                         }
-                        if ((exist == true)&&(comboBox2.SelectedIndex>0))
+                        if ((exist == true) && (comboBox2.SelectedIndex > 0))
                         {
                             //filter pollutant 
                             for (int j = 0; j < 10; j++)
@@ -1292,9 +1297,9 @@ namespace GralItemForms
                     foreach (LineSourceData _ls in domain.EditLS.ItemData)
                     {
                         bool exist = false;
-                        int index = 0; 
+                        int index = 0;
                         //filter source groups
-                        string selpoll = Convert.ToString(comboBox1.SelectedItem,ic);
+                        string selpoll = Convert.ToString(comboBox1.SelectedItem, ic);
                         if (comboBox1.SelectedIndex == 0)
                         {
                             exist = true;
@@ -1316,7 +1321,7 @@ namespace GralItemForms
                                     {
                                         index = loop;
                                         exist = true;
-                                        DrawObject.SourceGroup = Convert.ToInt32(dummy[1],ic);
+                                        DrawObject.SourceGroup = Convert.ToInt32(dummy[1], ic);
                                     }
                                 }
                                 else
@@ -1328,7 +1333,7 @@ namespace GralItemForms
                                     {
                                         index = loop;
                                         exist = true;
-                                        DrawObject.SourceGroup = Convert.ToInt32(dummy[0],ic);
+                                        DrawObject.SourceGroup = Convert.ToInt32(dummy[0], ic);
                                     }
                                 }
                                 //neu
@@ -1340,10 +1345,10 @@ namespace GralItemForms
                                         poll = 0;
                                         for (int j = 0; j < 10; j++)
                                         {
-                                            if ((Main.PollutantList[_poll.Pollutant[j]] == Convert.ToString(comboBox2.SelectedItem,ic)) &&
+                                            if ((Main.PollutantList[_poll.Pollutant[j]] == Convert.ToString(comboBox2.SelectedItem, ic)) &&
                                                 (_poll.EmissionRate[j] != 0))
                                             {
-                                                poll +=  _poll.EmissionRate[j];
+                                                poll += _poll.EmissionRate[j];
                                                 max = Math.Max(max, poll);
                                                 min = Math.Min(min, poll);
                                                 DrawObject.Item = _poll.Pollutant[j];
@@ -1405,7 +1410,7 @@ namespace GralItemForms
                                     }
                                 }
                             }
-                            
+
 
                             //filter AADT
                             if (comboBox2.SelectedIndex == 1)
@@ -1508,9 +1513,9 @@ namespace GralItemForms
                 {
                     DrawObject.ItemValues.Add(0);
                 }
-            }         
-            
-            Cursor = Cursors.Default;
+            }
+
+            Cursor = System.Windows.Forms.Cursors.Default;
         }
 
         /// <summary>
@@ -1624,7 +1629,6 @@ namespace GralItemForms
             dialog.Filter = "*.lay|*.lay";
             dialog.Title = "Save color scale";
             dialog.InitialDirectory = newPath;
-            dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSettings;
 #endif
@@ -1632,10 +1636,10 @@ namespace GralItemForms
             TypeConverter col = TypeDescriptor.GetConverter(typeof(Color));
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                
+
                 try
                 {
-                    using (StreamWriter mywriter=new StreamWriter(dialog.FileName))
+                    using (StreamWriter mywriter = new StreamWriter(dialog.FileName))
                     {
                         mywriter.WriteLine("Version02");
                         for (int i = 0; i < DrawObject.ItemValues.Count; i++)
@@ -1644,7 +1648,7 @@ namespace GralItemForms
                             mywriter.WriteLine(ColorTranslator.ToHtml(DrawObject.LineColors[i]));
                             mywriter.WriteLine(ColorTranslator.ToHtml(DrawObject.FillColors[i]));
                         }
-                        
+
                         mywriter.WriteLine("-----");
                         mywriter.WriteLine(DrawObject.LineWidth.ToString());
                         mywriter.WriteLine(numericUpDown1.Value.ToString(ic));
@@ -1652,28 +1656,28 @@ namespace GralItemForms
                         mywriter.WriteLine(numericUpDown4.Value.ToString(ic));
                         mywriter.WriteLine(ColorTranslator.ToHtml(DrawObject.LabelColor));
                         mywriter.WriteLine(DrawObject.LabelFont.FontFamily.Name + ":" +
-                                           DrawObject.LabelFont.Size + ":" + 
+                                           DrawObject.LabelFont.Size + ":" +
                                            (int)DrawObject.LabelFont.Style);
-                        
+
                         mywriter.WriteLine(numericUpDown2.Value.ToString(ic));
                         mywriter.WriteLine(numericUpDown3.Value.ToString(ic));
                         mywriter.WriteLine(numericUpDown5.Value.ToString(ic));
                         mywriter.WriteLine(numericUpDown7.Value.ToString(ic));
                         mywriter.WriteLine(numericUpDown8.Value.ToString(ic));
                         mywriter.WriteLine(numericUpDown9.Value.ToString(ic));
-                        
+
                         mywriter.WriteLine(checkBox1.Checked.ToString(ic));
                         mywriter.WriteLine(checkBox4.Checked.ToString(ic));
                         mywriter.WriteLine(checkBox6.Checked.ToString(ic));
                         mywriter.WriteLine(checkBox7.Checked.ToString(ic));
-                        
+
                         mywriter.WriteLine(radioButton1.Checked.ToString(ic));
                         mywriter.WriteLine(radioButton2.Checked.ToString(ic));
                         mywriter.WriteLine(DrawObject.Label.ToString(ic));
-                        
+
                     }
                 }
-                catch{}
+                catch { }
             }
         }
 
@@ -1702,14 +1706,14 @@ namespace GralItemForms
                     DrawObject.FillColors.Clear();
                     DrawObject.LineColors.Clear();
                     listBox1.Items.Clear();
-                    
+
                     int FileVersion = 0; // flag for format of layout file
                     string _col = string.Empty;
-                    
+
                     using (StreamReader myreader = new StreamReader(dialog.FileName))
                     {
                         string text = myreader.ReadLine();
-                        
+
                         // check version
                         if (text == "Version01")
                         {
@@ -1721,51 +1725,51 @@ namespace GralItemForms
                             FileVersion = 2;
                             text = myreader.ReadLine();
                         }
-                        
-                        while(text != null && text != "-----")
+
+                        while (text != null && text != "-----")
                         {
                             DrawObject.ItemValues.Add(St_F.TxtToDbl(text, false));
-                            
+
                             double val = St_F.TxtToDblICult(text, false);
-                            val = Math.Round(val, (int) numericUpDown4.Value);
-                            
+                            val = Math.Round(val, (int)numericUpDown4.Value);
+
                             listBox1.Items.Add(val);
 
                             text = myreader.ReadLine();
-                            
+
                             if (FileVersion == 0) // old format
                             {
-                                #if __MonoCS__
+#if __MonoCS__
                                 _col = text.Replace(";", ",");
-                                #else
+#else
                                 _col = text.Replace(";", listsep);
-                                #endif
+#endif
                                 DrawObject.LineColors.Add((Color)col.ConvertFromString(_col));
                             }
                             else if (FileVersion >= 1) // new format
                             {
-                                DrawObject.LineColors.Add((Color) ColorTranslator.FromHtml(text));
+                                DrawObject.LineColors.Add((Color)ColorTranslator.FromHtml(text));
                             }
 
                             text = myreader.ReadLine();
-                            
+
                             if (FileVersion == 0) // old format
                             {
-                                #if __MonoCS__
+#if __MonoCS__
                                 _col = text.Replace(";", ",");
-                                #else
+#else
                                 _col = text.Replace(";", listsep);
-                                #endif
+#endif
                                 DrawObject.FillColors.Add((Color)col.ConvertFromString(_col));
                             }
                             else if (FileVersion >= 1) // new format
                             {
-                                DrawObject.FillColors.Add((Color) ColorTranslator.FromHtml(text));
+                                DrawObject.FillColors.Add((Color)ColorTranslator.FromHtml(text));
                             }
-                            
+
                             text = myreader.ReadLine();
                         }
-                        
+
                         if (text == "-----" && sender.Equals(button14) && FileVersion > 1) // read additional data
                         {
                             text = myreader.ReadLine();
@@ -1777,8 +1781,8 @@ namespace GralItemForms
                             text = myreader.ReadLine();
                             numericUpDown4.Value = Convert.ToDecimal(text, ic);
                             text = myreader.ReadLine();
-                            DrawObject.LabelColor = (Color) ColorTranslator.FromHtml(text);
-                            
+                            DrawObject.LabelColor = (Color)ColorTranslator.FromHtml(text);
+
                             text = myreader.ReadLine();
                             string[] parts = text.Split(':');
                             if (parts.Length == 3)
@@ -1786,7 +1790,7 @@ namespace GralItemForms
                                 Font font = new Font(parts[0], float.Parse(parts[1]), (FontStyle)int.Parse(parts[2]));
                                 DrawObject.LabelFont = font;
                             }
-                            
+
                             text = myreader.ReadLine();
                             numericUpDown2.Value = Convert.ToDecimal(text, ic);
                             text = myreader.ReadLine();
@@ -1799,7 +1803,7 @@ namespace GralItemForms
                             numericUpDown8.Value = Convert.ToDecimal(text, ic);
                             text = myreader.ReadLine();
                             numericUpDown9.Value = Convert.ToDecimal(text, ic);
-                            
+
                             text = myreader.ReadLine();
                             checkBox1.Checked = Convert.ToBoolean(text, ic);
                             text = myreader.ReadLine();
@@ -1809,7 +1813,7 @@ namespace GralItemForms
                             text = myreader.ReadLine();
                             checkBox7.Checked = Convert.ToBoolean(text, ic);
                             text = myreader.ReadLine();
-                            
+
                             radioButton1.Checked = Convert.ToBoolean(text, ic);
                             text = myreader.ReadLine();
                             radioButton2.Checked = Convert.ToBoolean(text, ic);
@@ -1825,7 +1829,7 @@ namespace GralItemForms
                                 CheckBox3.Checked = true;
                                 CheckBox3.CheckState = CheckState.Indeterminate;
                             }
-                            else if(DrawObject.Label == 1)
+                            else if (DrawObject.Label == 1)
                             {
                                 CheckBox3.Checked = false;
                                 CheckBox3.CheckState = CheckState.Unchecked;
@@ -1841,7 +1845,7 @@ namespace GralItemForms
                 {
                     MessageBox.Show(this, "Unable to read the settings file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
+
             }
 
             //enable re-calculation of contours
@@ -1869,9 +1873,10 @@ namespace GralItemForms
         private void Button9_Click(object sender, EventArgs e)
         {
             Button bt = sender as Button;
-            
+
             if (DrawObject.FillColors.Count > 2)
             {
+                // default color gradient
                 int r1 = DrawObject.FillColors[0].R;
                 int g1 = DrawObject.FillColors[0].G;
                 int b1 = DrawObject.FillColors[0].B;
@@ -1896,7 +1901,7 @@ namespace GralItemForms
                     int intr1 = r11 + (r21 - r11) / DrawObject.LineColors.Count * i;
                     int intg1 = g11 + (g21 - g11) / DrawObject.LineColors.Count * i;
                     int intb1 = b11 + (b21 - b11) / DrawObject.LineColors.Count * i;
-                    
+
                     if (bt == button9)
                     {
                         DrawObject.FillColors[i] = Color.FromArgb(intr, intg, intb);
@@ -1911,6 +1916,28 @@ namespace GralItemForms
             else
             {
                 MessageBox.Show(this, "At least three levels are necessary", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        /// <summary>
+        /// Use predefined color scales
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int hclType = Math.Min(comboBox3.SelectedIndex, HCLColor.HCLColor.GetLength(0) - 1);
+            if (hclType > 0)
+            {
+                for (int i = 0; i < DrawObject.FillColors.Count; i++)
+                {
+                    DrawObject.FillColors[i] = HCLColor.HCLColor[hclType, Math.Min(i, HCLColor.HCLColor.GetLength(1) - 1)];
+                    DrawObject.LineColors[i] = HCLColor.HCLColor[hclType, Math.Min(i, HCLColor.HCLColor.GetLength(1) - 1)];
+                }
+            }
+            if (e != null)
+            {
+                listBox1.Refresh();
             }
         }
 
@@ -1932,8 +1959,8 @@ namespace GralItemForms
                     textBox1.Enabled = true;
                     textBox2.Enabled = true;
                     domain.ActualEditedDrawingObject = DrawObject;
-                    domain.MouseControl = GralDomain.MouseMode.ViewLegendPos; 
-                    domain.Cursor = Cursors.Cross;
+                    domain.MouseControl = GralDomain.MouseMode.ViewLegendPos;
+                    domain.Cursor = System.Windows.Forms.Cursors.Cross;
                 }
                 else
                 {
@@ -1944,9 +1971,19 @@ namespace GralItemForms
                     textBox1.Enabled = false;
                     textBox2.Enabled = false;
                     domain.MouseControl = GralDomain.MouseMode.Default;
-                    domain.Cursor = Cursors.Default;
+                    domain.Cursor = System.Windows.Forms.Cursors.Default;
                 }
             }
+        }
+
+        /// <summary>
+        /// Move the scale along with the map
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+            DrawObject.BasedOnMap = checkBox8.Checked;
         }
 
         /// <summary>
@@ -1960,8 +1997,24 @@ namespace GralItemForms
             {
                 string[] dummy = new string[3];
                 dummy = DrawObject.ColorScale.Split(new char[] { ',' });
+                decimal oldValue = Convert.ToDecimal(dummy[2], ic);
                 double s = Convert.ToDouble(numericUpDown2.Value, ic);
                 DrawObject.ColorScale = dummy[0] + "," + dummy[1] + "," + Convert.ToString(s, ic);
+
+                SetNumericupDownIncrement(numericUpDown2.Value, oldValue);
+            }
+        }
+
+        private void SetNumericupDownIncrement(decimal value, decimal oldValue)
+        {
+            if (value <= 0.1m)
+            {
+                numericUpDown2.Increment = 0.01m;
+            }
+            
+            if (value > 0.09m && oldValue < 0.1m)
+            {
+                numericUpDown2.Increment = 0.1m;
             }
         }
 
@@ -1998,16 +2051,16 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void Button11_Click(object sender, EventArgs e)
         {
-            string trans=Convert.ToString(DrawObject.LineWidth);
+            string trans = Convert.ToString(DrawObject.LineWidth);
             if (St_F.InputBoxValue("Set line width", "Value:", ref trans, this) == DialogResult.OK)
             {
                 try
                 {
-                    int w_old =  DrawObject.LineWidth;
+                    int w_old = DrawObject.LineWidth;
                     int w = Convert.ToInt32(trans);
                     DrawObject.LineWidth = w;
-                     //enable re-calculation of contours
-                     if (DrawObject.Name.Substring(0, 3) == "CM:" && ((w_old == 0 && w > 0) || (w_old > 0 && w == 0))	)
+                    //enable re-calculation of contours
+                    if (DrawObject.Name.Substring(0, 3) == "CM:" && ((w_old == 0 && w > 0) || (w_old > 0 && w == 0)))
                     {
                         domain.ReDrawContours = true;
                     }
@@ -2047,7 +2100,7 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            DrawObject.VectorScale = (float) (numericUpDown3.Value);
+            DrawObject.VectorScale = (float)(numericUpDown3.Value);
 
             //enable re-calculation of vectors
             if (DrawObject.Name.Substring(0, 3) == "VM:")
@@ -2070,7 +2123,7 @@ namespace GralItemForms
                 listBox1.Items.Add(Math.Round(Convert.ToDouble(DrawObject.ItemValues[i], ic), Convert.ToInt32(numericUpDown4.Value)));
             }
         }
- 
+
         /// <summary>
         /// Change the minimum area that shpuld be drawn
         /// </summary>
@@ -2093,8 +2146,8 @@ namespace GralItemForms
         private void Button2_Click(object sender, EventArgs e)
         {
             double min = (double)listBox1.Items[0];
-            double max = (double) listBox1.Items[listBox1.Items.Count - 1];
-            string trans=Convert.ToString((max-min)/10);
+            double max = (double)listBox1.Items[listBox1.Items.Count - 1];
+            string trans = Convert.ToString((max - min) / 10);
             if (St_F.InputBoxValue("Equidistance", "Value:", ref trans, this) == DialogResult.OK)
             {
                 try
@@ -2189,13 +2242,13 @@ namespace GralItemForms
             string file = DrawObject.ContourFilename;
             string[] data = new string[100];
             //open data of raster file
-            
+
             if (System.IO.File.Exists(file) == false) // try source strenght if no map is available
             {
                 ComboBox2_SelectedIndexChanged(null, null);
                 return;
             }
-            
+
             try
             {
                 StreamReader myReader = new StreamReader(file);
@@ -2222,8 +2275,8 @@ namespace GralItemForms
                     {
                         if (DrawObject.Name.Substring(0, 3) == "VM:") // Vector-Maps
                         {
-                            double u =  Convert.ToDouble(data[j * 2], ic);
-                            double v =  Convert.ToDouble(data[j * 2 + 1], ic);
+                            double u = Convert.ToDouble(data[j * 2], ic);
+                            double v = Convert.ToDouble(data[j * 2 + 1], ic);
                             zlevel[j, i] = Math.Sqrt(u * u + v * v); // u and v components are stored at the .vec file
                         }
                         else
@@ -2240,7 +2293,7 @@ namespace GralItemForms
                 }
                 myReader.Close();
                 myReader.Dispose();
-                
+
                 listBox1.Items.Clear();
 
                 DrawObject.FillColors.Clear();
@@ -2258,14 +2311,14 @@ namespace GralItemForms
                 DrawObject.LineColors[0] = Color.Yellow;
 
                 double val = min + (max - min) / Math.Pow(2, Convert.ToDouble(8));
-                
+
                 if (checkBox5.Checked)
                 {
                     val = Normalize(val, double.MinValue);
                 }
 
                 DrawObject.ItemValues[0] = val;
-                
+
                 val = max;
                 if (checkBox5.Checked)
                 {
@@ -2283,13 +2336,13 @@ namespace GralItemForms
                 double valPrev = max;
                 for (int i = 0; i < 7; i++)
                 {
-                    val = min + (max - min) / Math.Pow(2, Convert.ToDouble(8 - (i+1)));
-                    
+                    val = min + (max - min) / Math.Pow(2, Convert.ToDouble(8 - (i + 1)));
+
                     if (DrawObject.Name.Substring(0, 3) == "VM:")
                     {
-                        val =  min + (max - min) / 10 * Convert.ToDouble(i + 1);
+                        val = min + (max - min) / 10 * Convert.ToDouble(i + 1);
                     }
-                    
+
                     if (checkBox5.Checked)
                     {
                         val = Normalize(val, valPrev);
@@ -2321,13 +2374,13 @@ namespace GralItemForms
                     domain.ReDrawVectors = true;
                 }
             }
-            catch(Exception err)
+            catch (Exception err)
             {
-                MessageBox.Show(this, err.Message,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, err.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
-        
+
         /// <summary>
         /// Set values to the digits 1, 2, 4, 5, 8 or 10
         /// </summary>
@@ -2346,7 +2399,7 @@ namespace GralItemForms
             double norm = 0;
             do
             {
-                val += off * Math.Pow(10, exp); 
+                val += off * Math.Pow(10, exp);
                 if (val > double.MinValue)
                 {
                     exp = (int)Math.Floor(Math.Log10(val)) * (-1);
@@ -2388,7 +2441,7 @@ namespace GralItemForms
 
             return norm * Math.Pow(10, exp) * negative;
         }
-     
+
         /// <summary>
         /// method for changing the opacity of an image
         /// </summary>
@@ -2403,8 +2456,9 @@ namespace GralItemForms
                 Bitmap bmp = new Bitmap(image.Width, image.Height);
 
                 //create a graphics object from the image
-                using (Graphics gfx = Graphics.FromImage(bmp)) {
-                    
+                using (Graphics gfx = Graphics.FromImage(bmp))
+                {
+
                     {
                         gfx.Clear(Color.White);
                     }
@@ -2434,7 +2488,7 @@ namespace GralItemForms
                 return null;
             }
         }
-       
+
         /// <summary>
         /// Close the layout manager
         /// </summary>
@@ -2444,13 +2498,15 @@ namespace GralItemForms
         {
             listBox1.DrawItem -=
                 new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
-            
+
             listBox1.Items.Clear();
             listBox1.Dispose();
             comboBox1.Items.Clear();
             comboBox2.Items.Clear();
+            comboBox3.Items.Clear();
             comboBox1.Dispose();
             comboBox2.Dispose();
+            comboBox3.Dispose();
             toolTip1.Dispose();
             fontDialog1.Dispose();
             colorDialog1.Dispose();
@@ -2470,7 +2526,7 @@ namespace GralItemForms
                 { }
             }
         }
-        
+
         /// <summary>
         /// Disable simple countour mode
         /// </summary>
@@ -2501,14 +2557,14 @@ namespace GralItemForms
             {
                 if (DrawObject.DrawSimpleContour == false)
                 {
-                    DrawObject.DrawSimpleContour = true;	
+                    DrawObject.DrawSimpleContour = true;
                     domain.ReDrawContours = true;
                 }
                 checkBox6.Enabled = true;
                 groupBox6.Enabled = true;
             }
         }
-        
+
         /// <summary>
         /// Set opacity from numericupdown to trackbar
         /// </summary>
@@ -2516,9 +2572,9 @@ namespace GralItemForms
         /// <param name="e"></param>
         void NumericUpDown9ValueChanged(object sender, EventArgs e)
         {
-            trackBar1.Value = (int) (numericUpDown9.Value);
+            trackBar1.Value = (int)(numericUpDown9.Value);
         }
-        
+
         /// <summary>
         /// Set opacity from trackbar to numericupdown
         /// </summary>
@@ -2562,29 +2618,31 @@ namespace GralItemForms
         private void button15_Click(object sender, EventArgs e)
         {
             string filename = string.Empty;
+            string folder = Path.Combine(Main.ProjectName, "Maps");
             if (System.IO.File.Exists(DrawObject.ContourFilename))
             {
                 filename = DrawObject.ContourFilename;
+                folder = Path.GetFullPath(DrawObject.ContourFilename);
             }
             else
             {
-                filename = Path.Combine(Gral.Main.ProjectName, "Maps", Path.GetFileName(DrawObject.Name));
+                filename = Path.GetFileName(DrawObject.Name);
             }
 
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.dat;*.txt)|*.dat;*.txt",
                 Title = "Select raster data (ASCII Format)",
-                FileName = filename,
-                ShowHelp = true
+                FileName = Path.GetFileName(filename),
+                InitialDirectory = folder
 #if NET6_0_OR_GREATER
-                   ,
+                ,
                 ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
-{
+                {
                     filename = dialog.FileName;
                 }
                 else
@@ -2600,5 +2658,68 @@ namespace GralItemForms
                 textBox4.Text = DrawObject.ContourFilename;
             }
         }
-    }  
+
+        private class HCLColorMap
+        {
+            public Color[,] HCLColor = new Color[7, 7];
+            public string[] HCLName = new string[7] { "Default colors", "Sequential Blue", "Sequential Purple", "Sequential Red", "Sequential Green", "Diverging Green Orange", "Diverging Blue Red" };
+
+            public HCLColorMap()
+            {
+                // SeqBlue
+                HCLColor[1, 6] = Color.FromArgb(0, 54, 108);
+                HCLColor[1, 5] = Color.FromArgb(0, 93, 154);
+                HCLColor[1, 4] = Color.FromArgb(44, 134, 202);
+                HCLColor[1, 3] = Color.FromArgb(121, 171, 226);
+                HCLColor[1, 2] = Color.FromArgb(173, 204, 246);
+                HCLColor[1, 1] = Color.FromArgb(216, 233, 255);
+                HCLColor[1, 0] = Color.FromArgb(248, 248, 248);
+
+                // SeqPurple
+                HCLColor[2, 6] = Color.FromArgb(49, 34, 113);
+                HCLColor[2, 5] = Color.FromArgb(89, 76, 160);
+                HCLColor[2, 4] = Color.FromArgb(129, 117, 203);
+                HCLColor[2, 3] = Color.FromArgb(167, 159, 225);
+                HCLColor[2, 2] = Color.FromArgb(202, 197, 243);
+                HCLColor[2, 1] = Color.FromArgb(231, 228, 254);
+                HCLColor[2, 0] = Color.FromArgb(248, 248, 248);
+
+                // SeqRed
+                HCLColor[3, 6] = Color.FromArgb(105, 0, 12);
+                HCLColor[3, 5] = Color.FromArgb(170, 19, 36);
+                HCLColor[3, 4] = Color.FromArgb(238, 37, 58);
+                HCLColor[3, 3] = Color.FromArgb(255, 112, 120);
+                HCLColor[3, 2] = Color.FromArgb(255, 166, 170);
+                HCLColor[3, 1] = Color.FromArgb(255, 212, 214);
+                HCLColor[3, 0] = Color.FromArgb(248, 248, 248);
+
+                // SeqGreen
+                HCLColor[4, 6] = Color.FromArgb(0, 70, 22);
+                HCLColor[4, 5] = Color.FromArgb(13, 116, 52);
+                HCLColor[4, 4] = Color.FromArgb(32, 161, 78);
+                HCLColor[4, 3] = Color.FromArgb(116, 194, 134);
+                HCLColor[4, 2] = Color.FromArgb(172, 221, 182);
+                HCLColor[4, 1] = Color.FromArgb(217, 241, 222);
+                HCLColor[4, 0] = Color.FromArgb(248, 248, 248);
+
+                // Div Green Orange
+                HCLColor[5, 0] = Color.FromArgb(17, 198, 56);
+                HCLColor[5, 1] = Color.FromArgb(119, 209, 127);
+                HCLColor[5, 2] = Color.FromArgb(176, 218, 179);
+                HCLColor[5, 3] = Color.FromArgb(226, 226, 226);
+                HCLColor[5, 4] = Color.FromArgb(237, 201, 176);
+                HCLColor[5, 5] = Color.FromArgb(241, 176, 119);
+                HCLColor[5, 6] = Color.FromArgb(239, 151, 8);
+
+                // Div Blue Red
+                HCLColor[6, 0] = Color.FromArgb(0, 47, 112);
+                HCLColor[6, 1] = Color.FromArgb(81, 122, 201);
+                HCLColor[6, 2] = Color.FromArgb(180, 194, 235);
+                HCLColor[6, 3] = Color.FromArgb(226, 226, 226);
+                HCLColor[6, 4] = Color.FromArgb(237, 180, 181);
+                HCLColor[6, 5] = Color.FromArgb(192, 93, 93);
+                HCLColor[6, 6] = Color.FromArgb(95, 20, 21);
+            }
+        }
+    }
 }

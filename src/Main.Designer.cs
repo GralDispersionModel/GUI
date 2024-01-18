@@ -151,6 +151,8 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Sources = new System.Windows.Forms.TabPage();
+            this.LabelEmissionPath = new System.Windows.Forms.Label();
+            this.button60 = new System.Windows.Forms.Button();
             this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.button54 = new System.Windows.Forms.Button();
             this.groupBox21 = new System.Windows.Forms.GroupBox();
@@ -2247,6 +2249,8 @@
             // Sources
             // 
             this.Sources.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.Sources.Controls.Add(this.LabelEmissionPath);
+            this.Sources.Controls.Add(this.button60);
             this.Sources.Controls.Add(this.groupBox24);
             this.Sources.Controls.Add(this.groupBox21);
             this.Sources.Controls.Add(this.pictureBox5);
@@ -2269,6 +2273,30 @@
             this.Sources.Size = new System.Drawing.Size(811, 539);
             this.Sources.TabIndex = 0;
             this.Sources.Text = "     SOURCES     ";
+            // 
+            // LabelEmissionPath
+            // 
+            this.LabelEmissionPath.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LabelEmissionPath.Location = new System.Drawing.Point(500, 268);
+            this.LabelEmissionPath.Name = "LabelEmissionPath";
+            this.LabelEmissionPath.Size = new System.Drawing.Size(304, 20);
+            this.LabelEmissionPath.TabIndex = 47;
+            this.LabelEmissionPath.Text = "Path";
+            this.toolTip1.SetToolTip(this.LabelEmissionPath, "Path for the emission modulation settings");
+            // 
+            // button60
+            // 
+            this.button60.BackColor = System.Drawing.Color.Gainsboro;
+            this.button60.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button60.BackgroundImage")));
+            this.button60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button60.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button60.Location = new System.Drawing.Point(460, 262);
+            this.button60.Name = "button60";
+            this.button60.Size = new System.Drawing.Size(32, 32);
+            this.button60.TabIndex = 46;
+            this.toolTip1.SetToolTip(this.button60, "Optional: set a directory for emission modulation variations");
+            this.button60.UseVisualStyleBackColor = false;
+            this.button60.Click += new System.EventHandler(this.button60_Click);
             // 
             // groupBox24
             // 
@@ -2384,9 +2412,9 @@
             // 
             // pictureBox5
             // 
-            this.pictureBox5.Location = new System.Drawing.Point(460, 269);
+            this.pictureBox5.Location = new System.Drawing.Point(460, 296);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(346, 254);
+            this.pictureBox5.Size = new System.Drawing.Size(346, 227);
             this.pictureBox5.TabIndex = 20;
             this.pictureBox5.TabStop = false;
             // 
@@ -2449,6 +2477,7 @@
             this.listBox5.TabIndex = 5;
             this.toolTip1.SetToolTip(this.listBox5, "Select the pollutant");
             this.listBox5.SelectedIndexChanged += new System.EventHandler(this.ListBox5_SelectedIndexChanged);
+            this.listBox5.DoubleClick += new System.EventHandler(this.listBox5_DoubleClick);
             // 
             // listView1
             // 
@@ -2535,7 +2564,7 @@
             this.groupBox27.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox27.Location = new System.Drawing.Point(454, 218);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(351, 45);
+            this.groupBox27.Size = new System.Drawing.Size(329, 45);
             this.groupBox27.TabIndex = 24;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "Emission-time-series";
@@ -4527,7 +4556,7 @@
             this.groupBox13.Size = new System.Drawing.Size(159, 170);
             this.groupBox13.TabIndex = 50;
             this.groupBox13.TabStop = false;
-            this.groupBox13.Text = "Compute concentrations";
+            this.groupBox13.Text = "Calculate concentrations";
             this.groupBox13.Visible = false;
             // 
             // button40
@@ -4540,7 +4569,7 @@
             this.button40.Size = new System.Drawing.Size(145, 30);
             this.button40.TabIndex = 53;
             this.button40.Text = "&Percentiles";
-            this.toolTip1.SetToolTip(this.button40, "Computes high percentiles of concentrations.\r\n\r\n!!Caution: Computation times\r\ncan" +
+            this.toolTip1.SetToolTip(this.button40, "Calculate high percentiles of concentrations.\r\n\r\n!!Caution: Computation times\r\ncan" +
         " be extremely long!!");
             this.button40.UseVisualStyleBackColor = false;
             this.button40.Click += new System.EventHandler(this.Button40_Click);
@@ -4555,7 +4584,7 @@
             this.button37.Size = new System.Drawing.Size(145, 30);
             this.button37.TabIndex = 52;
             this.button37.Text = "&Receptor Conc.";
-            this.toolTip1.SetToolTip(this.button37, "Computes time series of concentrations at\r\nreceptor points");
+            this.toolTip1.SetToolTip(this.button37, "Calculate time series of concentrations at\r\nreceptor points");
             this.button37.UseVisualStyleBackColor = false;
             this.button37.Click += new System.EventHandler(this.Button37_Click);
             // 
@@ -4569,7 +4598,7 @@
             this.button25.Size = new System.Drawing.Size(145, 30);
             this.button25.TabIndex = 51;
             this.button25.Text = "Mean, Max, &Day Max";
-            this.toolTip1.SetToolTip(this.button25, "Computes average, maximum, and\r\nmaximum daily concentrations.\r\n\r\n!!Caution: Compu" +
+            this.toolTip1.SetToolTip(this.button25, "Calculate average, maximum, and\r\nmaximum daily concentrations.\r\n\r\n!!Caution: Compu" +
         "tation times\r\ncan be extremely long!!");
             this.button25.UseVisualStyleBackColor = false;
             this.button25.Click += new System.EventHandler(this.Button25_Click);
@@ -4584,7 +4613,7 @@
             this.button28.Size = new System.Drawing.Size(145, 30);
             this.button28.TabIndex = 50;
             this.button28.Text = "Mean";
-            this.toolTip1.SetToolTip(this.button28, "Computes average concentrations");
+            this.toolTip1.SetToolTip(this.button28, "Calculate average concentrations");
             this.button28.UseVisualStyleBackColor = false;
             this.button28.Click += new System.EventHandler(this.Button28_Click);
             // 
@@ -4600,7 +4629,7 @@
             this.groupBox14.Size = new System.Drawing.Size(159, 170);
             this.groupBox14.TabIndex = 60;
             this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "Compute odour hours";
+            this.groupBox14.Text = "Calculate odour hours";
             this.groupBox14.Visible = false;
             // 
             // button29
@@ -4613,7 +4642,7 @@
             this.button29.Size = new System.Drawing.Size(145, 30);
             this.button29.TabIndex = 62;
             this.button29.Text = "&All in all out stables";
-            this.toolTip1.SetToolTip(this.button29, "Computes odour hours for\r\nstables with an \"all in all out\"\r\nprocedure");
+            this.toolTip1.SetToolTip(this.button29, "Calculate odour hours for\r\nstables with an \"all in all out\"\r\nprocedure");
             this.button29.UseVisualStyleBackColor = false;
             this.button29.Click += new System.EventHandler(this.Button29_Click);
             // 
@@ -4627,7 +4656,7 @@
             this.button47.Size = new System.Drawing.Size(145, 30);
             this.button47.TabIndex = 63;
             this.button47.Text = "&Receptor met files";
-            this.toolTip1.SetToolTip(this.button47, "Computes met files at receptor points\r\n");
+            this.toolTip1.SetToolTip(this.button47, "Calculate met files at receptor points\r\n");
             this.button47.UseVisualStyleBackColor = false;
             this.button47.Click += new System.EventHandler(this.Button47Click);
             // 
@@ -4641,7 +4670,7 @@
             this.button26.Size = new System.Drawing.Size(145, 30);
             this.button26.TabIndex = 61;
             this.button26.Text = "C&ompost";
-            this.toolTip1.SetToolTip(this.button26, "Computes odour hours for\r\na single source group with up\r\nto 3 different odour str" +
+            this.toolTip1.SetToolTip(this.button26, "Calculate odour hours for\r\na single source group with up\r\nto 3 different odour str" +
         "enghts\r\nwith different frequencies");
             this.button26.UseVisualStyleBackColor = false;
             this.button26.Click += new System.EventHandler(this.Button26_Click);
@@ -4656,7 +4685,7 @@
             this.button27.Size = new System.Drawing.Size(145, 30);
             this.button27.TabIndex = 60;
             this.button27.Text = "Mu&ltiple Sources";
-            this.toolTip1.SetToolTip(this.button27, "Computes odour hours\r\nfor all defined source groups");
+            this.toolTip1.SetToolTip(this.button27, "Calculate odour hours\r\nfor all defined source groups");
             this.button27.UseVisualStyleBackColor = false;
             this.button27.Click += new System.EventHandler(this.Button27_Click);
             // 
@@ -5465,6 +5494,8 @@
         private System.Windows.Forms.Label label72;
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.Label label96;
+        private System.Windows.Forms.Button button60;
+        private System.Windows.Forms.Label LabelEmissionPath;
     }
 }
 

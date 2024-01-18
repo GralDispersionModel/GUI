@@ -14,6 +14,7 @@ using System;
 using System.Windows.Forms;
 using System.Linq;
 
+
 namespace GralMessage
 {
 	/// <summary>
@@ -27,8 +28,7 @@ namespace GralMessage
         public MessageWindow()
         {
             InitializeComponent();
-            this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-            this.Top = 80;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void Messagewindow_Load(object sender, EventArgs e)

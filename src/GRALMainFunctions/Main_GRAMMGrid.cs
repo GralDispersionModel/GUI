@@ -72,8 +72,7 @@ namespace Gral
                 OpenFileDialog dialog = new OpenFileDialog
                 {
                     Filter = "Topo files (*.txt;*.dat)|*.txt;*.dat",
-                    Title = "Select topography",
-                    ShowHelp = true
+                    Title = "Select topography"
 #if NET6_0_OR_GREATER
                     ,ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
 #endif
@@ -423,8 +422,7 @@ namespace Gral
                         OpenFileDialog dialog = new OpenFileDialog
                         {
                             Filter = "Landuse files (*.txt;*.dat)|*.txt;*.dat",
-                            Title = "Select Landuse File",
-                            ShowHelp = true
+                            Title = "Select Landuse File"
 #if NET6_0_OR_GREATER
                             ,ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
 #endif

@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using System.IO;
 using GralDomForms;
 using System.Data;
+using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -81,7 +82,7 @@ namespace GralDomain
                     GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
                     DecSep = decsep,
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
-                    Caption = "Compute Wind-Statistics ", // + DataCollection.Meteofilename;
+                    Caption = "Calculation of wind-statistics ", // + DataCollection.Meteofilename;
                     BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GrammMetFile, // ; 1 = analyse the GRAMM_Windfield
                     LocalStability = localSCL, // use local stability?
                     EvalPoints = receptor_points, // evaluation points
@@ -106,7 +107,7 @@ namespace GralDomain
                     GFFGridSize = (double)MainForm.numericUpDown10.Value,
                     DecSep = decsep,
                     UserText = "The process may take some minutes. The data can afterwards be analysed in the menu Meteorology",
-                    Caption = "Compute GRAL Wind-Statistics ", // + DataCollection.Meteofilename;
+                    Caption = "Calculation of GRAL wind-statistics ", // + DataCollection.Meteofilename;
                     BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GralMetFile, // ; 3 = analyse the GRAL Windfield
                     LocalStability = localSCL, // use local stability?
                     EvalPoints = receptor_points, // evaluation points
@@ -141,13 +142,13 @@ namespace GralDomain
         {
             using (DialogCreateMeteoStation met_st = new DialogCreateMeteoStation
             {
-                Meteo_Title = "GRAL GUI Compute mean wind velocity",
+                Meteo_Title = "GRAL GUI Calculate mean wind velocity",
                 Meteo_Init = "Av_Windspeed",
                 Meteo_Ext = ".txt",
                 Meteo_Height = 10,
                 Meteo_Model = 4, // just Filename & Height
-                X1 = Left + 70,
-                Y1 = Top + 50,
+                X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
+                Y1 = St_F.GetTopScreenAtMousePosition() + 150,
                 Xs = 0,
                 Ys = 0
             })
@@ -174,7 +175,7 @@ namespace GralDomain
                             GRAMMhorgridsize = MainForm.GRAMMHorGridSize,
                             DecSep = decsep,
                             UserText = @"The process may take some minutes. The file " + Path.GetFileName(file) + @" is stored in the subdirectory \maps\",
-                            Caption = "Compute mean wind velocity",
+                            Caption = "Calculate mean wind velocity",
                             BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GrammMeanWindVel, // ; 31
                             Filename = file
                         };

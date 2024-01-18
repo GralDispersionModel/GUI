@@ -23,6 +23,9 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Calculate the mean values in steady state mode
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void Mean(GralBackgroundworkers.BackgroundworkerData mydata,
                           System.ComponentModel.DoWorkEventArgs e)
         {
@@ -36,7 +39,7 @@ namespace GralBackgroundworkers
             int itm = 0;
 
             //get emission modulations for all source groups
-            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
 
             //in transient GRAL mode, it is necessary to set all modulation factors equal to one as they have been considered already in the GRAL simulations
             bool transientMode = CheckForTransientMode(mydata.ProjectName);
@@ -213,7 +216,6 @@ namespace GralBackgroundworkers
                     {
                         //set variables to zero
                         itm = 0;
-                        situationCount++;
                         foreach (string source_group_name in sg_names)
                         {
                             emmit[itm] = 0;
@@ -267,6 +269,7 @@ namespace GralBackgroundworkers
                             if (itm == 0  && ConFileOK) 
                             {
                                 nnn += wl_freq;
+                                situationCount++;
                             }
 
                             //read GRAL deposition files
@@ -370,7 +373,7 @@ namespace GralBackgroundworkers
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] ;
                     }
 
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + "_" + mydata.Slicename + ".txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + "_" + mydata.Slicename + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -381,7 +384,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
                     {
-                        file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + "_" + name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" + name + ".txt");
                         
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
@@ -403,7 +406,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration and deposition file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
                 
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
@@ -421,7 +424,7 @@ namespace GralBackgroundworkers
 
                 if (deposition_files_exists && mydata.WriteDepositionOrOdourData) 
                 {
-                    file = Path.Combine(mydata.ProjectName, @"Maps", "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
+                    file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
                     
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
@@ -432,7 +435,17 @@ namespace GralBackgroundworkers
                     AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
             }
-            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
+            string errorText = string.Empty;
+            if (wl > situationCount)
+            {
+                errorText = " -- " + (wl - situationCount).ToString() + " situation";
+                if (wl - situationCount > 1) 
+                {
+                    errorText += "s";
+                }
+                errorText += " not available or not readable ";
+            }
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful          
         }
     }

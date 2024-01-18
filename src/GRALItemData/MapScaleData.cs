@@ -21,13 +21,17 @@ namespace GralItemData
         public int Y     { get; set; }                         //y-coordinate of map scale bar
         public int Division  { get; set; }                     //number of divisions of the map scale bar
         public int Length    { get; set; }                     //lenght in m of the map scale bar
-        
+        public int RelativeTo { get; set; }                   // position of scale relative to the map or the screen
+        public const int ToScreen = 0;
+        public const int ToMap = 1;
+
         public MapScaleData()
         {
         	X = 0;
         	Y = 0;
         	Division = 3;
-        	Length = 500;
+        	Length = 100;
+            RelativeTo = ToScreen;
         }
 	}
 }

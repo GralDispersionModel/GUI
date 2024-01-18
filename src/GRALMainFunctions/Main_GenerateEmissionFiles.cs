@@ -10,17 +10,16 @@
 ///</remarks>
 #endregion
 
+using GralDomain;
+using GralIO;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-
-using GralDomain;
-using GralIO;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace Gral
 {
@@ -759,6 +758,11 @@ namespace Gral
         private bool Write_Emission_Timeseries()
         {
             string emission_ts = Path.Combine(ProjectName, @"Computation","emissions_timeseries.txt");
+            if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+            {
+                emission_ts = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+            }
+
             string mettimeseries = Path.Combine(ProjectName, @"Computation","mettimeseries.dat");
             DialogResult dr;
             CultureInfo ic = CultureInfo.InvariantCulture;

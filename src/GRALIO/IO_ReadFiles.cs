@@ -796,8 +796,8 @@ namespace GralIO
                                 uhrzeit = zeile[1].Split(new char[] { ':', '-', '.' });
                                 wd.Date = zeile[0];
                                 wd.Time = zeile[1];
-                                wd.Vel  = Convert.ToDouble(zeile[2].Replace(decsepuser, decsep1));
-                                wd.Dir  = Convert.ToDouble(zeile[3].Replace(decsepuser, decsep1));
+                                wd.Vel  = Math.Round(Convert.ToDouble(zeile[2].Replace(decsepuser, decsep1)), 2);
+                                wd.Dir  = Math.Round(Convert.ToDouble(zeile[3].Replace(decsepuser, decsep1)), 1);
                                 wd.StabClass = Convert.ToInt32(zeile[4]);
                                 wd.Hour = Convert.ToInt32(uhrzeit[0]);
                                 if (wd.Hour == 24) // if met-file contains 24:00 instead of 00:00
@@ -829,20 +829,20 @@ namespace GralIO
                                 wd.Hour  = Convert.ToInt32(text[5]);
                                 if (text[8] == "0")
                                 {
-                                    wd.Vel = Convert.ToDouble(text[10]) * 0.514;
+                                    wd.Vel = Math.Round(Convert.ToDouble(text[10]) * 0.514, 2);
                                 }
                                 else
                                 {
-                                    wd.Vel = Convert.ToDouble(text[10].Replace(decsepuser, decsep1)) * 0.1;
+                                    wd.Vel = Math.Round(Convert.ToDouble(text[10].Replace(decsepuser, decsep1)) * 0.1, 2);
                                 }
 
                                 if (text[8] == "0")
                                 {
-                                    wd.Dir = Convert.ToDouble(text[9]) * 10;
+                                    wd.Dir = Math.Round(Convert.ToDouble(text[9]) * 10, 1);
                                 }
                                 else
                                 {
-                                    wd.Dir = Convert.ToDouble(text[9]);
+                                    wd.Dir = Math.Round(Convert.ToDouble(text[9]), 1);
                                 }
 
                                 //Klug-Manier stability classes are transformed to GRAL stability classes in a way to match subsequent Obukhov length calculations
@@ -873,8 +873,8 @@ namespace GralIO
                                 wd.Date = readline.Substring(11,2) + "." + readline.Substring(9,2) + "." + readline.Substring(5,4);
                                 wd.Time = readline.Substring(13,2) + ":00";
                                 wd.Hour = Convert.ToInt32(readline.Substring(13,2));
-                                wd.Vel = Math.Round(Convert.ToDouble(readline.Substring(18,2)) * 0.514,1);
-                                wd.Dir = Convert.ToDouble(readline.Substring(16,2)) * 10;
+                                wd.Vel = Math.Round(Convert.ToDouble(readline.Substring(18,2)) * 0.514, 2);
+                                wd.Dir = Math.Round(Convert.ToDouble(readline.Substring(16,2)) * 10 , 1);
                                 //Klug-Manier stability classes are transformed to GRAL stability classes in a way to match subsequent Obukhov length calculations
                                 wd.StabClass = 8 - Convert.ToInt32(readline.Substring(20, 1));
                                 if (wd.StabClass < 6)

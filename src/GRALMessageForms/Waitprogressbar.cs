@@ -23,8 +23,8 @@ namespace GralMessage
         {
             InitializeComponent();
             Text = text;
-            this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 60;
-            this.Top = 60;
+            this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
+            this.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 140;
         }
                               
     }

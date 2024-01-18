@@ -16,15 +16,15 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Gral.GRALDomForms;
 using GralDomForms;
 using GralIO;
 using GralItemData;
 using GralItemForms;
 using GralMessage;
 using GralStaticFunctions;
+using SocialExplorer.IO.FastDBF;
 
 namespace GralDomain
 {
@@ -542,12 +542,15 @@ namespace GralDomain
                                 //check if contour map file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //check first, if map is located in the directory \Maps..
-                                    string tempfilename = Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                    if (File.Exists(tempfilename) == true)
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "");
+                                    if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;
-                                        SaveDomainSettings(1);
+                                        if (saveNewFilePath)
+                                        {
+                                            SaveDomainSettings(1);
+                                        }
                                     }
                                     else
                                     {
@@ -557,7 +560,8 @@ namespace GralDomain
                                             Filter = "(*.txt;*.dat)|*.txt;*.dat",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Contour map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Convert.ToString(Path.GetFileName(_drobj.ContourFilename))
+                                            //ShowHelp = true
 #if NET6_0_OR_GREATER
                                             ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -573,7 +577,7 @@ namespace GralDomain
                                     }
                                 }
                                 ReDrawContours = true;
-                                if (File.Exists(_drobj.ContourFilename))
+                                if (File.Exists(_drobj.ContourFilename) && _drobj.Show)
                                 {
                                     Contours(_drobj.ContourFilename, _drobj);
                                 }
@@ -591,12 +595,15 @@ namespace GralDomain
                                 //check if vector map file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //check first, if map is located in the directory \Maps..
-                                    string tempfilename=Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                    if (File.Exists(tempfilename) == true)
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
                                         _drobj.ContourFilename = tempfilename;
-                                        SaveDomainSettings(1);
+                                        if (saveNewFilePath)
+                                        {
+                                            SaveDomainSettings(1);
+                                        }
                                     }
                                     else
                                     {
@@ -606,9 +613,10 @@ namespace GralDomain
                                             Filter = "(*.txt;*.dat)|*.txt;*.dat",
                                             InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
                                             Title = "Vector map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                            ShowHelp = true
+                                            FileName = Path.GetFileName(_drobj.ContourFilename)
 #if NET6_0_OR_GREATER
-                                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                                            ,
+                                            ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
                                         })
                                         {
@@ -646,58 +654,74 @@ namespace GralDomain
                                 //check if shape file exists
                                 if (File.Exists(_drobj.ContourFilename) == false)
                                 {
-                                    //user can define new location of the file
-                                    using (OpenFileDialog dialog = new OpenFileDialog
+                                    //check first, if map is located in a sub directory of this project
+                                    (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                    if (File.Exists(tempfilename))
                                     {
-                                        Filter = "(*.shp)|*.shp",
-                                        InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
-                                        Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
-                                        ShowHelp = true
-#if NET6_0_OR_GREATER
-                                        ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
-#endif
-                                    })
-                                    {
-                                        dialog.HelpRequest += new System.EventHandler(LoadSettingsAndMaps_HelpRequest);
-                                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                                        _drobj.ContourFilename = tempfilename;
+                                        if (saveNewFilePath)
                                         {
-                                            _drobj.ContourFilename = dialog.FileName;
                                             SaveDomainSettings(1);
                                         }
                                     }
+                                    else
+                                    {
+                                        //user can define new location of the file
+                                        using (OpenFileDialog dialog = new OpenFileDialog
+                                        {
+                                            Filter = "(*.shp)|*.shp",
+                                            InitialDirectory = Path.Combine(Gral.Main.ProjectName, @"Maps"),
+                                            Title = "Shape file " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
+                                            FileName = Path.GetFileName(_drobj.ContourFilename)
+#if NET6_0_OR_GREATER
+                                            , ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+#endif
+                                        })
+                                        {
+                                            dialog.HelpRequest += new System.EventHandler(LoadSettingsAndMaps_HelpRequest);
+                                            if (dialog.ShowDialog(this) == DialogResult.OK)
+                                            {
+                                                _drobj.ContourFilename = dialog.FileName;
+                                                SaveDomainSettings(1);
+                                            }
+                                        }
+                                    }
                                 }
-                                
-                                int count = 0;
-                                foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
+
+                                if (File.Exists(_drobj.ContourFilename))
                                 {
-                                    if (shp is GralShape.SHPLine)
+                                    int count = 0;
+                                    foreach (object shp in shape.ReadShapeFile(_drobj.ContourFilename))
                                     {
-                                        _drobj.ShpLines.Add((GralShape.SHPLine) shp);
-                                    }
+                                        if (shp is GralShape.SHPLine)
+                                        {
+                                            _drobj.ShpLines.Add((GralShape.SHPLine)shp);
+                                        }
 
-                                    if (shp is GralShape.SHPPolygon)
-                                    {
-                                        _drobj.ShpPolygons.Add((GralShape.SHPPolygon) shp);
-                                    }
+                                        if (shp is GralShape.SHPPolygon)
+                                        {
+                                            _drobj.ShpPolygons.Add((GralShape.SHPPolygon)shp);
+                                        }
 
-                                    if (shp is PointF)
-                                    {
-                                        _drobj.ShpPoints.Add((PointF) shp);
-                                    }
+                                        if (shp is PointF)
+                                        {
+                                            _drobj.ShpPoints.Add((PointF)shp);
+                                        }
 
-                                    if (count == 0)
-                                    {
-                                        _drobj.West = shape.West;
-                                        _drobj.North = shape.North;
-                                        _drobj.PixelMx = shape.PixelMx;
-                                        _drobj.Picture = new Bitmap(100, Math.Abs(shape.PixelMy));
-                                    }
+                                        if (count == 0)
+                                        {
+                                            _drobj.West = shape.West;
+                                            _drobj.North = shape.North;
+                                            _drobj.PixelMx = shape.PixelMx;
+                                            _drobj.Picture = new Bitmap(100, Math.Abs(shape.PixelMy));
+                                        }
 
-                                    count++;
+                                        count++;
 
-                                    if (count % 200 == 0)
-                                    {
-                                        wait.Text = "Loading shape file " + count.ToString();
+                                        if (count % 200 == 0)
+                                        {
+                                            wait.Text = "Loading shape file " + count.ToString();
+                                        }
                                     }
                                 }
                                 
@@ -1043,7 +1067,7 @@ namespace GralDomain
                     a = Convert.ToString(SelectedItems.Count) + " " + a + "s?";
                 }
 
-                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete " + a, St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete " + a, St_F.GetScreenAtMousePosition() + 340, St_F.GetTopScreenAtMousePosition() + 150) == DialogResult.Yes)
                 {
                     int i_alt = -1;
                     SelectedItems.Sort(new SortIntDescending()); // sort descending
@@ -1431,8 +1455,7 @@ namespace GralDomain
             {
                 Filter = "(*.bmpw;*.gifw;*.jpgw;*.pngw;*.tfw;*.shp;*.bmp;*.gif;*.jpg;*.png;*.tif;*.tiff;*.jgw;*.pgw;*.gfw;*.bpw)|*.bmpw;*.gifw;*.jpgw;*.pngw;*.tfw;*.shp;*.bmp;*.gif;*.jpg;*.png;*.tif;*.tiff;*.jgw;*.pgw;*.gfw;*.bpw",
                 Title = "Select georeferenced image map",
-                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar),
-                ShowHelp = true
+                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar)
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -2072,19 +2095,31 @@ namespace GralDomain
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
 
+                label.AutoSize = false;
                 label.SetBounds(9, 10, 372, 13);
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 13);
+
                 numdown.SetBounds(12, 36, 372, 20);
-                buttonOk.SetBounds(228, 72, 75, 23);
-                buttonCancel.SetBounds(309, 72, 75, 23);
+                numdown.Location = new Point(12, 36);
+                numdown.Size = new System.Drawing.Size(372, 20);
 
-                label.AutoSize = true;
-                numdown.Anchor |= AnchorStyles.Right;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                buttonOk.SetBounds(9, 72, 75, 23);
+                buttonCancel.SetBounds(109, 72, 75, 23);
+                buttonOk.Location = new Point(9, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(109, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
 
-                form.ClientSize = new Size(396, 107);
+                numdown.Anchor |= AnchorStyles.Left;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
                 form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.ClientSize = new Size(Math.Max(300, label.Width + 20), 110);
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.MinimizeBox = false;
@@ -2139,30 +2174,19 @@ namespace GralDomain
         private void Button19_Click(object sender, EventArgs e)
         {
             HideWindows(0); // Kuntner - close all edit forms
-            MouseControl = MouseMode.ViewScaleBarPos;
-            int trans = MapScale.Division;
-            if (InputBox1("Define the divisions of the map scale bar", "Number of divisions:", 1, 10, ref trans) == DialogResult.OK)
+
+            MapScaleInput msi = new MapScaleInput()
             {
-                MapScale.Division = trans;
-            }
-            
-            trans = MapScale.Length;
-            foreach (DrawingObjects _drobj in ItemOptions)
+                Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260,
+                Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 180
+            };
+            msi.MapScale = MapScale;
+            if (msi.ShowDialog() == DialogResult.OK)
             {
-                if (_drobj.Name.Equals("SCALE BAR"))
-                {
-                    trans = _drobj.ContourLabelDist;
-                    break;
-                }
+                MouseControl = MouseMode.ViewScaleBarPos;
+                SaveDomainSettings(1);
             }
-            
-            if (InputBox1("Length of the map scale bar", "Length in [m]:", 1, 100000, ref trans) == DialogResult.OK)
-            {
-                MapScale.Length = trans;
-            }
-            SaveDomainSettings(1);
             Picturebox1_Paint();
-            MouseControl = MouseMode.ViewScaleBarPos;
             Cursor = Cursors.Cross;
         }
 
@@ -2217,7 +2241,7 @@ namespace GralDomain
             dialog.Filter = "*.gif|*.gif|*.jpeg|*.jpeg|*.png|*.png|*.bmp|*.bmp|*.emf|*.emf|*.tiff|*.tiff|*.wmf|*.wmf";
             dialog.Title = "Save map";
             dialog.InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar);
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
 #endif
@@ -2443,7 +2467,7 @@ namespace GralDomain
             }
 
             _selmp.StartPosition = FormStartPosition.Manual;
-            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 150);
             _selmp.Owner = this;
             _selmp.Show();
 
@@ -2523,7 +2547,7 @@ namespace GralDomain
             using (SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm))
             {
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog(1);
+                disp.Location = GetScreenPositionForNewDialog(2);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
                 if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
@@ -2647,7 +2671,8 @@ namespace GralDomain
             MMO.GRAMMPath = MainForm.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
             MMO.StartPosition = FormStartPosition.Manual;
-            MMO.Left = Math.Max(350, GetScreenPositionForNewDialog(1).X - 1200);
+            MMO.Left = Math.Max(150, St_F.GetScreenAtMousePosition() + 150);
+            MMO.Top = St_F.GetTopScreenAtMousePosition() + 150;
             MMO.Show();
         }
 
@@ -2744,7 +2769,7 @@ namespace GralDomain
                     }
 
                     disp.StartPosition = FormStartPosition.Manual;
-                    disp.Location = GetScreenPositionForNewDialog(1);
+                    disp.Location = GetScreenPositionForNewDialog(2);
                     if (disp.ShowDialog() == DialogResult.OK)
                     {
                         ProfileConcentration.DispersionSituation = disp.selected_situation;
@@ -2786,9 +2811,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(Mean*_total_*.txt)|Mean*_total_*.txt",
-                Title = "Select File",
-                InitialDirectory = files,
-                ShowHelp = true
+                Title = "Select concentration file",
+                InitialDirectory = files
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -2886,7 +2910,7 @@ namespace GralDomain
                     Concentration = conc,
                     StartPosition = FormStartPosition.Manual
                 };
-                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, Top + 400);
+                pie.Location = new Point(St_F.GetScreenAtMousePosition() + 600, St_F.GetTopScreenAtMousePosition() + 150);
                 pie.Show();
                 Cursor = Cursors.Default;
                 if (MessageInfoForm != null)
@@ -2908,9 +2932,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.dat;*.txt)|*.dat;*.txt",
-                Title = "Select a Concentration File",
-                InitialDirectory = files,
-                ShowHelp = true
+                Title = "Select a concentration file",
+                InitialDirectory = files
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
@@ -3153,8 +3176,9 @@ namespace GralDomain
                     ShowConcentrationFiles = true,
                     GRZPath = files
                 };
+                
                 disp.StartPosition = FormStartPosition.Manual;
-                disp.Location = GetScreenPositionForNewDialog(1);
+                disp.Location = GetScreenPositionForNewDialog(2);
                 if (disp.ShowDialog() == DialogResult.OK && disp.selected_situation > 0) // unzip the *.con files from this situation
                 {
                     int dissit = disp.selected_situation; // selected situation
@@ -3195,12 +3219,8 @@ namespace GralDomain
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "(*.con)|*.con",
-                Title = "Select Concentration File",
-                InitialDirectory = tempPath,
-                ShowHelp = true
-#if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
-#endif
+                Title = "Select a concentration file",
+                InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Computation")
             };
 
             if (dialog.ShowDialog(this) == DialogResult.OK)
@@ -3304,6 +3324,10 @@ namespace GralDomain
                 FrameDelay = FrameDelay
             })
             {
+                animgifs.StartPosition = FormStartPosition.Manual;
+                animgifs.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
+                animgifs.Top = St_F.GetTopScreenAtMousePosition() + 150;
+
                 if (animgifs.ShowDialog(this) == DialogResult.OK)
                 {
                     ResultFile = animgifs.GIFFileName;
@@ -3470,7 +3494,7 @@ namespace GralDomain
 
                 //write ESRI-ASCII File
                 string name = Path.GetFileNameWithoutExtension(filename);
-                string file = Path.Combine(Gral.Main.ProjectName, @"Maps", name + ".txt");
+                string file = Path.Combine(Gral.Main.ProjectSetting.EvaluationPath, name + ".txt");
                 if (!string.IsNullOrEmpty(filenameESRI))
                 {
                     file = filenameESRI;
@@ -3582,9 +3606,11 @@ namespace GralDomain
         /// </summary>
         private void button57_Click(object sender, EventArgs e)
         {
+            Point pt = new Point(Math.Max(0, Right - 700), Math.Min(Screen.FromControl(button57).Bounds.Height - 200, Top + 250));
             using (GralDomForms.ViewFrameSaveAndLoad viewframe = new ViewFrameSaveAndLoad())
             {
-                viewframe.Location = GetScreenPositionForNewDialog(1);
+                viewframe.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+                viewframe.Location = pt;
                 if (viewframe.ShowDialog() == DialogResult.OK)
                 {
                     if (viewframe.SelText.Length > 0)
@@ -3869,6 +3895,10 @@ namespace GralDomain
                 GRAL_Topo = GRAL_Topo
             })
             {
+                dial.StartPosition = FormStartPosition.Manual;
+                dial.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 260;
+                dial.Top = St_F.GetTopScreenAtMousePosition() + 150;
+
                 if (dial.ShowDialog() == DialogResult.Cancel)
                 {
                     dial.Dispose();
@@ -4394,7 +4424,7 @@ namespace GralDomain
                 StartPosition = FormStartPosition.Manual
             })
             {
-                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, Top + 200);
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, St_F.GetTopScreenAtMousePosition() + 150);
                 if (mod.ShowDialog() == DialogResult.OK)
                 {
                     TopoModify = mod.modify;
@@ -4523,7 +4553,13 @@ namespace GralDomain
         private System.Drawing.Point GetScreenPositionForNewDialog(int Mode)
         {
             int x = GralStaticFunctions.St_F.GetScreenAtMousePosition(); // get screen
-            
+            int y = 60;
+
+            if (Mode == 2)
+            {
+                y = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
+            }
+
             if (panel1.Dock == DockStyle.Left) // Panel on the right side
             {
                 if (Mode == 0)
@@ -4543,8 +4579,12 @@ namespace GralDomain
                     x += panel1.Left - 350;
                 }
             }
+            if (Mode == 2)
+            {
+                x = St_F.GetScreenAtMousePosition() + 250;
+            }
             x = Math.Max(10, x);
-            return new System.Drawing.Point(x, 60);
+            return new System.Drawing.Point(x, y);
         }
 
         /// <summary>
@@ -4682,7 +4722,7 @@ namespace GralDomain
             
             _selmp.MeteoModel = 0;
             _selmp.StartPosition = FormStartPosition.Manual;
-            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, Top + 50);
+            _selmp.Location = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 150);
             _selmp.Owner = this;
             _selmp.MeteoInitFileName = Path.Combine(Gral.Main.ProjectName, "TimeSeries.txt");
             _selmp.Show();
@@ -4756,8 +4796,9 @@ namespace GralDomain
                     MaxSource = MainForm.listView1.Items.Count,
                     Prefix = _prefix,
                     MeteoNotClassified = MainForm.checkBox19.Checked,
+                    PathEmissionModulation = Gral.Main.ProjectSetting.EmissionModulationPath,
                     FictiousYear = _timeSeriesYear
-            };
+                };
 
                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                 {

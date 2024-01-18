@@ -131,7 +131,7 @@ namespace GralShape
                                 _rd.Name = "Receptor" + Convert.ToString(SHP_Line);
                             }
 
-                            //check for stack heights
+                            //check for receptor heights
                             if (comboBox1.SelectedIndex != 0)
                             {
                                 height = St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox1.SelectedItem)].ToString(), false);
@@ -155,7 +155,6 @@ namespace GralShape
                             _rd.Pt = new GralDomain.PointD(pt.X, pt.Y);
 
                             domain.EditR.ItemData.Add(_rd);
-
                         }
 
                         SHP_Line++;
@@ -292,7 +291,7 @@ namespace GralShape
             };
             dbf_reader.StartPosition = FormStartPosition.Manual;
             dbf_reader.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-            dbf_reader.Top = 80;
+            dbf_reader.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
             dbf_reader.ReadDBF(ShapeFileName.Replace(".shp", ".dbf"));
             dt = dbf_reader.dt;
             dbf_reader.Close();

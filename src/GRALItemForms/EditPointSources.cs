@@ -316,8 +316,18 @@ namespace GralItemForms
 
             bool valid_coors = true;
 
-            if (St_F.CheckDoubleValid(textBox2.Text) == false ||
-                St_F.CheckDoubleValid(textBox3.Text) == false)
+            double x = 0;
+            double y = 0;
+            try
+            {
+                x = double.Parse(textBox2.Text, CultureInfo.CurrentCulture);
+                y = double.Parse(textBox3.Text, CultureInfo.CurrentCulture);
+            }
+            catch
+            {
+                valid_coors = false;
+            }
+            if (Double.IsNaN(x) || Double.IsNaN(y))
             {
                 valid_coors = false;
             }
@@ -355,7 +365,7 @@ namespace GralItemForms
                 }
 
                 _pdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
-                _pdata.Pt = new PointD(textBox2.Text, textBox3.Text, CultureInfo.CurrentCulture);
+                _pdata.Pt = new PointD(x, y);
                 _pdata.Velocity = (float) (numericUpDown2.Value);
                 _pdata.Temperature = (float) (numericUpDown3.Value + 273);
                 _pdata.Diameter = (float) (numericUpDown4.Value);
@@ -504,7 +514,7 @@ namespace GralItemForms
             // if ask = false do not ask and delete immediality
             if (ask == true)
             {
-                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150) == DialogResult.Yes)
                 {
                     ask = false;
                 }
@@ -706,11 +716,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 
                 edit.Dep = dep[nr]; // set actual values
@@ -930,11 +940,11 @@ namespace GralItemForms
 
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150 );
                 }
 
                 if (edT.ShowDialog() == DialogResult.OK)

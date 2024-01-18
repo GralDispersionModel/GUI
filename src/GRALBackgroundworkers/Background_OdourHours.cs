@@ -23,6 +23,9 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Calculate odour hours based on several approaches
         /// </summary>
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
         private void OdourHours(GralBackgroundworkers.BackgroundworkerData mydata,
                                 System.ComponentModel.DoWorkEventArgs e)
         {
@@ -36,7 +39,7 @@ namespace GralBackgroundworkers
             int[] sg_mean_modulation_count = new int[maxsource];
 
             //get emission modulations for all source groups
-            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.ProjectName);
+            (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
 
             
             //read mettimeseries.dat
@@ -117,7 +120,7 @@ namespace GralBackgroundworkers
             if (!transientMode)
             {
                 emifac_timeseries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName,
-                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names);
+                                                                               sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
             //read meteopgt.all
@@ -529,7 +532,7 @@ namespace GralBackgroundworkers
                     name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
                 }
 
-                file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
+                file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
                 Result.Z = itm;
                 Result.Values = concmit;
                 Result.FileName = file;
@@ -547,7 +550,7 @@ namespace GralBackgroundworkers
 
             //write mean total odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-            file = Path.Combine(mydata.ProjectName, @"Maps", "Mean_" + name + ".txt");
+            file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
             Result.Z = maxsource;
             Result.Values = concmit;
             Result.FileName = file;
@@ -557,7 +560,7 @@ namespace GralBackgroundworkers
             //write mean total daytime odour hour file
             /*
             name = mydata.Prefix + mydata.Pollutant + "_total_6-18h" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-            file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+            file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
             Result.Z = maxsource + 1;
             Result.Values = concmit;
             Result.FileName = file;
@@ -565,7 +568,7 @@ namespace GralBackgroundworkers
             
             //write mean total evening odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total_19-21h" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-            file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+            file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
             Result.Z = maxsource + 2;
             Result.Values = concmit;
             Result.FileName = file;
@@ -573,7 +576,7 @@ namespace GralBackgroundworkers
             
             //write mean total nighttime odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total_22-5h" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-            file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+            file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
             Result.Z = maxsource + 3;
             Result.Values = concmit;
             Result.FileName = file;
@@ -581,7 +584,7 @@ namespace GralBackgroundworkers
            
             //write mean total weighted odour hour file
             name = mydata.Prefix + mydata.Pollutant + "_total_weighted" + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
-            file = Path.Combine(mydata.Projectname, @"Maps", "Mean_" + name + ".txt");
+            file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
             Result.Z = maxsource + 4;
             Result.Values = concmit;
             Result.FileName = file;
@@ -598,7 +601,7 @@ namespace GralBackgroundworkers
 
                 //write mean total R90
                 string name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-                string file5 = Path.Combine(mydata.ProjectName, @"Maps", "R90_" + name5 + ".txt");
+                string file5 = Path.Combine(mydata.PathEvaluationResults, "R90_" + name5 + ".txt");
                 Result.Z = -1;
                 Result.Round = 2;
                 Result.Unit = "-";
@@ -615,7 +618,7 @@ namespace GralBackgroundworkers
 
                 //write mean total concentration flucutation intensity
                 name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-                file5 = Path.Combine(mydata.ProjectName, @"Maps", "ConcentrationFluctuationIntensity_" + name5 + ".txt");
+                file5 = Path.Combine(mydata.PathEvaluationResults, "ConcentrationFluctuationIntensity_" + name5 + ".txt");
                 Result.TwoDim = CFI;
                 Result.FileName = file5;
                 Result.WriteFloatResult();
@@ -628,7 +631,7 @@ namespace GralBackgroundworkers
                 }
                 //write mean total standard deviation of the concentration flucutations
                 name5 = mydata.Prefix + mydata.Pollutant + "_" + mydata.Slicename + "_total";
-                file5 = Path.Combine(mydata.ProjectName, @"Maps", "ConcentrationStandardDeviation_" + name5 + ".txt");
+                file5 = Path.Combine(mydata.PathEvaluationResults, "ConcentrationStandardDeviation_" + name5 + ".txt");
                 Result.Unit =  @"OU/m" + Gral.Main.CubeString;
                 Result.TwoDim = Conc_standard;
                 Result.FileName = file5;
@@ -636,7 +639,17 @@ namespace GralBackgroundworkers
                 AddInfoText(Environment.NewLine + "Writing result file " + file5);
 
             }
-            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + DateTime.Now.ToShortTimeString());
+            string errorText = string.Empty;
+            if (wl > situationCount)
+            {
+                errorText = " -- " + (wl - situationCount).ToString() + " situation";
+                if (wl - situationCount > 1)
+                {
+                    errorText += "s";
+                }
+                errorText += " not available or not readable ";
+            }
+            AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful
         }
     }

@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using System.IO;
 using GralItemData;
 using GralMessage;
+using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -30,7 +31,7 @@ namespace GralDomain
             dialog.Filter = "(Asources.txt;cadastre.dat;*.shp)|Asources.txt;cadastre*.dat;*.shp";
             dialog.Title = "Select existing area source data";
             dialog.FileName = "";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif
@@ -177,7 +178,7 @@ namespace GralDomain
                         Cursor = Cursors.Default;
                         shp.StartPosition = FormStartPosition.Manual;
                         shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                        shp.Top = 80;
+                        shp.Top = St_F.GetTopScreenAtMousePosition() + 150;
                         dial = shp.ShowDialog();
                         
                         EditAS.SetTrackBarMaximum();

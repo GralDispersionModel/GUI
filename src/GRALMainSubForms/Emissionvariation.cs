@@ -22,6 +22,7 @@ using System.Linq;
 using System.Globalization;
 using GralStaticFunctions;
 using Gral;
+using GralData;
 
 namespace GralMainForms
 {
@@ -37,16 +38,20 @@ namespace GralMainForms
         private float pixel = 1;
         private int index;
         private readonly string[] months = new string[12]{"Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-        private bool changes_saved = true;		
+        private bool changes_saved = true;
+        private string emissionModulationPath = string.Empty;
         
         //private bool _set_GRAL_Files_Only = false;
 		        
-        public Emissionvariation(Main f)
+        public Emissionvariation(Main f, string EmissionModulationPath)
         {
             form1 = f;
             DoubleBuffered = true;
             InitializeComponent();
-           
+            if (Directory.Exists(EmissionModulationPath))
+            {
+                emissionModulationPath = EmissionModulationPath;
+            }
 
             Graphics g = CreateGraphics();
             float dx = 96;
@@ -247,6 +252,12 @@ namespace GralMainForms
 			
             //load information about the selected diurnal and seasonal modulation for this source group
             string newPath = Path.Combine(Main.ProjectName, @"Settings", "emissionmodulations.txt");
+            // in case of an emissionmodulation variation use the emissionmodulations.txt from the variation folder
+            if (!string.Equals(Path.Combine(Main.ProjectName, @"Computation"), Main.ProjectSetting.EmissionModulationPath))
+            {
+                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
+            }
+
             string[] text2 = new string[26];
             string dummy;
             try
@@ -556,6 +567,10 @@ namespace GralMainForms
             }
             name = name.Substring(name.Length - 3);
             newPath = Path.Combine(Main.ProjectName, @"Computation", "emissions" + name + ".dat");
+            if (Directory.Exists(Main.ProjectSetting.EmissionModulationPath))
+            {
+                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissions" + name + ".dat");
+            }
             
             string[] text1 = new string[25];
             string[] text2 = new string[13];
@@ -585,6 +600,12 @@ namespace GralMainForms
             
             //save information about the selected diurnal and seasonal modulation for this source group
             newPath = Path.Combine(Main.ProjectName, @"Settings", "emissionmodulations.txt");
+            // in case of an emissionmodulation variation use the emissionmodulations.txt from the variation folder
+            if (!string.Equals(Path.Combine(Main.ProjectName, @"Computation"), Main.ProjectSetting.EmissionModulationPath))
+            {
+                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
+            }
+            
             string[] dummy = new string[101];
             int ind = 0;
             try
@@ -651,7 +672,7 @@ namespace GralMainForms
             }
                       
             //fill form1.listbox5 with available pollutants
-            if (check == 1)
+            if (check == 1 && !Main.Project_Locked)
             {
                 form1.listBox5.Items.Clear();
                 form1.button18.Visible = false;

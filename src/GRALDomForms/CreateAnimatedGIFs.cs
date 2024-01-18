@@ -66,8 +66,7 @@ namespace GralDomForms
             {
                 Filter = "(*.gif)|*.gif",
                 Title = "Set GIF file name",
-                InitialDirectory = GIFFileName,
-                ShowHelp = true
+                InitialDirectory = GIFFileName
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif

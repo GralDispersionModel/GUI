@@ -148,16 +148,42 @@ namespace GralDomForms
 
         public void ReceiveClickedCoordinates(Object obj, EventArgs e)
         {
-            string _a = "Pt " + Convert.ToString(NameCounter++); 
             if (obj is GralDomain.PointD _pt)
             {
+
+                int row = dataGridView1.CurrentRow.Index;
+                bool existingLine = false;
+                if (row < PointCoorData.Rows.Count)
+                {
+                    if (PointCoorData.Rows[row][0].ToString() != string.Empty)
+                    {
+                        existingLine = true;
+                    }
+                }
+
                 DataRow workrow;
-                workrow = PointCoorData.NewRow();
-                workrow[0] = _a;
+                if (existingLine)
+                {
+                    workrow = PointCoorData.Rows[row];
+                }
+                else
+                {
+                    workrow = PointCoorData.NewRow();
+                    string _a = "Pt " + Convert.ToString(NameCounter++);
+                    workrow[0] = _a;
+                }
+                
                 workrow[1] = _pt.X;
                 workrow[2] = _pt.Y;
-                workrow[3] = 10;
-                PointCoorData.Rows.Add(workrow);
+                if (!existingLine)
+                {
+                    workrow[3] = 10;
+                    PointCoorData.Rows.Add(workrow);
+                }
+                else
+                {
+               
+                }
                 this.Activate();
             }
         }
@@ -307,8 +333,7 @@ namespace GralDomForms
                 Title = "Set the result file name",
                 AddExtension = true,
                 OverwritePrompt = true,
-                CheckPathExists = true,
-                ShowHelp = true
+                CheckPathExists = true
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif

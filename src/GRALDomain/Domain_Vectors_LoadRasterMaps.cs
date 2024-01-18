@@ -37,6 +37,15 @@ namespace GralDomain
                 CultureInfo ic = CultureInfo.InvariantCulture;
                 try
                 {
+                    if (!File.Exists(file))
+                    {
+                        (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, file, "Maps");
+                        if (File.Exists(tempfilename))
+                        {
+                            file = tempfilename;
+                        }
+                    }
+
                     if (File.Exists(file))
                     {
                         using (StreamReader myReader = new StreamReader(file))
@@ -243,6 +252,7 @@ namespace GralDomain
                 }
             }
             ReDrawVectors = false;
+            _drobj.Rendered = true;
         }
 
         /// <summary>
@@ -286,13 +296,13 @@ namespace GralDomain
             {
                 DialogCreateMeteoStation met_st = new DialogCreateMeteoStation
                 {
-                    Meteo_Title = "GRAL GUI Compute vector map",
+                    Meteo_Title = "GRAL GUI Calculate a vector map",
                     Meteo_Init = "Vectormap",
                     Meteo_Ext = ".vec",
                     Meteo_Model = windfieldenable,
                     Meteo_Height = 10,
-                    X1 = Left + 70,
-                    Y1 = Top + 50,
+                    X1 = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160,
+                    Y1 = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150,
                     Xs = 0,
                     Ys = 0,
                     ShowAbsHeightBox = true
@@ -339,7 +349,7 @@ namespace GralDomain
                                 
                                 MessageWindow message = new MessageWindow();
                                 message.Show();
-                                message.listBox1.Items.Add("Compute vector map...");
+                                message.listBox1.Items.Add("Calculate vector map...");
                                 message.Refresh();
 
                                 //reading geometry file "ggeom.asc"

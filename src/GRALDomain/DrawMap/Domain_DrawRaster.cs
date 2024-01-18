@@ -21,7 +21,10 @@ namespace GralDomain
         /// <summary>
         /// Draw Raster
         /// </summary>
-		private void DrawRaster(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north,
+#if NET7_0_OR_GREATER
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+#endif
+        private void DrawRaster(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north,
 		                        double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
 		{
 			Pen raster = new Pen(_drobj.LineColors[0], 1);

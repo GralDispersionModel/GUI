@@ -76,8 +76,8 @@ namespace GralBackgroundworkers
                                 sg_numbers[itm] = Convert.ToInt32(GetSgNumbers(sg_names[sg])); // Get number of the Source-group
                                 // MessageBox.Show(itm.ToString()+"/"+sg_numbers[itm]);
                                 // Read modulation of that source-group
-                                newpath = Path.Combine("Computation", "emissions" + Convert.ToString(itm + 1).PadLeft(3, '0') + ".dat");
-                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
+                                newpath = Path.Combine("emissions" + Convert.ToString(itm + 1).PadLeft(3, '0') + ".dat");
+                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.PathEmissionModulation, newpath)))
                                 {
                                     for (int j = 0; j < 24; j++)
                                     {
@@ -144,9 +144,9 @@ namespace GralBackgroundworkers
                 }
 
                 // read value from emissions_timeseries.txt -> emifac_day[] and emifac_mon[] not used
-                newpath = Path.Combine(mydata.ProjectName, "Computation", "emissions_timeseries.txt");
+                newpath = Path.Combine(mydata.PathEmissionModulation, "emissions_timeseries.txt");
                 // modulation = 1 in transient mode
-                if (File.Exists(newpath) == true && !transient)
+                if (File.Exists(newpath) && !transient)
                 {
                     try
                     {
@@ -229,33 +229,23 @@ namespace GralBackgroundworkers
                     }
                 } // read value from emissions_timeseries.txt
             }
-            if (!timeseries)
+            if (!timeseries && !transient)
             {
                 for (int n = 0; n < maxsource; n++)
                 {
                     for (int sg = 0; sg < sg_names.Length; sg++) // check all selected source groups
                     {
-                        double sum = 0;
-                        int count = 0;
                         if ((n + 1) == Convert.ToInt32(GetSgNumbers(sg_names[sg]))) // sourcegroup selected?
                         {
-                            for (int j = 0; j < 24; j++)
+                            int count = 0;
+                            double sum = 0;
+                            for (int h = 0; h < 24; h++)
                             {
-                                if (transient)
+                                for (int m = 0; m < 12; m++)
                                 {
-                                    emifac_day[j, n] = 1;
+                                    sum += emifac_mon[m, n] * emifac_day[h, n];
+                                    count++;
                                 }
-                                sum += emifac_day[j, n];
-                                count++;
-                            }
-                            for (int j = 0; j < 12; j++)
-                            {
-                                if (transient)
-                                {
-                                    emifac_mon[j, n] = 1;
-                                }
-                                sum += emifac_mon[j, n];
-                                count++;
                             }
                             AddInfoText(Environment.NewLine + "Mean modulation factor (annual/diurnal factors) for source group " + sg_numbers[n].ToString() + " = " + Math.Round(sum / Math.Max(count, 1), 2));
                         }
@@ -485,7 +475,7 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        string writerRecTimeSeries = Path.Combine(mydata.ProjectName, "Computation","ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
+                        string writerRecTimeSeries = Path.Combine(mydata.PathEvaluationResults, "ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
                         if (File.Exists(writerRecTimeSeries))
                         {
                             try
@@ -549,10 +539,17 @@ namespace GralBackgroundworkers
                                     dispersionsituations = wrmet.Count;
 
                                 int count_dispsit_in_mettime = 0;
-                                int count_ws = -1;
+                                int count_ws = -1; // recent line in mettimeseries.dat
 
                                 while (!string.IsNullOrEmpty(text2[0]))
                                 {
+
+                                    if (Rechenknecht.CancellationPending)
+                                    {
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
                                     count_ws++;
                                     count_dispsit_in_mettime += 1;
 
@@ -562,9 +559,13 @@ namespace GralBackgroundworkers
                                     month = text3[1];
                                     day = text3[0];
                                     hour = text2[1];
-                                    
-                                    if (hour == "24")
+
+                                    //if a time series uses hours from 1 to 24 instead the default 0 to 23
+                                    if (hour == "24") 
+                                    {
                                         hourplus = 1;
+                                    }
+                                    
                                     wgmettime = text2[2];
                                     wrmettime = text2[3];
                                     akmettime = text2[4];

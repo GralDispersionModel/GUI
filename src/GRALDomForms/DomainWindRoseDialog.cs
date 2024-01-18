@@ -114,8 +114,7 @@ namespace GralDomForms
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm; *.akt)|*.akterm;*.akt",
                 Title = "Select meteorological data",
                 InitialDirectory = Path.Combine(Main.ProjectName, "Mefiles"),
-                Multiselect = true,
-                ShowHelp = true
+                Multiselect = true  
 #if NET6_0_OR_GREATER
                 ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif

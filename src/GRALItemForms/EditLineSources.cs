@@ -648,7 +648,7 @@ namespace GralItemForms
             // if ask = false do not ask and delete immediality
             if (ask == true)
             {
-                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150) == DialogResult.Yes)
                 {
                     ask = false;
                 }
@@ -1055,11 +1055,11 @@ namespace GralItemForms
 
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                     {
-                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                     }
                     else
                     {
-                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, St_F.GetTopScreenAtMousePosition() + 150);
                     }
 
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
@@ -1097,11 +1097,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(lineemission[nr].Text, true);
@@ -1325,11 +1325,11 @@ namespace GralItemForms
             };
             if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
             {
-                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 350);
             }
             else
             {
-                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, St_F.GetTopScreenAtMousePosition() + 350);
             }
 
             sgsel.SourceGroup = SG_List;

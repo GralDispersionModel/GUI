@@ -22,15 +22,18 @@ namespace GralMessage
 	public partial class MessageBoxTemporary : Form
 	{
 		private System.Windows.Forms.Timer timer1;
-		private Point ptm = new Point(0, 0);
+		private Point ptm = new Point(GralStaticFunctions.St_F.GetScreenAtMousePosition(), GralStaticFunctions.St_F.GetTopScreenAtMousePosition());
 		public MessageBoxTemporary(string a, Point ptt)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			ptm.X  = ptt.X + 20;
-			ptm.Y  = ptt.Y + 20;
+            if (ptt.X > ptm.X && ptt.Y > ptm.Y)
+            {
+                ptm.X = ptt.X + 20;
+                ptm.Y = ptt.Y + 20;
+            }
 			textBox1.Text = a;
 
             timer1 = new System.Windows.Forms.Timer
@@ -49,14 +52,11 @@ namespace GralMessage
 			timer1.Dispose();
 		}
 
-		
 		void PictureBox1Paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.DrawIcon(SystemIcons.Information,0,0);
 		}
-		
-		
-		
+			
 		void MessageBox_TemporaryLoad(object sender, EventArgs e)
 		{
 			Location = ptm;

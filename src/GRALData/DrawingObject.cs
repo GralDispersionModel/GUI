@@ -209,8 +209,17 @@ namespace GralDomain
         /// list of strings for item infos
         /// </summary>
         public List<string> ItemInfo { get; set; }
+        /// <summary>
+        /// Is this contour map already rendered?
+        /// </summary>
+        public bool Rendered = false;
 
         private bool disposed = false;
+
+        /// <summary>
+        /// Element based on the map or screen
+        /// </summary>
+        public bool BasedOnMap = false;
 
         /// <summary>
         /// Default settings for the drawing object

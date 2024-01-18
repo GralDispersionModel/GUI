@@ -62,6 +62,7 @@ namespace GralDomain
                 }
                 MouseControl = MouseMode.ReceptorPos;
                 InfoBoxCloseAllForms(); // close all infoboxes
+
                 EditR.Show();
                 EditR.ShowForm();
                 EditR.BringToFront();

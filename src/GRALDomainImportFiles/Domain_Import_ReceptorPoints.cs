@@ -30,7 +30,7 @@ namespace GralDomain
                 dialog.Filter = "(Receptor.dat;*.shp)|Receptor.dat;*.shp";
                 dialog.Title = "Select existing receptors";
                 dialog.FileName = "";
-                dialog.ShowHelp = true;
+                // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
                 dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif
@@ -39,6 +39,12 @@ namespace GralDomain
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     int numbrec = EditR.ItemData.Count;
+                    
+                    if (numbrec == 1 && EditR.ItemData[0].Name.Length == 0)
+                    {
+                        EditR.ItemData.Clear();
+                    }
+
                     if (!dialog.FileName.EndsWith("shp"))
                     {
                         int i = 1;
@@ -89,7 +95,7 @@ namespace GralDomain
                                 Cursor = Cursors.Default;
                                 shp.StartPosition = FormStartPosition.Manual;
                                 shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                                shp.Top = 80;
+                                shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                                 dial = shp.ShowDialog();
                                 
                                 EditR.SetTrackBarMaximum();

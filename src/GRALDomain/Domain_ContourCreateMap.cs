@@ -33,8 +33,7 @@ namespace GralDomain
                 {
                     Filter = "(*.dat;*.txt)|*.dat;*.txt",
                     Title = "Select raster data (ASCII Format)",
-                    InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar),
-                    ShowHelp = true
+                    InitialDirectory = Gral.Main.ProjectSetting.EvaluationPath
 #if NET6_0_OR_GREATER
                     ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif

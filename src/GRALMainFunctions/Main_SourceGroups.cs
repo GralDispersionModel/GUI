@@ -319,7 +319,12 @@ namespace Gral
             {
                 if (listView1.Items.Count > 0)
                 {
-                    GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this);
+                    string newPath = Path.Combine(Main.ProjectName, @"Settings", "emissionmodulations.txt");
+                    if (File.Exists(Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt")))
+                    {
+                        newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
+                    }
+                    GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath);
                     emvar.Close_Emissionvariation(i);
                     emvar.Dispose();
                 }
@@ -448,6 +453,10 @@ namespace Gral
                     try
                     {
                         string newPath = Path.Combine(ProjectName, @"Computation", "emissions" + name + ".dat");
+                        if (Directory.Exists(ProjectSetting.EmissionModulationPath))
+                        {
+                            newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + name + ".dat");
+                        }
                         File.Delete(newPath);
                     }
                     catch

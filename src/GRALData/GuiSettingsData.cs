@@ -65,7 +65,7 @@ namespace GralData
         /// Check for an update at each start of the GUI
         /// </summary>
         public bool AutoCheckForUpdates;
-
+        
         private CultureInfo ic = CultureInfo.InvariantCulture;
 
         /// <summary>
@@ -198,7 +198,6 @@ namespace GralData
                         }
                         catch { }
                     }
-
                 }
             }
             catch
@@ -231,7 +230,7 @@ namespace GralData
                 ^ CopyCoresToProject.GetHashCode() ^ CompatibilityToVersion1901.GetHashCode() ^ VectorMapAutoScaling.GetHashCode()
                 ^ IgnoreMeteo00Values.GetHashCode() ^ DeleteFilesToRecyclingBin.GetHashCode() ^ DefaultPathForGRAMM.GetHashCode();
         }
-        public static bool operator ==(GuiSettings a, GuiSettings b)
+        public static bool operator == (GuiSettings a, GuiSettings b)
         {
             return a.PreviousUsedProjectPath.Equals(b.PreviousUsedProjectPath) && a.TopoFileName.Equals(b.TopoFileName) && a.DefaultPathForGRAL.Equals(b.DefaultPathForGRAL) &&
                    a.CopyCoresToProject == b.CopyCoresToProject && a.CompatibilityToVersion1901 == b.CompatibilityToVersion1901 &&

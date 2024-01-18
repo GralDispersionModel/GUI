@@ -17,6 +17,7 @@ using System.IO;
 using GralIO;
 using GralDomForms;
 using System.Collections.Generic;
+using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -639,6 +640,8 @@ namespace GralDomain
                 VerticalProfile_Dynamic vertprof = new VerticalProfile_Dynamic();
                 string filename = "GRAMM-" + Path.GetFileName(file);
                 vertprof.file = Path.Combine(Path.GetDirectoryName(file), filename);
+                vertprof.StartPosition = FormStartPosition.Manual;
+                vertprof.Location = new Point(St_F.GetScreenAtMousePosition() + 460, St_F.GetTopScreenAtMousePosition() + 100);
                 vertprof.Show();
             }
         }
@@ -656,6 +659,8 @@ namespace GralDomain
                 VerticalProfileForm.X = TestPt.X;
                 VerticalProfileForm.Y = TestPt.Y;
                 VerticalProfileForm.Init();
+                VerticalProfileForm.StartPosition = FormStartPosition.Manual;
+                VerticalProfileForm.Location = new Point(St_F.GetScreenAtMousePosition() + 460, St_F.GetTopScreenAtMousePosition() + 100);
                 VerticalProfileForm.Show();
             }
         }
@@ -787,7 +792,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.Closing += new System.ComponentModel.CancelEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileVelocity.Location = new Point(this.Left + 50, this.Top + 100);
+                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100); 
                 ProfileConcentration.VertProfileVelocity.Show();
 
                 //write text files with vertical profiles
@@ -834,7 +839,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.FileName = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileDirection.Location = new Point(this.Left + 350, this.Top + 100);
+                ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 520, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileDirection.Show();
             }
             catch { }
@@ -1027,7 +1032,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.Closing += new System.ComponentModel.CancelEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileVelocity.Location = new Point(this.Left + 50, this.Top + 100);
+                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileVelocity.Show();
 
                 //write text files with vertical profiles
@@ -1078,7 +1083,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.FileName = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileDirection.Location = new Point(this.Left + 350, this.Top + 100);
+                ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 520, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileDirection.Show();
 
             }
@@ -1116,19 +1121,32 @@ namespace GralDomain
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
 
+                label.AutoSize = false;
                 label.SetBounds(9, 20, 372, 13);
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 13);
+
                 combo.SetBounds(12, 36, 372, 20);
+                combo.Location = new Point(12, 36);
+                combo.Size = new System.Drawing.Size(372, 20);
+
                 buttonOk.SetBounds(228, 72, 75, 23);
                 buttonCancel.SetBounds(309, 72, 75, 23);
+                buttonOk.Location = new Point(228, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(309, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
 
-                label.AutoSize = true;
-                combo.Anchor |= AnchorStyles.Right;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                combo.Anchor |= AnchorStyles.Top;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
                 form.ClientSize = new Size(396, 107);
                 form.Controls.AddRange(new Control[] { label, combo, buttonOk, buttonCancel });
                 form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.MinimizeBox = false;

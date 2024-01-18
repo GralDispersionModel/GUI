@@ -32,7 +32,7 @@ namespace GralDomain
             dialog.Filter = "(Buildings.txt;buildings.dat;*.shp)|Buildings.txt;buildings.dat;*.shp";
             dialog.Title = "Select existing buildings data";
             dialog.FileName = "";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif
@@ -192,7 +192,7 @@ namespace GralDomain
                             DialogResult dial = new DialogResult();
                             shp.StartPosition = FormStartPosition.Manual;
                             shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                            shp.Top = 80;
+                            shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                             dial = shp.ShowDialog();
                             {
                             }

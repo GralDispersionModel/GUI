@@ -115,10 +115,19 @@ namespace GralDomain
                                     
                                     myWriter.WriteLine(bol.ConvertToString(_drobj.Fill));
                                     myWriter.WriteLine(bol.ConvertToString(_drobj.FillYesNo));
-                                    
-                                    myWriter.WriteLine("R"); // R = reserved for future use
-                                    myWriter.WriteLine("R");
-                                    myWriter.WriteLine("R");
+
+                                    if (_drobj.Name.Equals("SCALE BAR"))
+                                    {
+                                        myWriter.WriteLine(Convert.ToString(MapScale.RelativeTo)); // Write Map Scale relative value
+                                        myWriter.WriteLine(Convert.ToString(MapScale.Length));
+                                        myWriter.WriteLine("R");
+                                    }
+                                    else
+                                    {
+                                        myWriter.WriteLine(bol.ConvertToString(_drobj.BasedOnMap)); 
+                                        myWriter.WriteLine("R"); // R = reserved for future use
+                                        myWriter.WriteLine("R"); // R = reserved for future use
+                                    }
                                     myWriter.WriteLine(Convert.ToString(_drobj.LabelInterval));
                                     myWriter.WriteLine(Convert.ToString(_drobj.ContourAreaMin));
                                     
@@ -361,9 +370,30 @@ namespace GralDomain
                 string label_distance = "1";
                 if (version > 0) //compatibility to old projects
                 {
-                    dummy = myReader.ReadLine(); // not used at the moment
-                    dummy = myReader.ReadLine();
-                    dummy = myReader.ReadLine();
+                    if (_drobj.Name.Equals("SCALE BAR"))
+                    {
+                        dummy = myReader.ReadLine(); // Read Map Scale relative value
+                        if (Int32.TryParse(dummy, out int value))
+                        {
+                            MapScale.RelativeTo = value;
+                        }
+                        dummy = myReader.ReadLine();
+                        if (Int32.TryParse(dummy, out value))
+                        {
+                            MapScale.Length = value;
+                        }
+                        dummy = myReader.ReadLine(); // not used at the moment
+                    }
+                    else
+                    {
+                        dummy = myReader.ReadLine(); // Coordinates based on screen or map?
+                        if (!dummy.Equals("R") && dummy.Length > 2)
+                        {
+                            _drobj.BasedOnMap = (bool)bol.ConvertFromString(dummy);
+                        }
+                        dummy = myReader.ReadLine(); // not used at the moment
+                        dummy = myReader.ReadLine(); // not used at the moment
+                    }
                     label_distance = myReader.ReadLine(); // cotour_label interval
                     int label_d = 1;
                     if (Int32.TryParse(label_distance, out label_d) == false)
@@ -452,8 +482,9 @@ namespace GralDomain
                             //check if base map file exists
                             if (File.Exists(_drobj.ContourFilename) == false) // check if file exists in the folder "maps"
                             {
-                                string tempfilename=Path.Combine(Gral.Main.ProjectName,@"Maps", Path.GetFileName(_drobj.ContourFilename));
-                                if (File.Exists(tempfilename) == true)
+                                // check if file exists in a sub folder of this project
+                                (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, _drobj.ContourFilename, "Maps");
+                                if (File.Exists(tempfilename))
                                 {
                                     _drobj.ContourFilename = tempfilename;
                                 }
@@ -464,12 +495,13 @@ namespace GralDomain
                                 //user can define new location of the file
                                 OpenFileDialog dialog = new OpenFileDialog
                                 {
-                                    Filter = "(*.bmp;*.gif;*.jpg;*.png)|*.bmp;*.gif;*.jpg;*.png",
+                                    Filter = "(*.bmp;*.gif;*.jpg;*.png;*.tiff;*.png;*.tif)|*.gif;*.jpeg;*.png;*.jpg;*.bmp;*.tiff;*.tif",
                                     Title = "Base map " + Convert.ToString(Path.GetFileName(_drobj.ContourFilename)) + " not found - please enter new path",
                                     InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps"),
-                                    ShowHelp = true
+                                    FileName = Path.GetFileName(_drobj.ContourFilename)
 #if NET6_0_OR_GREATER
-                                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                                    ,
+                                    ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
                                 };
                                 if (dialog.ShowDialog() == DialogResult.OK)

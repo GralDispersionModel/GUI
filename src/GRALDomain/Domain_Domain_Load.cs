@@ -123,6 +123,16 @@ namespace GralDomain
                 //add unreferenced image file
                 if (existbasemap == true)
                 {
+                    if (!File.Exists(MapFileName))
+                    {
+                        // check if file exists in a sub folder of this project
+                        (string tempfilename, bool saveNewFilePath) = St_F.SearchAbsoluteAndRelativeFilePath(Gral.Main.ProjectName, MapFileName, "Maps");
+                        if (File.Exists(tempfilename))
+                        {
+                            MapFileName = tempfilename;
+                        }
+                    }
+
                     //add base map to object list
                     _drobj = new DrawingObjects("BM: " + Path.GetFileNameWithoutExtension(MapFileName));
 
@@ -197,7 +207,6 @@ namespace GralDomain
             EditPortals.ItemDisplayNr = 0;
             EditB.ItemDisplayNr = 0;
             EditWall.ItemDisplayNr = 0;
-            MapScale.Division = 2;
 
             //import source group definitions to source dialogs
             LoadSourceGroups();

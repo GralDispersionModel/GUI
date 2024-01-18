@@ -30,7 +30,7 @@ namespace GralDomain
             dialog.Filter = "(Portalsources.txt;portals.dat)|Portalsources.txt;portals.dat";
             dialog.Title = "Select existing tunnel portal data";
             dialog.FileName = "";
-            dialog.ShowHelp = true;
+            // dialog.ShowHelp = true;
 #if NET6_0_OR_GREATER
             dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
 #endif

@@ -624,18 +624,27 @@ namespace GralStaticFunctions
                 buttonCancel.DialogResult = DialogResult.Cancel;
 
                 label.SetBounds(9, 20, 372, 13);
-                buttonOk.SetBounds(228, 72, 75, 23);
-                buttonCancel.SetBounds(309, 72, 75, 23);
+                buttonOk.SetBounds(9, 72, 75, 23);
+                buttonCancel.SetBounds(100, 72, 75, 23);
 
-                label.AutoSize = true;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                label.AutoSize = false;
+                label.Location = new Point(9, 20);
+                label.Size = new System.Drawing.Size(372, 13);
 
-                form.ClientSize = new Size(396, 107);
+                buttonOk.Location = new Point(9, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(100, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
+
+                buttonOk.Anchor = AnchorStyles.Top| AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+                form.ClientSize = new Size(Math.Max(252, label.Width + 20), 110);
                 form.Controls.AddRange(new Control[] { label, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
                 form.MinimizeBox = false;
                 form.MaximizeBox = false;
                 form.AcceptButton = buttonOk;
@@ -674,19 +683,30 @@ namespace GralStaticFunctions
 
                 label.SetBounds(9, 10, 372, 16);
                 textBox.SetBounds(12, 36, 372, 20);
-                buttonOk.SetBounds(228, 72, 75, 23);
-                buttonCancel.SetBounds(309, 72, 75, 23);
+                buttonOk.SetBounds(9, 72, 75, 23);
+                buttonCancel.SetBounds(100, 72, 75, 23);
 
-                label.AutoSize = true;
-                textBox.Anchor |= AnchorStyles.Right;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                label.AutoSize = false;
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 16);
+                buttonOk.Location = new Point(9, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(100, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
+                textBox.Location = new Point(12, 36);
+                textBox.Size = new System.Drawing.Size(372, 20);
 
-                form.ClientSize = new Size(396, 107);
+                textBox.Anchor |= AnchorStyles.Top | AnchorStyles.Left;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+                form.ClientSize = new Size(Math.Max(396, label.Width + 20), 110);
                 form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
                 form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
                 form.MinimizeBox = false;
                 form.MaximizeBox = false;
                 form.AcceptButton = buttonOk;
@@ -725,18 +745,26 @@ namespace GralStaticFunctions
                 buttonCancel.DialogResult = DialogResult.No;
 
                 label.SetBounds(9, 20, 372, 13);
-                buttonOk.SetBounds(228, 72, 75, 23);
-                buttonCancel.SetBounds(309, 72, 75, 23);
+                buttonOk.SetBounds(9, 72, 75, 23);
+                buttonCancel.SetBounds(100, 72, 75, 23);
 
-                label.AutoSize = true;
-                buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                label.AutoSize = false;
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(372, 13);
+                buttonOk.Location = new Point(9, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(100, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
 
-                form.ClientSize = new Size(396, 107);
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
                 form.Controls.AddRange(new Control[] { label, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                form.ClientSize = new Size(Math.Max(396, label.Width + 20), 110);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.Manual;
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
                 form.Left = x;
                 form.Top = y;
                 form.MinimizeBox = false;
@@ -790,6 +818,24 @@ namespace GralStaticFunctions
         }
 
         /// <summary>
+        /// Retrieve the bottom position in pixels of the current screen
+        /// </summary>
+        public static int GetBottomScreenAtMousePosition()
+        {
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            return screen.Bounds.Bottom;
+        }
+
+        /// <summary>
+        /// Retrieve the Top position in pixels of the current screen
+        /// </summary>
+        public static int GetTopScreenAtMousePosition()
+        {
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            return screen.Bounds.Top;
+        }
+
+        /// <summary>
         /// Reduce the lenght of a file name inclusive path
         /// </summary>
         /// <param name="FileName">File name with path</param>
@@ -798,7 +844,7 @@ namespace GralStaticFunctions
         public static string ReduceFileNameLenght(string FileName, int Lenght)
         {
             string _a = FileName;
-            if (_a.Length > Lenght)
+            if (_a.Length > 0 && Lenght > 0 && _a.Length > Lenght)
             {
                 int _pathLenght = Path.GetDirectoryName(FileName).Length;
                 int _nameLenght = Path.GetFileName(FileName).Length;
@@ -808,10 +854,10 @@ namespace GralStaticFunctions
                 }
                 else
                 {
-                    int _diff = Lenght - _nameLenght - 3;
+                    int _diff = Lenght - _nameLenght - 4;
                     if (_diff > 0)
                     {
-                        _a = Path.GetDirectoryName(FileName).Substring(0, _diff) + "..." + Path.GetFileName(FileName);
+                        _a = Path.GetDirectoryName(FileName).Substring(0, _diff) + "..." + Path.DirectorySeparatorChar + Path.GetFileName(FileName);
                     }
                     else
                     {
@@ -820,6 +866,27 @@ namespace GralStaticFunctions
                 }
             }
             return _a;
+        }
+
+        /// <summary>
+        /// Trim the text for fitting into the textbox
+        /// </summary>
+        /// <param name="box"></param>
+        /// <param name="text"></param>
+        public static void SetTrimmedTextToTextBox(TextBox box, string text)
+        {
+            float l1 = Math.Max(10, TextRenderer.MeasureText(text, box.Font).Width);
+            box.Text = ReduceFileNameLenght(text, (int)(text.Length * (box.Width / l1)));
+        }
+        /// <summary>
+        /// trim the text for fitting into the label
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="text"></param>
+        public static void SetTrimmedTextToTextBox(Label label, string text)
+        {
+            float l1 = Math.Max(10, TextRenderer.MeasureText(text, label.Font).Width);
+            label.Text = ReduceFileNameLenght(text, (int)(text.Length * (label.Width / l1)));
         }
 
         /// <summary>
@@ -834,6 +901,78 @@ namespace GralStaticFunctions
             FileDelete.DeleteFileToRecyclingBin(FileName);
             Application.DoEvents();
 #endif
+        }
+
+        /// <summary>
+        /// Search a file at an absolute path; if not found, search within the recent project at the same sub-folder as in the original project or in a default sub folder
+        /// </summary>
+        /// <param name="ProjectPath">The recent project path</param>
+        /// <param name="FilePath">The file with path to be searched</param>
+        /// <param name="defaultSubFolder">The default folder for such files or string.empty = no defalut folder</param>
+        /// <returns>(The path for the file, true if this is a new valid path - otherwise false)</returns>
+        public static (string, bool) SearchAbsoluteAndRelativeFilePath(string ProjectPath, string FilePath, string defaultSubFolder)
+        {
+            if (File.Exists(FilePath))
+            {
+                return (FilePath, false);
+            }
+            else
+            {
+                // search File in the sub-directory of the recent project
+                string result = string.Empty;
+                string resultPath = string.Empty;
+                string filename = Path.GetFileName(FilePath);
+                bool saveNewFilePath = false;
+                try
+                {
+                    DirectoryInfo di = new DirectoryInfo(ProjectPath);
+                    string project = di.Name.ToString();
+                    // if the file is in the project root folder
+                    if (string.Equals(project, Directory.GetParent(FilePath).Name))
+                    {
+                        result = Path.Combine(ProjectPath, filename);
+                        saveNewFilePath = true;
+                    }
+                    // find the file in a sub folder?
+                    else
+                    {
+                        while (!string.IsNullOrWhiteSpace(FilePath))
+                        {
+                            DirectoryInfo parentFolder = Directory.GetParent(FilePath);
+                            if (parentFolder == null)
+                            {
+                                resultPath = string.Empty;
+                                break;
+                            }
+                            if (!string.Equals(project, parentFolder.Name.ToString()))
+                            {
+                                resultPath = Path.Combine(parentFolder.Name.ToString(), resultPath);
+                            }
+                            else
+                            {
+                                break;
+                            }
+
+                            FilePath = Directory.GetParent(FilePath).FullName;
+                        }
+                        if (!string.IsNullOrEmpty(resultPath))
+                        {
+                            result = Path.Combine(ProjectPath, resultPath, filename);
+                            saveNewFilePath = true;
+                        }
+                    }
+                }
+                catch
+                {
+                    result = string.Empty;
+                }
+                // and finally check at the default folder, except if defaultDubFolder == string.empty
+                if (string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(defaultSubFolder) && File.Exists(Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath))))
+                {
+                    return (Path.Combine(ProjectPath, defaultSubFolder, Path.GetFileName(FilePath)), true);
+                }
+                return (result, saveNewFilePath);
+            }
         }
 
     }

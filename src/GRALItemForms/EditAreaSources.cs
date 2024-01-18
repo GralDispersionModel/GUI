@@ -485,7 +485,7 @@ namespace GralItemForms
             // if ask = false do not ask and delete immediality
             if (ask == true)
             {
-                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, 400) == DialogResult.Yes)
+                if (St_F.InputBoxYesNo("Attention", "Do you really want to delete this source?", St_F.GetScreenAtMousePosition() + 340, GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 450) == DialogResult.Yes)
                 {
                     ask = false;
                 }
@@ -687,16 +687,15 @@ namespace GralItemForms
 
                     VerticesEditDialog vert = new VerticesEditDialog(number_of_vertices, ref CornerAreaX, ref CornerAreaY)
                     {
-                        Location = new System.Drawing.Point(Right - 180 - 280, Top + 60),
                         StartPosition = FormStartPosition.Manual
                     };
                     if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                     {
-                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                     }
                     else
                     {
-                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, Top);
+                        vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, St_F.GetTopScreenAtMousePosition() + 150);
                     }
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
                     if (vert.ShowDialog() == DialogResult.OK)
@@ -732,11 +731,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(areaemission[nr].Text,true);
