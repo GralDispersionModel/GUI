@@ -2,7 +2,7 @@
 This application is a graphical user interface (GUI), designed to simplify the numerous input values for GRAL (atmospheric dispersion model) and GRAMM (non-hydrostatic mesoscale wind-field model), [edit sources and obstacles](ReadMe/Items.md), import data from shape files, [analyze and display results](ReadMe/Maps.md) as contour lines, visualize wind vectors, and verify the input and output of the GRAL and GRAMM model. It is also possible to visualize and classify [meteorological input data](ReadMe/WindAnalysis.md) (wind roses, stability or velocity classes, diurnal frequencies of wind directions, diurnal mean wind velocity).<br>
 There is also a [youtube](https://www.youtube.com/watch?v=vfEVl-j4P5s) tutorial that shows and explains some basic functions of the GUI.<br><br>
 
-The application has been migrated from .NETFramework to .NET6 after the release of version 22.03. Since the .NETFramework is no longer developed by Microsoft, we expect the following advantages from the migration in the future:
+The application has been migrated from .NETFramework to .NET6 after the release of version 22.03 and to .NET8 for version 23.11. Since the .NETFramework is no longer developed by Microsoft, we expect the following advantages from the migration in the future:
 * High dpi support
 * Performance improvements
 * Publishing of single files including the entire required framework
