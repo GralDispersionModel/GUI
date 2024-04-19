@@ -125,6 +125,8 @@ namespace GralIO
                     {
                         myWriter.WriteLine("0 \t ! Use GRAL Online Functions = false");
                     }
+
+                    myWriter.WriteLine(_data.AVX512Usage.ToString(ic) + "\t ! Use the AVX512 instructions Yes = 1, No = 0");
                 }
 
             }
@@ -322,6 +324,18 @@ namespace GralIO
                                 {
                                     _data.UseGRALOnlineFunctions = false;
                                 }
+                            }
+                        }
+                    }
+
+                    if (myreader.EndOfStream == false) // read Sub Domain radius from sources
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                            {
+                                _data.AVX512Usage = Convert.ToInt32(_val);
                             }
                         }
                     }

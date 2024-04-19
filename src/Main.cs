@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Intrinsics.X86;
 using System.Windows.Forms;
 using static System.Windows.Forms.DataFormats;
 
@@ -410,7 +411,7 @@ namespace Gral
                                     "AB_Baust1",
                                     "AB_Baust2",
                                     "AB_Stop+Go"};
-            
+
             checkBox35.Checked = false;
             groupBox25.Enabled = true;
             dateTimePicker1.CustomFormat = "MMMM dd, yyyy '-' HH:mm";
@@ -422,7 +423,7 @@ namespace Gral
             //initialize the GUI Settings
             GUISettings = new GralData.GuiSettings();
             GUISettings.ReadFromFile();
-            
+
             if (GUISettings.AutoCheckForUpdates)
             {
                 AutoUpdateStart(false);
@@ -536,7 +537,7 @@ namespace Gral
             {
                 //load last project path
                 GUISettings.ReadFromFile();
-                
+
                 dialog.SelectedPath = GUISettings.PreviousUsedProjectPath;
 #if NET6_0_OR_GREATER
                 dialog.UseDescriptionForTitle = true;
@@ -714,7 +715,7 @@ namespace Gral
         {
             GenerateInDat();
         }
-        
+
         /// <summary>
         ///open acutal map or generate a blank, unreferenced sheet
         /// </summary>
@@ -771,7 +772,7 @@ namespace Gral
             {
                 newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
             }
-            GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath) 
+            GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath)
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left, this.Top),
@@ -947,7 +948,7 @@ namespace Gral
                         }
                     }
                 }
-                catch {}
+                catch { }
 
                 DeleteEmissionFiles();
             } // emifilereset
@@ -978,7 +979,7 @@ namespace Gral
         //    Reset controlfile in.dat
         //
         /////////////////////////////////////////////////////////////////////////////
-        
+
         /// <summary>
         ///When a height slice has been changed -> ResetInDat
         /// </summary>
@@ -1179,7 +1180,7 @@ namespace Gral
         }
         private void RemoveSourceGroup_Click(object sender, EventArgs e)
         {
-           RemoveSourceGroups(sender, e);
+            RemoveSourceGroups(sender, e);
         }
         public void ListView1ItemActivate(object sender, EventArgs e)
         {
@@ -1271,11 +1272,11 @@ namespace Gral
                 top += Convert.ToDouble(numericUpDown17.Value) * Math.Pow(Convert.ToDouble(numericUpDown19.Value), i - 2);
             }
             if (top < 10000 || MessageBox.Show("A maximum layer height above 10000 m can lead to unstable GRAMM calculations due to low air pressure.\n" +
-                "It is recommended to reduce the number of vertical layers or the vertical stretching factor.\nWould you like to continue?", "Create GRAMM Topography", 
+                "It is recommended to reduce the number of vertical layers or the vertical stretching factor.\nWould you like to continue?", "Create GRAMM Topography",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 GRAMMLoadCreateTopography(sender, e);
-            }    
+            }
         }
         //load and create the GRAMM landuse file
         private void Button20_Click(object sender, EventArgs e)
@@ -1466,7 +1467,7 @@ namespace Gral
         //     additional tools
         //
         //////////////////////////////////////////////////////////////////////
-        
+
         /// <summary>
         /// Raster buildings
         /// </summary>
@@ -1500,9 +1501,9 @@ namespace Gral
         /// <param name="e"></param>
         private void Button13_Click(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            #else
+#else
             try
             {
                 Main_NEMO NemoWork = new Main.Main_NEMO();
@@ -1510,11 +1511,11 @@ namespace Gral
                 GralMainForms.Nemostartwindow nemo = new GralMainForms.Nemostartwindow(this);
                 DialogResult dr = new DialogResult();
                 dr = nemo.ShowDialog();
-                string [] text=new string[2];
-                int sg1=1;
-                int sg2=1;
-                int sg3=1;
-                int sg4=1;
+                string[] text = new string[2];
+                int sg1 = 1;
+                int sg2 = 1;
+                int sg3 = 1;
+                int sg4 = 1;
                 if (dr == DialogResult.OK)
                 {
                 }
@@ -1576,7 +1577,7 @@ namespace Gral
             {
                 //MessageBox.Show (ex.Message);
             }
-            #endif
+#endif
         }
 
         /// <summary>
@@ -1638,7 +1639,7 @@ namespace Gral
             }
             return dialogResult;
         }
-        
+
         /// <summary>
         /// Temporary input box for floating values
         /// </summary>
@@ -1832,7 +1833,7 @@ namespace Gral
                 return 0;
             }
         }
-        
+
         /// <summary>
         /// Check if the most important input files for a GRAL computation are available and enable/disable GRAL simulations
         /// </summary>
@@ -1920,7 +1921,7 @@ namespace Gral
                 groupBox16.Visible = false;
             }
         }
-        
+
         /// <summary>
         /// Check if all files for a GRAMM computation are available and enable/disable GRAMM simulations
         /// </summary>
@@ -2403,10 +2404,10 @@ namespace Gral
             checkBox29.Enabled = !locked;      // Surface roughness lenght
             numericUpDown45.Enabled = !locked; // Adaptive surface roughness
             numericUpDown46.Enabled = !locked; // Building raster checkpoints
-            
+
             numericUpDown39.Enabled = !locked; // Latidude
             numericUpDown43.Enabled = !locked; // Compressed mode for GRAL output
-            
+
             if (GRALSettings.BuildingMode == BuildingModeEnum.Prognostic)
             {
                 numericUpDown42.Enabled = !locked; // Sub domain factor
@@ -2540,7 +2541,7 @@ namespace Gral
                 }
             }
             catch
-            {}
+            { }
         }
 
         /// <summary>
@@ -2559,12 +2560,12 @@ namespace Gral
             if (tabControl1.SelectedIndex == 1) // GRAL Settings
             {
                 SetButton12Bitmap();
-                SetButton57Bitmap();   
+                SetButton57Bitmap();
             }
             if (tabControl1.SelectedIndex == 2) // Domain
             {
                 listView2.Items.Clear();
-                foreach(SG_Class _sg in DefinedSourceGroups)
+                foreach (SG_Class _sg in DefinedSourceGroups)
                 {
                     ListViewItem item = new ListViewItem(_sg.SG_Number.ToString());
                     item.SubItems.Add(_sg.SG_Name);
@@ -2777,8 +2778,8 @@ namespace Gral
                 PercentGrammChanged(null, null);
                 DispnrGrammChanged(null, null);
                 // activate FileSystemWatcher
-                #if __MonoCS__
-                #else
+#if __MonoCS__
+#else
                 if (percentGRAL != null && Directory.Exists(percentGRAL.Path))
                 {
                     percentGRAL.EnableRaisingEvents = true;
@@ -2798,12 +2799,33 @@ namespace Gral
                 {
                     dispnrGramm.EnableRaisingEvents = true;
                 }
+
+                checkBoxAVX.Visible = button10.Visible;
+                if (checkBoxAVX.Visible)
+                {
+                    if (GRALSettings.AVX512Usage == 1 && Avx512F.IsSupported)
+                    {
+                        checkBoxAVX.Checked = true;
+                    }
+                    else
+                    {
+                        checkBoxAVX.Checked = false;
+                    }
+                    if (Avx512F.IsSupported)
+                    {
+                        checkBoxAVX.Enabled = true;
+                    }
+                    else
+                    {
+                        checkBoxAVX.Enabled = false;
+                    }
+                }
 #endif
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
-                #if __MonoCS__
-                #else
+#if __MonoCS__
+#else
                 if (percentGRAL != null)
                 {
                     percentGRAL.EnableRaisingEvents = false;
@@ -2865,7 +2887,7 @@ namespace Gral
         /// </summary>
         void SetButton57Bitmap()
         {
-            if (GRALSettings.WriteESRIResult || 
+            if (GRALSettings.WriteESRIResult ||
                 File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) ||
                 !GRALSettings.WaitForKeyStroke ||
                 GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50)
@@ -2896,11 +2918,11 @@ namespace Gral
             catch
             {
                 string a = "Project:	" + ProjectName + Environment.NewLine;
-                a +=       "Machine: 	" + Environment.MachineName + Environment.NewLine;
-                a +=       "User:    	" + Environment.UserName + Environment.NewLine;
-                a +=       "Domain:  	" + Environment.UserDomainName + Environment.NewLine;
-                a +=       "Proc count: " + Environment.ProcessorCount  + Environment.NewLine;
-                a +=       "GRAMM Windfield: " + GRAMMwindfield;
+                a += "Machine: 	" + Environment.MachineName + Environment.NewLine;
+                a += "User:    	" + Environment.UserName + Environment.NewLine;
+                a += "Domain:  	" + Environment.UserDomainName + Environment.NewLine;
+                a += "Proc count: " + Environment.ProcessorCount + Environment.NewLine;
+                a += "GRAMM Windfield: " + GRAMMwindfield;
                 textBox17.Text = a;
             }
             panel1.Visible = false;
@@ -2931,7 +2953,7 @@ namespace Gral
             int prozessoranzahl = Math.Min(63, Environment.ProcessorCount);
             try
             {
-                string maxproc = Path.Combine(ProjectName, @"Computation","Max_Proc.txt");
+                string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");
                 if (File.Exists(maxproc))
                 {
                     try
@@ -2946,7 +2968,7 @@ namespace Gral
                 }
             }
             catch
-            {}
+            { }
             numericUpDown32.Value = prozessoranzahl;
         }
 
@@ -2968,7 +2990,7 @@ namespace Gral
                 }
                 catch
                 {
-                    MessageBox.Show("Unable to write file 'Max_Proc.txt'","GUI Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Unable to write file 'Max_Proc.txt'", "GUI Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -3059,7 +3081,7 @@ namespace Gral
                 if (Mode == ButtonColorEnum.Invisible)
                 {
                     pictureBox1.Visible = false;
-                    Control_OK  = false;
+                    Control_OK = false;
                 }
                 else
                 {
@@ -3162,7 +3184,7 @@ namespace Gral
                             File.Delete(newPath1);
                         }
                     }
-                    catch {}
+                    catch { }
                     try // delete vegetation.dat if file exists
                     {
                         string newPath1 = Path.Combine(ProjectName, @"Computation", "vegetation.dat");
@@ -3171,7 +3193,7 @@ namespace Gral
                             File.Delete(newPath1);
                         }
                     }
-                    catch {}
+                    catch { }
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
@@ -3196,7 +3218,7 @@ namespace Gral
             if (EmifileReset == true)
             {
                 if (checkBox32.Checked == false || MessageBox.Show(this, "Enable GRAL transient mode? Caution: the computation slows down" + Environment.NewLine + "and GRAL version 18.03 or higher is needed!",
-                                    "GRAL GUI", MessageBoxButtons.OKCancel , MessageBoxIcon.Question) == DialogResult.OK)
+                                    "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
                     if (checkBox32.Checked == true)
                     {
@@ -3325,7 +3347,7 @@ namespace Gral
                         File.Delete(name);
                     }
                 }
-                catch{}
+                catch { }
             }
             else
             {
@@ -3513,8 +3535,8 @@ namespace Gral
             using (GralMainForms.VerticalLayerHeights VLH = new GralMainForms.VerticalLayerHeights()
             {
                 StretchFlexible = FlowFieldStretchFlexible,
-                StretchingFactor = (float) numericUpDown12.Value,
-                LowestCellHeight = (float) numericUpDown11.Value,
+                StretchingFactor = (float)numericUpDown12.Value,
+                LowestCellHeight = (float)numericUpDown11.Value,
                 StartPosition = FormStartPosition.Manual,
                 Left = this.Right,
                 Top = this.Top + 250
@@ -3532,7 +3554,7 @@ namespace Gral
         private void Button55_Click(object sender, EventArgs e)
         {
             bool open = false;
-            foreach(Form f in Application.OpenForms)
+            foreach (Form f in Application.OpenForms)
             {
                 if (f.Name.Contains("AppInfo"))
                 {
@@ -3574,9 +3596,9 @@ namespace Gral
                     MSp.Left = Left + 80;
                     MSp.Top = Top + 40;
 
-                    if (MSp.ShowDialog() == DialogResult.OK )
+                    if (MSp.ShowDialog() == DialogResult.OK)
                     {
-                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult || 
+                        if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult ||
                             MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke ||
                             MSp.RadiusForPrognosticFlowField != GRALSettings.PrognosticSubDomainsSizeSourceRadius ||
                             MSp.GRALOnlineFunctions != GRALSettings.UseGRALOnlineFunctions)
@@ -3684,11 +3706,11 @@ namespace Gral
         /// <param name="e"></param>
         private void OnlineParametersFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            GralMainForms.OnlineParameters online = (GralMainForms.OnlineParameters) sender;
+            GralMainForms.OnlineParameters online = (GralMainForms.OnlineParameters)sender;
             OnlineRefreshInterval = online.OnlineRefreshInterval;
             OnlineParmeters = online.OnlineCheckBoxes;
         }
-       
+
         /// <summary>
         /// Check for an update of a new GUI/GRAL version
         /// </summary>
@@ -3805,7 +3827,7 @@ namespace Gral
         {
             try
             {
-                if (File.Exists(src) && !File.Exists(dest)) 
+                if (File.Exists(src) && !File.Exists(dest))
                 {
                     File.Copy(src, dest);
                 }
@@ -3816,6 +3838,25 @@ namespace Gral
         private void listBox5_DoubleClick(object sender, EventArgs e)
         {
             ShowTotalEmissions(sender, e);
+        }
+
+        private void checkBoxAVX_Click(object sender, EventArgs e)
+        {
+            if (checkBoxAVX.Checked && Avx512F.IsSupported)
+            {
+                GRALSettings.AVX512Usage = 1;
+            }
+            else
+            {
+                GRALSettings.AVX512Usage = 0;
+            }
+
+            InDatFileIO write_in_dat = new InDatFileIO
+            {
+                Data = GRALSettings
+            };
+            write_in_dat.WriteInDat();
+            write_in_dat = null;
         }
     }
 }

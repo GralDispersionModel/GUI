@@ -211,8 +211,12 @@ namespace GralIO
                 _prognosticSubDomainsSourceRadius = Math.Max(0, Math.Min(100000, value));
             }
         }
+        /// <summary>
+        ///Use AVX512 instructions - 512 bit Advanced Vector Extensions
+        /// </summary>
+        public int AVX512Usage  { get; set; }
 
-        public InDatVariables()
+    public InDatVariables()
         {
             InDatPath = String.Empty;
             ParticleNumber = 100;
@@ -237,6 +241,7 @@ namespace GralIO
             Loglevel = 0;
             AdaptiveRoughness = 0;
             PrognosticSubDomainsSizeSourceRadius = 0;
+            AVX512Usage = 0;
         }
 
         public InDatVariables(InDatVariables other)
@@ -267,6 +272,7 @@ namespace GralIO
             AdaptiveRoughness = other.AdaptiveRoughness;
             PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
             UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
+            AVX512Usage = other.AVX512Usage;
         }
 
     }
