@@ -2803,7 +2803,7 @@ namespace Gral
                 checkBoxAVX.Visible = button10.Visible;
                 if (checkBoxAVX.Visible)
                 {
-                    if (GRALSettings.AVX512Usage == 1 && Avx512F.IsSupported)
+                    if (GRALSettings.AVX512Usage == 1 && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
                     {
                         checkBoxAVX.Checked = true;
                     }
@@ -2811,7 +2811,7 @@ namespace Gral
                     {
                         checkBoxAVX.Checked = false;
                     }
-                    if (Avx512F.IsSupported)
+                    if (System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
                     {
                         checkBoxAVX.Enabled = true;
                     }
@@ -3842,7 +3842,7 @@ namespace Gral
 
         private void checkBoxAVX_Click(object sender, EventArgs e)
         {
-            if (checkBoxAVX.Checked && Avx512F.IsSupported)
+            if (checkBoxAVX.Checked && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
             {
                 GRALSettings.AVX512Usage = 1;
             }
