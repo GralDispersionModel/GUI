@@ -20,7 +20,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+#if __MonoCS__
+#else
 using System.Runtime.Intrinsics.X86;
+#endif
 using System.Windows.Forms;
 using static System.Windows.Forms.DataFormats;
 
@@ -2779,6 +2782,18 @@ namespace Gral
                 DispnrGrammChanged(null, null);
                 // activate FileSystemWatcher
 #if __MonoCS__
+                checkBoxAVX.Visible = button10.Visible;
+                if (checkBoxAVX.Visible)
+                {
+                    if (GRALSettings.AVX512Usage == 1)
+                    {
+                        checkBoxAVX.Checked = true;
+                    }
+                    else
+                    {
+                        checkBoxAVX.Checked = false;
+                    }
+                }
 #else
                 if (percentGRAL != null && Directory.Exists(percentGRAL.Path))
                 {
@@ -3842,7 +3857,8 @@ namespace Gral
 
         private void checkBoxAVX_Click(object sender, EventArgs e)
         {
-            if (checkBoxAVX.Checked && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
+#if __MonoCS__
+            if (checkBoxAVX.Checked)
             {
                 GRALSettings.AVX512Usage = 1;
             }
@@ -3851,6 +3867,16 @@ namespace Gral
                 GRALSettings.AVX512Usage = 0;
             }
 
+#else
+            if (checkBoxAVX.Checked && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
+            {
+                GRALSettings.AVX512Usage = 1;
+            }
+            else
+            {
+                GRALSettings.AVX512Usage = 0;
+            }
+#endif
             InDatFileIO write_in_dat = new InDatFileIO
             {
                 Data = GRALSettings
