@@ -993,11 +993,11 @@ namespace GralItemForms
             {
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, Top);
+                    edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(portalemission[nr].Text, true);
@@ -1205,11 +1205,11 @@ namespace GralItemForms
             };
             if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
             {
-                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 350);
             }
             else
             {
-                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, Top);
+                sgsel.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 460, St_F.GetTopScreenAtMousePosition() + 350);
             }
             sgsel.SourceGroup = SG_List;
             sgsel.CopyFrom = new List<string>();
@@ -1349,11 +1349,11 @@ namespace GralItemForms
                 
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, Top);
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150 );
                 }
                 
                 if (edT.ShowDialog() == DialogResult.OK)

@@ -126,7 +126,7 @@ namespace GralMainForms
                     {
                         if (ShowUserInfo)
                         {
-                            MessageBox.Show(this, Error, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, Error, "GRAL GUI Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
@@ -135,7 +135,7 @@ namespace GralMainForms
             {
                 if (ShowUserInfo)
                 {
-                    MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, ex.Message, "GRAL GUI Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -206,7 +206,7 @@ private void LoadUpdateFileHttp(object sender, System.ComponentModel.DoWorkEvent
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.Message, "GRAL GUI Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -223,7 +223,7 @@ private void LoadUpdateFileHttp(object sender, System.ComponentModel.DoWorkEvent
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.Message, "GRAL GUI Update notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -290,7 +290,7 @@ namespace GralIO
 
             //searching and reading for file containing default values or additional landuse values or updated landuse values
             bool defaultvalues = File.Exists(Path.Combine(Main.ProjectName, @"Computation", "Landuse_Default.txt"));
-            if (defaultvalues==true)
+            if (defaultvalues)
             {
                 try
                 {
@@ -300,11 +300,13 @@ namespace GralIO
                         try
                         {
                             //header line
-                            text1 = reader1.ReadLine().Split(new char[] {'\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            string temp = reader1.ReadLine();
 
                             //consecutive lines containing landuse values
-                            while ((text1 = reader1.ReadLine().Split(new char[] {'\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries)) != null)
+                            while (!reader1.EndOfStream)
                             {
+                                temp = reader1.ReadLine();
+                                text1 = temp.Split(new char[] { '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                 int NR = Convert.ToInt32(text1[0]);
                                 AGL[NR] = Convert.ToDouble(text1[1], ic);
                                 EPSGL[NR] = Convert.ToDouble(text1[2], ic);
