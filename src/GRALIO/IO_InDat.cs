@@ -125,6 +125,8 @@ namespace GralIO
                     {
                         myWriter.WriteLine("0 \t ! Use GRAL Online Functions = false");
                     }
+
+                    myWriter.WriteLine(_data.AVX512Usage.ToString(ic) + "\t ! Use the AVX512 instructions Yes = 1, No = 0");
                 }
 
             }
@@ -224,6 +226,7 @@ namespace GralIO
                         _data.BuildingHeightsWrite = false;
                     }
 
+                    _data.Compressed = 2;
                     if (myreader.EndOfStream == false) // read data compressed value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
@@ -251,6 +254,7 @@ namespace GralIO
                         _data.Compressed = 0;
                     }
 
+                    _data.WaitForKeyStroke = true;
                     if (myreader.EndOfStream == false) // read Wait for Key Stroke value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
@@ -266,6 +270,7 @@ namespace GralIO
                         }
                     }
 
+                    _data.WriteESRIResult = false;
                     if (myreader.EndOfStream == false) // read ESRI Result value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
@@ -283,6 +288,7 @@ namespace GralIO
                         }
                     }
 
+                    _data.AdaptiveRoughness = 0;
                     if (myreader.EndOfStream == false) // read Adaptive Roughness value
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
@@ -295,6 +301,7 @@ namespace GralIO
                         }
                     }
 
+                    _data.PrognosticSubDomainsSizeSourceRadius = 0;
                     if (myreader.EndOfStream == false) // read Sub Domain radius from sources
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
@@ -307,7 +314,8 @@ namespace GralIO
                         }
                     }
 
-                    if (myreader.EndOfStream == false) // read Sub Domain radius from sources
+                    _data.UseGRALOnlineFunctions = false;
+                    if (myreader.EndOfStream == false) // read online functions flag
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         if (text.Length > 0)
@@ -322,6 +330,19 @@ namespace GralIO
                                 {
                                     _data.UseGRALOnlineFunctions = false;
                                 }
+                            }
+                        }
+                    }
+
+                    _data.AVX512Usage = 0;
+                    if (myreader.EndOfStream == false) // read AVX512 extension usage
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                            {
+                                _data.AVX512Usage = Convert.ToInt32(_val);
                             }
                         }
                     }
