@@ -286,6 +286,10 @@ namespace GralBackgroundworkers
         /// Year for meteo time series
         /// </summary>
         public int FictiousYear { get; set; }
+        /// <summary>
+        /// Sum up sub-hourly concentrations to hourly mean concentrations?
+        /// </summary>
+        public bool SubHourlyToMeanHourlyConcentrations { get; set; }
     }
 
     public class CellNumbers

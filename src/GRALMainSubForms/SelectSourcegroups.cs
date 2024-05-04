@@ -27,10 +27,12 @@ namespace GralMainForms
         private int Mode = 0;
         private bool transientMode = false;
         public string PathToEmissionModulation = string.Empty;
-        public string PathForResultFiles = string.Empty;             
-		public string Prefix
-		{ get 
-        	{ if (_prefix.Length > 0)
+        public string PathForResultFiles = string.Empty;
+        public string Prefix
+        {
+            get
+            {
+                if (_prefix.Length > 0)
                 {
                     return _prefix + "_";
                 }
@@ -38,8 +40,17 @@ namespace GralMainForms
                 {
                     return String.Empty;
                 }
-            } set {_prefix = value;}
-		}
+            }
+            set { _prefix = value; }
+        }
+        /// <summary>
+        /// Enable checkbox for the evaluation of hourly mean values before calculating the percentiles
+        /// </summary>
+        public bool EnableHourlyMeanValuesCheckbox = false;
+        /// <summary>
+        /// Checkbox for the evaluation of hourly mean values before calculating the percentiles checked?
+        /// </summary>
+        public bool HourlyMeanValuesChecked = false;
 
         /// <summary>
         /// 
@@ -48,12 +59,12 @@ namespace GralMainForms
         /// <param name="_mode"> 0 = default, 1 = Percentile, 2 = Odour</param>
         /// <param name="_PathToEmissionModulation"></param>
         /// <param name="_PathForResultFiles"></param>
-        public SelectSourcegroups (Main f, int _mode, string _PathToEmissionModulation, string _PathForResultFiles, bool TransientMode)
-		{
-			Mode = _mode; // 0 = standard, 1 = Percentile, 2 = Odour
+        public SelectSourcegroups(Main f, int _mode, string _PathToEmissionModulation, string _PathForResultFiles, bool TransientMode)
+        {
+            Mode = _mode; // 0 = standard, 1 = Percentile, 2 = Odour
             transientMode = TransientMode;
 
-			if (!string.IsNullOrEmpty(_PathToEmissionModulation))
+            if (!string.IsNullOrEmpty(_PathToEmissionModulation))
             {
                 PathToEmissionModulation = _PathToEmissionModulation;
             }
@@ -62,29 +73,32 @@ namespace GralMainForms
                 PathForResultFiles = _PathForResultFiles;
             }
 
-			InitializeComponent ();
-			form1 = f;
-						
-			#if __MonoCS__
+            InitializeComponent();
+            form1 = f;
+
+#if __MonoCS__
 			    // set Numericupdowns-Alignement to Left in Linux
 				var allNumUpDowns  = Main.GetAllControls<NumericUpDown>(this);
 				foreach (NumericUpDown nu in allNumUpDowns)
 				{
 					nu.TextAlign = HorizontalAlignment.Left;
 				}
-			#else
-			    //
-			#endif
-		}
+#else
+            //
+#endif
+        }
 
         private void button1_Click(object sender, EventArgs e) // OK or Cancel button
         {
+            HourlyMeanValuesChecked = checkBox4.Checked | checkBox5.Checked;
             Hide();
         }
 
         private void SelectSourcegroups_Load(object sender, EventArgs e)
         {
-        	//fill listbox with source groups
+            checkBox4.Enabled = EnableHourlyMeanValuesCheckbox;
+            checkBox5.Enabled = EnableHourlyMeanValuesCheckbox;
+            //fill listbox with source groups
             if (Main.DefinedSourceGroups.Count > 0)
             {
                 for (int i = 0; i < form1.listView1.Items.Count; i++)
@@ -110,29 +124,29 @@ namespace GralMainForms
             if (transientMode)
             {
                 textBox2.Enabled = false;
-                buttonModulationPath.Enabled = false;  
+                buttonModulationPath.Enabled = false;
                 label6.Enabled = false;
             }
 
             if (Mode == 0) // do not show odour group box
-			{
-				groupBox1.Visible = false;
-				groupBox2.Visible = false;				
-			}
-			
-			if (Mode == 1)
-			{
-				groupBox2.Visible = true;
-				numericUpDown2.Enabled = true;
-				groupBox1.Visible = false;
-			}
-			
-			if (Mode == 2)
-			{
-				groupBox1.Visible = true;
-				groupBox2.Visible = false;		
-				radioButton1.Checked = true;
-				numericUpDown3.Enabled = true;
+            {
+                groupBox1.Visible = false;
+                groupBox2.Visible = false;
+            }
+
+            if (Mode == 1)
+            {
+                groupBox2.Visible = true;
+                numericUpDown2.Enabled = true;
+                groupBox1.Visible = false;
+            }
+
+            if (Mode == 2)
+            {
+                groupBox1.Visible = true;
+                groupBox2.Visible = false;
+                radioButton1.Checked = true;
+                numericUpDown3.Enabled = true;
             }
 
             if (Mode == 3)
@@ -150,7 +164,7 @@ namespace GralMainForms
                 numericUpDown1.Visible = false;
                 label2.Visible = false;
                 numericUpDown3.Enabled = true;
-            }        
+            }
         }
 
         private void SetPathTextBoxes()
@@ -158,16 +172,16 @@ namespace GralMainForms
             GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox2, PathToEmissionModulation);
             GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox3, PathForResultFiles);
         }
-             
+
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
 
         }
-        
+
         void SelectSourcegroupsResizeEnd(object sender, EventArgs e)
         {
-        	listBox1.Width = ClientSize.Width - 5;
-        	listBox1.Height = Math.Max(30, groupBox3.Top - 10);
+            listBox1.Width = ClientSize.Width - 5;
+            listBox1.Height = Math.Max(30, groupBox3.Top - 10);
             groupBox3.Width = Math.Max(10, ClientSize.Width - groupBox3.Left - 15);
             textBox1.Width = Math.Max(10, groupBox3.Width - textBox1.Left - 5);
             textBox2.Width = Math.Max(10, groupBox3.Width - textBox2.Left - 5);
@@ -177,17 +191,17 @@ namespace GralMainForms
             l1 = TextRenderer.MeasureText(PathForResultFiles, textBox3.Font).Width;
             textBox3.Text = GralStaticFunctions.St_F.ReduceFileNameLenght(PathForResultFiles, (int)(PathForResultFiles.Length * (textBox3.Width / l1)));
         }
-        
+
         void TextBox1TextChanged(object sender, EventArgs e)
         {
-        	_prefix = textBox1.Text;
-        	_prefix = string.Join("_", _prefix.Split(Path.GetInvalidFileNameChars()));
-        	//label1.Text = _prefix;
+            _prefix = textBox1.Text;
+            _prefix = string.Join("_", _prefix.Split(Path.GetInvalidFileNameChars()));
+            //label1.Text = _prefix;
         }
-        
+
         void SelectSourcegroupsShown(object sender, EventArgs e)
         {
-        	
+
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -232,7 +246,7 @@ namespace GralMainForms
                 path = PathToEmissionModulation;
                 descripton = "Select the path to the emission modulation files";
             }
-            if(!path.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.InvariantCulture)) 
+            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.InvariantCulture))
             {
                 path += Path.DirectorySeparatorChar;
             }
