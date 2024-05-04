@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item>
-  <version>2.2.0.3</version>
-  <url>https://github.com/GralDispersionModel/GRAL/releases/download/V22.03/V2203.zip</url>
-  <changelog>https://github.com/GralDispersionModel/GUI/releases</changelog>
+  <version>2.4.0.4</version>
+  <url>https://gral.tugraz.at/</url>
+  <changelog>https://github.com/GralDispersionModel/GRAL/releases</changelog>
   <mandatory>false</mandatory>
 </item>
