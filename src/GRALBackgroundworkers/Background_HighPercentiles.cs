@@ -243,6 +243,7 @@ namespace GralBackgroundworkers
                         //new hour -> reset sub concentrations and look, if next hour is new -> the evaluate
                         if (CalculateMeanHourlyValues)
                         {
+                            //new recent date & Time 
                             if (!string.Equals(oldMonth, month) || !string.Equals(oldDay, day) || !string.Equals(oldhour, hour))
                             {
                                 subHourCounter = 0;
@@ -264,24 +265,24 @@ namespace GralBackgroundworkers
                                         }
                                     }
                                 });
-                                //next hour a new value?
-                                if ((count_ws + 1) < data_mettimeseries.Count)
+                            }
+                            //next hour a new value?
+                            if ((count_ws + 1) < data_mettimeseries.Count)
+                            {
+                                string nextMeteo = data_mettimeseries[count_ws + 1];
+                                text2 = nextMeteo.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (text2.Length > 2 && !string.Equals(text2[1], hour))
                                 {
-                                    string nextMeteo = data_mettimeseries[count_ws + 1];
-                                    text2 = nextMeteo.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                    if (text2.Length > 2 && !string.Equals(text2[1], hour))
-                                    {
-                                        subHourValueEvaluate = true;
-                                    }
-                                    else
-                                    {
-                                        subHourValueEvaluate = false;
-                                    }
+                                    subHourValueEvaluate = true;
                                 }
                                 else
                                 {
-                                    subHourValueEvaluate = true; // last value
+                                    subHourValueEvaluate = false;
                                 }
+                            }
+                            else
+                            {
+                                subHourValueEvaluate = true; // last value
                             }
                         }
 
