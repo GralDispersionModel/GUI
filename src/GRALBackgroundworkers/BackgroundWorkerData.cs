@@ -290,6 +290,10 @@ namespace GralBackgroundworkers
         /// Sum up sub-hourly concentrations to hourly mean concentrations?
         /// </summary>
         public bool SubHourlyToMeanHourlyConcentrations { get; set; }
+        /// <summary>
+        /// Time span for the meteorology when using time spans < 3600 s
+        /// </summary>
+        public int SubHourlyTimeSpan { get; set; }
     }
 
     public class CellNumbers

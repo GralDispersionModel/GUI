@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Globalization;
 using GralIO;
+using System.Linq;
 
 namespace GralBackgroundworkers
 {
@@ -38,7 +39,6 @@ namespace GralBackgroundworkers
             }
 
             bool CalculateMeanHourlyValues = mydata.SubHourlyToMeanHourlyConcentrations; 
-
             int maxsource = mydata.MaxSource;
             string[] text = new string[5];
             string newpath;
@@ -68,7 +68,8 @@ namespace GralBackgroundworkers
             //int indexi = 0;
             //int indexj = 0;
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
-            float[][][] tempConc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[1])); // temporary concentration field to add up sub-hourly partial concentrations
+            float[][][] tempConc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[1])); // temporary concentration field to add up sub-hourly to hourly partial concentrations 
+            int[] subHourlyCount = new int[maxsource];
 
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
@@ -153,24 +154,44 @@ namespace GralBackgroundworkers
                                                                                sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
-            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100));   
-            float[][][][] concpercentile = CreateArray<float[][][]>(mydata.CellsGralX + 1, () => CreateArray<float[][]>(mydata.CellsGralY + 1, () => CreateArray<float[]>(maxsource + 1, () => new float[arraylength])));
-//			float fac = 0;
-//			float fac_total = 0;
-//          read mettimeseries.dat
+            // read mettimeseries.dat
             List<string> data_mettimeseries = new List<string>();
             ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
             if (data_mettimeseries.Count == 0) // no data available
-            { 
-                BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
+            {
+                BackgroundThreadMessageBox("Error reading mettimeseries.dat");
             }
+
+            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100 - mydata.Percentile) / 100));            
+            //reduce the array lenght, if sub hourly values should be analyzed as hourly values
+            if (CalculateMeanHourlyValues && mydata.SubHourlyTimeSpan > 1 && mydata.SubHourlyTimeSpan < 3600)
+            {
+                int numberOfHours = 0;
+                string hourOld = string.Empty;
+                // get number of full hours in mettimeseries.dat
+                foreach (string metline in data_mettimeseries) 
+                {
+                    text2 = metline.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (text2.Length > 2 && !string.Equals(text2[1], hourOld))
+                    {
+                        numberOfHours++;
+                        hourOld = text2[1];
+                    }
+                }
+
+                if (numberOfHours > 0)
+                {
+                    arraylength = Math.Max(2, Convert.ToInt32(numberOfHours * (100 - mydata.Percentile) / 100));
+                }
+            }
+            float[][][][] concpercentile = CreateArray<float[][][]>(mydata.CellsGralX + 1, () => CreateArray<float[][]>(mydata.CellsGralY + 1, () => CreateArray<float[]>(maxsource + 1, () => new float[arraylength])));
 
             int count_ws = -1;
             string oldMonth = string.Empty;
             string oldDay = string.Empty;
             string oldhour = string.Empty;
-            int subHourCounter = 0;
             bool subHourValueEvaluate = true; // evaluate all situations by default
+            int fullHourCount = 0;
             
             foreach(string mettimeseries in data_mettimeseries)
             {
@@ -246,7 +267,6 @@ namespace GralBackgroundworkers
                             //new recent date & Time 
                             if (!string.Equals(oldMonth, month) || !string.Equals(oldDay, day) || !string.Equals(oldhour, hour))
                             {
-                                subHourCounter = 0;
                                 oldMonth = month;
                                 oldDay = day;
                                 oldhour = hour;
@@ -266,6 +286,7 @@ namespace GralBackgroundworkers
                                     }
                                 });
                             }
+
                             //next hour a new value?
                             if ((count_ws + 1) < data_mettimeseries.Count)
                             {
@@ -325,15 +346,16 @@ namespace GralBackgroundworkers
                                 // Error reading one *.con file
                                 exist = false;
                             }
-                            //copy concentration from temp file to the concentraion file and consider emission modulation
+
+                            //copy or sum up concentration from temp file to the concentraion file and consider emission modulation
                             if (exist)
                             {
+                                subHourlyCount[itm]++;
                                 int std = Convert.ToInt32(hour);
                                 int mon = Convert.ToInt32(month) - 1;
 
                                 if (CalculateMeanHourlyValues)
                                 {
-                                    subHourCounter++;
                                     Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
                                     {
                                         for (int i = range.Item1; i < range.Item2; i++)
@@ -365,7 +387,7 @@ namespace GralBackgroundworkers
                         SetText("Day.Month: " + day + "." + month);
 
                         //evaluate sub hourly concentration values and calculate hourly mean value
-                        if (CalculateMeanHourlyValues && subHourValueEvaluate && subHourCounter > 0)
+                        if (CalculateMeanHourlyValues && subHourValueEvaluate && subHourlyCount.Sum() > 0)
                         {
                             Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
                             {
@@ -376,19 +398,27 @@ namespace GralBackgroundworkers
                                         float[] concTemp = conc[i][j];
                                         for (int itmi = 0; itmi < concTemp.Length; itmi++)
                                         {
-                                            concTemp[itmi] /= subHourCounter;
+                                            if (subHourlyCount[itmi] > 0)
+                                            {
+                                                concTemp[itmi] /= subHourlyCount[itmi];
+                                            }
                                         }
                                     }
                                 }
                             });
-                            subHourCounter = 0;
+#if NET8_0_OR_GREATER
+                            Array.Clear(subHourlyCount);
+#else
+                            Array.Clear(subHourlyCount, 0, subHourlyCount.Length);
+#endif                        
                         }
-                        
+
                         if (exist == true) // con file available
                         {
                             situationCount++;
                             if (subHourValueEvaluate) // evaluate this situation or not, if this is a sub-hourly value?
                             {
+                                fullHourCount++;
                                 //for (int ii = 0; ii <= mydata.CellsGralX; ii++)
                                 Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Environment.ProcessorCount))), range =>
                                 {
@@ -573,6 +603,11 @@ namespace GralBackgroundworkers
                     errorText += "s";
                 }
                 errorText += " not available or not readable ";
+            }
+
+            if (subHourValueEvaluate)
+            {
+                AddInfoText(Environment.NewLine + "Number of evaluated hours: " + fullHourCount);
             }
             AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful

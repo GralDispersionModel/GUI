@@ -386,7 +386,7 @@ namespace Gral
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
                         sel_sg.checkBox3.Visible = false;
-                        if (numericUpDown4.Value < 3600)
+                        if (numericUpDown4.Value < 3600 && (3600 / numericUpDown4.Value) == (int) (3600 / numericUpDown4.Value))
                         {
                             sel_sg.EnableHourlyMeanValuesCheckbox = true;
                         }
@@ -447,6 +447,7 @@ namespace Gral
 
                                 DataCollection.BackgroundWorkerFunction = GralBackgroundworkers.BWMode.HighPercentiles; // 40 = compute high percentils
                                 DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
+                                DataCollection.SubHourlyTimeSpan = (int) numericUpDown4.Value;
 
                                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                                 {
@@ -612,6 +613,7 @@ namespace Gral
                                         catch { }
 
                                         DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
+                                        DataCollection.SubHourlyTimeSpan = (int)numericUpDown4.Value;
 
                                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                                         {
