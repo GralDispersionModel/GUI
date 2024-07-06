@@ -82,7 +82,7 @@ namespace GralDomain
                     foreach (LineSourceData _ls in EditLS.ItemData)
                     {
                         //compute integral pollution over all source groups
-                        double[] poll = new double[Gral.Main.PollutantList.Count];
+                        decimal[] poll = new decimal[Gral.Main.PollutantList.Count];
                         for (int polindex = 0; polindex < Gral.Main.PollutantList.Count; polindex++)
                         {
                             foreach (PollutantsData _poll in _ls.Poll)
@@ -92,7 +92,7 @@ namespace GralDomain
                                     if ((Gral.Main.PollutantList[_poll.Pollutant[j]] == Gral.Main.PollutantList[polindex]) &&
                                         (_poll.EmissionRate[j] != 0))
                                     {
-                                        poll[polindex] += _poll.EmissionRate[j];
+                                        poll[polindex] += (decimal)_poll.EmissionRate[j];
                                         break;
                                     }
                                 }
@@ -280,13 +280,13 @@ namespace GralDomain
                     
                     foreach (AreaSourceData _as in EditAS.ItemData)
                     {
-                        double[] poll = new double[Gral.Main.PollutantList.Count];
+                        decimal[] poll = new decimal[Gral.Main.PollutantList.Count];
                         for (int j = 0; j < 10; j++)
                         {
                             if (_as.Poll.EmissionRate[j] != 0)
                             {
                                 int polindex = _as.Poll.Pollutant[j];
-                                poll[polindex] = _as.Poll.EmissionRate[j];
+                                poll[polindex] = (decimal) _as.Poll.EmissionRate[j];
                             }
                         }
 
@@ -371,13 +371,13 @@ namespace GralDomain
                     
                     foreach (PointSourceData _psdata in EditPS.ItemData)
                     {
-                        double[] poll = new double[Gral.Main.PollutantList.Count];
+                        decimal [] poll = new decimal[Gral.Main.PollutantList.Count];
                         for (int j = 0; j < 10; j++)
                         {
                             if (_psdata.Poll.EmissionRate[j] != 0)
                             {
                                 int polindex = _psdata.Poll.Pollutant[j];
-                                poll[polindex] = _psdata.Poll.EmissionRate[j];
+                                poll[polindex] = (decimal) _psdata.Poll.EmissionRate[j];
                             }
                         }
 
@@ -398,9 +398,9 @@ namespace GralDomain
                     Box.Show();
                     //MessageBox.Show(this, "Data export successful: \r\n" + Convert.ToString(editps.psourcedata.Count) + " point sources exported.");
                 }
-                catch
+                catch(Exception ex)
                 {
-                    MessageBox.Show(this, "Error when exporting point source data","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Error when exporting point source data" + Environment.NewLine + ex.Message.ToString(),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 Cursor = Cursors.Default;
             }
@@ -462,7 +462,128 @@ namespace GralDomain
             }
             dialog.Dispose();
         }
-        
+
+        /// <summary>
+        /// Export buildings to a shape file with a dbf database
+        /// </summary>
+        private void ExportShapeBuildings(object sender, EventArgs e)
+        {
+
+            if (EditB.ItemData.Count > 0)
+            {
+                SaveFileDialog dialog = saveFileDialog1;
+                dialog.Filter = "*.shp|*.shp";
+                dialog.Title = "Export buildings to a .shp file";
+                dialog.InitialDirectory = Gral.Main.ProjectName;
+                dialog.FileName = "Buildings.shp";
+                // dialog.ShowHelp = true;
+#if NET6_0_OR_GREATER
+                dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
+#endif
+
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        //write geometry data to shape file
+                        Cursor = Cursors.WaitCursor;
+                        Waitprogressbar wait = new Waitprogressbar("Export to shape file");
+                        wait.Show();
+                        ShapeWriter shape = new ShapeWriter(this);
+                        shape.WriteShapeFile(dialog.FileName, 10);
+                        wait.Close();
+
+                        //create data set with attributes of the area sources
+                        DataSet dsBuildings = new DataSet();
+                        dsBuildings.Tables.Add();
+                        dsBuildings.Tables[0].Columns.Add("Name", typeof(string));
+                        dsBuildings.Tables[0].Columns.Add("Height", typeof(decimal));
+
+                        foreach (BuildingData _bu in EditB.ItemData)
+                        {
+                            dsBuildings.Tables[0].Rows.Add(_bu.Name, _bu.Height.ToString());
+                        }
+                        //write attributes to dbase file
+                        TestWriteNewDbf(dsBuildings, dialog.FileName);
+                        //WriteDBF wdbf = new WriteDBF();
+                        //wdbf.EportDBF(dsarea, dialog.FileName);
+
+                        MessageBoxTemporary Box = new MessageBoxTemporary("Data export successful: \r\n" + Convert.ToString(EditB.ItemData.Count) + " buildings exported.", Location);
+                        Box.Show();
+                        //MessageBox.Show(this, "Data export successful: \r\n" + Convert.ToString(editas.areasourcedata.Count) + " areas exported.");
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(this, "Error when exporting buildings data" + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Cursor = Cursors.Default;
+                }
+                dialog.Dispose();
+            }
+            else
+            {
+                MessageBox.Show(this, "No buildings available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        /// <summary>
+        /// Export domain area to a shape file with a dbf database
+        /// </summary>
+        private void ExportShapeDomainArea(object sender, EventArgs e)
+        {
+            {
+                SaveFileDialog dialog = saveFileDialog1;
+                dialog.Filter = "*.shp|*.shp";
+                dialog.Title = "Export domain area to a .shp file";
+                dialog.InitialDirectory = Gral.Main.ProjectName;
+                dialog.FileName = "DomainArea.shp";
+                // dialog.ShowHelp = true;
+#if NET6_0_OR_GREATER
+                dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
+#endif
+
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        //write geometry data to shape file
+                        Cursor = Cursors.WaitCursor;
+                        Waitprogressbar wait = new Waitprogressbar("Export to shape file");
+                        wait.Show();
+                        ShapeWriter shape = new ShapeWriter(this);
+                        shape.WriteShapeFile(dialog.FileName, 11);
+                        wait.Close();
+
+                        //create data set with attributes of the area sources
+                        DataSet domainArea = new DataSet();
+                        domainArea.Tables.Add();
+                        domainArea.Tables[0].Columns.Add("West", typeof(decimal));
+                        domainArea.Tables[0].Columns.Add("South", typeof(decimal));
+                        domainArea.Tables[0].Columns.Add("East", typeof(decimal));
+                        domainArea.Tables[0].Columns.Add("North", typeof(decimal));
+
+                        domainArea.Tables[0].Rows.Add(MainForm.GralDomRect.West.ToString(), MainForm.GralDomRect.South.ToString(), MainForm.GralDomRect.East.ToString(), MainForm.GralDomRect.North.ToString());
+                      
+                        //write attributes to dbase file
+                        TestWriteNewDbf(domainArea, dialog.FileName);
+                        //WriteDBF wdbf = new WriteDBF();
+                        //wdbf.EportDBF(dsarea, dialog.FileName);
+
+                        MessageBoxTemporary Box = new MessageBoxTemporary("Data export successful", Location);
+                        Box.Show();
+                        //MessageBox.Show(this, "Data export successful: \r\n" + Convert.ToString(editas.areasourcedata.Count) + " areas exported.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, "Error when exporting domain area data" + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Cursor = Cursors.Default;
+                }
+                dialog.Dispose();
+            }
+        }
+
         /// <summary>
         /// Routine written by Ahmed Lacevic to write dbf files
         /// </summary>
