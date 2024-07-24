@@ -1123,9 +1123,11 @@ namespace GralItemForms
                 string sg_name = listBox2.SelectedItem.ToString();
                 int sg_nr = St_F.GetSgNumber(sg_name);
                 int indexold = GetPollutantListIndex(sg_nr);
-                
-                SourceGroupEmission.RemoveAt(indexold);
-                listBox2.Items.RemoveAt(listBox2.SelectedIndex);
+                if (indexold >= 0)
+                {
+                    SourceGroupEmission.RemoveAt(indexold);
+                    listBox2.Items.RemoveAt(listBox2.SelectedIndex);
+                }
             }
             SaveArray(true);
             // fill in new values
