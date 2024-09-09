@@ -10,18 +10,18 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
-using System.Globalization;
 using GralItemData;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralShape
 {
     /// <summary>
     /// Write a shape file
     /// </summary>
-    public class ShapeWriter
+    public partial class ShapeWriter
     {
         double xMin, yMin, xMax, yMax;
         public GralDomain.Domain domain = null;
@@ -492,7 +492,7 @@ namespace GralShape
                     fs.Dispose(); fshx.Dispose();
                 }
             }
-            
+
             //export receptors
             else if (shapetype == 0)
             {
