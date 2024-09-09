@@ -32,7 +32,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <ImplicitUsings>disable</ImplicitUsings>
     <SignAssembly>False</SignAssembly>
-    <PackageLicenseFile>D:\GitHub\GUI_NET6\License.md</PackageLicenseFile>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ApplicationDefaultFont>Segoe UI,9pt</ApplicationDefaultFont>
@@ -200,6 +200,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\License.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
