@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
-using System.Globalization;
 using GralStaticFunctions;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralIO
 {
@@ -127,6 +127,8 @@ namespace GralIO
                     }
 
                     myWriter.WriteLine(_data.AVX512Usage.ToString(ic) + "\t ! Use the AVX512 instructions Yes = 1, No = 0");
+                    int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;
+                    myWriter.WriteLine(reproducibleResults.ToString(ic) + "\t ! Use the GRAL reproducible results option Yes = 1, No = 0");
                 }
 
             }
@@ -343,6 +345,21 @@ namespace GralIO
                             if (int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
                             {
                                 _data.AVX512Usage = Convert.ToInt32(_val);
+                            }
+                        }
+                    }
+
+                    _data.ReproducibleResults = false;
+                    if (myreader.EndOfStream == false) // read reproducible results option
+                    {
+                        int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;  
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
+                        if (text.Length > 0)
+                        {
+                            if (int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                            {
+                                reproducibleResults = Convert.ToInt32(_val);
+                                _data.ReproducibleResults = reproducibleResults == 1;
                             }
                         }
                     }
