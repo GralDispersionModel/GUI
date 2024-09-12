@@ -10,8 +10,12 @@
 ///</remarks>
 #endregion
 
+using GralDomain;
 using GralItemData;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -171,7 +175,7 @@ namespace GralShape
                     }
 
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
@@ -181,6 +185,7 @@ namespace GralShape
                     fs.Dispose(); fshx.Dispose();
                 }
             }
+
             //export area sources
             else if (shapetype == 5)
             {
@@ -392,7 +397,7 @@ namespace GralShape
                     }
 
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
@@ -482,7 +487,7 @@ namespace GralShape
                     }
 
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
@@ -573,7 +578,7 @@ namespace GralShape
                     }
 
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
@@ -782,7 +787,7 @@ namespace GralShape
                     }
 
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
@@ -798,7 +803,7 @@ namespace GralShape
                 shapetype = 5; // shapetype polygon
                 int edgePoints = 5;
                 //write main file header
-                (FileStream fs, FileStream fshx) = writeHeader(filename, shapetype, edgePoints);
+                (FileStream fs, FileStream fshx) = writeHeader(filename, shapetype, 1);
                 if (fs != null && fshx != null)
                 {
                     //bounding box
@@ -899,9 +904,8 @@ namespace GralShape
                     data8 = WriteDoubleLittle(domain.MainForm.GralDomRect.North);
                     fs.Write(data8, 0, 8);
 
-
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
@@ -911,7 +915,7 @@ namespace GralShape
                     fs.Dispose(); fshx.Dispose();
                 }
             }
-            //export contour lines
+            //export spline line contour lines
             else if (shapetype == 12)
             {
                 shapetype = 3; // shapetype polyline
@@ -1069,7 +1073,7 @@ namespace GralShape
                     }
 
                     //filelength updated
-                    double dummy = Convert.ToDouble(fs.Length * 0.5);
+                    long dummy = fs.Length / 2;
                     int filelength = (int)dummy;
 
                     data = WriteIntBig(filelength);
