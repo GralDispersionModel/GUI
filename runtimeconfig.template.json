@@ -1,6 +1,7 @@
 {
   "configProperties": 
   {
-    "System.Net.DisableIPv6": "true" 
+    "System.Net.DisableIPv6": "true",
+    "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero": true
   }
 }
