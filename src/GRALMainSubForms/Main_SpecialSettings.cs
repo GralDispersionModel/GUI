@@ -11,6 +11,7 @@ namespace GralMainForms
         public int LogLevel = 0;
         public int RadiusForPrognosticFlowField = 0;
         public bool GRALOnlineFunctions = true;
+        public bool GRALReproducibleResults = false;
 
         public Main_SpecialSettings()
         {
@@ -28,7 +29,7 @@ namespace GralMainForms
             {
                 WriteASCiiOutput = checkBox1.Checked;
                 GRALOnlineFunctions = !checkBox5.Checked;
-                LogLevel = (int) numericUpDown2.Value;
+                LogLevel = (int)numericUpDown2.Value;
 
                 string KeepTransientPath = Path.Combine(Gral.Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat");
 
@@ -117,6 +118,7 @@ namespace GralMainForms
                 button1.Enabled = true;
                 button2.Enabled = true;
             }
+            checkBox6.Checked = GRALReproducibleResults;
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
@@ -138,9 +140,15 @@ namespace GralMainForms
             }
         }
 
+
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
             RadiusForPrognosticFlowField = Convert.ToInt32(numericUpDown3.Value);
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            GRALReproducibleResults = checkBox6.Checked;
         }
     }
 }

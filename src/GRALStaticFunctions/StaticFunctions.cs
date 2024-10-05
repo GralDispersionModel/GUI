@@ -875,8 +875,11 @@ namespace GralStaticFunctions
         /// <param name="text"></param>
         public static void SetTrimmedTextToTextBox(TextBox box, string text)
         {
-            float l1 = Math.Max(10, TextRenderer.MeasureText(text, box.Font).Width);
-            box.Text = ReduceFileNameLenght(text, (int)(text.Length * (box.Width / l1)));
+            if (!string.IsNullOrEmpty(text))
+            {
+                float l1 = Math.Max(10, TextRenderer.MeasureText(text, box.Font).Width);
+                box.Text = ReduceFileNameLenght(text, (int)(text.Length * (box.Width / l1)));
+            }
         }
         /// <summary>
         /// trim the text for fitting into the label
@@ -885,8 +888,11 @@ namespace GralStaticFunctions
         /// <param name="text"></param>
         public static void SetTrimmedTextToTextBox(Label label, string text)
         {
-            float l1 = Math.Max(10, TextRenderer.MeasureText(text, label.Font).Width);
-            label.Text = ReduceFileNameLenght(text, (int)(text.Length * (label.Width / l1)));
+            if (!string.IsNullOrEmpty(text))
+            {
+                float l1 = Math.Max(10, TextRenderer.MeasureText(text, label.Font).Width);
+                label.Text = ReduceFileNameLenght(text, (int)(text.Length * (label.Width / l1)));
+            }
         }
 
         /// <summary>

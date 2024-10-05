@@ -256,6 +256,7 @@ namespace GralDomain
             if (EditB.ItemData.Count > 0)
             {
                 button16.Visible = true;
+                button58.Visible = true;
             }
             // import Vegetation
             EditVegetation.ReloadItemData();

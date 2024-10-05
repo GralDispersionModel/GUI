@@ -216,7 +216,12 @@ namespace GralIO
         /// </summary>
         public int AVX512Usage  { get; set; }
 
-    public InDatVariables()
+        public bool ReproducibleResults { get; set; }
+        /// <summary>
+        ///GRAL reproducible results option
+        /// </summary>
+
+        public InDatVariables()
         {
             InDatPath = String.Empty;
             ParticleNumber = 100;
@@ -242,6 +247,7 @@ namespace GralIO
             AdaptiveRoughness = 0;
             PrognosticSubDomainsSizeSourceRadius = 0;
             AVX512Usage = 0;
+            ReproducibleResults = false;
         }
 
         public InDatVariables(InDatVariables other)
@@ -273,6 +279,7 @@ namespace GralIO
             PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
             UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
             AVX512Usage = other.AVX512Usage;
+            ReproducibleResults = other.ReproducibleResults;   
         }
 
     }

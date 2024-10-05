@@ -77,7 +77,7 @@ namespace GralData
             EndStunde = 23;
             BiasCorrection = true;
             ShowBias = true;
-            ShowFrames = false;
+            ShowFrames = true;
             DrawSmallSectors = false;
             SectorCount = 16;
             Ignore00Values = false;

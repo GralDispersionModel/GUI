@@ -28,428 +28,424 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectSourcegroups));
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.button2 = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.buttonResultPath = new System.Windows.Forms.Button();
-            this.buttonModulationPath = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            this.SuspendLayout();
+            listBox1 = new System.Windows.Forms.ListBox();
+            button1 = new System.Windows.Forms.Button();
+            checkBox1 = new System.Windows.Forms.CheckBox();
+            checkBox2 = new System.Windows.Forms.CheckBox();
+            checkBox3 = new System.Windows.Forms.CheckBox();
+            label1 = new System.Windows.Forms.Label();
+            textBox1 = new System.Windows.Forms.TextBox();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            label5 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
+            numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            label2 = new System.Windows.Forms.Label();
+            numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            radioButton2 = new System.Windows.Forms.RadioButton();
+            radioButton1 = new System.Windows.Forms.RadioButton();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            label3 = new System.Windows.Forms.Label();
+            numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            button2 = new System.Windows.Forms.Button();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            buttonResultPath = new System.Windows.Forms.Button();
+            buttonModulationPath = new System.Windows.Forms.Button();
+            textBox3 = new System.Windows.Forms.TextBox();
+            label7 = new System.Windows.Forms.Label();
+            textBox2 = new System.Windows.Forms.TextBox();
+            label6 = new System.Windows.Forms.Label();
+            toolTip1 = new System.Windows.Forms.ToolTip(components);
+            checkBox4 = new System.Windows.Forms.CheckBox();
+            checkBox5 = new System.Windows.Forms.CheckBox();
+            groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
+            groupBox3.SuspendLayout();
+            SuspendLayout();
             // 
             // listBox1
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(413, 199);
-            this.listBox1.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.listBox1, "Calculated source groups");
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Location = new System.Drawing.Point(0, 0);
+            listBox1.Margin = new System.Windows.Forms.Padding(2);
+            listBox1.Name = "listBox1";
+            listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            listBox1.Size = new System.Drawing.Size(413, 199);
+            listBox1.TabIndex = 0;
+            toolTip1.SetToolTip(listBox1, "Calculated source groups");
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(13, 530);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 40);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "&OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+            button1.Location = new System.Drawing.Point(13, 532);
+            button1.Margin = new System.Windows.Forms.Padding(2);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(105, 40);
+            button1.TabIndex = 8;
+            button1.Text = "&OK";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // checkBox1
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox1.Location = new System.Drawing.Point(262, 401);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(150, 36);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "Calculate\r\nmax. concentrations";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            checkBox1.Location = new System.Drawing.Point(262, 403);
+            checkBox1.Margin = new System.Windows.Forms.Padding(2);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new System.Drawing.Size(150, 36);
+            checkBox1.TabIndex = 3;
+            checkBox1.Text = "Calculate\r\nmax. concentrations";
+            checkBox1.UseVisualStyleBackColor = true;
             // 
             // checkBox2
             // 
-            this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(262, 362);
-            this.checkBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(150, 36);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Calculate\r\nmean concentrations";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            checkBox2.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            checkBox2.Checked = true;
+            checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            checkBox2.Location = new System.Drawing.Point(262, 364);
+            checkBox2.Margin = new System.Windows.Forms.Padding(2);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new System.Drawing.Size(150, 36);
+            checkBox2.TabIndex = 2;
+            checkBox2.Text = "Calculate\r\nmean concentrations";
+            checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
             // checkBox3
             // 
-            this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(262, 441);
-            this.checkBox3.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(150, 36);
-            this.checkBox3.TabIndex = 4;
-            this.checkBox3.Text = "Calculate daily\r\nmax. concentrations";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            checkBox3.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            checkBox3.Checked = true;
+            checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            checkBox3.Location = new System.Drawing.Point(262, 443);
+            checkBox3.Margin = new System.Windows.Forms.Padding(2);
+            checkBox3.Name = "checkBox3";
+            checkBox3.Size = new System.Drawing.Size(150, 36);
+            checkBox3.TabIndex = 4;
+            checkBox3.Text = "Calculate daily\r\nmax. concentrations";
+            checkBox3.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(8, 102);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(110, 28);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Result file-prefix";
+            label1.Location = new System.Drawing.Point(8, 102);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(110, 28);
+            label1.TabIndex = 5;
+            label1.Text = "Result file-prefix";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(164, 99);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(219, 23);
-            this.textBox1.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.textBox1, "A file prefix for the result files");
-            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1TextChanged);
+            textBox1.Location = new System.Drawing.Point(164, 99);
+            textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new System.Drawing.Size(219, 23);
+            textBox1.TabIndex = 1;
+            toolTip1.SetToolTip(textBox1, "A file prefix for the result files");
+            textBox1.TextChanged += TextBox1TextChanged;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.numericUpDown3);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.numericUpDown1);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(14, 355);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox1.Size = new System.Drawing.Size(229, 156);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Odour";
+            groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            groupBox1.Controls.Add(checkBox5);
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(label4);
+            groupBox1.Controls.Add(numericUpDown3);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(numericUpDown1);
+            groupBox1.Controls.Add(radioButton2);
+            groupBox1.Controls.Add(radioButton1);
+            groupBox1.Location = new System.Drawing.Point(14, 357);
+            groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox1.Size = new System.Drawing.Size(229, 170);
+            groupBox1.TabIndex = 7;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Odour";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(183, 52);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 15);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "OU/m³";
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(183, 52);
+            label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(44, 15);
+            label5.TabIndex = 6;
+            label5.Text = "OU/m³";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 52);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(94, 15);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Odour threshold";
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(23, 52);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(94, 15);
+            label4.TabIndex = 5;
+            label4.Text = "Odour threshold";
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.DecimalPlaces = 1;
-            this.numericUpDown3.Enabled = false;
-            this.numericUpDown3.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDown3.Location = new System.Drawing.Point(126, 46);
-            this.numericUpDown3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(56, 23);
-            this.numericUpDown3.TabIndex = 4;
-            this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown3.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            numericUpDown3.DecimalPlaces = 1;
+            numericUpDown3.Enabled = false;
+            numericUpDown3.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown3.Location = new System.Drawing.Point(126, 46);
+            numericUpDown3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            numericUpDown3.Name = "numericUpDown3";
+            numericUpDown3.Size = new System.Drawing.Size(56, 23);
+            numericUpDown3.TabIndex = 4;
+            numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            numericUpDown3.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(23, 117);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 15);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Percentile";
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(23, 115);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(59, 15);
+            label2.TabIndex = 3;
+            label2.Text = "Percentile";
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.DecimalPlaces = 1;
-            this.numericUpDown1.Enabled = false;
-            this.numericUpDown1.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDown1.Location = new System.Drawing.Point(126, 112);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(56, 23);
-            this.numericUpDown1.TabIndex = 6;
-            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown1, "Percentile to be evaluated");
-            this.numericUpDown1.Value = new decimal(new int[] {
-            98,
-            0,
-            0,
-            0});
+            numericUpDown1.DecimalPlaces = 1;
+            numericUpDown1.Enabled = false;
+            numericUpDown1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown1.Location = new System.Drawing.Point(126, 110);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new System.Drawing.Size(56, 23);
+            numericUpDown1.TabIndex = 6;
+            numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown1, "Percentile to be evaluated");
+            numericUpDown1.Value = new decimal(new int[] { 98, 0, 0, 0 });
             // 
             // radioButton2
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(8, 85);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(136, 19);
-            this.radioButton2.TabIndex = 7;
-            this.radioButton2.Text = "Odour concentration";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            radioButton2.AutoSize = true;
+            radioButton2.Location = new System.Drawing.Point(8, 85);
+            radioButton2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            radioButton2.Name = "radioButton2";
+            radioButton2.Size = new System.Drawing.Size(136, 19);
+            radioButton2.TabIndex = 7;
+            radioButton2.Text = "Odour concentration";
+            radioButton2.UseVisualStyleBackColor = true;
             // 
             // radioButton1
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(8, 23);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(143, 19);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Odour hour frequency";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            radioButton1.AutoSize = true;
+            radioButton1.Checked = true;
+            radioButton1.Location = new System.Drawing.Point(8, 23);
+            radioButton1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new System.Drawing.Size(143, 19);
+            radioButton1.TabIndex = 0;
+            radioButton1.TabStop = true;
+            radioButton1.Text = "Odour hour frequency";
+            radioButton1.UseVisualStyleBackColor = true;
+            radioButton1.CheckedChanged += radioButton1_CheckedChanged;
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.numericUpDown2);
-            this.groupBox2.Location = new System.Drawing.Point(13, 355);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox2.Size = new System.Drawing.Size(230, 75);
-            this.groupBox2.TabIndex = 8;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Percentile Evaluation";
+            groupBox2.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            groupBox2.Controls.Add(checkBox4);
+            groupBox2.Controls.Add(label3);
+            groupBox2.Controls.Add(numericUpDown2);
+            groupBox2.Location = new System.Drawing.Point(13, 357);
+            groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox2.Size = new System.Drawing.Size(230, 75);
+            groupBox2.TabIndex = 8;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Percentile Evaluation";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 33);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 15);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Percentile";
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(24, 25);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(59, 15);
+            label3.TabIndex = 3;
+            label3.Text = "Percentile";
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.DecimalPlaces = 1;
-            this.numericUpDown2.Enabled = false;
-            this.numericUpDown2.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDown2.Location = new System.Drawing.Point(127, 31);
-            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.numericUpDown2.Minimum = new decimal(new int[] {
-            90,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(56, 23);
-            this.numericUpDown2.TabIndex = 5;
-            this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.toolTip1.SetToolTip(this.numericUpDown2, "Percentile to be evaluated");
-            this.numericUpDown2.Value = new decimal(new int[] {
-            98,
-            0,
-            0,
-            0});
+            numericUpDown2.DecimalPlaces = 1;
+            numericUpDown2.Enabled = false;
+            numericUpDown2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown2.Location = new System.Drawing.Point(127, 23);
+            numericUpDown2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            numericUpDown2.Minimum = new decimal(new int[] { 90, 0, 0, 0 });
+            numericUpDown2.Name = "numericUpDown2";
+            numericUpDown2.Size = new System.Drawing.Size(56, 23);
+            numericUpDown2.TabIndex = 5;
+            numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown2, "Percentile to be evaluated");
+            numericUpDown2.Value = new decimal(new int[] { 98, 0, 0, 0 });
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(295, 530);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(105, 40);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "&Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button1_Click);
+            button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            button2.Location = new System.Drawing.Point(295, 532);
+            button2.Margin = new System.Windows.Forms.Padding(2);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(105, 40);
+            button2.TabIndex = 9;
+            button2.Text = "&Cancel";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button1_Click;
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox3.Controls.Add(this.buttonResultPath);
-            this.groupBox3.Controls.Add(this.buttonModulationPath);
-            this.groupBox3.Controls.Add(this.textBox3);
-            this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this.textBox2);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(14, 209);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(390, 135);
-            this.groupBox3.TabIndex = 10;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Emission Modulation/Result Files";
+            groupBox3.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            groupBox3.Controls.Add(buttonResultPath);
+            groupBox3.Controls.Add(buttonModulationPath);
+            groupBox3.Controls.Add(textBox3);
+            groupBox3.Controls.Add(label7);
+            groupBox3.Controls.Add(textBox2);
+            groupBox3.Controls.Add(label6);
+            groupBox3.Controls.Add(textBox1);
+            groupBox3.Controls.Add(label1);
+            groupBox3.Location = new System.Drawing.Point(14, 211);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(390, 135);
+            groupBox3.TabIndex = 10;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Emission Modulation/Result Files";
             // 
             // buttonResultPath
             // 
-            this.buttonResultPath.BackColor = System.Drawing.Color.Gainsboro;
-            this.buttonResultPath.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonResultPath.BackgroundImage")));
-            this.buttonResultPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonResultPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonResultPath.Location = new System.Drawing.Point(119, 60);
-            this.buttonResultPath.Name = "buttonResultPath";
-            this.buttonResultPath.Size = new System.Drawing.Size(32, 32);
-            this.buttonResultPath.TabIndex = 47;
-            this.toolTip1.SetToolTip(this.buttonResultPath, "Set the path for the result files");
-            this.buttonResultPath.UseVisualStyleBackColor = false;
-            this.buttonResultPath.Click += new System.EventHandler(this.buttonSelectPath_Click);
+            buttonResultPath.BackColor = System.Drawing.Color.Gainsboro;
+            buttonResultPath.BackgroundImage = (System.Drawing.Image)resources.GetObject("buttonResultPath.BackgroundImage");
+            buttonResultPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            buttonResultPath.Font = new System.Drawing.Font("Segoe UI", 9F);
+            buttonResultPath.Location = new System.Drawing.Point(119, 60);
+            buttonResultPath.Name = "buttonResultPath";
+            buttonResultPath.Size = new System.Drawing.Size(32, 32);
+            buttonResultPath.TabIndex = 47;
+            toolTip1.SetToolTip(buttonResultPath, "Set the path for the result files");
+            buttonResultPath.UseVisualStyleBackColor = false;
+            buttonResultPath.Click += buttonSelectPath_Click;
             // 
             // buttonModulationPath
             // 
-            this.buttonModulationPath.BackColor = System.Drawing.Color.Gainsboro;
-            this.buttonModulationPath.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonModulationPath.BackgroundImage")));
-            this.buttonModulationPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonModulationPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonModulationPath.Location = new System.Drawing.Point(119, 22);
-            this.buttonModulationPath.Name = "buttonModulationPath";
-            this.buttonModulationPath.Size = new System.Drawing.Size(32, 32);
-            this.buttonModulationPath.TabIndex = 46;
-            this.toolTip1.SetToolTip(this.buttonModulationPath, "Set the path with emission modulation files for one evaluation");
-            this.buttonModulationPath.UseVisualStyleBackColor = false;
-            this.buttonModulationPath.Click += new System.EventHandler(this.buttonSelectPath_Click);
+            buttonModulationPath.BackColor = System.Drawing.Color.Gainsboro;
+            buttonModulationPath.BackgroundImage = (System.Drawing.Image)resources.GetObject("buttonModulationPath.BackgroundImage");
+            buttonModulationPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            buttonModulationPath.Font = new System.Drawing.Font("Segoe UI", 9F);
+            buttonModulationPath.Location = new System.Drawing.Point(119, 22);
+            buttonModulationPath.Name = "buttonModulationPath";
+            buttonModulationPath.Size = new System.Drawing.Size(32, 32);
+            buttonModulationPath.TabIndex = 46;
+            toolTip1.SetToolTip(buttonModulationPath, "Set the path with emission modulation files for one evaluation");
+            buttonModulationPath.UseVisualStyleBackColor = false;
+            buttonModulationPath.Click += buttonSelectPath_Click;
             // 
             // textBox3
             // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Location = new System.Drawing.Point(164, 64);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(219, 23);
-            this.textBox3.TabIndex = 9;
-            this.textBox3.WordWrap = false;
+            textBox3.Enabled = false;
+            textBox3.Location = new System.Drawing.Point(164, 64);
+            textBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new System.Drawing.Size(219, 23);
+            textBox3.TabIndex = 9;
+            textBox3.WordWrap = false;
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(8, 67);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(109, 28);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "Path for result files";
+            label7.Location = new System.Drawing.Point(8, 67);
+            label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(109, 28);
+            label7.TabIndex = 8;
+            label7.Text = "Path for result files";
             // 
             // textBox2
             // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(164, 24);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(219, 23);
-            this.textBox2.TabIndex = 7;
-            this.textBox2.WordWrap = false;
+            textBox2.Enabled = false;
+            textBox2.Location = new System.Drawing.Point(164, 24);
+            textBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new System.Drawing.Size(219, 23);
+            textBox2.TabIndex = 7;
+            textBox2.WordWrap = false;
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(8, 24);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(109, 35);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "Path to emission modulation files";
+            label6.Location = new System.Drawing.Point(8, 24);
+            label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(109, 35);
+            label6.TabIndex = 6;
+            label6.Text = "Path to emission modulation files";
+            // 
+            // checkBox4
+            // 
+            checkBox4.AutoSize = true;
+            checkBox4.Location = new System.Drawing.Point(26, 53);
+            checkBox4.Name = "checkBox4";
+            checkBox4.Size = new System.Drawing.Size(180, 19);
+            checkBox4.TabIndex = 6;
+            checkBox4.Text = "based on hourly mean values";
+            checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox5
+            // 
+            checkBox5.AutoSize = true;
+            checkBox5.Location = new System.Drawing.Point(25, 143);
+            checkBox5.Name = "checkBox5";
+            checkBox5.Size = new System.Drawing.Size(180, 19);
+            checkBox5.TabIndex = 8;
+            checkBox5.Text = "based on hourly mean values";
+            checkBox5.UseVisualStyleBackColor = true;
             // 
             // SelectSourcegroups
             // 
-            this.AcceptButton = this.button1;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button2;
-            this.ClientSize = new System.Drawing.Size(413, 583);
-            this.ControlBox = false;
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.checkBox3);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.listBox1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(370, 600);
-            this.Name = "SelectSourcegroups";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Select Source Groups";
-            this.Load += new System.EventHandler(this.SelectSourcegroups_Load);
-            this.Shown += new System.EventHandler(this.SelectSourcegroupsShown);
-            this.ResizeEnd += new System.EventHandler(this.SelectSourcegroupsResizeEnd);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.ResumeLayout(false);
-
+            AcceptButton = button1;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = button2;
+            ClientSize = new System.Drawing.Size(413, 586);
+            ControlBox = false;
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
+            Controls.Add(checkBox3);
+            Controls.Add(checkBox2);
+            Controls.Add(checkBox1);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(listBox1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Margin = new System.Windows.Forms.Padding(2);
+            MinimumSize = new System.Drawing.Size(370, 600);
+            Name = "SelectSourcegroups";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Select Source Groups";
+            Load += SelectSourcegroups_Load;
+            Shown += SelectSourcegroupsShown;
+            ResizeEnd += SelectSourcegroupsResizeEnd;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            ResumeLayout(false);
         }
+
         private System.Windows.Forms.Label label5;
         public System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.Label label4;
@@ -480,5 +476,7 @@
         private System.Windows.Forms.Button buttonResultPath;
         private System.Windows.Forms.Button buttonModulationPath;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }

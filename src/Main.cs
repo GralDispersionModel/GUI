@@ -3606,6 +3606,7 @@ namespace Gral
                     MSp.LogLevel = GRALSettings.Loglevel;
                     MSp.RadiusForPrognosticFlowField = GRALSettings.PrognosticSubDomainsSizeSourceRadius;
                     MSp.GRALOnlineFunctions = GRALSettings.UseGRALOnlineFunctions;
+                    MSp.GRALReproducibleResults = GRALSettings.ReproducibleResults;
 
                     MSp.StartPosition = FormStartPosition.Manual;
                     MSp.Left = Left + 80;
@@ -3616,12 +3617,14 @@ namespace Gral
                         if (MSp.WriteASCiiOutput != GRALSettings.WriteESRIResult ||
                             MSp.KeyStrokeWhenExitGRAL != GRALSettings.WaitForKeyStroke ||
                             MSp.RadiusForPrognosticFlowField != GRALSettings.PrognosticSubDomainsSizeSourceRadius ||
-                            MSp.GRALOnlineFunctions != GRALSettings.UseGRALOnlineFunctions)
+                            MSp.GRALOnlineFunctions != GRALSettings.UseGRALOnlineFunctions ||
+                            MSp.GRALReproducibleResults != GRALSettings.ReproducibleResults)
                         {
                             GRALSettings.WriteESRIResult = MSp.WriteASCiiOutput;
                             GRALSettings.WaitForKeyStroke = MSp.KeyStrokeWhenExitGRAL;
                             GRALSettings.PrognosticSubDomainsSizeSourceRadius = MSp.RadiusForPrognosticFlowField;
                             GRALSettings.UseGRALOnlineFunctions = MSp.GRALOnlineFunctions;
+                            GRALSettings.ReproducibleResults = MSp.GRALReproducibleResults;
                             ResetInDat();
                         }
                         GRALSettings.Loglevel = MSp.LogLevel;
