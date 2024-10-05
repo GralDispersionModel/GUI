@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
+using System.Linq;
 using System.Windows.Forms;
 using GralStaticFunctions;
 
@@ -24,10 +26,9 @@ namespace GralMainForms
     /// </summary>
     public partial class Windrose : Form
     {
-        private Point[] WindRosePoints;
         public double[,] SectFrequ = new double[16, 8];
         public double[] WndClasses = new double[7];
-        public string MetFileName;
+public string MetFileName;
         public List<GralData.WindData> WindData;
         public int WindSectorCount = 16;
 
@@ -56,6 +57,11 @@ namespace GralMainForms
         private Pen PenDarkRed = new Pen(Color.DarkRed);
         private Pen PenBrown = new Pen(Color.Brown);
         private Pen PenGray = new Pen(Color.Gray, 1);
+        private Pen PenBlack = new Pen(Color.Black, 1);
+        private Pen[] pensWind;
+        private Pen[] pensSC;
+        private Brush[] brushesWind;
+        private Brush[] brushesSC;
         private Pen PenGrayTransparent = new Pen(Color.FromArgb(60, Color.Gray), 1);
 
         private Brush BrushBlue = new SolidBrush(Color.Blue);
@@ -72,7 +78,7 @@ namespace GralMainForms
         private StringFormat StringFormatNearFar;
 
         private Rectangle LegendPosition = St_F.WindRoseLegend;
-        private Point MousedXdY = new Point();
+        private System.Drawing.Point MousedXdY = new System.Drawing.Point();
         private bool MoveLegend = false;
         private Rectangle InfoPosition = St_F.WindRoseInfo;
         private bool MoveInfo = false;
@@ -137,8 +143,6 @@ namespace GralMainForms
 
         private void Form3_Load(object sender, EventArgs e)
         {
-            WindRosePoints = new Point[WindSectorCount * 3 + 1];
-
             if (St_F.WindRoseFormSize.Height > 100)
             {
                 this.Size = St_F.WindRoseFormSize;
@@ -161,7 +165,13 @@ namespace GralMainForms
             pictureBox1.Height = Math.Max(1, ClientRectangle.Height - 1);
             LegendPosition = St_F.WindRoseLegend;
             InfoPosition = St_F.WindRoseInfo;
-            MouseWheel += new MouseEventHandler(form_MouseWheel); 
+            MouseWheel += new MouseEventHandler(form_MouseWheel);
+            pensWind = new Pen[] { PenBlue, PenLightBlue, PenGreen, PenYellowGreen, PenYellow, PenOrange, PenRed, PenBrown };
+            brushesWind = new Brush[] { BrushBlue, BrushRedGreen, BrushGreen, BrushYellowGreen, BrushYellow, BrushOrange, BrushRed, BrushBrown };
+            pensSC = new Pen[] { PenBlue, PenBlue, PenLightBlue, PenGreen, PenYellowGreen, PenOrange, PenRed, PenDarkRed };
+            brushesSC = new Brush[] { BrushBlue, BrushBlue, BrushLightBlue, BrushGreen, BrushYellowGreen, BrushOrange, BrushRed, BrushDarkRed };
+            PenBlack.Width = 1.3F;
+            PenBlack.Alignment = PenAlignment.Inset;
         }
 
         void PictureBox1Paint(object sender, PaintEventArgs e)
@@ -174,9 +184,12 @@ namespace GralMainForms
             int mid_x = pictureBox1.Width / 2; // Kuntner
             int mid_y = pictureBox1.Height / 2;
 
-            //draw file name
+            e.Graphics.Clear(Color.White);
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             Graphics g = e.Graphics;
 
+            //draw file name
             StringFormat format2 = new StringFormat
             {
                 Alignment = StringAlignment.Center
@@ -404,36 +417,26 @@ namespace GralMainForms
 
             for (int n = 7; n >= 0; n--)
             {
-                int l = 1;
                 for (int i = 0; i < WindSectorCount; i++)
                 {
-                    //coordinates wind rose - drawing
-                    int x1 = 0; int y1 = 0; int x2 = 0; int y2 = 0;
-                    try
-                    {
-                        x1 = Convert.ToInt32(Math.Sin(sectorangle * i - sectorwidth) * sektsum[i] * scale);
-                        y1 = Convert.ToInt32(Math.Cos(sectorangle * i - sectorwidth) * sektsum[i] * scale);
-                        x2 = Convert.ToInt32(Math.Sin(sectorangle * i + sectorwidth) * sektsum[i] * scale);
-                        y2 = Convert.ToInt32(Math.Cos(sectorangle * i + sectorwidth) * sektsum[i] * scale);
-                    }
-                    catch
-                    {
-                    }
-                    WindRosePoints[i + l - 1] = new Point(mid_x, mid_y);
-                    WindRosePoints[i + l] = new Point(mid_x + x1, mid_y - y1);
-                    WindRosePoints[i + l + 1] = new Point(mid_x + x2, mid_y - y2);
-                    WindRosePoints[i + l + 2] = new Point(mid_x, mid_y);
+                    int radius = Convert.ToInt32(sektsum[i] * scale);
+#if __MonoCS__
+                    float startAngle = (float)((sectorangle * i - sectorwidth) * 180 / Math.PI - 90);
+                    float sectorAnglePie = (float)((sectorwidth * 2) * 180 / Math.PI);
+#else
+                    float startAngle = (float)(sectorangle * i - sectorwidth) * 180 / MathF.PI - 90;
+                    float sectorAnglePie = (float)(sectorwidth * 2) * 180 / MathF.PI;
+#endif
                     sektsum[i] = sektsum[i] - SectFrequ[i, n];
-                    l += 2;
-                }
-
-                if (DrawingMode == 0)
-                {
-                    DrawWindSpeedRose(g, n);
-                }
-                else if (DrawingMode == 1)
-                {
-                    DrawWindSCRose(g, n);
+                    
+                    if (DrawingMode == 0)
+                    {
+                        DrawWindSpeedRose(g, pensWind, brushesWind, n, mid_x, mid_y, radius, startAngle, sectorAnglePie);
+                    }
+                    else if (DrawingMode == 1 && n > 0)
+                    {
+                        DrawWindSpeedRose(g, pensSC, brushesSC, 8 - n, mid_x, mid_y, radius, startAngle, sectorAnglePie);
+                    }
                 }
 
                 PenGrayTransparent.DashStyle = DashStyle.Dot;
@@ -461,101 +464,47 @@ namespace GralMainForms
         private void DrawWindSpeedScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
             int x_legend = LegendPosition.X * CopyToClipboardScale;
-
-            switch (n)
+           
+           
+            if (n >= 0 && n < 8 && n < pensWind.Length && n < brushesWind.Length)
             {
-                case 7:
-                    g.DrawRectangle(PenBlue, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushBlue, x_legend, y0, 20, VertDist);
-                    g.DrawString("0.0 - " + Convert.ToString(WndClasses[0]) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 6:
-                    g.DrawRectangle(PenLightBlue, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushRedGreen, x_legend, y0, 20, VertDist);
-                    g.DrawString(Convert.ToString(WndClasses[0]).PadLeft(2) + " -" + Convert.ToString(WndClasses[1]).PadLeft(2) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 5:
-                    g.DrawRectangle(PenGreen, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushGreen, x_legend, y0, 20, VertDist);
-                    g.DrawString(Convert.ToString(WndClasses[1]).PadLeft(2) + " -" + Convert.ToString(WndClasses[2]).PadLeft(2) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 4:
-                    g.DrawRectangle(PenYellowGreen, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushYellowGreen, x_legend, y0, 20, VertDist);
-                    g.DrawString(Convert.ToString(WndClasses[2]).PadLeft(2) + " -" + Convert.ToString(WndClasses[3]).PadLeft(2) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 3:
-                    g.DrawRectangle(PenYellow, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushYellow, x_legend, y0, 20, VertDist);
-                    g.DrawString(Convert.ToString(WndClasses[3]).PadLeft(2) + " -" + Convert.ToString(WndClasses[4]).PadLeft(2) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 2:
-                    g.DrawRectangle(PenOrange, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushOrange, x_legend, y0, 20, VertDist);
-                    g.DrawString(Convert.ToString(WndClasses[4]).PadLeft(2) + " -" + Convert.ToString(WndClasses[5]).PadLeft(2) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 1:
-                    g.DrawRectangle(PenRed, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushRed, x_legend, y0, 20, VertDist);
-                    g.DrawString(Convert.ToString(WndClasses[5]).PadLeft(2) + " -" + Convert.ToString(WndClasses[6]).PadLeft(2) + " m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
-                case 0:
-                    g.DrawRectangle(PenBrown, x_legend, y0, 20, VertDist);
-                    g.FillRectangle(BrushBrown, x_legend, y0, 20, VertDist);
-                    g.DrawString(">" + Convert.ToString(WndClasses[6]).PadLeft(2) + "m/s",
-                                 kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
-                    break;
+                switch (n)
+                {
+                    case 7:
+                        g.DrawRectangle(pensWind[7 - n], x_legend, y0, 20, VertDist);
+                        g.FillRectangle(brushesWind[7 - n], x_legend, y0, 20, VertDist);
+                        g.DrawString("0.0 - " + Convert.ToString(WndClasses[0]) + " m/s",
+                                     kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        g.DrawRectangle(pensWind[7 - n], x_legend, y0, 20, VertDist);
+                        g.FillRectangle(brushesWind[7 - n], x_legend, y0, 20, VertDist);
+                        g.DrawString(Convert.ToString(WndClasses[6 - n]).PadLeft(2) + " -" + Convert.ToString(WndClasses[7 - n]).PadLeft(2) + " m/s",
+                                     kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
+                        break;
+                    case 0:
+                        g.DrawRectangle(pensWind[7 - n], x_legend, y0, 20, VertDist);
+                        g.FillRectangle(brushesWind[7 - n], x_legend, y0, 20, VertDist);
+                        g.DrawString(">" + Convert.ToString(WndClasses[6]).PadLeft(2) + "m/s",
+                                     kleinfont, BrushBlack, x_legend + 26, y0, StringFormatNearFar);
+                        break;
+                }
             }
         }
 
         private void DrawWindSCScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
-            int x_legend = LegendPosition.X * CopyToClipboardScale;
-
-            switch (n)
+            if (n > 0 && n < 8 && n < pensSC.Length && n < brushesSC.Length)
             {
-                case 7:
-                    g.DrawRectangle(PenDarkRed, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushDarkRed, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 1", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
-                case 6:
-                    g.DrawRectangle(PenRed, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushRed, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 2", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
-                case 5:
-                    g.DrawRectangle(PenOrange, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushOrange, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 3", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
-                case 4:
-                    g.DrawRectangle(PenYellowGreen, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushYellowGreen, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 4", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
-                case 3:
-                    g.DrawRectangle(PenGreen, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushGreen, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 5", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
-                case 2:
-                    g.DrawRectangle(PenLightBlue, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushLightBlue, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 6", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
-                case 1:
-                    g.DrawRectangle(PenBlue, x_legend, y0, 25, VertDist);
-                    g.FillRectangle(BrushBlue, x_legend, y0, 25, VertDist);
-                    g.DrawString("SC 7", kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
-                    break;
+                int x_legend = LegendPosition.X * CopyToClipboardScale;
+                g.DrawRectangle(pensSC[n], x_legend, y0, 25, VertDist);
+                g.FillRectangle(brushesSC[n], x_legend, y0, 25, VertDist);
+                g.DrawString("SC " + (8 - n).ToString(), kleinfont, BrushBlack, x_legend + 30, y0, StringFormatNearFar);
             }
         }
 
@@ -564,187 +513,25 @@ namespace GralMainForms
         /// </summary>
         /// <param name="g"></param>
         /// <param name="n"></param>
-        private void DrawWindSpeedRose(Graphics g, int n)
+        private void DrawWindSpeedRose(Graphics g, Pen[] pen, Brush[] brush, int n, int mid_x, int mid_y, int radius, float startAngle, float sectorAngle)
         {
-            switch (n)
+            if (radius > 0)
             {
-                case 7:
-                    g.FillPolygon(BrushBrown, WindRosePoints);
-                    if (!DrawFrames)
+                if (n >= 0 && n < brush.Length)
+                {
+                    g.FillPie(brush[n], new Rectangle(mid_x - radius, mid_y - radius, radius * 2, radius * 2), startAngle, sectorAngle);
+                }
+                if (n >= 0 && n < brush.Length)
+                {
+                    if (DrawFrames)
                     {
-                        g.DrawPolygon(PenBrown, WindRosePoints);
+                        g.DrawPie(PenBlack, new Rectangle(mid_x - radius, mid_y - radius, radius * 2, radius * 2), startAngle, sectorAngle);
                     }
                     else
                     {
-                        g.DrawPolygon(PenGray, WindRosePoints);
+                        g.DrawPie(pen[n], new Rectangle(mid_x - radius, mid_y - radius, radius * 2, radius * 2), startAngle, sectorAngle);
                     }
-                    break;
-                case 6:
-                    g.FillPolygon(BrushRed, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenRed, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 5:
-                    g.FillPolygon(BrushOrange, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenOrange, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 4:
-                    g.FillPolygon(BrushYellow, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenYellow, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 3:
-                    g.FillPolygon(BrushYellowGreen, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenYellowGreen, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 2:
-                    g.FillPolygon(BrushGreen, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenGreen, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 1:
-                    g.FillPolygon(BrushRedGreen, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenLightBlue, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 0:
-                    g.FillPolygon(BrushBlue, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenBlue, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Draw Stability Class Wind Rose Sectors
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="n"></param>
-        private void DrawWindSCRose(Graphics g, int n)
-        {
-            switch (n)
-            {
-                case 7:
-                    g.FillPolygon(BrushBlue, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenBlue, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 6:
-                    g.FillPolygon(BrushLightBlue, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenLightBlue, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 5:
-                    g.FillPolygon(BrushGreen, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenGreen, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 4:
-                    g.FillPolygon(BrushYellowGreen, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenYellowGreen, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 3:
-                    g.FillPolygon(BrushOrange, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenOrange, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 2:
-                    g.FillPolygon(BrushRed, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenRed, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
-                case 1:
-                    g.FillPolygon(BrushDarkRed, WindRosePoints);
-                    if (!DrawFrames)
-                    {
-                        g.DrawPolygon(PenDarkRed, WindRosePoints);
-                    }
-                    else
-                    {
-                        g.DrawPolygon(PenGray, WindRosePoints);
-                    }
-                    break;
+                }             
             }
         }
 
@@ -764,7 +551,7 @@ namespace GralMainForms
             pictureBox1.Height *= CopyToClipboardScale;
             IniScale *= CopyToClipboardScale;
             pictureBox1.Refresh();
-            Application.DoEvents();
+            System.Windows.Forms.Application.DoEvents();
             Bitmap bitMap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             pictureBox1.DrawToBitmap(bitMap, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
             Clipboard.SetDataObject(bitMap);
@@ -819,6 +606,7 @@ namespace GralMainForms
             PenYellowGreen.Dispose();
             PenYellow.Dispose();
             PenGray.Dispose();
+            PenBlack.Dispose();
             PenDarkRed.Dispose();
             PenGrayTransparent.Dispose();
 

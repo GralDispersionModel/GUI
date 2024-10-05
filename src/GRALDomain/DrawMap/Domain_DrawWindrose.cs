@@ -107,47 +107,46 @@ namespace GralDomain
                                 sektmax = _drobj.ContourAreaMin / 100D;
                             }
                             double scale = diameter / sektmax;
-                            
+
                             for (int n = 7; n >= 0; n--)
                             {
-                                int l = 1;
                                 for (int i = 0; i < 16; i++)
                                 {
-                                    //coordinates wind rose - drawing
-                                    int x1 = 0; int y1 = 0; int x2 = 0; int y2 = 0;
-                                    try
-                                    {
-                                        x1 = Convert.ToInt32(Math.Sin(sectorangle * i - sectorwidth) * sektsum[i] * scale);
-                                        y1 = Convert.ToInt32(Math.Cos(sectorangle * i - sectorwidth) * sektsum[i] * scale);
-                                        x2 = Convert.ToInt32(Math.Sin(sectorangle * i + sectorwidth) * sektsum[i] * scale);
-                                        y2 = Convert.ToInt32(Math.Cos(sectorangle * i + sectorwidth) * sektsum[i] * scale);
-                                    }
-                                    catch
-                                    {}
-                                    windrosepoints[i + l - 1] = new Point(x0, y0);
-                                    windrosepoints[i + l] = new Point(x0 + x1, y0 - y1);
-                                    windrosepoints[i + l + 1] = new Point(x0 + x2, y0 - y2);
-                                    windrosepoints[i + l + 2] = new Point(x0, y0);
-                                    
+                                    int radius = Convert.ToInt32(sektsum[i] * scale);
+#if __MonoCS__
+                                    float startAngle = (float)((sectorangle * i - sectorwidth) * 180 / Math.PI - 90);
+                                    float sectorAnglePie = (float)((sectorwidth * 2) * 180 / Math.PI);
+#else
+                                    float startAngle = (float)(sectorangle * i - sectorwidth) * 180 / MathF.PI - 90;
+                                    float sectorAnglePie = (float)(sectorwidth * 2) * 180 / MathF.PI;
+#endif
                                     if (n % 2 == 0)
                                     {
-                                        sektsum[i] = sektsum[i] - _ptList[1 + i * 4 + (int) (n / 2)].X;
+                                        sektsum[i] = sektsum[i] - _ptList[1 + i * 4 + (int)(n / 2)].X;
                                     }
                                     else
                                     {
-                                        sektsum[i] = sektsum[i] - _ptList[1 + i * 4 + (int) (n / 2)].Y;
+                                        sektsum[i] = sektsum[i] - _ptList[1 + i * 4 + (int)(n / 2)].Y;
                                     }
-                                    l += 2;
-                                }
-                                
-                                g.FillPolygon(windbrush[n], windrosepoints);
-                                if (drawFrame)
-                                {
-                                    g.DrawPolygon(PenGray, windrosepoints);
-                                }
-                                else
-                                {
-                                    g.DrawPolygon(windpen[n], windrosepoints);
+
+                                    if (radius > 0)
+                                    {
+                                        if (n >= 0 && n < windbrush.Length)
+                                        {
+                                            g.FillPie(windbrush[n], new Rectangle(x0 - radius, y0 - radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
+                                        }
+                                        if (n >= 0 && n < windpen.Length)
+                                        {
+                                            if (drawFrame)
+                                            {
+                                                g.DrawPie(PenGray, new Rectangle(y0 - radius, y0- radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
+                                            }
+                                            else
+                                            {
+                                                g.DrawPie(windpen[n], new Rectangle(x0- radius, y0 - radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
+                                            }
+                                        }
+                                    }
                                 }
                             }
 
