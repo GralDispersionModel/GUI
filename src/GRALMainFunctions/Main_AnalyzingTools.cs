@@ -675,7 +675,10 @@ namespace Gral
                                     WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                     DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename;
                                     DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
+                                    DataCollection.PathEmissionModulation = sel_sg.PathToEmissionModulation;
+                                    DataCollection.PathEvaluationResults = ProjectSetting.EvaluationPath;
+                                    DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
+                                    DataCollection.SubHourlyTimeSpan = (int)numericUpDown4.Value;
                                     DataCollection.BackgroundWorkerFunction = GralBackgroundworkers.BWMode.OdorConcentrationPercentile; // 23 = Compute Odour concentration percentiles
 
                                     //check if GRAL simulations were carried out in transient mode
