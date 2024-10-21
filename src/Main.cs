@@ -2905,7 +2905,8 @@ namespace Gral
             if (GRALSettings.WriteESRIResult ||
                 File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) ||
                 !GRALSettings.WaitForKeyStroke ||
-                GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50)
+                GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50 ||
+                GRALSettings.ReproducibleResults)
             {
                 button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
             }
