@@ -653,9 +653,9 @@ namespace GralShape
                         //offset
                         data = WriteIntBig(offset);
                         fshx.Write(data, 0, 4);
-                        offset = offset + 4 + 24 + 8 * (_bu.Pt.Count);
+                        offset = offset + 4 + 24 + 8 * (_bu.Pt.Count + 1);
                         //content length
-                        data = WriteIntBig(24 + 8 * (_bu.Pt.Count));
+                        data = WriteIntBig(24 + 8 * (_bu.Pt.Count + 1));
                         fs.Write(data, 0, 4);
                         fshx.Write(data, 0, 4);
                         //shape type
@@ -688,7 +688,7 @@ namespace GralShape
                         data = WriteIntLittle(1);
                         fs.Write(data, 0, 4);
                         //the total number of points of all polylines
-                        data = WriteIntLittle(_bu.Pt.Count);
+                        data = WriteIntLittle(_bu.Pt.Count + 1);
                         fs.Write(data, 0, 4);
                         //index of first point of each polyline
                         data = WriteIntLittle(0);
@@ -770,7 +770,13 @@ namespace GralShape
                                 data8 = WriteDoubleLittle(y1);
                                 fs.Write(data8, 0, 8);
                             }
-                            //write first point again to close the polygon
+                            //Write the first point again, so that the polygon is closed
+                            x1 = Convert.ToDouble(_bu.Pt[0].X);
+                            y1 = Convert.ToDouble(_bu.Pt[0].Y);
+                            data8 = WriteDoubleLittle(x1);
+                            fs.Write(data8, 0, 8);
+                            data8 = WriteDoubleLittle(y1);
+                            fs.Write(data8, 0, 8);
                         }
                         else
                         {
@@ -783,6 +789,13 @@ namespace GralShape
                                 data8 = WriteDoubleLittle(y1);
                                 fs.Write(data8, 0, 8);
                             }
+                            //Write the first point again, so that the polygon is closed
+                            x1 = Convert.ToDouble(_bu.Pt[_bu.Pt.Count - 1].X);
+                            y1 = Convert.ToDouble(_bu.Pt[_bu.Pt.Count - 1].Y);
+                            data8 = WriteDoubleLittle(x1);
+                            fs.Write(data8, 0, 8);
+                            data8 = WriteDoubleLittle(y1);
+                            fs.Write(data8, 0, 8);
                         }
                     }
 
@@ -808,9 +821,9 @@ namespace GralShape
                 {
                     //bounding box
                     xMin = domain.MainForm.GralDomRect.West;
-                    yMin = domain.MainForm.GralDomRect.North;
+                    yMin = domain.MainForm.GralDomRect.South;
                     xMax = domain.MainForm.GralDomRect.East;
-                    yMax = domain.MainForm.GralDomRect.South;
+                    yMax = domain.MainForm.GralDomRect.North;
 
                     data8 = WriteDoubleLittle(xMin);
                     fs.Write(data8, 0, 8);

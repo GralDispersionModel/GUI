@@ -261,7 +261,7 @@ namespace GralShape
                         if (polygon.NumParts > 1)
                         {
                             parts --;
-                            for (int i = polygon.NumPoints; i < (polygon.NumPoints + polygon.NumParts -1); i++)
+                            for (int i = polygon.NumPoints; i < (polygon.NumPoints + polygon.NumParts - 1); i++)
                             {
                                 polygon.Points[i].X = ruecksprung[parts].X;
                                 polygon.Points[i].Y = ruecksprung[parts].Y;
