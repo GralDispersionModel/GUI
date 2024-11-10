@@ -779,7 +779,7 @@ namespace GralDomain
                             int gaussEnde = Math.Min(ptCopy.Count - 1, ptCount + filter);
                             for (int pt = gaussStart; pt < gaussEnde; pt ++)
                             {
-                                double weight = weightingFactors[Math.Max(0, Math.Min(weightingFactors.Length - 1, (ptCount - pt) / 2 - weightingMid))]; // gaussianWeight((ptCount - pt) / 2, sigma);
+                                double weight = weightingFactors[Math.Max(0, Math.Min(weightingFactors.Length - 1, weightingMid + (ptCount - pt)))]; // gaussianWeight((ptCount - pt) / 2, sigma);
                                 weightedSumX += ptCopy[pt].X * weight;
                                 weightedSumY += ptCopy[pt].Y * weight;
                                 weightedSum += weight;
