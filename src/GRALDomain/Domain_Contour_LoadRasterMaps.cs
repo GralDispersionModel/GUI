@@ -737,13 +737,19 @@ namespace GralDomain
 
         private void gaussianFilter(List<PointF> pts, int filter, float sigma)
         {
-            if (pts.Count > 3 && filter > 0 && sigma > 0)
+            if (pts.Count > 5 && filter > 0 && sigma > 0)
             {
                 float xA = pts[1].X;
                 float yA = pts[1].Y;
                 int start = 1;
                 int ende = 0;
                 List<PointF> ptCopy = new List<PointF>();
+                double[] weightingFactors = new double[2 * filter + 4];
+                int weightingMid = filter + 2;
+                for (int i = 0; i < weightingFactors.Length; i++)
+                {
+                    weightingFactors[i] = gaussianWeight((i - weightingMid), sigma);
+                }
                 for (int i = 2; i < pts.Count - 2; i += 2)
                 {
                     if (Math.Abs(xA - pts[i].X) < 0.01 && Math.Abs(yA - pts[i].Y) < 0.01)
@@ -773,7 +779,7 @@ namespace GralDomain
                             int gaussEnde = Math.Min(ptCopy.Count - 1, ptCount + filter);
                             for (int pt = gaussStart; pt < gaussEnde; pt ++)
                             {
-                                double weight = gaussianWeight((ptCount - pt) / 2, sigma);
+                                double weight = weightingFactors[Math.Max(0, Math.Min(weightingFactors.Length - 1, (ptCount - pt) / 2 - weightingMid))]; // gaussianWeight((ptCount - pt) / 2, sigma);
                                 weightedSumX += ptCopy[pt].X * weight;
                                 weightedSumY += ptCopy[pt].Y * weight;
                                 weightedSum += weight;
