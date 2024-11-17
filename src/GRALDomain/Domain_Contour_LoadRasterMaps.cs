@@ -577,9 +577,9 @@ namespace GralDomain
                     
                     //MessageBox.Show(Convert.ToString(point_counter)+"/" +Convert.ToString(nx * ny));
                     List<List<PointF>> _contPts = _drobj.ContourPoints;
-                    if (point_counter < 400000) // less than 400.000 line segments
+                    if (point_counter < 500000) // less than 500.000 line segments
                     {
-                        message.listBox1.Items.Add("Sort polygons...");
+                        message.listBox1.Items.Add("Sort line segments...");
                         Application.DoEvents();
 
                         // conrec done! now sort and filter the lines and write to counterpoints()
@@ -609,7 +609,7 @@ namespace GralDomain
                                      while (i < unsorted[k].Count)
                                      {
                                          RectangleF _unsorted = unsorted[k][i];
-                                         if (Math.Abs(xA - _unsorted.X) < 0.01 && Math.Abs(yA - _unsorted.Y) < 0.01)
+                                         if (Math.Abs(xA - _unsorted.X) < 0.1 && Math.Abs(yA - _unsorted.Y) < 0.1)
                                          {
                                              _contPts[k].Add(new PointF(_unsorted.X, _unsorted.Y));
                                              xA = _unsorted.Width;
@@ -618,7 +618,7 @@ namespace GralDomain
                                              area += ((xA - _unsorted.X) * _unsorted.Y + (xA - _unsorted.X) * (yA - _unsorted.Y) / 2);
 
                                              unsorted[k].RemoveAt(i);
-                                             if (Math.Abs(xA - xf) < 0.01 && Math.Abs(yA - yf) < 0.01) // contour line closed
+                                             if (Math.Abs(xA - xf) < 0.1 && Math.Abs(yA - yf) < 0.1) // contour line closed
                                              {
                                                  i = unsorted[k].Count; // start new contour line
                                              }
@@ -627,7 +627,7 @@ namespace GralDomain
                                                  i = -1; // start searching
                                              }
                                          }
-                                         else if (Math.Abs(xA - _unsorted.Width) < 0.01 && Math.Abs(yA - _unsorted.Height) < 0.01)
+                                         else if (Math.Abs(xA - _unsorted.Width) < 0.1 && Math.Abs(yA - _unsorted.Height) < 0.1)
                                          {
                                              _contPts[k].Add(new PointF(_unsorted.Width, _unsorted.Height)); // reverse order in list
                                              xA = _unsorted.X;
@@ -636,7 +636,7 @@ namespace GralDomain
                                              area += ((xA - _unsorted.Width) * _unsorted.Height + (xA - _unsorted.Width) * (yA - _unsorted.Height) / 2);
 
                                              unsorted[k].RemoveAt(i);
-                                             if (Math.Abs(xA - xf) < 0.01 && Math.Abs(yA - yf) < 0.01) // contour line closed
+                                             if (Math.Abs(xA - xf) < 0.1 && Math.Abs(yA - yf) < 0.1) // contour line closed
                                              {
                                                  i = unsorted[k].Count; // start new contour line
                                              }
@@ -661,9 +661,14 @@ namespace GralDomain
                                  }
                              }
                         });
-
+                        message.listBox1.Items.Add("Filter polylines...");
+                        Application.DoEvents();
+                        Parallel.For(0, _drobj.ItemValues.Count, k =>
+                        {
+                            gaussianFilter(_contPts[k], (int)_drobj.ContourFilter, _drobj.ContourTension);
+                        });
                     }
-                    else // do not sort and filter > 400.000 line segments!
+                    else // do not sort and filter > 500.000 line segments!
                     {
                         //for (int k = 0; k < itemvalue[index].Count; k++)
                         Parallel.For(0, _drobj.ItemValues.Count, k =>
@@ -674,11 +679,7 @@ namespace GralDomain
                                 _contPts[k].Add(new PointF(unsorted[k][i].Width, unsorted[k][i].Height));
                             }	             	
                         });
-                    }
-                    Parallel.For(0, _drobj.ItemValues.Count, k =>
-                    {
-                        gaussianFilter(_contPts[k], (int)_drobj.ContourFilter, _drobj.ContourTension);
-                    });
+                    }       
                 }
                 
                 message.Close();
@@ -752,7 +753,7 @@ namespace GralDomain
                 }
                 for (int i = 2; i < pts.Count - 2; i += 2)
                 {
-                    if (Math.Abs(xA - pts[i].X) < 0.01 && Math.Abs(yA - pts[i].Y) < 0.01)
+                    if (Math.Abs(xA - pts[i].X) < 0.1 && Math.Abs(yA - pts[i].Y) < 0.1)
                     {
                         xA = pts[i + 1].X;
                         yA = pts[i + 1].Y;
@@ -804,6 +805,8 @@ namespace GralDomain
                         ende = 0;
                     }
                 }
+                ptCopy.Clear();
+                ptCopy.TrimExcess();
             }
         }
 
