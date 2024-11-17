@@ -211,7 +211,7 @@ namespace GralItemForms
                         numericUpDown7.Increment = 1;
                         numericUpDown7.Value = (decimal)(Math.Round(DrawObject.ContourFilter, 0));
                         label13.Text = "Filter sigma";
-                        numericUpDown8.Maximum = 3;
+                        numericUpDown8.Maximum = 10;
                     }
                     radioButton1.Visible = true;
                     radioButton2.Visible = true;
@@ -2554,7 +2554,7 @@ namespace GralItemForms
                     numericUpDown7.Value = 0;
                     numericUpDown7.DecimalPlaces = 0;
                     numericUpDown7.Increment = 1;
-                    numericUpDown8.Maximum = 3;
+                    numericUpDown8.Maximum = 10;
                 }
                 checkBox6.Enabled = false;
                 groupBox6.Enabled = false;
