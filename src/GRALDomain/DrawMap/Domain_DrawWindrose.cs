@@ -135,7 +135,7 @@ namespace GralDomain
                                         {
                                             if (drawFrame)
                                             {
-                                                g.DrawPie(PenGray, new Rectangle(y0 - radius, y0- radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
+                                                g.DrawPie(PenGray, new Rectangle(x0 - radius, y0- radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
                                             }
                                             else
                                             {
