@@ -386,6 +386,10 @@ namespace Gral
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
                         sel_sg.checkBox3.Visible = false;
+                        if (numericUpDown4.Value < 3600 && (3600 / numericUpDown4.Value) == (int) (3600 / numericUpDown4.Value))
+                        {
+                            sel_sg.EnableHourlyMeanValuesCheckbox = true;
+                        }
                         sel_sg.Prefix = FilePrefix;
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
@@ -442,6 +446,8 @@ namespace Gral
                                 DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
 
                                 DataCollection.BackgroundWorkerFunction = GralBackgroundworkers.BWMode.HighPercentiles; // 40 = compute high percentils
+                                DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
+                                DataCollection.SubHourlyTimeSpan = (int) numericUpDown4.Value;
 
                                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                                 {
@@ -479,6 +485,10 @@ namespace Gral
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
                         sel_sg.checkBox3.Visible = false;
+                        if (numericUpDown4.Value < 3600)
+                        {
+                            sel_sg.EnableHourlyMeanValuesCheckbox = true;
+                        }
                         sel_sg.Prefix = FilePrefix;
 
                         if (sel_sg.ShowDialog() == DialogResult.OK)
@@ -602,6 +612,9 @@ namespace Gral
                                         }
                                         catch { }
 
+                                        DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
+                                        DataCollection.SubHourlyTimeSpan = (int)numericUpDown4.Value;
+
                                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                                         {
                                             Text = DataCollection.Caption
@@ -662,7 +675,10 @@ namespace Gral
                                     WriteGralLogFile(2, DataCollection.UserText, DataCollection.Caption); // Write Gral-Logfile
                                     DataCollection.UserText += Environment.NewLine + "Result file name: Mean_Odour_" + sel_sg.Prefix + DataCollection.Pollutant + "_..._" + DataCollection.Slicename;
                                     DataCollection.UserText += Environment.NewLine + "The process may take some minutes";
-
+                                    DataCollection.PathEmissionModulation = sel_sg.PathToEmissionModulation;
+                                    DataCollection.PathEvaluationResults = ProjectSetting.EvaluationPath;
+                                    DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
+                                    DataCollection.SubHourlyTimeSpan = (int)numericUpDown4.Value;
                                     DataCollection.BackgroundWorkerFunction = GralBackgroundworkers.BWMode.OdorConcentrationPercentile; // 23 = Compute Odour concentration percentiles
 
                                     //check if GRAL simulations were carried out in transient mode

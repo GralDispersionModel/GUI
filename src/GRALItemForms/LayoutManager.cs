@@ -199,21 +199,29 @@ namespace GralItemForms
                         radioButton2.Checked = true;
                         checkBox6.Enabled = true;
                         groupBox6.Enabled = true;
+                        numericUpDown7.Value = (decimal)(Math.Round(DrawObject.ContourFilter, 1));
                     }
                     else
                     {
                         radioButton1.Checked = true;
                         checkBox6.Enabled = false;
                         groupBox6.Enabled = false;
+                        label12.Text = "Number of filter points";
+                        numericUpDown7.DecimalPlaces = 0;
+                        numericUpDown7.Increment = 1;
+                        numericUpDown7.Value = (decimal)(Math.Round(DrawObject.ContourFilter, 0));
+                        label13.Text = "Filter sigma";
+                        numericUpDown8.Maximum = 10;
                     }
                     radioButton1.Visible = true;
                     radioButton2.Visible = true;
                     checkBox6.Visible = true;
 
+                    numericUpDown8.Visible = true;
+                    numericUpDown7.Visible = true;
                     label12.Visible = true;
                     label13.Visible = true;
                     checkBox6.Checked = DrawObject.ContourDrawBorder;
-                    numericUpDown7.Value = (decimal)(Math.Round(DrawObject.ContourFilter, 1));
                     numericUpDown8.Value = (decimal)(Math.Round(DrawObject.ContourTension, 1));
                     numericUpDown10.Value = (decimal)(DrawObject.RemoveSpikes);
                     groupBox6.Visible = true;
@@ -2540,6 +2548,13 @@ namespace GralItemForms
                 {
                     DrawObject.DrawSimpleContour = false;
                     domain.ReDrawContours = true;
+                    label12.Text = "Number of filter points";
+                    label13.Text = "Filter sigma value";
+                    numericUpDown7.Enabled = true;
+                    numericUpDown7.Value = 0;
+                    numericUpDown7.DecimalPlaces = 0;
+                    numericUpDown7.Increment = 1;
+                    numericUpDown8.Maximum = 10;
                 }
                 checkBox6.Enabled = false;
                 groupBox6.Enabled = false;
@@ -2559,6 +2574,14 @@ namespace GralItemForms
                 {
                     DrawObject.DrawSimpleContour = true;
                     domain.ReDrawContours = true;
+                    label12.Text = "Filter lines [m]";
+                    label13.Text = "Spline Tension";
+                    numericUpDown7.Enabled = true;
+                    numericUpDown7.Value = 0.1M;
+                    numericUpDown7.DecimalPlaces = 1;
+                    numericUpDown7.Increment = 0.1M;
+                    numericUpDown8.Value = 0.1M;
+                    numericUpDown8.Maximum = 1;
                 }
                 checkBox6.Enabled = true;
                 groupBox6.Enabled = true;

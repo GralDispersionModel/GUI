@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Globalization;
 using GralIO;
+using System.Linq;
 
 namespace GralBackgroundworkers
 {
@@ -37,6 +38,7 @@ namespace GralBackgroundworkers
                 mydata.EmissionFactor = 1;
             }
 
+            bool CalculateMeanHourlyValues = mydata.SubHourlyToMeanHourlyConcentrations; 
             int maxsource = mydata.MaxSource;
             string[] text = new string[5];
             string newpath;
@@ -62,12 +64,12 @@ namespace GralBackgroundworkers
             string month;
             string day;
             string hour;
-            int numhour = 1;
-            int nnn = 0;
             int situationCount = 0;
             //int indexi = 0;
             //int indexj = 0;
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
+            float[][][] tempConc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[1])); // temporary concentration field to add up sub-hourly to hourly partial concentrations 
+            int[] subHourlyCount = new int[maxsource];
 
             //read meteopgt.all
             List<string> data_meteopgt = new List<string>();
@@ -152,19 +154,44 @@ namespace GralBackgroundworkers
                                                                                sg_numbers, ref emifac_day, ref emifac_mon, sg_names, mydata.PathEmissionModulation);
             }
 
-            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100-mydata.Percentile)/100));   
-            float[][][][] concpercentile = CreateArray<float[][][]>(mydata.CellsGralX + 1, () => CreateArray<float[][]>(mydata.CellsGralY + 1, () => CreateArray<float[]>(maxsource + 1, () => new float[arraylength])));
-//			float fac = 0;
-//			float fac_total = 0;
-//          read mettimeseries.dat
+            // read mettimeseries.dat
             List<string> data_mettimeseries = new List<string>();
             ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
             if (data_mettimeseries.Count == 0) // no data available
-            { 
-                BackgroundThreadMessageBox ("Error reading mettimeseries.dat");
+            {
+                BackgroundThreadMessageBox("Error reading mettimeseries.dat");
             }
 
+            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100 - mydata.Percentile) / 100));            
+            //reduce the array lenght, if sub hourly values should be analyzed as hourly values
+            if (CalculateMeanHourlyValues && mydata.SubHourlyTimeSpan > 1 && mydata.SubHourlyTimeSpan < 3600)
+            {
+                int numberOfHours = 0;
+                string hourOld = string.Empty;
+                // get number of full hours in mettimeseries.dat
+                foreach (string metline in data_mettimeseries) 
+                {
+                    text2 = metline.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (text2.Length > 2 && !string.Equals(text2[1], hourOld))
+                    {
+                        numberOfHours++;
+                        hourOld = text2[1];
+                    }
+                }
+
+                if (numberOfHours > 0)
+                {
+                    arraylength = Math.Max(2, Convert.ToInt32(numberOfHours * (100 - mydata.Percentile) / 100));
+                }
+            }
+            float[][][][] concpercentile = CreateArray<float[][][]>(mydata.CellsGralX + 1, () => CreateArray<float[][]>(mydata.CellsGralY + 1, () => CreateArray<float[]>(maxsource + 1, () => new float[arraylength])));
+
             int count_ws = -1;
+            string oldMonth = string.Empty;
+            string oldDay = string.Empty;
+            string oldhour = string.Empty;
+            bool subHourValueEvaluate = true; // evaluate all situations by default
+            int fullHourCount = 0;
             
             foreach(string mettimeseries in data_mettimeseries)
             {
@@ -234,106 +261,212 @@ namespace GralBackgroundworkers
                             weanumb = count_ws;
                         }
 
-                        //itm = 0;
-                        //foreach (string source_group_name in sg_names)
-                        Object thisLock = new Object();
-                        Parallel.For(0, sg_names.Length, itmp =>
+                        //new hour -> reset sub concentrations and look, if next hour is new -> the evaluate
+                        if (CalculateMeanHourlyValues)
                         {
-                            if (sg_names.Length > 0) // counts the number of elements in sg_names >0
+                            //new recent date & Time 
+                            if (!string.Equals(oldMonth, month) || !string.Equals(oldDay, day) || !string.Equals(oldhour, hour))
                             {
-                                con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
+                                oldMonth = month;
+                                oldDay = day;
+                                oldhour = hour;
+                                //delete conc-array when using sub-hourly partial concentrations and creating hourly mean values for the percentile calculation at each new hour
+                                Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
+                                {
+                                    for (int i = range.Item1; i < range.Item2; i++)
+                                    {
+                                        for (int j = 0; j <= mydata.CellsGralY; j++)
+                                        {
+#if NET8_0_OR_GREATER
+                                            Array.Clear(conc[i][j]);
+#else
+                                            Array.Clear(conc[i][j], 0, maxsource);
+#endif
+                                        }
+                                    }
+                                });
+                            }
+
+                            //next hour a new value?
+                            if ((count_ws + 1) < data_mettimeseries.Count)
+                            {
+                                string nextMeteo = data_mettimeseries[count_ws + 1];
+                                text2 = nextMeteo.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (text2.Length > 2 && !string.Equals(text2[1], hour))
+                                {
+                                    subHourValueEvaluate = true;
+                                }
+                                else
+                                {
+                                    subHourValueEvaluate = false;
+                                }
                             }
                             else
                             {
-                                con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
+                                subHourValueEvaluate = true; // last value
+                            }
+                        }
+
+                        int itm = 0;
+                        foreach (string source_group_name in sg_names)
+                        {
+                            if (sg_names.Length > 0) // counts the number of elements in sg_names >0
+                            {
+                                con_files[itm] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".con";
+                            }
+                            else
+                            {
+                                con_files[itm] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itm]).PadLeft(2, '0') + ".con";
                             }
 
-                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp])) == false &&
+                            if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itm])) == false &&
                                 File.Exists(Path.Combine(mydata.ProjectName, @"Computation", Convert.ToString(weanumb + 1).PadLeft(5, '0') + ".grz")) == false)
                             {
-                                lock(thisLock)
-                                {
-                                    exist = false;
-                                }
+                                exist = false;
                                 //break;
                             }
-                            //set variables to zero
-                            for (int i = 0; i <= mydata.CellsGralX; i++)
+
+                            //reset the concentration - not all cells are set when reading *.con files! 
+                            Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
                             {
-                                for (int j = 0; j <= mydata.CellsGralY; j++)
-                            {
-                                conc[i][j][itmp] = 0;
-                            }
-                            }
+                                for (int i = range.Item1; i < range.Item2; i++)
+                                {
+                                    float[][] tempConcInt = tempConc[i];
+                                    for (int j = 0; j <= mydata.CellsGralY; j++)
+                                    {
+                                        tempConcInt[j][0] = 0;
+                                    }
+                                }
+                            });
+
                             //read GRAL concentration files
-                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itmp]);
-                            if (!ReadConFiles(filename, mydata, itmp, ref conc))
+                            string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itm]);
+                            if (!ReadConFiles(filename, mydata, 0, ref tempConc))
                             {
                                 // Error reading one *.con file
                                 exist = false;
                             }
-                            //itm++;
-                        });
-                        thisLock = null;
 
-                        SetText("Day.Month: " + day + "." + month);
-                        
-                        if (exist == true) // con file does exist
-                        {
-                            
-                            //number of dispersion situation
-                            nnn += 1;
-                            situationCount++;
-                            //number of hours of specific day
-                            numhour += 1;
-                            int std = Convert.ToInt32(hour);
-                            int mon = Convert.ToInt32(month) - 1;		
-                            
-                            //for (int ii = 0; ii <= mydata.CellsGralX; ii++)
-                            Parallel.For(0, mydata.CellsGralX, ii =>
+                            //copy or sum up concentration from temp file to the concentraion file and consider emission modulation
+                            if (exist)
                             {
-                                for (int j = 0; j <= mydata.CellsGralY; j++)
+                                subHourlyCount[itm]++;
+                                int std = Convert.ToInt32(hour);
+                                int mon = Convert.ToInt32(month) - 1;
+
+                                if (CalculateMeanHourlyValues)
                                 {
-                                    float fac = 0;
-                                    float fac_total = 0;
-                                    float[] _ConcCell = conc[ii][j];
-                                    float[][] _ConcPerc = concpercentile[ii][j];
-
-                                    int itmi = 0;
-                                    foreach (string source_group_name in sg_names)
+                                    Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
                                     {
-                                        fac = mydata.EmissionFactor * _ConcCell[itmi] * (float)emifac_day[std - hourplus, itmi] * (float)emifac_mon[mon, itmi] * (float)emifac_timeseries[count_ws, itmi];
-                                        fac_total += fac;
-
-                                        //compute percentile concentrations for each source group and in total
-                                        float[] _conc = _ConcPerc[itmi];
-                                        //check whether actual concentration is higher than already stored concentrations
-                                        int pcomp = BinarySearch(_conc, fac);
-                                        if (pcomp >= 0)
+                                        for (int i = range.Item1; i < range.Item2; i++)
                                         {
-                                            Array.Copy(_conc, 1, _conc, 0, pcomp);
-                                            _conc[pcomp] = fac;
+                                            for (int j = 0; j <= mydata.CellsGralY; j++)
+                                            {
+                                                conc[i][j][itm] += tempConc[i][j][0] * (float)(emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm]);
+                                            }
                                         }
-                                        itmi++;
-                                    }
-
-                                    //compute total percentile over all source groups
-                                    { 
-                                        float[] _conc = _ConcPerc[maxsource];
-                                        //check whether actual concentration is higher than already stored concentrations
-                                        int pcomp = BinarySearch(_conc, fac_total);
-                                        if (pcomp >= 0)
+                                    });
+                                }
+                                else
+                                {
+                                    Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
+                                    {
+                                        for (int i = range.Item1; i < range.Item2; i++)
                                         {
-                                            Array.Copy(_conc, 1, _conc, 0, pcomp);
-                                            _conc[pcomp] = fac_total;
+                                            for (int j = 0; j <= mydata.CellsGralY; j++)
+                                            {
+                                                conc[i][j][itm] = tempConc[i][j][0] * (float)(emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm]);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                            itm++;
+                        }
+                        
+                        SetText("Day.Month: " + day + "." + month);
+
+                        //evaluate sub hourly concentration values and calculate hourly mean value
+                        if (CalculateMeanHourlyValues && subHourValueEvaluate && subHourlyCount.Sum() > 0)
+                        {
+                            Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Math.Max(4, Environment.ProcessorCount)))), range =>
+                            {
+                                for (int i = range.Item1; i < range.Item2; i++)
+                                {
+                                    for (int j = 0; j <= mydata.CellsGralY; j++)
+                                    {
+                                        float[] concTemp = conc[i][j];
+                                        for (int itmi = 0; itmi < concTemp.Length; itmi++)
+                                        {
+                                            if (subHourlyCount[itmi] > 0)
+                                            {
+                                                concTemp[itmi] /= subHourlyCount[itmi];
+                                            }
                                         }
                                     }
                                 }
                             });
+#if NET8_0_OR_GREATER
+                            Array.Clear(subHourlyCount);
+#else
+                            Array.Clear(subHourlyCount, 0, subHourlyCount.Length);
+#endif                        
+                        }
+
+                        if (exist == true) // con file available
+                        {
+                            situationCount++;
+                            if (subHourValueEvaluate) // evaluate this situation or not, if this is a sub-hourly value?
+                            {
+                                fullHourCount++;
+                                //for (int ii = 0; ii <= mydata.CellsGralX; ii++)
+                                Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(0, mydata.CellsGralX + 1, Math.Max(4, (int)(mydata.CellsGralX / Environment.ProcessorCount))), range =>
+                                {
+                                    for (int ii = range.Item1; ii < range.Item2; ii++)
+                                    {
+                                        for (int j = 0; j <= mydata.CellsGralY; j++)
+                                        {
+                                            float fac = 0;
+                                            float fac_total = 0;
+                                            float[] _ConcCell = conc[ii][j];
+                                            float[][] _ConcPerc = concpercentile[ii][j];
+
+                                            int itmi = 0;
+                                            foreach (string source_group_name in sg_names)
+                                            {
+                                                fac = mydata.EmissionFactor * _ConcCell[itmi];
+                                                fac_total += fac;
+
+                                                //compute percentile concentrations for each source group and in total
+                                                float[] _conc = _ConcPerc[itmi];
+                                                //check whether actual concentration is higher than already stored concentrations
+                                                int pcomp = BinarySearch(_conc, fac);
+                                                if (pcomp >= 0)
+                                                {
+                                                    Array.Copy(_conc, 1, _conc, 0, pcomp);
+                                                    _conc[pcomp] = fac;
+                                                }
+                                                itmi++;
+                                            }
+
+                                            //compute total percentile over all source groups
+                                            {
+                                                float[] _conc = _ConcPerc[maxsource];
+                                                //check whether actual concentration is higher than already stored concentrations
+                                                int pcomp = BinarySearch(_conc, fac_total);
+                                                if (pcomp >= 0)
+                                                {
+                                                    Array.Copy(_conc, 1, _conc, 0, pcomp);
+                                                    _conc[pcomp] = fac_total;
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-                
+                }               
             }
             
             string file;
@@ -470,6 +603,11 @@ namespace GralBackgroundworkers
                     errorText += "s";
                 }
                 errorText += " not available or not readable ";
+            }
+
+            if (subHourValueEvaluate)
+            {
+                AddInfoText(Environment.NewLine + "Number of evaluated hours: " + fullHourCount);
             }
             AddInfoText(Environment.NewLine + "Process finished - " + situationCount.ToString() + " *.con files processed " + errorText + DateTime.Now.ToShortTimeString());
             Computation_Completed = true; // set flag, that computation was successful

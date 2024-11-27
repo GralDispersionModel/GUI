@@ -803,10 +803,10 @@
             // 
             // label12
             // 
-            label12.Location = new System.Drawing.Point(12, 24);
+            label12.Location = new System.Drawing.Point(388, 491);
             label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label12.Name = "label12";
-            label12.Size = new System.Drawing.Size(117, 15);
+            label12.Size = new System.Drawing.Size(141, 17);
             label12.TabIndex = 39;
             label12.Text = "Filter Lines [m]";
             label12.Visible = false;
@@ -815,7 +815,7 @@
             // 
             numericUpDown7.DecimalPlaces = 1;
             numericUpDown7.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericUpDown7.Location = new System.Drawing.Point(10, 43);
+            numericUpDown7.Location = new System.Drawing.Point(386, 510);
             numericUpDown7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             numericUpDown7.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericUpDown7.Name = "numericUpDown7";
@@ -823,13 +823,14 @@
             numericUpDown7.TabIndex = 18;
             numericUpDown7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             numericUpDown7.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown7.Visible = false;
             // 
             // label13
             // 
-            label13.Location = new System.Drawing.Point(12, 74);
+            label13.Location = new System.Drawing.Point(389, 539);
             label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label13.Name = "label13";
-            label13.Size = new System.Drawing.Size(117, 15);
+            label13.Size = new System.Drawing.Size(140, 17);
             label13.TabIndex = 41;
             label13.Text = "Spline Tension";
             label13.Visible = false;
@@ -838,7 +839,7 @@
             // 
             numericUpDown8.DecimalPlaces = 1;
             numericUpDown8.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericUpDown8.Location = new System.Drawing.Point(9, 92);
+            numericUpDown8.Location = new System.Drawing.Point(386, 557);
             numericUpDown8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             numericUpDown8.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown8.Name = "numericUpDown8";
@@ -846,6 +847,7 @@
             numericUpDown8.TabIndex = 19;
             numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             numericUpDown8.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown8.Visible = false;
             // 
             // label14
             // 
@@ -895,7 +897,7 @@
             // 
             // label3
             // 
-            label3.Location = new System.Drawing.Point(13, 127);
+            label3.Location = new System.Drawing.Point(11, 21);
             label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(117, 15);
@@ -905,7 +907,7 @@
             // 
             // numericUpDown10
             // 
-            numericUpDown10.Location = new System.Drawing.Point(10, 145);
+            numericUpDown10.Location = new System.Drawing.Point(8, 39);
             numericUpDown10.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             numericUpDown10.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDown10.Name = "numericUpDown10";
@@ -916,16 +918,12 @@
             // groupBox6
             // 
             groupBox6.Controls.Add(label3);
-            groupBox6.Controls.Add(numericUpDown7);
             groupBox6.Controls.Add(numericUpDown10);
-            groupBox6.Controls.Add(label12);
-            groupBox6.Controls.Add(numericUpDown8);
-            groupBox6.Controls.Add(label13);
-            groupBox6.Location = new System.Drawing.Point(388, 491);
+            groupBox6.Location = new System.Drawing.Point(387, 600);
             groupBox6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             groupBox6.Name = "groupBox6";
             groupBox6.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            groupBox6.Size = new System.Drawing.Size(141, 181);
+            groupBox6.Size = new System.Drawing.Size(141, 72);
             groupBox6.TabIndex = 48;
             groupBox6.TabStop = false;
             groupBox6.Text = "Spline Lines";
@@ -979,9 +977,13 @@
             ClientSize = new System.Drawing.Size(539, 831);
             ControlBox = false;
             Controls.Add(groupBox7);
+            Controls.Add(numericUpDown7);
+            Controls.Add(numericUpDown8);
+            Controls.Add(label13);
             Controls.Add(groupBox6);
             Controls.Add(groupBox5);
             Controls.Add(checkBox7);
+            Controls.Add(label12);
             Controls.Add(checkBox6);
             Controls.Add(radioButton2);
             Controls.Add(radioButton1);
