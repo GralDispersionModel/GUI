@@ -55,15 +55,26 @@ namespace GralItemForms
         /// <param name="e"></param>
         public void UpdateListbox(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
-            foreach (DrawingObjects _dr in domain.ItemOptions)
+            listBox1.DrawItem -=
+                 new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem); //do not update the redraw when building new listbox entries
+            try
             {
-                string drawingObject = _dr.Name;
-                if (!string.IsNullOrEmpty(_dr.ContourFilename) && _dr.ContourFilename != "x" && !_dr.Name.StartsWith("WINDROSE"))
+                listBox1.Items.Clear();
+                foreach (DrawingObjects _dr in domain.ItemOptions)
                 {
-                    drawingObject += "     (" + Path.GetFileName(_dr.ContourFilename) +")";
+                    string drawingObject = _dr.Name;
+                    if (!string.IsNullOrEmpty(_dr.ContourFilename) && _dr.ContourFilename != "x" && !_dr.Name.StartsWith("WINDROSE"))
+                    {
+                        drawingObject += "     (" + Path.GetFileName(_dr.ContourFilename) + ")";
+                    }
+                    listBox1.Items.Add(drawingObject);
                 }
-                listBox1.Items.Add(drawingObject);
+            }
+            catch { }
+            finally
+            {
+                listBox1.DrawItem +=
+                 new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem); //start updates of the listbox redraw
             }
         }
 
