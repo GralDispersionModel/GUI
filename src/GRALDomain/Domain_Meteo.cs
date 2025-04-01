@@ -75,7 +75,7 @@ namespace GralDomain
             {
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
-                    Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
+                    Path_GRAMMwindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield),
                     ProjectName = Gral.Main.ProjectName,
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
@@ -99,7 +99,7 @@ namespace GralDomain
             {
                 GralBackgroundworkers.BackgroundworkerData DataCollection = new GralBackgroundworkers.BackgroundworkerData
                 {
-                    Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
+                    Path_GRAMMwindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield),
                     ProjectName = Gral.Main.ProjectName,
                     GrammWest = MainForm.GrammDomRect.West,
                     GrammSouth = MainForm.GrammDomRect.South,
@@ -167,7 +167,7 @@ namespace GralDomain
                             VericalIndex = Convert.ToDouble(trans),
                             MeteoFileName = GRAMMmeteofile,
                             ProjectName = Gral.Main.ProjectName,
-                            Path_GRAMMwindfield = MainForm.GRAMMwindfield,
+                            Path_GRAMMwindfield = Gral.Main.GRAMMwindfield,
                             XDomain = XDomain,
                             YDomain = YDomain,
                             GrammWest = MainForm.GrammDomRect.West,

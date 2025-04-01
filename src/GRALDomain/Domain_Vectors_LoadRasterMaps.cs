@@ -325,7 +325,7 @@ namespace GralDomain
                         }
                         else if (windfieldenable > 2 || windfieldenable == 1)
                         {
-                            disp.GrammPath = Path.GetDirectoryName(MainForm.GRAMMwindfield);
+                            disp.GrammPath = Path.GetDirectoryName(Gral.Main.GRAMMwindfield);
                         }
                         else
                         {
@@ -359,7 +359,7 @@ namespace GralDomain
                                 double[,,] ZSP = new double[1, 1, 1];
                                 GGeomFileIO ggeom = new GGeomFileIO
                                 {
-                                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                                    PathWindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield)
                                 };
 
                                 if (ggeom.ReadGGeomAsc(0) == true)
@@ -425,7 +425,7 @@ namespace GralDomain
                                         message.listBox1.Items.Add("Reading wind field...");
                                         message.Refresh();
 
-                                        string wndfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
+                                        string wndfilename = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
                                         Windfield_Reader Reader = new Windfield_Reader();
                                         if (await Task.Run(() => Reader.Windfield_read(wndfilename, NX, NY, NZ, ref UWI, ref VWI, ref WWI)) == false)
                                         {

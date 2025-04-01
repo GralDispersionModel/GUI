@@ -725,7 +725,7 @@ namespace GralDomain
                 //reading geometry file "ggeom.asc"
                 GGeomFileIO ggeom = new GGeomFileIO
                 {
-                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                    PathWindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield)
                 };
                 double[,] AH = new double[1, 1];
                 double[,,] ZSP = new double[1, 1, 1];
@@ -757,7 +757,7 @@ namespace GralDomain
                 float[,,] WWI = new float[NX + 1, NY + 1, NZ + 1];
                 try
                 {
-                    string wndfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
+                    string wndfilename = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
                     Windfield_Reader Reader = new Windfield_Reader();
 
 

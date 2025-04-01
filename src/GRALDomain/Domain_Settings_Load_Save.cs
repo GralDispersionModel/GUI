@@ -564,7 +564,7 @@ namespace GralDomain
             // Check indices
             try
             {
-                if ((ix1 - ix0) > 1 && (iy0 - iy1) > 1 && MainForm.GRAMMwindfield != null)
+                if ((ix1 - ix0) > 1 && (iy0 - iy1) > 1 && Gral.Main.GRAMMwindfield != null)
                 {
                     //reading geometry file "ggeom.asc"
                     double[,] AH = new double[1, 1];
@@ -577,7 +577,7 @@ namespace GralDomain
 
                     GGeomFileIO ggeom = new GGeomFileIO
                     {
-                        PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                        PathWindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield)
                     };
                     if (ggeom.ReadGGeomAsc(1) == true)
                     {

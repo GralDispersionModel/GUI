@@ -825,9 +825,9 @@ namespace GralDomain
 
 
                         string ggeom_path;
-                        if (MainForm.GRAMMwindfield != null)
+                        if (Gral.Main.GRAMMwindfield != null)
                         {
-                            ggeom_path = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), "ggeom.asc");
+                            ggeom_path = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), "ggeom.asc");
                         }
                         else
                         {

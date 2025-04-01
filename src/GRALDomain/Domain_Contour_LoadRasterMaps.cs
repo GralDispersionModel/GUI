@@ -67,7 +67,7 @@ namespace GralDomain
                             // read NX and NY from ggeom.asc
                             GGeomFileIO ggeom = new GGeomFileIO
                             {
-                                PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                                PathWindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield)
                             };
                             if (ggeom.ReadGGeomAsc(2) == true)
                             {

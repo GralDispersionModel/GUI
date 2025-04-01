@@ -471,9 +471,9 @@ namespace GralDomain
 
             // show section button if ggeom.asc does exist
             string ggeom_path;
-            if (MainForm.GRAMMwindfield != null)
+            if (Gral.Main.GRAMMwindfield != null)
             {
-                ggeom_path = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), @"ggeom.asc");
+                ggeom_path = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), @"ggeom.asc");
             }
             else
             {
@@ -784,7 +784,7 @@ namespace GralDomain
             {
                 GGeomFileIO ggeom = new GGeomFileIO
                 {
-                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                    PathWindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield)
                 };
                 // Mean cell height
                 if (CellHeightsType == 1 || CellHeightsType == 0)
@@ -2470,12 +2470,12 @@ namespace GralDomain
             SendCoors += _selmp.ReceiveClickedCoordinates;
             _selmp.CancelComputation += CancelMetTimeSeries;
             _selmp.StartComputation += MetTimeSeries;
-            if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            if (Gral.Main.GRAMMwindfield != null && File.Exists(Path.Combine(Gral.Main.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
                 _selmp.LocalStability = true;
             }
             _selmp.MeteoModel = 0;
-            if (MainForm.GRAMMwindfield != null)
+            if (Gral.Main.GRAMMwindfield != null)
             {
                 _selmp.MeteoModel = MeteoModelEmum.GRAMM;
             }
@@ -2507,7 +2507,7 @@ namespace GralDomain
             //    Xs = XDomain,
             //    Ys = YDomain
             //};
-            //if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            //if (Gral.Main.GRAMMwindfield != null && File.Exists(Path.Combine(Gral.Main.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             //{
             //    MeteoDialog.Local_Stability = true;
             //}
@@ -2568,9 +2568,9 @@ namespace GralDomain
                 disp.Location = GetScreenPositionForNewDialog(2);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
-                if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                if (Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                 {
-                    grammpath = MainForm.GRAMMwindfield;
+                    grammpath = Gral.Main.GRAMMwindfield;
                 }
                 disp.SCLPath = grammpath;
 
@@ -2580,9 +2580,9 @@ namespace GralDomain
                     ReadSclUstOblClasses reader = new ReadSclUstOblClasses();
 
                     string filename = Path.Combine(Gral.Main.ProjectName, @"Computation", Convert.ToString(sel).PadLeft(5, '0') + ".scl");
-                    if (File.Exists(filename) == false && MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                    if (File.Exists(filename) == false && Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                     {
-                        filename = Path.Combine(MainForm.GRAMMwindfield, Convert.ToString(sel).PadLeft(5, '0') + ".scl");
+                        filename = Path.Combine(Gral.Main.GRAMMwindfield, Convert.ToString(sel).PadLeft(5, '0') + ".scl");
                     }
 
                     reader.FileName = filename;
@@ -2676,7 +2676,7 @@ namespace GralDomain
         {
             MouseControl = MouseMode.SetPointMatch;
             Cursor = Cursors.Cross;
-            if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            if (Gral.Main.GRAMMwindfield != null && File.Exists(Path.Combine(Gral.Main.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
                 MMO.LocalStabilityUsed = true;
             }
@@ -2686,7 +2686,7 @@ namespace GralDomain
             }
 
             MMO.SettingsPath = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
-            MMO.GRAMMPath = MainForm.GRAMMwindfield;
+            MMO.GRAMMPath = Gral.Main.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
             MMO.StartPosition = FormStartPosition.Manual;
             MMO.Left = Math.Max(150, St_F.GetScreenAtMousePosition() + 150);
@@ -2720,7 +2720,7 @@ namespace GralDomain
                     VericalIndex = Convert.ToDouble(trans),
                     MeteoFileName = GRAMMmeteofile,
                     ProjectName = Gral.Main.ProjectName,
-                    Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
+                    Path_GRAMMwindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield),
                     XDomain = Convert.ToInt32(TestPt.X),
                     YDomain = Convert.ToInt32(TestPt.Y),
                     GrammWest = MainForm.GrammDomRect.West,
@@ -2761,9 +2761,9 @@ namespace GralDomain
                         {
                             disp.selectGRAMM_GRAL = 0; // default: no selection
                             string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
-                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            if (Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                             {
-                                grammpath = MainForm.GRAMMwindfield;
+                                grammpath = Gral.Main.GRAMMwindfield;
                             }
                             disp.GrammPath = grammpath;
                             disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
@@ -2772,9 +2772,9 @@ namespace GralDomain
                         {
                             disp.selectGRAMM_GRAL = 1; // default: select GRAMM
                             string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
-                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            if (Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                             {
-                                grammpath = MainForm.GRAMMwindfield;
+                                grammpath = Gral.Main.GRAMMwindfield;
                             }
                             disp.GrammPath = grammpath;
                             disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
