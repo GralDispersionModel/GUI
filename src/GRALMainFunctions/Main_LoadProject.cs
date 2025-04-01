@@ -1617,9 +1617,6 @@ namespace Gral
 
                 CheckConFiles();
                 
-                //check size of GRAL concentration files
-                GralFileSizes();
-                
                 Gramm_locked_buttonClick(null, null);   // change locked-Button
                 
                 if ((Control.ModifierKeys & Keys.Shift) != Keys.Shift) // if shift key pressed, don't close the message window

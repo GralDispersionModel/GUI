@@ -423,7 +423,7 @@ namespace Gral
             }
             catch
             { }
-            numericUpDown5.Value = trackbar;
+            numericUpDown5.Value = Math.Max(numericUpDown5.Minimum, Math.Min(numericUpDown5.Maximum, trackbar));
             GenerateInDat();
         }
     }

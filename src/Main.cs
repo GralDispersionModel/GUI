@@ -22,10 +22,10 @@ using System.Globalization;
 using System.IO;
 #if __MonoCS__
 #else
-using System.Runtime.Intrinsics.X86;
+using System.Timers;
+
 #endif
 using System.Windows.Forms;
-using static System.Windows.Forms.DataFormats;
 
 namespace Gral
 {
@@ -191,7 +191,7 @@ namespace Gral
         /// <summary>
         /// Path of GRAMM windfield
         /// </summary>
-        public string GRAMMwindfield;
+        public static string GRAMMwindfield;
         /// <summary>
         /// GRAL computation
         /// </summary>
@@ -314,7 +314,11 @@ namespace Gral
         private GralDomain.DomainformClosed DomainClosedHandle;
 
         public Int32 OnlineParmeters = 0;
-
+        /// <summary>
+        /// Timer for updating the file size labels
+        /// </summary>
+        private System.Timers.Timer UpdateFileSizes;
+        
         /// <summary>
         /// Start the main form of this application
         /// </summary>
@@ -488,6 +492,8 @@ namespace Gral
                     }
                 }
             }
+            UpdateFileSizes.Stop();
+            UpdateFileSizes.Dispose();
         }
 
         /// <summary>
@@ -2054,90 +2060,6 @@ namespace Gral
         }
 
         /// <summary>
-        /// Get *.con, *.gff and *.wnd file size and display it in the main form
-        /// </summary>
-        private void GralFileSizes()
-        {
-            if (string.IsNullOrEmpty(ProjectName))
-            {
-                return;
-            }
-
-            try // Kuntner: error if no project exists
-            {
-                string _file = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
-                DirectoryInfo _directory = new DirectoryInfo(_file);
-                FileInfo[] files_conc = _directory.GetFiles("*.con");
-                if (files_conc.Length == 0) // compressed files?
-                {
-                    files_conc = _directory.GetFiles("*.grz");
-                }
-
-                long file_size = 0;
-                for (int i = 0; i < files_conc.Length; i++)
-                {
-                    file_size += files_conc[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    label84.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
-                }
-                else
-                {
-                    label84.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
-                }
-                label57.Text = files_conc.Length.ToString() + " files";
-            }
-            catch { }
-
-            try
-            {
-                //size of GRAL flow field files
-                DirectoryInfo _directory = new DirectoryInfo(St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation")) + Path.DirectorySeparatorChar);
-                FileInfo[] files_gff = _directory.GetFiles("*.gff");
-                long file_size = 0;
-                for (int i = 0; i < files_gff.Length; i++)
-                {
-                    file_size += files_gff[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    label85.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
-                }
-                else
-                {
-                    label85.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
-                }
-                label72.Text = files_gff.Length.ToString() + " files";
-            }
-            catch
-            { }
-
-            try
-            {
-                // Wnd Files
-                string _file = Path.Combine(GRAMMwindfield);
-                DirectoryInfo _directory = new DirectoryInfo(_file);
-                FileInfo[] files_wnd = _directory.GetFiles("*.wnd");
-                long file_size = 0;
-                for (int i = 0; i < files_wnd.Length; i++)
-                {
-                    file_size += files_wnd[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
-                }
-                else
-                {
-                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
-                }
-                label96.Text = files_wnd.Length.ToString() + " files";
-            }
-            catch { }
-        }
-
-        /// <summary>
         /// When checked, GRAL stores intermediate flow field files in *gff files
         /// </summary>
         /// <param name="sender"></param>
@@ -2553,6 +2475,7 @@ namespace Gral
         void TabControl1Click(object sender, EventArgs e)
         {
             double n = 0;
+            UpdateFileSizes.Stop();
             if (tabControl1.SelectedIndex == 0) // Project
             {
                 textBox17.Hide();
@@ -2735,8 +2658,8 @@ namespace Gral
             if (tabControl1.SelectedIndex == 6)
             {
                 CheckConFiles(); // check, if project is locked
-                GralFileSizes(); // calculate file sizes
-
+                UpdateFileSize(null, null); // calculate file sizes
+                UpdateFileSizes.Start(); // update the files size periodically
                 // Check, if GRAMM Windfield exists
                 if (Directory.Exists(GRAMMwindfield))
                 {
@@ -3016,7 +2939,116 @@ namespace Gral
         /// </summary>
         void MainLoad(object sender, EventArgs e)
         {
+            // Create the update timer with a 30 seconds interval
+            UpdateFileSizes = new System.Timers.Timer(30000);
+            // Hook up the Elapsed event for the timer running in its own thread
+            UpdateFileSizes.Elapsed += UpdateFileSize;
+            UpdateFileSizes.AutoReset = true;
+            UpdateFileSizes.Enabled = true;
+            UpdateFileSizes.Stop();
+        }
+        /// <summary>
+        /// Update the file size and number of GRAL and GRAMM result files periodically
+        /// </summary>
+        private void UpdateFileSize(Object source, ElapsedEventArgs e)
+        {
+            string _projectName = ProjectName;
 
+            if (string.IsNullOrEmpty(_projectName))
+            {
+                return;
+            }
+            try // Kuntner: error if no project exists
+            {
+                string _file = Path.Combine(_projectName, "Computation" + Path.DirectorySeparatorChar);
+                DirectoryInfo _directory = new DirectoryInfo(_file);
+                FileInfo[] files_conc = _directory.GetFiles("*.con");
+                if (files_conc.Length == 0) // compressed files?
+                {
+                    files_conc = _directory.GetFiles("*.grz");
+                }
+
+                long file_size = 0;
+                for (int i = 0; i < files_conc.Length; i++)
+                {
+                    file_size += files_conc[i].Length;
+                }
+                if (file_size < 1000000000)
+                {
+                    SetLabel(label84, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
+                }
+                else
+                {
+                    SetLabel(label84, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
+                }
+                SetLabel(label57, files_conc.Length.ToString() + " files");
+            }
+            catch { }
+
+            try
+            {
+                //size of GRAL flow field files
+                DirectoryInfo _directory = new DirectoryInfo(St_F.GetGffFilePath(Path.Combine(_projectName, "Computation")) + Path.DirectorySeparatorChar);
+                FileInfo[] files_gff = _directory.GetFiles("*.gff");
+                long file_size = 0;
+                for (int i = 0; i < files_gff.Length; i++)
+                {
+                    file_size += files_gff[i].Length;
+                }
+                if (file_size < 1000000000)
+                {
+                    SetLabel(label85, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
+                }
+                else
+                {
+                    SetLabel(label85, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
+                }
+                SetLabel(label72, files_gff.Length.ToString() + " files");
+            }
+            catch
+            { }
+
+            try
+            {
+                // Wnd Files
+                string _GRAMMwindfield = GRAMMwindfield;
+                if (!string.IsNullOrEmpty(_GRAMMwindfield))
+                {
+                    string _file = Path.Combine(_GRAMMwindfield);
+                    DirectoryInfo _directory = new DirectoryInfo(_file);
+                    FileInfo[] files_wnd = _directory.GetFiles("*.wnd");
+                    long file_size = 0;
+                    for (int i = 0; i < files_wnd.Length; i++)
+                    {
+                        file_size += files_wnd[i].Length;
+                    }
+                    if (file_size < 1000000000)
+                    {
+                        SetLabel(label97, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
+                    }
+                    else
+                    {
+                        SetLabel(label97, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
+                    }
+                    SetLabel(label96, files_wnd.Length.ToString() + " files");
+                }
+            }
+            catch { }
+        }
+        /// <summary>
+        /// Invoke label text from other thread
+        /// </summary>
+        private void SetLabel(Label label, string text)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                { label.Text = text; }));
+            }
+            else
+            {
+                label.Text = text;
+            }
         }
 
         /// <summary>

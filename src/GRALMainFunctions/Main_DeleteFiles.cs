@@ -144,7 +144,7 @@ namespace Gral
                 }
 
                 DispNrChanged(null, null); // change displaynumber
-                GralFileSizes();
+                UpdateFileSize(null, null);
             }
             catch
             { }
@@ -365,7 +365,7 @@ namespace Gral
                 }
 
                 DispnrGrammChanged(null, null); // change displaynumber
-                GralFileSizes(); // actualize file size
+                UpdateFileSize(null, null); // actualize file size
             }
             catch
             { }
@@ -444,8 +444,7 @@ namespace Gral
                     }
                 }
             }
-
-            GralFileSizes();
+            UpdateFileSize(null, null);
             return dia;
         }
 
