@@ -20,6 +20,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+
 #if __MonoCS__
 #else
 using System.Timers;
@@ -2150,6 +2152,11 @@ namespace Gral
             if (GRAMM_Locked) // if locked Lock is closed!
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
+                    gramm_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(gramm_locked_button, "GRAMM project is locked");
                 toolTip1.SetToolTip(button105, "GRAMM project is locked");
                 GrammLockedLockElements(GRAMM_Locked);
@@ -2158,6 +2165,11 @@ namespace Gral
             else
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
+                    gramm_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(gramm_locked_button, "GRAMM project is unlocked");
                 toolTip1.SetToolTip(button105, "GRAMM project is unlocked");
                 GrammLockedLockElements(GRAMM_Locked);
@@ -2185,6 +2197,11 @@ namespace Gral
             if (Project_Locked) // if locked Lock is closed!
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
+                    project_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(project_locked_button, "GRAL project is locked - unlock: delete all *.con files");
                 toolTip1.SetToolTip(button101, "GRAL project is locked");
                 toolTip1.SetToolTip(button104, "GRAL project is locked");
@@ -2194,6 +2211,11 @@ namespace Gral
             else
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
+                    project_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(project_locked_button, "GRAL project is unlocked");
                 toolTip1.SetToolTip(button101, "GRAL project is unlocked");
                 toolTip1.SetToolTip(button104, "GRAL project is unlocked");
@@ -2946,7 +2968,40 @@ namespace Gral
             UpdateFileSizes.AutoReset = true;
             UpdateFileSizes.Enabled = true;
             UpdateFileSizes.Stop();
+            
+            //enable support for high contrast themes
+            if (System.Windows.SystemParameters.HighContrast)
+            {
+                LoopAllControls(this.Controls);
+            }
         }
+
+        /// <summary>
+        /// Loop over all buttons and set Button.Image to Button.Backgroundimage
+        /// </summary>
+        public static void LoopAllControls(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                if (control.HasChildren)
+                {
+                    //Recursively loop through the child controls
+                    LoopAllControls(control.Controls);
+                }
+                else
+                {
+                    if (control is Button btn)
+                    {
+                        if (btn.BackgroundImage != null)
+                        {
+                            Bitmap resized = new Bitmap(btn.BackgroundImage, new Size(btn.Width, btn.Height));
+                            btn.Image = resized;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Update the file size and number of GRAL and GRAMM result files periodically
         /// </summary>

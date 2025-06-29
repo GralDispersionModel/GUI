@@ -354,6 +354,11 @@ namespace GralDomain
                 //domain_lock_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
                 //toolTip1.SetToolTip(domain_lock_button, "GRAL project is unlocked");
             }
+            //enable support for high contrast themes
+            if (System.Windows.SystemParameters.HighContrast)
+            {
+                Gral.Main.LoopAllControls(this.Controls);
+            }
 
             Picturebox1_Paint();
         }
