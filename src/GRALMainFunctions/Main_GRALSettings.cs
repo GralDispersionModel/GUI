@@ -190,61 +190,49 @@ namespace Gral
                 {
                     numericUpDown10.ValueChanged -= new System.EventHandler(NumericUpDown10_ValueChanged); // remove event listener
                     decimal val = Convert.ToDecimal(numericUpDown10.Text); // get last value (still in the Text)
-
+                    //direction up
                     if ((numericUpDown10.Value > numericUpDown9.Value) || val < numericUpDown10.Value)
                     {
-                        int wertint = (int)(numericUpDown10.Value / numericUpDown9.Value);
-                        decimal wertdec = (numericUpDown10.Value / numericUpDown9.Value);
-                        if ((decimal)wertint != wertdec)
+                        decimal concGrid = numericUpDown9.Value;
+                        int divisorMerk = 1;
+                        for (int divisor = 1; divisor < 40; divisor++)
                         {
-                            //search for the next lower value until a natural divisor is found
-                            wertint = (int)(Math.Floor(numericUpDown10.Value / numericUpDown9.Value));
-                            if (wertint != 0)
+                            decimal temp = (decimal)(concGrid / divisor);
+                            if (temp <= val)
                             {
-                                numericUpDown10.Value = numericUpDown9.Value * (decimal)wertint;
+                                break;
                             }
-                            else
+                            if (Math.Round(temp, 1) == temp)
                             {
-                                numericUpDown10.Value = numericUpDown9.Value;
+                                divisorMerk = divisor;
                             }
                         }
+                        numericUpDown10.Value = numericUpDown9.Value / divisorMerk;
                     }
-                    else
+                    else // direction down
                     {
-                        int wertint = (int)(numericUpDown9.Value / numericUpDown10.Value);
-                        decimal wertdec = (numericUpDown9.Value / numericUpDown10.Value);
-                        if ((decimal)wertint != wertdec)
+                        decimal concGrid = numericUpDown9.Value;
+                        int divisorMerk = 1;
+                        for (int divisor = 1; divisor < 40; divisor++)
                         {
-                            //search for the next lower value until a natural divisor is found
-                            wertint = (int)(Math.Ceiling(numericUpDown9.Value / numericUpDown10.Value));
-                            numericUpDown10.Value = numericUpDown9.Value / (decimal)wertint;
+                            decimal temp = (decimal)(concGrid / divisor);
+                            if (Math.Round(temp, 1) == temp)
+                            {
+                                divisorMerk = divisor;
+                                if (temp < val)
+                                {
+                                    break;
+                                }
+                            }
                         }
-
+                        numericUpDown10.Value = numericUpDown9.Value / divisorMerk;
                     }
-
-                    /*
-                    if (val > numericUpDown10.Value) // increase button
-                    {
-                        if ((decimal)(val / 2)  > (decimal) 1.2 && Math.Round(val /2, 2) == (val /2))
-                            numericUpDown10.Value = (decimal) (val / 2);
-                        else
-                            numericUpDown10.Value = (decimal) (val);
-                    }
-                    else
-                    {
-                        if ((val * 2) <= numericUpDown10.Maximum)
-                            numericUpDown10.Value = val * 2;
-                        else
-                            numericUpDown10.Value = numericUpDown10.Maximum;
-                    }
-                     */
-
                     numericUpDown10.ValueChanged += new System.EventHandler(NumericUpDown10_ValueChanged); // add event listener
                 }
             }
             //catch
-            {
-            }
+            //{
+            //}
         }
 
         /// <summary>
