@@ -297,11 +297,12 @@ namespace Gral
         void Panel1Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;			
-            
-            Font titlefont = new Font("Arial", 19, FontStyle.Bold);
-            Font subtitlefont = new Font("Arial", 11, FontStyle.Bold);
-            Font subtitlefontUnderlined = new Font("Arial", 11, FontStyle.Bold | FontStyle.Underline);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            FontFamily fontFam = new FontFamily("Arial");
+            Font titlefont = new Font(fontFam, 19, FontStyle.Bold);
+            Font subtitlefont = new Font(fontFam, 11, FontStyle.Bold);
+            Font subtitlefontUnderlined = new Font(fontFam, 11, FontStyle.Bold | FontStyle.Underline);
 
             StringFormat format1 = new StringFormat
             {
@@ -320,7 +321,7 @@ namespace Gral
             {
                 version = version.Substring(0, 2) + "." + version.Substring(2);
             }
-            g.DrawString("GRAL GUI V" + version + " - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            g.DrawString("GRAL GUI V" + version + "Beta1 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
@@ -352,6 +353,7 @@ namespace Gral
             subtitlefontUnderlined.Dispose();
             Solid_black.Dispose();
             Solid_blue.Dispose();
+            fontFam.Dispose();
             g.Dispose();	
         }
     }
