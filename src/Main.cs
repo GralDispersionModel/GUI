@@ -314,7 +314,9 @@ namespace Gral
         public static readonly string My_p_m3 = "µg/m³";
         public static readonly string mg_p_m2 = "mg/m².d";
         private GralDomain.DomainformClosed DomainClosedHandle;
-
+        /// <summary>
+        /// Flag for the shown online parameters when running GRAMM
+        /// </summary>
         public Int32 OnlineParmeters = 0;
         /// <summary>
         /// Timer for updating the file size labels
@@ -2970,10 +2972,41 @@ namespace Gral
             UpdateFileSizes.Stop();
             
             //enable support for high contrast themes
-            if (System.Windows.SystemParameters.HighContrast)
+            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
             {
+                this.BackColor = System.Drawing.SystemColors.Control;
                 LoopAllControls(this.Controls);
             }
+            this.numericUpDown10.MouseWheel += new MouseEventHandler(numericUpDown_MouseWheel);
+            this.numericUpDown9.MouseWheel += new MouseEventHandler(numericUpDown_MouseWheel);
+        }
+
+        /// <summary>
+        /// Limit the Mousewheel to +- NumericUpDown.Increment
+        /// </summary>
+        private void numericUpDown_MouseWheel(object sender, MouseEventArgs e)
+        {
+            NumericUpDown numupd = sender as NumericUpDown;
+            if (numupd == null) return;
+            //direction
+            if (e.Delta > 0)
+            {
+                decimal temp = numupd.Value + numupd.Increment;
+                if (temp < numupd.Maximum)
+                {
+                    numupd.Value = temp;
+                }
+            }
+            else if (e.Delta < 0)
+            {
+                decimal temp = numupd.Value - numupd.Increment;
+                if (temp < numupd.Maximum)
+                    if (temp > numupd.Minimum)
+                    {
+                        numupd.Value = temp;
+                    }
+            }
+            ((HandledMouseEventArgs)e).Handled = true;
         }
 
         /// <summary>
@@ -2983,6 +3016,15 @@ namespace Gral
         {
             foreach (Control control in controls)
             {
+                if (control is Panel pnl)
+                {
+                    pnl.BackColor = System.Drawing.SystemColors.Control;
+                }
+                if (control is GroupBox grp)
+                {
+                    grp.BackColor = System.Drawing.SystemColors.Control;
+                    grp.ForeColor = System.Drawing.SystemColors.ControlText;
+                }
                 if (control.HasChildren)
                 {
                     //Recursively loop through the child controls
@@ -2990,13 +3032,40 @@ namespace Gral
                 }
                 else
                 {
+                    if (control is TextBox txt)
+                    {
+                        txt.ForeColor = System.Drawing.SystemColors.ControlText;
+                        txt.BackColor = System.Drawing.SystemColors.Control;
+                    }
+                    if (control is Label lbl)
+                    {
+                        lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+                        lbl.BackColor = System.Drawing.SystemColors.Control;
+                    }
+                    if (control is NumericUpDown numupd)
+                    {
+                        numupd.BackColor = System.Drawing.SystemColors.Control;
+                        numupd.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+                    if (control is RadioButton rbtn)
+                    {
+                        rbtn.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+                    if (control is ListView lv)
+                    {
+                        lv.BackColor = System.Drawing.SystemColors.Control;
+                        lv.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+
                     if (control is Button btn)
                     {
-                        if (btn.BackgroundImage != null)
+                        if (btn.BackgroundImage != null && System.Windows.SystemParameters.HighContrast)
                         {
                             Bitmap resized = new Bitmap(btn.BackgroundImage, new Size(btn.Width, btn.Height));
                             btn.Image = resized;
                         }
+                        btn.BackColor = System.Drawing.SystemColors.ButtonFace;
+                        btn.ForeColor = System.Drawing.SystemColors.ControlText;
                     }
                 }
             }

@@ -28,7 +28,7 @@ namespace GralMainForms
             // The InitializeComponent() call is required for Windows Forms designer support.
             //
             InitializeComponent();
-           
+
             // Folder of the GUI settings files
             string app_settings_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "GRAL_GUI_Settings");
             if (Directory.Exists(app_settings_path))
@@ -43,9 +43,9 @@ namespace GralMainForms
             }
 
             // Copy GRAL/GRAMM.exe
-            radioButton5.Checked =! Main.GUISettings.CopyCoresToProject; // No
+            radioButton5.Checked = !Main.GUISettings.CopyCoresToProject; // No
             radioButton6.Checked = Main.GUISettings.CopyCoresToProject; // Yes
-                        
+
             checkBox1.Checked = Main.GUISettings.CompatibilityToVersion1901;
             checkBox2.Checked = Main.GUISettings.VectorMapAutoScaling;
             checkBox3.Checked = Main.GUISettings.DeleteFilesToRecyclingBin;
@@ -54,6 +54,7 @@ namespace GralMainForms
 #else
             checkBox4.Enabled = false;
 #endif
+            checkBox5.Checked = Main.GUISettings.UseDefaultColors;
             if (Main.GUISettings.IgnoreMeteo00Values == Gral.WindData00Enum.All)
             {
                 radioButton10.Checked = true;
@@ -66,21 +67,21 @@ namespace GralMainForms
             {
                 radioButton12.Checked = true;
             }
-            
+
             radioButton3.CheckedChanged += new EventHandler(RadioButton3Click);
             radioButton4.CheckedChanged += new EventHandler(RadioButton4Click);
             radioButton5.CheckedChanged += new EventHandler(RadioButton5_6Click);
             radioButton6.CheckedChanged += new EventHandler(RadioButton5_6Click);
-            
-       }
-                
+
+        }
+
         // Change GUI Settings Path to application path
         void RadioButton3Click(object sender, EventArgs e)
         {
             if (radioButton3.Checked)
             {
                 string app_settings_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "GRAL_GUI_Settings");
-                
+
                 if (Directory.Exists(app_settings_path))
                 {
                     if (MessageBox.Show(this, "Change settings path to application path and delete recent settings?",
@@ -91,7 +92,7 @@ namespace GralMainForms
                         {
                             Directory.Delete(app_settings_path, true);
                         }
-                        catch{}
+                        catch { }
                     }
                     else
                     {
@@ -105,21 +106,21 @@ namespace GralMainForms
                 }
             }
         }
-        
+
         // Change GUI Settings Path to user folder
         void RadioButton4Click(object sender, EventArgs e)
         {
             if (radioButton4.Checked)
             {
                 string app_settings_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "GRAL_GUI_Settings");
-                
+
                 if (MessageBox.Show(this, "Create new settings path " + app_settings_path + " and copy all setting to this path?",
                                     "Change GUI Settings Path", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
                     try
                     {
                         Directory.CreateDirectory(app_settings_path);
-                        
+
                         string _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "DepositionSettings.txt");
                         string _dest = String.Empty;
                         if (File.Exists(_source))
@@ -127,42 +128,42 @@ namespace GralMainForms
                             _dest = Path.Combine(app_settings_path, "DepositionSettings.txt");
                             File.Copy(_source, _dest, true);
                         }
-                        
+
                         _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"DefaultPath");
                         if (File.Exists(_source))
                         {
                             _dest = Path.Combine(app_settings_path, @"DefaultPath");
                             File.Copy(_source, _dest, true);
                         }
-                        
+
                         _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"RecentFiles.txt");
                         if (File.Exists(_source))
                         {
                             _dest = Path.Combine(app_settings_path, @"RecentFiles.txt");
                             File.Copy(_source, _dest, true);
                         }
-                        
+
                         _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Emission_Mod_Diurnal.txt");
                         if (File.Exists(_source))
                         {
                             _dest = Path.Combine(app_settings_path, "Emission_Mod_Diurnal.txt");
                             File.Copy(_source, _dest, true);
                         }
-                        
+
                         _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Emission_Mod_Seasonal.txt");
                         if (File.Exists(_source))
                         {
                             _dest = Path.Combine(app_settings_path, "Emission_Mod_Seasonal.txt");
                             File.Copy(_source, _dest, true);
                         }
-                        
+
                         _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"GRAL.nemo");
                         if (File.Exists(_source))
                         {
                             _dest = Path.Combine(app_settings_path, @"GRAL.nemo");
                             File.Copy(_source, _dest, true);
                         }
-                        
+
                         _source = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"Landuse_Default.txt");
                         if (File.Exists(_source))
                         {
@@ -189,25 +190,25 @@ namespace GralMainForms
                 }
             }
         }
-        
+
         // Copy cores to output?
         void RadioButton5_6Click(object sender, EventArgs e)
         {
             Main.GUISettings.CopyCoresToProject = radioButton6.Checked;
         }
-        
-        
+
+
         void GUI_SettingsLoad(object sender, EventArgs e)
         {
         }
-        
+
         void Button1Click(object sender, EventArgs e)
         {
             Gral.Main.GUISettings.CompatibilityToVersion1901 = checkBox1.Checked;
             Main.GUISettings.WriteToFile();
             Close();
         }
-       
+
         void CheckBox1Click(object sender, EventArgs e)
         {
             Gral.Main.GUISettings.CompatibilityToVersion1901 = checkBox1.Checked;
@@ -247,6 +248,12 @@ namespace GralMainForms
         private void checkBox4_Click(object sender, EventArgs e)
         {
             Main.GUISettings.AutoCheckForUpdates = checkBox4.Checked;
+            RadioButton5_6Click(null, null); // write file
+        }
+
+        private void checkBox5_Click(object sender, EventArgs e)
+        {
+            Main.GUISettings.UseDefaultColors = checkBox5.Checked;
             RadioButton5_6Click(null, null); // write file
         }
     }

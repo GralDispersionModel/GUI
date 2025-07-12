@@ -65,7 +65,11 @@ namespace GralData
         /// Check for an update at each start of the GUI
         /// </summary>
         public bool AutoCheckForUpdates;
-        
+        /// <summary>
+        /// Use default colors
+        /// </summary>
+        public bool UseDefaultColors;
+
         private CultureInfo ic = CultureInfo.InvariantCulture;
 
         /// <summary>
@@ -91,6 +95,7 @@ namespace GralData
             IgnoreMeteo00Values = Gral.WindData00Enum.All;
             DeleteFilesToRecyclingBin = true;
             AutoCheckForUpdates = false;
+            UseDefaultColors = false;
         }
 
         /// <summary>
@@ -114,6 +119,7 @@ namespace GralData
                     write.WriteLine(DeleteFilesToRecyclingBin.ToString(ic));
                     write.WriteLine(DefaultPathForGRAMM);
                     write.WriteLine(AutoCheckForUpdates.ToString(ic));
+                    write.WriteLine(UseDefaultColors.ToString(ic));
                 }
             }
             catch
@@ -195,6 +201,14 @@ namespace GralData
                         try
                         {
                             AutoCheckForUpdates = Convert.ToBoolean(read.ReadLine(), ic);
+                        }
+                        catch { }
+                    }
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            UseDefaultColors = Convert.ToBoolean(read.ReadLine(), ic);
                         }
                         catch { }
                     }

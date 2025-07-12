@@ -355,7 +355,7 @@ namespace GralDomain
                 //toolTip1.SetToolTip(domain_lock_button, "GRAL project is unlocked");
             }
             //enable support for high contrast themes
-            if (System.Windows.SystemParameters.HighContrast)
+            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
             {
                 Gral.Main.LoopAllControls(this.Controls);
             }

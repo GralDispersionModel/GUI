@@ -395,7 +395,12 @@ namespace GralDomForms
             {
                 radioButton1.Checked = true;
             }
-
+            //enable support for high contrast themes
+            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
+            {
+                Gral.Main.LoopAllControls(this.Controls);
+                this.BackColor = System.Drawing.SystemColors.Window;
+            }
             Domain.CancellationTokenReset();
         }
 
