@@ -1506,8 +1506,8 @@ namespace Gral
                 if (_bdList.Count == 0 && _vdList.Count == 0 && _wdList.Count == 0)
                 {
                     ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.Invisible); // Building label invisible
-                    MessageBox.Show(this, "No buildings, walls or vegetation areas \n inside the GRAL domain area", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                MessageBox.Show(this, "There are no buildings, walls or vegetation areas \ninside the GRAL domain area,\nor no domain area has been defined", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             //			}
             //			catch(Exception ex)
