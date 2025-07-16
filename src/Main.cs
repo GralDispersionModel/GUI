@@ -2855,11 +2855,11 @@ namespace Gral
                 GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50 ||
                 GRALSettings.ReproducibleResults)
             {
-                button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
+                button57.BackgroundImage = Gral.Properties.Resources.WrenchYellowTransparant;
             }
             else
             {
-                button57.BackgroundImage = Gral.Properties.Resources.WrenchBlue;
+                button57.BackgroundImage = Gral.Properties.Resources.WrenchBlueTransparent;
             }
         }
 
@@ -2975,6 +2975,7 @@ namespace Gral
             if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
             {
                 this.BackColor = System.Drawing.SystemColors.Control;
+                this.button57.BackColor = Color.Gainsboro;
                 LoopAllControls(this.Controls);
             }
             this.numericUpDown10.MouseWheel += new MouseEventHandler(numericUpDown_MouseWheel);
@@ -3262,17 +3263,17 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox1.Image = Gral.Properties.Resources.RedDotTransparent;
                     Control_OK = false;
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox1.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Control_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.BlackHook;
+                    pictureBox1.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Control_OK = true;
                 }
             }
@@ -3290,17 +3291,17 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox2.Image = Gral.Properties.Resources.RedDotTransparent;
                     Meteo_OK = false;
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox2.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Meteo_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.BlackHook;
+                    pictureBox2.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Meteo_OK = true;
                 }
             }
@@ -3318,17 +3319,17 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox3.Image = Gral.Properties.Resources.RedDotTransparent;
                     Emission_OK = false;
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox3.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Emission_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.BlackHook;
+                    pictureBox3.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Emission_OK = true;
                 }
             }
@@ -3346,7 +3347,7 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox4.Image = Gral.Properties.Resources.RedDotTransparent;
                     Building_OK = false;
                     try // delete buildings.dat if file exists
                     {
@@ -3369,12 +3370,12 @@ namespace Gral
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox4.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Building_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.BlackHook;
+                    pictureBox4.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Building_OK = true;
                 }
             }

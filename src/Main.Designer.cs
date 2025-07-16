@@ -478,7 +478,7 @@
             // 
             // button55
             // 
-            button55.BackgroundImage = Properties.Resources.Info;
+            button55.BackgroundImage = Properties.Resources.Info1;
             button55.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button55.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
             button55.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -703,7 +703,7 @@
             // 
             // button57
             // 
-            button57.BackgroundImage = Properties.Resources.WrenchBlue;
+            button57.BackgroundImage = Properties.Resources.WrenchBlueTransparent;
             button57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button57.FlatAppearance.BorderSize = 0;
             button57.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3732,7 +3732,7 @@
             checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
             checkBoxAVX.Location = new System.Drawing.Point(14, 256);
             checkBoxAVX.Name = "checkBoxAVX";
-            checkBoxAVX.Size = new System.Drawing.Size(146, 19);
+            checkBoxAVX.Size = new System.Drawing.Size(145, 19);
             checkBoxAVX.TabIndex = 26;
             checkBoxAVX.Text = "Use AVX512 extensions";
             toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
@@ -4237,7 +4237,7 @@
             radioButton2.Font = new System.Drawing.Font("Segoe UI", 9F);
             radioButton2.Location = new System.Drawing.Point(7, 45);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new System.Drawing.Size(71, 19);
+            radioButton2.Size = new System.Drawing.Size(70, 19);
             radioButton2.TabIndex = 1;
             radioButton2.Text = "complex";
             radioButton2.UseVisualStyleBackColor = true;

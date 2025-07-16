@@ -3474,7 +3474,7 @@ namespace GralDomain
             // reset button behaviour
             button55.Click -= new System.EventHandler(this.CancelAnimatedGIF);
             this.button55.Click += new System.EventHandler(this.CreateAnmiatedGIF);
-            button55.BackgroundImage = Gral.Properties.Resources.RedDot;
+            button55.BackgroundImage = Gral.Properties.Resources.RedDotTransparent;
             toolTip1.SetToolTip(button55, "Create animated GIF from a series of *.con files");
             OnlineCounter = 0;
         }

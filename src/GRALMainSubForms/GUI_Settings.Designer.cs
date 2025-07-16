@@ -230,9 +230,9 @@
             checkBox5.Location = new System.Drawing.Point(38, 399);
             checkBox5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkBox5.Name = "checkBox5";
-            checkBox5.Size = new System.Drawing.Size(390, 28);
+            checkBox5.Size = new System.Drawing.Size(467, 28);
             checkBox5.TabIndex = 11;
-            checkBox5.Text = "Use default windows colors (need to restart the app)";
+            checkBox5.Text = "Use default windows colors (the app must be restarted)";
             checkBox5.UseVisualStyleBackColor = true;
             checkBox5.Click += checkBox5_Click;
             // 
