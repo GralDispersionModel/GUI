@@ -455,7 +455,7 @@ namespace Gral
             GRAMMProcess.Dispose();
             System.Threading.Thread.Sleep(1000);
             //check if GRAL simulation should be enabled
-            Invoke(new showtopo(Enable_GRAL));
+            Invoke(new showTopo(Enable_GRAL));
             MessageBox.Show("GRAMM simulation stopped or interrupted", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             #endif
         }

@@ -33,7 +33,7 @@ namespace GralData
 
         private string projectName = string.Empty;
         private CultureInfo ic = CultureInfo.InvariantCulture;
-
+       
         /// <summary>
         /// Initialize and set default values for the GUI settings
         /// </summary>

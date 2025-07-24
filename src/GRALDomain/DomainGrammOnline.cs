@@ -789,7 +789,7 @@ namespace GralDomain
                     ProfileConcentration.VertProfileVelocity.Close();
                 }
                 ProfileConcentration.VertProfileVelocity = new VerticalProfile_Static();
-                ProfileConcentration.VertProfileVelocity.Closing += new System.ComponentModel.CancelEventHandler(VertProfileVelocityClosing);
+                ProfileConcentration.VertProfileVelocity.FormClosing += new FormClosingEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100); 
@@ -836,7 +836,7 @@ namespace GralDomain
                     ProfileConcentration.VertProfileDirection.Close();
                 }
                 ProfileConcentration.VertProfileDirection = new VerticalProfile_Static();
-                ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
+                ProfileConcentration.VertProfileDirection.FormClosing += new FormClosingEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.FileName = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 520, St_F.GetTopScreenAtMousePosition() + 100);
@@ -1029,7 +1029,7 @@ namespace GralDomain
                     ProfileConcentration.VertProfileVelocity.Close();
                 }
                 ProfileConcentration.VertProfileVelocity = new VerticalProfile_Static();
-                ProfileConcentration.VertProfileVelocity.Closing += new System.ComponentModel.CancelEventHandler(VertProfileVelocityClosing);
+                ProfileConcentration.VertProfileVelocity.FormClosing += new FormClosingEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100);
@@ -1080,7 +1080,7 @@ namespace GralDomain
                     ProfileConcentration.VertProfileDirection.Close();
                 }
                 ProfileConcentration.VertProfileDirection = new VerticalProfile_Static();
-                ProfileConcentration.VertProfileDirection.Closing += new System.ComponentModel.CancelEventHandler(VertProfileDirectionClosing);
+                ProfileConcentration.VertProfileDirection.FormClosing += new FormClosingEventHandler(VertProfileDirectionClosing);
                 ProfileConcentration.VertProfileDirection.FileName = file2;
                 ProfileConcentration.VertProfileDirection.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
                 ProfileConcentration.VertProfileDirection.Location = new Point(St_F.GetScreenAtMousePosition() + 520, St_F.GetTopScreenAtMousePosition() + 100);

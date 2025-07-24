@@ -2854,7 +2854,7 @@ namespace GralDomain
                 }
 
                 MessageInfoForm = new MessageWindow();
-                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                 MessageInfoForm.Show();
 
                 //read each of the files and extract the concentration at the selected location
@@ -2865,7 +2865,7 @@ namespace GralDomain
                         if (MessageInfoForm == null)
                         {
                             MessageInfoForm = new MessageWindow();
-                            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                            MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                             MessageInfoForm.Show();
                         }
                         MessageInfoForm.listBox1.Items.Add("Reading file: " + files_conc[i].Name);
@@ -4288,10 +4288,7 @@ namespace GralDomain
                                     if (i % 40 == 0)
                                     {
                                         wait.Text = "Writing GRAL topography " + ((int)(100 - (float)i / (ny + 2) * 100F)).ToString() + "%";
-                                        if (cts != null)
-                                        {
-                                            cts.ThrowIfCancellationRequested();
-                                        }
+                                        cts.ThrowIfCancellationRequested();
                                     }
 
                                     //string line = String.Empty;

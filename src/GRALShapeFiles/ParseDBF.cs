@@ -104,7 +104,7 @@ namespace GralShape
 
             if (radioButton5.Checked)
             {
-                encoding = Encoding.UTF7;
+               // encoding = Encoding.UTF7;
             }
 
             if (radioButton6.Checked)

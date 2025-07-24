@@ -54,7 +54,7 @@ namespace GralDomain
                 Text = "GRAMM Match to Observation error",
                 ShowInTaskbar = false
             }; // Kuntner
-            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+            MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
 
             //delete existing meteo files first
             if (File.Exists(Path.Combine(Gral.Main.ProjectName, "Computation", "meteopgt.all")))
@@ -268,7 +268,7 @@ namespace GralDomain
                                         Text = "GRAMM Match to Observation error",
                                         ShowInTaskbar = false
                                     }; // Kuntner
-                                    MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                    MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                                 }
                                 MessageInfoForm.listBox1.Items.Add("Unable to read wind field nr. " + Convert.ToString(iiwet));
                                 MessageInfoForm.Show();
@@ -509,7 +509,7 @@ namespace GralDomain
                                         Text = "GRAMM Match to Observation error",
                                         ShowInTaskbar = false
                                     }; // Kuntner
-                                    MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                    MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                                 }
                                 MessageInfoForm.listBox1.Items.Add("Concatenate failed"); // Kuntner
                                 MessageInfoForm.Show();
@@ -641,7 +641,7 @@ namespace GralDomain
                                     Text = "GRAMM Match to Observation error",
                                     ShowInTaskbar = false
                                 }; // Kuntner
-                                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                             }
                             MessageInfoForm.listBox1.Items.Add("Flow field copying error/canceled"); // Kuntner
                             MessageInfoForm.Show();
@@ -913,7 +913,6 @@ namespace GralDomain
         {
             if (MessageInfoForm != null)
             {
-                MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
                 MessageInfoForm.Dispose();
                 MessageInfoForm = null;
             }

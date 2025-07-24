@@ -17,10 +17,10 @@ namespace SocialExplorer.IO.FastDBF
     { 
     }
 
-    public DbfDataTruncateException(SerializationInfo info, StreamingContext context)
-      : base(info, context)
-    {
-    }
+    //public DbfDataTruncateException(SerializationInfo info, StreamingContext context)
+    //  : base(info, context)
+    // {
+    //}
     
   }
 }

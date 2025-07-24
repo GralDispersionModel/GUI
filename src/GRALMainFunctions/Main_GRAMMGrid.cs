@@ -172,7 +172,7 @@ namespace Gral
 
                 if (gr.GenerateGgeomFile())
                 {
-                    Invoke(new showtopo(ShowTopo));
+                    Invoke(new showTopo(ShowTopo));
                 }
                 else
                 {
@@ -256,7 +256,7 @@ namespace Gral
             }
         }
 
-                private delegate void showtopo();
+        private delegate void showTopo();
         
         //generating GRAMM grid was successful
         private void ShowTopo()
@@ -474,7 +474,7 @@ namespace Gral
                                 lu.GenerateLanduseFile(Landusefile, checkBox36.Checked);
                                 if (lu.ok == true)
                                 {
-                                    Invoke(new showtopo(ShowLanduse));
+                                    Invoke(new showTopo(ShowLanduse));
                                 }
 
                                 Cursor = Cursors.Default;
@@ -482,7 +482,7 @@ namespace Gral
                             catch
                             {
                                 MessageBox.Show("Unable to generate landuse file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                Invoke(new showtopo(HideLanduse));
+                                Invoke(new showTopo(HideLanduse));
                             }
                             Cursor = Cursors.Arrow;
                         }
@@ -504,7 +504,7 @@ namespace Gral
                             lu.GenerateLanduseFile(Landusefile, checkBox36.Checked);
                             if (lu.ok == true)
                             {
-                                Invoke(new showtopo(ShowLanduse));
+                                Invoke(new showTopo(ShowLanduse));
                             }
 
                             Cursor = Cursors.Default;
@@ -512,7 +512,7 @@ namespace Gral
                         catch
                         {
                             MessageBox.Show("Unable to generate landuse file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            Invoke(new showtopo(HideLanduse));
+                            Invoke(new showTopo(HideLanduse));
                         }
                     }
 

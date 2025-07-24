@@ -363,7 +363,7 @@ namespace Gral
             GRALProcess.Dispose();
             System.Threading.Thread.Sleep(1000);
             //check if *.con files are existing for postprocessing routines
-            Invoke(new showtopo(CheckConFiles));
+            Invoke(new showTopo(CheckConFiles));
             WriteGralLogFile(3,"","");
             MessageBox.Show("GRAL simulation stopped or interrupted", "Info",MessageBoxButtons.OK,MessageBoxIcon.Information,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
             #endif
