@@ -328,7 +328,7 @@ namespace Gral3DFunctions
         	
         	try
         	{
-        		string a;
+        		//string a;
         		string[] dummy = new string[1000000];
         		bool valid = false;
         		
