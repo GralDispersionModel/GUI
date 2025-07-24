@@ -69,6 +69,10 @@ namespace GralData
         /// Use default colors
         /// </summary>
         public bool UseDefaultColors;
+        /// <summary>
+        /// Use the system wide dark mode
+        /// </summary>
+        public bool UseDarkMode;
 
         private CultureInfo ic = CultureInfo.InvariantCulture;
 
@@ -95,7 +99,18 @@ namespace GralData
             IgnoreMeteo00Values = Gral.WindData00Enum.All;
             DeleteFilesToRecyclingBin = true;
             AutoCheckForUpdates = false;
-            UseDefaultColors = false;
+            UseDefaultColors = true;
+
+#if NET9_0_OR_GREATER
+            if ((int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", -1) == 0)
+            {
+                UseDarkMode = true;
+            }
+            else
+            {
+                UseDarkMode = false;
+            }
+#endif
         }
 
         /// <summary>
@@ -211,6 +226,10 @@ namespace GralData
                             UseDefaultColors = Convert.ToBoolean(read.ReadLine(), ic);
                         }
                         catch { }
+                    }
+                    else
+                    {
+                        UseDefaultColors = true;
                     }
                 }
             }

@@ -494,11 +494,6 @@ namespace GralItemForms
                     DrawObject.LabelFont = new Font("ARIAL", 8);
                 }
 
-                if (DrawObject.LineColors[0] != null)
-                {
-
-                }
-
                 CheckBox3.Text = "Show raster";
                 toolTip1.SetToolTip(CheckBox3, "Draw a grid raster");
                 CheckBox3.Visible = true;
@@ -576,7 +571,6 @@ namespace GralItemForms
             comboBox3.SelectedIndex = 0;
 
             listBox1.Refresh();
-            listBox1.BackColor = Color.White;
             init = true;
 
             checkBox8.Checked = DrawObject.BasedOnMap;
@@ -850,7 +844,7 @@ namespace GralItemForms
 
                 int width = (int)(e.Bounds.Width / 5D * 2);
                 RectangleF textColumn = new RectangleF(e.Bounds.Left, e.Bounds.Top, width, e.Bounds.Height);
-                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Black, textColumn, drawFormat);
+                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.ControlText), textColumn, drawFormat);
 
                 int graphwidth = (e.Bounds.Width - width) / 2;
                 int x0 = width + graphwidth + 4;
@@ -862,7 +856,7 @@ namespace GralItemForms
                 y0 = e.Bounds.Top + e.Bounds.Height / 2;
                 e.Graphics.DrawLine(new Pen(DrawObject.LineColors[e.Index], 3), x0, y0, x0 + Math.Max(1, graphwidth - 8), y0);
 
-                Pen myPen = new Pen(Color.LightGray, 1);
+                Pen myPen = new Pen(SystemColors.ControlText, 1);
                 myPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                 e.Graphics.DrawLine(myPen, e.Bounds.Left + 4, e.Bounds.Bottom - 1, e.Bounds.Right - 8, e.Bounds.Bottom - 1);
             }

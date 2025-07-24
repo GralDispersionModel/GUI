@@ -12,6 +12,7 @@
 
 using GralData;
 using GralIO;
+using GralMainForms;
 using GralMessage;
 using GralStaticFunctions;
 using System;
@@ -2976,6 +2977,11 @@ namespace Gral
             {
                 this.BackColor = System.Drawing.SystemColors.Control;
                 this.button57.BackColor = Color.Gainsboro;
+                this.button55.BackColor = Color.Gainsboro;
+                this.button55.FlatStyle = FlatStyle.Standard;
+                this.button55.Left = 760;
+                this.button55.Size = new Size(32, 32);
+                LoopAllControls(this.Controls);
                 LoopAllControls(this.Controls);
             }
             this.numericUpDown10.MouseWheel += new MouseEventHandler(numericUpDown_MouseWheel);
@@ -3273,7 +3279,8 @@ namespace Gral
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.BlackHookTransparent;
+                    PictureboxSetHook(pictureBox1);
+                    //pictureBox1.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Control_OK = true;
                 }
             }
@@ -3301,7 +3308,8 @@ namespace Gral
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.BlackHookTransparent;
+                    PictureboxSetHook(pictureBox2);
+                    //pictureBox2.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Meteo_OK = true;
                 }
             }
@@ -3329,7 +3337,8 @@ namespace Gral
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.BlackHookTransparent;
+                    PictureboxSetHook(pictureBox3);
+                    //pictureBox3.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Emission_OK = true;
                 }
             }
@@ -3375,9 +3384,26 @@ namespace Gral
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.BlackHookTransparent;
+                    PictureboxSetHook(pictureBox4);
+                    //pictureBox4.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Building_OK = true;
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Set the hook color depending on dark mode or not
+        /// </summary>
+        /// <param name="sender"></param>
+        private void PictureboxSetHook(PictureBox pb)
+        {
+            if (Gral.Main.GUISettings.UseDarkMode && Gral.Main.GUISettings.UseDefaultColors)
+            {
+                pb.Image = Gral.Properties.Resources.WhiteHookTransparent;
+            }
+            else
+            {
+                pb.Image = Gral.Properties.Resources.BlackHookTransparent;
             }
         }
 
@@ -3871,7 +3897,7 @@ namespace Gral
                 NumberOfGRALayers = Convert.ToInt32(numericUpDown26.Value),
                 ProjectName = ProjectName
             };
-            online.Closing += new System.ComponentModel.CancelEventHandler(OnlineParametersFormClosing);
+            online.FormClosing += new FormClosingEventHandler(OnlineParametersFormClosing);
             online.Location = new Point(this.Left + 150, this.Top + 50);
             online.Show();
         }

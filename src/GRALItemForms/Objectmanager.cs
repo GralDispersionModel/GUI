@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using Gral;
 using GralItemData;
 using GralDomain;
+using System.Windows.Media;
 
 namespace GralItemForms
 {
@@ -41,8 +42,7 @@ namespace GralItemForms
         {
             InitializeComponent();
             domain = f;
-            listBox1.DrawItem +=
-                 new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
+            listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
             listBox1.ItemHeight = listBox1.Font.Height;
             decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
             ListboxUpdate = new ForceObjectManagerUpdate(UpdateListbox);
@@ -689,11 +689,11 @@ namespace GralItemForms
                 {
                     if (domain.ItemOptions[e.Index].Show == false)
                     {
-                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Gray, e.Bounds);
+                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.GrayText), e.Bounds);
                     }
                     else
                     {
-                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Black, e.Bounds);
+                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.ControlText), e.Bounds);
                     }
                 }
             }
@@ -920,7 +920,6 @@ namespace GralItemForms
 			catch
 			{}
 		}
-
         
     }
 }

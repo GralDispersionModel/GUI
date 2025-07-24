@@ -28,186 +28,194 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Windrose));
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.SuspendLayout();
+            button1 = new System.Windows.Forms.Button();
+            button2 = new System.Windows.Forms.Button();
+            label10 = new System.Windows.Forms.Label();
+            button4 = new System.Windows.Forms.Button();
+            label9 = new System.Windows.Forms.Label();
+            button5 = new System.Windows.Forms.Button();
+            button3 = new System.Windows.Forms.Button();
+            toolTip1 = new System.Windows.Forms.ToolTip(components);
+            button6 = new System.Windows.Forms.Button();
+            button7 = new System.Windows.Forms.Button();
+            button8 = new System.Windows.Forms.Button();
+            pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(784, 110);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(36, 33);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "+";
-            this.toolTip1.SetToolTip(this.button1, "Enlarge the Rose Key: Shift and +");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button1.BackColor = System.Drawing.SystemColors.Control;
+            button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            button1.Location = new System.Drawing.Point(784, 110);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(36, 33);
+            button1.TabIndex = 10;
+            button1.Text = "+";
+            toolTip1.SetToolTip(button1, "Enlarge the Rose Key: Shift and +");
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(784, 170);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(36, 33);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "-";
-            this.toolTip1.SetToolTip(this.button2, "Shrink the Rose Key: Shift and -");
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button2.BackColor = System.Drawing.SystemColors.Control;
+            button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            button2.Location = new System.Drawing.Point(784, 170);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(36, 33);
+            button2.TabIndex = 11;
+            button2.Text = "-";
+            toolTip1.SetToolTip(button2, "Shrink the Rose Key: Shift and -");
+            button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // label10
             // 
-            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(784, 314);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(34, 13);
-            this.label10.TabIndex = 20;
-            this.label10.Text = "Scale";
+            label10.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            label10.AutoSize = true;
+            label10.Location = new System.Drawing.Point(784, 314);
+            label10.Name = "label10";
+            label10.Size = new System.Drawing.Size(34, 15);
+            label10.TabIndex = 20;
+            label10.Text = "Scale";
             // 
             // button4
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(784, 334);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(36, 33);
-            this.button4.TabIndex = 19;
-            this.button4.Text = "-";
-            this.toolTip1.SetToolTip(this.button4, "Decrease the Scale Key: -");
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            button4.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button4.BackColor = System.Drawing.SystemColors.Control;
+            button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            button4.Location = new System.Drawing.Point(784, 334);
+            button4.Name = "button4";
+            button4.Size = new System.Drawing.Size(36, 33);
+            button4.TabIndex = 19;
+            button4.Text = "-";
+            toolTip1.SetToolTip(button4, "Decrease the Scale Key: -");
+            button4.UseVisualStyleBackColor = false;
+            button4.Click += button4_Click;
             // 
             // label9
             // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(786, 150);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(34, 13);
-            this.label9.TabIndex = 17;
-            this.label9.Text = "Zoom";
+            label9.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            label9.AutoSize = true;
+            label9.Location = new System.Drawing.Point(786, 150);
+            label9.Name = "label9";
+            label9.Size = new System.Drawing.Size(39, 15);
+            label9.TabIndex = 17;
+            label9.Text = "Zoom";
             // 
             // button5
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(784, 274);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(36, 33);
-            this.button5.TabIndex = 18;
-            this.button5.Text = "+";
-            this.toolTip1.SetToolTip(this.button5, "Increase the Scale Key: +");
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            button5.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button5.BackColor = System.Drawing.SystemColors.Control;
+            button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            button5.Location = new System.Drawing.Point(784, 274);
+            button5.Name = "button5";
+            button5.Size = new System.Drawing.Size(36, 33);
+            button5.TabIndex = 18;
+            button5.Text = "+";
+            toolTip1.SetToolTip(button5, "Increase the Scale Key: +");
+            button5.UseVisualStyleBackColor = false;
+            button5.Click += button5_Click;
             // 
             // button3
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button3.BackgroundImage")));
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button3.Location = new System.Drawing.Point(784, 4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(36, 37);
-            this.button3.TabIndex = 13;
-            this.toolTip1.SetToolTip(this.button3, "Copy to Clipboard");
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            button3.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button3.BackColor = System.Drawing.SystemColors.Control;
+            button3.BackgroundImage = (System.Drawing.Image)resources.GetObject("button3.BackgroundImage");
+            button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            button3.Location = new System.Drawing.Point(784, 4);
+            button3.Name = "button3";
+            button3.Size = new System.Drawing.Size(36, 37);
+            button3.TabIndex = 13;
+            toolTip1.SetToolTip(button3, "Copy to Clipboard");
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
             // 
             // button6
             // 
-            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button6.BackgroundImage")));
-            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button6.Location = new System.Drawing.Point(784, 47);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(36, 37);
-            this.button6.TabIndex = 23;
-            this.toolTip1.SetToolTip(this.button6, "Set the Font");
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.Button6Click);
+            button6.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button6.BackColor = System.Drawing.SystemColors.Control;
+            button6.BackgroundImage = (System.Drawing.Image)resources.GetObject("button6.BackgroundImage");
+            button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            button6.Location = new System.Drawing.Point(784, 47);
+            button6.Name = "button6";
+            button6.Size = new System.Drawing.Size(36, 37);
+            button6.TabIndex = 23;
+            toolTip1.SetToolTip(button6, "Set the Font");
+            button6.UseVisualStyleBackColor = false;
+            button6.Click += Button6Click;
             // 
             // button7
             // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button7.BackgroundImage = global::Gral.Properties.Resources.Pin;
-            this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button7.Location = new System.Drawing.Point(784, 384);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(36, 37);
-            this.button7.TabIndex = 24;
-            this.toolTip1.SetToolTip(this.button7, "Pin the scale");
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.Button7Click);
+            button7.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button7.BackColor = System.Drawing.SystemColors.Control;
+            button7.BackgroundImage = Gral.Properties.Resources.Pin;
+            button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            button7.Location = new System.Drawing.Point(784, 384);
+            button7.Name = "button7";
+            button7.Size = new System.Drawing.Size(36, 37);
+            button7.TabIndex = 24;
+            toolTip1.SetToolTip(button7, "Pin the scale");
+            button7.UseVisualStyleBackColor = false;
+            button7.Click += Button7Click;
             // 
             // button8
             // 
-            this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
-            this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button8.Location = new System.Drawing.Point(784, 441);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(36, 37);
-            this.button8.TabIndex = 25;
-            this.toolTip1.SetToolTip(this.button8, "Show the data table");
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            button8.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            button8.BackColor = System.Drawing.SystemColors.Control;
+            button8.BackgroundImage = (System.Drawing.Image)resources.GetObject("button8.BackgroundImage");
+            button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            button8.Location = new System.Drawing.Point(784, 441);
+            button8.Name = "button8";
+            button8.Size = new System.Drawing.Size(36, 37);
+            button8.TabIndex = 25;
+            toolTip1.SetToolTip(button8, "Show the data table");
+            button8.UseVisualStyleBackColor = false;
+            button8.Click += button8_Click;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(780, 608);
-            this.pictureBox1.TabIndex = 22;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.PictureBox1Paint);
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            pictureBox1.Location = new System.Drawing.Point(1, 1);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(780, 608);
+            pictureBox1.TabIndex = 22;
+            pictureBox1.TabStop = false;
+            pictureBox1.Paint += PictureBox1Paint;
+            pictureBox1.MouseDown += pictureBox1_MouseDown;
+            pictureBox1.MouseMove += pictureBox1_MouseMove;
+            pictureBox1.MouseUp += pictureBox1_MouseUp;
             // 
             // Windrose
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(832, 611);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.button1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Windrose";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Windrose";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WindroseFormClosed);
-            this.Load += new System.EventHandler(this.Form3_Load);
-            this.ResizeEnd += new System.EventHandler(this.WindroseResizeEnd);
-            this.Resize += new System.EventHandler(this.WindroseResize);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            BackColor = System.Drawing.SystemColors.Control;
+            ClientSize = new System.Drawing.Size(832, 611);
+            Controls.Add(button8);
+            Controls.Add(button7);
+            Controls.Add(button6);
+            Controls.Add(pictureBox1);
+            Controls.Add(label10);
+            Controls.Add(button3);
+            Controls.Add(button4);
+            Controls.Add(button2);
+            Controls.Add(button5);
+            Controls.Add(label9);
+            Controls.Add(button1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "Windrose";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Windrose";
+            FormClosed += WindroseFormClosed;
+            Load += Form3_Load;
+            ResizeEnd += WindroseResizeEnd;
+            Resize += WindroseResize;
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
         private System.Windows.Forms.Button button7;

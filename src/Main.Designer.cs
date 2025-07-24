@@ -492,7 +492,7 @@
             // 
             // button52
             // 
-            button52.BackColor = System.Drawing.Color.Gainsboro;
+            button52.BackColor = System.Drawing.SystemColors.Control;
             button52.BackgroundImage = (System.Drawing.Image)resources.GetObject("button52.BackgroundImage");
             button52.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button52.Location = new System.Drawing.Point(760, 108);
@@ -506,7 +506,7 @@
             // 
             // button50
             // 
-            button50.BackColor = System.Drawing.Color.Gainsboro;
+            button50.BackColor = System.Drawing.SystemColors.Control;
             button50.BackgroundImage = (System.Drawing.Image)resources.GetObject("button50.BackgroundImage");
             button50.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button50.Location = new System.Drawing.Point(760, 23);
@@ -531,7 +531,7 @@
             // 
             // button46
             // 
-            button46.BackColor = System.Drawing.Color.Gainsboro;
+            button46.BackColor = System.Drawing.SystemColors.Control;
             button46.BackgroundImage = (System.Drawing.Image)resources.GetObject("button46.BackgroundImage");
             button46.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button46.Location = new System.Drawing.Point(14, 74);
@@ -557,8 +557,8 @@
             // 
             // button44
             // 
-            button44.BackColor = System.Drawing.Color.Gainsboro;
-            button44.ForeColor = System.Drawing.Color.Black;
+            button44.BackColor = System.Drawing.SystemColors.Control;
+            button44.ForeColor = System.Drawing.SystemColors.ControlText;
             button44.Location = new System.Drawing.Point(112, 18);
             button44.Name = "button44";
             button44.Size = new System.Drawing.Size(116, 28);
@@ -571,8 +571,8 @@
             // button38
             // 
             button38.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            button38.BackColor = System.Drawing.Color.Gainsboro;
-            button38.ForeColor = System.Drawing.Color.Black;
+            button38.BackColor = System.Drawing.SystemColors.Control;
+            button38.ForeColor = System.Drawing.SystemColors.ControlText;
             button38.Location = new System.Drawing.Point(263, 18);
             button38.Margin = new System.Windows.Forms.Padding(2);
             button38.Name = "button38";
@@ -595,7 +595,7 @@
             // 
             // button8
             // 
-            button8.BackColor = System.Drawing.Color.Gainsboro;
+            button8.BackColor = System.Drawing.SystemColors.Control;
             button8.BackgroundImage = (System.Drawing.Image)resources.GetObject("button8.BackgroundImage");
             button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             button8.Location = new System.Drawing.Point(14, 23);
@@ -1081,7 +1081,7 @@
             groupBox5.Controls.Add(label4);
             groupBox5.Controls.Add(numericUpDown3);
             groupBox5.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox5.ForeColor = System.Drawing.Color.Black;
+            groupBox5.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox5.Location = new System.Drawing.Point(266, 15);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new System.Drawing.Size(250, 517);
@@ -1213,7 +1213,7 @@
             groupBox8.Controls.Add(label26);
             groupBox8.Controls.Add(numericUpDown10);
             groupBox8.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox8.ForeColor = System.Drawing.Color.Black;
+            groupBox8.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox8.Location = new System.Drawing.Point(522, 15);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new System.Drawing.Size(282, 517);
@@ -1387,7 +1387,7 @@
             // 
             // button11
             // 
-            button11.BackColor = System.Drawing.Color.Gainsboro;
+            button11.BackColor = System.Drawing.SystemColors.Control;
             button11.BackgroundImage = (System.Drawing.Image)resources.GetObject("button11.BackgroundImage");
             button11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button11.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -1706,10 +1706,10 @@
             // 
             // button15
             // 
-            button15.BackColor = System.Drawing.Color.Gainsboro;
+            button15.BackColor = System.Drawing.SystemColors.Control;
             button15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             button15.Font = new System.Drawing.Font("Segoe UI", 10F);
-            button15.ForeColor = System.Drawing.Color.Black;
+            button15.ForeColor = System.Drawing.SystemColors.ControlText;
             button15.Location = new System.Drawing.Point(27, 127);
             button15.Name = "button15";
             button15.Size = new System.Drawing.Size(124, 88);
@@ -1732,7 +1732,7 @@
             groupBox9.Controls.Add(textBox14);
             groupBox9.Controls.Add(textBox15);
             groupBox9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            groupBox9.ForeColor = System.Drawing.Color.Black;
+            groupBox9.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox9.Location = new System.Drawing.Point(508, 295);
             groupBox9.Name = "groupBox9";
             groupBox9.Size = new System.Drawing.Size(275, 225);
@@ -1825,9 +1825,9 @@
             // 
             // button14
             // 
-            button14.BackColor = System.Drawing.Color.Gainsboro;
+            button14.BackColor = System.Drawing.SystemColors.Control;
             button14.Font = new System.Drawing.Font("Segoe UI", 10F);
-            button14.ForeColor = System.Drawing.Color.Black;
+            button14.ForeColor = System.Drawing.SystemColors.ControlText;
             button14.Location = new System.Drawing.Point(26, 19);
             button14.Name = "button14";
             button14.Size = new System.Drawing.Size(125, 88);
@@ -1852,7 +1852,7 @@
             groupBox7.Controls.Add(textBox5);
             groupBox7.Controls.Add(textBox2);
             groupBox7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            groupBox7.ForeColor = System.Drawing.Color.Black;
+            groupBox7.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox7.Location = new System.Drawing.Point(505, 8);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new System.Drawing.Size(275, 244);
@@ -1993,7 +1993,7 @@
             // 
             // button60
             // 
-            button60.BackColor = System.Drawing.Color.Gainsboro;
+            button60.BackColor = System.Drawing.SystemColors.Control;
             button60.BackgroundImage = (System.Drawing.Image)resources.GetObject("button60.BackgroundImage");
             button60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button60.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -2020,7 +2020,7 @@
             // 
             // button54
             // 
-            button54.ForeColor = System.Drawing.Color.Black;
+            button54.ForeColor = System.Drawing.SystemColors.ControlText;
             button54.Location = new System.Drawing.Point(0, 17);
             button54.Name = "button54";
             button54.Size = new System.Drawing.Size(66, 23);
@@ -2140,7 +2140,7 @@
             // button21
             // 
             button21.Font = new System.Drawing.Font("Segoe UI Light", 8.25F);
-            button21.ForeColor = System.Drawing.Color.Black;
+            button21.ForeColor = System.Drawing.SystemColors.ControlText;
             button21.Location = new System.Drawing.Point(647, 90);
             button21.Name = "button21";
             button21.Size = new System.Drawing.Size(64, 51);
@@ -2265,7 +2265,7 @@
             // button51
             // 
             button51.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button51.ForeColor = System.Drawing.Color.Black;
+            button51.ForeColor = System.Drawing.SystemColors.ControlText;
             button51.Location = new System.Drawing.Point(168, 16);
             button51.Name = "button51";
             button51.Size = new System.Drawing.Size(75, 25);
@@ -2279,7 +2279,7 @@
             // button49
             // 
             button49.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button49.ForeColor = System.Drawing.Color.Black;
+            button49.ForeColor = System.Drawing.SystemColors.ControlText;
             button49.Location = new System.Drawing.Point(87, 16);
             button49.Name = "button49";
             button49.Size = new System.Drawing.Size(75, 25);
@@ -2293,7 +2293,7 @@
             // button48
             // 
             button48.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button48.ForeColor = System.Drawing.Color.Black;
+            button48.ForeColor = System.Drawing.SystemColors.ControlText;
             button48.Location = new System.Drawing.Point(6, 16);
             button48.Name = "button48";
             button48.Size = new System.Drawing.Size(75, 25);
@@ -2339,9 +2339,9 @@
             // 
             // button58
             // 
-            button58.BackColor = System.Drawing.Color.Gainsboro;
+            button58.BackColor = System.Drawing.SystemColors.Control;
             button58.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button58.ForeColor = System.Drawing.Color.Black;
+            button58.ForeColor = System.Drawing.SystemColors.ControlText;
             button58.Image = Properties.Resources.SaveSmall;
             button58.Location = new System.Drawing.Point(139, 19);
             button58.Name = "button58";
@@ -2564,9 +2564,9 @@
             // 
             // button6
             // 
-            button6.BackColor = System.Drawing.Color.Gainsboro;
+            button6.BackColor = System.Drawing.SystemColors.Control;
             button6.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button6.ForeColor = System.Drawing.Color.Black;
+            button6.ForeColor = System.Drawing.SystemColors.ControlText;
             button6.Location = new System.Drawing.Point(18, 71);
             button6.Name = "button6";
             button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -2600,7 +2600,7 @@
             // button39
             // 
             button39.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button39.ForeColor = System.Drawing.Color.Black;
+            button39.ForeColor = System.Drawing.SystemColors.ControlText;
             button39.Location = new System.Drawing.Point(8, 60);
             button39.Name = "button39";
             button39.Size = new System.Drawing.Size(116, 34);
@@ -2613,7 +2613,7 @@
             // button5
             // 
             button5.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button5.ForeColor = System.Drawing.Color.Black;
+            button5.ForeColor = System.Drawing.SystemColors.ControlText;
             button5.Location = new System.Drawing.Point(9, 250);
             button5.Name = "button5";
             button5.Size = new System.Drawing.Size(116, 34);
@@ -2626,7 +2626,7 @@
             // button4
             // 
             button4.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            button4.ForeColor = System.Drawing.Color.Black;
+            button4.ForeColor = System.Drawing.SystemColors.ControlText;
             button4.Location = new System.Drawing.Point(9, 212);
             button4.Name = "button4";
             button4.Size = new System.Drawing.Size(116, 34);
@@ -2639,7 +2639,7 @@
             // button3
             // 
             button3.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            button3.ForeColor = System.Drawing.Color.Black;
+            button3.ForeColor = System.Drawing.SystemColors.ControlText;
             button3.Location = new System.Drawing.Point(9, 174);
             button3.Name = "button3";
             button3.Size = new System.Drawing.Size(116, 34);
@@ -2652,7 +2652,7 @@
             // button56
             // 
             button56.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button56.ForeColor = System.Drawing.Color.Black;
+            button56.ForeColor = System.Drawing.SystemColors.ControlText;
             button56.Location = new System.Drawing.Point(9, 136);
             button56.Name = "button56";
             button56.Size = new System.Drawing.Size(116, 34);
@@ -2664,7 +2664,7 @@
             // button2
             // 
             button2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button2.ForeColor = System.Drawing.Color.Black;
+            button2.ForeColor = System.Drawing.SystemColors.ControlText;
             button2.Location = new System.Drawing.Point(9, 98);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(116, 34);
@@ -2677,7 +2677,7 @@
             // button1
             // 
             button1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button1.ForeColor = System.Drawing.Color.Black;
+            button1.ForeColor = System.Drawing.SystemColors.ControlText;
             button1.Location = new System.Drawing.Point(9, 22);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(116, 34);
@@ -2689,9 +2689,9 @@
             // 
             // OpenMetFile
             // 
-            OpenMetFile.BackColor = System.Drawing.Color.Gainsboro;
+            OpenMetFile.BackColor = System.Drawing.SystemColors.Control;
             OpenMetFile.Font = new System.Drawing.Font("Segoe UI", 9F);
-            OpenMetFile.ForeColor = System.Drawing.Color.Black;
+            OpenMetFile.ForeColor = System.Drawing.SystemColors.ControlText;
             OpenMetFile.Location = new System.Drawing.Point(17, 19);
             OpenMetFile.Name = "OpenMetFile";
             OpenMetFile.Size = new System.Drawing.Size(116, 34);
@@ -2920,9 +2920,9 @@
             // 
             // button43
             // 
-            button43.BackColor = System.Drawing.Color.Gainsboro;
+            button43.BackColor = System.Drawing.SystemColors.Control;
             button43.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button43.ForeColor = System.Drawing.Color.Black;
+            button43.ForeColor = System.Drawing.SystemColors.ControlText;
             button43.Location = new System.Drawing.Point(26, 296);
             button43.Name = "button43";
             button43.Size = new System.Drawing.Size(203, 40);
@@ -2936,10 +2936,10 @@
             // 
             // button24
             // 
-            button24.BackColor = System.Drawing.Color.Gainsboro;
+            button24.BackColor = System.Drawing.SystemColors.Control;
             button24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             button24.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button24.ForeColor = System.Drawing.Color.Black;
+            button24.ForeColor = System.Drawing.SystemColors.ControlText;
             button24.Location = new System.Drawing.Point(670, 25);
             button24.Name = "button24";
             button24.Size = new System.Drawing.Size(133, 108);
@@ -2969,7 +2969,7 @@
             groupBox12.Controls.Add(numericUpDown20);
             groupBox12.Controls.Add(label58);
             groupBox12.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox12.ForeColor = System.Drawing.Color.Black;
+            groupBox12.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox12.Location = new System.Drawing.Point(25, 395);
             groupBox12.Name = "groupBox12";
             groupBox12.Size = new System.Drawing.Size(764, 145);
@@ -3192,10 +3192,10 @@
             // 
             // button23
             // 
-            button23.BackColor = System.Drawing.Color.Gainsboro;
+            button23.BackColor = System.Drawing.SystemColors.Control;
             button23.BackgroundImage = Properties.Resources.Rueckgaenging;
             button23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            button23.ForeColor = System.Drawing.Color.Black;
+            button23.ForeColor = System.Drawing.SystemColors.ControlText;
             button23.Location = new System.Drawing.Point(759, 351);
             button23.Name = "button23";
             button23.Size = new System.Drawing.Size(30, 31);
@@ -3207,10 +3207,10 @@
             // 
             // button22
             // 
-            button22.BackColor = System.Drawing.Color.Gainsboro;
+            button22.BackColor = System.Drawing.SystemColors.Control;
             button22.BackgroundImage = Properties.Resources.Rueckgaenging;
             button22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            button22.ForeColor = System.Drawing.Color.Black;
+            button22.ForeColor = System.Drawing.SystemColors.ControlText;
             button22.Location = new System.Drawing.Point(759, 231);
             button22.Name = "button22";
             button22.Size = new System.Drawing.Size(30, 30);
@@ -3222,9 +3222,9 @@
             // 
             // button20
             // 
-            button20.BackColor = System.Drawing.Color.Gainsboro;
+            button20.BackColor = System.Drawing.SystemColors.Control;
             button20.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button20.ForeColor = System.Drawing.Color.Black;
+            button20.ForeColor = System.Drawing.SystemColors.ControlText;
             button20.Location = new System.Drawing.Point(25, 344);
             button20.Name = "button20";
             button20.Size = new System.Drawing.Size(104, 46);
@@ -3236,9 +3236,9 @@
             // 
             // button19
             // 
-            button19.BackColor = System.Drawing.Color.Gainsboro;
+            button19.BackColor = System.Drawing.SystemColors.Control;
             button19.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button19.ForeColor = System.Drawing.Color.Black;
+            button19.ForeColor = System.Drawing.SystemColors.ControlText;
             button19.Location = new System.Drawing.Point(26, 224);
             button19.Name = "button19";
             button19.Size = new System.Drawing.Size(104, 46);
@@ -3264,7 +3264,7 @@
             groupBox10.Controls.Add(label53);
             groupBox10.Controls.Add(numericUpDown18);
             groupBox10.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox10.ForeColor = System.Drawing.Color.Black;
+            groupBox10.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox10.Location = new System.Drawing.Point(25, 12);
             groupBox10.Name = "groupBox10";
             groupBox10.Size = new System.Drawing.Size(358, 203);
@@ -3487,9 +3487,9 @@
             // 
             // button36
             // 
-            button36.BackColor = System.Drawing.Color.Gainsboro;
+            button36.BackColor = System.Drawing.SystemColors.Control;
             button36.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button36.ForeColor = System.Drawing.Color.Black;
+            button36.ForeColor = System.Drawing.SystemColors.ControlText;
             button36.Location = new System.Drawing.Point(14, 70);
             button36.Margin = new System.Windows.Forms.Padding(2);
             button36.Name = "button36";
@@ -3518,7 +3518,7 @@
             // 
             // gramm_locked_button
             // 
-            gramm_locked_button.BackColor = System.Drawing.Color.Gainsboro;
+            gramm_locked_button.BackColor = System.Drawing.SystemColors.Control;
             gramm_locked_button.BackgroundImage = (System.Drawing.Image)resources.GetObject("gramm_locked_button.BackgroundImage");
             gramm_locked_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             gramm_locked_button.Location = new System.Drawing.Point(335, 451);
@@ -3575,7 +3575,7 @@
             // 
             // button45
             // 
-            button45.BackColor = System.Drawing.Color.Gainsboro;
+            button45.BackColor = System.Drawing.SystemColors.Control;
             button45.BackgroundImage = (System.Drawing.Image)resources.GetObject("button45.BackgroundImage");
             button45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button45.Location = new System.Drawing.Point(160, 30);
@@ -3663,7 +3663,7 @@
             // button32
             // 
             button32.AutoSize = true;
-            button32.BackColor = System.Drawing.Color.Gainsboro;
+            button32.BackColor = System.Drawing.SystemColors.Control;
             button32.BackgroundImage = (System.Drawing.Image)resources.GetObject("button32.BackgroundImage");
             button32.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button32.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
@@ -3678,7 +3678,7 @@
             // button30
             // 
             button30.AutoSize = true;
-            button30.BackColor = System.Drawing.Color.Gainsboro;
+            button30.BackColor = System.Drawing.SystemColors.Control;
             button30.BackgroundImage = (System.Drawing.Image)resources.GetObject("button30.BackgroundImage");
             button30.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button30.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
@@ -3693,7 +3693,7 @@
             // button31
             // 
             button31.AutoSize = true;
-            button31.BackColor = System.Drawing.Color.Gainsboro;
+            button31.BackColor = System.Drawing.SystemColors.Control;
             button31.BackgroundImage = (System.Drawing.Image)resources.GetObject("button31.BackgroundImage");
             button31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button31.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
@@ -3808,9 +3808,9 @@
             // 
             // button18
             // 
-            button18.BackColor = System.Drawing.Color.Gainsboro;
+            button18.BackColor = System.Drawing.SystemColors.Control;
             button18.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button18.ForeColor = System.Drawing.Color.Black;
+            button18.ForeColor = System.Drawing.SystemColors.ControlText;
             button18.Location = new System.Drawing.Point(13, 123);
             button18.Name = "button18";
             button18.Size = new System.Drawing.Size(116, 34);
@@ -3823,9 +3823,9 @@
             // 
             // button9
             // 
-            button9.BackColor = System.Drawing.Color.Gainsboro;
+            button9.BackColor = System.Drawing.SystemColors.Control;
             button9.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button9.ForeColor = System.Drawing.Color.Black;
+            button9.ForeColor = System.Drawing.SystemColors.ControlText;
             button9.Location = new System.Drawing.Point(13, 164);
             button9.Name = "button9";
             button9.Size = new System.Drawing.Size(116, 34);
@@ -3838,9 +3838,9 @@
             // 
             // button7
             // 
-            button7.BackColor = System.Drawing.Color.Gainsboro;
+            button7.BackColor = System.Drawing.SystemColors.Control;
             button7.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button7.ForeColor = System.Drawing.Color.Black;
+            button7.ForeColor = System.Drawing.SystemColors.ControlText;
             button7.Location = new System.Drawing.Point(13, 83);
             button7.Name = "button7";
             button7.Size = new System.Drawing.Size(116, 34);
@@ -3854,9 +3854,9 @@
             // button10
             // 
             button10.AutoSize = true;
-            button10.BackColor = System.Drawing.Color.Gainsboro;
+            button10.BackColor = System.Drawing.SystemColors.Control;
             button10.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button10.ForeColor = System.Drawing.Color.Black;
+            button10.ForeColor = System.Drawing.SystemColors.ControlText;
             button10.Location = new System.Drawing.Point(13, 43);
             button10.Name = "button10";
             button10.Size = new System.Drawing.Size(116, 34);
@@ -3979,10 +3979,10 @@
             // 
             // button42
             // 
-            button42.BackColor = System.Drawing.Color.Gainsboro;
+            button42.BackColor = System.Drawing.SystemColors.Control;
             button42.BackgroundImage = (System.Drawing.Image)resources.GetObject("button42.BackgroundImage");
             button42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button42.ForeColor = System.Drawing.Color.Black;
+            button42.ForeColor = System.Drawing.SystemColors.ControlText;
             button42.Location = new System.Drawing.Point(141, 74);
             button42.Name = "button42";
             button42.Size = new System.Drawing.Size(26, 25);
@@ -3993,10 +3993,10 @@
             // 
             // button41
             // 
-            button41.BackColor = System.Drawing.Color.Gainsboro;
+            button41.BackColor = System.Drawing.SystemColors.Control;
             button41.BackgroundImage = (System.Drawing.Image)resources.GetObject("button41.BackgroundImage");
             button41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button41.ForeColor = System.Drawing.Color.Black;
+            button41.ForeColor = System.Drawing.SystemColors.ControlText;
             button41.Location = new System.Drawing.Point(141, 34);
             button41.Name = "button41";
             button41.Size = new System.Drawing.Size(26, 25);
@@ -4043,9 +4043,9 @@
             // 
             // button40
             // 
-            button40.BackColor = System.Drawing.Color.Gainsboro;
+            button40.BackColor = System.Drawing.SystemColors.Control;
             button40.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button40.ForeColor = System.Drawing.Color.Black;
+            button40.ForeColor = System.Drawing.SystemColors.ControlText;
             button40.Location = new System.Drawing.Point(8, 127);
             button40.Name = "button40";
             button40.Size = new System.Drawing.Size(145, 30);
@@ -4057,9 +4057,9 @@
             // 
             // button37
             // 
-            button37.BackColor = System.Drawing.Color.Gainsboro;
+            button37.BackColor = System.Drawing.SystemColors.Control;
             button37.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button37.ForeColor = System.Drawing.Color.Black;
+            button37.ForeColor = System.Drawing.SystemColors.ControlText;
             button37.Location = new System.Drawing.Point(8, 92);
             button37.Name = "button37";
             button37.Size = new System.Drawing.Size(145, 30);
@@ -4071,9 +4071,9 @@
             // 
             // button25
             // 
-            button25.BackColor = System.Drawing.Color.Gainsboro;
+            button25.BackColor = System.Drawing.SystemColors.Control;
             button25.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button25.ForeColor = System.Drawing.Color.Black;
+            button25.ForeColor = System.Drawing.SystemColors.ControlText;
             button25.Location = new System.Drawing.Point(8, 58);
             button25.Name = "button25";
             button25.Size = new System.Drawing.Size(145, 30);
@@ -4085,9 +4085,9 @@
             // 
             // button28
             // 
-            button28.BackColor = System.Drawing.Color.Gainsboro;
+            button28.BackColor = System.Drawing.SystemColors.Control;
             button28.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button28.ForeColor = System.Drawing.Color.Black;
+            button28.ForeColor = System.Drawing.SystemColors.ControlText;
             button28.Location = new System.Drawing.Point(8, 22);
             button28.Name = "button28";
             button28.Size = new System.Drawing.Size(145, 30);
@@ -4114,9 +4114,9 @@
             // 
             // button29
             // 
-            button29.BackColor = System.Drawing.Color.Gainsboro;
+            button29.BackColor = System.Drawing.SystemColors.Control;
             button29.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button29.ForeColor = System.Drawing.Color.Black;
+            button29.ForeColor = System.Drawing.SystemColors.ControlText;
             button29.Location = new System.Drawing.Point(8, 92);
             button29.Name = "button29";
             button29.Size = new System.Drawing.Size(145, 30);
@@ -4128,9 +4128,9 @@
             // 
             // button47
             // 
-            button47.BackColor = System.Drawing.Color.Gainsboro;
+            button47.BackColor = System.Drawing.SystemColors.Control;
             button47.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button47.ForeColor = System.Drawing.Color.Black;
+            button47.ForeColor = System.Drawing.SystemColors.ControlText;
             button47.Location = new System.Drawing.Point(8, 127);
             button47.Name = "button47";
             button47.Size = new System.Drawing.Size(145, 30);
@@ -4142,9 +4142,9 @@
             // 
             // button26
             // 
-            button26.BackColor = System.Drawing.Color.Gainsboro;
+            button26.BackColor = System.Drawing.SystemColors.Control;
             button26.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button26.ForeColor = System.Drawing.Color.Black;
+            button26.ForeColor = System.Drawing.SystemColors.ControlText;
             button26.Location = new System.Drawing.Point(8, 57);
             button26.Name = "button26";
             button26.Size = new System.Drawing.Size(145, 30);
@@ -4156,9 +4156,9 @@
             // 
             // button27
             // 
-            button27.BackColor = System.Drawing.Color.Gainsboro;
+            button27.BackColor = System.Drawing.SystemColors.Control;
             button27.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button27.ForeColor = System.Drawing.Color.Black;
+            button27.ForeColor = System.Drawing.SystemColors.ControlText;
             button27.Location = new System.Drawing.Point(8, 22);
             button27.Name = "button27";
             button27.Size = new System.Drawing.Size(145, 30);
@@ -4191,7 +4191,7 @@
             // button33
             // 
             button33.AutoSize = true;
-            button33.BackColor = System.Drawing.Color.Gainsboro;
+            button33.BackColor = System.Drawing.SystemColors.Control;
             button33.BackgroundImage = (System.Drawing.Image)resources.GetObject("button33.BackgroundImage");
             button33.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button33.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
@@ -4259,7 +4259,7 @@
             // button34
             // 
             button34.AutoSize = true;
-            button34.BackColor = System.Drawing.Color.Gainsboro;
+            button34.BackColor = System.Drawing.SystemColors.Control;
             button34.BackgroundImage = (System.Drawing.Image)resources.GetObject("button34.BackgroundImage");
             button34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button34.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
@@ -4274,7 +4274,7 @@
             // button35
             // 
             button35.AutoSize = true;
-            button35.BackColor = System.Drawing.Color.Gainsboro;
+            button35.BackColor = System.Drawing.SystemColors.Control;
             button35.BackgroundImage = (System.Drawing.Image)resources.GetObject("button35.BackgroundImage");
             button35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button35.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
@@ -4288,7 +4288,7 @@
             // 
             // project_locked_button
             // 
-            project_locked_button.BackColor = System.Drawing.Color.Gainsboro;
+            project_locked_button.BackColor = System.Drawing.SystemColors.Control;
             project_locked_button.BackgroundImage = (System.Drawing.Image)resources.GetObject("project_locked_button.BackgroundImage");
             project_locked_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             project_locked_button.Location = new System.Drawing.Point(572, 451);
