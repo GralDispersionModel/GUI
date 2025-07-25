@@ -2107,6 +2107,7 @@
             // 
             // pictureBox5
             // 
+            pictureBox5.BackColor = System.Drawing.SystemColors.Window;
             pictureBox5.Location = new System.Drawing.Point(460, 296);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new System.Drawing.Size(346, 227);
@@ -2164,7 +2165,6 @@
             // 
             listBox5.Font = new System.Drawing.Font("Segoe UI", 9F);
             listBox5.FormattingEnabled = true;
-            listBox5.ItemHeight = 15;
             listBox5.Location = new System.Drawing.Point(460, 90);
             listBox5.Name = "listBox5";
             listBox5.Size = new System.Drawing.Size(181, 109);
@@ -2239,7 +2239,6 @@
             // 
             listBox4.Font = new System.Drawing.Font("Segoe UI", 9F);
             listBox4.FormattingEnabled = true;
-            listBox4.ItemHeight = 15;
             listBox4.Location = new System.Drawing.Point(6, 90);
             listBox4.Name = "listBox4";
             listBox4.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
@@ -3277,7 +3276,6 @@
             GRAMMmodelheight.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             GRAMMmodelheight.FormattingEnabled = true;
             GRAMMmodelheight.IntegralHeight = false;
-            GRAMMmodelheight.ItemHeight = 17;
             GRAMMmodelheight.Location = new System.Drawing.Point(204, 149);
             GRAMMmodelheight.MinimumSize = new System.Drawing.Size(4, 21);
             GRAMMmodelheight.Name = "GRAMMmodelheight";
