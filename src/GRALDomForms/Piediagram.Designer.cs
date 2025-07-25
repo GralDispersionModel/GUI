@@ -53,7 +53,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.BackColor = System.Drawing.SystemColors.Window;
+            pictureBox1.BackColor = System.Drawing.Color.White;
             pictureBox1.Location = new System.Drawing.Point(0, 0);
             pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             pictureBox1.Name = "pictureBox1";

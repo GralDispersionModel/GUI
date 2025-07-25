@@ -127,7 +127,7 @@
             // 
             // panel1
             // 
-            panel1.BackColor = System.Drawing.SystemColors.Window;
+            panel1.BackColor = System.Drawing.Color.White;
             panel1.Location = new System.Drawing.Point(10, 9);
             panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
@@ -137,7 +137,7 @@
             // 
             // panel2
             // 
-            panel2.BackColor = System.Drawing.SystemColors.Window;
+            panel2.BackColor = System.Drawing.Color.White;
             panel2.Location = new System.Drawing.Point(10, 367);
             panel2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             panel2.Name = "panel2";

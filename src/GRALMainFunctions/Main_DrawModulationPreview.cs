@@ -77,9 +77,9 @@ namespace Gral
                     int y0 = pictureBox5.Height / 2 - 7;
                     int y1 = pictureBox5.Height - 17;
                     Pen mypen = new Pen(Color.Black, 1);
-                    Brush whitebrush = new SolidBrush(Color.White);
-                    Brush b1 = new SolidBrush(Color.LightGray);
-                    Brush b2 = new SolidBrush(Color.Black);
+                    Brush whitebrush = new SolidBrush(SystemColors.Window);
+                    Brush b1 = new SolidBrush(SystemColors.GrayText);
+                    Brush b2 = new SolidBrush(SystemColors.WindowText);
                     Font _smallFont = new Font("Arial", 6);
                     StringFormat format2 = new StringFormat
                     {

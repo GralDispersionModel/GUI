@@ -40,7 +40,7 @@ namespace GralDomain
             }
             
             Graphics g = Graphics.FromImage(PictureBoxBitmap);
-            g.Clear(SystemColors.Window);
+            g.Clear(Color.White);
             g.CompositingQuality = CompositingQuality.GammaCorrected;
             
             int pb1_height = picturebox1.Height;
