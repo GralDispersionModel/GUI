@@ -4431,7 +4431,7 @@ namespace GralDomain
             }
             else
             {
-                TopoModifyBlocked = new bool[CellHeights.GetUpperBound(0), CellHeights.GetUpperBound(1)];
+                TopoModifyBlocked = new bool[CellHeights.GetUpperBound(0) + 1, CellHeights.GetUpperBound(1) + 1];
             }
 
             // Go to the dialog
