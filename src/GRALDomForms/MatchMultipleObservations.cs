@@ -535,8 +535,8 @@ namespace GralDomForms
                                     {
                                         // create a meteo file 
                                         string filename = "MatchPreview_" + Path.GetFileName(MetFileNames[RemoveLine]);
-                                        
                                         System.Globalization.CultureInfo ic = System.Globalization.CultureInfo.InvariantCulture;
+                                        DateTime dTime = new DateTime(2023, 1, 1, 0, 0, 0);
                                         //write new meteo file
                                         using (StreamWriter writer = new StreamWriter(Path.Combine(Gral.Main.ProjectName, "Metfiles", filename)))
                                         {
@@ -554,10 +554,12 @@ namespace GralDomForms
                                                     int stabClass = LocalStabilityClass[RemoveLine, index];
                                                     text = _mettimeSeries[i].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                                     date = text[0].Split('.');
-                                                    DateTime _date = new DateTime(DateTime.Now.Year, Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(text[1]), 0, 0);
-                                                    writer.WriteLine(_date.ToString("d", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
-                                                                     _date.ToString("t", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
-                                                                     Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
+                                                    //DateTime _date = new DateTime(DateTime.Now.Year, Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(text[1]), 0, 0);
+                                                    //writer.WriteLine(_date.ToString("d", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
+                                                    //                 _date.ToString("t", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
+                                                    //                 Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
+                                                    writer.WriteLine(dTime.ToString("dd.MM.yy,HH:mm", CultureInfo.InvariantCulture) + "," + Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
+                                                    dTime = dTime.AddHours(1);
                                                 }
                                             }
                                         }
