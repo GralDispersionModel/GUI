@@ -78,14 +78,16 @@ namespace GralDomain
                 string obname = _drobj.Name;
                 
                 // create LabelFont, LabelBrush and SelectedBrush
-                Font  LabelFont;
+                Font  LabelFont, NorthFont;
                 if (_drobj.ScaleLabelFont)
                 {
                     LabelFont = new Font(_drobj.LabelFont.Name, Convert.ToInt32(Math.Max(1, Math.Min(2000, _drobj.LabelFont.Size * 0.5F *  factor_x ))));
+                    NorthFont = new Font(_drobj.LabelFont.Name, Convert.ToInt32(Math.Max(1, Math.Min(2000, _drobj.LabelFont.Size * 0.5F * factor_x))), FontStyle.Bold);
                 }
                 else
                 {
                     LabelFont = new Font(_drobj.LabelFont.Name, _drobj.LabelFont.Size * Convert.ToInt32(Math.Min(32000, 1 / _bmppbx_save)));
+                    NorthFont = new Font(_drobj.LabelFont.Name, _drobj.LabelFont.Size * Convert.ToInt32(Math.Min(32000, 1 / _bmppbx_save)), FontStyle.Bold);
                 }
                 Brush LabelBrush = new SolidBrush(_drobj.LabelColor);
                 if (_drobj.LabelColor == Color.Empty)
@@ -359,10 +361,28 @@ namespace GralDomain
                 {
                     if ((obname == "NORTH ARROW") && (_drobj.Show == true))
                     {
-                        int xpos1 = Convert.ToInt32((NorthArrow.X - Math.Min(32000, 75D * Convert.ToDouble(_drobj.ContourLabelDist / 100D) * 0.5)) / _bmppbx_save);
-                        int ypos1 = Convert.ToInt32((NorthArrow.Y - Math.Min(32000, 75D * Convert.ToDouble(_drobj.ContourLabelDist / 100D) * 0.5)) / _bmppbx_save);
-                        g.DrawImage(NorthArrowBitmap, xpos1, ypos1, Convert.ToInt32(Math.Min(32000, 75 * Convert.ToDouble(_drobj.ContourLabelDist / 100D) / _bmppbx_save)), Convert.ToInt32(Math.Min(32000, 75 * Convert.ToDouble(_drobj.ContourLabelDist / 100D) / _bmppbx_save)));
-                        //g.DrawString(_bmppbx_save.ToString(), LabelFont, LabelBrush, new PointF(100, 100));
+                        
+                        int xpos1 = Convert.ToInt32(NorthArrow.X / _bmppbx_save);
+                        int ypos1 = Convert.ToInt32(NorthArrow.Y / _bmppbx_save);
+                        int size = Convert.ToInt32(Math.Min(32000, 20 * Convert.ToDouble(_drobj.ContourLabelDist / 100D) / _bmppbx_save));
+                        System.Drawing.PointF[] points = new System.Drawing.PointF[3];
+                        points[0] = new PointF(xpos1, ypos1);
+                        points[1] = new PointF(xpos1 - size, ypos1 + size * 2);
+                        points[2] = new PointF(xpos1, ypos1 + size * 1.5F);
+                        using (Pen north = new Pen(Color.Black, 2))
+                        {
+                            g.DrawPolygon(north, points);
+                            points[0] = new PointF(xpos1 + 1, ypos1);
+                            points[1] = new PointF(xpos1 + size, ypos1 + size * 2);
+                            points[2] = new PointF(xpos1 + 1, ypos1 + size * 1.5F);
+                            g.DrawPolygon(north, points);
+                        }
+                        using (SolidBrush brush = new SolidBrush(Color.Black))
+                        {
+                            g.FillPolygon(brush, points);
+                        }
+                        SizeF fsize = g.MeasureString("N", NorthFont);
+                        g.DrawString("N", NorthFont, LabelBrush, xpos1 - fsize.Width / 2, ypos1 - fsize.Height * 1.2F);
                     }
                 }
                 catch{}
@@ -370,6 +390,7 @@ namespace GralDomain
                 LabelFont.Dispose();
                 LabelBrush.Dispose();
                 SelectedBrush.Dispose();
+                NorthFont.Dispose();
             } // Object-Loop
             
             Pen p = new Pen(Color.LightBlue, 3);
