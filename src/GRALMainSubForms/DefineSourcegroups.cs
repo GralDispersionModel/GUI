@@ -20,7 +20,7 @@ using Gral;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Dialog to set user defined source group names
     /// </summary>
     public partial class Sourcegroups : Form
@@ -41,21 +41,21 @@ namespace GralMainForms
             {
                 _sgname[i] = string.Empty;
             }
-            
+
             try
             {
                 string newPath = Path.Combine(Main.ProjectName, @"Settings", "Sourcegroups.txt");
-                if(File.Exists(newPath))
+                if (File.Exists(newPath))
                 {
                     using (StreamReader myReader = new StreamReader(newPath))
                     {
                         string[] text = new string[2];
                         string text1;
-                        while (myReader.EndOfStream==false)
+                        while (myReader.EndOfStream == false)
                         {
                             text1 = myReader.ReadLine();
                             text = text1.Split(new char[] { ',' });
-                            
+
                             if (text.Length > 1)
                             {
                                 // Plausibility check for source groups
@@ -66,7 +66,7 @@ namespace GralMainForms
                                     _sgname[s] = text[0];
                                 }
                             }
-                         }
+                        }
                     }
                 }
             }
@@ -74,7 +74,7 @@ namespace GralMainForms
             {
                 MessageBox.Show(this, "Error when reading file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
             DataTable _data = new DataTable();
             _data.Columns.Add("Number", typeof(int));
             _data.Columns.Add("Name", typeof(string));
@@ -86,7 +86,7 @@ namespace GralMainForms
                 workrow[1] = _sgname[i];
                 _data.Rows.Add(workrow);
             }
-            
+
             DataView datasorted = new DataView();
             datasorted = new DataView(_data); // create DataView from DataTable
             dataGridView1.DataSource = datasorted; // connect DataView to GridView
@@ -96,7 +96,7 @@ namespace GralMainForms
             dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView1.Columns["Number"].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.Columns["Name"].SortMode = DataGridViewColumnSortMode.NotSortable;
-            
+
             for (int i = 1; i < 100; i++)
             {
                 if (string.IsNullOrEmpty(_sgname[i]))
@@ -104,6 +104,7 @@ namespace GralMainForms
                     dataGridView1.Rows[i - 1].DefaultCellStyle.BackColor = Color.Beige;
                 }
             }
+            dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView1KeyDown);
         }
 
         //close the form and save source group definitions
@@ -127,15 +128,15 @@ namespace GralMainForms
                     }
                 }
             }
-            
+
             //check for double counting of source group names
             for (int i = 0; i < 99; i++)
             {
                 if (dataGridView1.Rows[i].Cells[1].Value != null)
                 {
                     string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
-                    string _check_if_empty =  a.Replace(" ", string.Empty);
-                    
+                    string _check_if_empty = a.Replace(" ", string.Empty);
+
                     if (!string.IsNullOrEmpty(_check_if_empty))
                     {
                         for (int j = i + 1; j < 99; j++)
@@ -152,7 +153,7 @@ namespace GralMainForms
                     }
                 }
             }
-            
+
             try
             {
                 string newPath = Path.Combine(Main.ProjectName, @"Settings", "Sourcegroups.txt");
@@ -160,22 +161,22 @@ namespace GralMainForms
                 {
                     File.Delete(newPath);
                 }
-                
+
                 Main.DefinedSourceGroups.Clear();
-                
-                using (StreamWriter myWriter = new StreamWriter(newPath,false))
+
+                using (StreamWriter myWriter = new StreamWriter(newPath, false))
                 {
-                    for(int i = 0; i < 99; i++)
+                    for (int i = 0; i < 99; i++)
                     {
                         if (dataGridView1.Rows[i].Cells[1].Value != null)
                         {
                             string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
-                            string _check_if_empty =  a.Replace(" ", string.Empty);
-                            
+                            string _check_if_empty = a.Replace(" ", string.Empty);
+
                             if (!string.IsNullOrEmpty(_check_if_empty))
                             {
                                 myWriter.WriteLine(Convert.ToString(a) + "," + Convert.ToString(i + 1));
-                                Main.DefinedSourceGroups.Add(new SG_Class() {SG_Name = Convert.ToString(a), SG_Number = i + 1});
+                                Main.DefinedSourceGroups.Add(new SG_Class() { SG_Name = Convert.ToString(a), SG_Number = i + 1 });
                             }
                             else // check if a source group has been deleted
                             {
@@ -201,16 +202,16 @@ namespace GralMainForms
                                             }
                                         }
                                     }
-                                    catch{}
+                                    catch { }
                                 }
                             }
                         }
                     }
                 }
-                
+
                 Main.DefinedSourceGroups.Sort();
                 //St_F.Sort_Source_Group_File(newPath);
-                
+
                 Close();
             }
             catch
@@ -218,15 +219,84 @@ namespace GralMainForms
                 MessageBox.Show(this, "Error when writing file \"Sourcegroups.txt\" in the directory \"Settings\".", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-    
+
         void SourcegroupsResizeEnd(object sender, EventArgs e)
         {
             dataGridView1.Height = Math.Max(1, button1.Top - 10);
         }
-        
+
         void Button1Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        //paste text from the clipboard
+        void DataGridView1KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Modifiers == Keys.Control)
+                {
+                    switch (e.KeyCode)
+                    {
+                        case Keys.C:
+                            break;
+
+                        case Keys.V:
+                            PasteClipboard();
+                            break;
+                    }
+                }
+            }
+            catch
+            { }
+        }
+        void PasteClipboard()
+        {
+            try
+            {
+                string s = Clipboard.GetText();
+                string[] lines = s.Split('\n');
+
+                int iRow = dataGridView1.CurrentCell.RowIndex;
+                int iCol = dataGridView1.CurrentCell.ColumnIndex;
+                DataGridViewCell oCell;
+
+                foreach (string line in lines)
+                {
+                    if (iRow < dataGridView1.RowCount && line.Length > 0)
+                    {
+                        string[] sCells = line.Split('\t');
+                        for (int i = 0; i < sCells.GetLength(0); ++i)
+                        {
+                            if (iCol + i < dataGridView1.ColumnCount)
+                            {
+                                oCell = dataGridView1[iCol + i, iRow];
+                                oCell.Value = Convert.ChangeType(sCells[i].Replace("\r", ""), oCell.ValueType);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        iRow++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (FormatException)
+            {
+                return;
+            }
+        }
+
+        private void Sourcegroups_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            dataGridView1.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.DataGridView1KeyDown);
+            dataGridView1.Dispose();
         }
     }
 }
