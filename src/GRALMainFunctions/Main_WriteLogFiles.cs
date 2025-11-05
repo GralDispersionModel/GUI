@@ -121,10 +121,7 @@ namespace Gral
                                 mywriter.WriteLine(Convert.ToString(Math.Round(CellsGralX / n * c,0)).PadLeft(14) + "  \t  // Numbers of flow field cells in x-direction");
                                 mywriter.WriteLine(Convert.ToString(Math.Round(CellsGralY / n * c,0)).PadLeft(14) + "  \t  // Numbers of flow field cells in y-direction");
                                 mywriter.WriteLine(Convert.ToString(numericUpDown26.Value).PadLeft(14) + "  \t  // Numbers of flow field cells in z-direction");
-                                
-//							mywriter.WriteLine(Convert.ToString(numericUpDown28.Value).PadLeft(14) + "  \t  // Relaxation velocity");
-//							mywriter.WriteLine(Convert.ToString(numericUpDown27.Value).PadLeft(14) + "  \t  // Relaxation pressure correction");
-                                
+                                                                
                                 if (checkBox22.Checked)
                                 {
                                     mywriter.WriteLine("Write until steady-state");

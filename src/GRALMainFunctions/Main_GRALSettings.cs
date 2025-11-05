@@ -418,68 +418,6 @@ namespace Gral
         }
 
         /// <summary>
-        /// change relaxation factor of velocity for microscale flow field model of GRAL
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SetGRALFlowFieldVelRelaxFactor(object sender, EventArgs e)
-        {
-            try
-            {
-                if (EmifileReset == true)
-                {
-                    string newPath1 = Path.Combine(ProjectName, @"Computation", "relaxation_factors.txt");
-                    try
-                    {
-                        using (StreamWriter mywriter = new StreamWriter(newPath1))
-                        {
-                            mywriter.WriteLine(Convert.ToString(numericUpDown28.Value, ic));
-                            mywriter.WriteLine(Convert.ToString(numericUpDown27.Value, ic));
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not write file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        /// <summary>
-        /// change relaxation factor for pressure correction of microscale wind field model of GRAL
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SetGRALFlowFieldPreRelaxFactor(object sender, EventArgs e)
-        {
-            try
-            {
-                if (EmifileReset == true)
-                {
-                    string newPath1 = Path.Combine(ProjectName, @"Computation", "relaxation_factors.txt");
-                    try
-                    {
-                        using (StreamWriter mywriter = new StreamWriter(newPath1))
-                        {
-                            mywriter.WriteLine(Convert.ToString(numericUpDown28.Value, ic));
-                            mywriter.WriteLine(Convert.ToString(numericUpDown27.Value, ic));
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not write file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        /// <summary>
         /// change minimum number of iterations over timesteps in the microscale flow field model of GRAL
         /// </summary>
         /// <param name="sender"></param>

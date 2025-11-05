@@ -696,12 +696,12 @@ namespace Gral
                 message.listBox1.Items.Add("Loading flow field relaxation factors");
                 if (OpenProject.ReadRelaxFactorsFile() == true)
                 {
-                    numericUpDown28.Value = OpenProject.RelaxVel; //vel
-                    numericUpDown27.Value = OpenProject.RelaxPress; //pres
+                    ProjectSetting.RelaxationFactorGRALVelocity = (double)OpenProject.RelaxVel; 
+                    ProjectSetting.RelaxationFactorGRALPressure = (double)OpenProject.RelaxPress; 
                 }
                 else
                 {
-                    message.listBox1.Items.Add("Can't open flow field relaxation factors");
+                    message.listBox1.Items.Add("No indiuvidual flow field relaxation factors defined");
                 }
 
                 //read file building_roughness.txt

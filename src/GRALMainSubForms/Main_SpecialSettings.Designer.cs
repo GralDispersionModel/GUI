@@ -46,14 +46,22 @@
             numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             checkBox5 = new System.Windows.Forms.CheckBox();
             checkBox6 = new System.Windows.Forms.CheckBox();
+            label76 = new System.Windows.Forms.Label();
+            label77 = new System.Windows.Forms.Label();
+            numericUpDown28 = new System.Windows.Forms.NumericUpDown();
+            numericUpDown27 = new System.Windows.Forms.NumericUpDown();
             groupBox3 = new System.Windows.Forms.GroupBox();
             label3 = new System.Windows.Forms.Label();
+            groupBox4 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown28).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown27).BeginInit();
             groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -85,7 +93,7 @@
             groupBox2.Controls.Add(numericUpDown1);
             groupBox2.Controls.Add(label1);
             groupBox2.Controls.Add(checkBox2);
-            groupBox2.Location = new System.Drawing.Point(18, 99);
+            groupBox2.Location = new System.Drawing.Point(18, 90);
             groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -130,7 +138,7 @@
             // button1
             // 
             button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            button1.Location = new System.Drawing.Point(18, 488);
+            button1.Location = new System.Drawing.Point(18, 544);
             button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(105, 33);
@@ -142,7 +150,7 @@
             // button2
             // 
             button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            button2.Location = new System.Drawing.Point(251, 488);
+            button2.Location = new System.Drawing.Point(251, 544);
             button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(105, 33);
@@ -156,7 +164,7 @@
             checkBox3.Checked = true;
             checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
             checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            checkBox3.Location = new System.Drawing.Point(18, 373);
+            checkBox3.Location = new System.Drawing.Point(19, 445);
             checkBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new System.Drawing.Size(200, 20);
@@ -169,7 +177,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(26, 339);
+            label2.Location = new System.Drawing.Point(27, 411);
             label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(54, 15);
@@ -178,7 +186,7 @@
             // 
             // numericUpDown2
             // 
-            numericUpDown2.Location = new System.Drawing.Point(104, 337);
+            numericUpDown2.Location = new System.Drawing.Point(105, 409);
             numericUpDown2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             numericUpDown2.Maximum = new decimal(new int[] { 3, 0, 0, 0 });
             numericUpDown2.Name = "numericUpDown2";
@@ -220,7 +228,7 @@
             checkBox5.Checked = true;
             checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
             checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            checkBox5.Location = new System.Drawing.Point(18, 403);
+            checkBox5.Location = new System.Drawing.Point(19, 475);
             checkBox5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkBox5.Name = "checkBox5";
             checkBox5.Size = new System.Drawing.Size(213, 20);
@@ -235,7 +243,7 @@
             checkBox6.Checked = true;
             checkBox6.CheckState = System.Windows.Forms.CheckState.Checked;
             checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter);
-            checkBox6.Location = new System.Drawing.Point(18, 433);
+            checkBox6.Location = new System.Drawing.Point(19, 505);
             checkBox6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkBox6.Name = "checkBox6";
             checkBox6.Size = new System.Drawing.Size(195, 20);
@@ -245,16 +253,68 @@
             checkBox6.UseVisualStyleBackColor = true;
             checkBox6.CheckedChanged += checkBox6_CheckedChanged;
             // 
+            // label76
+            // 
+            label76.AutoSize = true;
+            label76.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label76.Location = new System.Drawing.Point(11, 55);
+            label76.Name = "label76";
+            label76.Size = new System.Drawing.Size(151, 15);
+            label76.TabIndex = 39;
+            label76.Text = "Relaxation pressure correct.";
+            toolTip1.SetToolTip(label76, "Relaxation factor for temperature,\r\nhumidity, TKE, dissipation");
+            // 
+            // label77
+            // 
+            label77.AutoSize = true;
+            label77.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label77.Location = new System.Drawing.Point(11, 30);
+            label77.Name = "label77";
+            label77.Size = new System.Drawing.Size(105, 15);
+            label77.TabIndex = 37;
+            label77.Text = "Relaxation velocity";
+            toolTip1.SetToolTip(label77, "Relaxation factor for velocity");
+            // 
+            // numericUpDown28
+            // 
+            numericUpDown28.DecimalPlaces = 2;
+            numericUpDown28.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            numericUpDown28.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericUpDown28.Location = new System.Drawing.Point(190, 23);
+            numericUpDown28.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown28.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericUpDown28.Name = "numericUpDown28";
+            numericUpDown28.Size = new System.Drawing.Size(72, 23);
+            numericUpDown28.TabIndex = 38;
+            numericUpDown28.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown28, "The lower the relaxation factor,\r\nthe higher the numerical stability");
+            numericUpDown28.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            // 
+            // numericUpDown27
+            // 
+            numericUpDown27.DecimalPlaces = 2;
+            numericUpDown27.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            numericUpDown27.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericUpDown27.Location = new System.Drawing.Point(190, 51);
+            numericUpDown27.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown27.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericUpDown27.Name = "numericUpDown27";
+            numericUpDown27.Size = new System.Drawing.Size(72, 23);
+            numericUpDown27.TabIndex = 40;
+            numericUpDown27.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown27, "The lower the relaxation factor,\r\nthe higher the numerical stability");
+            numericUpDown27.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // groupBox3
             // 
             groupBox3.Controls.Add(numericUpDown3);
             groupBox3.Controls.Add(label3);
             groupBox3.Controls.Add(checkBox4);
-            groupBox3.Location = new System.Drawing.Point(18, 217);
+            groupBox3.Location = new System.Drawing.Point(18, 199);
             groupBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            groupBox3.Size = new System.Drawing.Size(338, 103);
+            groupBox3.Size = new System.Drawing.Size(338, 95);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "Reduce the size of prognostic sub domains";
@@ -269,11 +329,25 @@
             label3.TabIndex = 2;
             label3.Text = "Radius in [m]";
             // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(label76);
+            groupBox4.Controls.Add(label77);
+            groupBox4.Controls.Add(numericUpDown28);
+            groupBox4.Controls.Add(numericUpDown27);
+            groupBox4.Location = new System.Drawing.Point(19, 305);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(337, 87);
+            groupBox4.TabIndex = 63;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Individual GRAL Relaxation factors";
+            // 
             // Main_SpecialSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(373, 546);
+            ClientSize = new System.Drawing.Size(373, 589);
+            Controls.Add(groupBox4);
             Controls.Add(checkBox6);
             Controls.Add(checkBox5);
             Controls.Add(groupBox3);
@@ -296,8 +370,12 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown28).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown27).EndInit();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -322,5 +400,10 @@
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.Label label77;
+        private System.Windows.Forms.NumericUpDown numericUpDown28;
+        private System.Windows.Forms.NumericUpDown numericUpDown27;
     }
 }

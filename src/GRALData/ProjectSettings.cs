@@ -42,6 +42,14 @@ namespace GralData
             projectName = ProjectName;
             SetDefaultValues();
         }
+        /// <summary>
+        /// Relaxation factor velocity Gral flow field calculation 
+        /// </summary>
+        public double RelaxationFactorGRALVelocity = 0.1;
+        /// <summary>
+        /// Relaxation factor pressure Gral flow field calculation
+        /// </summary>
+        public double RelaxationFactorGRALPressure = 1;
 
         /// <summary>
         /// Write GUI Settings to the file GUISettings.txt

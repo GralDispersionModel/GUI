@@ -1126,16 +1126,6 @@ namespace Gral
         {
             SetGRALFlowFieldVerticalCellNumber(sender, e);
         }
-        //change relaxation factor of velocity for microscale flow field model of GRAL
-        private void NumericUpDown28_ValueChanged(object sender, EventArgs e)
-        {
-            SetGRALFlowFieldVelRelaxFactor(sender, e);
-        }
-        //change relaxation factor for pressure correction of microscale wind field model of GRAL
-        private void NumericUpDown27_ValueChanged(object sender, EventArgs e)
-        {
-            SetGRALFlowFieldPreRelaxFactor(sender, e);
-        }
         //change minimum number of iterations over timesteps in the microscale flow field model of GRAL
         private void NumericUpDown29_ValueChanged(object sender, EventArgs e)
         {
@@ -2344,8 +2334,6 @@ namespace Gral
             numericUpDown11.Enabled = !locked;
             numericUpDown12.Enabled = !locked;
             numericUpDown26.Enabled = !locked;
-            numericUpDown27.Enabled = !locked;
-            numericUpDown28.Enabled = !locked;
             numericUpDown29.Enabled = !locked;
             numericUpDown30.Enabled = !locked;
             numericUpDown31.Enabled = !locked;
@@ -2431,8 +2419,6 @@ namespace Gral
             numericUpDown11.Increment = Convert.ToDecimal(inc * 0.1);
             numericUpDown12.Increment = Convert.ToDecimal(inc * 0.01);
             numericUpDown26.Increment = inc;
-            numericUpDown27.Increment = Convert.ToDecimal(inc * 0.01);
-            numericUpDown28.Increment = Convert.ToDecimal(inc * 0.01);
             numericUpDown29.Increment = Convert.ToDecimal(inc * 10);
             numericUpDown30.Increment = Convert.ToDecimal(inc * 10);
             numericUpDown31.Increment = Convert.ToDecimal(inc * 0.001);
@@ -2854,7 +2840,9 @@ namespace Gral
                 File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) ||
                 !GRALSettings.WaitForKeyStroke ||
                 GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50 ||
-                GRALSettings.ReproducibleResults)
+                GRALSettings.ReproducibleResults ||
+                Math.Abs (ProjectSetting.RelaxationFactorGRALPressure - 1)   > 0.0001 ||
+                Math.Abs (ProjectSetting.RelaxationFactorGRALVelocity - 0.1) > 0.0001)
             {
                 button57.BackgroundImage = Gral.Properties.Resources.WrenchYellowTransparant;
             }

@@ -116,10 +116,6 @@
             numericUpDown31 = new System.Windows.Forms.NumericUpDown();
             label80 = new System.Windows.Forms.Label();
             label74 = new System.Windows.Forms.Label();
-            label76 = new System.Windows.Forms.Label();
-            label77 = new System.Windows.Forms.Label();
-            numericUpDown28 = new System.Windows.Forms.NumericUpDown();
-            numericUpDown27 = new System.Windows.Forms.NumericUpDown();
             label25 = new System.Windows.Forms.Label();
             label26 = new System.Windows.Forms.Label();
             numericUpDown10 = new System.Windows.Forms.NumericUpDown();
@@ -377,8 +373,6 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown29).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown30).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown31).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown28).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown27).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown10).BeginInit();
             Domain.SuspendLayout();
             groupBox9.SuspendLayout();
@@ -673,7 +667,7 @@
             checkBox29.Size = new System.Drawing.Size(110, 23);
             checkBox29.TabIndex = 64;
             checkBox29.Text = "adapt. rough.";
-            toolTip1.SetToolTip(checkBox29, "Enable the transient GRAL mode");
+            toolTip1.SetToolTip(checkBox29, "Set the maximum value for the adaptive roughness option");
             checkBox29.UseVisualStyleBackColor = true;
             checkBox29.CheckStateChanged += CheckBox29_CheckStateChanged;
             // 
@@ -1205,10 +1199,6 @@
             groupBox8.Controls.Add(numericUpDown31);
             groupBox8.Controls.Add(label80);
             groupBox8.Controls.Add(label74);
-            groupBox8.Controls.Add(label76);
-            groupBox8.Controls.Add(label77);
-            groupBox8.Controls.Add(numericUpDown28);
-            groupBox8.Controls.Add(numericUpDown27);
             groupBox8.Controls.Add(label25);
             groupBox8.Controls.Add(label26);
             groupBox8.Controls.Add(numericUpDown10);
@@ -1368,7 +1358,7 @@
             groupBox26.Controls.Add(numericUpDown41);
             groupBox26.Controls.Add(checkBox26);
             groupBox26.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            groupBox26.Location = new System.Drawing.Point(2, 428);
+            groupBox26.Location = new System.Drawing.Point(7, 360);
             groupBox26.Name = "groupBox26";
             groupBox26.Size = new System.Drawing.Size(276, 77);
             groupBox26.TabIndex = 44;
@@ -1409,6 +1399,7 @@
             numericUpDown41.TabIndex = 44;
             numericUpDown41.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             toolTip1.SetToolTip(numericUpDown41, "0: lower compression rate 1: higher compression rate 2: faster for huge projects with terrain or many buildings");
+            numericUpDown41.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown41.ValueChanged += NumericUpDown41_ValueChanged;
             // 
             // checkBox26
@@ -1572,64 +1563,6 @@
             label74.Size = new System.Drawing.Size(19, 16);
             label74.TabIndex = 32;
             label74.Text = "m";
-            // 
-            // label76
-            // 
-            label76.AutoSize = true;
-            label76.Font = new System.Drawing.Font("Segoe UI", 10F);
-            label76.Location = new System.Drawing.Point(9, 496);
-            label76.Name = "label76";
-            label76.Size = new System.Drawing.Size(176, 19);
-            label76.TabIndex = 35;
-            label76.Text = "Relaxation pressure correct.";
-            toolTip1.SetToolTip(label76, "Relaxation factor for temperature,\r\nhumidity, TKE, dissipation");
-            label76.Visible = false;
-            // 
-            // label77
-            // 
-            label77.AutoSize = true;
-            label77.Font = new System.Drawing.Font("Segoe UI", 10F);
-            label77.Location = new System.Drawing.Point(9, 484);
-            label77.Name = "label77";
-            label77.Size = new System.Drawing.Size(121, 19);
-            label77.TabIndex = 33;
-            label77.Text = "Relaxation velocity";
-            toolTip1.SetToolTip(label77, "Relaxation factor for velocity");
-            label77.Visible = false;
-            // 
-            // numericUpDown28
-            // 
-            numericUpDown28.DecimalPlaces = 2;
-            numericUpDown28.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown28.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown28.Location = new System.Drawing.Point(208, 482);
-            numericUpDown28.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown28.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown28.Name = "numericUpDown28";
-            numericUpDown28.Size = new System.Drawing.Size(68, 25);
-            numericUpDown28.TabIndex = 34;
-            numericUpDown28.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(numericUpDown28, "The lower the relaxation factor,\r\nthe higher the numerical stability");
-            numericUpDown28.Value = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericUpDown28.Visible = false;
-            numericUpDown28.ValueChanged += NumericUpDown28_ValueChanged;
-            // 
-            // numericUpDown27
-            // 
-            numericUpDown27.DecimalPlaces = 2;
-            numericUpDown27.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown27.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown27.Location = new System.Drawing.Point(208, 495);
-            numericUpDown27.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown27.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown27.Name = "numericUpDown27";
-            numericUpDown27.Size = new System.Drawing.Size(68, 25);
-            numericUpDown27.TabIndex = 36;
-            numericUpDown27.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(numericUpDown27, "The lower the relaxation factor,\r\nthe higher the numerical stability");
-            numericUpDown27.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown27.Visible = false;
-            numericUpDown27.ValueChanged += NumericUpDown27_ValueChanged;
             // 
             // label25
             // 
@@ -4529,8 +4462,6 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown29).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown30).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown31).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown28).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown27).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown10).EndInit();
             Domain.ResumeLayout(false);
             groupBox9.ResumeLayout(false);
@@ -4841,10 +4772,6 @@
         public System.Windows.Forms.NumericUpDown numericUpDown26;
         private System.Windows.Forms.Label label74;
         private System.Windows.Forms.Label label75;
-        public System.Windows.Forms.NumericUpDown numericUpDown27;
-        private System.Windows.Forms.Label label76;
-        public System.Windows.Forms.NumericUpDown numericUpDown28;
-        private System.Windows.Forms.Label label77;
         public System.Windows.Forms.NumericUpDown numericUpDown30;
         private System.Windows.Forms.Label label79;
         public System.Windows.Forms.NumericUpDown numericUpDown29;
