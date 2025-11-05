@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <NoWarn>$(NoWarn);WFO5002</NoWarn>
+    <NoWarn>$(NoWarn);WFO5002;WFO1000</NoWarn>
     <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
     <LangVersion>preview</LangVersion>
     <OutputType>WinExe</OutputType>
