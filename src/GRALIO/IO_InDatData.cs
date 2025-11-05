@@ -215,12 +215,11 @@ namespace GralIO
         ///Use AVX512 instructions - 512 bit Advanced Vector Extensions
         /// </summary>
         public int AVX512Usage  { get; set; }
-
-        public bool ReproducibleResults { get; set; }
         /// <summary>
         ///GRAL reproducible results option
         /// </summary>
-
+        public bool ReproducibleResults { get; set; }
+        
         public InDatVariables()
         {
             InDatPath = String.Empty;
@@ -279,7 +278,7 @@ namespace GralIO
             PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
             UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
             AVX512Usage = other.AVX512Usage;
-            ReproducibleResults = other.ReproducibleResults;   
+            ReproducibleResults = other.ReproducibleResults;
         }
 
     }
