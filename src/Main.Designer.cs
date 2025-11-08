@@ -3728,7 +3728,7 @@
             // 
             numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             numericUpDown32.Location = new System.Drawing.Point(124, 219);
-            numericUpDown32.Maximum = new decimal(new int[] { 63, 0, 0, 0 });
+            numericUpDown32.Maximum = new decimal(new int[] { 128, 0, 0, 0 });
             numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown32.Name = "numericUpDown32";
             numericUpDown32.Size = new System.Drawing.Size(59, 25);

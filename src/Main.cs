@@ -2902,7 +2902,7 @@ namespace Gral
         void MaxProcFileRead()
         {
             //Read the actual number of threads to be used in each parallelized region
-            int prozessoranzahl = Math.Min(63, Environment.ProcessorCount);
+            int prozessoranzahl = Math.Min(128, Environment.ProcessorCount);
             try
             {
                 string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");
