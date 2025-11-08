@@ -102,7 +102,7 @@ namespace GralData
             UseDefaultColors = true;
 
 #if NET9_0_OR_GREATER
-            if ((int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", -1) == 0)
+            if (Application.IsDarkModeEnabled)
             {
                 UseDarkMode = true;
             }
