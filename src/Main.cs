@@ -2337,6 +2337,7 @@ namespace Gral
             numericUpDown29.Enabled = !locked;
             numericUpDown30.Enabled = !locked;
             numericUpDown31.Enabled = !locked;
+            numericUpDown33.Enabled = !locked;
             numericUpDown34.Enabled = !locked; // GRAL transient
             numericUpDown38.Enabled = !locked; // Surface roughness lenght
             checkBox29.Enabled = !locked;      // Surface roughness lenght
@@ -2902,7 +2903,7 @@ namespace Gral
         void MaxProcFileRead()
         {
             //Read the actual number of threads to be used in each parallelized region
-            int prozessoranzahl = Math.Min(128, Environment.ProcessorCount);
+            int prozessoranzahl = Math.Min(63, Environment.ProcessorCount);
             try
             {
                 string maxproc = Path.Combine(ProjectName, @"Computation", "Max_Proc.txt");
@@ -3771,7 +3772,7 @@ namespace Gral
         {
             if (MessageBox.Show(this, "These special settings are only intended for a few applications. Do not proceed if you cannot assess the effects", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                using (GralMainForms.Main_SpecialSettings MSp = new GralMainForms.Main_SpecialSettings())
+                using (GralMainForms.SpecialSettings MSp = new GralMainForms.SpecialSettings())
                 {
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;

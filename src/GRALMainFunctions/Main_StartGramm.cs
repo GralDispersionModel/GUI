@@ -251,8 +251,7 @@ namespace Gral
                         }
 
                         // now loop through the GRAMM instances
-                        int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) /
-                                                              (double)numericUpDown33.Value));
+                        int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numericUpDown33.Value));
                         int instance_start = first_sit;
                         int instance_end;
                         int count = 1;

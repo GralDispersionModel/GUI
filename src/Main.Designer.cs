@@ -259,6 +259,12 @@
             label53 = new System.Windows.Forms.Label();
             numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             Computation = new System.Windows.Forms.TabPage();
+            groupBox31 = new System.Windows.Forms.GroupBox();
+            checkBoxAVX = new System.Windows.Forms.CheckBox();
+            numericUpDown33 = new System.Windows.Forms.NumericUpDown();
+            label98 = new System.Windows.Forms.Label();
+            numericUpDown32 = new System.Windows.Forms.NumericUpDown();
+            label20 = new System.Windows.Forms.Label();
             label94 = new System.Windows.Forms.Label();
             textBox16 = new System.Windows.Forms.TextBox();
             groupBox17 = new System.Windows.Forms.GroupBox();
@@ -272,8 +278,6 @@
             label96 = new System.Windows.Forms.Label();
             button45 = new System.Windows.Forms.Button();
             label97 = new System.Windows.Forms.Label();
-            label98 = new System.Windows.Forms.Label();
-            numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             label67 = new System.Windows.Forms.Label();
             progressBar2 = new System.Windows.Forms.ProgressBar();
             label66 = new System.Windows.Forms.Label();
@@ -282,13 +286,10 @@
             button30 = new System.Windows.Forms.Button();
             button31 = new System.Windows.Forms.Button();
             groupBox6 = new System.Windows.Forms.GroupBox();
-            checkBoxAVX = new System.Windows.Forms.CheckBox();
             pictureBox4 = new System.Windows.Forms.PictureBox();
             pictureBox3 = new System.Windows.Forms.PictureBox();
             pictureBox2 = new System.Windows.Forms.PictureBox();
             pictureBox1 = new System.Windows.Forms.PictureBox();
-            label20 = new System.Windows.Forms.Label();
-            numericUpDown32 = new System.Windows.Forms.NumericUpDown();
             button18 = new System.Windows.Forms.Button();
             button9 = new System.Windows.Forms.Button();
             button7 = new System.Windows.Forms.Button();
@@ -411,16 +412,17 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown17).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown18).BeginInit();
             Computation.SuspendLayout();
+            groupBox31.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown33).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown32).BeginInit();
             groupBox17.SuspendLayout();
             groupBox15.SuspendLayout();
             groupBox30.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown33).BeginInit();
             groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown32).BeginInit();
             groupBox16.SuspendLayout();
             groupBox18.SuspendLayout();
             groupBox13.SuspendLayout();
@@ -1358,7 +1360,7 @@
             groupBox26.Controls.Add(numericUpDown41);
             groupBox26.Controls.Add(checkBox26);
             groupBox26.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            groupBox26.Location = new System.Drawing.Point(7, 360);
+            groupBox26.Location = new System.Drawing.Point(2, 430);
             groupBox26.Name = "groupBox26";
             groupBox26.Size = new System.Drawing.Size(276, 77);
             groupBox26.TabIndex = 44;
@@ -3356,6 +3358,7 @@
             // Computation
             // 
             Computation.BackColor = System.Drawing.Color.FromArgb(192, 255, 255);
+            Computation.Controls.Add(groupBox31);
             Computation.Controls.Add(label94);
             Computation.Controls.Add(textBox16);
             Computation.Controls.Add(groupBox17);
@@ -3371,6 +3374,81 @@
             Computation.Size = new System.Drawing.Size(811, 539);
             Computation.TabIndex = 5;
             Computation.Text = "COMPUTATION";
+            // 
+            // groupBox31
+            // 
+            groupBox31.Controls.Add(checkBoxAVX);
+            groupBox31.Controls.Add(numericUpDown33);
+            groupBox31.Controls.Add(label98);
+            groupBox31.Controls.Add(numericUpDown32);
+            groupBox31.Controls.Add(label20);
+            groupBox31.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            groupBox31.Location = new System.Drawing.Point(212, 309);
+            groupBox31.Name = "groupBox31";
+            groupBox31.Size = new System.Drawing.Size(217, 129);
+            groupBox31.TabIndex = 81;
+            groupBox31.TabStop = false;
+            groupBox31.Text = "Processor cores";
+            // 
+            // checkBoxAVX
+            // 
+            checkBoxAVX.AutoSize = true;
+            checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
+            checkBoxAVX.Location = new System.Drawing.Point(13, 92);
+            checkBoxAVX.Name = "checkBoxAVX";
+            checkBoxAVX.Size = new System.Drawing.Size(145, 19);
+            checkBoxAVX.TabIndex = 26;
+            checkBoxAVX.Text = "Use AVX512 extensions";
+            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
+            checkBoxAVX.UseVisualStyleBackColor = true;
+            checkBoxAVX.Visible = false;
+            checkBoxAVX.Click += checkBoxAVX_Click;
+            // 
+            // numericUpDown33
+            // 
+            numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
+            numericUpDown33.Location = new System.Drawing.Point(148, 56);
+            numericUpDown33.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            numericUpDown33.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown33.Name = "numericUpDown33";
+            numericUpDown33.Size = new System.Drawing.Size(59, 25);
+            numericUpDown33.TabIndex = 36;
+            numericUpDown33.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown33, "Use multiple instances to speed up the computation\r\nKeep in mind that each instance consumes the same amount of RAM.");
+            numericUpDown33.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown33.ValueChanged += NumericUpDown32ValueChanged;
+            // 
+            // label98
+            // 
+            label98.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            label98.Location = new System.Drawing.Point(10, 58);
+            label98.Name = "label98";
+            label98.Size = new System.Drawing.Size(130, 20);
+            label98.TabIndex = 24;
+            label98.Text = "Number of Instances";
+            // 
+            // numericUpDown32
+            // 
+            numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            numericUpDown32.Location = new System.Drawing.Point(148, 25);
+            numericUpDown32.Maximum = new decimal(new int[] { 128, 0, 0, 0 });
+            numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown32.Name = "numericUpDown32";
+            numericUpDown32.Size = new System.Drawing.Size(59, 25);
+            numericUpDown32.TabIndex = 5;
+            numericUpDown32.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown32, "Number of used cores per instance");
+            numericUpDown32.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            numericUpDown32.ValueChanged += NumericUpDown32ValueChanged;
+            // 
+            // label20
+            // 
+            label20.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            label20.Location = new System.Drawing.Point(10, 27);
+            label20.Name = "label20";
+            label20.Size = new System.Drawing.Size(130, 20);
+            label20.TabIndex = 24;
+            label20.Text = "Cores per Instance";
             // 
             // label94
             // 
@@ -3397,9 +3475,9 @@
             groupBox17.Controls.Add(button59);
             groupBox17.Controls.Add(button36);
             groupBox17.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox17.Location = new System.Drawing.Point(9, 327);
+            groupBox17.Location = new System.Drawing.Point(9, 309);
             groupBox17.Name = "groupBox17";
-            groupBox17.Size = new System.Drawing.Size(191, 111);
+            groupBox17.Size = new System.Drawing.Size(191, 129);
             groupBox17.TabIndex = 80;
             groupBox17.TabStop = false;
             groupBox17.Text = "GRAMM / GRAL Online";
@@ -3408,7 +3486,7 @@
             // button59
             // 
             button59.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button59.Location = new System.Drawing.Point(14, 29);
+            button59.Location = new System.Drawing.Point(13, 38);
             button59.Name = "button59";
             button59.Size = new System.Drawing.Size(166, 30);
             button59.TabIndex = 101;
@@ -3421,7 +3499,7 @@
             button36.BackColor = System.Drawing.SystemColors.Control;
             button36.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             button36.ForeColor = System.Drawing.SystemColors.ControlText;
-            button36.Location = new System.Drawing.Point(14, 70);
+            button36.Location = new System.Drawing.Point(13, 79);
             button36.Margin = new System.Windows.Forms.Padding(2);
             button36.Name = "button36";
             button36.Size = new System.Drawing.Size(166, 30);
@@ -3464,8 +3542,6 @@
             // 
             groupBox15.BackColor = System.Drawing.Color.FromArgb(192, 255, 255);
             groupBox15.Controls.Add(groupBox30);
-            groupBox15.Controls.Add(label98);
-            groupBox15.Controls.Add(numericUpDown33);
             groupBox15.Controls.Add(label67);
             groupBox15.Controls.Add(progressBar2);
             groupBox15.Controls.Add(label66);
@@ -3476,7 +3552,7 @@
             groupBox15.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
             groupBox15.Location = new System.Drawing.Point(212, 11);
             groupBox15.Name = "groupBox15";
-            groupBox15.Size = new System.Drawing.Size(217, 427);
+            groupBox15.Size = new System.Drawing.Size(217, 287);
             groupBox15.TabIndex = 30;
             groupBox15.TabStop = false;
             groupBox15.Text = "GRAMM";
@@ -3488,19 +3564,19 @@
             groupBox30.Controls.Add(button45);
             groupBox30.Controls.Add(label97);
             groupBox30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox30.Location = new System.Drawing.Point(5, 170);
+            groupBox30.Location = new System.Drawing.Point(6, 170);
             groupBox30.Name = "groupBox30";
-            groupBox30.Size = new System.Drawing.Size(192, 117);
+            groupBox30.Size = new System.Drawing.Size(201, 111);
             groupBox30.TabIndex = 38;
             groupBox30.TabStop = false;
             groupBox30.Text = "GRAMM file size";
             // 
             // label96
             // 
-            label96.Font = new System.Drawing.Font("Segoe UI", 9F);
-            label96.Location = new System.Drawing.Point(14, 45);
+            label96.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label96.Location = new System.Drawing.Point(14, 48);
             label96.Name = "label96";
-            label96.Size = new System.Drawing.Size(138, 23);
+            label96.Size = new System.Drawing.Size(110, 23);
             label96.TabIndex = 38;
             label96.Text = "0";
             // 
@@ -3509,9 +3585,9 @@
             button45.BackColor = System.Drawing.SystemColors.Control;
             button45.BackgroundImage = (System.Drawing.Image)resources.GetObject("button45.BackgroundImage");
             button45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button45.Location = new System.Drawing.Point(160, 30);
+            button45.Location = new System.Drawing.Point(158, 18);
             button45.Name = "button45";
-            button45.Size = new System.Drawing.Size(26, 25);
+            button45.Size = new System.Drawing.Size(32, 32);
             button45.TabIndex = 37;
             toolTip1.SetToolTip(button45, "Delete all GRAMM wind field files\r\n");
             button45.UseVisualStyleBackColor = false;
@@ -3519,35 +3595,12 @@
             // 
             // label97
             // 
-            label97.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label97.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label97.Location = new System.Drawing.Point(14, 25);
             label97.Name = "label97";
             label97.Size = new System.Drawing.Size(138, 23);
             label97.TabIndex = 16;
             label97.Text = "0 MByte";
-            // 
-            // label98
-            // 
-            label98.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label98.Location = new System.Drawing.Point(14, 330);
-            label98.Name = "label98";
-            label98.Size = new System.Drawing.Size(116, 20);
-            label98.TabIndex = 24;
-            label98.Text = "GRAMM instances";
-            // 
-            // numericUpDown33
-            // 
-            numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown33.Location = new System.Drawing.Point(142, 327);
-            numericUpDown33.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            numericUpDown33.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown33.Name = "numericUpDown33";
-            numericUpDown33.Size = new System.Drawing.Size(55, 25);
-            numericUpDown33.TabIndex = 36;
-            numericUpDown33.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(numericUpDown33, "Use multiple instances to speed up the computation");
-            numericUpDown33.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown33.ValueChanged += NumericUpDown32ValueChanged;
             // 
             // label67
             // 
@@ -3638,13 +3691,10 @@
             // 
             // groupBox6
             // 
-            groupBox6.Controls.Add(checkBoxAVX);
             groupBox6.Controls.Add(pictureBox4);
             groupBox6.Controls.Add(pictureBox3);
             groupBox6.Controls.Add(pictureBox2);
             groupBox6.Controls.Add(pictureBox1);
-            groupBox6.Controls.Add(label20);
-            groupBox6.Controls.Add(numericUpDown32);
             groupBox6.Controls.Add(button18);
             groupBox6.Controls.Add(button9);
             groupBox6.Controls.Add(button7);
@@ -3656,20 +3706,6 @@
             groupBox6.TabIndex = 1;
             groupBox6.TabStop = false;
             groupBox6.Text = "Generate input files";
-            // 
-            // checkBoxAVX
-            // 
-            checkBoxAVX.AutoSize = true;
-            checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
-            checkBoxAVX.Location = new System.Drawing.Point(14, 256);
-            checkBoxAVX.Name = "checkBoxAVX";
-            checkBoxAVX.Size = new System.Drawing.Size(145, 19);
-            checkBoxAVX.TabIndex = 26;
-            checkBoxAVX.Text = "Use AVX512 extensions";
-            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
-            checkBoxAVX.UseVisualStyleBackColor = true;
-            checkBoxAVX.Visible = false;
-            checkBoxAVX.Click += checkBoxAVX_Click;
             // 
             // pictureBox4
             // 
@@ -3714,28 +3750,6 @@
             pictureBox1.TabIndex = 25;
             pictureBox1.TabStop = false;
             pictureBox1.Visible = false;
-            // 
-            // label20
-            // 
-            label20.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label20.Location = new System.Drawing.Point(13, 222);
-            label20.Name = "label20";
-            label20.Size = new System.Drawing.Size(105, 20);
-            label20.TabIndex = 24;
-            label20.Text = "Processor cores";
-            // 
-            // numericUpDown32
-            // 
-            numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            numericUpDown32.Location = new System.Drawing.Point(124, 219);
-            numericUpDown32.Maximum = new decimal(new int[] { 128, 0, 0, 0 });
-            numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown32.Name = "numericUpDown32";
-            numericUpDown32.Size = new System.Drawing.Size(59, 25);
-            numericUpDown32.TabIndex = 5;
-            numericUpDown32.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            numericUpDown32.Value = new decimal(new int[] { 16, 0, 0, 0 });
-            numericUpDown32.ValueChanged += NumericUpDown32ValueChanged;
             // 
             // button18
             // 
@@ -3814,9 +3828,9 @@
             groupBox16.Controls.Add(button35);
             groupBox16.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             groupBox16.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox16.Location = new System.Drawing.Point(445, 11);
+            groupBox16.Location = new System.Drawing.Point(435, 11);
             groupBox16.Name = "groupBox16";
-            groupBox16.Size = new System.Drawing.Size(357, 427);
+            groupBox16.Size = new System.Drawing.Size(367, 427);
             groupBox16.TabIndex = 40;
             groupBox16.TabStop = false;
             groupBox16.Text = "GRAL";
@@ -3855,7 +3869,7 @@
             groupBox18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             groupBox18.Location = new System.Drawing.Point(5, 170);
             groupBox18.Name = "groupBox18";
-            groupBox18.Size = new System.Drawing.Size(176, 117);
+            groupBox18.Size = new System.Drawing.Size(186, 117);
             groupBox18.TabIndex = 8;
             groupBox18.TabStop = false;
             groupBox18.Text = "GRAL file size";
@@ -3863,11 +3877,11 @@
             // label72
             // 
             label72.AutoSize = true;
-            label72.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label72.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label72.Location = new System.Drawing.Point(5, 90);
             label72.Name = "label72";
             label72.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label72.Size = new System.Drawing.Size(13, 15);
+            label72.Size = new System.Drawing.Size(15, 17);
             label72.TabIndex = 11;
             label72.Text = "0";
             label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3875,11 +3889,11 @@
             // label57
             // 
             label57.AutoSize = true;
-            label57.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label57.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label57.Location = new System.Drawing.Point(5, 45);
             label57.Name = "label57";
             label57.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label57.Size = new System.Drawing.Size(16, 15);
+            label57.Size = new System.Drawing.Size(19, 17);
             label57.TabIndex = 10;
             label57.Text = "0 ";
             label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3887,11 +3901,11 @@
             // label85
             // 
             label85.AutoSize = true;
-            label85.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label85.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label85.Location = new System.Drawing.Point(5, 70);
             label85.Name = "label85";
             label85.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label85.Size = new System.Drawing.Size(50, 15);
+            label85.Size = new System.Drawing.Size(55, 17);
             label85.TabIndex = 5;
             label85.Text = "0 MByte";
             label85.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3899,11 +3913,11 @@
             // label84
             // 
             label84.AutoSize = true;
-            label84.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label84.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label84.Location = new System.Drawing.Point(5, 25);
             label84.Name = "label84";
             label84.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label84.Size = new System.Drawing.Size(50, 15);
+            label84.Size = new System.Drawing.Size(55, 17);
             label84.TabIndex = 4;
             label84.Text = "0 MByte";
             label84.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3914,9 +3928,9 @@
             button42.BackgroundImage = (System.Drawing.Image)resources.GetObject("button42.BackgroundImage");
             button42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button42.ForeColor = System.Drawing.SystemColors.ControlText;
-            button42.Location = new System.Drawing.Point(141, 74);
+            button42.Location = new System.Drawing.Point(151, 74);
             button42.Name = "button42";
-            button42.Size = new System.Drawing.Size(26, 25);
+            button42.Size = new System.Drawing.Size(32, 32);
             button42.TabIndex = 9;
             toolTip1.SetToolTip(button42, "Delete all intermediate GRAL flow field files");
             button42.UseVisualStyleBackColor = false;
@@ -3928,9 +3942,9 @@
             button41.BackgroundImage = (System.Drawing.Image)resources.GetObject("button41.BackgroundImage");
             button41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button41.ForeColor = System.Drawing.SystemColors.ControlText;
-            button41.Location = new System.Drawing.Point(141, 34);
+            button41.Location = new System.Drawing.Point(151, 18);
             button41.Name = "button41";
-            button41.Size = new System.Drawing.Size(26, 25);
+            button41.Size = new System.Drawing.Size(32, 32);
             button41.TabIndex = 8;
             toolTip1.SetToolTip(button41, "Delete all intermediate GRAL concentration files");
             button41.UseVisualStyleBackColor = false;
@@ -3939,20 +3953,20 @@
             // label83
             // 
             label83.AutoSize = true;
-            label83.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label83.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label83.Location = new System.Drawing.Point(79, 79);
             label83.Name = "label83";
-            label83.Size = new System.Drawing.Size(54, 15);
+            label83.Size = new System.Drawing.Size(59, 17);
             label83.TabIndex = 1;
             label83.Text = "*.gff files";
             // 
             // label82
             // 
             label82.AutoSize = true;
-            label82.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label82.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label82.Location = new System.Drawing.Point(79, 38);
             label82.Name = "label82";
-            label82.Size = new System.Drawing.Size(59, 15);
+            label82.Size = new System.Drawing.Size(64, 17);
             label82.TabIndex = 0;
             label82.Text = "*.con files";
             // 
@@ -3964,7 +3978,7 @@
             groupBox13.Controls.Add(button25);
             groupBox13.Controls.Add(button28);
             groupBox13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox13.Location = new System.Drawing.Point(190, 24);
+            groupBox13.Location = new System.Drawing.Point(200, 24);
             groupBox13.Name = "groupBox13";
             groupBox13.Size = new System.Drawing.Size(159, 170);
             groupBox13.TabIndex = 50;
@@ -4035,7 +4049,7 @@
             groupBox14.Controls.Add(button26);
             groupBox14.Controls.Add(button27);
             groupBox14.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox14.Location = new System.Drawing.Point(190, 200);
+            groupBox14.Location = new System.Drawing.Point(200, 200);
             groupBox14.Name = "groupBox14";
             groupBox14.Size = new System.Drawing.Size(159, 170);
             groupBox14.TabIndex = 60;
@@ -4142,7 +4156,7 @@
             groupBox11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             groupBox11.Location = new System.Drawing.Point(5, 300);
             groupBox11.Name = "groupBox11";
-            groupBox11.Size = new System.Drawing.Size(177, 111);
+            groupBox11.Size = new System.Drawing.Size(186, 121);
             groupBox11.TabIndex = 6;
             groupBox11.TabStop = false;
             groupBox11.Text = " GRAL Topography";
@@ -4150,10 +4164,10 @@
             // checkBox25
             // 
             checkBox25.AutoSize = true;
-            checkBox25.Font = new System.Drawing.Font("Segoe UI", 9F);
+            checkBox25.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             checkBox25.Location = new System.Drawing.Point(7, 68);
             checkBox25.Name = "checkBox25";
-            checkBox25.Size = new System.Drawing.Size(151, 34);
+            checkBox25.Size = new System.Drawing.Size(167, 38);
             checkBox25.TabIndex = 7;
             checkBox25.Text = "Use original topo-\r\ngraphical data for GRAL";
             toolTip1.SetToolTip(checkBox25, "Prompts you for high resolution topographical\r\ndata used to define the GRAL topography\r\nwhen starting the GRAL simulation.");
@@ -4165,10 +4179,10 @@
             // 
             radioButton2.AutoSize = true;
             radioButton2.Enabled = false;
-            radioButton2.Font = new System.Drawing.Font("Segoe UI", 9F);
+            radioButton2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton2.Location = new System.Drawing.Point(7, 45);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new System.Drawing.Size(70, 19);
+            radioButton2.Size = new System.Drawing.Size(75, 21);
             radioButton2.TabIndex = 1;
             radioButton2.Text = "complex";
             radioButton2.UseVisualStyleBackColor = true;
@@ -4178,10 +4192,10 @@
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
             radioButton1.Enabled = false;
-            radioButton1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            radioButton1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton1.Location = new System.Drawing.Point(7, 20);
             radioButton1.Name = "radioButton1";
-            radioButton1.Size = new System.Drawing.Size(42, 19);
+            radioButton1.Size = new System.Drawing.Size(44, 21);
             radioButton1.TabIndex = 6;
             radioButton1.TabStop = true;
             radioButton1.Text = "flat";
@@ -4511,18 +4525,20 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown18).EndInit();
             Computation.ResumeLayout(false);
             Computation.PerformLayout();
+            groupBox31.ResumeLayout(false);
+            groupBox31.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown33).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown32).EndInit();
             groupBox17.ResumeLayout(false);
             groupBox15.ResumeLayout(false);
             groupBox15.PerformLayout();
             groupBox30.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numericUpDown33).EndInit();
             groupBox6.ResumeLayout(false);
             groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown32).EndInit();
             groupBox16.ResumeLayout(false);
             groupBox16.PerformLayout();
             groupBox18.ResumeLayout(false);
@@ -4852,6 +4868,7 @@
         private System.Windows.Forms.Button button60;
         private System.Windows.Forms.Label LabelEmissionPath;
         public System.Windows.Forms.CheckBox checkBoxAVX;
+        private System.Windows.Forms.GroupBox groupBox31;
     }
 }
 

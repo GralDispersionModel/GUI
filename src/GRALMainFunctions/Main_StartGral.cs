@@ -82,7 +82,7 @@ namespace Gral
             catch
             { }
 
-            if (transient == 1)
+            if (transient == 1) // steady state
             {
                 if (ReadFile.ReadMeteopgtAllFile() == true)
                 {
@@ -94,7 +94,7 @@ namespace Gral
                     DispSituationfrequ = ReadFile.DispsituationFrequ;
                 }
             }
-            else
+            else //transient
             {
                 if (weathersit_count > 0)
                 {
@@ -281,7 +281,7 @@ namespace Gral
                     }
 
                     //start routine GRAL*.exe to compute concentrations
-                    #if __MonoCS__
+#if __MonoCS__
                     try
                     {
                         string command = String.Empty;
@@ -319,25 +319,72 @@ namespace Gral
                     {
                         MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    #else
+#else
 
-                    GRALProcess = new Process
+                    // multple instances
+                    int numberOfInstances = (int) numericUpDown33.Value;
+                    try
                     {
-                        EnableRaisingEvents = true
-                    };
-                    GRALProcess.Exited += new System.EventHandler(GralExited);
-                    GRALProcess.StartInfo.FileName = GRAL_Program_Path;
-                    GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                    GRALProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
-                    if (GUISettings.CopyCoresToProject == false)
-                    {
-                        GRALProcess.StartInfo.Arguments = " " + "\"" + GRAL_Project_Path + "\"";
+
+                        if (transient == 1) // steady state mode, in transient mode, weathersitcount is already available
+                        {
+                            weathersit_count = (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(ProjectName, "Computation", "meteopgt.all")) - 2;
+                        }
+                        else
+                        {
+                            //read mettimeseries.dat
+                            List<string> data_mettimeseries = new List<string>();
+                            ReadMetTimeSeries(Path.Combine(ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
+                            weathersit_count = Math.Max(data_mettimeseries.Count, 1);
+                        }
                     }
-                    if (GRALSettings.Loglevel > 0)
+                    catch { }
+
+                    int first_sit = Convert.ToInt32(numericUpDown5.Value); 
+                    int final_sit = weathersit_count;
+                    int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
+                    int instance_start = first_sit;
+                    int instance_end;
+                    int count = 1;
+
+                    while (instance_start <= final_sit || (numberOfInstances == 1 && count == 1))
                     {
-                        GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
+                        instance_end = instance_start + offset;
+                        if (count == numberOfInstances) // avoid rounding errors
+                        {
+                            instance_end = final_sit;
+                        }
+                        GRALProcess = new Process();
+                        if (count == 1) // first instance
+                        {
+                            GRALProcess.EnableRaisingEvents = true;
+                            GRALProcess.Exited += new System.EventHandler(GralExited);
+                        }
+                        else
+                        {
+                            GRALProcess.EnableRaisingEvents = false;
+                        }
+                        GRALProcess.StartInfo.FileName = GRAL_Program_Path;
+                        GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                        GRALProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
+                        if (GUISettings.CopyCoresToProject == false)
+                        {
+                            GRALProcess.StartInfo.Arguments = " " + "\"" + GRAL_Project_Path + "\"";
+                        }
+                        if (GRALSettings.Loglevel > 0)
+                        {
+                            GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
+                        }
+                        if (numberOfInstances > 1)
+                        {
+                            GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                        }
+                        GRALProcess.Start();
+                        System.Threading.Thread.Sleep(250);
+                        // new start value, new instance
+                        instance_start = instance_end + 1;
+                        count++;
                     }
-                    GRALProcess.Start();
                     
                     #endif
 
