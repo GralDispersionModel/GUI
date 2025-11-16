@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Objectmanager));
             button1 = new System.Windows.Forms.Button();
             button2 = new System.Windows.Forms.Button();
             checkBox1 = new System.Windows.Forms.CheckBox();
@@ -43,8 +42,8 @@
             // 
             // button1
             // 
-            button1.BackgroundImage = (System.Drawing.Image)resources.GetObject("button1.BackgroundImage");
             button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            button1.Image = Gral.Properties.Resources.ArrowUp;
             button1.Location = new System.Drawing.Point(14, 128);
             button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button1.Name = "button1";
@@ -56,8 +55,8 @@
             // 
             // button2
             // 
-            button2.BackgroundImage = (System.Drawing.Image)resources.GetObject("button2.BackgroundImage");
             button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            button2.Image = Gral.Properties.Resources.ArrowDown;
             button2.Location = new System.Drawing.Point(14, 179);
             button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button2.Name = "button2";
@@ -127,8 +126,8 @@
             // button4
             // 
             button4.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-            button4.BackgroundImage = Gral.Properties.Resources.Rueckgaenging;
             button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            button4.Image = Gral.Properties.Resources.Rueckgaenging;
             button4.Location = new System.Drawing.Point(7, 369);
             button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button4.Name = "button4";
