@@ -10,6 +10,7 @@
 ///</remarks>
 #endregion
 
+using Gral.GralMainForms;
 using GralData;
 using GralIO;
 using GralMainForms;
@@ -786,7 +787,7 @@ namespace Gral
             {
                 newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
             }
-            GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath)
+            global::GralMainForms.Emissionvariation emvar = new global::GralMainForms.Emissionvariation(this, newPath)
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left, this.Top),
@@ -1383,8 +1384,74 @@ namespace Gral
         //Start GRAL simulation
         private void Button33_Click(object sender, EventArgs e)
         {
-            GRALStartCalculation(sender, e);
+            GRALStartCalculation(0, 0);
         }
+        private void Button33_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) // start a chunk of situations
+            {
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Start a chunk of GRAL situations";
+                mi.Click += RightClickButton33;
+                m.Items.Add(mi);
+                m.Show(button33, button33.PointToClient(Cursor.Position));
+            }
+        }
+        private void RightClickButton33(object sender, EventArgs e)
+        {
+            ContextMenuStrip m = sender as ContextMenuStrip;
+            if (m != null)
+            {
+                m.Dispose();
+            }
+            Cursor.Current = Cursors.WaitCursor;
+            int maxWeatherSituation = 1;
+            InDatVariables data = new InDatVariables();
+            InDatFileIO ReadInData = new InDatFileIO();
+            data.InDatPath = Path.Combine(ProjectName, @"Computation", "in.dat");
+            ReadInData.Data = data;
+            if (ReadInData.ReadInDat() == true)
+            {
+                if (data.Transientflag == 0)
+                {
+                    //read mettimeseries.dat
+                    string mettimeseries = Path.Combine(ProjectName, @"Computation", "mettimeseries.dat");
+                    List<string> data_mettimeseries = new List<string>();
+                    ReadMetTimeSeries(mettimeseries, ref data_mettimeseries);
+                    maxWeatherSituation = Math.Max(data_mettimeseries.Count, 1);
+                }
+                else
+                {
+                    maxWeatherSituation = (int)St_F.CountLinesInFile(Path.Combine(ProjectName, @"Computation", @"meteopgt.all")) - 2;
+                }
+            }
+            int start = 1; int end = 1;
+            Cursor.Current = Cursors.Default;
+            if (maxWeatherSituation > 1)
+            {
+                StartandFinalSituation startFinalSit = new StartandFinalSituation(maxWeatherSituation)
+                {
+                    StartPosition = FormStartPosition.Manual,
+                    Location = new System.Drawing.Point(this.Left, this.Top),
+                    Owner = this
+                };
+                if (startFinalSit.ShowDialog() == DialogResult.OK)
+                {
+                    start = startFinalSit.StartSituation;
+                    end = startFinalSit.FinalSituation;
+                }
+                startFinalSit.Close();
+                startFinalSit.Dispose();
+            }
+            if (start < end)
+            {
+                numericUpDown33.Value = 1;
+                GRALStartCalculation(start, end);
+            }
+        }
+
+
         //stop GRAL simulations
         private void Button34_Click(object sender, EventArgs e)
         {
@@ -1512,7 +1579,7 @@ namespace Gral
             {
                 Main_NEMO NemoWork = new Main.Main_NEMO();
                 //source group seperation
-                GralMainForms.Nemostartwindow nemo = new GralMainForms.Nemostartwindow(this);
+                global::GralMainForms.Nemostartwindow nemo = new global::GralMainForms.Nemostartwindow(this);
                 DialogResult dr = new DialogResult();
                 dr = nemo.ShowDialog();
                 string[] text = new string[2];
@@ -2096,7 +2163,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button43_Click(object sender, EventArgs e)
         {
-            GralMainForms.Amend_Landuse AL = new GralMainForms.Amend_Landuse()
+            global::GralMainForms.Amend_Landuse AL = new global::GralMainForms.Amend_Landuse()
             {
                 Owner = this,
                 StartPosition = FormStartPosition.Manual,
@@ -3185,7 +3252,7 @@ namespace Gral
         /// </summary>
         void Button46Click(object sender, EventArgs e)
         {
-            using (GralMainForms.MostRecentFiles MRF = new GralMainForms.MostRecentFiles())
+            using (global::GralMainForms.MostRecentFiles MRF = new global::GralMainForms.MostRecentFiles())
             {
                 if (MRF.ShowDialog() == DialogResult.OK)
                 {
@@ -3420,6 +3487,7 @@ namespace Gral
                         button60.Enabled = false;
                         ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
                         ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                        deleteReceptorConcentrationFiles();
                     }
                     else
                     {
@@ -3429,6 +3497,7 @@ namespace Gral
                         checkBox34.Enabled = false;
                         groupBox21.Visible = false; // Wet Deposition settings
                         groupBox24.Visible = false; // Decay rate
+                        deleteReceptorConcentrationFiles(); 
                     }
                     ResetInDat();
                 }
@@ -3439,7 +3508,23 @@ namespace Gral
                 }
             }
         }
-
+        /// <summary>
+        /// Delete receptor concentrations files
+        /// </summary>
+        private void deleteReceptorConcentrationFiles()
+        {
+            string recFile = Path.Combine(ProjectName, @"Computation", "ReceptorConcentrations.dat");
+            if (File.Exists(recFile))
+            {
+                try
+                {  File.Delete(recFile); } catch { }
+            }
+            recFile = Path.Combine(ProjectName, @"Computation", "Receptor_Timeseries_Transient.txt");
+            if (File.Exists(recFile))
+            {
+                try { File.Delete(recFile); } catch { };
+            }
+        }
         /// <summary>
         /// Set the cut-off concentration for transient simulations
         /// </summary>
@@ -3482,7 +3567,7 @@ namespace Gral
         /// <param name="e"></param>
         void Button49Click(object sender, EventArgs e)
         {
-            GralMainForms.ShowEmissionTimeseries ets = new GralMainForms.ShowEmissionTimeseries()
+            global::GralMainForms.ShowEmissionTimeseries ets = new global::GralMainForms.ShowEmissionTimeseries()
             {
                 SG_Show = -1
             };
@@ -3550,7 +3635,7 @@ namespace Gral
         /// <param name="e"></param>
         void Button50Click(object sender, EventArgs e)
         {
-            GralMainForms.GUI_Settings settings = new GralMainForms.GUI_Settings
+            global::GralMainForms.GUI_Settings settings = new global::GralMainForms.GUI_Settings
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left, this.Top),
@@ -3660,7 +3745,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button12_Click(object sender, EventArgs e)
         {
-            using (GralMainForms.FlexibleStretchingFactors FStF = new GralMainForms.FlexibleStretchingFactors()
+            using (global::GralMainForms.FlexibleStretchingFactors FStF = new global::GralMainForms.FlexibleStretchingFactors()
             {
                 FlexibleStretchingFactor = FlowFieldStretchFlexible,
                 ProjectLocked = Project_Locked,
@@ -3695,7 +3780,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button54_Click(object sender, EventArgs e)
         {
-            using (GralMainForms.DecayRateForm DRF = new GralMainForms.DecayRateForm()
+            using (global::GralMainForms.DecayRateForm DRF = new global::GralMainForms.DecayRateForm()
             {
                 DecayRate = DecayRate,
                 ProjectLocked = Project_Locked,
@@ -3720,7 +3805,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button53_Click(object sender, EventArgs e)
         {
-            using (GralMainForms.VerticalLayerHeights VLH = new GralMainForms.VerticalLayerHeights()
+            using (global::GralMainForms.VerticalLayerHeights VLH = new global::GralMainForms.VerticalLayerHeights()
             {
                 StretchFlexible = FlowFieldStretchFlexible,
                 StretchingFactor = (float)numericUpDown12.Value,
@@ -3753,7 +3838,7 @@ namespace Gral
             }
             if (!open)
             {
-                GralMainForms.AppInfo Ai = new GralMainForms.AppInfo()
+                global::GralMainForms.AppInfo Ai = new global::GralMainForms.AppInfo()
                 {
                     StartPosition = FormStartPosition.Manual,
                     Location = new System.Drawing.Point(this.Left, this.Top),
@@ -3772,7 +3857,7 @@ namespace Gral
         {
             if (MessageBox.Show(this, "These special settings are only intended for a few applications. Do not proceed if you cannot assess the effects", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                using (GralMainForms.SpecialSettings MSp = new GralMainForms.SpecialSettings())
+                using (global::GralMainForms.SpecialSettings MSp = new global::GralMainForms.SpecialSettings())
                 {
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
@@ -3877,7 +3962,7 @@ namespace Gral
         /// <param name="e"></param>
         private void button59_Click(object sender, EventArgs e)
         {
-            GralMainForms.OnlineParameters online = new GralMainForms.OnlineParameters()
+            global::GralMainForms.OnlineParameters online = new global::GralMainForms.OnlineParameters()
             {
                 GRAMMGroupBoxVisible = groupBox15.Visible,
                 OnlineGroupBoxVisible = groupBox17.Visible,
@@ -3897,7 +3982,7 @@ namespace Gral
         /// <param name="e"></param>
         private void OnlineParametersFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            GralMainForms.OnlineParameters online = (GralMainForms.OnlineParameters)sender;
+            global::GralMainForms.OnlineParameters online = (global::GralMainForms.OnlineParameters)sender;
             OnlineRefreshInterval = online.OnlineRefreshInterval;
             OnlineParmeters = online.OnlineCheckBoxes;
         }
@@ -3908,7 +3993,7 @@ namespace Gral
         /// <param name="ReportError">Show "error" and "No update available" messages?</param>
         public static void AutoUpdateStart(bool ReportError)
         {
-            GralMainForms.UpdateNotification upd = new GralMainForms.UpdateNotification()
+            global::GralMainForms.UpdateNotification upd = new global::GralMainForms.UpdateNotification()
             {
                 RecentVersion = Application.ProductVersion,
                 ShowUserInfo = ReportError

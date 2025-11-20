@@ -3651,9 +3651,9 @@
             button32.BackgroundImage = (System.Drawing.Image)resources.GetObject("button32.BackgroundImage");
             button32.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button32.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button32.Location = new System.Drawing.Point(123, 21);
+            button32.Location = new System.Drawing.Point(139, 22);
             button32.Name = "button32";
-            button32.Size = new System.Drawing.Size(45, 34);
+            button32.Size = new System.Drawing.Size(35, 35);
             button32.TabIndex = 32;
             toolTip1.SetToolTip(button32, "Start the GRAMM computation core");
             button32.UseVisualStyleBackColor = false;
@@ -3668,7 +3668,7 @@
             button30.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
             button30.Location = new System.Drawing.Point(6, 22);
             button30.Name = "button30";
-            button30.Size = new System.Drawing.Size(45, 34);
+            button30.Size = new System.Drawing.Size(35, 35);
             button30.TabIndex = 30;
             toolTip1.SetToolTip(button30, "Stop the simulation");
             button30.UseVisualStyleBackColor = false;
@@ -3681,9 +3681,9 @@
             button31.BackgroundImage = (System.Drawing.Image)resources.GetObject("button31.BackgroundImage");
             button31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button31.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button31.Location = new System.Drawing.Point(65, 22);
+            button31.Location = new System.Drawing.Point(70, 23);
             button31.Name = "button31";
-            button31.Size = new System.Drawing.Size(45, 34);
+            button31.Size = new System.Drawing.Size(35, 35);
             button31.TabIndex = 31;
             toolTip1.SetToolTip(button31, "Pause");
             button31.UseVisualStyleBackColor = false;
@@ -4140,13 +4140,14 @@
             button33.BackgroundImage = (System.Drawing.Image)resources.GetObject("button33.BackgroundImage");
             button33.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button33.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button33.Location = new System.Drawing.Point(136, 24);
+            button33.Location = new System.Drawing.Point(140, 24);
             button33.Name = "button33";
-            button33.Size = new System.Drawing.Size(45, 34);
+            button33.Size = new System.Drawing.Size(35, 35);
             button33.TabIndex = 42;
-            toolTip1.SetToolTip(button33, "Start the GRAL computation core");
+            toolTip1.SetToolTip(button33, "Start the GRAL computation core\r\nRight mouse key: start a chunk of situations");
             button33.UseVisualStyleBackColor = false;
             button33.Click += Button33_Click;
+            button33.MouseDown += Button33_MouseDown;
             // 
             // groupBox11
             // 
@@ -4210,7 +4211,7 @@
             button34.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
             button34.Location = new System.Drawing.Point(8, 24);
             button34.Name = "button34";
-            button34.Size = new System.Drawing.Size(45, 34);
+            button34.Size = new System.Drawing.Size(35, 35);
             button34.TabIndex = 40;
             toolTip1.SetToolTip(button34, "Stop the simulation");
             button34.UseVisualStyleBackColor = false;
@@ -4223,9 +4224,9 @@
             button35.BackgroundImage = (System.Drawing.Image)resources.GetObject("button35.BackgroundImage");
             button35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button35.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button35.Location = new System.Drawing.Point(70, 24);
+            button35.Location = new System.Drawing.Point(72, 24);
             button35.Name = "button35";
-            button35.Size = new System.Drawing.Size(45, 34);
+            button35.Size = new System.Drawing.Size(35, 35);
             button35.TabIndex = 41;
             toolTip1.SetToolTip(button35, "Pause");
             button35.UseVisualStyleBackColor = false;
