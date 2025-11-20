@@ -1636,7 +1636,7 @@ namespace Gral
                 Cursor = Cursors.Default;
 
                 // set new MostRecentFiles file
-                GralMainForms.MostRecentFiles MRF = new GralMainForms.MostRecentFiles
+                global::GralMainForms.MostRecentFiles MRF = new global::GralMainForms.MostRecentFiles
                 {
                     NewFile = foldername
                 };

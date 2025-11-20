@@ -28,65 +28,69 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Selectslice));
+            listBox1 = new System.Windows.Forms.ListBox();
+            button1 = new System.Windows.Forms.Button();
+            button2 = new System.Windows.Forms.Button();
+            SuspendLayout();
             // 
             // listBox1
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(20, 11);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(169, 186);
-            this.listBox1.TabIndex = 0;
+            listBox1.FormattingEnabled = true;
+            listBox1.Location = new System.Drawing.Point(23, 20);
+            listBox1.Margin = new System.Windows.Forms.Padding(2);
+            listBox1.Name = "listBox1";
+            listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            listBox1.Size = new System.Drawing.Size(196, 214);
+            listBox1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(20, 222);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(72, 28);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "&OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+            button1.Location = new System.Drawing.Point(23, 256);
+            button1.Margin = new System.Windows.Forms.Padding(2);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(84, 32);
+            button1.TabIndex = 1;
+            button1.Text = "&OK";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(120, 222);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(69, 28);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "&Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            button2.Location = new System.Drawing.Point(140, 256);
+            button2.Margin = new System.Windows.Forms.Padding(2);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(80, 32);
+            button2.TabIndex = 2;
+            button2.Text = "&Cancel";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // Selectslice
             // 
-            this.AcceptButton = this.button1;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button2;
-            this.ClientSize = new System.Drawing.Size(208, 270);
-            this.ControlBox = false;
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.listBox1);
-            this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(160, 242);
-            this.Name = "Selectslice";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Select horizontal slices";
-            this.Load += new System.EventHandler(this.Selectslice_Load);
-            this.ResumeLayout(false);
+            AcceptButton = button1;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = button2;
+            ClientSize = new System.Drawing.Size(243, 312);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(listBox1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Margin = new System.Windows.Forms.Padding(2);
+            MaximizeBox = false;
+            MdiChildrenMinimizedAnchorBottom = false;
+            MinimizeBox = false;
+            MinimumSize = new System.Drawing.Size(184, 273);
+            Name = "Selectslice";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Select horizontal slices";
+            Load += Selectslice_Load;
+            ResumeLayout(false);
 
         }
 

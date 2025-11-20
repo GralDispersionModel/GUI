@@ -27,9 +27,9 @@ namespace Gral
         /// <summary>
         /// Start GRAL simulation
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GRALStartCalculation(object sender, EventArgs e)
+        /// <param name="StartSituation">First situation when starting a chunk of situations</param>
+        /// <param name="FinalSituation">Final situation when starting a chunk of situations</param>
+        private void GRALStartCalculation(int StartSituation, int FinalSituation)
         {
             if (Convert.ToString(listBox5.SelectedItem).Contains("Odour")) // check if the lowest conc. layer > 1.5 * vert. extension
             {
@@ -378,6 +378,10 @@ namespace Gral
                         if (numberOfInstances > 1)
                         {
                             GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                        }
+                        if (StartSituation > 0 && FinalSituation > StartSituation) // start 1 instance with a chunk of siutations
+                        {
+                            GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
                         }
                         GRALProcess.Start();
                         System.Threading.Thread.Sleep(250);

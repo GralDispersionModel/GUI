@@ -253,6 +253,8 @@
             Controls.Add(groupBox25);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "GUI_Settings";
             Text = "GUI Settings";
             Load += GUI_SettingsLoad;

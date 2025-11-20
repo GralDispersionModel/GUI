@@ -19,10 +19,10 @@ namespace Gral.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Gral.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gral.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Gral.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Add {
+        internal static System.Drawing.Bitmap Add {
             get {
                 object obj = ResourceManager.GetObject("Add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap AddSmall {
+        internal static System.Drawing.Bitmap AddSmall {
             get {
                 object obj = ResourceManager.GetObject("AddSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap AddSmall1 {
+        internal static System.Drawing.Bitmap AddSmall1 {
             get {
                 object obj = ResourceManager.GetObject("AddSmall1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap AreaSource {
+        internal static System.Drawing.Bitmap AreaSource {
             get {
                 object obj = ResourceManager.GetObject("AreaSource", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +103,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ArrowDown {
+        internal static System.Drawing.Bitmap ArrowDown {
             get {
                 object obj = ResourceManager.GetObject("ArrowDown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +113,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ArrowLeft {
+        internal static System.Drawing.Bitmap ArrowLeft {
             get {
                 object obj = ResourceManager.GetObject("ArrowLeft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -123,7 +123,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ArrowRight {
+        internal static System.Drawing.Bitmap ArrowRight {
             get {
                 object obj = ResourceManager.GetObject("ArrowRight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -133,7 +133,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ArrowUp {
+        internal static System.Drawing.Bitmap ArrowUp {
             get {
                 object obj = ResourceManager.GetObject("ArrowUp", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -143,7 +143,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap BlackHook {
+        internal static System.Drawing.Bitmap BlackHook {
             get {
                 object obj = ResourceManager.GetObject("BlackHook", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -153,7 +153,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap BlackHookTransparent {
+        internal static System.Drawing.Bitmap BlackHookTransparent {
             get {
                 object obj = ResourceManager.GetObject("BlackHookTransparent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -163,7 +163,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clipboard {
+        internal static System.Drawing.Bitmap Clipboard {
             get {
                 object obj = ResourceManager.GetObject("Clipboard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -173,7 +173,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Cross {
+        internal static System.Drawing.Bitmap Cross {
             get {
                 object obj = ResourceManager.GetObject("Cross", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -183,7 +183,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap delete {
+        internal static System.Drawing.Bitmap delete {
             get {
                 object obj = ResourceManager.GetObject("delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -193,7 +193,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DeleteSmall {
+        internal static System.Drawing.Bitmap DeleteSmall {
             get {
                 object obj = ResourceManager.GetObject("DeleteSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -203,7 +203,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Domain {
+        internal static System.Drawing.Bitmap Domain {
             get {
                 object obj = ResourceManager.GetObject("Domain", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -213,7 +213,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap GreenDot {
+        internal static System.Drawing.Bitmap GreenDot {
             get {
                 object obj = ResourceManager.GetObject("GreenDot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -223,7 +223,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap GreenDotTransparent {
+        internal static System.Drawing.Bitmap GreenDotTransparent {
             get {
                 object obj = ResourceManager.GetObject("GreenDotTransparent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -233,7 +233,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Hand {
+        internal static System.Drawing.Bitmap Hand {
             get {
                 object obj = ResourceManager.GetObject("Hand", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -243,7 +243,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] harrow {
+        internal static byte[] harrow {
             get {
                 object obj = ResourceManager.GetObject("harrow", resourceCulture);
                 return ((byte[])(obj));
@@ -253,7 +253,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Info {
+        internal static System.Drawing.Bitmap Info {
             get {
                 object obj = ResourceManager.GetObject("Info", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -263,7 +263,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Info1 {
+        internal static System.Drawing.Bitmap Info1 {
             get {
                 object obj = ResourceManager.GetObject("Info1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -273,7 +273,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Konfig {
+        internal static System.Drawing.Bitmap Konfig {
             get {
                 object obj = ResourceManager.GetObject("Konfig", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -283,7 +283,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap KonfigYellow {
+        internal static System.Drawing.Bitmap KonfigYellow {
             get {
                 object obj = ResourceManager.GetObject("KonfigYellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -293,7 +293,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Linesource {
+        internal static System.Drawing.Bitmap Linesource {
             get {
                 object obj = ResourceManager.GetObject("Linesource", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -303,7 +303,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] lmove {
+        internal static byte[] lmove {
             get {
                 object obj = ResourceManager.GetObject("lmove", resourceCulture);
                 return ((byte[])(obj));
@@ -313,7 +313,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap lock_closed {
+        internal static System.Drawing.Bitmap lock_closed {
             get {
                 object obj = ResourceManager.GetObject("lock_closed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -323,7 +323,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap lock_open {
+        internal static System.Drawing.Bitmap lock_open {
             get {
                 object obj = ResourceManager.GetObject("lock_open", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -333,7 +333,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Locked {
+        internal static System.Drawing.Bitmap Locked {
             get {
                 object obj = ResourceManager.GetObject("Locked", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -343,7 +343,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Logo {
+        internal static System.Drawing.Bitmap Logo {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -353,7 +353,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lupe_minus {
+        internal static System.Drawing.Bitmap Lupe_minus {
             get {
                 object obj = ResourceManager.GetObject("Lupe_minus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -363,7 +363,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lupe1 {
+        internal static System.Drawing.Bitmap Lupe1 {
             get {
                 object obj = ResourceManager.GetObject("Lupe1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -373,7 +373,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lupe2 {
+        internal static System.Drawing.Bitmap Lupe2 {
             get {
                 object obj = ResourceManager.GetObject("Lupe2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -389,7 +389,7 @@ namespace Gral.Properties {
         ///City traffic,0.11,0.06,0.06,0.06,0.12,0.33,1.07,2,1.46,1.35,1.43,1.5,1.57,1.61,1.59,1.77,2.06,1.9,1.41,0.92,0.59,0.47,0.38,0.21
         ///.
         /// </summary>
-        public static string Modulation_diurnal {
+        internal static string Modulation_diurnal {
             get {
                 return ResourceManager.GetString("Modulation_diurnal", resourceCulture);
             }
@@ -404,7 +404,7 @@ namespace Gral.Properties {
         ///Summer,0,0,0,1,1,1,1,1,1,0,0,0
         ///.
         /// </summary>
-        public static string Modulation_seasonal {
+        internal static string Modulation_seasonal {
             get {
                 return ResourceManager.GetString("Modulation_seasonal", resourceCulture);
             }
@@ -413,7 +413,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap New {
+        internal static System.Drawing.Bitmap New {
             get {
                 object obj = ResourceManager.GetObject("New", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -423,7 +423,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap New1 {
+        internal static System.Drawing.Bitmap New1 {
             get {
                 object obj = ResourceManager.GetObject("New1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -433,7 +433,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap North {
+        internal static System.Drawing.Bitmap North {
             get {
                 object obj = ResourceManager.GetObject("North", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -443,7 +443,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Open {
+        internal static System.Drawing.Bitmap Open {
             get {
                 object obj = ResourceManager.GetObject("Open", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -453,7 +453,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Open1 {
+        internal static System.Drawing.Bitmap Open1 {
             get {
                 object obj = ResourceManager.GetObject("Open1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -463,7 +463,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Panelzoom {
+        internal static System.Drawing.Bitmap Panelzoom {
             get {
                 object obj = ResourceManager.GetObject("Panelzoom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -473,7 +473,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Pin {
+        internal static System.Drawing.Bitmap Pin {
             get {
                 object obj = ResourceManager.GetObject("Pin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -483,7 +483,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Pin_Down {
+        internal static System.Drawing.Bitmap Pin_Down {
             get {
                 object obj = ResourceManager.GetObject("Pin_Down", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -493,7 +493,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Pointsource {
+        internal static System.Drawing.Bitmap Pointsource {
             get {
                 object obj = ResourceManager.GetObject("Pointsource", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -503,7 +503,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Pointsource1 {
+        internal static System.Drawing.Bitmap Pointsource1 {
             get {
                 object obj = ResourceManager.GetObject("Pointsource1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -513,7 +513,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Portal {
+        internal static System.Drawing.Bitmap Portal {
             get {
                 object obj = ResourceManager.GetObject("Portal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -523,7 +523,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Portal1 {
+        internal static System.Drawing.Bitmap Portal1 {
             get {
                 object obj = ResourceManager.GetObject("Portal1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -533,7 +533,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap RedDot {
+        internal static System.Drawing.Bitmap RedDot {
             get {
                 object obj = ResourceManager.GetObject("RedDot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -543,7 +543,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap RedDotTransparent {
+        internal static System.Drawing.Bitmap RedDotTransparent {
             get {
                 object obj = ResourceManager.GetObject("RedDotTransparent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -553,7 +553,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Restore {
+        internal static System.Drawing.Bitmap Restore {
             get {
                 object obj = ResourceManager.GetObject("Restore", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -563,7 +563,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap RestoreSmall {
+        internal static System.Drawing.Bitmap RestoreSmall {
             get {
                 object obj = ResourceManager.GetObject("RestoreSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -573,7 +573,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap RestoreSmall1 {
+        internal static System.Drawing.Bitmap RestoreSmall1 {
             get {
                 object obj = ResourceManager.GetObject("RestoreSmall1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -583,7 +583,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Rueckgaenging {
+        internal static System.Drawing.Bitmap Rueckgaenging {
             get {
                 object obj = ResourceManager.GetObject("Rueckgaenging", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -593,7 +593,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Save {
+        internal static System.Drawing.Bitmap Save {
             get {
                 object obj = ResourceManager.GetObject("Save", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -603,7 +603,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Save1 {
+        internal static System.Drawing.Bitmap Save1 {
             get {
                 object obj = ResourceManager.GetObject("Save1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -613,7 +613,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Save2 {
+        internal static System.Drawing.Bitmap Save2 {
             get {
                 object obj = ResourceManager.GetObject("Save2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -623,7 +623,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap SaveSmall {
+        internal static System.Drawing.Bitmap SaveSmall {
             get {
                 object obj = ResourceManager.GetObject("SaveSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -633,7 +633,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap StopRecording {
+        internal static System.Drawing.Bitmap StopRecording {
             get {
                 object obj = ResourceManager.GetObject("StopRecording", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -643,7 +643,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap TimeSeries {
+        internal static System.Drawing.Bitmap TimeSeries {
             get {
                 object obj = ResourceManager.GetObject("TimeSeries", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -653,7 +653,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap TimeSeriesSelected {
+        internal static System.Drawing.Bitmap TimeSeriesSelected {
             get {
                 object obj = ResourceManager.GetObject("TimeSeriesSelected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -663,7 +663,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap trashcan {
+        internal static System.Drawing.Bitmap trashcan {
             get {
                 object obj = ResourceManager.GetObject("trashcan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -673,7 +673,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap TrashcanSmall {
+        internal static System.Drawing.Bitmap TrashcanSmall {
             get {
                 object obj = ResourceManager.GetObject("TrashcanSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -683,7 +683,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Unlocked {
+        internal static System.Drawing.Bitmap Unlocked {
             get {
                 object obj = ResourceManager.GetObject("Unlocked", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -693,7 +693,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap update {
+        internal static System.Drawing.Bitmap update {
             get {
                 object obj = ResourceManager.GetObject("update", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -703,7 +703,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WhiteHookTransparent {
+        internal static System.Drawing.Bitmap WhiteHookTransparent {
             get {
                 object obj = ResourceManager.GetObject("WhiteHookTransparent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -713,7 +713,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WrenchBlue {
+        internal static System.Drawing.Bitmap WrenchBlue {
             get {
                 object obj = ResourceManager.GetObject("WrenchBlue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -723,7 +723,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WrenchBlueTransparent {
+        internal static System.Drawing.Bitmap WrenchBlueTransparent {
             get {
                 object obj = ResourceManager.GetObject("WrenchBlueTransparent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -733,7 +733,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WrenchYellow {
+        internal static System.Drawing.Bitmap WrenchYellow {
             get {
                 object obj = ResourceManager.GetObject("WrenchYellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -743,7 +743,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WrenchYellowTransparant {
+        internal static System.Drawing.Bitmap WrenchYellowTransparant {
             get {
                 object obj = ResourceManager.GetObject("WrenchYellowTransparant", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -753,7 +753,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Zeiger {
+        internal static System.Drawing.Bitmap Zeiger {
             get {
                 object obj = ResourceManager.GetObject("Zeiger", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -763,7 +763,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] zoom {
+        internal static byte[] zoom {
             get {
                 object obj = ResourceManager.GetObject("zoom", resourceCulture);
                 return ((byte[])(obj));
@@ -773,7 +773,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] zoom_in {
+        internal static byte[] zoom_in {
             get {
                 object obj = ResourceManager.GetObject("zoom_in", resourceCulture);
                 return ((byte[])(obj));
@@ -783,7 +783,7 @@ namespace Gral.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] zoom_out {
+        internal static byte[] zoom_out {
             get {
                 object obj = ResourceManager.GetObject("zoom_out", resourceCulture);
                 return ((byte[])(obj));

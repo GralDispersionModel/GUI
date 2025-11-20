@@ -409,7 +409,7 @@ namespace Gral
         private void GRAMMLoadCreateLanduse(object sender, EventArgs e)
         {
             //open dialog window to select between existing land-use file or to use homogenous default values
-            using (GralMainForms.LanduseSelect LS = new GralMainForms.LanduseSelect()
+            using (global::GralMainForms.LanduseSelect LS = new global::GralMainForms.LanduseSelect()
             {
                 Owner = this
             })
@@ -424,7 +424,8 @@ namespace Gral
                             Filter = "Landuse files (*.txt;*.dat)|*.txt;*.dat",
                             Title = "Select Landuse File"
 #if NET6_0_OR_GREATER
-                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
+                            ,
+                            ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
 #endif
                         };
                         if (dialog.ShowDialog() == DialogResult.OK)
@@ -464,12 +465,12 @@ namespace Gral
 
                             try
                             {
-                                Cursor = Cursors.WaitCursor;
+                                base.Cursor = Cursors.WaitCursor;
                                 //clear textbox
                                 textBoxGrammLandUseFile.Text = string.Empty;
                                 //string file = Path.GetDirectoryName(Application.ExecutablePath);
 
-                                Cursor = Cursors.WaitCursor;
+                                base.Cursor = Cursors.WaitCursor;
                                 Landuse lu = new Landuse();
                                 lu.GenerateLanduseFile(Landusefile, checkBox36.Checked);
                                 if (lu.ok == true)
@@ -477,14 +478,14 @@ namespace Gral
                                     Invoke(new showTopo(ShowLanduse));
                                 }
 
-                                Cursor = Cursors.Default;
+                                base.Cursor = Cursors.Default;
                             }
                             catch
                             {
                                 MessageBox.Show("Unable to generate landuse file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 Invoke(new showTopo(HideLanduse));
                             }
-                            Cursor = Cursors.Arrow;
+                            base.Cursor = Cursors.Arrow;
                         }
                     }
                     //use default value stored in the file Landuse_Default.txt
@@ -494,12 +495,12 @@ namespace Gral
 
                         try
                         {
-                            Cursor = Cursors.WaitCursor;
+                            base.Cursor = Cursors.WaitCursor;
                             //clear listbox
                             textBoxGrammLandUseFile.Text = string.Empty;
                             //string file = Path.GetDirectoryName(Application.ExecutablePath);
 
-                            Cursor = Cursors.WaitCursor;
+                            base.Cursor = Cursors.WaitCursor;
                             Landuse lu = new Landuse();
                             lu.GenerateLanduseFile(Landusefile, checkBox36.Checked);
                             if (lu.ok == true)
@@ -507,7 +508,7 @@ namespace Gral
                                 Invoke(new showTopo(ShowLanduse));
                             }
 
-                            Cursor = Cursors.Default;
+                            base.Cursor = Cursors.Default;
                         }
                         catch
                         {

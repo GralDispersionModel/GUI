@@ -153,7 +153,7 @@ namespace Gral
         /// <param name="e"></param>
         private void ShowDefineSourceGroupsDialog(object sender, EventArgs e)
         {
-            using (GralMainForms.Sourcegroups defsources = new GralMainForms.Sourcegroups(this))
+            using (global::GralMainForms.Sourcegroups defsources = new global::GralMainForms.Sourcegroups(this))
             {
                 defsources.ShowDialog();
             }
@@ -324,7 +324,7 @@ namespace Gral
                     {
                         newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
                     }
-                    GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath);
+                    global::GralMainForms.Emissionvariation emvar = new global::GralMainForms.Emissionvariation(this, newPath);
                     emvar.Close_Emissionvariation(i);
                     emvar.Dispose();
                 }
@@ -553,7 +553,7 @@ namespace Gral
 
             ComputeTotalEmissions(totalemissions);
 
-            GralMainForms.TotalEmissions totemi = new GralMainForms.TotalEmissions(totalemissions, this, Pollmod[listBox5.SelectedIndex], checkBox32.Checked);
+            global::GralMainForms.TotalEmissions totemi = new global::GralMainForms.TotalEmissions(totalemissions, this, Pollmod[listBox5.SelectedIndex], checkBox32.Checked);
             totemi.Show();
 
             Cursor = Cursors.Default;

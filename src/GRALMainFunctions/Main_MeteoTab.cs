@@ -166,7 +166,7 @@ namespace Gral
                 }
 
                 //MessageBox.Show(filelength.ToString());
-                GralMainForms.MeteoInput FormatMetFile = new GralMainForms.MeteoInput(this)
+                global::GralMainForms.MeteoInput FormatMetFile = new global::GralMainForms.MeteoInput(this)
                 {
                     MetFile1 = MetfileName,
                     FfileLength1 = filelength,
@@ -200,7 +200,7 @@ namespace Gral
             WindroseSetting.ShowMaxScaleGroupBox = false;
             WindroseSetting.ShowBias = true;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -341,7 +341,7 @@ namespace Gral
                             }
                         }
 
-                        GralMainForms.Windrose windrose = new GralMainForms.Windrose
+                        global::GralMainForms.Windrose windrose = new global::GralMainForms.Windrose
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -397,7 +397,7 @@ namespace Gral
             WindroseSetting.ShowMaxScaleGroupBox = false;
             WindroseSetting.ShowBias = true;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -492,7 +492,7 @@ namespace Gral
                             }
                         }
 
-                        GralMainForms.Windrose windrose = new GralMainForms.Windrose()
+                        global::GralMainForms.Windrose windrose = new global::GralMainForms.Windrose()
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -546,7 +546,7 @@ namespace Gral
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = true;
             
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -602,7 +602,7 @@ namespace Gral
                             wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
                         }
 
-                        GralMainForms.Windclasses wclass = new GralMainForms.Windclasses()
+                        global::GralMainForms.Windclasses wclass = new global::GralMainForms.Windclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -644,7 +644,7 @@ namespace Gral
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = false;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -699,7 +699,7 @@ namespace Gral
                                 wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
                             }
 
-                            GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
+                            global::GralMainForms.WindDistribution wDistr = new global::GralMainForms.WindDistribution()
                             {
                                 StartPosition = FormStartPosition.Manual,
                                 Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -745,7 +745,7 @@ namespace Gral
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = true;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -784,7 +784,7 @@ namespace Gral
                             sclassFrequency[i] = sclassFrequency[i] / Convert.ToDouble(count);
                         }
 
-                        GralMainForms.Stabilityclasses sclass = new GralMainForms.Stabilityclasses()
+                        global::GralMainForms.Stabilityclasses sclass = new global::GralMainForms.Stabilityclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -846,7 +846,7 @@ namespace Gral
                 }
             }
 
-            GralMainForms.DiurnalWindspeed mwind = new GralMainForms.DiurnalWindspeed()
+            global::GralMainForms.DiurnalWindspeed mwind = new global::GralMainForms.DiurnalWindspeed()
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -907,7 +907,7 @@ namespace Gral
                 }
             }
 
-            GralMainForms.DiurnalWinddirections mwinddir = new GralMainForms.DiurnalWinddirections()
+            global::GralMainForms.DiurnalWinddirections mwinddir = new global::GralMainForms.DiurnalWinddirections()
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),

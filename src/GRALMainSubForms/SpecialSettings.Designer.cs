@@ -372,6 +372,8 @@
             Controls.Add(groupBox1);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "SpecialSettings";
             Text = "Special GRAL Settings";
             Load += Main_SpecialSettings_Load;
