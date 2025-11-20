@@ -39,7 +39,7 @@ namespace Gral
             guiSettings.ReadFromFile();
             if (guiSettings.UseDefaultColors)
             {
-                Application.SetColorMode(SystemColorMode.System);
+                Application.SetColorMode(SystemColorMode.Classic);
             }
 //#pragma warning restore WFO5001
 #endif
