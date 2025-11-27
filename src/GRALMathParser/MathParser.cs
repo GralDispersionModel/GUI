@@ -40,9 +40,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Globalization;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace MathParserMathos
 {
@@ -52,7 +51,7 @@ namespace MathParserMathos
     /// </summary>
     public class MathParserMathos
     {
-    	public bool Radiant;
+        public bool Radiant;
         /// <summary>
         /// This constructor will add some basic operators, functions, and variables
         /// to the parser. Please note that you are able to change that using
@@ -62,7 +61,7 @@ namespace MathParserMathos
         /// <param name="loadPreDefinedOperators">This will load "%", "*", ":", "/", "+", "-", ">", "&lt;", "="</param>
         /// <param name="loadPreDefinedVariables">This will load "pi" and "e"</param>
         /// <param name="radiant">This will set rad or deg
-        public MathParserMathos(bool loadPreDefinedFunctions = true, bool loadPreDefinedOperators = true, bool loadPreDefinedVariables = true, bool Radiant= true)
+        public MathParserMathos(bool loadPreDefinedFunctions = true, bool loadPreDefinedOperators = true, bool loadPreDefinedVariables = true, bool Radiant = true)
         {
             if (loadPreDefinedOperators)
             {
@@ -70,7 +69,7 @@ namespace MathParserMathos
                 // please note, its possible to do it either inside the constructor,
                 // or outside the class. the lowest value will be executed first!
                 OperatorList.Add("?"); // z.B. 5E5 , E wird durch "?" ersetzt
-                
+
                 OperatorList.Add("%"); // modulo
                 OperatorList.Add("^"); // to the power of
                 OperatorList.Add(":"); // division 1
@@ -82,13 +81,13 @@ namespace MathParserMathos
                 OperatorList.Add(">"); // greater than
                 OperatorList.Add("<"); // less than
                 OperatorList.Add("="); // are equal
-				
-                
+
+
 
                 // when an operator is executed, the parser needs to know how.
                 // this is how you can add your own operators. note, the order
                 // in this list does not matter.
-                _operatorAction.Add("?", (numberA, numberB) => (double) numberA * Math.Pow(10, (double)numberB));
+                _operatorAction.Add("?", (numberA, numberB) => (double)numberA * Math.Pow(10, (double)numberB));
                 _operatorAction.Add("%", (numberA, numberB) => numberA % numberB);
                 _operatorAction.Add("^", (numberA, numberB) => (double)Math.Pow((double)numberA, (double)numberB));
                 _operatorAction.Add(":", (numberA, numberB) => numberA / numberB);
@@ -100,7 +99,7 @@ namespace MathParserMathos
                 _operatorAction.Add(">", (numberA, numberB) => numberA > numberB ? 1 : 0);
                 _operatorAction.Add("<", (numberA, numberB) => numberA < numberB ? 1 : 0);
                 _operatorAction.Add("=", (numberA, numberB) => numberA == numberB ? 1 : 0);
-           
+
             }
 
 
@@ -118,49 +117,49 @@ namespace MathParserMathos
 
                 if (Radiant)
                 {
-                	LocalFunctions.Add("cos", x => (double)Math.Cos((double)x[0]));
-                	LocalFunctions.Add("cosh", x => (double)Math.Cosh((double)x[0]));
-                	LocalFunctions.Add("arccos", x => (double)Math.Acos((double)x[0]));
+                    LocalFunctions.Add("cos", x => (double)Math.Cos((double)x[0]));
+                    LocalFunctions.Add("cosh", x => (double)Math.Cosh((double)x[0]));
+                    LocalFunctions.Add("arccos", x => (double)Math.Acos((double)x[0]));
 
-                	LocalFunctions.Add("sin", x => (double)Math.Sin((double)x[0]));
-                	LocalFunctions.Add("sinh", x => (double)Math.Sinh((double)x[0]));
-                	LocalFunctions.Add("arcsin", x => (double)Math.Asin((double)x[0]));
+                    LocalFunctions.Add("sin", x => (double)Math.Sin((double)x[0]));
+                    LocalFunctions.Add("sinh", x => (double)Math.Sinh((double)x[0]));
+                    LocalFunctions.Add("arcsin", x => (double)Math.Asin((double)x[0]));
 
-                	LocalFunctions.Add("tan", x => (double)Math.Tan((double)x[0]));
-                	LocalFunctions.Add("tanh", x => (double)Math.Tanh((double)x[0]));
-                	LocalFunctions.Add("arctan", x => (double)Math.Atan((double)x[0]));
-                	//LocalFunctions.Add("arctan2", x => (double)Math.Atan2((double)x[0], (double)x[1]));
+                    LocalFunctions.Add("tan", x => (double)Math.Tan((double)x[0]));
+                    LocalFunctions.Add("tanh", x => (double)Math.Tanh((double)x[0]));
+                    LocalFunctions.Add("arctan", x => (double)Math.Atan((double)x[0]));
+                    //LocalFunctions.Add("arctan2", x => (double)Math.Atan2((double)x[0], (double)x[1]));
                 }
                 else
                 {
-                	LocalFunctions.Add("cos", x => (double)Math.Cos((double)x[0] * Math.PI / 180));
-                	LocalFunctions.Add("cosh", x => (double)Math.Cosh((double)x[0] * Math.PI / 180));
-                	LocalFunctions.Add("arccos", x => (double)Math.Acos((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("cos", x => (double)Math.Cos((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("cosh", x => (double)Math.Cosh((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("arccos", x => (double)Math.Acos((double)x[0] * Math.PI / 180));
 
-                	LocalFunctions.Add("sin", x => (double)Math.Sin((double)x[0] * Math.PI / 180));
-                	LocalFunctions.Add("sinh", x => (double)Math.Sinh((double)x[0] * Math.PI / 180));
-                	LocalFunctions.Add("arcsin", x => (double)Math.Asin((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("sin", x => (double)Math.Sin((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("sinh", x => (double)Math.Sinh((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("arcsin", x => (double)Math.Asin((double)x[0] * Math.PI / 180));
 
-                	LocalFunctions.Add("tan", x => (double)Math.Tan((double)x[0] * Math.PI / 180));
-                	LocalFunctions.Add("tanh", x => (double)Math.Tanh((double)x[0] * Math.PI / 180));
-                	LocalFunctions.Add("arctan", x => (double)Math.Atan((double)x[0] * Math.PI / 180));
-                	//LocalFunctions.Add("arctan2", x => (double)Math.Atan2((double)x[0] * Math.PI / 180, (double)x[1]));
+                    LocalFunctions.Add("tan", x => (double)Math.Tan((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("tanh", x => (double)Math.Tanh((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("arctan", x => (double)Math.Atan((double)x[0] * Math.PI / 180));
+                    //LocalFunctions.Add("arctan2", x => (double)Math.Atan2((double)x[0] * Math.PI / 180, (double)x[1]));
                 }
-                
+
                 LocalFunctions.Add("sqrt", x => (double)Math.Sqrt((double)x[0]));
-                LocalFunctions.Add("cur", x => (double)Math.Pow((double)x[0], 1.0d/3.0d));
-                
-                LocalFunctions.Add("fact", delegate(double[] input)
+                LocalFunctions.Add("cur", x => (double)Math.Pow((double)x[0], 1.0d / 3.0d));
+
+                LocalFunctions.Add("fact", delegate (double[] input)
                 {
                     double a = 1;
-                   	for (int i = 1; i<= input[0];i++)
+                    for (int i = 1; i <= input[0]; i++)
                     {
                         a *= i;
                     }
 
                     return (double)a;
                 });
-                
+
                 LocalFunctions.Add("rem", x => (double)Math.IEEERemainder((double)x[0], (double)x[1]));
                 LocalFunctions.Add("root", x => (double)Math.Pow((double)x[0], 1.0 / (double)x[1]));
 
@@ -172,39 +171,39 @@ namespace MathParserMathos
                 //LocalFunctions.Add("log10", x => (double)Math.Log10((double)x[0]));
                 LocalFunctions.Add("log", x => (double)Math.Log10((double)x[0]));
 
-                LocalFunctions.Add("rcp", x => (double) 1 /(double)x[0]);
-                
-                LocalFunctions.Add("dbplus", delegate(double[] input)
+                LocalFunctions.Add("rcp", x => (double)1 / (double)x[0]);
+
+                LocalFunctions.Add("dbplus", delegate (double[] input)
                 {
-                   	double sum = 0;
-                   	for (int i = 0; i < input.Length; i++)
-                   	{
-                   		sum += (double)Math.Pow(10, 0.1 * (double)input[i]);
-                   	}
-                    return (double) 10 * Math.Log10(sum);
+                    double sum = 0;
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        sum += (double)Math.Pow(10, 0.1 * (double)input[i]);
+                    }
+                    return (double)10 * Math.Log10(sum);
                 });
-                
-                LocalFunctions.Add("dbmean", delegate(double[] input)
+
+                LocalFunctions.Add("dbmean", delegate (double[] input)
                 {
-                   	double sum = 0;
-                   	for (int i = 0; i < input.Length; i++)
-                   	{
-                   		sum += (double)Math.Pow(10, 0.1 * (double)input[i]);
-                   	}
-                   	sum /= ((double) input.Length);
-                    return (double) 10 * Math.Log10(sum);
+                    double sum = 0;
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        sum += (double)Math.Pow(10, 0.1 * (double)input[i]);
+                    }
+                    sum /= ((double)input.Length);
+                    return (double)10 * Math.Log10(sum);
                 });
-                
-                LocalFunctions.Add("dbminus", delegate(double[] input)
+
+                LocalFunctions.Add("dbminus", delegate (double[] input)
                 {
-                   	double sum = (double)Math.Pow(10, 0.1 * (double)input[0]);
-                   	for (int i = 1; i < input.Length; i++)
-                   	{
-                   		sum -= (double)Math.Pow(10, 0.1 * (double)input[i]);
-                   	}
-                    return (double) 10 * Math.Log10(sum);
+                    double sum = (double)Math.Pow(10, 0.1 * (double)input[0]);
+                    for (int i = 1; i < input.Length; i++)
+                    {
+                        sum -= (double)Math.Pow(10, 0.1 * (double)input[i]);
+                    }
+                    return (double)10 * Math.Log10(sum);
                 });
-                
+
                 LocalFunctions.Add("round", x => (double)Math.Round((double)x[0]));
                 LocalFunctions.Add("truncate", x => (double)(x[0] < 0.0d ? -Math.Floor(-(double)x[0]) : Math.Floor((double)x[0])));
                 LocalFunctions.Add("floor", x => (double)Math.Floor((double)x[0]));
@@ -217,18 +216,18 @@ namespace MathParserMathos
             {
                 // local variables such as pi can also be added into the parser.
                 LocalVariables.Add("pi", (double)3.14159265358979323846264338327950288); // the simplest variable!
-//                LocalVariables.Add("pi2", (double)6.28318530717958647692528676655900576);
-//                LocalVariables.Add("pi05", (double)1.57079632679489661923132169163975144);
-//                LocalVariables.Add("pi025", (double)0.78539816339744830961566084581987572);
-//                LocalVariables.Add("pi0125", (double)0.39269908169872415480783042290993786);
-//                LocalVariables.Add("pitograd", (double)57.2957795130823208767981548141051704);
-//                LocalVariables.Add("piofgrad", (double)0.01745329251994329576923690768488612);
+                                                                                         //                LocalVariables.Add("pi2", (double)6.28318530717958647692528676655900576);
+                                                                                         //                LocalVariables.Add("pi05", (double)1.57079632679489661923132169163975144);
+                                                                                         //                LocalVariables.Add("pi025", (double)0.78539816339744830961566084581987572);
+                                                                                         //                LocalVariables.Add("pi0125", (double)0.39269908169872415480783042290993786);
+                                                                                         //                LocalVariables.Add("pitograd", (double)57.2957795130823208767981548141051704);
+                                                                                         //                LocalVariables.Add("piofgrad", (double)0.01745329251994329576923690768488612);
 
                 // LocalVariables.Add("e", (double)2.71828182845904523536028747135266249);
                 //                LocalVariables.Add("phi", (double)1.61803398874989484820458683436563811);
                 //                LocalVariables.Add("major", (double)0.61803398874989484820458683436563811);
                 //                LocalVariables.Add("minor", (double)0.38196601125010515179541316563436189);
-                LocalVariables.Add("a", (double) 0);
+                LocalVariables.Add("a", (double)0);
                 LocalVariables.Add("b", (double)0);
                 LocalVariables.Add("c", (double)0);
                 LocalVariables.Add("d", (double)0);
@@ -398,7 +397,7 @@ namespace MathParserMathos
 
                 varName = varName.Replace(" ", "");
                 mathExpression = mathExpression.Replace("let", "");
-                
+
                 varValue = Parse(mathExpression);
 
                 if (LocalVariables.ContainsKey(varName))
@@ -456,7 +455,7 @@ namespace MathParserMathos
         {
             // Word corrections
 
-            input =System.Text.RegularExpressions. Regex.Replace(input, "\\b(sqr|sqrt)\\b", "sqrt", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(sqr|sqrt)\\b", "sqrt", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(atan2|arctan2)\\b", "arctan2", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(acos|arccos)\\b", "arccos", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(asin|arcsin)\\b", "arcsin", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -465,7 +464,7 @@ namespace MathParserMathos
             input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(atn|arctan)\\b", "arctan", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(log10|log)\\b", "log", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             input = System.Text.RegularExpressions.Regex.Replace(input, "\\b(fac|fact)\\b", "fact", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            
+
             //... and more
 
             return input;
@@ -485,11 +484,11 @@ namespace MathParserMathos
             expr = expr.Replace("-+", "-");
             expr = expr.Replace("--", "+");
 
-           /* foreach (var item in LocalVariables)
-            {
-                // replace the current variables with their value
-                _expr = _expr.Replace(item.Key, "(" + item.Value.ToString(CULTURE_INFO) + ")");
-            }*/
+            /* foreach (var item in LocalVariables)
+             {
+                 // replace the current variables with their value
+                 _expr = _expr.Replace(item.Key, "(" + item.Value.ToString(CULTURE_INFO) + ")");
+             }*/
 
             for (var i = 0; i < expr.Length; i++)
             {
@@ -504,26 +503,26 @@ namespace MathParserMathos
                     }
 
                     vector += ch;
-                    
+
                     while ((i + 1) < expr.Length && Char.IsLetterOrDigit(expr[i + 1])) // here is it is possible to choose whether you want variables that only contain letters with or without digits.
                     {
                         i++;
                         vector += expr[i];
                     }
-                    
+
                     tokens.Add(vector);
                     vector = "";
                 }
                 else if (Char.IsDigit(ch))
                 {
                     vector += ch;
-                    
+
                     while ((i + 1) < expr.Length && (Char.IsDigit(expr[i + 1]) || expr[i + 1] == '.')) // removed || _expr[i + 1] == ','
                     {
                         i++;
                         vector += expr[i];
                     }
-                    
+
                     tokens.Add(vector);
                     vector = "";
                 }
@@ -591,9 +590,9 @@ namespace MathParserMathos
                     // if there is no closing bracket, throw a new exception
                     throw new ArithmeticException("No closing bracket/parenthesis! tkn: " + open.ToString(CultureInfo.InvariantCulture));
                 }
-                
+
                 var roughExpr = new List<string>();
-                
+
                 for (var i = open + 1; i < close; i++)
                 {
                     roughExpr.Add(tokens[i]);
@@ -603,7 +602,7 @@ namespace MathParserMathos
 
                 var functioName = tokens[open == 0 ? 0 : open - 1];
                 var args = new double[0];
-                
+
                 if (LocalFunctions.Keys.Contains(functioName))
                 {
                     if (roughExpr.Contains(";"))
@@ -622,7 +621,7 @@ namespace MathParserMathos
 
                             // changing the size of the array of arguments
                             Array.Resize(ref args, args.Length + 1);
-                            
+
                             if (defaultExpr.Count == 0)
                             {
                                 args[args.Length - 1] = 0;
@@ -680,16 +679,16 @@ namespace MathParserMathos
                 case 1:
                     return double.Parse(tokens[0], CultureInfo);
                 case 2:
-                {
-                    var op = tokens[0];
+                    {
+                        var op = tokens[0];
 
-                    if (op == "-" || op == "+")
+                        if (op == "-" || op == "+")
                         {
                             return double.Parse((op == "+" ? "" : "-") + tokens[1], CultureInfo);
                         }
 
                         return OperatorAction[op](0, double.Parse(tokens[1], CultureInfo));
-                }
+                    }
                 case 0:
                     return 0;
             }

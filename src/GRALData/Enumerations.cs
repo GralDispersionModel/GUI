@@ -16,9 +16,9 @@ namespace GralDomain
     /// </summary>
     public enum MeteoModelEmum
     {
-        None  = 0b00000000,
-        GRAMM = 0b00000001, 
-        GRAL  = 0b00000010
+        None = 0b00000000,
+        GRAMM = 0b00000001,
+        GRAL = 0b00000010
     }
 
     /// <summary>

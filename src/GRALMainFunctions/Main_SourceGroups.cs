@@ -10,13 +10,13 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
+using GralMessage;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using GralItemData;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using GralMessage;
 
 namespace Gral
 {
@@ -26,14 +26,14 @@ namespace Gral
         public void SelectAllUsedSourceGroups()
         {
             listBox4.Items.Clear();
-            
+
             List<PointSourceData> _psList = new List<PointSourceData>();
             PointSourceDataIO _ps = new PointSourceDataIO();
-            string _file = Path.Combine(ProjectName,"Emissions","Psources.txt");
+            string _file = Path.Combine(ProjectName, "Emissions", "Psources.txt");
             _ps.LoadPointSources(_psList, _file);
             _ps = null;
-            
-            foreach (PointSourceData _psd in _psList )
+
+            foreach (PointSourceData _psd in _psList)
             {
                 if ((_psd.Pt.X >= GralDomRect.West) && (_psd.Pt.X <= GralDomRect.East) &&
                     (_psd.Pt.Y >= GralDomRect.South) && (_psd.Pt.Y <= GralDomRect.North))
@@ -41,16 +41,16 @@ namespace Gral
                     UpdateSourceGroupsInListBox4(_psd.Poll.SourceGroup);
                 }
             }
-            
+
             _psList.Clear();
             _psList.TrimExcess();
-            
-            List <AreaSourceData> _asList = new List<AreaSourceData>();
+
+            List<AreaSourceData> _asList = new List<AreaSourceData>();
             AreaSourceDataIO _as = new AreaSourceDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Asources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Asources.txt");
             _as.LoadAreaData(_asList, _file);
             _as = null;
-            
+
             foreach (AreaSourceData _asd in _asList)
             {
                 //filter domain
@@ -58,7 +58,7 @@ namespace Gral
                 double xmax = double.MinValue;
                 double ymin = double.MaxValue;
                 double ymax = double.MinValue;
-                
+
                 foreach (GralDomain.PointD _pt in _asd.Pt)
                 {
                     xmin = Math.Min(xmin, _pt.X);
@@ -66,7 +66,7 @@ namespace Gral
                     ymin = Math.Min(ymin, _pt.Y);
                     ymax = Math.Max(ymax, _pt.Y);
                 }
-                
+
                 if ((xmin >= GralDomRect.West) && (xmax <= GralDomRect.East) &&
                     (ymin >= GralDomRect.South) && (ymax <= GralDomRect.North))
                 {
@@ -81,14 +81,14 @@ namespace Gral
             }
             _asList.Clear();
             _asList.TrimExcess();
-            
-            
-            List <LineSourceData> _lsList = new List<LineSourceData>();
+
+
+            List<LineSourceData> _lsList = new List<LineSourceData>();
             LineSourceDataIO _ls = new LineSourceDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Lsources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Lsources.txt");
             _ls.LoadLineSources(_lsList, _file);
             _ls = null;
-            
+
             foreach (LineSourceData _lsdata in _lsList)
             {
                 //filter domain
@@ -96,7 +96,7 @@ namespace Gral
                 double xmax = double.MinValue;
                 double ymin = double.MaxValue;
                 double ymax = double.MinValue;
-                
+
                 foreach (GralData.PointD_3d _pt in _lsdata.Pt)
                 {
                     xmin = Math.Min(xmin, _pt.X);
@@ -104,7 +104,7 @@ namespace Gral
                     ymin = Math.Min(ymin, _pt.Y);
                     ymax = Math.Max(ymax, _pt.Y);
                 }
-                
+
                 if ((xmin >= GralDomRect.West) && (xmax <= GralDomRect.East) &&
                     (ymin >= GralDomRect.South) && (ymax <= GralDomRect.North))
                 {
@@ -121,10 +121,10 @@ namespace Gral
             }
             _lsList.Clear();
             _lsList.TrimExcess();
-            
+
             List<PortalsData> _poList = new List<PortalsData>();
             PortalsDataIO _pd = new PortalsDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Portalsources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Portalsources.txt");
             _pd.LoadPortalSources(_poList, _file);
             _pd = null;
 
@@ -141,11 +141,11 @@ namespace Gral
                     }
                 }
             }
-            
+
             _poList.Clear();
             _poList.TrimExcess();
         }
-        
+
         /// <summary>
         /// Show the dialog to define the source groups
         /// </summary>
@@ -193,7 +193,7 @@ namespace Gral
                         }
                     }
                 }
-                
+
                 if (exist == false)
                 {
                     int index = -1;
@@ -208,7 +208,7 @@ namespace Gral
                     }
 
                     // sort Listbox entries
-                    List <SG_Class> _sg = new List<SG_Class>();
+                    List<SG_Class> _sg = new List<SG_Class>();
                     for (int i = 0; i < listBox4.Items.Count; i++)
                     {
                         text = Convert.ToString(listBox4.Items[i]).Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -217,7 +217,7 @@ namespace Gral
                             int s_numb = 0;
                             if (int.TryParse(text[1], out s_numb))
                             {
-                                _sg.Add(new SG_Class{SG_Name = text[0], SG_Number = s_numb});
+                                _sg.Add(new SG_Class { SG_Name = text[0], SG_Number = s_numb });
                             }
                         }
                         else if (text.Length == 1) // Source group not defined but used!
@@ -225,22 +225,22 @@ namespace Gral
                             int s_numb = 0;
                             if (int.TryParse(text[0], out s_numb))
                             {
-                                _sg.Add(new SG_Class{SG_Name = text[0], SG_Number = s_numb});
+                                _sg.Add(new SG_Class { SG_Name = text[0], SG_Number = s_numb });
                             }
                         }
                     }
                     _sg.Sort();
-                    
+
                     listBox4.Items.Clear();
-                    foreach(SG_Class _sgi in _sg)
+                    foreach (SG_Class _sgi in _sg)
                     {
                         listBox4.Items.Add(_sgi.SG_Name + ": " + _sgi.SG_Number.ToString());
                     }
                     // sort LIstbox entries
-                    
+
                     listView1.Items.Clear();
                 }
-                
+
             }
             else
             {
@@ -306,7 +306,7 @@ namespace Gral
             message.Show();
             message.listBox1.Items.Add("Collect pollutants for selected source groups...");
             message.Refresh();
-            
+
             //select existing pollutants for the selected source groups
             CollectAllUsedPollutants();
             CheckIfAllSourcegroupsHaveDefinedEmissionModulations(true);
@@ -339,7 +339,7 @@ namespace Gral
             Enable_GRAL();
         }
 
-                //write source groups to "GRAL.geb"
+        //write source groups to "GRAL.geb"
         public void WriteGralGebFile()
         {
             if (EmifileReset == true) // block writing while open a project
@@ -359,7 +359,7 @@ namespace Gral
                         string a = Convert.ToString(numericUpDown11.Value, ic) + "," + Convert.ToString(numericUpDown12.Value, ic);
                         if (FlowFieldStretchFlexible.Count > 0) // flexible stretching factors
                         {
-                            foreach(float[] _val in FlowFieldStretchFlexible)
+                            foreach (float[] _val in FlowFieldStretchFlexible)
                             {
                                 a = a + "," + _val[0].ToString(ic) + "," + _val[1].ToString(ic); // write height and stretching factor
                             }
@@ -483,11 +483,11 @@ namespace Gral
             button48.Visible = false;
 
             Pollmod.Clear();
-            
+
             CollectAllUsedPollutants();
 
             CheckIfAllSourcegroupsHaveDefinedEmissionModulations(true);
-            
+
             message.Close();
             message.Dispose();
 
@@ -496,10 +496,10 @@ namespace Gral
             //enable/disable GRAL simulations
             Enable_GRAL();
         }
-        
+
         private void CheckIfAllSourcegroupsHaveDefinedEmissionModulations(bool Change_Emission_Label)
         {
-           //check if all source groups have defined emission modulations
+            //check if all source groups have defined emission modulations
             int check = 1;
             for (int i = 0; i < listView1.Items.Count; i++)
             {
@@ -508,7 +508,7 @@ namespace Gral
                     check = 0;
                 }
             }
-            
+
             //fill form1.listbox5 with available pollutants
             if (check == 1)
             {
@@ -521,7 +521,7 @@ namespace Gral
                         listBox5.SelectedIndex = 0;
                     }
                 }
-                
+
                 if (Pollmod.Count > 0)
                 {
                     button18.Visible = true;
@@ -538,7 +538,7 @@ namespace Gral
                     button21.Visible = false;
                     button48.Visible = false;
                 }
-            } 
+            }
         }
 
         /// <summary>

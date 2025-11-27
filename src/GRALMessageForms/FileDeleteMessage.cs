@@ -16,16 +16,16 @@ using System.Windows.Forms;
 
 namespace GralMessage
 {
-	/// <summary>
+    /// <summary>
     /// Form to aks for deleteing all files
     /// </summary>
     public partial class FileDeleteMessage : Form
     {
-    	private bool _gramm;
-		public bool DeleteGramm {set {_gramm = value;} } // Filename 
+        private bool _gramm;
+        public bool DeleteGramm { set { _gramm = value; } } // Filename 
         public string DeleteMessage = string.Empty;
         public List<string> ListboxEntries;
-		
+
         public FileDeleteMessage()
         {
             InitializeComponent();
@@ -33,9 +33,9 @@ namespace GralMessage
 
         private void FileDeleteMessageLoad(object sender, EventArgs e)
         {
-			AcceptButton = button2;
-			ActiveControl = button2;
-			if (_gramm)
+            AcceptButton = button2;
+            ActiveControl = button2;
+            if (_gramm)
             {
                 label1.Text = "Delete all wind field files at the project folder?";
             }

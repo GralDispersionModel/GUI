@@ -51,7 +51,7 @@ namespace GralDomForms
 #endif
             wait.Text = "Automatic Tuning - Pass 1/3";
             wait.Show();
-           
+
             // 1st guess: brute force test for all meteo stations
             if ((Passes & 1) == 1)
             {
@@ -71,7 +71,7 @@ namespace GralDomForms
                         {
                             _m.WeightingFactor[j] = fact;
                             // set factor for stations with auto mode 0 to low value
-                            if(j < MatchingData.WeightingAutoMode.Length && MatchingData.WeightingAutoMode[j] < 0.0000001)
+                            if (j < MatchingData.WeightingAutoMode.Length && MatchingData.WeightingAutoMode[j] < 0.0000001)
                             {
 
                             }
@@ -99,7 +99,7 @@ namespace GralDomForms
 
             // 2nd guess: check Mode 2 = components
             if ((Passes & 2) == 2)
-            { 
+            {
                 wait.Text = "Automatic Tuning - Pass 2/3";
                 wait.BeginInvoke(wait.UpdateProgressDelegate, this, testValuesDirection.Count() * testValuesVector.Count());
                 foreach (double fact in testValuesVector)
@@ -147,19 +147,19 @@ namespace GralDomForms
             {
                 List<int> MetfileList = new List<int>();
                 int[] IterDirection = new int[MetFileNames.Count];
-                
+
                 for (int j = 0; j < MetFileNames.Count; j++)
                 {
                     MetfileList.Add(j);
                     IterDirection[j] = 1;
                 }
-                
+
                 wait.BeginInvoke(wait.UpdateProgressDelegate, this, Math.Max(5, (int)(numericUpDown1.Value * MetfileList.Count)));
 
                 for (int iterations = 0; iterations < (int)numericUpDown1.Value; iterations++)
                 {
                     wait.Text = "Automatic Tuning - Pass 3/3-iteration: " + (iterations + 1).ToString();
-                    
+
                     foreach (int i in MetfileList)
                     {
                         wait.BeginInvoke(wait.UpdateProgressDelegate, this, 0);
@@ -191,7 +191,7 @@ namespace GralDomForms
                                 //1st pass
                                 if (Fitting < 0)
                                 {
-                                   Fitting = fit;
+                                    Fitting = fit;
                                     j--; // restart with iteration step 0/0
                                 }
 

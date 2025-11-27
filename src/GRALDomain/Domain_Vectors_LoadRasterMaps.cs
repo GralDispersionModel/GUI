@@ -17,11 +17,11 @@ using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -152,7 +152,7 @@ namespace GralDomain
                             {
                                 max = 10; // default fix scaling factor
                             }
-                            
+
                             //compute arrow-polygons
                             double xcenter = 0.0;
                             double ycenter = 0.0;
@@ -318,7 +318,7 @@ namespace GralDomain
                     {
                         //select dispersion situation
                         SelectDispersionSituation disp = new SelectDispersionSituation(this, MainForm);
-                        
+
                         if (windfieldenable == 2)
                         {
                             disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
@@ -346,7 +346,7 @@ namespace GralDomain
                                 {
                                     Cursor = Cursors.WaitCursor;
                                 }
-                                
+
                                 MessageWindow message = new MessageWindow();
                                 message.Show();
                                 message.listBox1.Items.Add("Calculate vector map...");
@@ -466,7 +466,7 @@ namespace GralDomain
                                                     {
                                                         ischnitt = vertIndexArray[i, j];
                                                     }
-                                                    
+
                                                     if (ischnitt >= 0)
                                                     {
                                                         sb.Append(Convert.ToString(Math.Round(UWI[i, j, ischnitt], 4), ic) + "," + Convert.ToString(Math.Round(VWI[i, j, ischnitt], 4), ic) + ",");
@@ -545,7 +545,7 @@ namespace GralDomain
                                             {
                                                 throw new Exception();
                                             }
-                                            
+
                                             for (int j = NY; j > 0; j--)
                                             {
                                                 sb.Clear();
@@ -637,7 +637,7 @@ namespace GralDomain
                                 {
                                     Cursor = Cursors.WaitCursor;
                                 }
-                               
+
                                 //obtain surface heights
                                 Single[,] AH = new Single[1, 1];
                                 Single[,] Building_heights = new Single[1, 1];
@@ -792,11 +792,11 @@ namespace GralDomain
                                                 for (int k = 1; k < nkk + 1; k++)
                                                 {
                                                     //check if point is above desired slice above ground
-                                                        if (AHMIN + HOKART[k] >= AH[i, j] - Building_heights[i, j] + schnitt)
-                                                        {
-                                                            slice[i, j] = k;
-                                                            break;
-                                                        }
+                                                    if (AHMIN + HOKART[k] >= AH[i, j] - Building_heights[i, j] + schnitt)
+                                                    {
+                                                        slice[i, j] = k;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
@@ -946,7 +946,7 @@ namespace GralDomain
                                         {
                                             throw new Exception();
                                         }
-                                        
+
                                         for (int j = njj; j > 0; j--)
                                         {
                                             for (int i = 1; i <= nii; i++)
@@ -1035,7 +1035,7 @@ namespace GralDomain
                                     uk = null; vk = null; wk = null; tke = null;
                                     return;
                                 }
-                                              
+
                                 //add vector map to object list
                                 DrawingObjects _drobj = new DrawingObjects("VM: " + Path.GetFileNameWithoutExtension(file));
 

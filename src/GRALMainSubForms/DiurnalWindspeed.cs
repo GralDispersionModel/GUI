@@ -18,23 +18,23 @@ using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form shows the diurnal wind speed
     /// </summary>
     public partial class DiurnalWindspeed : Form
     {
         public double[] meanwind = new double[24];
         public string metfile;
-		public List <GralData.WindData> wind;
+        public List<GralData.WindData> wind;
         private double _mean_wind_speed = 0;
         private const float HorSize = 762F;
         private const float VertSize = 508F;
 
         public DiurnalWindspeed()
         {
-            InitializeComponent();         
+            InitializeComponent();
         }
-        
+
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             if (panel1.Width < 20 || panel1.Height < 20)
@@ -54,7 +54,7 @@ namespace GralMainForms
             {
                 classmax = Math.Max(meanwind[i], classmax);
             }
-            
+
             double scale = Math.Min(400 / classmax, 1000000);
 
             //draw diagram
@@ -68,33 +68,33 @@ namespace GralMainForms
             Font _mediumFont = new Font("Arial", 9);
             Font _largeFont = new Font("Arial", 10);
             Brush _blackBrush = new SolidBrush(Color.Black);
-            
+
             SizeF _lenght = g.MeasureString(metfile, _smallFont);
-            int distance = (int) _lenght.Height + 2;
-            
+            int distance = (int)_lenght.Height + 2;
+
             float _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(metfile, _smallFont, _blackBrush, _x, 2, format1);
-            
+
             string _data = "Data points: " + Convert.ToString(wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
             _x = Math.Max(0, HorSize - _lenght.Width - 5);
             g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + distance, format1);
-			
-			//g.DrawString(wind[0].Date, _smallFont, _blackBrush, 675, 2 + 2 * distance, format1);
-			if (wind.Count > 1)
-			{
-			    _data = wind[0].Date + " - " + wind[wind.Count - 1].Date;
-			   _lenght = g.MeasureString(_data, _smallFont);
-			    _x = Math.Max(0, HorSize - _lenght.Width - 5);
-			    g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
-			}
-			
-			_data = "Mean wind speed " + Math.Round(_mean_wind_speed, 1).ToString() + " m/s";
-			_lenght = g.MeasureString(_data, _smallFont);
-			_x = Math.Max(0, HorSize - _lenght.Width - 5);
-			g.DrawString(_data, _smallFont, _blackBrush, _x, 4 + 3 * distance, format1);
-			
-			int hoehe2 = 0;
+
+            //g.DrawString(wind[0].Date, _smallFont, _blackBrush, 675, 2 + 2 * distance, format1);
+            if (wind.Count > 1)
+            {
+                _data = wind[0].Date + " - " + wind[wind.Count - 1].Date;
+                _lenght = g.MeasureString(_data, _smallFont);
+                _x = Math.Max(0, HorSize - _lenght.Width - 5);
+                g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
+            }
+
+            _data = "Mean wind speed " + Math.Round(_mean_wind_speed, 1).ToString() + " m/s";
+            _lenght = g.MeasureString(_data, _smallFont);
+            _x = Math.Max(0, HorSize - _lenght.Width - 5);
+            g.DrawString(_data, _smallFont, _blackBrush, _x, 4 + 3 * distance, format1);
+
+            int hoehe2 = 0;
             Pen p4 = new Pen(Color.Blue, 3)
             {
                 EndCap = LineCap.RoundAnchor,
@@ -118,22 +118,22 @@ namespace GralMainForms
             Pen p1 = new Pen(Color.Black, 2);
             Pen p2 = new Pen(Color.Black, 2);
             Pen p3 = new Pen(Color.Black, 1);
-            
+
             p2.EndCap = LineCap.ArrowAnchor;
             g.DrawLine(p1, 55, 440, 695, 440);
             g.DrawLine(p2, 55, 440, 55, 20);
-            
+
             StringFormat string_Format = new StringFormat()
             {
-            	Alignment = StringAlignment.Center //Horizontale Orientieren
+                Alignment = StringAlignment.Center //Horizontale Orientieren
             };
-            
-            for (int i = 0; i < 24; i+= 3)
+
+            for (int i = 0; i < 24; i += 3)
             {
-            	string a = i.ToString("D2") + ":00";
-            	_x = 55 + (i + 1) * 25;
-            	g.DrawString(a, _mediumFont, _blackBrush, _x, 450, string_Format);
-            	g.DrawLine(p3, _x, 444, _x, 436);
+                string a = i.ToString("D2") + ":00";
+                _x = 55 + (i + 1) * 25;
+                g.DrawString(a, _mediumFont, _blackBrush, _x, 450, string_Format);
+                g.DrawLine(p3, _x, 444, _x, 436);
             }
             string_Format.Dispose();
             p3.DashStyle = DashStyle.Dot;
@@ -174,8 +174,8 @@ namespace GralMainForms
                 g.DrawLine(p3, 55, lev1, 695, lev1);
                 g.DrawString(s, _largeFont, _blackBrush, 25, lev1 - 5);
             }
-            
-            p1.Dispose();p2.Dispose();p3.Dispose();p4.Dispose();
+
+            p1.Dispose(); p2.Dispose(); p3.Dispose(); p4.Dispose();
             format1.Dispose();
             _smallFont.Dispose();
             _mediumFont.Dispose();
@@ -185,17 +185,17 @@ namespace GralMainForms
 
         private void Form6_Load(object sender, EventArgs e)
         {
-        	_mean_wind_speed = 0;
-			if (meanwind.Length > 0)
-			{
-			    for (int i = 0; i < meanwind.Length; i++)
-			    {
-			        _mean_wind_speed += meanwind[i];
-			    }
-			    _mean_wind_speed /= meanwind.Length;
-			}
-			
-         	Text = "Diurnal mean wind speed   -  " + metfile; // Kuntner
+            _mean_wind_speed = 0;
+            if (meanwind.Length > 0)
+            {
+                for (int i = 0; i < meanwind.Length; i++)
+                {
+                    _mean_wind_speed += meanwind[i];
+                }
+                _mean_wind_speed /= meanwind.Length;
+            }
+
+            Text = "Diurnal mean wind speed   -  " + metfile; // Kuntner
         }
 
         //save image to clipboard
@@ -217,13 +217,13 @@ namespace GralMainForms
             panel1.Height /= CopyToClipboardScale;
             panel1.Refresh();
         }
-		void DiurnalWindspeedFormClosed(object sender, FormClosedEventArgs e)
-		{
-			toolTip1.Dispose();
-			panel1.Dispose();
-			button1.Dispose();
-		}
-        
+        void DiurnalWindspeedFormClosed(object sender, FormClosedEventArgs e)
+        {
+            toolTip1.Dispose();
+            panel1.Dispose();
+            button1.Dispose();
+        }
+
         void DiurnalWindspeedResizeEnd(object sender, EventArgs e)
         {
             if (ClientSize.Width > 60)
@@ -231,19 +231,19 @@ namespace GralMainForms
                 panel1.Width = ClientSize.Width - 55;
                 panel1.Height = ClientSize.Height;
             }
-            
+
             panel1.Invalidate();
-			panel1.Update();
+            panel1.Update();
         }
-        
+
         void DiurnalWindspeedResize(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Maximized) 
+            if (WindowState == FormWindowState.Maximized)
             {
                 DiurnalWindspeedResizeEnd(null, null);
                 // Maximized!
             }
-            if (WindowState == FormWindowState.Normal) 
+            if (WindowState == FormWindowState.Normal)
             {
                 DiurnalWindspeedResizeEnd(null, null);
                 // Restored!

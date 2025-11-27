@@ -35,7 +35,7 @@ namespace GralDomForms
         /// <summary>
         /// buffer for the meteopgt.all data
         /// </summary>
-        public List <GralData.PGTAll> PGT;
+        public List<GralData.PGTAll> PGT;
         /// <summary>
         /// Weighting for the wind vector
         /// </summary>

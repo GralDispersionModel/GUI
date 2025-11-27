@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
 using GralItemData;
+using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -113,7 +113,7 @@ namespace GralDomain
                 MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonControl, Gral.ButtonColorEnum.RedDot); // red label at control button
             }
             Cursor = Cursors.Default;
-            
+
             //add/delete receptors in object list
             if (EditR.ItemData.Count == 0 && Gral.Main.Project_Locked == false) // block this, if project is locked!
             {

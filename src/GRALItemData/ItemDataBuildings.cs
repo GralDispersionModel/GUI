@@ -10,124 +10,124 @@
 ///</remarks>
 #endregion
 
+using GralDomain;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using GralDomain;
-using GralStaticFunctions;
 
 namespace GralItemData
 {
-	/// <summary>
+    /// <summary>
     /// This class represents the building data
     /// </summary>
-	[Serializable]
-	public class BuildingData
-	{
-		public string Name			{ get; set;}
-		public float Height 		{ get; set;}
-		public float LowerBound		{ get; set;}
-		public float Area	 		{ get; set;}
-		public List<GralDomain.PointD> Pt   { get; set;}
-		
-		private static CultureInfo ic = CultureInfo.InvariantCulture;
-		
-		/// <summary>
-		/// Create a new empty building data object
-		/// </summary>
-		public BuildingData()
-		{
-			Name = "Bu";
-			Pt = new List<PointD>();
-		}
-		
-		/// <summary>
-		/// Create a new building data object from string
-		/// </summary>
-		public BuildingData(string sourcedata) // new item from string
-		{
-			int index = 0;
-			int version = 0;
-			string[] text = new string[1];
-			text = sourcedata.Split(new char[] { ',' });
-			Pt = new List<PointD>();
-			
-			try
-			{
-				if (text.Length > 5) // otherwise the file is corrupt
-				{
-					version = Convert.ToInt32(text[index++]);
-					Name   = text[index++];
-					Height = (float) (St_F.TxtToDbl(text[index++], false));
-					LowerBound = (float) (St_F.TxtToDbl(text[index++], false));
-					Area   = (float) (St_F.TxtToDbl(text[index++], false));
-					
-					int vertices_number = Convert.ToInt32(text[index++]); // number of vertices
-					
-					for (int i = 0; i < vertices_number; i++)
-					{
-						double x = St_F.TxtToDbl(text[index++], false);
-						double y = St_F.TxtToDbl(text[index++], false);
-						Pt.Add(new PointD(x, y));
-					}
-				}
-				else
-				{
-					throw new ArgumentException();
-				}
-			}
-			catch
-			{
-				Name = String.Empty;
-				Pt = new List<PointD>();
-			}
-		}
-		
-		/// <summary>
-		/// Create a new building data object from other object
-		/// </summary>
-		public BuildingData(BuildingData other) // Deep copy for new item
-		{
-			Name = other.Name;
-			Area = other.Area;
-			Height = other.Height;
-			LowerBound = other.LowerBound;
-			
-			Pt = new List<PointD>();
-			foreach (PointD _pt in other.Pt)
-			{
-				Pt.Add(_pt);
-			}			
-		}
-		
-		/// <summary>
-		/// Convert object data to a string as used in the item file
-		/// </summary>
-		public override string ToString()
-		{
-			if (Name == null || Name == String.Empty)
-			{
-				Name = "Building";
-			}
-			
-			string dummy = St_F.RemoveinvalidChars(Name) + "," +
-				Height.ToString(ic) + "," +
-				LowerBound.ToString(ic) + "," +
-				Area.ToString(ic) + "," +
-				Pt.Count.ToString();
-				
-			foreach (PointD _pt in Pt)
-			{
-				dummy += "," + Math.Round(_pt.X, 1).ToString(ic) + "," + Math.Round(_pt.Y, 1).ToString(ic);
-			}
-			
-			return dummy;
-		}
+    [Serializable]
+    public class BuildingData
+    {
+        public string Name { get; set; }
+        public float Height { get; set; }
+        public float LowerBound { get; set; }
+        public float Area { get; set; }
+        public List<GralDomain.PointD> Pt { get; set; }
 
-		public double CalcArea()
-		{
-			double area = 0;
-			if (Pt.Count > 2)
+        private static CultureInfo ic = CultureInfo.InvariantCulture;
+
+        /// <summary>
+        /// Create a new empty building data object
+        /// </summary>
+        public BuildingData()
+        {
+            Name = "Bu";
+            Pt = new List<PointD>();
+        }
+
+        /// <summary>
+        /// Create a new building data object from string
+        /// </summary>
+        public BuildingData(string sourcedata) // new item from string
+        {
+            int index = 0;
+            int version = 0;
+            string[] text = new string[1];
+            text = sourcedata.Split(new char[] { ',' });
+            Pt = new List<PointD>();
+
+            try
+            {
+                if (text.Length > 5) // otherwise the file is corrupt
+                {
+                    version = Convert.ToInt32(text[index++]);
+                    Name = text[index++];
+                    Height = (float)(St_F.TxtToDbl(text[index++], false));
+                    LowerBound = (float)(St_F.TxtToDbl(text[index++], false));
+                    Area = (float)(St_F.TxtToDbl(text[index++], false));
+
+                    int vertices_number = Convert.ToInt32(text[index++]); // number of vertices
+
+                    for (int i = 0; i < vertices_number; i++)
+                    {
+                        double x = St_F.TxtToDbl(text[index++], false);
+                        double y = St_F.TxtToDbl(text[index++], false);
+                        Pt.Add(new PointD(x, y));
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+            catch
+            {
+                Name = String.Empty;
+                Pt = new List<PointD>();
+            }
+        }
+
+        /// <summary>
+        /// Create a new building data object from other object
+        /// </summary>
+        public BuildingData(BuildingData other) // Deep copy for new item
+        {
+            Name = other.Name;
+            Area = other.Area;
+            Height = other.Height;
+            LowerBound = other.LowerBound;
+
+            Pt = new List<PointD>();
+            foreach (PointD _pt in other.Pt)
+            {
+                Pt.Add(_pt);
+            }
+        }
+
+        /// <summary>
+        /// Convert object data to a string as used in the item file
+        /// </summary>
+        public override string ToString()
+        {
+            if (Name == null || Name == String.Empty)
+            {
+                Name = "Building";
+            }
+
+            string dummy = St_F.RemoveinvalidChars(Name) + "," +
+                Height.ToString(ic) + "," +
+                LowerBound.ToString(ic) + "," +
+                Area.ToString(ic) + "," +
+                Pt.Count.ToString();
+
+            foreach (PointD _pt in Pt)
+            {
+                dummy += "," + Math.Round(_pt.X, 1).ToString(ic) + "," + Math.Round(_pt.Y, 1).ToString(ic);
+            }
+
+            return dummy;
+        }
+
+        public double CalcArea()
+        {
+            double area = 0;
+            if (Pt.Count > 2)
             {
                 for (int i = 0; i < Pt.Count - 1; i++)
                 {
@@ -136,7 +136,7 @@ namespace GralItemData
                 area = Math.Round(Math.Abs(area), 1);
             }
             return area;
-		}
-	}
+        }
+    }
 }
 

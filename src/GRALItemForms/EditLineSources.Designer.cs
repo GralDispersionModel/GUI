@@ -145,7 +145,7 @@
             this.numericUpDown1.TabIndex = 4;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.numericUpDown1, "Lowest height above ground level");
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.NumericUpDown1_ValueChanged);
             // 
             // button1
             // 
@@ -157,7 +157,7 @@
             this.button1.TabIndex = 39;
             this.toolTip1.SetToolTip(this.button1, "Add one line source");
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // button2
             // 
@@ -169,7 +169,7 @@
             this.button2.TabIndex = 40;
             this.toolTip1.SetToolTip(this.button2, "Remove one line source");
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // button3
             // 
@@ -181,7 +181,7 @@
             this.button3.TabIndex = 41;
             this.toolTip1.SetToolTip(this.button3, "Delete all line sources");
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // label6
             // 
@@ -235,7 +235,7 @@
             this.button4.TabIndex = 9;
             this.toolTip1.SetToolTip(this.button4, "Save the input data for the selected source group");
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // textBox4
             // 
@@ -258,7 +258,7 @@
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.toolTip1.SetToolTip(this.textBox2, "Click to edit edge point table");
             this.textBox2.Click += new System.EventHandler(this.TextBox2Click);
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // button5
             // 
@@ -344,7 +344,7 @@
             this.button6.TabIndex = 63;
             this.toolTip1.SetToolTip(this.button6, "Store & reload settings");
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button4_Click);
+            this.button6.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button7
             // 
@@ -383,7 +383,7 @@
             this.trackBar2.TabIndex = 78;
             this.toolTip1.SetToolTip(this.trackBar2, "Select edge points");
             this.trackBar2.Value = 1;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            this.trackBar2.Scroll += new System.EventHandler(this.TrackBar2_Scroll);
             // 
             // checkBox3
             // 
@@ -395,7 +395,7 @@
             this.checkBox3.Text = "Show and edit emission in kg/h";
             this.toolTip1.SetToolTip(this.checkBox3, "Use and show emission as kg/h");
             this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckBox3_CheckedChanged);
             // 
             // Exit
             // 
@@ -409,7 +409,7 @@
             this.Exit.TabIndex = 57;
             this.toolTip1.SetToolTip(this.Exit, "Close form");
             this.Exit.UseVisualStyleBackColor = true;
-            this.Exit.Click += new System.EventHandler(this.cancelButtonClick);
+            this.Exit.Click += new System.EventHandler(this.CancelButtonClick);
             // 
             // label1
             // 
@@ -486,7 +486,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(171, 17);
             this.listBox1.TabIndex = 59;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -590,7 +590,7 @@
             this.numericUpDown4.Size = new System.Drawing.Size(80, 20);
             this.numericUpDown4.TabIndex = 51;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
+            this.numericUpDown4.ValueChanged += new System.EventHandler(this.NumericUpDown4_ValueChanged);
             // 
             // label8
             // 
@@ -620,7 +620,7 @@
             this.label15.TabIndex = 42;
             this.label15.Text = "0";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label15.TextChanged += new System.EventHandler(this.label15_TextChanged);
+            this.label15.TextChanged += new System.EventHandler(this.Label15_TextChanged);
             // 
             // tabControl1
             // 
@@ -684,7 +684,7 @@
             this.button9.TabIndex = 77;
             this.button9.Text = "&OK";
             this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.button9.Click += new System.EventHandler(this.Button9_Click);
             // 
             // checkBox2
             // 
@@ -694,7 +694,7 @@
             this.checkBox2.TabIndex = 5;
             this.checkBox2.Text = "3D Line";
             this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
             // 
             // button10
             // 
@@ -705,7 +705,7 @@
             this.button10.TabIndex = 77;
             this.button10.Text = "&Cancel";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.cancelButtonClick);
+            this.button10.Click += new System.EventHandler(this.CancelButtonClick);
             // 
             // labelTitle
             // 
@@ -715,7 +715,7 @@
             this.labelTitle.Size = new System.Drawing.Size(153, 25);
             this.labelTitle.TabIndex = 56;
             this.labelTitle.Text = "Edit Line Sources";
-            this.labelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            this.labelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseDown);
             // 
             // panel1
             // 
@@ -727,7 +727,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(221, 34);
             this.panel1.TabIndex = 80;
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseDown);
             // 
             // ScrollLeft
             // 
@@ -768,7 +768,7 @@
             this.trackBar1.Size = new System.Drawing.Size(160, 19);
             this.trackBar1.TabIndex = 86;
             this.trackBar1.Value = 1;
-            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_Scroll);
+            this.trackBar1.ValueChanged += new System.EventHandler(this.TrackBar1_Scroll);
             // 
             // EditLinesources
             // 

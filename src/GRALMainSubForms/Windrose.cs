@@ -10,14 +10,12 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Linq;
 using System.Windows.Forms;
-using GralStaticFunctions;
 
 namespace GralMainForms
 {
@@ -28,7 +26,7 @@ namespace GralMainForms
     {
         public double[,] SectFrequ = new double[16, 8];
         public double[] WndClasses = new double[7];
-public string MetFileName;
+        public string MetFileName;
         public List<GralData.WindData> WindData;
         public int WindSectorCount = 16;
 
@@ -422,9 +420,9 @@ public string MetFileName;
                     int radius = Convert.ToInt32(sektsum[i] * scale);
                     float startAngle = (float)(sectorangle * i - sectorwidth) * 180 / MathF.PI - 90;
                     float sectorAnglePie = (float)(sectorwidth * 2) * 180 / MathF.PI;
-                    
+
                     sektsum[i] = sektsum[i] - SectFrequ[i, n];
-                    
+
                     if (DrawingMode == 0)
                     {
                         DrawWindSpeedRose(g, pensWind, brushesWind, n, mid_x, mid_y, radius, startAngle, sectorAnglePie);
@@ -460,8 +458,8 @@ public string MetFileName;
         private void DrawWindSpeedScale(Graphics g, int n, int VertDist, int y0, Font kleinfont)
         {
             int x_legend = LegendPosition.X * CopyToClipboardScale;
-           
-           
+
+
             if (n >= 0 && n < 8 && n < pensWind.Length && n < brushesWind.Length)
             {
                 switch (n)
@@ -527,7 +525,7 @@ public string MetFileName;
                     {
                         g.DrawPie(pen[n], new Rectangle(mid_x - radius, mid_y - radius, radius * 2, radius * 2), startAngle, sectorAngle);
                     }
-                }             
+                }
             }
         }
 

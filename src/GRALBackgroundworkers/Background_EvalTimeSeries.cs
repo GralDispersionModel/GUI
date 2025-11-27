@@ -11,10 +11,8 @@
 #endregion
 
 using System;
-using System.Threading;
-using System.IO;
 using System.Collections.Generic;
-using GralIO;
+using System.IO;
 using System.Text;
 
 namespace GralBackgroundworkers
@@ -55,7 +53,7 @@ namespace GralBackgroundworkers
                 {
                     throw new Exception("Error reading the emission modulation factors");
                 }
-                double[,] EmissionFacTimeSeries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName, 
+                double[,] EmissionFacTimeSeries = ReadEmissionModulationTimeSeries(meteoTimeSeries.Count, maxsource, mydata.ProjectName,
                                                                                sg_numbers, ref EmissionFactHour, ref EmissionFactMonth, sg_names, mydata.PathEmissionModulation);
 
                 if (meteoPGTALL.Count == 0) // no data available
@@ -250,14 +248,14 @@ namespace GralBackgroundworkers
                     }
 
                     //write data
-                    foreach(string _res in ReceptorTimeResult)
+                    foreach (string _res in ReceptorTimeResult)
                     {
                         mywriter.WriteLine(_res);
                     }
                 }
                 AddInfoText(Environment.NewLine + "Process finished ");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 BackgroundThreadMessageBox(ex.Message);
             }
@@ -303,7 +301,7 @@ namespace GralBackgroundworkers
             double[,] emifacHours = new double[24, MaxSource];
             double[,] emifacMonths = new double[12, MaxSource];
             string[] SourceGroupNumbers = new string[MaxSource];
-            
+
             //get variation for source group
             int itm = 0;
             try
@@ -353,7 +351,7 @@ namespace GralBackgroundworkers
                 }
                 AddInfoText(Environment.NewLine + Environment.NewLine + "Reading emission modulation factors from: " + ModulationPath);
             }
-            catch 
+            catch
             {
                 AddInfoText(Environment.NewLine + Environment.NewLine + "Error reading the emission modulation factors from: " + ModulationPath);
                 return (null, null, null);
@@ -373,7 +371,7 @@ namespace GralBackgroundworkers
         /// <param name="emifac_mon">monthly emission factors</param>
         /// <param name="ModulationPath">Path to an emission timeseries file</param>
         /// <returns>Emission time series</returns>
-        private double[,] ReadEmissionModulationTimeSeries(int MettimeFileLength, int MaxSource, string ProjectName, 
+        private double[,] ReadEmissionModulationTimeSeries(int MettimeFileLength, int MaxSource, string ProjectName,
                                                            string[] SGNumbers, ref double[,] emifac_day, ref double[,] emifac_mon, string[] sg_names, string ModulationPath)
         {
             double[,] emifac_timeseries = new double[MettimeFileLength + 1, MaxSource];
@@ -390,7 +388,7 @@ namespace GralBackgroundworkers
                 }
             }
             string newpath = Path.Combine(ModulationPath, "emissions_timeseries.txt");
-            
+
             bool timeseries = false;
             if (File.Exists(newpath) == true)
             {
@@ -429,7 +427,7 @@ namespace GralBackgroundworkers
 
                         for (int i = 0; i < MettimeFileLength; i++)
                         {
-                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';',',' }, StringSplitOptions.RemoveEmptyEntries);
+                            text10 = read1.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
                             for (int n = 0; n < MaxSource; n++)
                             {
                                 if (sg_time[n] == 0)

@@ -14,14 +14,14 @@ using System.Drawing;
 
 namespace GralData
 {
-	/// <summary>
-	/// Class for Base Maps data
-	/// </summary>
-	public class BaseMapData
-	{
-		public Rectangle Destrec {get; set;}
-		public double    West {get; set;}
-        public double    North {get; set;}
-        public double    PixelMX {get; set;}
+    /// <summary>
+    /// Class for Base Maps data
+    /// </summary>
+    public class BaseMapData
+    {
+        public Rectangle Destrec { get; set; }
+        public double West { get; set; }
+        public double North { get; set; }
+        public double PixelMX { get; set; }
     }
 }

@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
-using GralIO;
-using System.Collections.Generic;
 
 namespace Gral
 {
@@ -386,7 +386,7 @@ namespace Gral
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
                         sel_sg.checkBox3.Visible = false;
-                        if (numericUpDown4.Value < 3600 && (3600 / numericUpDown4.Value) == (int) (3600 / numericUpDown4.Value))
+                        if (numericUpDown4.Value < 3600 && (3600 / numericUpDown4.Value) == (int)(3600 / numericUpDown4.Value))
                         {
                             sel_sg.EnableHourlyMeanValuesCheckbox = true;
                         }
@@ -712,7 +712,7 @@ namespace Gral
                         }
                     }
                 }
-            }            
+            }
             Cursor = Cursors.Default;
         }
 
@@ -738,7 +738,7 @@ namespace Gral
                         sel_sg.checkBox3.Visible = false;
                         sel_sg.listBox1.SelectionMode = SelectionMode.One;
                         sel_sg.Prefix = FilePrefix;
-                        
+
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
                             ProjectSetting.EvaluationPath = sel_sg.PathForResultFiles;
@@ -793,7 +793,7 @@ namespace Gral
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
                                 {
-                                    using(global::GralMainForms.Input_Odour inodour = new global::GralMainForms.Input_Odour()
+                                    using (global::GralMainForms.Input_Odour inodour = new global::GralMainForms.Input_Odour()
                                     {
                                         StartPosition = FormStartPosition.Manual,
                                         Location = new System.Drawing.Point(this.Left, this.Top),
@@ -804,7 +804,7 @@ namespace Gral
                                         {
                                             peakmean = inodour.MeanToPeak;
                                             writeAdditionalFiles = inodour.WriteAdditionalFiles;
-                                            
+
                                             input_correct = true;
                                         }
                                     }
@@ -976,7 +976,7 @@ namespace Gral
                                             //select between constant R90 ratio or variance model
                                             peakmean = inodour.MeanToPeak;
                                             writeAdditionalFiles = inodour.WriteAdditionalFiles;
-                                            
+
                                             input_correct = true;
                                         }
                                     }

@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralIO;
-using System.Drawing;
 
 namespace Gral
 {
@@ -69,12 +68,12 @@ namespace Gral
                     GRALSettings.DispersionTime = Convert.ToInt32(numericUpDown4.Value);
                     GRALSettings.ParticleNumber = Convert.ToInt32(numericUpDown6.Value);
                     GRALSettings.DispersionSituation = Convert.ToInt32(numericUpDown5.Value);
-                    
+
                     //save data to "in.dat"
                     GRALSettings.InDatPath = newPath;
                     GRALSettings.BuildingHeightsWrite = checkBox23.Checked;
                     GRALSettings.PrognosticSubDomains = (int)numericUpDown42.Value;
-               
+
                     if (checkBox32.Checked == true)
                     {
                         GRALSettings.Transientflag = 0;
@@ -90,11 +89,11 @@ namespace Gral
                     };
                     if (writer.WriteInDat()) // if writing = OK
                     {
-                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook); 
+                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook);
                     }
                     else // error writing in.dat
                     {
-                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot); 
+                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot);
                     }
                     writer = null;
                 }
@@ -533,7 +532,7 @@ namespace Gral
                 numericUpDown30.Value = 500;
             }
         }
-        
+
         //decide, whether iterations shall be performed until steady-state conditions are reached, or not
         private void SetGRALFlowFieldSteadyStateIterationChanged(object sender, EventArgs e)
         {

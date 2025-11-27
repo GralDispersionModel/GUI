@@ -76,7 +76,7 @@ namespace Gral
                     }
                 }
                 catch
-                {}
+                { }
             }
         }
     }

@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
+using GralMessage;
+using GralStaticFunctions;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralMessage;
-using GralStaticFunctions;
 
 namespace Gral
 {
@@ -398,7 +398,7 @@ namespace Gral
 
                                     _dateTime = _date.Day.ToString(ic) + "." + _date.Month.ToString(ic) + "." + _date.Year.ToString(ic) + "," + _date.Hour.ToString(ic) + ":00,";
                                     myWriterERA.WriteLine(_dateTime + vel + "," + dirDeg.ToString(ic) + ",4");
-                                    
+
                                     _date = _date.AddHours(1);
                                 }
                             }

@@ -10,13 +10,13 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Data;
-using System.Text;
 using GralStaticFunctions;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
@@ -715,7 +715,7 @@ namespace GralDomForms
                         for (int i = 0; i < sCells.GetLength(0); ++i)
                         {
                             double test = 0;
-                           
+
                             if (iCol + i < dataGridView1.ColumnCount)
                             {
                                 oCell = dataGridView1[iCol + i, iRow];
@@ -724,7 +724,7 @@ namespace GralDomForms
                                 {
                                     sCells[i] = test.ToString("0.0");
                                 }
-                                
+
                                 oCell.Value = Convert.ChangeType(sCells[i].Replace("\r", ""), oCell.ValueType);
 
                                 // remember changed item
@@ -782,7 +782,7 @@ namespace GralDomForms
 
             //create a list to store all found entris
             List<int> _entryfound = new List<int>(20);
-            
+
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 int index = dataGridView1.Rows[i].Index;

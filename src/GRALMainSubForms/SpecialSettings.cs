@@ -57,8 +57,8 @@ namespace GralMainForms
                     }
                 }
 
-                if (Gral.Main.ProjectSetting.RelaxationFactorGRALPressure != (double)numericUpDown27.Value || 
-                    Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity != (double) numericUpDown28.Value)
+                if (Gral.Main.ProjectSetting.RelaxationFactorGRALPressure != (double)numericUpDown27.Value ||
+                    Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity != (double)numericUpDown28.Value)
                 {
                     SetGRALFlowFieldRelaxFactor();
                 }
@@ -72,8 +72,8 @@ namespace GralMainForms
 
             string KeepTransientPath = Path.Combine(Gral.Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat");
             numericUpDown1.Value = 24;
-            numericUpDown28.Value = (decimal) Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity;
-            numericUpDown27.Value = (decimal) Gral.Main.ProjectSetting.RelaxationFactorGRALPressure;
+            numericUpDown28.Value = (decimal)Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity;
+            numericUpDown27.Value = (decimal)Gral.Main.ProjectSetting.RelaxationFactorGRALPressure;
 
             if (File.Exists(KeepTransientPath))
             {
@@ -172,18 +172,18 @@ namespace GralMainForms
             try
             {
                 string newPath1 = Path.Combine(Gral.Main.ProjectName, @"Computation", "relaxation_factors.txt");
-                    try
+                try
+                {
+                    using (StreamWriter mywriter = new StreamWriter(newPath1))
                     {
-                        using (StreamWriter mywriter = new StreamWriter(newPath1))
-                        {
-                            mywriter.WriteLine(Convert.ToString(Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity, ic));
-                            mywriter.WriteLine(Convert.ToString(Gral.Main.ProjectSetting.RelaxationFactorGRALPressure, ic));
-                        }
+                        mywriter.WriteLine(Convert.ToString(Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity, ic));
+                        mywriter.WriteLine(Convert.ToString(Gral.Main.ProjectSetting.RelaxationFactorGRALPressure, ic));
                     }
-                    catch
-                    {
-                        MessageBox.Show("Error when writing file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Error when writing file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch
             {

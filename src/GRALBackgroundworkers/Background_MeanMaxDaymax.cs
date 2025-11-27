@@ -11,9 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-using GralIO;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace GralBackgroundworkers
@@ -54,8 +53,8 @@ namespace GralBackgroundworkers
             string akmettime;
             string month;
             string day;
-            string MonthPrevious="a";
-            string DayPrevious="a";
+            string MonthPrevious = "a";
+            string DayPrevious = "a";
             string hour;
             int WeatherSituationsOfThisDay = 1;
             int nnn = 0;
@@ -79,11 +78,11 @@ namespace GralBackgroundworkers
             List<string> data_meteopgt = new List<string>();
             ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
             if (data_meteopgt.Count == 0) // no data available
-            { 
-                BackgroundThreadMessageBox ("Can't read meteopgt.all");
+            {
+                BackgroundThreadMessageBox("Can't read meteopgt.all");
             }
 
-            foreach(string line_meteopgt in data_meteopgt)
+            foreach (string line_meteopgt in data_meteopgt)
             {
                 try
                 {
@@ -93,9 +92,9 @@ namespace GralBackgroundworkers
                     akmet.Add(text[2]);
                 }
                 catch
-                {}
+                { }
             }
-            
+
             //read mettimeseries.dat to get file length necessary to define some array lengths
             newpath = Path.Combine("Computation", "mettimeseries.dat");
             int mettimefilelength = 0;
@@ -114,13 +113,13 @@ namespace GralBackgroundworkers
                 }
                 if (mettimefilelength == 0) // File-lenght must > 0
                 {
-                    BackgroundThreadMessageBox ("Can´t read mettimeseries.dat");
+                    BackgroundThreadMessageBox("Can´t read mettimeseries.dat");
                     return; // leave method
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                BackgroundThreadMessageBox (ex.Message);
+                BackgroundThreadMessageBox(ex.Message);
                 return;
             }
             //mettimefilelength--;
@@ -144,7 +143,7 @@ namespace GralBackgroundworkers
 
             //if file emissions_timeseries.txt exists, these modulation factors will be used
             double[,] emifac_timeseries = new double[mettimefilelength + 1, maxsource];
-            
+
             //it is necessary to set all values of the array emifac_timeseries equal to 1
             for (int i = 0; i < mettimefilelength + 1; i++)
             {
@@ -165,8 +164,8 @@ namespace GralBackgroundworkers
             List<string> data_mettimeseries = new List<string>();
             ReadMettimeseries(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
             if (data_mettimeseries.Count == 0) // no data available
-            { 
-                BackgroundThreadMessageBox ("Can't read mettimeseries.dat");
+            {
+                BackgroundThreadMessageBox("Can't read mettimeseries.dat");
             }
 
             int count_ws = -1;
@@ -179,9 +178,9 @@ namespace GralBackgroundworkers
                 //MessageBox.Show(mettimeseries);
                 text2 = mettimeseries.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
-                
+
                 count_ws++;
-                
+
                 if (Rechenknecht.CancellationPending)
                 {
                     e.Cancel = true;
@@ -189,17 +188,17 @@ namespace GralBackgroundworkers
                 }
                 if (count_ws % 4 == 0)
                 {
-                    Rechenknecht.ReportProgress((int) (count_ws / (double) data_mettimeseries.Count * 100D));
+                    Rechenknecht.ReportProgress((int)(count_ws / (double)data_mettimeseries.Count * 100D));
                 }
-                
-                month=text3[1];
-                day=text3[0];
-                hour=text2[1];
+
+                month = text3[1];
+                day = text3[0];
+                hour = text2[1];
                 if (hour == "24")
                     hourplus = 1;
-                wgmettime=text2[2];
-                wrmettime=text2[3];
-                akmettime=text2[4];
+                wgmettime = text2[2];
+                wrmettime = text2[3];
+                akmettime = text2[4];
 
                 //in case of transient simulation there is no need to loop over meteopgt.all
                 int meteo_loop = wrmet.Count;
@@ -212,8 +211,8 @@ namespace GralBackgroundworkers
                 for (int n = 0; n < meteo_loop; n++)
                 {
                     //in case of transient simulation there is no need to loop over meteopgt.all
-                    bool meteo_situation_found = false;                    
-                    if (transientMode || no_classification==true)
+                    bool meteo_situation_found = false;
+                    if (transientMode || no_classification == true)
                     {
                         meteo_situation_found = true;
                     }
@@ -338,11 +337,11 @@ namespace GralBackgroundworkers
                                 {
                                     int _itm = 0;
                                     float[] ConcDayMaxTempSumL = ConcDaymaxTempSum[ii][j];
-                                    float[] DepDayMaxTempSumL  = DepDaymaxTempSum[ii][j];
+                                    float[] DepDayMaxTempSumL = DepDaymaxTempSum[ii][j];
                                     float[] ConcAverageL = concmit[ii][j];
-                                    float[] DepAverageL  = depmit[ii][j];
+                                    float[] DepAverageL = depmit[ii][j];
                                     float[] ConcMaxL = concmax[ii][j];
-                                    float[] DepMaxL  = depmax[ii][j];
+                                    float[] DepMaxL = depmax[ii][j];
 
                                     //reset max. daily concentrations for each source group
                                     concmaxdummy[ii, j] = 0;
@@ -351,8 +350,8 @@ namespace GralBackgroundworkers
                                     else // reset daymax temp values and calculate daymax value
                                     {
                                         float[] ConcDayMaxL = concdaymax[ii][j];
-                                        float[] DepDayMaxL  = depdaymax[ii][j];
-                                        
+                                        float[] DepDayMaxL = depdaymax[ii][j];
+
                                         ConcDayMaxL[maxsource] = Math.Max(ConcDayMaxL[maxsource], ConcDayMaxTempSumL[maxsource] / WeatherSituationsOfThisDay);
                                         DepDayMaxL[maxsource] = Math.Max(DepDayMaxL[maxsource], DepDayMaxTempSumL[maxsource] / WeatherSituationsOfThisDay);
                                         _itm = 0;
@@ -418,10 +417,10 @@ namespace GralBackgroundworkers
 
                 // save the last used day to recognize a new day
                 DayPrevious = day;
-                MonthPrevious = month;		
+                MonthPrevious = month;
 
             } // Loop over all weather situations of a year
-            
+
             //final computations
             if (nnn > 0)
             {
@@ -441,10 +440,10 @@ namespace GralBackgroundworkers
                 //total concentration
                 for (int i = 0; i <= mydata.CellsGralX; i++)
                     for (int j = 0; j <= mydata.CellsGralY; j++)
-                {
-                    concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
-                    depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
-                }
+                    {
+                        concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
+                        depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
+                    }
 
             }
 
@@ -479,9 +478,9 @@ namespace GralBackgroundworkers
                     }
                     else
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
-                    
+
                     file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + "_" + mydata.Slicename + ".txt");
-                    
+
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;
                     Result.Z = itm;
@@ -492,7 +491,7 @@ namespace GralBackgroundworkers
 
                     if (deposition_files_exists)
                     {
-                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" +name + ".txt");
+                        file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" + name + ".txt");
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -545,7 +544,7 @@ namespace GralBackgroundworkers
             if (mydata.CalculateMaxHour == true)
             {
                 int itm = 0;
-                string depo_name="";
+                string depo_name = "";
                 foreach (string source_group_name in sg_names)
                 {
                     if (Rechenknecht.CancellationPending)
@@ -566,7 +565,7 @@ namespace GralBackgroundworkers
                         name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] + "_" + mydata.Slicename;
                         depo_name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     }
-                    
+
                     file = Path.Combine(mydata.PathEvaluationResults, "Max_" + name + ".txt");
                     Result.Unit = Gral.Main.My_p_m3;
                     Result.Round = 5;

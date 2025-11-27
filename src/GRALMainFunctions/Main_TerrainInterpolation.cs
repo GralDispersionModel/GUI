@@ -149,7 +149,7 @@ namespace Gral
                                        (int)Math.Max(1, Math.Min(TerrainMaxX, ((Xs - X0Terr) / DxTerr))),
                                        (int)Math.Max(1, Math.Min(TerrainMaxY, ((Y0Terr - Ys) / DyTerr))));
             (double _xCenter, double _yCenter) = TerrainCellCenter(cellPosition);
-            
+
             double sumdenom = 0;
             double sumnom = 0;
 

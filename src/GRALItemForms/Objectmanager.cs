@@ -10,15 +10,14 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralDomain;
+using GralItemData;
 using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using Gral;
-using GralItemData;
-using GralDomain;
-using System.Windows.Media;
 
 namespace GralItemForms
 {
@@ -31,8 +30,8 @@ namespace GralItemForms
     {
         private readonly GralDomain.Domain domain = null;
         private readonly String decsep;
-		// delegate to send Message, that redraw is needed!
-		public event ForceDomainRedraw Object_redraw;
+        // delegate to send Message, that redraw is needed!
+        public event ForceDomainRedraw Object_redraw;
         /// <summary>
         /// Delegate to force an update from child forms
         /// </summary>
@@ -104,29 +103,29 @@ namespace GralItemForms
         {
             try
             {
-                
+
                 if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
                 {
-                	MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                	return;
+                    MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
-                	
-                
+
+
                 int index = listBox1.SelectedIndex;
                 if (index > 0)
                 {
-                	// close all Layout-forms
-					Layout_Close_Forms();
-					DrawingObjects _drobj = domain.ItemOptions[index];
-					
-					domain.ItemOptions.Insert(index - 1, _drobj);
+                    // close all Layout-forms
+                    Layout_Close_Forms();
+                    DrawingObjects _drobj = domain.ItemOptions[index];
+
+                    domain.ItemOptions.Insert(index - 1, _drobj);
                     domain.ItemOptions.RemoveAt(index + 1);
                     listBox1.Items.Insert(index - 1, listBox1.SelectedItem);
-					listBox1.Items.RemoveAt(index + 1);
+                    listBox1.Items.RemoveAt(index + 1);
 
-					#if __MonoCS__
+#if __MonoCS__
 					listBox1.ClearSelected ();
-					#endif
+#endif
                     listBox1.SelectedIndex = index - 1;
                 }
             }
@@ -144,30 +143,30 @@ namespace GralItemForms
         {
             try
             {
-            	if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
-            	{
-            		MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                	return;
-            	}
-                
+                if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
+                {
+                    MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
                 int index = listBox1.SelectedIndex;
                 if (index < listBox1.Items.Count - 1 && index >= 0)
                 {
-                	// close all Layout-forms
-					Layout_Close_Forms();
-					DrawingObjects _drobj = domain.ItemOptions[index];
-					
-					domain.ItemOptions.Insert(index + 2, _drobj);
-					domain.ItemOptions.RemoveAt(index);
+                    // close all Layout-forms
+                    Layout_Close_Forms();
+                    DrawingObjects _drobj = domain.ItemOptions[index];
+
+                    domain.ItemOptions.Insert(index + 2, _drobj);
+                    domain.ItemOptions.RemoveAt(index);
 
                     string drawingObject = _drobj.Name;
                     if (!string.IsNullOrEmpty(_drobj.ContourFilename) && _drobj.ContourFilename != "x")
                     {
                         drawingObject += " Filename: " + Path.GetFileName(_drobj.ContourFilename);
                     }
-					listBox1.Items.Insert(index + 2, drawingObject);
+                    listBox1.Items.Insert(index + 2, drawingObject);
                     listBox1.Items.RemoveAt(index);
-                    
+
                     listBox1.SelectedIndex = index + 1;
                 }
             }
@@ -190,10 +189,10 @@ namespace GralItemForms
             domain.button16.Visible = false;
             domain.button23.Visible = false;
             domain.button49.Visible = false;
-            
+
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
-            	if ((Convert.ToString(listBox1.Items[i]) == "POINT SOURCES") && (domain.ItemOptions[i].Show == true))
+                if ((Convert.ToString(listBox1.Items[i]) == "POINT SOURCES") && (domain.ItemOptions[i].Show == true))
                 {
                     domain.button8.Visible = true;
                 }
@@ -228,8 +227,8 @@ namespace GralItemForms
                     domain.button49.Visible = true;
                 }
             }
-            
-           RedrawDomain(this, null);
+
+            RedrawDomain(this, null);
         }
 
         /// <summary>
@@ -239,7 +238,7 @@ namespace GralItemForms
         /// <param name="e"></param>
         void Button6Click(object sender, EventArgs e)
         {
-        	if (listBox1.SelectedIndex > -1)
+            if (listBox1.SelectedIndex > -1)
             {
                 ListBox1_DoubleClick(null, null);
             }
@@ -252,18 +251,18 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void ListBox1_DoubleClick(object sender, EventArgs e)
         {
-        	if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
-        	{
-        		MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-               	return;
-        	}
-            
+            if (listBox1.SelectedItems.Count > 1) // if more than one item is selected
+            {
+                MessageBox.Show(this, "More than one item selected", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             // catch invalid index
             if (listBox1.SelectedIndex > domain.ItemOptions.Count || listBox1.SelectedIndex < 0)
             {
                 return;
             }
-                
+
             Layout layout = new Layout(domain);
             //fill combobox1 with source groups and combobox2 with items
             layout.label1.Visible = false;
@@ -273,9 +272,9 @@ namespace GralItemForms
             layout.comboBox2.Visible = false;
             layout.comboBox2.Items.Add("NONE");
             layout.DrawObject = domain.ItemOptions[listBox1.SelectedIndex];
-            
+
             Cursor = Cursors.WaitCursor;
-            layout.Text = "Layout" +  "  " + Convert.ToString(listBox1.SelectedItem);
+            layout.Text = "Layout" + "  " + Convert.ToString(listBox1.SelectedItem);
             layout.UpdateListbox += ListboxUpdate; // update of listbox entries
 
             if (Convert.ToString(listBox1.SelectedItem) == "AREA SOURCES")
@@ -284,7 +283,7 @@ namespace GralItemForms
                 layout.comboBox1.Visible = true;
                 layout.label2.Visible = true;
                 layout.comboBox2.Visible = true;
-                
+
                 foreach (AreaSourceData _as in domain.EditAS.ItemData)
                 {
                     Updatecombobox1(_as.Poll.SourceGroup, layout);
@@ -295,7 +294,7 @@ namespace GralItemForms
                     {
                         for (int i1 = 0; i1 < Main.PollutantList.Count; i1++)
                         {
-                        	if (_as.Poll.Pollutant[j] == i1)
+                            if (_as.Poll.Pollutant[j] == i1)
                             {
                                 if (_as.Poll.EmissionRate[j] != 0)
                                 {
@@ -327,7 +326,7 @@ namespace GralItemForms
                         }
                     }
                 }
-               
+
                 for (int j = 1; j < layout.comboBox1.Items.Count; j++)
                 {
                     string[] text = new string[2];
@@ -352,7 +351,7 @@ namespace GralItemForms
 
                 for (int j = 1; j < layout.comboBox2.Items.Count; j++)
                 {
-                    for(int i1=0;i1<Main.PollutantList.Count; i1++)
+                    for (int i1 = 0; i1 < Main.PollutantList.Count; i1++)
                     {
                         if (Convert.ToString(layout.comboBox2.Items[j]) == Main.PollutantList[i1])
                         {
@@ -379,9 +378,9 @@ namespace GralItemForms
                 {
                     for (int j = 0; j < _ls.Poll.Count; j++)
                     {
-                    	Updatecombobox1(_ls.Poll[j].SourceGroup, layout);
+                        Updatecombobox1(_ls.Poll[j].SourceGroup, layout);
                     }
-                    
+
                     string poll = "";
                     bool exist = false;
                     for (int k = 0; k < _ls.Poll.Count; k++)
@@ -390,9 +389,9 @@ namespace GralItemForms
                         {
                             for (int i1 = 0; i1 < Main.PollutantList.Count; i1++)
                             {
-                            	if ((_ls.Poll[k].Pollutant[j] == i1))
+                                if ((_ls.Poll[k].Pollutant[j] == i1))
                                 {
-                            		if (_ls.Poll[k].EmissionRate[j] != 0)
+                                    if (_ls.Poll[k].EmissionRate[j] != 0)
                                     {
                                         poll = Main.PollutantList[i1];
                                         exist = false;
@@ -460,7 +459,7 @@ namespace GralItemForms
                     }
                 }
             }
-            
+
             if (Convert.ToString(listBox1.SelectedItem) == "BUILDINGS")
             {
                 layout.label2.Visible = true;
@@ -518,12 +517,12 @@ namespace GralItemForms
         {
             try
             {
-            	for (int index = listBox1.Items.Count-1; index >= 0; index--) // check all items
-        		{
-            		if (listBox1.GetSelected(index) == true) // change selected items
-            		{
-            			if (checkBox1.Checked == true)
-            			{
+                for (int index = listBox1.Items.Count - 1; index >= 0; index--) // check all items
+                {
+                    if (listBox1.GetSelected(index) == true) // change selected items
+                    {
+                        if (checkBox1.Checked == true)
+                        {
                             // Render map?
                             if (!domain.ItemOptions[index].Rendered)
                             {
@@ -540,14 +539,14 @@ namespace GralItemForms
                                 }
 
                             }
-            				domain.ItemOptions[index].Show = true;
-            			}
-            			else
-            			{
-            				domain.ItemOptions[index].Show = false;
-            			}
-            		}
-            	}
+                            domain.ItemOptions[index].Show = true;
+                        }
+                        else
+                        {
+                            domain.ItemOptions[index].Show = false;
+                        }
+                    }
+                }
             }
             catch
             {
@@ -579,7 +578,7 @@ namespace GralItemForms
             //hide or show button to remove files
             button4.Visible = false;
             button6.Visible = false;
-            
+
             if (listBox1.SelectedIndex > -1) // item selected
             {
                 button6.Visible = true; // show button Layout
@@ -656,11 +655,11 @@ namespace GralItemForms
 
             try
             {
-            	domain.ObjectManagerForm.Left = domain.Left+40;
-			    domain.ObjectManagerForm.Top = domain.Top +120;
-			
+                domain.ObjectManagerForm.Left = domain.Left + 40;
+                domain.ObjectManagerForm.Top = domain.Top + 120;
+
                 listBox1.SelectedIndex = 0;
-                
+
                 if (domain.ItemOptions[0].Show == true)
                 {
                     checkBox1.Checked = true;
@@ -713,8 +712,8 @@ namespace GralItemForms
                 text = Convert.ToString(layout.comboBox1.Items[i]).Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 if (text.Length > 1)
                 {
-                	int _sg = 0;
-                	int.TryParse(text[1], out _sg);
+                    int _sg = 0;
+                    int.TryParse(text[1], out _sg);
                     if (_sg == SGNumber)
                     {
                         exist = true;
@@ -724,7 +723,7 @@ namespace GralItemForms
                 else
                 {
                     int _sg = 0;
-                	int.TryParse(text[0], out _sg);
+                    int.TryParse(text[0], out _sg);
                     if (_sg == SGNumber)
                     {
                         exist = true;
@@ -757,7 +756,7 @@ namespace GralItemForms
             int i = 0;
             foreach (SG_Class _sg in Main.DefinedSourceGroups)
             {
-            	int sg = GralStaticFunctions.St_F.GetSgNumber(_sg.SG_Name);
+                int sg = GralStaticFunctions.St_F.GetSgNumber(_sg.SG_Name);
                 if (sg == SGNumber)
                 {
                     index = i;
@@ -774,9 +773,9 @@ namespace GralItemForms
         /// <param name="e"></param>
         void ListBox1KeyDown(object sender, KeyEventArgs e)
         {
-        	if (e.KeyCode == Keys.Delete)
-        	{
-        		if (MessageBox.Show(this, "Remove selected items?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (MessageBox.Show(this, "Remove selected items?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     Button4_Click(null, null);
                 }
@@ -812,66 +811,66 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void Button4_Click(object sender, EventArgs e)
         {
-        	//int index = listBox1.SelectedIndex;
-        	int index = listBox1.Items.Count;
-        	while (index > 0)
-        	{
-        		// Close Layout forms
-				Layout_Close_Forms();
-				
-        		index --;
-        		if (listBox1.GetSelected(index) == true) // item selected?
-        		{
-        			// just delete allowed items
-        			if (domain.ItemOptions[index].Name.Substring(0, 3) == "CM:" ||  
-        			    domain.ItemOptions[index].Name.Substring(0, 3) == "VM:" ||
-        			    domain.ItemOptions[index].Name.Substring(0, 3) == "BM:" ||
-        			    domain.ItemOptions[index].Name.Substring(0, 3) == "PM:" ||
-        			    domain.ItemOptions[index].Name.Substring(0, 3) == "SM:" ||
-        			    domain.ItemOptions[index].Name.Equals("NORTH ARROW")    ||
-        			    domain.ItemOptions[index].Name.Equals("SCALE BAR")      ||
-        			    domain.ItemOptions[index].Name.StartsWith("CONCENTRATION VALUES") ||
+            //int index = listBox1.SelectedIndex;
+            int index = listBox1.Items.Count;
+            while (index > 0)
+            {
+                // Close Layout forms
+                Layout_Close_Forms();
+
+                index--;
+                if (listBox1.GetSelected(index) == true) // item selected?
+                {
+                    // just delete allowed items
+                    if (domain.ItemOptions[index].Name.Substring(0, 3) == "CM:" ||
+                        domain.ItemOptions[index].Name.Substring(0, 3) == "VM:" ||
+                        domain.ItemOptions[index].Name.Substring(0, 3) == "BM:" ||
+                        domain.ItemOptions[index].Name.Substring(0, 3) == "PM:" ||
+                        domain.ItemOptions[index].Name.Substring(0, 3) == "SM:" ||
+                        domain.ItemOptions[index].Name.Equals("NORTH ARROW") ||
+                        domain.ItemOptions[index].Name.Equals("SCALE BAR") ||
+                        domain.ItemOptions[index].Name.StartsWith("CONCENTRATION VALUES") ||
                         domain.ItemOptions[index].Name.StartsWith("ITEM INFO") ||
                         domain.ItemOptions[index].Name.Equals("WINDROSE"))
-        			{
-        				
-        				// delete contour files, because it's not possible to load them again
-        				if (Convert.ToString(domain.ItemOptions[index].Name).Substring(0, 3) == "VM:") // Vector map
-        				{
-        					string file = domain.ItemOptions[index].ContourFilename;
-        					try
-        					{
-        						if (File.Exists(file))
+                    {
+
+                        // delete contour files, because it's not possible to load them again
+                        if (Convert.ToString(domain.ItemOptions[index].Name).Substring(0, 3) == "VM:") // Vector map
+                        {
+                            string file = domain.ItemOptions[index].ContourFilename;
+                            try
+                            {
+                                if (File.Exists(file))
                                 {
                                     File.Delete(file);
                                 }
 
                                 string path = Path.GetDirectoryName(file);
-        						
-        						file = Path.Combine(path, Path.GetFileNameWithoutExtension(file) + ".u");
-        						if (File.Exists(file))
+
+                                file = Path.Combine(path, Path.GetFileNameWithoutExtension(file) + ".u");
+                                if (File.Exists(file))
                                 {
                                     File.Delete(file);
                                 }
 
                                 file = Path.Combine(path, Path.GetFileNameWithoutExtension(file) + ".v");
-        						if (File.Exists(file))
+                                if (File.Exists(file))
                                 {
                                     File.Delete(file);
                                 }
                             }
-        					catch {}
-        				}
+                            catch { }
+                        }
 
                         domain.ItemOptions[index].Show = false;
                         domain.RemoveMap(index);
-        				        				
-        				listBox1.Items.RemoveAt(index);
-        			}
-        		}
-        	}
+
+                        listBox1.Items.RemoveAt(index);
+                    }
+                }
+            }
         }
-        
+
         /// <summary>
         /// Close the form
         /// </summary>
@@ -879,29 +878,29 @@ namespace GralItemForms
         /// <param name="e"></param>
         void ObjectmanagerFormClosed(object sender, FormClosedEventArgs e)
         {
-        	// Close all Layout-Forms
-			Layout_Close_Forms();
-			listBox1.DrawItem -= 
+            // Close all Layout-Forms
+            Layout_Close_Forms();
+            listBox1.DrawItem -=
                  new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem);
-			listBox1.Items.Clear();
-			listBox1.Dispose();
-			toolTip1.Dispose();
-        	domain.ObjectManagerForm = null; // Kuntner release objectmanager!
+            listBox1.Items.Clear();
+            listBox1.Dispose();
+            toolTip1.Dispose();
+            domain.ObjectManagerForm = null; // Kuntner release objectmanager!
         }
-       
-		/// <summary>
+
+        /// <summary>
         /// close all layout forms
         /// </summary>
         public void Layout_Close_Forms()
-		{
-			for(int i = Application.OpenForms.Count-1; i >=0; i--)
-			{
-				if(Application.OpenForms[i].Name.StartsWith("Layout"))
+        {
+            for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
+            {
+                if (Application.OpenForms[i].Name.StartsWith("Layout"))
                 {
                     Application.OpenForms[i].Close();
                 }
             }
-		}
+        }
 
         /// <summary>
         /// Send Message to domain Form, that redraw is necessary
@@ -909,17 +908,17 @@ namespace GralItemForms
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void RedrawDomain(object sender, EventArgs e)
-		{
-			try
-			{
-				if (Object_redraw != null)
+        {
+            try
+            {
+                if (Object_redraw != null)
                 {
                     Object_redraw(this, e);
                 }
             }
-			catch
-			{}
-		}
-        
+            catch
+            { }
+        }
+
     }
 }

@@ -12,8 +12,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Globalization;
+using System.IO;
 
 namespace GralShape
 {
@@ -26,16 +26,16 @@ namespace GralShape
         private double xMin, yMin, xMax, yMax, zMin, zMax, mMin, mMax;
         private readonly GralDomain.Domain domain = null;
         private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-        private bool  _readbuildings = true;
-        public bool ReadBuildings {set {_readbuildings = value;}}
+        private bool _readbuildings = true;
+        public bool ReadBuildings { set { _readbuildings = value; } }
         private double _west;
-        public double West {get {return _west;}}
+        public double West { get { return _west; } }
         private double _north;
-        public double North {get {return _north;}}
+        public double North { get { return _north; } }
         private double _pixelmx;
-        public double PixelMx {get {return _pixelmx;}}
+        public double PixelMx { get { return _pixelmx; } }
         private int _pixelmy;
-        public int PixelMy {get {return _pixelmy;}}
+        public int PixelMy { get { return _pixelmy; } }
 
         public ShapeReader(GralDomain.Domain d)
         {
@@ -78,9 +78,9 @@ namespace GralShape
             _west = xMin;
             _north = -yMax;
             _pixelmx = (xMax - xMin) / 100;
-            _pixelmy = Convert.ToInt32((yMax - yMin) / Math.Max((xMax - xMin),1) * 100);
+            _pixelmy = Convert.ToInt32((yMax - yMin) / Math.Max((xMax - xMin), 1) * 100);
             _pixelmy = Math.Max(_pixelmy, 1);
-            
+
             int currentPosition = 100;
             while (currentPosition < fileLength)
             {
@@ -89,7 +89,7 @@ namespace GralShape
                 int contentLength = readIntBig(data, recordStart + 4);
                 int recordContentStart = recordStart + 8;
                 shapetype = readIntLittle(data, recordContentStart);
-                
+
                 //Shape-Type: Point
                 if (shapetype == 1)
                 {
@@ -144,7 +144,7 @@ namespace GralShape
                 }
 
                 //Shape-Type: PolylineZ
-                if (shapetype == 13) 
+                if (shapetype == 13)
                 {
                     SHPLine line = new SHPLine();
                     //int recordShapeType = readIntLittle(data, recordContentStart);
@@ -172,7 +172,7 @@ namespace GralShape
                         int index = pointStart + (i * 16) + 8;
                         line.Points[i].Y = readDoubleLittle(data, index);
                         index = pointStart + 16 * line.NumPoints + 16 + 8 * i;
-                        line.PointsZ[i]  = readDoubleLittle(data, index);
+                        line.PointsZ[i] = readDoubleLittle(data, index);
                     }
                     //domain.shplines[index].Add(line);
                     yield return line;
@@ -235,8 +235,8 @@ namespace GralShape
                         polygon.Parts[i] = readIntLittle(data, partStart + i * 4);
                     }
                     int pointStart = recordContentStart + 44 + 4 * polygon.NumParts;
-                                        
-                    if(_readbuildings) // read buildings data
+
+                    if (_readbuildings) // read buildings data
                     {
                         int parts = 0;
                         GralDomain.PointD[] ruecksprung = new GralDomain.PointD[polygon.NumParts];
@@ -244,7 +244,7 @@ namespace GralShape
                         {
                             polygon.Points[i].X = readDoubleLittle(data, pointStart + (i * 16));
                             polygon.Points[i].Y = readDoubleLittle(data, pointStart + (i * 16) + 8);
-                            if (parts <  polygon.NumParts - 1)
+                            if (parts < polygon.NumParts - 1)
                             {
                                 if (i == polygon.Parts[parts + 1])
                                 {
@@ -257,10 +257,10 @@ namespace GralShape
                                 }
                             }
                         }
-                        
+
                         if (polygon.NumParts > 1)
                         {
-                            parts --;
+                            parts--;
                             for (int i = polygon.NumPoints; i < (polygon.NumPoints + polygon.NumParts - 1); i++)
                             {
                                 polygon.Points[i].X = ruecksprung[parts].X;
@@ -278,7 +278,7 @@ namespace GralShape
                         {
                             //create a local copy of the polygon class inclusive header
                             SHPPolygon polyPart = new SHPPolygon(polygon, false);
-                            
+
                             int end = 0;
                             if ((polygon.NumParts - parts) > 1)
                             {
@@ -295,10 +295,10 @@ namespace GralShape
                             {
                                 polyPart.Points[cp].X = readDoubleLittle(data, pointStart + (c * 16));
                                 polyPart.Points[cp].Y = readDoubleLittle(data, pointStart + (c * 16) + 8);
-                                c++;cp++;
+                                c++; cp++;
                             }
                             //SHPPolygons[index].Add(polygon); // add this ring
-                            yield return polyPart;							
+                            yield return polyPart;
                         }
                     }
                 }
@@ -325,14 +325,14 @@ namespace GralShape
                     }
 
                     int partStart = recordContentStart + 44;
-                    
+
                     for (int i = 0; i < polygon.NumParts; i++)
                     {
                         polygon.Parts[i] = readIntLittle(data, partStart + i * 4);
                     }
                     int pointStart = recordContentStart + 44 + 4 * polygon.NumParts;
-                    
-                    if(_readbuildings) // read buildings data
+
+                    if (_readbuildings) // read buildings data
                     {
                         int parts = 0;
                         GralDomain.PointD[] ruecksprung = new GralDomain.PointD[polygon.NumParts];
@@ -340,7 +340,7 @@ namespace GralShape
                         {
                             polygon.Points[i].X = readDoubleLittle(data, pointStart + (i * 16));
                             polygon.Points[i].Y = readDoubleLittle(data, pointStart + (i * 16) + 8);
-                            if (parts <  polygon.NumParts - 1)
+                            if (parts < polygon.NumParts - 1)
                             {
                                 if (i == polygon.Parts[parts + 1])
                                 {
@@ -353,11 +353,11 @@ namespace GralShape
                                 }
                             }
                         }
-                        
+
                         if (polygon.NumParts > 1)
                         {
-                            parts --;
-                            for (int i = polygon.NumPoints; i < (polygon.NumPoints + polygon.NumParts -1); i++)
+                            parts--;
+                            for (int i = polygon.NumPoints; i < (polygon.NumPoints + polygon.NumParts - 1); i++)
                             {
                                 polygon.Points[i].X = ruecksprung[parts].X;
                                 polygon.Points[i].Y = ruecksprung[parts].Y;
@@ -391,17 +391,17 @@ namespace GralShape
                             {
                                 polyPart.Points[cp].X = readDoubleLittle(data, pointStart + (c * 16));
                                 polyPart.Points[cp].Y = readDoubleLittle(data, pointStart + (c * 16) + 8);
-                                c++;cp++;
+                                c++; cp++;
                             }
                             //SHPPolygons[index].Add(polygon); // add this ring
-                            yield return polyPart;							
+                            yield return polyPart;
                         }
                     }
-                    
+
                 }
                 currentPosition = recordStart + (4 + contentLength) * 2;
             }
-            
+
             data = null; // release memory         
             yield break;
         }
@@ -410,9 +410,9 @@ namespace GralShape
         {
             byte[] bytes = new byte[4];
             bytes[0] = data[pos];
-            bytes[1] = data[pos+1];
-            bytes[2] = data[pos+2];
-            bytes[3] = data[pos+3];
+            bytes[1] = data[pos + 1];
+            bytes[2] = data[pos + 2];
+            bytes[3] = data[pos + 3];
             Array.Reverse(bytes);
             return BitConverter.ToInt32(bytes, 0);
         }

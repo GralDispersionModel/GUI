@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
-using System.IO;
-using System.Windows.Forms;
-
 using GralDomForms;
 using GralItemForms;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -30,18 +29,18 @@ namespace GralDomain
 
             // Kuntner clean up open forms, picturebox, release memory to avoid memory lags
             HideWindows(0);
-            
+
             MMO.StartMatchProcess -= new StartMatchingDelegate(StartMatchingProcess);
             MMO.CancelMatchProcess -= new CancelMatchingDelegate(MatchCancel);
             MMO.FinishMatchProcess -= new FinishMatchingDelegate(MatchFinish);
             MMO.LoadWindData -= new LoadWindFileData(LoadWindFileForMatching);
-            
+
             if (MMO != null)
             {
                 MMO.CloseMatchDialogAllowed = true; // allow closing of the MMO form, otherwise MMO.Close() is locked
                 MMO.WindVelocityObs = null;
                 MMO.WindDirectionObs = null;
-                MMO.StabilityClassObs  = null;
+                MMO.StabilityClassObs = null;
                 MMO.MetFileNames = null;
                 MMO.MetFileLenght = null;
                 MMO.DateObsMetFile = null;
@@ -49,15 +48,15 @@ namespace GralDomain
                 MMO.DecsepUser = null;
                 MMO.RowsepUser = null;
                 MMO.TimeStapmsMetTimeSeries = null;
-                
+
                 MMO.Close();
                 MMO.Dispose();
                 MMO = null;
             }
-            
-            for(int i = Application.OpenForms.Count - 1; i >= 0; i--)
+
+            for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
-                if(Application.OpenForms[i] != MainForm && (Application.OpenForms[i].Text == "Match GRAMM flow fields with multiple meteorological observations"
+                if (Application.OpenForms[i] != MainForm && (Application.OpenForms[i].Text == "Match GRAMM flow fields with multiple meteorological observations"
                                                          || Application.OpenForms[i].Text == "Mathrasteroperation"
                                                          || Application.OpenForms[i].Text == "Source apportionment"
                                                          || Application.OpenForms[i].Text == "GRAL GUI - Section drawing"
@@ -67,28 +66,28 @@ namespace GralDomain
                     Application.OpenForms[i].Close();
                 }
             }
-         
+
             // cancel all await tasks
             if (CancellationTokenSource != null)
             {
                 CancellationTokenSource.Cancel();
                 CancellationTokenSource.Dispose();
             }
-            
+
             ReleaseFileSystemWatchers();
-            
+
             if (ObjectManagerForm != null) // Kuntner: close objectmanager
             {
                 ObjectManagerForm.Button5_Click(null, null); // close objectmanager
                 ObjectManagerForm.Object_redraw -= DomainRedrawDelegate;
                 ObjectManagerForm.Close();
             }
-            
+
             if (VerticalProfileForm != null)
             {
                 VerticalProfileForm.Close();
             }
-            
+
             if (ProfileConcentration.VertProfileDirection != null)
             {
                 ProfileConcentration.VertProfileDirection.Close();
@@ -110,20 +109,20 @@ namespace GralDomain
                 PictureBoxBitmap.Dispose();
             }
             PictureBoxBitmap = null;
-            
-            
+
+
             MMO = null;
             MMOData.SetWindVel(null); MMOData.SetWindDir(null); MMOData.SetSC(null); MMOData.SetDate(null); MMOData.SetTime(null); MMOData.SetHour(null);
-            
+
             if (NorthArrowBitmap != null)
             {
                 NorthArrowBitmap.Dispose();
             }
 
             NorthArrowBitmap = null;
-           
+
             CornerAreaSource = null;
-            
+
             CellHeights = null;
 
             EditPS.PointSourceRedraw -= DomainRedrawDelegate; // Redraw from Edit Point Sources
@@ -155,7 +154,7 @@ namespace GralDomain
 
             GeoReferenceOne.Form_Georef1_Closed -= new Georeference1_Closed(CloseGeoRef1); // Message, that georef1 is closed
             GeoReferenceTwo.Form_Georef2_Closed -= new Georeference2_Closed(CloseGeoRef2); // Message, that georef2 is closed
-            
+
             if (GeoReferenceOne != null)
             {
                 GeoReferenceOne.Close();
@@ -214,19 +213,19 @@ namespace GralDomain
                 EditR.Close();
                 EditR.Dispose();
             }
-            
+
             if (MeteoDialog != null) // 
             {
                 MeteoDialog.Close();
                 MeteoDialog.Dispose();
             }
-            
+
             InfoBoxCloseAllForms();
-            
+
             // Close Vertical Profile windows
-            for(int i = Application.OpenForms.Count-1; i >=0; i--)
+            for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
-                if(Application.OpenForms[i] != MainForm && Application.OpenForms[i].Name.Contains("Profile_"))
+                if (Application.OpenForms[i] != MainForm && Application.OpenForms[i].Name.Contains("Profile_"))
                 {
                     Application.OpenForms[i].Close();
                 }
@@ -274,27 +273,27 @@ namespace GralDomain
                 saveFileDialog1.Dispose();
             }
 
-            foreach (DrawingObjects _drobj  in ItemOptions)
+            foreach (DrawingObjects _drobj in ItemOptions)
             {
                 _drobj.Dispose();
             }
             ItemOptions.Clear();
             ItemOptions.TrimExcess();
             //Application.DoEvents();
-            
+
             CancellationTokenSource = null;
 
             try
             {
-                if (DomainClosed!= null)
+                if (DomainClosed != null)
                 {
                     DomainClosed(this, e);
                 }
             }
             catch
-            {}
+            { }
         }
-        
+
         /// <summary>
         /// Prevent closing the domain form when a match process or a gif recoring is running
         /// </summary>
@@ -309,7 +308,7 @@ namespace GralDomain
                     e.Cancel = true;
                 }
             }
-            
+
             // if Gif recording is running 
             if (OnlineCounter == -1)
             {
@@ -319,7 +318,7 @@ namespace GralDomain
                 System.Threading.Thread.Sleep(250);
             }
         }
-        
+
         /// <summary>
         /// Release all file system watchers
         /// </summary>
@@ -523,9 +522,9 @@ namespace GralDomain
         /// </summary>
         public void InfoBoxCloseAllForms()
         {
-            for(int i = Application.OpenForms.Count-1; i >=0; i--)
+            for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
-                if(Application.OpenForms[i] != MainForm && Application.OpenForms[i].Name == "Infobox")
+                if (Application.OpenForms[i] != MainForm && Application.OpenForms[i].Name == "Infobox")
                 {
                     Application.OpenForms[i].Close();
                 }

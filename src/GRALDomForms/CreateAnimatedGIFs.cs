@@ -28,13 +28,13 @@ namespace GralDomForms
         public CreateAnimatedGIFs()
         {
             InitializeComponent();
-            #if __MonoCS__
+#if __MonoCS__
                 var allNumUpDowns  = Gral.Main.GetAllControls<NumericUpDown>(this);
                 foreach (NumericUpDown nu in allNumUpDowns)
                 {
                     nu.TextAlign = HorizontalAlignment.Left;
                 }
-            #endif
+#endif
         }
 
         private void CreateAnimatedGIFs_Load(object sender, EventArgs e)
@@ -49,9 +49,9 @@ namespace GralDomForms
 
         private void button3_Click(object sender, EventArgs e)
         {
-            StartSituation = (int) (numericUpDown1.Value);
-            FinalSituation = (int) (numericUpDown2.Value);
-            FrameDelay = (int) (numericUpDown3.Value);
+            StartSituation = (int)(numericUpDown1.Value);
+            FinalSituation = (int)(numericUpDown2.Value);
+            FrameDelay = (int)(numericUpDown3.Value);
             this.Close();
         }
 
@@ -68,7 +68,8 @@ namespace GralDomForms
                 Title = "Set GIF file name",
                 InitialDirectory = GIFFileName
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
             })
             {

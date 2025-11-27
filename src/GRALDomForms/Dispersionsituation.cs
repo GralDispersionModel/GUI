@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralIO;
 using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Gral;
-using GralIO;
 
 namespace GralDomForms
 {
@@ -38,16 +38,16 @@ namespace GralDomForms
         public bool ShowConcentrationFiles = false;
         private bool transient = false;
 
-        public SelectDispersionSituation (GralDomain.Domain d, Main f)
+        public SelectDispersionSituation(GralDomain.Domain d, Main f)
         {
-            InitializeComponent ();
+            InitializeComponent();
             domain = d;
             form1 = f;
             button1.DialogResult = DialogResult.OK;
             button2.DialogResult = DialogResult.Cancel;
         }
 
-        private void Dispersionsituation_Load (object sender, EventArgs e)
+        private void Dispersionsituation_Load(object sender, EventArgs e)
         {
             if (selectGRAMM_GRAL == 0)
             {
@@ -74,43 +74,43 @@ namespace GralDomForms
             }
 
             //in case of steady-state simulations meteopgt.all is used in transient simulations mettimeseries.dat
-            
-            try 
+
+            try
             {
-                InDatVariables data = new InDatVariables ();
-                InDatFileIO ReadInData = new InDatFileIO ();
-                data.InDatPath = Path.Combine (Main.ProjectName, "Computation", "in.dat");
+                InDatVariables data = new InDatVariables();
+                InDatFileIO ReadInData = new InDatFileIO();
+                data.InDatPath = Path.Combine(Main.ProjectName, "Computation", "in.dat");
                 ReadInData.Data = data;
-                if (ReadInData.ReadInDat () == true && (form1.checkBox19.Checked == true || ShowConcentrationFiles)) // Transient mode & no classification or Concentration files in transient mode 
+                if (ReadInData.ReadInDat() == true && (form1.checkBox19.Checked == true || ShowConcentrationFiles)) // Transient mode & no classification or Concentration files in transient mode 
                 {
-                    if (data.Transientflag == 0) 
+                    if (data.Transientflag == 0)
                     {
                         transient = true;
                     }
                 }
-            } 
+            }
             catch { }
-            
+
             if (transient)
             {
                 //fill Listbox
-                _data = new DataTable ();
-                _data.Columns.Add ("Number", typeof (string));
-                _data.Columns.Add ("Date", typeof (string));
-                _data.Columns.Add ("Hour", typeof (string));
-                _data.Columns.Add ("Wind speed", typeof (string));
-                _data.Columns.Add ("Wind sector", typeof (string));
-                _data.Columns.Add ("Stability class", typeof (string));
+                _data = new DataTable();
+                _data.Columns.Add("Number", typeof(string));
+                _data.Columns.Add("Date", typeof(string));
+                _data.Columns.Add("Hour", typeof(string));
+                _data.Columns.Add("Wind speed", typeof(string));
+                _data.Columns.Add("Wind sector", typeof(string));
+                _data.Columns.Add("Stability class", typeof(string));
             }
             else
             {
                 //fill Listbox
-                _data = new DataTable ();
-                _data.Columns.Add ("Number", typeof (string));
-                _data.Columns.Add ("Wind sector", typeof (string));
-                _data.Columns.Add ("Wind speed", typeof (string));
-                _data.Columns.Add ("Stability class", typeof (string));
-                _data.Columns.Add ("Frequency [1/1000]", typeof (string));
+                _data = new DataTable();
+                _data.Columns.Add("Number", typeof(string));
+                _data.Columns.Add("Wind sector", typeof(string));
+                _data.Columns.Add("Wind speed", typeof(string));
+                _data.Columns.Add("Stability class", typeof(string));
+                _data.Columns.Add("Frequency [1/1000]", typeof(string));
             }
 
             AddGridViewEntries();
@@ -148,7 +148,7 @@ namespace GralDomForms
                 selectentries = 4;
                 textBox1.Text = GRZPath;
             }
-            
+
             //read file meteopgt.all
             if (transient == false)
             {
@@ -239,7 +239,7 @@ namespace GralDomForms
                                 count += 1;
 
                                 // select existing situations
-                                if (showSituations.Checked || selectentries == 0 || 
+                                if (showSituations.Checked || selectentries == 0 ||
                                                           (selectentries == 1 && File.Exists(Path.Combine(GrammPath, Convert.ToString(count).PadLeft(5, '0') + ".wnd"))) ||
                                                           (selectentries == 2 && File.Exists(Path.Combine(GFFPath, Convert.ToString(count).PadLeft(5, '0') + ".gff"))) ||
                                                           (selectentries == 3 && File.Exists(Path.Combine(SCLPath, Convert.ToString(count).PadLeft(5, '0') + ".scl"))) ||
@@ -278,7 +278,7 @@ namespace GralDomForms
                 }
                 catch { }
             }
-            
+
             if (_data != null && _data.Rows.Count > 0)
             {
                 DataView datasorted = new DataView();
@@ -299,12 +299,13 @@ namespace GralDomForms
             }
         }
 
-        private void button1_Click (object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
 #if __MonoCS__
 #else
-                selected_situation = Convert.ToInt32 (dataGridView1.Rows [dataGridView1.SelectedCells [0].RowIndex].Cells [0].Value);
+                selected_situation = Convert.ToInt32(dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[0].Value);
 #endif
                 if (radioButton1.Checked)
                 {
@@ -319,10 +320,10 @@ namespace GralDomForms
                     selectGRAMM_GRAL = 0;
                 }
                 //this.Close();
-            } 
+            }
             catch
             {
-                MessageBox.Show (this, "No situation selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "No situation selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //domain.dissit = 0;
                 selected_situation = 0;
             }
@@ -337,14 +338,14 @@ namespace GralDomForms
 #endif
         }
 
-        void DispersionsituationResizeEnd (object sender, EventArgs e)
+        void DispersionsituationResizeEnd(object sender, EventArgs e)
         {
             dataGridView1.Width = ClientSize.Width - 5;
-            dataGridView1.Height = Math.Max (10, label1.Top - 5);
-            textBox1.Width = Math.Max(5, ClientSize.Width - textBox1.Left  - 15);
+            dataGridView1.Height = Math.Max(10, label1.Top - 5);
+            textBox1.Width = Math.Max(5, ClientSize.Width - textBox1.Left - 15);
         }
 
-        void button2_Click (object sender, EventArgs e) // Cancel
+        void button2_Click(object sender, EventArgs e) // Cancel
         {
             selected_situation = 0;
 #if __MonoCS__
@@ -358,16 +359,16 @@ namespace GralDomForms
         }
 
         // Change the selection of the datagridview for LINUX compatibility
-        void DataGridView1SelectionChanged (object sender, EventArgs e)
+        void DataGridView1SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0) // no rows selected
             {
                 //selected_situation = 0;
-            } 
+            }
             else
             {
                 selected_situation = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
-            }         
+            }
         }
 
         void DispersionsituationFormClosed(object sender, FormClosedEventArgs e)
@@ -389,7 +390,7 @@ namespace GralDomForms
                 dataGridView1.Dispose();
             }
         }
-            
+
         void DataGridView1RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             selected_situation = dataGridView1.SelectedRows[0].Index + 1;

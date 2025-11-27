@@ -15,9 +15,9 @@ using System.Collections.Generic;
 
 namespace GralDomForms
 {
-	/// <summary>
-	/// Class for windfield section drawings
-	/// </summary>       
+    /// <summary>
+    /// Class for windfield section drawings
+    /// </summary>       
     public class WindfieldSectionDrawings
     {
         public double GralWest { get; set; }
@@ -29,7 +29,7 @@ namespace GralDomForms
         public Single Stretch { get; set; }
         public List<float[]> StretchFlexible { get; set; }
         public Single AHmin { get; set; }
-        public double cellsize {get; set;}
+        public double cellsize { get; set; }
         public double X0 { get; set; }
         public double Y0 { get; set; }
         public double X1 { get; set; }

@@ -24,8 +24,8 @@ namespace GralDomain
                                  double factor_x, double factor_y)
         {
             int pb1_height = picturebox1.Height;
-			int pb1_width  = picturebox1.Width;
-			
+            int pb1_width = picturebox1.Width;
+
             int minx;
             int maxx;
             int miny;
@@ -53,7 +53,7 @@ namespace GralDomain
                         maxy = (int)((y0 - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
                         double factorx = MapSize.SizeX * BmpScale;
                         double factory = MapSize.SizeY * BmpScale;
-                        
+
                         Bitmap _bm = _drobj.BM;
                         for (int i = minx + 1; i < maxx; i++)
                         {

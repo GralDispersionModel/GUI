@@ -10,16 +10,15 @@
 ///</remarks>
 #endregion
 
+using GralData;
+using GralDomForms;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-
-using GralData;
-using GralDomForms;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralDomain
 {

@@ -11,9 +11,6 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 using System.Drawing;
 
 namespace GralBackgroundworkers
@@ -128,7 +125,7 @@ namespace GralBackgroundworkers
                             {
                                 variables[0] = A[x][y];
                                 PointCoors = ESRICellCoors(PointIndex, _fileHeader[0]);
-                                
+
                                 if (B != null)
                                 {
                                     PointIndex = ESRIGetIndex(PointCoors, _fileHeader[1]);

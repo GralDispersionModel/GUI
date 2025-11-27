@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-using GralItemData;
 
 namespace GralDomain
 {
@@ -28,11 +27,11 @@ namespace GralDomain
         {
             int i = 0;
             // search items
-            List <string> ItemNames = new List<string>();
-            List <int> ItemNumber = new List<int>();
+            List<string> ItemNames = new List<string>();
+            List<int> ItemNumber = new List<int>();
             double fx = 1 / BmpScale / MapSize.SizeX;
             double fy = 1 / BmpScale / MapSize.SizeY;
-                
+
             foreach (ReceptorData _rd in EditR.ItemData)
             {
                 int x1 = (int)((_rd.Pt.X - MapSize.West) * fx) + TransformX;
@@ -44,25 +43,25 @@ namespace GralDomain
                 }
                 i++;
             }
-            
+
             return SelectOverlappedItem(e, ItemNames, ItemNumber);
         }
-        
-		/// <summary>
+
+        /// <summary>
         /// Paste a receptor
         /// </summary>
         private void RightClickReceptorPaste(object sender, System.EventArgs e)
-		{
-			CopiedItem.Receptor.Pt = new PointD(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
-			
-			ReceptorData Temp = new ReceptorData(CopiedItem.Receptor);
-			Temp.Name += "-Copy";
-			EditR.ItemData.Add(Temp);
-			EditR.SetTrackBarMaximum();
-			CopiedItem.Receptor = null;
-			EditAndSaveReceptorData(null, null); // save changes
-			Picturebox1_Paint();
-			MouseControl = MouseMode.ReceptorSel;
+        {
+            CopiedItem.Receptor.Pt = new PointD(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
+
+            ReceptorData Temp = new ReceptorData(CopiedItem.Receptor);
+            Temp.Name += "-Copy";
+            EditR.ItemData.Add(Temp);
+            EditR.SetTrackBarMaximum();
+            CopiedItem.Receptor = null;
+            EditAndSaveReceptorData(null, null); // save changes
+            Picturebox1_Paint();
+            MouseControl = MouseMode.ReceptorSel;
             ContextMenuStrip m = sender as ContextMenuStrip;
             if (m != null)
             {

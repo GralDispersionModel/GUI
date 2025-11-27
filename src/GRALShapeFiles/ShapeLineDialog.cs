@@ -31,7 +31,7 @@ namespace GralShape
     public partial class ShapeLineDialog : Form
     {
         private readonly GralDomain.Domain domain = null;
-        
+
         private readonly string ShapeFileName;
         private readonly Deposition[] dep = new Deposition[10];
         private readonly Button[] but1 = new Button[10];                     //Buttons for deposition
@@ -56,7 +56,7 @@ namespace GralShape
             domain = d;
             GralDomRect = GralDomainRectangle;
             ShapeFileName = Filename;
-            
+
             Load_Source_Grp();
 
             //fill the combobox30 with available base years
@@ -66,20 +66,20 @@ namespace GralShape
             }
 
             comboBox30.SelectedIndex = 25;
-            
+
             // init deposition data
             for (int i = 0; i < 10; i++)
             {
                 dep[i] = new Deposition(); // initialize Gral.Deposition array
                 dep[i].init();
             }
-            
+
             int x = 0; int y = comboBox1P.Top - 3 - comboBox6P.Height; int a = comboBox6P.Width + 5;
             for (int nr = 0; nr < 10; nr++)
             {
                 if (nr == 5)
                 {
-                    x = 0;	
+                    x = 0;
                     y = comboBox6P.Top - 3 - comboBox6P.Height;
                 }
                 //Buttons for Gral.Deposition
@@ -112,7 +112,7 @@ namespace GralShape
                 }
 
                 but1[nr].Location = new System.Drawing.Point(x_b, y);
-                
+
                 but1[nr].Font = new System.Drawing.Font("Microsoft Sans Serif", 2.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
                 but1[nr].Text = "Gral.Deposition " + (nr + 1).ToString();
                 Controls.Add(but1[nr]);
@@ -131,31 +131,31 @@ namespace GralShape
                 string name = "Line";
                 string section = "1";
                 int sgroup = 1;
-                
+
                 bool inside;
-                
+
                 GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("Import shape file");
                 wait.Show();
-                
+
                 GralData.DouglasPeucker douglas = new GralData.DouglasPeucker();
-                
+
                 int SHP_Line = 0;
                 ShapeReader shape = new ShapeReader(domain);
                 foreach (object shp in shape.ReadShapeFile(ShapeFileName))
                 {
                     if (shp is SHPLine)
                     {
-                        SHPLine lines = (SHPLine) shp;
-                        
+                        SHPLine lines = (SHPLine)shp;
+
                         inside = false;
                         int numbpt = lines.Points.Length;
-                        List <PointD> pt = new List<PointD>();
+                        List<PointD> pt = new List<PointD>();
                         //add only lines inside the GRAL domain
                         for (int j = 0; j < numbpt; j++)
                         {
                             PointD ptt = new PointD(Math.Round(lines.Points[j].X, 1), Math.Round(lines.Points[j].Y, 1));
                             pt.Add(ptt);
-                            
+
                             if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
                             {
                                 inside = true;
@@ -201,7 +201,7 @@ namespace GralShape
                                 // 3D Lines
                                 douglas.DouglasPeuckerRun(pt, (double)numericUpDown1.Value);
                                 _ls.Lines3D = true;
-                                
+
                                 int abs = 1;
                                 if (checkBox1.Checked == true) // absolute heights
                                 {
@@ -230,7 +230,7 @@ namespace GralShape
                             }
 
                             numbpt = _ls.Pt.Count;
-                            
+
                             //check for names
                             if (comboBox3.SelectedIndex != 0)
                             {
@@ -246,7 +246,7 @@ namespace GralShape
                             }
 
                             _ls.Name = name;
-                            
+
                             //check for line sections
                             if (comboBox1.SelectedIndex != 0)
                             {
@@ -269,7 +269,7 @@ namespace GralShape
                             }
 
                             _ls.Section = section;
-                                                    
+
                             // check for vertical extension
                             double vertical_extension = 0;
                             if (comboBox31.SelectedIndex != 0)
@@ -277,7 +277,7 @@ namespace GralShape
                                 try
                                 {
                                     vertical_extension = St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox31.SelectedItem)].ToString(), false);
-                                    
+
                                     vertical_extension = Math.Round(vertical_extension, 1);
                                     if (vertical_extension == 0)
                                     {
@@ -294,8 +294,8 @@ namespace GralShape
                                 vertical_extension = 3;
                             }
 
-                            _ls.VerticalExt = (float) vertical_extension;
-                            
+                            _ls.VerticalExt = (float)vertical_extension;
+
                             //check for source group
                             if (comboBox4.SelectedIndex != 0)
                             {
@@ -324,7 +324,7 @@ namespace GralShape
                                     {
                                         sgroup = 1;
                                     }
-                                    
+
                                 }
                                 catch
                                 {
@@ -359,8 +359,8 @@ namespace GralShape
                                     width = 7;
                                 }
                             }
-                            _ls.Width = (float) width;
-                            
+                            _ls.Width = (float)width;
+
                             //check for average daily traffic
                             double aadt = 0;
                             if (comboBox26.SelectedIndex != 0)
@@ -374,8 +374,8 @@ namespace GralShape
                                     aadt = 0;
                                 }
                             }
-                            _ls.Nemo.AvDailyTraffic = (int) aadt;
-                            
+                            _ls.Nemo.AvDailyTraffic = (int)aadt;
+
                             //check for share of heavy duty vehicles
                             double hdv = 0;
                             if (comboBox27.SelectedIndex != 0)
@@ -389,8 +389,8 @@ namespace GralShape
                                     hdv = 0;
                                 }
                             }
-                            _ls.Nemo.ShareHDV = (float) hdv;
-                            
+                            _ls.Nemo.ShareHDV = (float)hdv;
+
                             //check for the slope of roads
                             double slope = 0;
                             if (comboBox28.SelectedIndex != 0)
@@ -404,8 +404,8 @@ namespace GralShape
                                     slope = 0;
                                 }
                             }
-                            _ls.Nemo.Slope = (float) slope;
-                            
+                            _ls.Nemo.Slope = (float)slope;
+
                             //check for the average passenger car speed
                             double speed = 0;
                             if (comboBox29.SelectedIndex != 0)
@@ -419,9 +419,9 @@ namespace GralShape
                                     speed = 0;
                                 }
                             }
-                            
+
                             //select traffic situation according to the speed and slope
-                            
+
                             //read velocities for each vehicle-type according to the driving pattern and the slope
                             Assembly _assembly;
                             _assembly = Assembly.GetExecutingAssembly();
@@ -443,7 +443,7 @@ namespace GralShape
                                     }
                                 }
                             }
-                            
+
                             string trafficsituation = String.Empty;
                             double diff = 100000;
                             for (int k = 1; k < 400; k++)
@@ -458,7 +458,7 @@ namespace GralShape
                                     {
                                         double vPC = Convert.ToDouble(velo[4].Replace(".", decsep));
                                         double difference = Math.Abs(speed - vPC);
-                                        
+
                                         if ((difference < diff) && (velo[0] != "Dummy"))
                                         {
                                             diff = difference;
@@ -471,7 +471,7 @@ namespace GralShape
                                     break;
                                 }
                             }
-                            
+
                             //get the corresponding index of the traffic situation
                             int trafficsitnumber = 0;
                             for (int k = 0; k < Main.NemoTrafficSituations.Length; k++)
@@ -481,7 +481,7 @@ namespace GralShape
                                     trafficsitnumber = k;
                                 }
                             }
-                            
+
                             _ls.Nemo.TrafficSit = trafficsitnumber;
 
                             //check for the base year
@@ -494,8 +494,8 @@ namespace GralShape
                             {
                                 year = "2020";
                             }
-                            _ls.Nemo.BaseYear = (int) (St_F.TxtToDbl(year, false));
-                            
+                            _ls.Nemo.BaseYear = (int)(St_F.TxtToDbl(year, false));
+
                             double emission_factor = Convert.ToDouble(numericUpDown2.Value);
                             if (checkBox2.Checked)
                             {
@@ -513,14 +513,14 @@ namespace GralShape
                                 _poll.Pollutant[_count] = _combo.SelectedIndex;
                                 _count++;
                             }
-                            
+
                             _ls.Poll.Add(new PollutantsData(_poll));
-                            
+
                             for (int di = 0; di < 10; di++) // save deposition
                             {
                                 _ls.GetDep()[di] = dep[di];
                             }
-                            
+
                             domain.EditLS.ItemData.Add(_ls);
                             Application.DoEvents();
 
@@ -528,20 +528,20 @@ namespace GralShape
                             {
                                 Add_Source_Grp("Line-source-import-" + sgroup + "," + sgroup);
                             }
-                            
+
                             lines = null;
                         }
-                        
+
                         pt.Clear();
-                        
+
                     }
                     SHP_Line++;
                 }
                 shape = null;
-                               
+
                 // set new source groups to the source dialogs
                 domain.LoadSourceGroups();
-                
+
                 wait.Close();
                 wait.Dispose();
                 DialogResult = DialogResult.OK;
@@ -569,7 +569,7 @@ namespace GralShape
             dbf_reader.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
             dbf_reader.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
             dbf_reader.ReadDBF(ShapeFileName.Replace(".shp", ".dbf"));
-            
+
             dt = dbf_reader.dt;
             dbf_reader.Close();
             dbf_reader.Dispose();
@@ -687,18 +687,18 @@ namespace GralShape
                 }
             }
         }
-          
+
         void LabelMouseDoubleClick(object sender, MouseEventArgs e)
         {
             //MessageBox.Show(this, sender.ToString());
             Edit_deposition(sender, e);
         }
-        
+
         private void Edit_deposition(object sender, EventArgs e)
         {
             int nr = -1;
             for (int i = 0; i < 10; i++)
-            {				
+            {
                 if (sender == but1[i]) // found the button
                 {
                     nr = i;
@@ -758,8 +758,8 @@ namespace GralShape
                 }
 
                 edit.Dispose();
-            
-            if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
+
+                if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
                 {
                     but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
                 }
@@ -769,7 +769,7 @@ namespace GralShape
                 }
             }
         }
-        
+
         void Shape_Line_DialogFormClosed(object sender, FormClosedEventArgs e)
         {
             foreach (Button but in but1)
@@ -816,7 +816,7 @@ namespace GralShape
                 WaitDlg.Dispose();
             }
         }
-            
+
         private void Load_Source_Grp()
         {
             // import source groups and fill source dialogs 
@@ -829,7 +829,7 @@ namespace GralShape
                 {
                     string[] text = new string[2];
                     string text1;
-                   
+
                     while (myReader.EndOfStream == false)
                     {
                         text1 = myReader.ReadLine();
@@ -845,7 +845,7 @@ namespace GralShape
             {
             }
         }
-        
+
         private void Add_Source_Grp(string a)
         {
             // add a source group and fill source dialogs 
@@ -853,7 +853,7 @@ namespace GralShape
             {
                 //write additional source group definition
                 string newPath = Path.Combine(Main.ProjectName, @"Settings", "Sourcegroups.txt");
-                
+
                 using (StreamWriter myWriter = new StreamWriter(newPath, true))
                 {
                     myWriter.WriteLine(a);
@@ -862,11 +862,11 @@ namespace GralShape
             catch
             {
             }
-            
+
             SortSourceGroupFile(Path.Combine(Main.ProjectName, @"Settings", "Sourcegroups.txt"));
             Load_Source_Grp();
         }
-        
+
         /// <summary>
         /// Sort the source group files dependend on the source group number
         /// </summary>
@@ -874,7 +874,7 @@ namespace GralShape
         private void SortSourceGroupFile(string filename)
         {
             List<Gral.SG_Class> sg = new List<Gral.SG_Class>();
-            
+
             try
             {
                 //import source group definitions
@@ -882,40 +882,40 @@ namespace GralShape
                 {
                     string[] text = new string[2];
                     string text1;
-                   
+
                     while (myReader.EndOfStream == false)
                     {
                         text1 = myReader.ReadLine();
                         text = text1.Split(new char[] { ',' });
                         if (text.Length > 1)
                         {
-                            int s = 1;      
+                            int s = 1;
                             if (int.TryParse(text[1], out s))
                             {
-                              sg.Add(new Gral.SG_Class() {SG_Name = text[0], SG_Number = s});
+                                sg.Add(new Gral.SG_Class() { SG_Name = text[0], SG_Number = s });
                             }
                         }
                     }
                 }
-                
+
                 sg.Sort();
-                
+
                 //write source group definition file
                 using (StreamWriter myWriter = new StreamWriter(filename))
                 {
-                    foreach(Gral.SG_Class _sg in sg)
+                    foreach (Gral.SG_Class _sg in sg)
                     {
                         myWriter.WriteLine(_sg.ToString());
                     }
                 }
-                
+
             }
             catch
             {
             }
-            
+
             sg.Clear();
-         }
+        }
 
         private void Button4_Click(object sender, EventArgs e)
         {

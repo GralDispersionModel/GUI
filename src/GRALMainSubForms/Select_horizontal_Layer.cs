@@ -19,75 +19,75 @@ namespace GralMainForms
     /// Seelct a horizontal layer for the analyation of results
     /// </summary>
     public partial class SelectHorizontalLayer : Form
-	{
-		public int MaxGramm;
-		public int MaxGral;
-		public SelectHorizontalLayer(int layer, int gramm, int _maxgramm, int _maxgral, int interval)
-		{
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
-			InitializeComponent();
-			MaxGramm = _maxgramm;
-			MaxGral = _maxgral;
-			radioButton1.Show();
-			radioButton2.Show();
-			LayerUpDown.Minimum = 1;
-			refreshUpDown.Minimum = 1;
-			refreshUpDown.Maximum =20;
-			refreshUpDown.Value = interval;
-			
-			switch (gramm)
-			{
-				case -2: // show GRAL only
-					radioButton1.Hide();
-					radioButton2.Checked = true;
-					LayerUpDown.Maximum = _maxgral;
-					break;		
-				case -1: // show GRAMM only
-					radioButton2.Hide();
-					radioButton1.Checked = true;
-					LayerUpDown.Maximum = _maxgramm;
-					break;
-				case 1: // Check GRAMM
-					radioButton1.Checked = true;
-					LayerUpDown.Maximum = _maxgramm;
-					break;
-				
-				case 2: // Check GRAL
-					radioButton2.Checked = true;
-					LayerUpDown.Maximum = _maxgral;
-					break;
-			
-			}
-			
-			LayerUpDown.Value = layer;	
-		}
-		
-		
-		
-		void Button2Click(object sender, EventArgs e) // Cancel
-		{	
-			
-		}
-		
-		
-		
-		void Button1Click(object sender, EventArgs e)
-		{	 	
-			
-		}
-		
-		
-		
-		void RadioButton1CheckedChanged(object sender, EventArgs e)
-		{
-			LayerUpDown.Maximum = MaxGramm;
-		}
-		
-		void RadioButton2CheckedChanged(object sender, EventArgs e)
-		{
-			LayerUpDown.Maximum = MaxGral;
-		}
-	}
+    {
+        public int MaxGramm;
+        public int MaxGral;
+        public SelectHorizontalLayer(int layer, int gramm, int _maxgramm, int _maxgral, int interval)
+        {
+            //
+            // The InitializeComponent() call is required for Windows Forms designer support.
+            //
+            InitializeComponent();
+            MaxGramm = _maxgramm;
+            MaxGral = _maxgral;
+            radioButton1.Show();
+            radioButton2.Show();
+            LayerUpDown.Minimum = 1;
+            refreshUpDown.Minimum = 1;
+            refreshUpDown.Maximum = 20;
+            refreshUpDown.Value = interval;
+
+            switch (gramm)
+            {
+                case -2: // show GRAL only
+                    radioButton1.Hide();
+                    radioButton2.Checked = true;
+                    LayerUpDown.Maximum = _maxgral;
+                    break;
+                case -1: // show GRAMM only
+                    radioButton2.Hide();
+                    radioButton1.Checked = true;
+                    LayerUpDown.Maximum = _maxgramm;
+                    break;
+                case 1: // Check GRAMM
+                    radioButton1.Checked = true;
+                    LayerUpDown.Maximum = _maxgramm;
+                    break;
+
+                case 2: // Check GRAL
+                    radioButton2.Checked = true;
+                    LayerUpDown.Maximum = _maxgral;
+                    break;
+
+            }
+
+            LayerUpDown.Value = layer;
+        }
+
+
+
+        void Button2Click(object sender, EventArgs e) // Cancel
+        {
+
+        }
+
+
+
+        void Button1Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        void RadioButton1CheckedChanged(object sender, EventArgs e)
+        {
+            LayerUpDown.Maximum = MaxGramm;
+        }
+
+        void RadioButton2CheckedChanged(object sender, EventArgs e)
+        {
+            LayerUpDown.Maximum = MaxGral;
+        }
+    }
 }

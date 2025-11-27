@@ -34,14 +34,14 @@ namespace Gral
             Application.SetCompatibleTextRenderingDefault(true);
 #endif
 #if NET9_0_OR_GREATER
-//#pragma warning disable WFO5001
+            //#pragma warning disable WFO5001
             GralData.GuiSettings guiSettings = new GralData.GuiSettings();
             guiSettings.ReadFromFile();
             if (guiSettings.UseDefaultColors)
             {
                 Application.SetColorMode(SystemColorMode.Classic);
             }
-//#pragma warning restore WFO5001
+            //#pragma warning restore WFO5001
 #endif
             Application.Run(new Main());
         }

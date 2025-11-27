@@ -10,21 +10,21 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
 using GralItemData;
 using GralMessage;
 using GralStaticFunctions;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
     public partial class Domain
     {
-    	/// <summary>
-    	/// Import area Sources from *.txt, *.dat or *.shp file
-    	/// </summary>
+        /// <summary>
+        /// Import area Sources from *.txt, *.dat or *.shp file
+        /// </summary>
         private void ImportAreaSources(object sender, EventArgs e)
         {
             OpenFileDialog dialog = openFileDialog1;
@@ -40,11 +40,11 @@ namespace GralDomain
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 int numbarea = EditAS.ItemData.Count;
-                
+
                 if ((!dialog.FileName.EndsWith("shp")) && (!dialog.FileName.EndsWith("Asources.txt")))
                 {
                     int i = 1;
-                   try
+                    try
                     {
                         string[] text1 = new string[15];
                         string file = dialog.FileName;
@@ -56,7 +56,7 @@ namespace GralDomain
                             for (i = 0; i < 4; i++)
                             {
                                 polli[i] = Convert.ToString(Gral.Main.PollutantList.IndexOf("Unknown"));
-                                for (int i1 = 0; i1 <  Gral.Main.PollutantList.Count; i1++)
+                                for (int i1 = 0; i1 < Gral.Main.PollutantList.Count; i1++)
                                 {
                                     if (text1[i + 6] == (Gral.Main.PollutantList[i1] + "[kg/h]"))
                                     {
@@ -65,7 +65,7 @@ namespace GralDomain
                                 }
                                 if (polli[i] == Convert.ToString(Gral.Main.PollutantList.IndexOf("Unknown")))
                                 {
-                                    MessageBox.Show(this, text1[i + 6] + " is not a registered pollutant name","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show(this, text1[i + 6] + " is not a registered pollutant name", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
 
                             }
@@ -87,7 +87,7 @@ namespace GralDomain
                                         (y2[0] >= MainForm.GralDomRect.South) && (y2[1] <= MainForm.GralDomRect.North))
                                     {
                                         double areapolygon = Math.Abs((x2[0] - x2[1]) * (y2[0] - y2[1]));
-                                        double r1 = Math.Min(Convert.ToDouble(text1[3].Replace(".",decsep)), Convert.ToDouble(text1[4].Replace(".",decsep)));
+                                        double r1 = Math.Min(Convert.ToDouble(text1[3].Replace(".", decsep)), Convert.ToDouble(text1[4].Replace(".", decsep)));
                                         AreaSourceData _as = new AreaSourceData
                                         {
                                             Name = "Area" + Convert.ToString(i),
@@ -99,11 +99,11 @@ namespace GralDomain
                                         {
                                             SourceGroup = Convert.ToInt32(text1[10], ic)
                                         };
-                                        _as.Area = (float) areapolygon;
+                                        _as.Area = (float)areapolygon;
                                         for (int k = 0; k < 4; k++)
                                         {
                                             _poll.Pollutant[k] = Convert.ToInt32(polli[k]);
-                                            _poll.EmissionRate[k] =Convert.ToDouble(text1[6 + k], ic);
+                                            _poll.EmissionRate[k] = Convert.ToDouble(text1[6 + k], ic);
                                         }
                                         _as.Poll = _poll;
                                         _as.Pt.Add(new PointD(x2[0], y2[0]));
@@ -111,7 +111,7 @@ namespace GralDomain
                                         _as.Pt.Add(new PointD(x2[1], y2[1]));
                                         _as.Pt.Add(new PointD(x2[1], y2[0]));
                                         _as.Pt.Add(new PointD(x2[0], y2[0]));
-                                        
+
                                         EditAS.ItemData.Add(_as);
                                     }
                                 }
@@ -121,38 +121,38 @@ namespace GralDomain
                                 }
                             }
                         }
-                        
+
                         EditAS.SetTrackBarMaximum();
                         EditAndSaveAreaSourceData(sender, e);
                         EditAS.FillValues();
 
                         //add AREA SOURCES layer if not already existing
                         CheckForExistingDrawingObject("AREA SOURCES");
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditAS.ItemData.Count - numbarea) + " area sources imported.", Location);
                         Box.Show();
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editas.areasourcedata.Count - numbarea) + " area sources imported.");
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading area source data in line number " + Convert.ToString(i + 1),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading area source data in line number " + Convert.ToString(i + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                
+
                 if (dialog.FileName.EndsWith("Asources.txt"))
                 {
-                    
+
                     AreaSourceDataIO _adata = new AreaSourceDataIO();
-                    _adata.LoadAreaData(EditAS.ItemData, dialog.FileName, true, new RectangleF((float) MainForm.GralDomRect.West, (float) MainForm.GralDomRect.South, (float) (MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float) (MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
+                    _adata.LoadAreaData(EditAS.ItemData, dialog.FileName, true, new RectangleF((float)MainForm.GralDomRect.West, (float)MainForm.GralDomRect.South, (float)(MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float)(MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
                     _adata = null;
-                    
+
                     EditAS.SetTrackBarMaximum();
                     EditAndSaveAreaSourceData(sender, e);
                     EditAS.FillValues();
 
                     //add AREA SOURCES layer if not already existing
                     CheckForExistingDrawingObject("AREA SOURCES");
-                    
+
                     MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditAS.ItemData.Count - numbarea) + " area sources imported.", Location);
                     Box.Show();
                     //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editas.areasourcedata.Count - numbarea) + " area sources imported.");
@@ -168,11 +168,11 @@ namespace GralDomain
 
                         //read geometry data from shape file
                         Cursor = Cursors.WaitCursor;
-                        
+
                         //open dialog for assigning building height
                         wait.Show();
-                        
-                        GralShape.ShapeAreaDialog shp = new  GralShape.ShapeAreaDialog(this, MainForm.GralDomRect, dialog.FileName);
+
+                        GralShape.ShapeAreaDialog shp = new GralShape.ShapeAreaDialog(this, MainForm.GralDomRect, dialog.FileName);
                         DialogResult dial = new DialogResult();
                         wait.Hide();
                         Cursor = Cursors.Default;
@@ -180,18 +180,18 @@ namespace GralDomain
                         shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
                         shp.Top = St_F.GetTopScreenAtMousePosition() + 150;
                         dial = shp.ShowDialog();
-                        
+
                         EditAS.SetTrackBarMaximum();
                         EditAndSaveAreaSourceData(sender, e);
                         EditAS.FillValues();
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditAS.ItemData.Count - numbarea) + " area sources imported.", Location);
                         Box.Show();
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editas.areasourcedata.Count - numbarea) + " area sources imported.");
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading shape file","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading shape file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     wait.Close();
                 }

@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
-using GralStaticFunctions;
 using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form to set user defined flexible stretching factors
     /// </summary>
     public partial class FlexibleStretchingFactors : Form

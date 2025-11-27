@@ -12,8 +12,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Data;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
@@ -35,7 +35,7 @@ namespace GralMainForms
             DataTable _data = new DataTable();
             _data.Columns.Add("Number", typeof(string));
             _data.Columns.Add("Decay", typeof(double));
-            
+
             for (int i = 1; i < 100; i++) // all possible source groups
             {
                 DataRow workrow;
@@ -56,7 +56,7 @@ namespace GralMainForms
             dataGridView1.DataSource = datasorted; // connect DataView to GridView
             dataGridView1.Columns["Number"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView1.Columns["Number"].ReadOnly = true;
-            
+
             if (ProjectLocked)
             {
                 dataGridView1.Columns["Decay"].ReadOnly = true;

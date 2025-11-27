@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
 using GralIO;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GralBackgroundworkers
 {
@@ -195,7 +195,7 @@ namespace GralBackgroundworkers
                     {
                         throw new Exception();
                     }
-                    
+
                     double min = 1000;
                     double max = -1;
                     for (int j = NY; j > 0; j--)

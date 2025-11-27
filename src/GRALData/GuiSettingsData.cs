@@ -10,9 +10,9 @@
 ///</remarks>
 #endregion
 using System;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace GralData
 {
@@ -263,7 +263,7 @@ namespace GralData
                 ^ CopyCoresToProject.GetHashCode() ^ CompatibilityToVersion1901.GetHashCode() ^ VectorMapAutoScaling.GetHashCode()
                 ^ IgnoreMeteo00Values.GetHashCode() ^ DeleteFilesToRecyclingBin.GetHashCode() ^ DefaultPathForGRAMM.GetHashCode();
         }
-        public static bool operator == (GuiSettings a, GuiSettings b)
+        public static bool operator ==(GuiSettings a, GuiSettings b)
         {
             return a.PreviousUsedProjectPath.Equals(b.PreviousUsedProjectPath) && a.TopoFileName.Equals(b.TopoFileName) && a.DefaultPathForGRAL.Equals(b.DefaultPathForGRAL) &&
                    a.CopyCoresToProject == b.CopyCoresToProject && a.CompatibilityToVersion1901 == b.CompatibilityToVersion1901 &&

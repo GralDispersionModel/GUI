@@ -9,11 +9,8 @@
 /// You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ///</remarks>
 #endregion
-using System;
-using System.IO;
-using System.Windows.Forms;
 using System.Globalization;
-using System.Diagnostics.Eventing.Reader;
+using System.IO;
 
 namespace GralData
 {
@@ -33,7 +30,7 @@ namespace GralData
 
         private string projectName = string.Empty;
         private CultureInfo ic = CultureInfo.InvariantCulture;
-       
+
         /// <summary>
         /// Initialize and set default values for the GUI settings
         /// </summary>
@@ -151,13 +148,13 @@ namespace GralData
         }
         public override int GetHashCode()
         {
-            return  EmissionModulationPath.GetHashCode();
+            return EmissionModulationPath.GetHashCode();
         }
-        public static bool operator == (ProjectSettings a, ProjectSettings b)
+        public static bool operator ==(ProjectSettings a, ProjectSettings b)
         {
             return a.EmissionModulationPath.Equals(b.EmissionModulationPath);
         }
-        public static bool operator != (ProjectSettings a, ProjectSettings b)
+        public static bool operator !=(ProjectSettings a, ProjectSettings b)
         {
             return !(a == b);
         }

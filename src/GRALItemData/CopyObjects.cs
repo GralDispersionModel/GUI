@@ -16,14 +16,14 @@ namespace GralItemData
     /// Data container for meteopgt.all lines with sortable frequency 
     /// </summary>
     public class CopyObjects
-	{
+    {
         public PointSourceData PointSource;
         public BuildingData Building;
         public LineSourceData LineSource;
         public ReceptorData Receptor;
         public AreaSourceData AreaSource;
         public PortalsData PortalSource;
-        
+
         public CopyObjects()
         {
             PointSource = null;
@@ -32,6 +32,6 @@ namespace GralItemData
             Receptor = null;
             AreaSource = null;
             PortalSource = null;
-		}
-	}
+        }
+    }
 }

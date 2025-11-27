@@ -10,16 +10,14 @@
 ///</remarks>
 #endregion
 
+using GralData;
+using GralDomain;
+using GralIO;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.IO;
 using System.Globalization;
-using GralIO;
-using GralData;
-using System.Threading.Tasks;
-using System.Diagnostics.Eventing.Reader;
-using GralDomain;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
@@ -37,7 +35,7 @@ namespace GralDomForms
         private List<string> spaltenbezeichnungen = new List<string>(); //liste mit spaltenbezeichnungen
         private int RemoveLine = -999;
         public bool StartMatch = false;
-        
+
         private string _settings_path;
         public string SettingsPath { set { _settings_path = value; } }
         public string GRAMMPath;
@@ -370,7 +368,7 @@ namespace GralDomForms
             TimeStapmsMetTimeSeries.Clear();
             dataGridView1.Rows.Clear();
             groupBox2.Enabled = false;
-            
+
             // send delegate - Message to domain Form, that match process should finish
             try
             {
@@ -747,7 +745,8 @@ namespace GralDomForms
                 Title = "Save match to oberservation data",
                 InitialDirectory = _settings_path
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
             })
             {
@@ -823,7 +822,8 @@ namespace GralDomForms
                 Title = "Load match to oberservation data",
                 InitialDirectory = _settings_path
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
             })
             {
@@ -884,7 +884,7 @@ namespace GralDomForms
 
                             if (MMOFileFormat > 2)
                             {
-                                temp = sr.ReadLine().Replace(".", decsep); 
+                                temp = sr.ReadLine().Replace(".", decsep);
                                 decimal.TryParse(temp, out v);
                                 numericUpDown2.Value = v;
                             }
@@ -964,7 +964,8 @@ namespace GralDomForms
                                                 " file not found - please select the file",
                                             FileName = Path.GetFileName(windfilename)
 #if NET6_0_OR_GREATER
-                                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                                            ,
+                                            ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
                                         };
 

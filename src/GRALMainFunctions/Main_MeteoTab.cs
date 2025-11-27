@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using GralData;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -35,7 +35,8 @@ namespace Gral
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm;*.akt)|*.akterm;*.akt",
                 Title = "Select meteorological data"
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
             })
             {
@@ -104,7 +105,7 @@ namespace Gral
                         while (streamreader.EndOfStream == false)
                         {
                             reihe = streamreader.ReadLine();
-                            
+
                             if (filelength < 5 && reihe.ToUpper().Contains("Z="))
                             {
                                 AnemometerheightRecent = GralDomain.Domain.EvalMetFileHeader(reihe);
@@ -545,14 +546,14 @@ namespace Gral
             WindroseSetting.ShowBias = false;
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = true;
-            
+
             using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
                 Left = this.Left + 20,
                 Top = this.Top + 150,
-                
+
             })
             {
                 if (mts.ShowDialog() == DialogResult.OK)
@@ -619,7 +620,7 @@ namespace Gral
                         }
                         else
                         {
-                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
@@ -736,7 +737,7 @@ namespace Gral
             int count = 0;
             int startstunde = 0;
             int endstunden = 23;
-            
+
             List<WindData> wind = new List<WindData>();
             int maxvelocity = WindroseSetting.MaxVelocity;
             bool showBias = WindroseSetting.ShowBias;
@@ -757,7 +758,7 @@ namespace Gral
                 {
                     startstunde = mts.WindRoseSet.StartStunde;
                     endstunden = mts.WindRoseSet.EndStunde;
-                   
+
                     if (startstunde == endstunden)
                     {
                         MessageBox.Show("Start- and endtime must be different values");
@@ -990,7 +991,7 @@ namespace Gral
                 NumUpDown[1].Value = 1.0M;
                 NumUpDown[2].Value = 2.0M;
                 NumUpDown[3].Value = 3.0M;
-                numericUpDown7.Value = (decimal) AnemometerheightRecent;
+                numericUpDown7.Value = (decimal)AnemometerheightRecent;
 
                 for (int i = 1; i < WindSpeedClasses; i++)
                 {
@@ -1260,7 +1261,8 @@ namespace Gral
                     Filter = "Met files (*.met)|*.met",
                     Title = "Save new *.met file"
 #if NET6_0_OR_GREATER
-                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                    ,
+                    ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
                 })
                 {
@@ -1284,7 +1286,7 @@ namespace Gral
                                 }
                             }
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }

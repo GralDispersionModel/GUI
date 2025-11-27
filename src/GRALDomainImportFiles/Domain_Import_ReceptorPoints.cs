@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using GralShape;
 using GralItemData;
 using GralMessage;
+using GralShape;
+using System;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -39,7 +39,7 @@ namespace GralDomain
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     int numbrec = EditR.ItemData.Count;
-                    
+
                     if (numbrec == 1 && EditR.ItemData[0].Name.Length == 0)
                     {
                         EditR.ItemData.Clear();
@@ -54,20 +54,20 @@ namespace GralDomain
                             ReceptorDataIO _rd = new ReceptorDataIO();
                             _rd.LoadReceptors(EditR.ItemData, file);
                             _rd = null;
-                            
+
                             EditR.SetTrackBarMaximum();
-                            
+
                             EditAndSaveReceptorData(sender, e);
                             EditR.FillValues();
 
                             //add RECEPTORS layer if not already existing
                             CheckForExistingDrawingObject("RECEPTORS");
-                            
-                            MessageBox.Show(this, "Data import successful: \r\n" + Convert.ToString(EditR.ItemData.Count - numbrec) + " receptor points imported.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            MessageBox.Show(this, "Data import successful: \r\n" + Convert.ToString(EditR.ItemData.Count - numbrec) + " receptor points imported.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch
                         {
-                            MessageBox.Show(this, "Error when reading point source data in line number " + Convert.ToString(i + 2),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Error when reading point source data in line number " + Convert.ToString(i + 2), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
@@ -78,7 +78,7 @@ namespace GralDomain
                         {
                             //add RECEPTORS layer if not already existing
                             CheckForExistingDrawingObject("RECEPTORS");
-                            
+
                             //read geometry data from shape file
                             Cursor = Cursors.WaitCursor;
                             wait1.Show();
@@ -97,19 +97,19 @@ namespace GralDomain
                                 shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
                                 shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                                 dial = shp.ShowDialog();
-                                
+
                                 EditR.SetTrackBarMaximum();
                                 EditAndSaveReceptorData(sender, e);
                                 EditR.FillValues();
                             }
-                            
+
                             MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditR.ItemData.Count - numbrec) + " receptor points imported.", Location);
                             Box.Show();
                             //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editr.receptors.Count - numbrec) + " receptor points imported.");
                         }
                         catch
                         {
-                            MessageBox.Show(this, "Error when reading shape file","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Error when reading shape file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             Cursor = Cursors.Default;
                         }
                         wait.Close();

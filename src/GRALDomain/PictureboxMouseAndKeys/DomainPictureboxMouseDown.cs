@@ -117,7 +117,7 @@ namespace GralDomain
             }
 
         }
-        
+
 
         /// <summary>
         /// Returns the point in the middle between pt1 and pt2
@@ -127,7 +127,7 @@ namespace GralDomain
         /// <returns></returns>
         PointD GetPointBetween(PointD pt1, PointD pt2)
         {
-            return new PointD(pt1.X - (pt1.X - pt2.X) / 2, pt1.Y - (pt1.Y - pt2.Y)/ 2);
+            return new PointD(pt1.X - (pt1.X - pt2.X) / 2, pt1.Y - (pt1.Y - pt2.Y) / 2);
         }
         /// <summary>
         /// Returns the point in the middle between pt1 and pt2
@@ -137,7 +137,7 @@ namespace GralDomain
         /// <returns></returns>
         GralData.PointD_3d GetPointBetween(GralData.PointD_3d pt1, GralData.PointD_3d pt2)
         {
-            return new GralData.PointD_3d(pt1.X - (pt1.X - pt2.X) / 2, 
+            return new GralData.PointD_3d(pt1.X - (pt1.X - pt2.X) / 2,
                                           pt1.Y - (pt1.Y - pt2.Y) / 2,
                                           pt1.Z - (pt1.Z - pt2.Z) / 2);
         }
@@ -148,23 +148,23 @@ namespace GralDomain
             sectionpoints.Clear();
             Picturebox1_Paint();
         }
-        
+
         //Mouse up events
         /// <summary>
         /// Mousekey up events on the picturebox
         /// </summary>
         private void Picturebox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if ((MouseControl == MouseMode.ViewMoveMap) | (e.Button==MouseButtons.Middle)) // Kuntner auch beim Auslassen des mittleren Buttons verschieben
+            if ((MouseControl == MouseMode.ViewMoveMap) | (e.Button == MouseButtons.Middle)) // Kuntner auch beim Auslassen des mittleren Buttons verschieben
             {
                 double xfac_old = XFac;
                 double transformx_old = TransformX;
                 double transformy_old = TransformY;
-                
-                TransformX =TransformX+ e.X - OldXPosition;
+
+                TransformX = TransformX + e.X - OldXPosition;
                 TransformY = TransformY + e.Y - OldYPosition;
-                
-                foreach(DrawingObjects _dr in ItemOptions)
+
+                foreach (DrawingObjects _dr in ItemOptions)
                 {
                     try
                     {
@@ -174,11 +174,11 @@ namespace GralDomain
                                                     Convert.ToInt32(_dr.Picture.Height * _dr.PixelMx / MapSize.SizeX * XFac));
                         _dr.SourceRec = new Rectangle(0, 0, _dr.Picture.Width, _dr.Picture.Height);
                     }
-                    catch{}
+                    catch { }
                 }
-                
+
                 MoveCoordinatesOfEditedItems(xfac_old, transformx_old, transformy_old);
-                
+
                 Picturebox1_Paint();
             }
 
@@ -187,7 +187,7 @@ namespace GralDomain
             {
                 MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
-                
+
                 if (Gral.Main.Project_Locked == true)
                 {
                     Gral.Main.ProjectLockedMessage(); // Project locked! - do not save any changes!
@@ -197,7 +197,7 @@ namespace GralDomain
                 }
 
                 //Check for an existing GRAL geometry
-                if (ReadGralGeometry()) 
+                if (ReadGralGeometry())
                 {
                     if (MessageBox.Show(this, "Use new GRAL domain and delete existing domain and GRAL topography data?", "New GRAL Domain Area", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                     {
@@ -215,10 +215,10 @@ namespace GralDomain
                 MainForm.GralDomRect.West = Math.Round(MainForm.GralDomRect.West / MainForm.HorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown9.Value);
                 MainForm.GralDomRect.East = Math.Round((GRALDomain.Right - TransformX) * BmpScale * MapSize.SizeX + MapSize.West, 1, MidpointRounding.AwayFromZero);
                 MainForm.GralDomRect.East = Math.Round(MainForm.GralDomRect.East / MainForm.HorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown9.Value);
-                
+
                 //check if GRAL Domain is smaller or equal to GRAMM domain
                 bool alright = true;
-                if(MainForm.textBox15.Text!="")
+                if (MainForm.textBox15.Text != "")
                 {
                     if ((MainForm.GralDomRect.West < MainForm.GrammDomRect.West) || (MainForm.GralDomRect.East > MainForm.GrammDomRect.East) || (MainForm.GralDomRect.South < MainForm.GrammDomRect.South) || (MainForm.GralDomRect.North > MainForm.GrammDomRect.North))
                     {
@@ -228,10 +228,10 @@ namespace GralDomain
                         MainForm.textBox5.Text = "";
                         MainForm.textBox6.Text = "";
                         MainForm.textBox7.Text = "";
-                        
+
                         //remove GRAL Domain from object list
                         RemoveItemFromItemOptions("GRAL DOMAIN");
-                        
+
                         MessageBox.Show(this, "GRAL Domain is outside GRAMM Domain", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Picturebox1_Paint();
                     }
@@ -241,10 +241,10 @@ namespace GralDomain
                     try
                     {
                         //write model domain to the text boxes
-                        MainForm.textBox2.Text = Convert.ToString(MainForm.GralDomRect.North, ic);;
-                        MainForm.textBox5.Text = Convert.ToString(MainForm.GralDomRect.South, ic);;
-                        MainForm.textBox6.Text = Convert.ToString(MainForm.GralDomRect.West, ic);;
-                        MainForm.textBox7.Text = Convert.ToString(MainForm.GralDomRect.East, ic);;
+                        MainForm.textBox2.Text = Convert.ToString(MainForm.GralDomRect.North, ic); ;
+                        MainForm.textBox5.Text = Convert.ToString(MainForm.GralDomRect.South, ic); ;
+                        MainForm.textBox6.Text = Convert.ToString(MainForm.GralDomRect.West, ic); ;
+                        MainForm.textBox7.Text = Convert.ToString(MainForm.GralDomRect.East, ic); ;
 
                         //write domain to "GRAL.geb"
                         MainForm.WriteGralGebFile();
@@ -257,7 +257,7 @@ namespace GralDomain
                         int width = x2 - x1;
                         int height = y2 - y1;
                         GRALDomain = new Rectangle(x1, y1, width, height);
-                        
+
                         // GRAL topography allowed?
                         if (Gral.Main.Project_Locked == false &&
                             MainForm.GralDomRect.East != MainForm.GralDomRect.West && MainForm.GralDomRect.North != MainForm.GralDomRect.South)
@@ -270,10 +270,10 @@ namespace GralDomain
                         }
 
                         Cursor = Cursors.Default;
-                        
+
                         //add GRAL domain to object list
-                        CheckForExistingDrawingObject("GRAL DOMAIN"); 
-                        
+                        CheckForExistingDrawingObject("GRAL DOMAIN");
+
                         groupBox5.Visible = true;
                         //refresh the list of source groups within the model domain
                         MainForm.SelectAllUsedSourceGroups();
@@ -292,24 +292,24 @@ namespace GralDomain
                     catch
                     {
                         GRALDomain = new Rectangle();
-                        MessageBox.Show(this, "Please define Project Folder first. Click on the 'New' or 'Open' button.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(this, "Please define Project Folder first. Click on the 'New' or 'Open' button.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
-            
+
 
             //define GRAMM Domain
             if (MouseControl == MouseMode.GrammDomainEndPoint)
             {
                 MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
-                
+
                 if (MainForm.GRAMM_Locked == true)
                 {
                     Gral.Main.GRAMMLockedMessage(); // Project locked! - do not save any changes!
                     return;
                 }
-                
+
                 try
                 {
                     //delete existing geometry and landusefiles
@@ -318,17 +318,17 @@ namespace GralDomain
                     //compute model domain extenstions in natural coordinates and clip them to the chosen raster size of the flow field grid
                     MainForm.GrammDomRect.North = Math.Round((GRAMMDomain.Top - TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
                     MainForm.GrammDomRect.North = Math.Round(MainForm.GrammDomRect.North / MainForm.GRAMMHorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown18.Value);
-                    MainForm.textBox15.Text = Convert.ToString(MainForm.GrammDomRect.North, ic);;
+                    MainForm.textBox15.Text = Convert.ToString(MainForm.GrammDomRect.North, ic); ;
                     MainForm.GrammDomRect.South = Math.Round((GRAMMDomain.Bottom - TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
                     MainForm.GrammDomRect.South = Math.Round(MainForm.GrammDomRect.South / MainForm.GRAMMHorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown18.Value);
-                    MainForm.textBox14.Text = Convert.ToString(MainForm.GrammDomRect.South, ic);;
+                    MainForm.textBox14.Text = Convert.ToString(MainForm.GrammDomRect.South, ic); ;
                     MainForm.GrammDomRect.West = Math.Round((GRAMMDomain.Left - TransformX) * BmpScale * MapSize.SizeX + MapSize.West, 1, MidpointRounding.AwayFromZero);
                     MainForm.GrammDomRect.West = Math.Round(MainForm.GrammDomRect.West / MainForm.GRAMMHorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown18.Value);
-                    MainForm.textBox13.Text = Convert.ToString(MainForm.GrammDomRect.West, ic);;
+                    MainForm.textBox13.Text = Convert.ToString(MainForm.GrammDomRect.West, ic); ;
                     MainForm.GrammDomRect.East = Math.Round((GRAMMDomain.Right - TransformX) * BmpScale * MapSize.SizeX + MapSize.West, 1, MidpointRounding.AwayFromZero);
                     MainForm.GrammDomRect.East = Math.Round(MainForm.GrammDomRect.East / MainForm.GRAMMHorGridSize, 0, MidpointRounding.AwayFromZero) * Convert.ToDouble(MainForm.numericUpDown18.Value);
-                    MainForm.textBox12.Text = Convert.ToString(MainForm.GrammDomRect.East, ic);;
-                    
+                    MainForm.textBox12.Text = Convert.ToString(MainForm.GrammDomRect.East, ic); ;
+
                     //write domain to "GRAMM.geb"
                     MainForm.WriteGrammGebFile();
                     MainForm.radioButton1.Checked = true;
@@ -345,15 +345,15 @@ namespace GralDomain
                     int height = y2 - y1;
                     GRAMMDomain = new Rectangle(x1, y1, width, height);
                     Cursor = Cursors.Default;
-                    
+
                     //add GRAMM domain to object list
-                    CheckForExistingDrawingObject("GRAMM DOMAIN"); 
+                    CheckForExistingDrawingObject("GRAMM DOMAIN");
                     Picturebox1_Paint();
                 }
                 catch
                 {
                     GRAMMDomain = new Rectangle();
-                    MessageBox.Show(this, "Please define Project Folder first. Click on the 'Open' button","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, "Please define Project Folder first. Click on the 'Open' button", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
 
@@ -362,10 +362,10 @@ namespace GralDomain
             {
                 MouseControl = MouseMode.Default;
                 Cursor.Clip = Rectangle.Empty;
-                
+
                 //export GRAMM sub-domain
                 GrammExportFile();
-                
+
             }
 
             //get zoom area for panel zoom
@@ -385,8 +385,8 @@ namespace GralDomain
                     TransformX = Convert.ToInt32((TransformX * fac1 + (picturebox1.Width / 2 - (PanelZoom.X + PanelZoom.Width / 2) * fac1)));
                     TransformY = Convert.ToInt32((TransformY * fac1 + (picturebox1.Height / 2 - (PanelZoom.Y + PanelZoom.Height / 2) * fac1)));
                     PanelZoom = new Rectangle();
-                    
-                    foreach(DrawingObjects _dr in ItemOptions)
+
+                    foreach (DrawingObjects _dr in ItemOptions)
                     {
                         try
                         {
@@ -396,9 +396,9 @@ namespace GralDomain
                                                         Convert.ToInt32(_dr.Picture.Height * _dr.PixelMx / MapSize.SizeX * XFac));
                             _dr.SourceRec = new Rectangle(0, 0, _dr.Picture.Width, _dr.Picture.Height);
                         }
-                        catch{}
+                        catch { }
                     }
-                    
+
                     Picturebox1_Paint();
                 }
                 catch
@@ -406,7 +406,7 @@ namespace GralDomain
                     PanelZoom = new Rectangle();
                 }
             }
-            
+
             if (MouseControl == MouseMode.GRALTopographyModify) // if GRAL topography is changed
             {
                 // restore Blocked array
@@ -416,27 +416,27 @@ namespace GralDomain
                 Array.Clear(TopoModifyBlocked, 0, TopoModifyBlocked.Length);
 #endif
             }
-            
+
             //enable/disable GRAL simulations
             MainForm.Enable_GRAL();
             //enable/disable GRAMM simulations
             MainForm.Enable_GRAMM();
         }
-        
+
         void form1_MouseWheel(object sender, MouseEventArgs e) // Kuntner
         {
-            if(e.Delta > 0)
+            if (e.Delta > 0)
             {
                 ZoomPlusMinus(1, e); // Scrollrad Up
             }
-            
-            if(e.Delta < 0)
+
+            if (e.Delta < 0)
             {
                 ZoomPlusMinus(-1, e);// Scrollrad Down
             }
-            
+
         }
-        
+
         /// <summary>
         /// Zoom the map using the mousewheel or the Menu Point Zoom and MouseClick
         /// </summary>
@@ -445,9 +445,9 @@ namespace GralDomain
             double xfac_old = XFac;
             double transformx_old = TransformX;
             double transformy_old = TransformY;
-            
-            double faktor=1.5;
-            
+
+            double faktor = 1.5;
+
             //Console.Beep(1000,100);
             // zoom picturebox, zoom=1 +, zoom=-1 -
             if (zoom == 0)
@@ -455,12 +455,12 @@ namespace GralDomain
                 return; // exit by zoom=0
             }
 
-            if (zoom>0)
+            if (zoom > 0)
             {
                 faktor = 1.5; // zoom in
             }
 
-            if (zoom<0)
+            if (zoom < 0)
             {
                 faktor = 1 / 1.5; // zoom out
             }
@@ -471,8 +471,8 @@ namespace GralDomain
                 BmpScale = 1 / XFac;
                 TransformX = Convert.ToInt32((TransformX * faktor + (picturebox1.Width / 2 - e.X * faktor)));
                 TransformY = Convert.ToInt32((TransformY * faktor + (picturebox1.Height / 2 - e.Y * faktor)));
-                
-                foreach(DrawingObjects _dr in ItemOptions)
+
+                foreach (DrawingObjects _dr in ItemOptions)
                 {
                     try
                     {
@@ -482,14 +482,14 @@ namespace GralDomain
                                                     Convert.ToInt32(_dr.Picture.Height * _dr.PixelMx / MapSize.SizeX * XFac));
                         _dr.SourceRec = new Rectangle(0, 0, _dr.Picture.Width, _dr.Picture.Height);
                     }
-                    catch{}
+                    catch { }
                 }
-                
+
                 MoveCoordinatesOfEditedItems(xfac_old, transformx_old, transformy_old);
             }
             catch
-            {}
-            
+            { }
+
             Picturebox1_Paint();
         }
     }

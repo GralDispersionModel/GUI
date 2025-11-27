@@ -11,26 +11,26 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
     public partial class Domain
-	{
+    {
         /// <summary>
         /// Set the new edge point coordinates
         /// </summary>
      	private void SetNewEdgepointArea()
-		{
-			EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
-			EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			
-			EditAS.SaveArray(false);
-			
-			EditAS.CornerAreaCount = 0;
-			// Reset Rubber-Line Drawing
-			Cursor.Clip = Rectangle.Empty;
+        {
+            EditAS.CornerAreaX[EditAS.CornerAreaCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+            EditAS.CornerAreaY[EditAS.CornerAreaCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+
+            EditAS.SaveArray(false);
+
+            EditAS.CornerAreaCount = 0;
+            // Reset Rubber-Line Drawing
+            Cursor.Clip = Rectangle.Empty;
 
             if (MouseControl == MouseMode.AreaSourceEditFinal)
             {
@@ -41,113 +41,113 @@ namespace GralDomain
                 EditAndSaveAreaSourceData(this, null); // save changes
                 MouseControl = MouseMode.AreaSourceSel; //continue area selection
             }
-			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
-			Picturebox1_Paint();
-		}
-		
-     	/// <summary>
+            RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1; // for lenght label
+            Picturebox1_Paint();
+        }
+
+        /// <summary>
         /// Set the new edge point coordinates
         /// </summary>
-		private void SetNewEdgepointLine()
-		{
-			EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToSingle(textBox1.Text.Replace(".",decsep));
-			EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToSingle(textBox2.Text.Replace(".",decsep));
-			
-			EditLS.SaveArray(false);
+        private void SetNewEdgepointLine()
+        {
+            EditLS.CornerLineX[EditLS.CornerLineSource] = Convert.ToSingle(textBox1.Text.Replace(".", decsep));
+            EditLS.CornerLineY[EditLS.CornerLineSource] = Convert.ToSingle(textBox2.Text.Replace(".", decsep));
 
-			EditLS.CornerLineSource = 0;
-			// Reset Rubber-Line Drawing
-			Cursor.Clip = Rectangle.Empty;
-			
-			if (MouseControl == MouseMode.LineSourceEditFinal)
+            EditLS.SaveArray(false);
+
+            EditLS.CornerLineSource = 0;
+            // Reset Rubber-Line Drawing
+            Cursor.Clip = Rectangle.Empty;
+
+            if (MouseControl == MouseMode.LineSourceEditFinal)
             {
                 MouseControl = MouseMode.LineSourcePos; // reset to linesource-Input
             }
             else if (MouseControl == MouseMode.LineSourceInlineEdit)
-			{
-				EditAndSaveLineSourceData(null, null); // save changes
-				MouseControl = MouseMode.LineSourceSel; //continue line selection
-			}
-			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
-			Picturebox1_Paint();
-		}
-		
-		/// <summary>
+            {
+                EditAndSaveLineSourceData(null, null); // save changes
+                MouseControl = MouseMode.LineSourceSel; //continue line selection
+            }
+            RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1; // for lenght label
+            Picturebox1_Paint();
+        }
+
+        /// <summary>
         /// Set the new edge point coordinates
         /// </summary>
-		private void SetNewEdgepointWall()
-		{
-			EditWall.CornerWallX[EditWall.CornerWallCount] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
-			EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			EditWall.SaveArray(false);
-			
-			EditWall.CornerWallCount = 0;
-			// Reset Rubber-Line Drawing
-			Cursor.Clip = Rectangle.Empty;
-			
-			if (MouseControl == MouseMode.WallEditFinal)
+        private void SetNewEdgepointWall()
+        {
+            EditWall.CornerWallX[EditWall.CornerWallCount] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+            EditWall.CornerWallY[EditWall.CornerWallCount] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+            EditWall.SaveArray(false);
+
+            EditWall.CornerWallCount = 0;
+            // Reset Rubber-Line Drawing
+            Cursor.Clip = Rectangle.Empty;
+
+            if (MouseControl == MouseMode.WallEditFinal)
             {
                 MouseControl = MouseMode.WallSet; // reset to wall-Input
             }
             else if (MouseControl == MouseMode.WallInlineEdit)
-			{
-				EditAndSaveWallData(this, null); // save changes
-				MouseControl = MouseMode.WallSel; //continue line selection
-			}
-			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
-			Picturebox1_Paint();
-		}
-		
-		/// <summary>
+            {
+                EditAndSaveWallData(this, null); // save changes
+                MouseControl = MouseMode.WallSel; //continue line selection
+            }
+            RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1; // for lenght label
+            Picturebox1_Paint();
+        }
+
+        /// <summary>
         /// Set the new edge point coordinates
         /// </summary>
-		private void SetNewEdgepointBuilding()
-		{
-			EditB.CornerBuildingX[EditB.CornerBuilding] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
-			EditB.CornerBuildingY[EditB.CornerBuilding] = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			EditB.SaveArray(false);
-			
-			EditB.CornerBuilding = 0;
-			// Reset Rubber-Line Drawing
-			Cursor.Clip = Rectangle.Empty;
-			
-			if (MouseControl == MouseMode.BuildingEditFinal)
+        private void SetNewEdgepointBuilding()
+        {
+            EditB.CornerBuildingX[EditB.CornerBuilding] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+            EditB.CornerBuildingY[EditB.CornerBuilding] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+            EditB.SaveArray(false);
+
+            EditB.CornerBuilding = 0;
+            // Reset Rubber-Line Drawing
+            Cursor.Clip = Rectangle.Empty;
+
+            if (MouseControl == MouseMode.BuildingEditFinal)
             {
                 MouseControl = MouseMode.BuildingPos; // reset to building-Input
             }
             else if (MouseControl == MouseMode.BuildingInlineEdit)
-			{
-				EditAndSaveBuildingsData(null, null); // save changes
-				MouseControl = MouseMode.BuildingSel; //continue building selection
-			}
-			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
-			Picturebox1_Paint();
-		}
-		
-		/// <summary>
+            {
+                EditAndSaveBuildingsData(null, null); // save changes
+                MouseControl = MouseMode.BuildingSel; //continue building selection
+            }
+            RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1; // for lenght label
+            Picturebox1_Paint();
+        }
+
+        /// <summary>
         /// Set the new edge point coordinates
         /// </summary>
-		private void SetNewEdgepointVegetation()
-		{
-			EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox1.Text.Replace(".",decsep));
-			EditVegetation.CornerVegY[EditVegetation.CornerVegetation]  = Convert.ToDouble(textBox2.Text.Replace(".",decsep));
-			EditVegetation.SaveArray(false);
-			
-			EditVegetation.CornerVegetation = 0;
-			// Reset Rubber-Line Drawing
-			Cursor.Clip = Rectangle.Empty;
-			
-			if (MouseControl == MouseMode.VegetationEditFinal)
+        private void SetNewEdgepointVegetation()
+        {
+            EditVegetation.CornerVegX[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+            EditVegetation.CornerVegY[EditVegetation.CornerVegetation] = Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+            EditVegetation.SaveArray(false);
+
+            EditVegetation.CornerVegetation = 0;
+            // Reset Rubber-Line Drawing
+            Cursor.Clip = Rectangle.Empty;
+
+            if (MouseControl == MouseMode.VegetationEditFinal)
             {
                 MouseControl = MouseMode.VegetationPosCorner; // reset to vegetation-Input
             }
             else if (MouseControl == MouseMode.VegetationInlineEdit)
-			{
-				EditAndSaveVegetationData(this, null); // save changes
-				MouseControl = MouseMode.VegetationSel; //continue vegetation selection
-			}
-			RubberLineCoors[0].X = -1;RubberLineCoors[0].Y = -1; // for lenght label
-			Picturebox1_Paint();
-		}
+            {
+                EditAndSaveVegetationData(this, null); // save changes
+                MouseControl = MouseMode.VegetationSel; //continue vegetation selection
+            }
+            RubberLineCoors[0].X = -1; RubberLineCoors[0].Y = -1; // for lenght label
+            Picturebox1_Paint();
+        }
     }
 }

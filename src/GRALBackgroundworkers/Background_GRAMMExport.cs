@@ -10,9 +10,9 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
 using System.IO;
-using GralIO;
 
 namespace GralBackgroundworkers
 {
@@ -25,7 +25,7 @@ namespace GralBackgroundworkers
                                       System.ComponentModel.DoWorkEventArgs e)
         {
             try
-            { 
+            {
                 float[,,] UWI = new float[mydata.GRAMMCells.NX + 1, mydata.GRAMMCells.NY + 1, mydata.GRAMMCells.NZ + 1];
                 float[,,] VWI = new float[mydata.GRAMMCells.NX + 1, mydata.GRAMMCells.NY + 1, mydata.GRAMMCells.NZ + 1];
                 float[,,] WWI = new float[mydata.GRAMMCells.NX + 1, mydata.GRAMMCells.NY + 1, mydata.GRAMMCells.NZ + 1];
@@ -46,7 +46,7 @@ namespace GralBackgroundworkers
                     NK = mydata.GRAMMSubCells.NZ
                 };
 
-                int lines = (int) GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(mydata.ProjectName, @"Computation", "meteopgt.all"));
+                int lines = (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(mydata.ProjectName, @"Computation", "meteopgt.all"));
 
                 ReadSclUstOblClasses ReadStablity = new ReadSclUstOblClasses
                 {
@@ -63,7 +63,7 @@ namespace GralBackgroundworkers
 
                     if (dissit % 4 == 0 && lines > 0)
                     {
-                       Rechenknecht.ReportProgress((int) (dissit / (double)lines * 100D));
+                        Rechenknecht.ReportProgress((int)(dissit / (double)lines * 100D));
                     }
 
                     string wndfilename = Path.Combine(mydata.Path_GRAMMwindfield, Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
@@ -94,7 +94,7 @@ namespace GralBackgroundworkers
                                     nj++;
                                 }
                                 ni++;
-                                nj = mydata.YDomain; 
+                                nj = mydata.YDomain;
                             }
 
                             wfexport.U = subU;
@@ -103,7 +103,7 @@ namespace GralBackgroundworkers
                             wfexport.PathWindfield = Path.Combine(Path.Combine(mydata.ProjectName, "Computation"), Convert.ToString(dissit).PadLeft(5, '0') + ".wnd");
 
                             wfexport.Windfield_export();
-                            
+
                             //read scl-files
                             string stabilityfilename = Path.Combine(mydata.Path_GRAMMwindfield, Convert.ToString(dissit).PadLeft(5, '0') + ".scl");
                             if (File.Exists(stabilityfilename))
@@ -121,7 +121,7 @@ namespace GralBackgroundworkers
 
                                 if (ReadStablity.ExportSclFile() == false)
                                 {
-                                    
+
                                 }
                                 ReadStablity.X0 = 0;
                                 ReadStablity.Y0 = 0;

@@ -10,29 +10,29 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
-using System.Collections.Generic;
-using GralStaticFunctions;
-using GralItemData;
 using Gral;
+using GralItemData;
+using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralItemForms
 {
     public partial class EditDeposition : Form
     {
-        private Deposition  _dep;
-        public Deposition Dep {set {_dep = value;} get {return _dep;} }
-                
-        private double  _emission;
-        public double Emission {set {_emission = value;} get {return _emission;}}
-        
-        private int  _pollutant;
-        public int Pollutant {set {_pollutant = value;}}
-        
+        private Deposition _dep;
+        public Deposition Dep { set { _dep = value; } get { return _dep; } }
+
+        private double _emission;
+        public double Emission { set { _emission = value; } get { return _emission; } }
+
+        private int _pollutant;
+        public int Pollutant { set { _pollutant = value; } }
+
         private List<Deposition_Settings> _depo_Settings = new List<Deposition_Settings>();
-        
+
         /// <summary>
         /// Deposition Dialog
         /// </summary>		
@@ -41,9 +41,9 @@ namespace GralItemForms
             //
             // The InitializeComponent() call is required for Windows Forms designer support.
             //
-            InitializeComponent();	
+            InitializeComponent();
         }
-        
+
         /// <summary>
         /// Save deposition settings - OK buttton
         /// </summary>
@@ -52,16 +52,16 @@ namespace GralItemForms
         void Button1Click(object sender, EventArgs e)
         {
             _dep.Frac_30 = 100;
-            _dep.Frac_2_5 = (int) numericUpDown2.Value;
-            _dep.Frac_10  = (int) numericUpDown3.Value;
-            _dep.DM_30    = (int) numericUpDown1.Value;
-            
+            _dep.Frac_2_5 = (int)numericUpDown2.Value;
+            _dep.Frac_10 = (int)numericUpDown3.Value;
+            _dep.DM_30 = (int)numericUpDown1.Value;
+
             _dep.Density = Convert.ToDouble(numericUpDown5.Value) * 1000; // g/cm³ to kg/m³
-            
+
             _dep.V_Dep1 = Convert.ToDouble(numericUpDown6.Value);
             _dep.V_Dep2 = Convert.ToDouble(numericUpDown7.Value);
             _dep.V_Dep3 = Convert.ToDouble(numericUpDown8.Value);
-            
+
             int i = 1; // PM2,5 = emission
             if (checkBox2.Checked)
             {
@@ -73,9 +73,9 @@ namespace GralItemForms
                 i = 3; // PM30 = emission
             }
 
-            _dep.Conc   = i;
+            _dep.Conc = i;
         }
-        
+
         /// <summary>
         /// Reset deposition settings
         /// </summary>
@@ -85,25 +85,25 @@ namespace GralItemForms
         {
             _dep.init(); // set all values to 0
         }
-        
+
         void Edit_DepositionLoad(object sender, EventArgs e)
-        {   
-            #if __MonoCS__
+        {
+#if __MonoCS__
             // set Numericupdowns-Alignement to Left in Linux
             var allNumUpDowns = Main.GetAllControls<NumericUpDown>(this);
             foreach (NumericUpDown nu in allNumUpDowns)
             {
                 nu.TextAlign = HorizontalAlignment.Left;
             }
-            #else
-            #endif
-            
+#else
+#endif
+
             if (_pollutant == 2)  // don't edit odour -> no deposition 
             {
                 _dep.init(); // set all values to 0
                 Close();
             }
-            
+
             if (_dep.Frac_30 == 0)
             {
                 init_pollutant(0);
@@ -120,14 +120,14 @@ namespace GralItemForms
                 try
                 {
                     string[] text;
-                    using(StreamReader myReader = new StreamReader(settings))
+                    using (StreamReader myReader = new StreamReader(settings))
                     {
                         myReader.ReadLine(); // 1st Line = Title
                         while (myReader.EndOfStream == false) // read until EOF
                         {
                             text = myReader.ReadLine().Split(new char[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                             Deposition_Settings i = new Deposition_Settings();
-                            
+
                             if (text.Length > 6)
                             {
                                 i.Title = text[0];
@@ -138,32 +138,32 @@ namespace GralItemForms
                                 i.V_Dep1 = Convert.ToDouble(text[5].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                                 i.V_Dep2 = Convert.ToDouble(text[6].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                                 i.V_Dep3 = Convert.ToDouble(text[7].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                
+
                                 listBox1.Items.Add(i.Title);
                                 _depo_Settings.Add(i);
                             }
-                        } 	
+                        }
                     }
                 }
-                catch{}
+                catch { }
             }
-            
+
             numericUpDown1.Value = St_F.ValueSpan(11, 1000, _dep.DM_30);
             numericUpDown2.Value = St_F.ValueSpan(0, 100, _dep.Frac_2_5);
-            numericUpDown3.Value = St_F.ValueSpan(0, 100,_dep.Frac_10);
-            
+            numericUpDown3.Value = St_F.ValueSpan(0, 100, _dep.Frac_10);
+
             label15.Text = Convert.ToString(_dep.Frac_30);
-            
+
             numericUpDown5.Value = Convert.ToDecimal(_dep.Density / 1000); // kg/m³ to g /cm³
             numericUpDown6.Value = Convert.ToDecimal(_dep.V_Dep1);
             numericUpDown7.Value = Convert.ToDecimal(_dep.V_Dep2);
             numericUpDown8.Value = Convert.ToDecimal(_dep.V_Dep3);
-            
+
             NumericUpDown2ValueChanged(null, null);
-            
+
             numericUpDown2.ValueChanged += new EventHandler(NumericUpDown2ValueChanged);
             numericUpDown3.ValueChanged += new EventHandler(NumericUpDown2ValueChanged);
-            
+
             if (_dep.Conc == 2)
             {
                 checkBox2.Checked = true;
@@ -173,9 +173,9 @@ namespace GralItemForms
             {
                 checkBox2.Checked = true;
                 checkBox3.Checked = true;
-            }			
+            }
         }
-        
+
         /// <summary>
         /// Init dialog for the 1st time
         /// </summary>
@@ -197,9 +197,9 @@ namespace GralItemForms
             checkBox2.Checked = false;
             checkBox3.Checked = false;
             checkBox2.Enabled = false;
-            checkBox3.Enabled = false;		
-            listBox1.Enabled = false;			
-            
+            checkBox3.Enabled = false;
+            listBox1.Enabled = false;
+
             switch (_pollutant)
             {
                 case 0: // NOx
@@ -208,7 +208,7 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.003;
                     }
-                    _dep.Conc    = 1;
+                    _dep.Conc = 1;
                     numericUpDown5.Enabled = false;
                     numericUpDown7.Enabled = false;
                     numericUpDown8.Enabled = false;
@@ -218,7 +218,7 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.01;
                     }
-                    _dep.Conc    = 1;
+                    _dep.Conc = 1;
                     numericUpDown5.Enabled = false;
                     numericUpDown7.Enabled = false;
                     numericUpDown8.Enabled = false;
@@ -251,19 +251,19 @@ namespace GralItemForms
                     numericUpDown2.Enabled = true;
                     numericUpDown3.Enabled = true;
                     listBox1.Enabled = true;
-                    _dep.Conc    = 2;
+                    _dep.Conc = 2;
                     break;
                 case 3: // SO2
                     if (type == 0)
                     {
                         _dep.V_Dep1 = 0.01;
                     }
-                    _dep.Conc    = 1;
+                    _dep.Conc = 1;
                     numericUpDown5.Enabled = false;
                     numericUpDown7.Enabled = false;
                     numericUpDown8.Enabled = false;
                     break;
-                
+
                 case 15: //bp
                 case 17: //Ni
                     if (type == 0)
@@ -280,7 +280,7 @@ namespace GralItemForms
                         {
                             _dep.Density = 8900;
                         }
-                        _dep.Conc    = 2;
+                        _dep.Conc = 2;
                     }
                     numericUpDown1.Enabled = true;
                     numericUpDown2.Enabled = true;
@@ -292,17 +292,17 @@ namespace GralItemForms
                     {
                         _dep.V_Dep1 = 0.005;
                     }
-                    _dep.Conc    = 1;
+                    _dep.Conc = 1;
                     numericUpDown5.Enabled = true;
                     numericUpDown7.Enabled = false;
                     numericUpDown8.Enabled = false;
                     break;
-                    
+
                 default:
-                     break;
-            }				           
+                    break;
+            }
         }
-        
+
         /// <summary>
         /// Change emission rate preview for PM2.5 or PM10
         /// </summary>
@@ -319,8 +319,8 @@ namespace GralItemForms
                 numericUpDown3.Value = numericUpDown2.Value;
             }
             //MessageBox.Show(Convert.ToString(_poll) + "/" +Convert.ToString(_em));
-            float p1 = (float) numericUpDown2.Value;
-            float p2 = (float) numericUpDown3.Value;
+            float p1 = (float)numericUpDown2.Value;
+            float p2 = (float)numericUpDown3.Value;
             float p3 = 100;
             int comma = 5;
             if (_emission > 0)
@@ -331,7 +331,7 @@ namespace GralItemForms
             double er = 0;
             if (_dep.Conc == 1) // PM 2.5
             {
-                float em100 = (float) _emission * 100 / p1; // 100 % of emission
+                float em100 = (float)_emission * 100 / p1; // 100 % of emission
                 label12.Text = Convert.ToString(Math.Round(em100 * p1 / 100, comma)); // PM 2,5
                 label13.Text = Convert.ToString(Math.Round(em100 * (p2 - p1) / 100, comma));
                 label14.Text = Convert.ToString(Math.Round(em100 * (p3 - p2) / 100, comma));
@@ -339,7 +339,7 @@ namespace GralItemForms
             }
             else if (_dep.Conc == 2) // PM 10
             {
-                float em100 = (float) _emission * 100 / p2; // 100 % of emission
+                float em100 = (float)_emission * 100 / p2; // 100 % of emission
                 label12.Text = Convert.ToString(Math.Round(em100 * p1 / 100, comma)); // PM 2,5
                 label13.Text = Convert.ToString(Math.Round(em100 * p2 / 100 - em100 * p1 / 100, comma));
                 label14.Text = Convert.ToString(Math.Round(em100 * (p3 - p2) / 100, comma));
@@ -347,7 +347,7 @@ namespace GralItemForms
             }
             label5.Text = er.ToString() + " kg/h";
         }
-        
+
         /// <summary>
         /// If PMXX calculation is enabled, then also enable PM10 calculation
         /// </summary>
@@ -373,7 +373,7 @@ namespace GralItemForms
                 checkBox3.Checked = false;
             }
         }
-        
+
         /// <summary>
         /// Select a deposition preset
         /// </summary>
@@ -386,12 +386,12 @@ namespace GralItemForms
                 if (listBox1.SelectedItem.ToString() == _depo_Settings[i].Title)
                 {
                     numericUpDown3.ValueChanged -= new System.EventHandler(NumericUpDown2ValueChanged);
-                    numericUpDown3.Value = (int) _depo_Settings[i].Frac_10;
-                    numericUpDown2.Value = (int) _depo_Settings[i].Frac_25;
+                    numericUpDown3.Value = (int)_depo_Settings[i].Frac_10;
+                    numericUpDown2.Value = (int)_depo_Settings[i].Frac_25;
                     numericUpDown3.ValueChanged += new EventHandler(NumericUpDown2ValueChanged);
                     NumericUpDown2ValueChanged(null, null);
                     numericUpDown5.Value = Convert.ToDecimal(_depo_Settings[i].Density / 1000d); // kg/m³ to g/cm³
-                    numericUpDown1.Value = (int) _depo_Settings[i].DM_30;
+                    numericUpDown1.Value = (int)_depo_Settings[i].DM_30;
                     numericUpDown6.Value = Convert.ToDecimal(_depo_Settings[i].V_Dep1);
                     numericUpDown7.Value = Convert.ToDecimal(_depo_Settings[i].V_Dep2);
                     numericUpDown8.Value = Convert.ToDecimal(_depo_Settings[i].V_Dep3);
@@ -399,7 +399,7 @@ namespace GralItemForms
                 }
             }
         }
-        
+
         void Edit_DepositionFormClosed(object sender, FormClosedEventArgs e)
         {
             toolTip1.Dispose();
@@ -407,7 +407,7 @@ namespace GralItemForms
             panel2.Dispose();
             panel3.Dispose();
         }
-             
+
         /// <summary>
         /// Enable or disable controls for locked projects
         /// </summary>

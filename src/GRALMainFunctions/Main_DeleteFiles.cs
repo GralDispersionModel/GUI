@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralMessage;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralData;
-using GralMessage;
 
 namespace Gral
 {
@@ -61,7 +60,7 @@ namespace Gral
                         }
                     }
                 }
-                
+
                 files_conc = di.GetFiles("*.grz"); //compressed files ?
                 if (files_conc.Length > 0)
                 {
@@ -218,7 +217,7 @@ namespace Gral
                         break;
                     }
                 }
-               
+
                 for (; i < Files.Length; i++)
                 {
                     wait.ProgressbarUpdate(this, 0);
@@ -351,7 +350,7 @@ namespace Gral
                                     return;
                                 }
                             }
-                            
+
                             GRAMM_Locked = false;                 // unlock GRAMM project
                             Gramm_locked_buttonClick(null, null); // change locked-Button
                         }
@@ -385,7 +384,7 @@ namespace Gral
 
             DeleteGralGffFile();
         }
-        
+
         //delete file GRAL_topofile.txt whenever items are changed by the user affecting the topography
         /// <summary>
         /// Deletes the high resolution GRAL_topofile.txt
@@ -422,7 +421,7 @@ namespace Gral
             dia = DialogResult.OK;
 
             string GffFilePath = GralStaticFunctions.St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation")) + Path.DirectorySeparatorChar;
-            
+
             DirectoryInfo di = new DirectoryInfo(GffFilePath);
             FileInfo[] files_conc = di.GetFiles("*.gff");
 
@@ -472,7 +471,7 @@ namespace Gral
                     button51.Visible = false;
                     TabControl1Click(null, null);
                 }
-                catch{}
+                catch { }
             }
         }
     }

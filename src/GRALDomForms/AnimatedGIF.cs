@@ -93,7 +93,7 @@ namespace GralDomForms
         /// The Number of Times the Animation must repeat.
         /// -1 indicates no repeat. 0 indicates repeat indefinitely
         /// </summary>
-        public int Repeat { get; set;}
+        public int Repeat { get; set; }
         #endregion
 
 

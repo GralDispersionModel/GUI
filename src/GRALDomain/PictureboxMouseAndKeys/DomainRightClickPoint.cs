@@ -10,16 +10,15 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using GralItemData;
-
 namespace GralDomain
 {
     public partial class Domain
-	{
+    {
         /// <summary>
         /// Search an item at the mouse position and if more than 1 item is found, a selection dialog appears
         /// </summary>
@@ -28,16 +27,16 @@ namespace GralDomain
         {
             int i = 0;
             // search items
-            List <string> ItemNames = new List<string>();
-            List <int> ItemNumber = new List<int>();
+            List<string> ItemNames = new List<string>();
+            List<int> ItemNumber = new List<int>();
             double fx = 1 / BmpScale / MapSize.SizeX;
             double fy = 1 / BmpScale / MapSize.SizeY;
-            
+
             foreach (PointSourceData _psdata in EditPS.ItemData)
             {
-                int x1 = (int) ((_psdata.Pt.X - MapSize.West) * fx)+TransformX;
-                int y1 = (int) ((_psdata.Pt.Y - MapSize.North) * fy)+TransformY;
-                
+                int x1 = (int)((_psdata.Pt.X - MapSize.West) * fx) + TransformX;
+                int y1 = (int)((_psdata.Pt.Y - MapSize.North) * fy) + TransformY;
+
                 if ((e.X >= x1 - 10) && (e.X <= x1 + 10) && (e.Y >= y1 - 10) && (e.Y <= y1 + 10))
                 {
                     ItemNames.Add(_psdata.Name);
@@ -45,25 +44,25 @@ namespace GralDomain
                 }
                 i++;
             }
-            
+
             return SelectOverlappedItem(e, ItemNames, ItemNumber);
         }
-        
-		/// <summary>
+
+        /// <summary>
         /// Paste a point source
         /// </summary>
-       	private void RightClickPointSourcePaste(object sender, System.EventArgs e)
-		{
-			CopiedItem.PointSource.Pt = new PointD(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
-			
-			PointSourceData Temp = new PointSourceData(CopiedItem.PointSource);
-			Temp.Name += "-Copy";
-			EditPS.ItemData.Add(Temp);
-			EditPS.SetTrackBarMaximum();
-			CopiedItem.PointSource = null;
-			EditAndSavePointSourceData(null, null); // save changes
-			Picturebox1_Paint();
-			MouseControl = MouseMode.PointSourceSel;
+        private void RightClickPointSourcePaste(object sender, System.EventArgs e)
+        {
+            CopiedItem.PointSource.Pt = new PointD(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
+
+            PointSourceData Temp = new PointSourceData(CopiedItem.PointSource);
+            Temp.Name += "-Copy";
+            EditPS.ItemData.Add(Temp);
+            EditPS.SetTrackBarMaximum();
+            CopiedItem.PointSource = null;
+            EditAndSavePointSourceData(null, null); // save changes
+            Picturebox1_Paint();
+            MouseControl = MouseMode.PointSourceSel;
             ContextMenuStrip m = sender as ContextMenuStrip;
             if (m != null)
             {
@@ -126,6 +125,6 @@ namespace GralDomain
                 CopiedItem.PointSource = new PointSourceData(EditPS.ItemData[Convert.ToInt32(mi.Tag)]);
             }
         }
-        
+
     }
 }

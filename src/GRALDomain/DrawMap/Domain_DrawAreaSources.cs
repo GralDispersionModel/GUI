@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using GralItemData;
 
 namespace GralDomain
 {
@@ -23,10 +23,10 @@ namespace GralDomain
         /// Draw Area Sources
         /// </summary>
         private void DrawAreaSources(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north,
-                                     double factor_x, double factor_y, Font LabelFont, Brush LabelBrush) 
+                                     double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat1 = new StringFormat
             {
@@ -35,25 +35,25 @@ namespace GralDomain
             }; //format for names of sources
 
             Brush SelectedBrush = new SolidBrush(Color2Transparent(150, Color.Green));
-            
+
             int n = -1;
             int transparency = _drobj.Transparancy;
             int linewidth_l = _drobj.LineWidth;
             bool FillYesNo = _drobj.FillYesNo;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             AreaSourceData _as;
-            
+
             for (int ii = 0; ii < EditAS.ItemData.Count; ii++)
             {
                 _as = EditAS.ItemData[ii];
                 try
                 {
                     n++;
-                    List <PointD> _pt = _as.Pt;
+                    List<PointD> _pt = _as.Pt;
                     int vertices = _pt.Count;
-                    
+
                     if (vertices > 2)
                     {
                         Point[] myPoints = new Point[vertices];
@@ -74,7 +74,7 @@ namespace GralDomain
                             myPoints[i] = new Point(x1, y1);
                             xmean += x1;
                             ymean += y1;
-                            
+
                             if (dismiss && (x1 > 0) && (x1 < pb1_width) && (y1 > 0) && (y1 < pb1_height))
                             {
                                 dismiss = false;
@@ -83,7 +83,7 @@ namespace GralDomain
                             // at last point
                             if ((i == vertices - 1) && (dismiss == false))
                             {
-                                if ((n == EditAS.ItemDisplayNr) && ((MouseControl ==  MouseMode.AreaSourceSel) || (MouseControl == MouseMode.AreaSourcePos)))
+                                if ((n == EditAS.ItemDisplayNr) && ((MouseControl == MouseMode.AreaSourceSel) || (MouseControl == MouseMode.AreaSourcePos)))
                                 {
                                     g.FillPolygon(SelectedBrush, myPoints);
                                     Brush edges = new SolidBrush(Color.Green);
@@ -111,7 +111,7 @@ namespace GralDomain
                                                 {
                                                     for (int r = _drobj.FillColors.Count - 1; r > -1; r--)
                                                     {
-                                                        if (_as.Poll.EmissionRate[j] >= (_drobj.ItemValues[r] - 5* float.Epsilon))
+                                                        if (_as.Poll.EmissionRate[j] >= (_drobj.ItemValues[r] - 5 * float.Epsilon))
                                                         {
                                                             index = r;
                                                             break;
@@ -149,14 +149,14 @@ namespace GralDomain
                                 xmean /= vertices;
                                 ymean /= vertices;
                             }
-                            g.DrawString( _as.Name, LabelFont, LabelBrush, xmean, ymean, StringFormat1);
+                            g.DrawString(_as.Name, LabelFont, LabelBrush, xmean, ymean, StringFormat1);
                         }
                     }
                 }
                 catch
-                {}
+                { }
             } // foreach
-            
+
             SelectedBrush.Dispose();
             StringFormat1.Dispose();
         }

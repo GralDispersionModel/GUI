@@ -549,7 +549,7 @@
             panel1.Size = new System.Drawing.Size(610, 425);
             panel1.TabIndex = 1;
             panel1.Paint += Panel1Paint;
-            panel1.MouseClick += panel1_MouseClick;
+            panel1.MouseClick += Panel1_MouseClick;
             // 
             // button44
             // 
@@ -1938,7 +1938,7 @@
             button60.TabIndex = 46;
             toolTip1.SetToolTip(button60, "Optional: set a directory for emission modulation variations");
             button60.UseVisualStyleBackColor = false;
-            button60.Click += button60_Click;
+            button60.Click += Button60_Click;
             // 
             // groupBox24
             // 
@@ -2106,7 +2106,7 @@
             listBox5.TabIndex = 5;
             toolTip1.SetToolTip(listBox5, "Select the pollutant");
             listBox5.SelectedIndexChanged += ListBox5_SelectedIndexChanged;
-            listBox5.DoubleClick += listBox5_DoubleClick;
+            listBox5.DoubleClick += ListBox5_DoubleClick;
             // 
             // listView1
             // 
@@ -2283,7 +2283,7 @@
             button58.TabIndex = 21;
             toolTip1.SetToolTip(button58, "Save as new *.met file");
             button58.UseVisualStyleBackColor = false;
-            button58.Click += button58_Click;
+            button58.Click += Button58_Click;
             // 
             // groupBox23
             // 
@@ -3402,7 +3402,7 @@
             toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
             checkBoxAVX.UseVisualStyleBackColor = true;
             checkBoxAVX.Visible = false;
-            checkBoxAVX.Click += checkBoxAVX_Click;
+            checkBoxAVX.Click += CheckBoxAVX_Click;
             // 
             // numericUpDown33
             // 
@@ -3492,7 +3492,7 @@
             button59.TabIndex = 101;
             button59.Text = "Set parameters";
             button59.UseVisualStyleBackColor = true;
-            button59.Click += button59_Click;
+            button59.Click += Button59_Click;
             // 
             // button36
             // 

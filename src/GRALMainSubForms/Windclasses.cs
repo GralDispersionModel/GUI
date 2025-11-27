@@ -18,14 +18,14 @@ using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form to show the wind speed classes
     /// </summary>
     public partial class Windclasses : Form
     {
         public double[] WClassFrequency;
         public string MetFile;
-		public List <GralData.WindData> Wind;
+        public List<GralData.WindData> Wind;
         private float dpi;
         public int StartHour;
         public int FinalHour;
@@ -37,7 +37,7 @@ namespace GralMainForms
         {
             InitializeComponent();
         }
-        
+
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             if (panel1.Width < 20 || panel1.Height < 20)
@@ -58,9 +58,9 @@ namespace GralMainForms
             Pen p1 = new Pen(Color.Black, 3);
             Pen p2 = new Pen(Color.Black, 3);
             Pen p3 = new Pen(Color.DarkGray, 1);
-            
+
             float _scale = Math.Min(panel1.Width / HorSize, panel1.Height / VertSize);
-			g.ScaleTransform(_scale, _scale);
+            g.ScaleTransform(_scale, _scale);
 
             SizeF _lenght = g.MeasureString(MetFile, _smallFont);
             int distance = (int)_lenght.Height + 2;
@@ -121,22 +121,22 @@ namespace GralMainForms
                 FormatFlags = StringFormatFlags.DirectionVertical
             };
 
-            e.Graphics.DrawString("< 0.5 m/s", _smallFont,  _blackBrush, new PointF(65, 445), stringFormat);
-            for (int i = 0; i < (maxwind-1); i++)
+            e.Graphics.DrawString("< 0.5 m/s", _smallFont, _blackBrush, new PointF(65, 445), stringFormat);
+            for (int i = 0; i < (maxwind - 1); i++)
             {
-            	string fs = Convert.ToString(i);
-            	string ls = Convert.ToString(i+1);
-            	if (i == 0)
+                string fs = Convert.ToString(i);
+                string ls = Convert.ToString(i + 1);
+                if (i == 0)
                 {
-                    e.Graphics.DrawString(fs +".5-" + ls + " m/s", _smallFont,  _blackBrush, new PointF(132 + i *64, 445), stringFormat);
+                    e.Graphics.DrawString(fs + ".5-" + ls + " m/s", _smallFont, _blackBrush, new PointF(132 + i * 64, 445), stringFormat);
                 }
                 else
                 {
-                    e.Graphics.DrawString(fs +" - " + ls + " m/s", _smallFont,  _blackBrush, new PointF(132 + i *64, 445), stringFormat);
+                    e.Graphics.DrawString(fs + " - " + ls + " m/s", _smallFont, _blackBrush, new PointF(132 + i * 64, 445), stringFormat);
                 }
             }
-            e.Graphics.DrawString(">" + Convert.ToString(maxwind-1.0) + ".0 m/s", _smallFont,  _blackBrush, new PointF(132 + (maxwind - 1) *64, 445), stringFormat);
-            
+            e.Graphics.DrawString(">" + Convert.ToString(maxwind - 1.0) + ".0 m/s", _smallFont, _blackBrush, new PointF(132 + (maxwind - 1) * 64, 445), stringFormat);
+
             StringFormat verticalString = new StringFormat
             {
                 FormatFlags = StringFormatFlags.DirectionVertical,
@@ -146,7 +146,7 @@ namespace GralMainForms
             SizeF _lenght3 = g.MeasureString("Frequency [%]", _mediumFont);
             g.DrawString("Frequency [%]", _mediumFont, _blackBrush, 4, (int)((VertSize - _lenght3.Width) / 2), verticalString);
 
-            g.DrawString("  0", _largeFont,  _blackBrush, 25, 435);
+            g.DrawString("  0", _largeFont, _blackBrush, 25, 435);
 
             //draw frequency levels
             for (int i = 1; i < 11; i++)
@@ -159,10 +159,10 @@ namespace GralMainForms
                     break;
                 }
                 g.DrawLine(p3, 55, lev1, Math.Max(759, 55 + (maxwind + 1) * 64), lev1);
-                g.DrawString(s, _largeFont,  _blackBrush, 25, lev1 - 5);
+                g.DrawString(s, _largeFont, _blackBrush, 25, lev1 - 5);
             }
-            p1.Dispose();p2.Dispose();p3.Dispose();
-            
+            p1.Dispose(); p2.Dispose(); p3.Dispose();
+
             stringFormat.Dispose();
             format1.Dispose();
             _smallFont.Dispose();
@@ -192,24 +192,24 @@ namespace GralMainForms
             panel1.Refresh();
         }
 
-        
+
         void WindclassesLoad(object sender, EventArgs e)
         {
-        	Graphics g = CreateGraphics();
-        	float dx = 96;
-        	try
-        	{
-        		dx = g.DpiX;
-        	}
-        	finally
-        	{
-        		g.Dispose();
-        	}
-			dpi = dx;
-			
-        	Text = "Frequency distribution wind classes  -  " + MetFile; // Kuntner
+            Graphics g = CreateGraphics();
+            float dx = 96;
+            try
+            {
+                dx = g.DpiX;
+            }
+            finally
+            {
+                g.Dispose();
+            }
+            dpi = dx;
+
+            Text = "Frequency distribution wind classes  -  " + MetFile; // Kuntner
         }
-        
+
         void WindclassesResizeEnd(object sender, EventArgs e)
         {
             if (ClientSize.Width > 60)
@@ -217,19 +217,19 @@ namespace GralMainForms
                 panel1.Width = ClientSize.Width - 55;
                 panel1.Height = ClientSize.Height;
             }
-            
+
             panel1.Invalidate();
-			panel1.Update();
+            panel1.Update();
         }
-        
+
         void WindclassesResize(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Maximized) 
+            if (WindowState == FormWindowState.Maximized)
             {
                 WindclassesResizeEnd(null, null);
                 // Maximized!
             }
-            if (WindowState == FormWindowState.Normal) 
+            if (WindowState == FormWindowState.Normal)
             {
                 WindclassesResizeEnd(null, null);
                 // Restored!

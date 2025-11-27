@@ -22,28 +22,28 @@ namespace GralIO
     /// InDatFileIO: read and write "in.dat" file
     /// </summary>
     public class InDatFileIO
-	{
-		private InDatVariables _data;
-		private CultureInfo ic = CultureInfo.InvariantCulture;
-		
-		public InDatVariables Data {get {return _data;} set {_data = value;} }
-		
-		/// <summary>
-    	/// Write file in.dat
-    	/// </summary>
-		public bool WriteInDat()
-		{
-			bool ok = true;
-			
-			try
-			{
-				using (StreamWriter myWriter = File.CreateText(_data.InDatPath))
-				{
-					myWriter.WriteLine(Convert.ToString(_data.ParticleNumber) + " \t ! Number of released particles per second");
-					myWriter.WriteLine(Convert.ToString(_data.DispersionTime) + " \t ! Dispersion time");
-					myWriter.WriteLine(Convert.ToString(_data.Transientflag)  + " \t ! Steady state GRAL mode = 1, Transient GRAL mode = 0");
-					myWriter.WriteLine("4" + " \t ! Meteorology input: inputzr.dat = 0, meteo.all = 1, elimaeki.prn = 2, SONIC.dat = 3, meteopgt.all = 4");
-					if (Convert.ToInt32(_data.Receptorflag) > 0)
+    {
+        private InDatVariables _data;
+        private CultureInfo ic = CultureInfo.InvariantCulture;
+
+        public InDatVariables Data { get { return _data; } set { _data = value; } }
+
+        /// <summary>
+        /// Write file in.dat
+        /// </summary>
+        public bool WriteInDat()
+        {
+            bool ok = true;
+
+            try
+            {
+                using (StreamWriter myWriter = File.CreateText(_data.InDatPath))
+                {
+                    myWriter.WriteLine(Convert.ToString(_data.ParticleNumber) + " \t ! Number of released particles per second");
+                    myWriter.WriteLine(Convert.ToString(_data.DispersionTime) + " \t ! Dispersion time");
+                    myWriter.WriteLine(Convert.ToString(_data.Transientflag) + " \t ! Steady state GRAL mode = 1, Transient GRAL mode = 0");
+                    myWriter.WriteLine("4" + " \t ! Meteorology input: inputzr.dat = 0, meteo.all = 1, elimaeki.prn = 2, SONIC.dat = 3, meteopgt.all = 4");
+                    if (Convert.ToInt32(_data.Receptorflag) > 0)
                     {
                         myWriter.WriteLine("1 \t ! Receptor points: Yes = 1, No = 0");
                     }
@@ -53,23 +53,23 @@ namespace GralIO
                     }
 
                     myWriter.WriteLine(Convert.ToString(_data.Roughness, ic) + " \t ! Surface roughness in [m]");
-					myWriter.WriteLine(Convert.ToString(_data.Latitude, ic) + " \t ! Latitude");
-					myWriter.WriteLine("N" + " \t ! Meandering Effect Off = J, On = N");
-					myWriter.WriteLine(_data.Pollutant + " \t ! Pollutant: not used since version 19.01, new: Pollutant.txt");
-					
-					for (int i = 0; i < _data.NumHorSlices; i++)
+                    myWriter.WriteLine(Convert.ToString(_data.Latitude, ic) + " \t ! Latitude");
+                    myWriter.WriteLine("N" + " \t ! Meandering Effect Off = J, On = N");
+                    myWriter.WriteLine(_data.Pollutant + " \t ! Pollutant: not used since version 19.01, new: Pollutant.txt");
+
+                    for (int i = 0; i < _data.NumHorSlices; i++)
                     {
                         myWriter.Write(Convert.ToString(_data.HorSlices[i], ic) + ",");
                     }
 
                     myWriter.Write(" \t ! Horizontal slices [m] seperated by a comma (number of slices need to be defined in GRAL.geb!)");
-					myWriter.WriteLine();
-					myWriter.WriteLine(Convert.ToString(_data.Deltaz, ic) + " \t ! Vertical grid spacing in [m]");
-					myWriter.WriteLine(Convert.ToString(_data.DispersionSituation) + " \t ! Start the calculation with this weather number");
-					myWriter.WriteLine(Convert.ToString((int) _data.BuildingMode) +","+ _data.PrognosticSubDomains.ToString(ic) +
+                    myWriter.WriteLine();
+                    myWriter.WriteLine(Convert.ToString(_data.Deltaz, ic) + " \t ! Vertical grid spacing in [m]");
+                    myWriter.WriteLine(Convert.ToString(_data.DispersionSituation) + " \t ! Start the calculation with this weather number");
+                    myWriter.WriteLine(Convert.ToString((int)_data.BuildingMode) + "," + _data.PrognosticSubDomains.ToString(ic) +
                         " \t ! How to take buildings into account? 1 = simple mass conservation, 2 = mass conservation with Poisson equation + advection, Factor for the prognostic sub domain size");
-					
-					if(_data.BuildingHeightsWrite == false)
+
+                    if (_data.BuildingHeightsWrite == false)
                     {
                         myWriter.WriteLine("0" + " \t ! Stream output for Soundplan 1 = activated, -2 = write buildings height");
                     }
@@ -116,7 +116,7 @@ namespace GralIO
                     myWriter.WriteLine(_data.AdaptiveRoughness.ToString(ic) + "\t ! Adaptive surface roughness - max value [m]. Default: 0 = no adaptive surface roughness");
 
                     myWriter.WriteLine(_data.PrognosticSubDomainsSizeSourceRadius.ToString(ic) + "\t ! Radius surrounding sources, in which the wind field is to be calculated prognostically; 0 = off, valid values: 50 - 10000 m  ");
-                    
+
                     if (_data.UseGRALOnlineFunctions)
                     {
                         myWriter.WriteLine("1 \t ! Use GRAL Online Functions = true");
@@ -132,21 +132,21 @@ namespace GralIO
                 }
 
             }
-			catch
-			{
-				MessageBox.Show("Error writing in.dat","I/O error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				ok = false;
-			}
-			return ok;
-		}
-		
-		/// <summary>
-    	/// Read the file in.dat
-    	/// </summary>
-		public bool ReadInDat()
-		{
-			try
-			{
+            catch
+            {
+                MessageBox.Show("Error writing in.dat", "I/O error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ok = false;
+            }
+            return ok;
+        }
+
+        /// <summary>
+        /// Read the file in.dat
+        /// </summary>
+        public bool ReadInDat()
+        {
+            try
+            {
                 using (StreamReader myreader = new StreamReader(_data.InDatPath))
                 {
 
@@ -206,7 +206,7 @@ namespace GralIO
 
                     text = myreader.ReadLine().Split(new char[] { '!' }, StringSplitOptions.RemoveEmptyEntries); // Remove comment
                     text = text[0].Split(new char[] { ' ', ',', '\r', '\n', ';', '!' }, StringSplitOptions.RemoveEmptyEntries);
-                    _data.BuildingMode = (Gral.BuildingModeEnum) Convert.ToInt32(text[0]);
+                    _data.BuildingMode = (Gral.BuildingModeEnum)Convert.ToInt32(text[0]);
                     _data.PrognosticSubDomains = 15;
                     if (text.Length > 1)
                     {
@@ -261,7 +261,7 @@ namespace GralIO
                     {
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         text[0] = text[0].Trim();
-                        
+
                         if (text[0].ToLower().Equals("nokeystroke"))
                         {
                             _data.WaitForKeyStroke = false;
@@ -352,7 +352,7 @@ namespace GralIO
                     _data.ReproducibleResults = false;
                     if (myreader.EndOfStream == false) // read reproducible results option
                     {
-                        int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;  
+                        int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;
                         text = myreader.ReadLine().Split(new char[] { ',', '!', ' ' });
                         if (text.Length > 0)
                         {
@@ -365,12 +365,12 @@ namespace GralIO
                     }
 
                 }
-			}
-			catch
-			{
-				return false;
-			}
-			return true;
-		}
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

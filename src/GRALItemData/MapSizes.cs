@@ -16,15 +16,17 @@ namespace GralItemData
     /// This class holds the data for the map size
     /// </summary>
     public class MapSizes
-	{
-    	private double _west = 0;
-    	private double _north = 0;
-    	private double _sizeX = 1;
-    	private double _sizeY = -1;
-    	
-    	public double West     { get {return _west;} set {_west = value;}}     // Western border of map
-    	public double North    { get {return _north;} set {_north = value;}}   // Northern border of map
-        public double SizeX    { get {return _sizeX;}                          // Natural Pixel size of map in E-W direction
+    {
+        private double _west = 0;
+        private double _north = 0;
+        private double _sizeX = 1;
+        private double _sizeY = -1;
+
+        public double West { get { return _west; } set { _west = value; } }     // Western border of map
+        public double North { get { return _north; } set { _north = value; } }   // Northern border of map
+        public double SizeX
+        {
+            get { return _sizeX; }                          // Natural Pixel size of map in E-W direction
             set
             {
                 if (value == 0)
@@ -37,7 +39,9 @@ namespace GralItemData
                 }
             }
         }
-        public double SizeY    { get {return _sizeY;}                          // Natural Pixel size of map in N-S direction
+        public double SizeY
+        {
+            get { return _sizeY; }                          // Natural Pixel size of map in N-S direction
             set
             {
                 if (value == 0)
@@ -50,14 +54,14 @@ namespace GralItemData
                 }
             }
         }
-    	
-    	public MapSizes()
-    	{
-    		West = 0;
-    		North = 0;
-    		SizeX = 1;
-			SizeY = -1;
-    	}
-        
-	}
+
+        public MapSizes()
+        {
+            West = 0;
+            North = 0;
+            SizeX = 1;
+            SizeY = -1;
+        }
+
+    }
 }

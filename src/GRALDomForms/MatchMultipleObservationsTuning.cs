@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
 using GralMessage;
 using GralStaticFunctions;
-using System.Globalization;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
@@ -46,12 +46,12 @@ namespace GralDomForms
                     ShowInTaskbar = false
                 }; // Kuntner
             }
-            
+
             List<string> metTimeSeries = new List<string>();
             // List for used meteo situations, used if the number of situations should be minimized
             HashSet<int> UsedMeteoSituations = new HashSet<int>();
 
-            int  NumberofWeatherSituations = (int) St_F.CountLinesInFile(Path.Combine(GRAMMPath, @"meteopgt.all")) - 2;
+            int NumberofWeatherSituations = (int)St_F.CountLinesInFile(Path.Combine(GRAMMPath, @"meteopgt.all")) - 2;
 
             foreach (GralData.PGTAll reset in MatchSettings.PGT) // reset PGT_FRQ
             {
@@ -124,7 +124,7 @@ namespace GralDomForms
                             //search for the GRAMM wind field, which fits best the observed wind data at the observation sites
                             //for (int n = 1; n <= NumberofWeatherSituations; n++) // n = number of calculated GRAMM fields
                             int _cores = Math.Max(1, Environment.ProcessorCount - 2);
-                            int range_parallel = (int) Math.Max(10, ((NumberofWeatherSituations + 1) / _cores));
+                            int range_parallel = (int)Math.Max(10, ((NumberofWeatherSituations + 1) / _cores));
                             range_parallel = Math.Min((NumberofWeatherSituations + 1), range_parallel); // if NumberofWeatherSituations < range_parallel
                             Parallel.ForEach(System.Collections.Concurrent.Partitioner.Create(1, (NumberofWeatherSituations + 1), range_parallel), range =>
                             {
@@ -194,7 +194,7 @@ namespace GralDomForms
                                             {
                                                 if (UsedMeteoSituations.Contains(cmpSit))
                                                 {
-                                                    err_st[j] *= ReduceSituationsFactor; 
+                                                    err_st[j] *= ReduceSituationsFactor;
                                                 }
                                             }
 
@@ -218,7 +218,7 @@ namespace GralDomForms
                                             {
                                                 double temp = Math.Max(0, Math.Abs(LocalStabilityClass[0, cmpSit] - StabilityClassObs[0][met_count]) - 1) * 200; // stability
                                                 temp += Math.Abs(LocalStabilityClass[0, cmpSit] - StabilityClassObs[0][met_count]) * 4; // little additional error. that best SCL can be found
-                                                                                                                                   //  xxx = temp;
+                                                                                                                                        //  xxx = temp;
                                                 if (MatchSettings.Optimization == 2) // error using components
                                                 {
                                                     err_st[j] += temp; // stability
@@ -252,7 +252,7 @@ namespace GralDomForms
 
                                     int match_station = 0; // counter, how much stations matched
                                     err = 0;
-                                    
+
                                     // find sum error without stations, when auto mode factor = 0
                                     for (int j = 0; j < MetFileNames.Count; j++) // j = number of actual Met-Station
                                     {
@@ -261,7 +261,7 @@ namespace GralDomForms
                                             if (MatchSettings.WeightingAutoMode[j] > 0.000001)
                                             {
                                                 // ignore bad stations if remove outliers = true;
-                                                if ((MatchSettings.Outliers == false) || ((err_st[j] / Math.Max(0.01, MatchSettings.WeightingFactor[j])) < err_min * 2)) 
+                                                if ((MatchSettings.Outliers == false) || ((err_st[j] / Math.Max(0.01, MatchSettings.WeightingFactor[j])) < err_min * 2))
                                                 {
                                                     err += err_st[j];
                                                     match_station++;
@@ -381,7 +381,7 @@ namespace GralDomForms
                                     {
                                         MatchSettings.VectorErrorSum[j, 3]++;
                                     }
-                                    
+
                                     err = Math.Abs(LocalStabilityClass[j, bestFitSituation] - StabilityClassObs[j][TimeSeriesPointer[j][met_count]]);
                                     if (err == 0)
                                     {

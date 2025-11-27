@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
+using GralMessage;
+using GralShape;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using GralShape;
-using GralItemData;
-using GralMessage;
 
 namespace GralDomain
 {
@@ -39,25 +39,25 @@ namespace GralDomain
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 int numwalls = EditWall.ItemData.Count;
-                
+
                 if (dialog.FileName.EndsWith("Walls.txt"))
                 {
                     try
                     {
                         WallDataIO _wd = new WallDataIO();
-                        _wd.LoadWallData(EditWall.ItemData, dialog.FileName, true, new RectangleF((float) MainForm.GralDomRect.West, (float) MainForm.GralDomRect.South, (float) (MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float) (MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
+                        _wd.LoadWallData(EditWall.ItemData, dialog.FileName, true, new RectangleF((float)MainForm.GralDomRect.West, (float)MainForm.GralDomRect.South, (float)(MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float)(MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
                         _wd = null;
-                        
+
                         EditWall.SetTrackBarMaximum();
                         EditAndSaveWallData(sender, e);
                         EditWall.FillValues();
-                        
+
                         if (EditWall.ItemData.Count > 0)
                         {
                             button49.Visible = true;
                         }
-                        
-                        CheckForExistingDrawingObject("WALLS"); 
+
+                        CheckForExistingDrawingObject("WALLS");
 
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditWall.ItemData.Count - numwalls) + " buildings imported.", Location);
                         Box.Show();
@@ -68,7 +68,7 @@ namespace GralDomain
                     }
                     catch
                     {
-                       
+
                     }
                 }
                 else
@@ -78,7 +78,7 @@ namespace GralDomain
                     {
                         //add Wall layer if not already existing
                         DrawingObjects _drobj = ItemOptions[CheckForExistingDrawingObject("WALLS")];
-                        
+
                         //read geometry data from shape file
                         Cursor = Cursors.WaitCursor;
                         wait.Show();
@@ -101,23 +101,23 @@ namespace GralDomain
                             shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
                             shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                             dial = shp.ShowDialog();
-                            
+
                             EditWall.SetTrackBarMaximum();
                             EditAndSaveWallData(sender, e);
                             EditWall.FillValues();
-                            
+
                             MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditWall.ItemData.Count - numwalls) + " walls imported.", Location);
                             Box.Show();
                             if (EditWall.ItemData.Count - numwalls > 0)
                             {
                                 MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
                             }
-                            
+
                             //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editb.buildingsdata.Count - numbuildings) + " buildings imported.");
                         }
                         SHPClear(_drobj);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show(this, ex.Message + " Error when reading .shp file");
                     }

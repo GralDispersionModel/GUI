@@ -11,14 +11,14 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
     public delegate void StartCreateMeteoStation(object sender, EventArgs e);
     public delegate void CancelCreateMeteoStation(object sender, EventArgs e);
-    
+
     /// <summary>
     /// Dialog to start the Meteo Evaluation process
     /// </summary>
@@ -50,15 +50,15 @@ namespace GralDomForms
         /// true: allow an evaluation at receptor points
         /// </summary>
         public bool Receptor_Points = false;
-        
+
         // delegate to send Message, that function should start
         public event StartCreateMeteoStation Start_computation;
         // delegate to send Message, that function is cancelled!
         public event CancelCreateMeteoStation Cancel_computation;
-        
+
         // Meteo Model Values: 0 - GRAMM Windfield,  Bit 1 GRAMM only, Bit 2 GRAL only, Bit 4 Filename & Height only
         // Bit 5: Filename & Height only & Height-String: Max. absolute height
-        
+
         /// <summary>
         /// Dialog to start the Meteo Evaluation process
         /// </summary>
@@ -70,21 +70,21 @@ namespace GralDomForms
         {
             InitializeComponent();
         }
-        
-        
+
+
         void Form1Load(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
                 numericUpDown1.TextAlign = HorizontalAlignment.Left;
-            #endif
-            
+#endif
+
             TopMost = true;
             Text = Meteo_Title;
             textBox1.Text = Meteo_Init;
             numericUpDown1.Value = Convert.ToDecimal(Meteo_Height);
             Top = Y1;
             Left = X1;
-            
+
             if (Meteo_Model == 0) // No selection of GRAMM or GRAL Model
             {
                 groupBox1.Visible = false;
@@ -98,7 +98,7 @@ namespace GralDomForms
                 groupBox2.Visible = false;
                 radioButton1.Visible = false;
                 radioButton2.Visible = false;
-                
+
                 if ((Meteo_Model & 1) == 1) // GRAMM
                 {
                     radioButton1.Visible = true;
@@ -109,7 +109,7 @@ namespace GralDomForms
                 if ((Meteo_Model & 2) == 2) // GRAL
                 {
                     radioButton2.Visible = true;
-                    if (radioButton1.Visible == false) 
+                    if (radioButton1.Visible == false)
                     {
                         //No GRAMM 
                         radioButton2.Checked = true;
@@ -135,7 +135,7 @@ namespace GralDomForms
                     numericUpDown1.Value = Convert.ToDecimal(Meteo_Height);
                 }
             }
-                
+
             if (Local_Stability) // true
             {
                 checkBox1.Enabled = true;
@@ -156,7 +156,7 @@ namespace GralDomForms
                 groupBox2.Enabled = false;
             }
 
-            if(ShowAbsHeightBox)
+            if (ShowAbsHeightBox)
             {
                 checkBox5.Visible = true;
             }
@@ -166,7 +166,7 @@ namespace GralDomForms
                 checkBox5.Checked = true;
             }
         }
-        
+
         void Hide_Coor()
         {
             label7.Visible = false;
@@ -174,7 +174,7 @@ namespace GralDomForms
             X_Coor.Visible = false;
             Y_Coor.Visible = false;
         }
-        
+
         // OK Button
         void Button1Click(object sender, EventArgs e)
         {
@@ -213,7 +213,7 @@ namespace GralDomForms
             {
                 Receptor_Points = false;
             }
-            
+
             // send Message to domain Form, that computation should start
             try
             {
@@ -223,13 +223,13 @@ namespace GralDomForms
                 }
             }
             catch
-            {}
+            { }
         }
 
         //Receptor point evaluation selected yes/no
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
-            if(checkBox2.Checked==true)
+            if (checkBox2.Checked == true)
             {
                 label1.Enabled = false;
                 textBox1.Enabled = false;
@@ -258,7 +258,7 @@ namespace GralDomForms
                 }
             }
             catch
-            {}
+            { }
             Close();
             Dispose();
         }
@@ -266,7 +266,7 @@ namespace GralDomForms
         {
             toolTip1.Dispose();
         }
-        
+
         void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton1.Checked)

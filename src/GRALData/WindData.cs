@@ -44,7 +44,7 @@ namespace GralData
         /// Wind direction
         /// </summary>
         public double Dir { get; set; }
-        
+
         public override string ToString()
         {
             CultureInfo ic = CultureInfo.InvariantCulture;

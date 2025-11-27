@@ -26,7 +26,7 @@ namespace GralDomain
                                   double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             Point[] windrosepoints = new Point[49];
-            int diameter = 	Convert.ToInt32(Math.Max(1, Math.Min(2000, _drobj.ContourLabelDist * factor_x )));
+            int diameter = Convert.ToInt32(Math.Max(1, Math.Min(2000, _drobj.ContourLabelDist * factor_x)));
             if (diameter > 14)
             {
                 try
@@ -38,25 +38,25 @@ namespace GralDomain
 
                     Pen[] windpen = new Pen[8];
                     Brush blackbrush = new SolidBrush(Color.Black); windpen[0] = new Pen(Color.Blue);
-                    windpen[1] = new Pen(Color.LightSkyBlue);	windpen[2] = new Pen(Color.Green);
-                    windpen[3] = new Pen(Color.YellowGreen);	windpen[4] = new Pen(Color.Yellow);
-                    windpen[5] = new Pen(Color.Orange);			windpen[6] = new Pen(Color.Red);
-                    windpen[7] = new Pen(Color.Brown); 
-                    
+                    windpen[1] = new Pen(Color.LightSkyBlue); windpen[2] = new Pen(Color.Green);
+                    windpen[3] = new Pen(Color.YellowGreen); windpen[4] = new Pen(Color.Yellow);
+                    windpen[5] = new Pen(Color.Orange); windpen[6] = new Pen(Color.Red);
+                    windpen[7] = new Pen(Color.Brown);
+
                     Brush[] windbrush = new Brush[8];
                     if (_drobj.Filter) // colors for wind velocity
                     {
-                        windbrush[0] = new SolidBrush(Color2Transparent(transparency, Color.Blue));	windbrush[1] = new SolidBrush(Color2Transparent(transparency, Color.LightSkyBlue));
-                        windbrush[2] = new SolidBrush(Color2Transparent(transparency,Color.Green));	windbrush[3] = new SolidBrush(Color2Transparent(transparency,Color.YellowGreen));
-                        windbrush[4] = new SolidBrush(Color2Transparent(transparency,Color.Yellow)); windbrush[5] = new SolidBrush(Color2Transparent(transparency,Color.Orange));
-                        windbrush[6] = new SolidBrush(Color2Transparent(transparency,Color.Red));	windbrush[7] = new SolidBrush(Color2Transparent(transparency,Color.Brown));
+                        windbrush[0] = new SolidBrush(Color2Transparent(transparency, Color.Blue)); windbrush[1] = new SolidBrush(Color2Transparent(transparency, Color.LightSkyBlue));
+                        windbrush[2] = new SolidBrush(Color2Transparent(transparency, Color.Green)); windbrush[3] = new SolidBrush(Color2Transparent(transparency, Color.YellowGreen));
+                        windbrush[4] = new SolidBrush(Color2Transparent(transparency, Color.Yellow)); windbrush[5] = new SolidBrush(Color2Transparent(transparency, Color.Orange));
+                        windbrush[6] = new SolidBrush(Color2Transparent(transparency, Color.Red)); windbrush[7] = new SolidBrush(Color2Transparent(transparency, Color.Brown));
                     }
                     else // colors for stability classes
                     {
-                        windbrush[0] = new SolidBrush(Color2Transparent(transparency, Color.Brown));	windbrush[1] = new SolidBrush(Color2Transparent(transparency, Color.DarkRed));
-                        windbrush[2] = new SolidBrush(Color2Transparent(transparency,Color.Red));	windbrush[3] = new SolidBrush(Color2Transparent(transparency,Color.Orange));
-                        windbrush[4] = new SolidBrush(Color2Transparent(transparency,Color.YellowGreen)); windbrush[5] = new SolidBrush(Color2Transparent(transparency,Color.Green));
-                        windbrush[6] = new SolidBrush(Color2Transparent(transparency,Color.LightBlue));	windbrush[7] = new SolidBrush(Color2Transparent(transparency,Color.Blue));
+                        windbrush[0] = new SolidBrush(Color2Transparent(transparency, Color.Brown)); windbrush[1] = new SolidBrush(Color2Transparent(transparency, Color.DarkRed));
+                        windbrush[2] = new SolidBrush(Color2Transparent(transparency, Color.Red)); windbrush[3] = new SolidBrush(Color2Transparent(transparency, Color.Orange));
+                        windbrush[4] = new SolidBrush(Color2Transparent(transparency, Color.YellowGreen)); windbrush[5] = new SolidBrush(Color2Transparent(transparency, Color.Green));
+                        windbrush[6] = new SolidBrush(Color2Transparent(transparency, Color.LightBlue)); windbrush[7] = new SolidBrush(Color2Transparent(transparency, Color.Blue));
                     }
                     bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
                     string[] LabelNames = new string[1];
@@ -65,14 +65,14 @@ namespace GralDomain
                         string[] w = _drobj.ContourFilename.Split(new char[] { '\t' });
                         LabelNames = new string[w.Length];
                         int count = 0;
-                        foreach(string _wnd in w)
+                        foreach (string _wnd in w)
                         {
                             string[] _name = _wnd.Split(new char[] { '?' }); // get 1st entry = filename
                             LabelNames[count] = System.IO.Path.GetFileName(_name[0]);
                             count++;
                         }
                     }
-                    
+
                     int _count = 0;
                     const double sectorangle = Math.PI / 8;
                     double sectorwidth = 0.196;
@@ -88,26 +88,26 @@ namespace GralDomain
                             PointF Pt0 = _ptList[0];
                             int x0 = (int)((Pt0.X - form1_west) * factor_x) + TransformX;
                             int y0 = (int)((Pt0.Y - form1_north) * factor_y) + TransformY;
-                            
+
                             double[] sektsum = new double[16];
                             double sektmax = 0;
-                            
+
                             for (int i = 0; i < 16; i++)
                             {
                                 for (int n = 0; n < 7; n += 2)
                                 {
-                                    sektsum [i] += _ptList[1 + i * 4 + (int) (n / 2)].X;
-                                    sektsum [i] += _ptList[1 + i * 4 + (int) (n / 2)].Y;
+                                    sektsum[i] += _ptList[1 + i * 4 + (int)(n / 2)].X;
+                                    sektsum[i] += _ptList[1 + i * 4 + (int)(n / 2)].Y;
                                 }
                                 sektmax = Math.Max(sektsum[i], sektmax);
                             }
-                            
+
                             if (_drobj.ContourAreaMin > 0.05) // fixed scale
                             {
                                 sektmax = _drobj.ContourAreaMin / 100D;
                             }
                             double scale = diameter / sektmax;
-                            
+
                             for (int n = 7; n >= 0; n--)
                             {
                                 for (int i = 0; i < 16; i++)
@@ -135,11 +135,11 @@ namespace GralDomain
                                         {
                                             if (drawFrame)
                                             {
-                                                g.DrawPie(PenGray, new Rectangle(x0 - radius, y0- radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
+                                                g.DrawPie(PenGray, new Rectangle(x0 - radius, y0 - radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
                                             }
                                             else
                                             {
-                                                g.DrawPie(windpen[n], new Rectangle(x0- radius, y0 - radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
+                                                g.DrawPie(windpen[n], new Rectangle(x0 - radius, y0 - radius, radius * 2, radius * 2), startAngle, sectorAnglePie);
                                             }
                                         }
                                     }
@@ -152,9 +152,9 @@ namespace GralDomain
                             try
                             {
                                 g.DrawLine(pcircle, Convert.ToInt32(x0 - div * 5), y0, Convert.ToInt32(x0 + div * 5), y0);
-                                g.DrawLine(pcircle, x0, Convert.ToInt32(y0 - div* 5), x0, Convert.ToInt32(y0 + div * 5));
+                                g.DrawLine(pcircle, x0, Convert.ToInt32(y0 - div * 5), x0, Convert.ToInt32(y0 + div * 5));
                             }
-                            catch{}
+                            catch { }
                             //base.OnPaint(e);
 
                             //draw circles
@@ -167,22 +167,22 @@ namespace GralDomain
                                     g.DrawEllipse(pcircle, x0 - _x1, y0 - _x1, 2 * _x1, 2 * _x1);
                                     g.DrawString(Convert.ToString(Math.Round(i * 0.25 * sektmax * 100, 0)) + "%", LabelFont, LabelBrush, x0 + _x1, y0 + 5);
                                 }
-                                catch{}
+                                catch { }
                                 //base.OnPaint(e);
                             }
                             pcircle.Dispose();
-                            
+
                             if (draw_label)
                             {
                                 if (_count < LabelNames.Length)
                                 {
-                                    g.DrawString(LabelNames[_count], LabelFont, LabelBrush, x0, Convert.ToInt32(y0 - div* 5));
+                                    g.DrawString(LabelNames[_count], LabelFont, LabelBrush, x0, Convert.ToInt32(y0 - div * 5));
                                 }
                             }
                         }
                         _count++;
                     }
-                    
+
                     for (int i = 0; i < 8; i++)
                     {
                         windbrush[i].Dispose();
@@ -191,7 +191,7 @@ namespace GralDomain
                     PenGray.Dispose();
                     blackbrush.Dispose();
                 }
-                catch{}
+                catch { }
             }
         }
     }

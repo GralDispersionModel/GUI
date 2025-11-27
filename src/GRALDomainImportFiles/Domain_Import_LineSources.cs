@@ -10,18 +10,18 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
-using GralShape;
 using GralItemData;
 using GralMessage;
+using GralShape;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
     public partial class Domain
-    {	
+    {
         /// <summary>
         /// Import line Sources from *.txt, *.dat or *.shp file
         /// </summary>
@@ -91,11 +91,11 @@ namespace GralDomain
                                     x2[0] = Convert.ToDouble(text1[3].Replace(".", decsep));
                                     y2[0] = Convert.ToDouble(text1[4].Replace(".", decsep));
                                     z2[0] = Convert.ToDouble(text1[5].Replace(".", decsep));
-                                    
+
                                     x2[1] = Convert.ToDouble(text1[6].Replace(".", decsep));
                                     y2[1] = Convert.ToDouble(text1[7].Replace(".", decsep));
                                     z2[1] = Convert.ToDouble(text1[8].Replace(".", decsep));
-                                    
+
                                     double length = Math.Pow((x2[1] - x2[0]), 2) + Math.Pow((y2[1] - y2[0]), 2);
 
                                     if ((x2[0] >= MainForm.GralDomRect.West) && (x2[1] <= MainForm.GralDomRect.East) &&
@@ -298,20 +298,20 @@ namespace GralDomain
                         //						}
 
                         EditLS.SetTrackBarMaximum();
-                        
+
                         EditAndSaveLineSourceData(sender, e);
                         EditLS.FillValues();
 
                         //add LINE SOURCE layer if not already existing
                         CheckForExistingDrawingObject("LINE SOURCES");
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditLS.ItemData.Count - numblines) + " line sources imported.", Location);
                         Box.Show();
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editls.linesourcedata.Count - numblines) + " line sources imported.");
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading or filtering line source data","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading or filtering line source data", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         EditLS.ItemData.RemoveRange(numbvorher, EditLS.ItemData.Count - numbvorher);
                     }
                 }
@@ -320,16 +320,16 @@ namespace GralDomain
                     try
                     {
                         LineSourceDataIO _ls = new LineSourceDataIO();
-                        _ls.LoadLineSources(EditLS.ItemData, dialog.FileName, true, new RectangleF((float) MainForm.GralDomRect.West, (float) MainForm.GralDomRect.South, (float) (MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float) (MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
+                        _ls.LoadLineSources(EditLS.ItemData, dialog.FileName, true, new RectangleF((float)MainForm.GralDomRect.West, (float)MainForm.GralDomRect.South, (float)(MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float)(MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
                         _ls = null;
-                        
+
                         EditAndSaveLineSourceData(sender, e);
                         EditLS.SetTrackBarMaximum();
                         EditLS.FillValues();
 
                         //add LINE SOURCE layer if not already existing
                         CheckForExistingDrawingObject("LINE SOURCES");
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditLS.ItemData.Count - numblines) + " line sources imported.", Location);
                         Box.Show();
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editls.linesourcedata.Count - numblines) + " line sources imported.");
@@ -346,7 +346,7 @@ namespace GralDomain
                     {
                         //add LINE SOURCES layer if not already existing
                         DrawingObjects _drobj = ItemOptions[CheckForExistingDrawingObject("LINE SOURCES")];
-                        
+
                         //read geometry data from shape file
                         Cursor = Cursors.WaitCursor;
                         wait.Show();
@@ -358,8 +358,8 @@ namespace GralDomain
                         //open dialog for assigning line source attributes
                         wait.Text = "Loading attribute table";
                         wait.Show();
-                        
-                        
+
+
                         using (ShapeLineDialog shp = new ShapeLineDialog(this, MainForm.GralDomRect, dialog.FileName))
                         {
                             Cursor = Cursors.Default;
@@ -367,14 +367,14 @@ namespace GralDomain
                             DialogResult dial = new DialogResult();
                             shp.StartPosition = FormStartPosition.Manual;
                             shp.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
-                            shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150; 
+                            shp.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 150;
                             dial = shp.ShowDialog();
                             {
                             }
                             EditLS.SetTrackBarMaximum();
                             EditAndSaveLineSourceData(sender, e);
                             EditLS.FillValues();
-                           
+
                             MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditLS.ItemData.Count - numblines) + " lines imported.", Location);
                             Box.Show();
                         }
@@ -383,14 +383,14 @@ namespace GralDomain
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading .shp file","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading .shp file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     wait.Close();
                 }
             }
             dialog.Dispose();
         }
-        
+
         private void SHPClear(DrawingObjects _drobj) // delete SHP Files list
         {
             _drobj.ShpPoints.Clear();
@@ -400,7 +400,7 @@ namespace GralDomain
             _drobj.ShpLines.TrimExcess(); // Kuntner
             _drobj.ShpPolygons.TrimExcess(); // Kuntner
         }
-        
+
         private bool ComparePoints(PointD p1, PointD p2)
         {
             if (Math.Abs(p1.X - p2.X) < 0.1 && Math.Abs(p1.Y - p2.Y) < 0.1)
@@ -412,6 +412,6 @@ namespace GralDomain
                 return false;
             }
         }
-        
+
     }
 }

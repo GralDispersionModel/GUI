@@ -18,29 +18,29 @@ using System.Threading.Tasks;
 
 namespace GralDomain
 {
-   public partial class Domain
-   {
+    public partial class Domain
+    {
         /// <summary>
         /// Draw Contour Maps
         /// </summary>
 #if NET7_0_OR_GREATER
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
 #endif
-        private void DrawContourMap(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north, 
+        private void DrawContourMap(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north,
                                     double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int minx;
             int maxx;
             int miny;
             int maxy;
-            
+
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
-            
-            int[,] contourcolor_name 	= _drobj.ContourColor;
-            int transparancy_name 		= _drobj.Transparancy;
+            int pb1_width = picturebox1.Width;
+
+            int[,] contourcolor_name = _drobj.ContourColor;
+            int transparancy_name = _drobj.Transparancy;
             GralDomain.DrawingObjects.ContourGeometries contourgeometry_name = _drobj.ContourGeometry;
-            
+
             StringFormat StringFormat1 = new StringFormat(); //format for names of sources
             StringFormat StringFormat2 = new StringFormat(); //format for names of line sources
             StringFormat1.LineAlignment = StringAlignment.Center;
@@ -49,45 +49,45 @@ namespace GralDomain
             StringFormat2.Alignment = StringAlignment.Center;
 
             #region Draw_Vertical_Concentration
-            if (_drobj.ShpPoints.Count > 2 ) // draw white box & Axes
+            if (_drobj.ShpPoints.Count > 2) // draw white box & Axes
             {
                 Brush pen_white = new SolidBrush(Color2Transparent(transparancy_name, Color.White));
                 Pen pen_terrain = new Pen(Color.Brown, 2);
-                Pen pen_black = new Pen (Color.Black);
+                Pen pen_black = new Pen(Color.Black);
                 RectangleF RectWhite = new RectangleF();
-                
+
                 float _x0 = _drobj.ShpPoints[0].X;
                 float _y0 = _drobj.ShpPoints[0].Y;
                 float _dx = _drobj.ShpPoints[1].X;
-                int _NII   = (int) _drobj.ShpPoints[2].X;
-                int _NJJ = (int) _drobj.ShpPoints[2].Y - 1;
+                int _NII = (int)_drobj.ShpPoints[2].X;
+                int _NJJ = (int)_drobj.ShpPoints[2].Y - 1;
                 float maxh = _drobj.ShpPoints[3].X;
 
-                int lenght_of_string = (int) g.MeasureString("9999", LabelFont).Width;
-                RectWhite.X = (float) ((_x0 - form1_west) * factor_x) +TransformX - 10 - lenght_of_string;
-                RectWhite.Y = (float) ((_y0  - form1_north) * factor_y - _dx * _NJJ * factor_x) +TransformY - LabelFont.Height - 10;
-                RectWhite.Width = (float) (_dx * _NII * factor_x) + 20 + 2* lenght_of_string;
-                RectWhite.Height = (float) (_dx * _NJJ * factor_x) + 30 + 2 * LabelFont.Height;
+                int lenght_of_string = (int)g.MeasureString("9999", LabelFont).Width;
+                RectWhite.X = (float)((_x0 - form1_west) * factor_x) + TransformX - 10 - lenght_of_string;
+                RectWhite.Y = (float)((_y0 - form1_north) * factor_y - _dx * _NJJ * factor_x) + TransformY - LabelFont.Height - 10;
+                RectWhite.Width = (float)(_dx * _NII * factor_x) + 20 + 2 * lenght_of_string;
+                RectWhite.Height = (float)(_dx * _NJJ * factor_x) + 30 + 2 * LabelFont.Height;
 
-                g.FillRectangle (pen_white, RectWhite );
-                g.DrawRectangle(pen_black, (int) RectWhite.X, (int) RectWhite.Y, (int) RectWhite.Width, (int) RectWhite.Height);
+                g.FillRectangle(pen_white, RectWhite);
+                g.DrawRectangle(pen_black, (int)RectWhite.X, (int)RectWhite.Y, (int)RectWhite.Width, (int)RectWhite.Height);
 
-                RectWhite.X = (float) ((_x0 - form1_west) * factor_x) + TransformX;
-                RectWhite.Y = (float) ((_y0  - form1_north) * factor_y - _dx * (_NJJ) * factor_x) + TransformY;
-                RectWhite.Width = (float) (_dx * _NII * factor_x);
-                RectWhite.Height = (float) (_dx * _NJJ * factor_x);
+                RectWhite.X = (float)((_x0 - form1_west) * factor_x) + TransformX;
+                RectWhite.Y = (float)((_y0 - form1_north) * factor_y - _dx * (_NJJ) * factor_x) + TransformY;
+                RectWhite.Width = (float)(_dx * _NII * factor_x);
+                RectWhite.Height = (float)(_dx * _NJJ * factor_x);
 
                 // draw coordinate system
                 pen_black.EndCap = LineCap.ArrowAnchor;
-                int _xmin = (int) Math.Max(RectWhite.X, 10 + lenght_of_string);
-                g.DrawLine (pen_black, _xmin, (int) RectWhite.Bottom, (int) RectWhite.Right, (int) RectWhite.Bottom);
+                int _xmin = (int)Math.Max(RectWhite.X, 10 + lenght_of_string);
+                g.DrawLine(pen_black, _xmin, (int)RectWhite.Bottom, (int)RectWhite.Right, (int)RectWhite.Bottom);
                 pen_black.EndCap = LineCap.Flat;
-                
+
                 double x_step = (_dx * _NII) / 10;
                 int exp = 0;
                 if (x_step != 0.0)
                 {
-                    exp = (int) Math.Floor(Math.Log10(x_step)) * (-1);
+                    exp = (int)Math.Floor(Math.Log10(x_step)) * (-1);
                 }
 
                 double norm = x_step * Math.Pow(10, exp);
@@ -97,7 +97,7 @@ namespace GralDomain
                 }
                 else if (norm < 3.4)
                 {
-                    norm  = 2;
+                    norm = 2;
                 }
                 else if (norm < 6.5)
                 {
@@ -114,24 +114,24 @@ namespace GralDomain
 
                 exp *= -1;
                 x_step = norm * Math.Pow(10, exp);
-                
+
                 int _xc = 0; int i = 0;
                 while (_xc < RectWhite.Right && i < 100)
                 {
                     if (_xc >= _xmin)
                     {
-                        g.DrawLine (pen_black, _xc, (int) RectWhite.Bottom - 4, _xc , (int) RectWhite.Bottom + 4);
-                        g.DrawString ((i * x_step).ToString (), LabelFont, LabelBrush, _xc, (int) RectWhite.Bottom + LabelFont.Height + 5, StringFormat1);
+                        g.DrawLine(pen_black, _xc, (int)RectWhite.Bottom - 4, _xc, (int)RectWhite.Bottom + 4);
+                        g.DrawString((i * x_step).ToString(), LabelFont, LabelBrush, _xc, (int)RectWhite.Bottom + LabelFont.Height + 5, StringFormat1);
                     }
                     ++i;
-                    _xc = (int) (RectWhite.X + x_step * i * factor_x);
+                    _xc = (int)(RectWhite.X + x_step * i * factor_x);
                 }
 
                 x_step = (_dx * _NJJ) / 10;
                 exp = 0;
                 if (x_step != 0.0)
                 {
-                    exp = (int) Math.Floor(Math.Log10(x_step)) * (-1);
+                    exp = (int)Math.Floor(Math.Log10(x_step)) * (-1);
                 }
 
                 norm = x_step * Math.Pow(10, exp);
@@ -141,7 +141,7 @@ namespace GralDomain
                 }
                 else if (norm < 3.4)
                 {
-                    norm  = 2;
+                    norm = 2;
                 }
                 else if (norm < 6.5)
                 {
@@ -158,7 +158,7 @@ namespace GralDomain
 
                 exp *= -1;
                 x_step = norm * Math.Pow(10, exp);
-                
+
                 if (RectWhite.Right > 50) // if right edge inside actual view
                 {
                     int _y0_ = 0;
@@ -170,50 +170,50 @@ namespace GralDomain
                     i = 0;
                     if (_y0_ == 0)
                     {
-                        _yc = (int) (RectWhite.Bottom);
+                        _yc = (int)(RectWhite.Bottom);
                     }
                     else
                     {
-                        _yc = (int) (RectWhite.Bottom - maxh / _y0_ * factor_x);
+                        _yc = (int)(RectWhite.Bottom - maxh / _y0_ * factor_x);
                     }
                     pen_black.EndCap = LineCap.ArrowAnchor;
-                    g.DrawLine (pen_black, _xmin, (int) RectWhite.Bottom, _xmin, (int) RectWhite.Top);
+                    g.DrawLine(pen_black, _xmin, (int)RectWhite.Bottom, _xmin, (int)RectWhite.Top);
                     pen_black.EndCap = LineCap.Flat;
-                    
+
                     while (_yc > RectWhite.Top && i < 100)
                     {
-                        g.DrawLine (pen_black, (int) _xmin -4, _yc, (int) _xmin  + 4 , _yc);
-                        g.DrawString ((i * x_step + _y0_).ToString (), LabelFont, LabelBrush, (int) (_xmin - lenght_of_string), _yc - LabelFont.Height / 2);
+                        g.DrawLine(pen_black, (int)_xmin - 4, _yc, (int)_xmin + 4, _yc);
+                        g.DrawString((i * x_step + _y0_).ToString(), LabelFont, LabelBrush, (int)(_xmin - lenght_of_string), _yc - LabelFont.Height / 2);
                         ++i;
                         if (_y0_ == 0)
                         {
-                            _yc = (int) (RectWhite.Bottom -  i * factor_x * x_step);
+                            _yc = (int)(RectWhite.Bottom - i * factor_x * x_step);
                         }
                         else
                         {
-                            _yc = (int) (RectWhite.Bottom - maxh / _y0_ * factor_x -  i * factor_x * x_step);
+                            _yc = (int)(RectWhite.Bottom - maxh / _y0_ * factor_x - i * factor_x * x_step);
                         }
                     }
                 }
-                
+
                 // draw terrain
                 for (i = 4; i < _drobj.ShpPoints.Count - 1; i++)
                 {
-                    int __x0 = (int) ((_drobj.ShpPoints[i].X - form1_west) * factor_x) +TransformX;
-                    int __y0 = (int) ((_drobj.ShpPoints[i].Y  - form1_north) * factor_y - _dx * _NJJ * factor_x) +TransformY;
-                    int __x1 = (int) ((_drobj.ShpPoints[i + 1].X - form1_west) * factor_x) +TransformX;
-                    int __y1 = (int) ((_drobj.ShpPoints[i + 1].Y  - form1_north) * factor_y - _dx * _NJJ * factor_x) +TransformY;
-                    
+                    int __x0 = (int)((_drobj.ShpPoints[i].X - form1_west) * factor_x) + TransformX;
+                    int __y0 = (int)((_drobj.ShpPoints[i].Y - form1_north) * factor_y - _dx * _NJJ * factor_x) + TransformY;
+                    int __x1 = (int)((_drobj.ShpPoints[i + 1].X - form1_west) * factor_x) + TransformX;
+                    int __y1 = (int)((_drobj.ShpPoints[i + 1].Y - form1_north) * factor_y - _dx * _NJJ * factor_x) + TransformY;
+
                     if (__x1 >= _xmin)
                     {
                         __x0 = Math.Max(__x0, _xmin);
                         if (__y0 < RectWhite.Bottom && __y1 < RectWhite.Bottom)
                         {
-                            g.DrawLine (pen_terrain, __x0, __y0, __x1, __y0);
-                            
-                            if ( i > 3) // draw vertical lines
+                            g.DrawLine(pen_terrain, __x0, __y0, __x1, __y0);
+
+                            if (i > 3) // draw vertical lines
                             {
-                                g.DrawLine (pen_terrain, __x1, __y0, __x1, __y1);
+                                g.DrawLine(pen_terrain, __x1, __y0, __x1, __y1);
                             }
                         }
                     }
@@ -224,52 +224,52 @@ namespace GralDomain
                 {
                     DashStyle = DashStyle.Dash
                 };
-                pen_white.Dispose ();
-                pen_black.Dispose ();
-                pen_terrain.Dispose ();
+                pen_white.Dispose();
+                pen_black.Dispose();
+                pen_terrain.Dispose();
             }
             #endregion Draw_Vertical_Concentration
-//
+            //
 
             if (_drobj.DrawSimpleContour && _drobj.ContourPolygons != null) // draw simple contour lines
             {
-                
+
                 int label_interval = Math.Max(1, _drobj.LabelInterval);
                 Matrix mat = new Matrix();
                 GraphicsPath gp = new GraphicsPath();
                 Region excludeRegion = new Region(gp);
-                
+
                 float x1 = _drobj.ContourClipping.Left;
                 float w = _drobj.ContourClipping.Width;
                 float y1 = _drobj.ContourClipping.Top;
                 float h = _drobj.ContourClipping.Height;
-                
+
                 RectangleF clipping = new RectangleF(
-                    (float) (((x1 - form1_west) * factor_x) + TransformX),
-                    (float) (((y1 - form1_north) * factor_y) + TransformY),
-                    (float) (w * factor_x ),
-                    (float) ((-h)  * factor_y ));
-                
-                if(_drobj.ContourDrawBorder)
+                    (float)(((x1 - form1_west) * factor_x) + TransformX),
+                    (float)(((y1 - form1_north) * factor_y) + TransformY),
+                    (float)(w * factor_x),
+                    (float)((-h) * factor_y));
+
+                if (_drobj.ContourDrawBorder)
                 {
                     Pen penClip = new Pen(_drobj.LineColor, _drobj.LineWidth);
                     g.DrawRectangle(penClip, clipping.X, clipping.Y, clipping.Width, clipping.Height);
                     penClip.Dispose();
                 }
-                
+
                 g.SetClip(clipping, CombineMode.Replace);
                 double labellenght = Convert.ToDouble(_drobj.ContourLabelDist) * factor_x;
-                int lenght_of_string = (int) g.MeasureString("9999", LabelFont).Width;
+                int lenght_of_string = (int)g.MeasureString("9999", LabelFont).Width;
                 labellenght = Math.Max(lenght_of_string, labellenght * 2);
-                
+
                 for (int i = 0; i < _drobj.ContourPolygons.Count; i++)  // loop over all iso-rings
                 {
                     double labellenghtact = 0;
                     string label_value;
-                    
+
                     int k = _drobj.ContourPolygons[i].ItemValueIndex; // index of contour value
                     k = Math.Max(0, Math.Min(k, _drobj.FillColors.Count));
-                    
+
                     int transparancy_new = transparancy_name;
                     if (_drobj.FillColors[k] == Color.White)
                     {
@@ -277,7 +277,7 @@ namespace GralDomain
                     }
 
                     Brush fill_contour = new SolidBrush(Color2Transparent(transparancy_new, _drobj.FillColors[k]));
-                    
+
                     Pen myPen;
                     if ((label_interval > 1) && (k % label_interval) == 0) // linewidth +1 if label-line
                     {
@@ -289,19 +289,19 @@ namespace GralDomain
                     }
 
                     Pen labelPen = new Pen(Color2Transparent(255, _drobj.LineColors[k]), Math.Min(2, _drobj.LineWidth));
-                    
+
                     PointD[] _pts = _drobj.ContourPolygons[i].EdgePoints;
                     int numberofvertices = _pts.Length;
-                    
+
                     if (numberofvertices > 4)
                     {
                         PointF[] pts = new PointF[numberofvertices];
                         for (int j = 0; j < numberofvertices; j++)
                         {
-                            pts[j].X = (float) (((_pts[j].X - form1_west) * factor_x) + TransformX);
-                            pts[j].Y = (float) (((_pts[j].Y - form1_north) * factor_y) + TransformY);
+                            pts[j].X = (float)(((_pts[j].X - form1_west) * factor_x) + TransformX);
+                            pts[j].Y = (float)(((_pts[j].Y - form1_north) * factor_y) + TransformY);
                         }
-                        
+
                         if (_drobj.FillYesNo == true)
                         {
                             // Draw ISO Rings if transparency is set
@@ -310,9 +310,9 @@ namespace GralDomain
                                 using (GraphicsPath IsoLineRing = new GraphicsPath())
                                 {
                                     IsoLineRing.AddClosedCurve(pts, _drobj.ContourTension);
-                                    
+
                                     // loop over all higher iso-rings
-                                    for (int ik = i + 1; ik < _drobj.ContourPolygons.Count; ik++)  
+                                    for (int ik = i + 1; ik < _drobj.ContourPolygons.Count; ik++)
                                     {
                                         // if ring is one step above recent ring -> hole
                                         if (_drobj.ContourPolygons[i].ItemValueIndex == _drobj.ContourPolygons[ik].ItemValueIndex - 1)
@@ -322,15 +322,15 @@ namespace GralDomain
                                                 _drobj.ContourPolygons[i].Bounds.West > _drobj.ContourPolygons[ik].Bounds.East ||
                                                 _drobj.ContourPolygons[i].Bounds.North < _drobj.ContourPolygons[ik].Bounds.South ||
                                                 _drobj.ContourPolygons[i].Bounds.South > _drobj.ContourPolygons[ik].Bounds.North)
-                                            {;} 
+                                            {; }
                                             else
                                             {
                                                 PointD[] _ptsk = _drobj.ContourPolygons[ik].EdgePoints;
                                                 PointF[] pts_k = new PointF[_ptsk.Length];
                                                 for (int j = 0; j < _ptsk.Length; j++)
                                                 {
-                                                    pts_k[j].X = (float) (((_ptsk[j].X - form1_west) * factor_x) + TransformX);
-                                                    pts_k[j].Y = (float) (((_ptsk[j].Y - form1_north) * factor_y) + TransformY);
+                                                    pts_k[j].X = (float)(((_ptsk[j].X - form1_west) * factor_x) + TransformX);
+                                                    pts_k[j].Y = (float)(((_ptsk[j].Y - form1_north) * factor_y) + TransformY);
                                                 }
                                                 IsoLineRing.AddClosedCurve(pts_k, _drobj.ContourTension);
                                             }
@@ -345,8 +345,8 @@ namespace GralDomain
                                 g.FillClosedCurve(fill_contour, pts, FillMode.Alternate, _drobj.ContourTension);
                             }
                         }
-                        
-                        for(int j = 0; j < numberofvertices; j++)
+
+                        for (int j = 0; j < numberofvertices; j++)
                         {
                             PointF pt1 = pts[j];
                             PointF pt2;
@@ -358,20 +358,20 @@ namespace GralDomain
                             {
                                 pt2 = pts[0];
                             }
-                            
+
                             //show label_value
                             if ((_drobj.Label == 2 || _drobj.Label == 3) && (k % label_interval) == 0) // show labels and label interval = OK?
                             {
                                 labellenghtact += Math.Sqrt(Math.Pow(pt1.X - pt2.X, 2) + Math.Pow(pt1.Y - pt2.Y, 2));
-                                
+
                                 if (labellenghtact > labellenght)
                                 {
                                     //labelpoints.Add(new PointF((float)x1,(float)y1)); // to calculate the distance between label_value
                                     labellenghtact = 0;
-                                    
+
                                     int x = Convert.ToInt32(pt1.X);
                                     int y = Convert.ToInt32(pt1.Y);
-                                    
+
                                     if (x > 0 && y > 0 && x < pb1_width && y < pb1_height)
                                     {
                                         label_value = Convert.ToString(Math.Round(_drobj.ItemValues[k], _drobj.DecimalPlaces));
@@ -382,13 +382,13 @@ namespace GralDomain
                                         }
 
                                         SizeF stringSize = g.MeasureString(label_value, LabelFont);
-                                        int sW = (int) (stringSize.Width * 0.5) + 2 ;
-                                        int sH = (int) (stringSize.Height * 0.5) + 1;
-                                        
-                                        gp.AddRectangle(new Rectangle(x - sW , y- sH,  sW * 2, sH * 2 ));
-                                        
+                                        int sW = (int)(stringSize.Width * 0.5) + 2;
+                                        int sH = (int)(stringSize.Height * 0.5) + 1;
+
+                                        gp.AddRectangle(new Rectangle(x - sW, y - sH, sW * 2, sH * 2));
+
                                         mat.Reset();
-                                        mat.RotateAt((float) angle, new Point(x, y));
+                                        mat.RotateAt((float)angle, new Point(x, y));
 
                                         gp.Transform(mat);
                                         g.Transform = mat;
@@ -401,12 +401,12 @@ namespace GralDomain
                                         {
                                             g.DrawString(label_value, LabelFont, LabelBrush, x, y, StringFormat1);
                                         }
-                                        
+
                                         g.ResetTransform();
 
-                                        #if __MonoCS__
-                                        #else
-                                        excludeRegion.Union (gp);
+#if __MonoCS__
+#else
+                                        excludeRegion.Union(gp);
                                         if (_drobj.Label == 3)
                                         {
                                             g.DrawPath(labelPen, gp); // draw rectangle around label
@@ -415,7 +415,7 @@ namespace GralDomain
                                         g.ExcludeClip(excludeRegion); // exclude label region from redraw
                                         gp.Reset();
                                         excludeRegion.MakeEmpty();
-                                        #endif
+#endif
                                     }
                                 }
                             }
@@ -424,12 +424,12 @@ namespace GralDomain
                                 break;
                             }
                         } // show labels
-                        
+
                         if (_drobj.LineWidth > 0) // draw contour lines
                         {
                             g.DrawClosedCurve(myPen, pts, _drobj.ContourTension, FillMode.Alternate);
                         }
-                        
+
                     }
                     myPen.Dispose();
                     fill_contour.Dispose();
@@ -468,8 +468,8 @@ namespace GralDomain
 #if NET6_0_OR_GREATER
                             // Avoid SetPixel for better performance
                             Color _trans = Color2Transparent(0, Color.White);
-                            byte[] _transByte = new byte[4] { _trans.B, _trans.R, _trans.G, _trans.A};
-                            
+                            byte[] _transByte = new byte[4] { _trans.B, _trans.R, _trans.G, _trans.A };
+
                             System.Drawing.Imaging.BitmapData bmdata = bm_loc.LockBits(new Rectangle(0, 0, bm_loc.Width, bm_loc.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             int stride = bmdata.Stride;
                             unsafe
@@ -529,7 +529,7 @@ namespace GralDomain
 #if NET6_0_OR_GREATER
                             }
 #endif
-                            
+
 #if NET6_0_OR_GREATER
                             bm_loc.UnlockBits(bmdata);
 #endif
@@ -542,7 +542,7 @@ namespace GralDomain
                             }
 
                             bm_loc.Dispose();
-                         });
+                        });
                         thisLock = null;
                     }
                     else
@@ -559,10 +559,10 @@ namespace GralDomain
                         int addonex = 0;
                         int iyold = (int)((y0 - dx * 0.5 - north) * factor_y) + TransformY;
                         int addoney = 0;
-                        
+
                         int i_max = contourgeometry_name.NX;
                         int j_max = contourgeometry_name.NY;
-                        
+
 
                         for (int i = 0; i < i_max; i++)
                         {
@@ -615,15 +615,15 @@ namespace GralDomain
                         }
                     }
                 }
-                
+
                 if (_drobj.LineWidth > 0) // draw contour lines
                 {
                     //number of z-levels
-                    List<Point>  contouredges = new List<Point>();
+                    List<Point> contouredges = new List<Point>();
                     int label_interval = Math.Max(1, _drobj.LabelInterval);
                     //MessageBox.Show(label_distance.ToString() + "/" + _drobj.ContourLabelDist.ToString());
                     double labellenght = Convert.ToDouble(_drobj.ContourLabelDist) * factor_x;
-                    int lenght_of_string = (int) g.MeasureString("9999", LabelFont).Width;
+                    int lenght_of_string = (int)g.MeasureString("9999", LabelFont).Width;
                     labellenght = Math.Max(lenght_of_string, labellenght * 2);
                     List<Color> _colLocal = _drobj.LineColors;
                     int _LineWidthLocal = _drobj.LineWidth;
@@ -634,7 +634,7 @@ namespace GralDomain
                         int step = -2;
                         double labellenghtact = 0;
                         string label_value;
-                        
+
                         Pen myPen;
                         if ((label_interval > 1) && (i % label_interval) == 0) // linewidth +1 if label-line
                         {
@@ -652,7 +652,7 @@ namespace GralDomain
                         Region excludeRegion = new Region(gp);
                         PointF[] contourpoints_name_i = _drobj.ContourPoints[i].ToArray();
                         int step_max = _drobj.ContourPoints[i].Count - 3;
-                        
+
                         double x1 = 0, x2 = 0, y1 = 0, y2 = 0;
                         while (step < step_max)
                         {
@@ -667,12 +667,12 @@ namespace GralDomain
                             if ((_drobj.Label == 2 || _drobj.Label == 3) && (i % label_interval) == 0) // show labels and label interval = OK?
                             {
                                 labellenghtact += Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-                                
+
                                 if (labellenghtact > labellenght)
                                 {
                                     //labelpoints.Add(new PointF((float)x1,(float)y1)); // to calculate the distance between label_value
                                     labellenghtact = 0;
-                                    
+
                                     int x = Convert.ToInt32((x1 + x2) * 0.5); int y = Convert.ToInt32((y1 + y2) * 0.5);
                                     if (x > 0 && y > 0 && x < pb1_width && y < pb1_height)
                                     {
@@ -684,13 +684,13 @@ namespace GralDomain
                                         }
 
                                         SizeF stringSize = g.MeasureString(label_value, LabelFont);
-                                        
-                                        int sW = (int) (stringSize.Width * 0.5) + 2 ; int sH = (int) (stringSize.Height * 0.5) + 1;
-                                        
-                                        gp.AddRectangle(new Rectangle(x - sW , y- sH,  sW * 2, sH * 2 ));
-                                        
+
+                                        int sW = (int)(stringSize.Width * 0.5) + 2; int sH = (int)(stringSize.Height * 0.5) + 1;
+
+                                        gp.AddRectangle(new Rectangle(x - sW, y - sH, sW * 2, sH * 2));
+
                                         mat.Reset();
-                                        mat.RotateAt((float) angle, new Point(x, y));
+                                        mat.RotateAt((float)angle, new Point(x, y));
 
                                         gp.Transform(mat);
                                         g.Transform = mat;
@@ -703,12 +703,12 @@ namespace GralDomain
                                         {
                                             g.DrawString(label_value, LabelFont, LabelBrush, x, y, StringFormat1);
                                         }
-                                        
+
                                         g.ResetTransform();
 
 #if __MonoCS__
 #else
-                                        excludeRegion.Union (gp);
+                                        excludeRegion.Union(gp);
                                         if (_drobj.Label == 3)
                                         {
                                             g.DrawPath(labelPen, gp); // draw rectangle around label
@@ -721,11 +721,11 @@ namespace GralDomain
                                     }
                                 }
                             } // show labels
-                            
+
                             if (Math.Max(x1, x2) > 0 && Math.Max(y1, y2) > 0 && Math.Min(x1, x2) < pb1_width && Math.Min(y1, y2) < pb1_height)
                             {
-                                contouredges.Add(new Point((int) x1, (int) y1));
-                                contouredges.Add(new Point((int) x2, (int) y2));
+                                contouredges.Add(new Point((int)x1, (int)y1));
+                                contouredges.Add(new Point((int)x2, (int)y2));
                             }
                             //g.DrawLine(myPen, Convert.ToInt32(x1), Convert.ToInt32(y1), Convert.ToInt32(x2), Convert.ToInt32(y2));
                             //	}
@@ -734,13 +734,13 @@ namespace GralDomain
                                 break;
                             }
                         } // while all points
-                        
+
                         // draw the lines
                         for (int ed = 0; ed < contouredges.Count; ed += 2)
                         {
-                            g.DrawLine(myPen, contouredges[ed].X, contouredges[ed].Y, contouredges[ed+1].X, contouredges[ed+1].Y);
+                            g.DrawLine(myPen, contouredges[ed].X, contouredges[ed].Y, contouredges[ed + 1].X, contouredges[ed + 1].Y);
                         }
-                        
+
                         g.ResetClip(); // Reset Clipping area
                         excludeRegion.Dispose();
                         contouredges.Clear();

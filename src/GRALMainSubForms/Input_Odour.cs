@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form for odour analyzation user settings
     /// </summary>
     public partial class Input_Odour : Form
@@ -38,7 +38,7 @@ namespace GralMainForms
             }
             else
             {
-                MeanToPeak = (int) numericUpDown1.Value;
+                MeanToPeak = (int)numericUpDown1.Value;
             }
             WriteAdditionalFiles = checkBox1.Checked;
         }
@@ -50,7 +50,7 @@ namespace GralMainForms
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            if(radioButton1.Checked==true)
+            if (radioButton1.Checked == true)
             {
                 numericUpDown1.Enabled = false;
             }

@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralMessage;
+using GralShape;
 using System;
 using System.Windows.Forms;
-using GralShape;
-using GralMessage;
 
 namespace GralDomain
 {
@@ -37,7 +37,7 @@ namespace GralDomain
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 int numvegetation = EditVegetation.ItemData.Count;
-                
+
                 if (dialog.FileName.EndsWith("shp"))
                 {
                     Waitprogressbar wait = new Waitprogressbar("Loading shape file");
@@ -46,7 +46,7 @@ namespace GralDomain
                     {
                         //add Vegetation layer if not already existing
                         CheckForExistingDrawingObject("VEGETATION");
-                        
+
                         //read geometry data from shape file
                         Cursor = Cursors.WaitCursor;
                         wait1.Show();
@@ -70,9 +70,9 @@ namespace GralDomain
                         dial = shp.ShowDialog();
                         {
                         }
-                        
+
                         EditVegetation.SetTrackBarMaximum();
-                        
+
                         EditAndSaveVegetationData(sender, e);
                         EditVegetation.FillValues();
                         shp.Dispose();
@@ -81,7 +81,7 @@ namespace GralDomain
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading shape file","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading shape file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Cursor = Cursors.Default;
                     }
                     wait.Close();

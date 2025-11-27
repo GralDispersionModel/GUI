@@ -15,18 +15,18 @@ using System.Drawing.Imaging;
 
 namespace GralDomain
 {
-   public partial class Domain
-   {
+    public partial class Domain
+    {
         /// <summary>
         /// Draw Base Maps
         /// </summary>
         private void DrawBaseMap(Graphics g, DrawingObjects _drobj)
         {
             // Kuntner: check bitmap zoom - avoid error
-            if (_drobj.DestRec.Height > 1 && _drobj.DestRec.Width > 1 && 
-                _drobj.SourceRec.Height > 1 && _drobj.SourceRec.Width> 1 && 
-                _drobj.DestRec.Width < 67108864 && _drobj.DestRec.Height<67108864 && 
-                _drobj.SourceRec.Width <67108864 && _drobj.SourceRec.Height<67108864)
+            if (_drobj.DestRec.Height > 1 && _drobj.DestRec.Width > 1 &&
+                _drobj.SourceRec.Height > 1 && _drobj.SourceRec.Width > 1 &&
+                _drobj.DestRec.Width < 67108864 && _drobj.DestRec.Height < 67108864 &&
+                _drobj.SourceRec.Width < 67108864 && _drobj.SourceRec.Height < 67108864)
             {
                 //create a color matrix object
                 ColorMatrix matrix = new ColorMatrix();
@@ -47,10 +47,10 @@ namespace GralDomain
 
                 //now draw the image
                 g.DrawImage(_drobj.Picture, _drobj.DestRec, _drobj.SourceRec.Left, _drobj.SourceRec.Top, _drobj.SourceRec.Width, _drobj.SourceRec.Height, GraphicsUnit.Pixel, attributes);
-                
+
                 matrix = null;
                 attributes = null;
-//						g.DrawImage(_drobj.Picture, _drobj.DestRec, _drobj.SourceRec, GraphicsUnit.Pixel);
+                //						g.DrawImage(_drobj.Picture, _drobj.DestRec, _drobj.SourceRec, GraphicsUnit.Pixel);
             }
         }
     }

@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace GralMessage
 {
-	/// <summary>
+    /// <summary>
     /// Show a progress bar
     /// </summary>
     public partial class Waitprogressbar : Form
@@ -26,6 +26,6 @@ namespace GralMessage
             this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
             this.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 140;
         }
-                              
+
     }
 }

@@ -19,12 +19,12 @@ namespace GralDomForms
     /// Settings for the 3D visualization
     /// </summary>    
     public partial class Dialog_3D : Form
-	{
-    	private bool _sm = true;
+    {
+        private bool _sm = true;
         /// <summary>
         /// Smoothing the 3D view?
         /// </summary>
-    	public bool Smoothing { set {_sm = value;} get{return _sm;}}
+    	public bool Smoothing { set { _sm = value; } get { return _sm; } }
         /// <summary>
         /// Vertical stretching factor
         /// </summary>
@@ -33,36 +33,36 @@ namespace GralDomForms
         /// GRAL topography available?
         /// </summary>
 		public bool GRAL_Topo { get; set; }
-				
-		public Dialog_3D()
-		{
-			InitializeComponent();
-			ID_OK.DialogResult = DialogResult.OK;
-			ID_CANCEL.DialogResult = DialogResult.Cancel;
-	    }
-		
-		void Form1Load(object sender, EventArgs e)
-		{
-			checkBox1.Checked = _sm;
-			
-			numericUpDown1.Value = Convert.ToDecimal(VertFactor);
-			if (GRAL_Topo)
-			{
-				radioButton2.Enabled = true;
-				radioButton2.Checked = true;
-			}
-			else
-			{
-				radioButton2.Enabled = false;
-				radioButton1.Checked = true;
-			}
-			
-		}
-		
-		void ID_OKClick(object sender, EventArgs e)
-		{
-			VertFactor = Convert.ToDouble(numericUpDown1.Value);
-			if (checkBox1.Checked)
+
+        public Dialog_3D()
+        {
+            InitializeComponent();
+            ID_OK.DialogResult = DialogResult.OK;
+            ID_CANCEL.DialogResult = DialogResult.Cancel;
+        }
+
+        void Form1Load(object sender, EventArgs e)
+        {
+            checkBox1.Checked = _sm;
+
+            numericUpDown1.Value = Convert.ToDecimal(VertFactor);
+            if (GRAL_Topo)
+            {
+                radioButton2.Enabled = true;
+                radioButton2.Checked = true;
+            }
+            else
+            {
+                radioButton2.Enabled = false;
+                radioButton1.Checked = true;
+            }
+
+        }
+
+        void ID_OKClick(object sender, EventArgs e)
+        {
+            VertFactor = Convert.ToDouble(numericUpDown1.Value);
+            if (checkBox1.Checked)
             {
                 _sm = true;
             }
@@ -72,18 +72,18 @@ namespace GralDomForms
             }
 
             GRAL_Topo = false;
-			if (radioButton2.Checked)
+            if (radioButton2.Checked)
             {
                 GRAL_Topo = true;
             }
 
             Close();
-		}
-		
-		
-		void ID_CANCELClick(object sender, EventArgs e)
-		{
-			Close();
-		}
-	}
+        }
+
+
+        void ID_CANCELClick(object sender, EventArgs e)
+        {
+            Close();
+        }
+    }
 }

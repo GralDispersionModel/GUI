@@ -13,20 +13,20 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
-	/// <summary>
-	/// Show dynamic vertical profiles
-	/// </summary>       
+    /// <summary>
+    /// Show dynamic vertical profiles
+    /// </summary>       
     public partial class VerticalProfile_Dynamic : Form
     {
         public string file;      //file, which is spotted
         private string decsep;    //system decimal seperator
-        private int zlevels=0;      //total number of z-levels of the GRAMM fields
+        private int zlevels = 0;      //total number of z-levels of the GRAMM fields
         private int zlevels_userdefined = 0; //user defined zlevels to be drawn
         private double min = 10000000;  //minimum of the GRAMM field
         private double max = -10000000; //maximum of the GRAMM field
@@ -96,7 +96,7 @@ namespace GralDomForms
         //draw diagram
         protected override void OnPaint(PaintEventArgs e)
         {
-        	base.OnPaint(e);
+            base.OnPaint(e);
             Graphics g = e.Graphics;
 
             int wi = Math.Max(0, Width - 40);
@@ -119,7 +119,7 @@ namespace GralDomForms
             format1.Alignment = StringAlignment.Center;
             format2.Alignment = StringAlignment.Far;
 
-            
+
             //compute minimum/maximum
             min = 10000000;
             max = -10000000;
@@ -132,8 +132,8 @@ namespace GralDomForms
             //draw axis
             g.DrawLine(p2, leftbound, bottombound, rightbound, bottombound);
             g.DrawLine(p2, leftbound, bottombound, leftbound, topbound);
-				
-           //horizontal/vertical scales
+
+            //horizontal/vertical scales
             if (zlevels > 0)
             {
                 if (max - min > 0)
@@ -151,30 +151,30 @@ namespace GralDomForms
                     vertscale = (bottombound - topbound) / vert_diff;
                 }
 
-                int x1 = Convert.ToInt32(leftbound-2);
-                int y1 = Convert.ToInt32(bottombound+2);
-                g.DrawString(Convert.ToString(Math.Round(zsp[0],0)), font, new SolidBrush(Color.Black), x1, y1 - font.Size*2, format2);
+                int x1 = Convert.ToInt32(leftbound - 2);
+                int y1 = Convert.ToInt32(bottombound + 2);
+                g.DrawString(Convert.ToString(Math.Round(zsp[0], 0)), font, new SolidBrush(Color.Black), x1, y1 - font.Size * 2, format2);
                 g.DrawString(Convert.ToString(Math.Round(zsp[zlevels_userdefined - 1], 0)), font, new SolidBrush(Color.Black), x1, y1 - font.Size * 2 - (bottombound - topbound), format2);
                 g.DrawString(Convert.ToString(Math.Round(min, 2)), font, new SolidBrush(Color.Black), x1 - font.Size * 2, y1 + font.Size, format1);
                 g.DrawString(Convert.ToString(Math.Round(max, 2)), font, new SolidBrush(Color.Black), x1 + (rightbound - leftbound) - font.Size * 2, y1 + font.Size, format1);
             }
 
             //draw profile
-            for (int i = 0; i < zlevels-1; i++)
+            for (int i = 0; i < zlevels - 1; i++)
             {
-                int x1=Convert.ToInt32(leftbound + (val[i] - min) * horscale);
+                int x1 = Convert.ToInt32(leftbound + (val[i] - min) * horscale);
                 int y1 = Convert.ToInt32(bottombound - (zsp[i] - zsp[0]) * vertscale);
-                int x2 = Convert.ToInt32(leftbound + (val[i+1] - min) * horscale);
-                int y2 = Convert.ToInt32(bottombound - (zsp[i+1] - zsp[0]) * vertscale);
+                int x2 = Convert.ToInt32(leftbound + (val[i + 1] - min) * horscale);
+                int y2 = Convert.ToInt32(bottombound - (zsp[i + 1] - zsp[0]) * vertscale);
                 g.DrawLine(p1, x1, y1, x2, y2);
             }
-            
-			p1.Dispose();
+
+            p1.Dispose();
             p2.Dispose();
             font.Dispose();
         }
 
-       	// zoom in
+        // zoom in
         private void button1_Click(object sender, EventArgs e)
         {
             zlevels_userdefined = Math.Max(1, zlevels_userdefined - 1);
@@ -183,18 +183,18 @@ namespace GralDomForms
         // zoom out
         private void button2_Click(object sender, EventArgs e)
         {
-        	zlevels_userdefined = Math.Min(zlevels, zlevels_userdefined + 1);
+            zlevels_userdefined = Math.Min(zlevels, zlevels_userdefined + 1);
             Refresh();
         }
-        
+
         void VerticalProfile_DynamicResizeEnd(object sender, EventArgs e)
         {
-        	 Refresh();
+            Refresh();
         }
-        
+
         void VerticalProfile_DynamicFormClosed(object sender, FormClosedEventArgs e)
         {
-        	 filewatch.Changed -= new FileSystemEventHandler(filewatch_Changed);
+            filewatch.Changed -= new FileSystemEventHandler(filewatch_Changed);
         }
     }
 }

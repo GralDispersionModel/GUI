@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using Gral.GRALDomForms;
+using GralIO;
 using System;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
 //using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using System.Globalization;
-using GralIO;
-using Gral.GRALDomForms;
-using System.Drawing;
 
 namespace GralDomForms
 {
@@ -36,7 +36,7 @@ namespace GralDomForms
         public string RasterG;
         public string RasterF;
 
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 
 
         public Mathrasteroperation(Gral.Main f, GralDomain.Domain f1)
@@ -45,19 +45,19 @@ namespace GralDomForms
             form1 = f;
             domain = f1;
             textBox1.KeyPress += new KeyPressEventHandler(Comma); //only point as decimal seperator is allowed
-         }
+        }
 
         private void Mathrasteroperation_Load(object sender, EventArgs e)
         {
             try
             {
-                Left = Math.Max(10, domain.Left + (int) (domain.Width * 0.5F) - 360);
+                Left = Math.Max(10, domain.Left + (int)(domain.Width * 0.5F) - 360);
                 Top = domain.Top + 80;
             }
             catch
             { }
         }
-        
+
         private string OpenFileDialogRaster(TextBox textBox)
         {
             string raster = string.Empty;
@@ -70,7 +70,8 @@ namespace GralDomForms
                 //ShowHelp = true,
                 RestoreDirectory = true
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
             })
             {
@@ -93,14 +94,14 @@ namespace GralDomForms
         private void button1_Click(object sender, EventArgs e)
         {
             RasterA = OpenFileDialogRaster(textBox3);
-            
+
             unit = String.Empty;
             GralIO.ESRIHeader readESRIHeader = new ESRIHeader();
             if (readESRIHeader.ReadESRIHeader(RasterA))
             {
                 unit = readESRIHeader.Unit;
             }
-            
+
             textBox2.Text = unit;
             groupBox2.Enabled = true;
             groupBox3.Enabled = true;
@@ -189,7 +190,7 @@ namespace GralDomForms
                 };
                 BackgroundStart.Show();
                 // now the backgroundworker works
-                
+
                 Close();
             }
             else

@@ -24,18 +24,18 @@ namespace GralDomain
                                double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat2 = new StringFormat
             {
                 LineAlignment = StringAlignment.Far,
                 Alignment = StringAlignment.Center
-            }; 
-            
+            };
+
             Pen penrec;
             if (_drobj.LineColors[0] == Color.Transparent || _drobj.LineColor == Color.Transparent)
             {
-                penrec = new Pen (Color.Blue);
+                penrec = new Pen(Color.Blue);
                 _drobj.LineColor = Color.Blue;
             }
             else
@@ -55,20 +55,20 @@ namespace GralDomain
                 }
                 else
                 {
-                    width = Convert.ToInt32(Math.Max (1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
+                    width = Convert.ToInt32(Math.Max(1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
                 }
             }
             else
             {
-                width = Convert.ToInt32(Math.Max (1, Math.Min(200, (double) _drobj.LineWidth / 8 * factor_x)));
+                width = Convert.ToInt32(Math.Max(1, Math.Min(200, (double)_drobj.LineWidth / 8 * factor_x)));
             }
 
             //width = 3;
             penrec.Width = width;
             width *= 2;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             for (int i = 0; i < _drobj.ContourPolygons.Count; i++)  // loop over all concentration values
             {
                 try

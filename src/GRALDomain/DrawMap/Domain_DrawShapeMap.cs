@@ -10,7 +10,6 @@
 ///</remarks>
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -23,14 +22,14 @@ namespace GralDomain
         /// </summary>
         private void DrawShapeMap(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north, double factor_x, double factor_y)
         {
-            List <PointF> _shpPoint =  _drobj.ShpPoints;
+            List<PointF> _shpPoint = _drobj.ShpPoints;
             foreach (PointF _pt in _shpPoint)
             {
                 int x = (int)((_pt.X - form1_west) * factor_x + TransformX);
                 int y = (int)((_pt.Y - form1_north) * factor_y + TransformY);
                 g.DrawEllipse(Pens.Black, x, y, 4, 4);
             }
-            
+
             if (_drobj.LineWidth > 0)
             {
                 double west = _drobj.Item;
@@ -40,8 +39,8 @@ namespace GralDomain
                     west = 0; north = 0;
                 }
                 Pen myPen = new Pen(Color2Transparent(_drobj.Transparancy, _drobj.LineColors[0]), _drobj.LineWidth);
-                
-                List <GralShape.SHPLine> _shpLine = _drobj.ShpLines;
+
+                List<GralShape.SHPLine> _shpLine = _drobj.ShpLines;
                 foreach (GralShape.SHPLine _line in _shpLine)
                 {
                     try
@@ -66,8 +65,8 @@ namespace GralDomain
                 }
                 myPen.Dispose(); // Kuntner dispose Pen
             }
-            
-            List <GralShape.SHPPolygon> _shppoly = _drobj.ShpPolygons;
+
+            List<GralShape.SHPPolygon> _shppoly = _drobj.ShpPolygons;
             Brush mybrush = new SolidBrush(Color2Transparent(_drobj.Transparancy, _drobj.FillColors[0]));
             foreach (GralShape.SHPPolygon _poly in _shppoly)
             {

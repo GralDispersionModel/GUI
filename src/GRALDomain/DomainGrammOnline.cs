@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
-using GralIO;
 using GralDomForms;
-using System.Collections.Generic;
+using GralIO;
 using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -626,8 +626,8 @@ namespace GralDomain
                 }
                 else
                 {
-                    x1 = (int)((TestPt.X - Convert.ToDouble(MainForm.textBox6.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
-                    y1 = (int)((TestPt.Y - Convert.ToDouble(MainForm.textBox5.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
+                    x1 = (int)((TestPt.X - Convert.ToDouble(MainForm.textBox6.Text)) / (double)MainForm.numericUpDown10.Value) + 1;
+                    y1 = (int)((TestPt.Y - Convert.ToDouble(MainForm.textBox5.Text)) / (double)MainForm.numericUpDown10.Value) + 1;
                 }
 
                 using (StreamWriter writer = new StreamWriter(file))
@@ -703,8 +703,8 @@ namespace GralDomain
                 int y1 = 1;
                 if (MainForm.textBox13.Text != "")
                 {
-                    x1 = (int) ((TestPt.X - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
-                    y1 = (int) ((TestPt.Y - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
+                    x1 = (int)((TestPt.X - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
+                    y1 = (int)((TestPt.Y - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
                     if (TestPt.X < MainForm.GrammDomRect.West || TestPt.Y < MainForm.GrammDomRect.South)
                     {
                         throw new Exception();
@@ -712,8 +712,8 @@ namespace GralDomain
                 }
                 else
                 {
-                    x1 = (int) ((TestPt.X - Convert.ToInt32(MainForm.textBox6.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
-                    y1 = (int) ((TestPt.Y - Convert.ToInt32(MainForm.textBox5.Text)) / (double) MainForm.numericUpDown10.Value) + 1;
+                    x1 = (int)((TestPt.X - Convert.ToInt32(MainForm.textBox6.Text)) / (double)MainForm.numericUpDown10.Value) + 1;
+                    y1 = (int)((TestPt.Y - Convert.ToInt32(MainForm.textBox5.Text)) / (double)MainForm.numericUpDown10.Value) + 1;
                 }
 
                 //Cursor = Cursors.WaitCursor;
@@ -792,7 +792,7 @@ namespace GralDomain
                 ProfileConcentration.VertProfileVelocity.FormClosing += new FormClosingEventHandler(VertProfileVelocityClosing);
                 ProfileConcentration.VertProfileVelocity.FileName = file1;
                 ProfileConcentration.VertProfileVelocity.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100); 
+                ProfileConcentration.VertProfileVelocity.Location = new Point(St_F.GetScreenAtMousePosition() + 160, St_F.GetTopScreenAtMousePosition() + 100);
                 ProfileConcentration.VertProfileVelocity.Show();
 
                 //write text files with vertical profiles
@@ -872,8 +872,8 @@ namespace GralDomain
 
                 string[] text = new string[1];
                 float flowfieldraster = Convert.ToSingle(MainForm.numericUpDown10.Value);
-                int x1 = (int) ((TestPt.X - MainForm.GralDomRect.West) / flowfieldraster) + 1;
-                int y1 = (int) ((TestPt.Y - MainForm.GralDomRect.South) / flowfieldraster) + 1;
+                int x1 = (int)((TestPt.X - MainForm.GralDomRect.West) / flowfieldraster) + 1;
+                int y1 = (int)((TestPt.Y - MainForm.GralDomRect.South) / flowfieldraster) + 1;
 
                 //Cursor = Cursors.WaitCursor;
 
@@ -1160,7 +1160,7 @@ namespace GralDomain
             }
             return dialogResult;
         }
-        
+
         private void FileWatcherError(object source, ErrorEventArgs e)
         {
             OnlineCounter = -1;

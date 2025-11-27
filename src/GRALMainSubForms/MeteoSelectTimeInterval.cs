@@ -22,7 +22,7 @@ namespace GralMainForms
     {
         public GralData.WindRoseSettings WindRoseSet;
 
-        
+
         /// <summary>
         /// Input box for start and endtime of a meteorological time series
         /// </summary>
@@ -44,7 +44,7 @@ namespace GralMainForms
             {
                 numericUpDown1.Visible = false;
                 label3.Visible = false;
-                label4.Visible = false;              
+                label4.Visible = false;
             }
             else if (WindRoseSet.MaxVelocity >= 6 && WindRoseSet.MaxVelocity <= 20)
             {
@@ -92,7 +92,7 @@ namespace GralMainForms
         {
             WindRoseSet.StartStunde = comboBox1.SelectedIndex;
             WindRoseSet.EndStunde = comboBox2.SelectedIndex;
-            WindRoseSet.MaxVelocity = (int) numericUpDown1.Value;
+            WindRoseSet.MaxVelocity = (int)numericUpDown1.Value;
             WindRoseSet.BiasCorrection = checkBox1.Checked;
             WindRoseSet.ShowFrames = checkBox2.Checked;
             WindRoseSet.DrawSmallSectors = checkBox3.Checked;

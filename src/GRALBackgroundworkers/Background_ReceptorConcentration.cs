@@ -20,7 +20,7 @@ namespace GralBackgroundworkers
 {
     public partial class ProgressFormBackgroundworker
     {
-       private List<double> xrec = new List<double>();
+        private List<double> xrec = new List<double>();
 
         /// <summary>
         /// Calculate receptor concentrations and GRAL flow field receptor wind fields 
@@ -338,8 +338,8 @@ namespace GralBackgroundworkers
             }
 
             //BackgroundThreadMessageBox(wrmet[0] + "/" + wgmet[0] + "/" + akmet[0]);
-            double[][][] conc = GralIO.Landuse.CreateArray<double[][]>(xrec.Count, () 
-                                                        => GralIO.Landuse.CreateArray<double[]>(maxsource, () 
+            double[][][] conc = GralIO.Landuse.CreateArray<double[][]>(xrec.Count, ()
+                                                        => GralIO.Landuse.CreateArray<double[]>(maxsource, ()
                                                                                  => new double[wrmet.Count]));
             double fmod = 1;
 
@@ -384,7 +384,7 @@ namespace GralBackgroundworkers
 
                                 //check all source groups within the file ReceptorConcentrations.dat
                                 List<int> containedSourceGroups = new List<int>();
-                                string[] headerSourceGroups = ConcentrationHeader[1].Split(new char[] {'\t'});
+                                string[] headerSourceGroups = ConcentrationHeader[1].Split(new char[] { '\t' });
                                 for (int i = 0; i < headerSourceGroups.Length; i++)
                                 {
                                     int _sg = 0;
@@ -438,30 +438,30 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    BackgroundThreadMessageBox ("Error reading" + Path.GetFileName(receptorfile) +  "Is this file available?" + Environment.NewLine +
+                    BackgroundThreadMessageBox("Error reading" + Path.GetFileName(receptorfile) + "Is this file available?" + Environment.NewLine +
                                                 "Has the number of receptors or source groups changed?");
                     return;
-                }			
+                }
             }
-            
+
             //read all wind speeds from file GRAL_Meteozeitreihe.dat
             bool metflag = false;
             bool local_SCL = false;
             string[] text7 = new string[xrec.Count];
-            
-            string GRAL_metfile = Path.Combine(mydata.ProjectName, "Computation","GRAL_Meteozeitreihe.dat");
-            int zeitreihe_lenght = (int) GralStaticFunctions.St_F.CountLinesInFile(GRAL_metfile);
-            
+
+            string GRAL_metfile = Path.Combine(mydata.ProjectName, "Computation", "GRAL_Meteozeitreihe.dat");
+            int zeitreihe_lenght = (int)GralStaticFunctions.St_F.CountLinesInFile(GRAL_metfile);
+
             double[,] GRAL_u = new double[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
             double[,] GRAL_v = new double[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
             int[,] GRAL_SC = new int[NumberOfReceptors, Math.Max(zeitreihe_lenght, wrmet.Count) + 1];
             string[] ReceptorMeteoCoors = new string[5];
-            
+
             if (File.Exists(GRAL_metfile))
             {
                 metflag = true;
                 numbwet = 0;
-                
+
                 if (Read_Meteo_Zeitreihe(GRAL_metfile, ref numbwet, ref local_SCL, ref GRAL_u, ref GRAL_v, ref GRAL_SC, ref ReceptorMeteoCoors) == false)
                 {
                     //set metflag to false, if MeteoZeitreihe not readable
@@ -475,14 +475,14 @@ namespace GralBackgroundworkers
                 {
                     try
                     {
-                        string writerRecTimeSeries = Path.Combine(mydata.PathEvaluationResults, "ReceptorTimeSeries_"+ mydata.Prefix + mydata.Pollutant + ".txt");
+                        string writerRecTimeSeries = Path.Combine(mydata.PathEvaluationResults, "ReceptorTimeSeries_" + mydata.Prefix + mydata.Pollutant + ".txt");
                         if (File.Exists(writerRecTimeSeries))
                         {
                             try
                             {
                                 File.Delete(writerRecTimeSeries);
                             }
-                            catch{}
+                            catch { }
                         }
 
                         //write results to file ReceptorTimeSeries.txt in Unicode encoding
@@ -492,7 +492,7 @@ namespace GralBackgroundworkers
                             //write header line
                             if (NewFileFormat)
                             {
-                                string[] headerInfo = {"Name", "Source group", "X", "Y", "Z", "-----"};
+                                string[] headerInfo = { "Name", "Source group", "X", "Y", "Z", "-----" };
 
                                 System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentCulture;
 
@@ -523,7 +523,7 @@ namespace GralBackgroundworkers
                                 }
                             }
                             recwrite.WriteLine();
-                            
+
                             //read mettimeseries.dat
                             newpath = Path.Combine("Computation", "mettimeseries.dat");
                             using (StreamReader readMetTimeSeries = new StreamReader(Path.Combine(mydata.ProjectName, newpath)))
@@ -561,11 +561,11 @@ namespace GralBackgroundworkers
                                     hour = text2[1];
 
                                     //if a time series uses hours from 1 to 24 instead the default 0 to 23
-                                    if (hour == "24") 
+                                    if (hour == "24")
                                     {
                                         hourplus = 1;
                                     }
-                                    
+
                                     wgmettime = text2[2];
                                     wrmettime = text2[3];
                                     akmettime = text2[4];
@@ -633,21 +633,21 @@ namespace GralBackgroundworkers
                                     }
                                 }
                             } // using reader of mettimeseries
-                            
+
                         } // using rec write
                     }
                     catch
                     {
-                        BackgroundThreadMessageBox ("Error writing the file Receptor_TimeSeries.txt");
+                        BackgroundThreadMessageBox("Error writing the file Receptor_TimeSeries.txt");
                         return;
                     }
                 }
                 else
                 {
-                    BackgroundThreadMessageBox ("File zeitreihe.dat not found");
+                    BackgroundThreadMessageBox("File zeitreihe.dat not found");
                 }
             }
-            
+
             if (metflag == true) // write meteorological data for all receptor points
             {
                 try
@@ -656,7 +656,7 @@ namespace GralBackgroundworkers
                     string[] recX = Array.Empty<string>();
                     string[] recY = Array.Empty<string>();
                     string[] recZ = Array.Empty<string>();
-                   
+
                     if (!string.IsNullOrEmpty(ReceptorMeteoCoors[0]))
                     {
                         recname = ReceptorMeteoCoors[0].Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -701,14 +701,14 @@ namespace GralBackgroundworkers
                             }
 
                             string[] text6 = new string[2];
-                            
+
                             //read mettimeseries.dat
                             using (StreamReader read = new StreamReader(Path.Combine(mydata.ProjectName, "Computation", "mettimeseries.dat")))
                             {
                                 text2 = read.ReadLine().Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                                 string dummy_year = "1990";
-                                int year_increase=0;
+                                int year_increase = 0;
                                 int monthold = -1;
 
                                 //consider, if meteopgt.all represents a time series or a statistics
@@ -717,7 +717,7 @@ namespace GralBackgroundworkers
                                     dispersionsituations = numbwet + 1;
                                 else
                                     dispersionsituations = wrmet.Count;
-                                
+
                                 int count_dispsit_in_mettime = 0;
 
                                 while (!string.IsNullOrEmpty(text2[0]))
@@ -772,16 +772,16 @@ namespace GralBackgroundworkers
 
                                     if (corr_situation > -1)
                                     {
-                                        int n  = corr_situation;
+                                        int n = corr_situation;
                                         SetText("Day.Month: " + day + "." + month);
-                                        
+
                                         //write results
                                         dummy_year = Convert.ToString(1990 + year_increase);
                                         dummy = day + "." + month + "." + dummy_year + "," + hour + ":00,";
-                                        
+
                                         //compute wind speed and direction
-                                        windspeed_GRAL = Math.Round(Math.Pow(Math.Pow(GRAL_u[k,n], 2) + Math.Pow(GRAL_v[k,n], 2), 0.5),2);
-                                        if (GRAL_v[k,n] == 0)
+                                        windspeed_GRAL = Math.Round(Math.Pow(Math.Pow(GRAL_u[k, n], 2) + Math.Pow(GRAL_v[k, n], 2), 0.5), 2);
+                                        if (GRAL_v[k, n] == 0)
                                             winddirection_GRAL = 90;
                                         else
                                             winddirection_GRAL = Convert.ToInt32(Math.Abs(Math.Atan(GRAL_u[k, n] / GRAL_v[k, n])) * 180 / 3.14);
@@ -809,11 +809,11 @@ namespace GralBackgroundworkers
                                         {
                                             dummy = dummy + "," + Convert.ToString(akmettime);
                                         }
-                                        
+
                                         recwrite.WriteLine(dummy);
                                         //consider, if meteopgt.all represents a time series or a statistics
-//										if (mydata.Checkbox19 == true || transient == true)
-//											break;
+                                        //										if (mydata.Checkbox19 == true || transient == true)
+                                        //											break;
                                     }
                                     else // found no corresponding situation -> write invalid situation
                                     {
@@ -846,17 +846,17 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    BackgroundThreadMessageBox ("Error writing GRAL-Metfiles");
+                    BackgroundThreadMessageBox("Error writing GRAL-Metfiles");
                     return;
-                }          
+                }
             }
             else
             {
                 //MessageBox.Show("File GRAL_Meteozeitreihe.dat not found", "Receptor Concentrations", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
-        private bool Read_Meteo_Zeitreihe(string GRAL_metfile, ref int numbwet, ref bool local_SCL, 
+
+        private bool Read_Meteo_Zeitreihe(string GRAL_metfile, ref int numbwet, ref bool local_SCL,
                                           ref double[,] GRAL_u, ref double[,] GRAL_v, ref int[,] GRAL_SC, ref string[] ReceptorHeader)
         {
             numbwet = 0;
@@ -865,7 +865,7 @@ namespace GralBackgroundworkers
 
             try // 11.9.2017 Kuntner -> new File format?
             {
-                using(StreamReader read1 = new StreamReader(GRAL_metfile))
+                using (StreamReader read1 = new StreamReader(GRAL_metfile))
                 {
                     string header = read1.ReadLine().Trim();
                     if (header.Equals("U,V,SC"))
@@ -892,11 +892,11 @@ namespace GralBackgroundworkers
                     }
                 }
             }
-            catch{}
-                
+            catch { }
+
             using (StreamReader read = new StreamReader(GRAL_metfile))
             {
-                 try
+                try
                 {
                     if (headerLineNumber > 0) // Read header lines
                     {
@@ -916,15 +916,15 @@ namespace GralBackgroundworkers
                             }
                         }
                     }
-                    
+
                     // read entire file
                     while (read.EndOfStream == false)
                     {
                         string[] columns = read.ReadLine().Split(new char[] { ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                         int numberOfReceptors = (int)(columns.Length / columnOffset);
-                        
+
                         int count = 0;
-                        
+
                         for (int numbrec = 0; numbrec < numberOfReceptors; numbrec++)
                         {
                             //check if this situation has been computed, otherwise this line is 0
@@ -944,14 +944,14 @@ namespace GralBackgroundworkers
                 }
                 catch
                 {
-                    BackgroundThreadMessageBox ("Error reading GRAL_Meteozeitreihe.dat");
+                    BackgroundThreadMessageBox("Error reading GRAL_Meteozeitreihe.dat");
                     return false;
                 }
             }
-            
+
             Computation_Completed = true; // set flag, that computation was successful
             return true;
         } // Read_GRAL_Meteozeitreihe
-        
+
     }
 }

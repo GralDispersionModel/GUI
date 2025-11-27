@@ -34,7 +34,7 @@ namespace Gral
         private enum SetTimeSeriesModeEnum { PointSourceVelocity = 0, PointSourceTemperature = 1, PortalSourceVelocity = 2, PortalSourceTemperature = 3 };
 
         private CultureInfo ic = CultureInfo.InvariantCulture;
-        
+
         //////////////////////////////////////////////////////////////////////////
         //
         //generate gral emission files
@@ -46,9 +46,9 @@ namespace Gral
         private void CreateGralEmissionFiles()
         {
             string SelectedPollutant = Pollmod[listBox5.SelectedIndex];
-            List <int> SelectedSourceGroups = new List<int>();
+            List<int> SelectedSourceGroups = new List<int>();
             //read the seleceted source groups for the simulation
-            for(int i = 0; i < listView1.Items.Count; i++)
+            for (int i = 0; i < listView1.Items.Count; i++)
             {
                 string selpoll = listView1.Items[i].SubItems[0].Text;
                 string[] dummy = selpoll.Split(new char[] { ':' });
@@ -63,35 +63,35 @@ namespace Gral
                 }
                 SelectedSourceGroups.Add(sg);
             }
-            
-            RectangleF DomainRect = new RectangleF((float) GralDomRect.West, (float) GralDomRect.South, (float) (GralDomRect.East - GralDomRect.West), (float) (GralDomRect.North - GralDomRect.South));
-            
+
+            RectangleF DomainRect = new RectangleF((float)GralDomRect.West, (float)GralDomRect.South, (float)(GralDomRect.East - GralDomRect.West), (float)(GralDomRect.North - GralDomRect.South));
+
             //Point Source__________________________________________________________________
-            List <PointSourceData> _psList = new List<PointSourceData>();
+            List<PointSourceData> _psList = new List<PointSourceData>();
             PointSourceDataIO _ps = new PointSourceDataIO();
-            string _file = Path.Combine(Main.ProjectName,"Emissions","Psources.txt");
+            string _file = Path.Combine(Main.ProjectName, "Emissions", "Psources.txt");
             _ps.LoadPointSources(_psList, _file, true, DomainRect);
             _ps = null;
-            
+
             bool file = false;
-            string newPath = Path.Combine(ProjectName, @"Computation","point.dat");
+            string newPath = Path.Combine(ProjectName, @"Computation", "point.dat");
             //remove existing file
             File.Delete(newPath);
-            
+
             try
             {
-                List <string> TempTimeSeries = new List<string>();
-                List <string> VelTimeSeries = new List<string>();
-                
+                List<string> TempTimeSeries = new List<string>();
+                List<string> VelTimeSeries = new List<string>();
+
                 using (StreamWriter myWriter = File.CreateText(newPath))
                 {
                     myWriter.WriteLine("Generated: V2019");
                     string Header = "x,y,z,";
                     Header += SelectedPollutant + "[kg/h],--,--,--,exit vel.[m/s],diameter[m],Temp.[K],Source group,deposition parameters F2.5, F10,DiaMax,Density,VDep2.5,VDep10,VDepMax,Dep_Conc";
-                    
+
                     myWriter.WriteLine(Header);
 
-                    foreach(PointSourceData _psdata in _psList)
+                    foreach (PointSourceData _psdata in _psList)
                     {
                         //filter source groups
                         if (SelectedSourceGroups.Contains(_psdata.Poll.SourceGroup)) // SG is selected
@@ -113,7 +113,7 @@ namespace Gral
                                         _psdata.Diameter.ToString(ic) + "," +
                                         _psdata.Temperature.ToString(ic) + "," +
                                         _psdata.Poll.SourceGroup.ToString(ic);
-                                    
+
                                     if (_psdata.GetDep() != null) // deposition entry exists
                                     {
                                         pqline += "," +
@@ -126,7 +126,7 @@ namespace Gral
                                             _psdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
                                             _psdata.GetDep()[j].Conc.ToString(ic);
                                     }
-                                    
+
                                     if (!string.IsNullOrEmpty(_psdata.TemperatureTimeSeries))
                                     {
                                         pqline += ",Temp@_" + _psdata.TemperatureTimeSeries;
@@ -142,7 +142,7 @@ namespace Gral
                                         {
                                             VelTimeSeries.Add(_psdata.VelocityTimeSeries);
                                         }
-                                    }                                   
+                                    }
                                     myWriter.WriteLine(pqline);
                                     file = true;
                                 }
@@ -150,7 +150,7 @@ namespace Gral
                         }
                     }
                 }
-                
+
                 // create new Time Series for Temperature and Velocity
                 if (VelTimeSeries.Count > 0)
                 {
@@ -174,28 +174,28 @@ namespace Gral
                 TempTimeSeries.TrimExcess();
             }
             catch (Exception ex) { MessageBox.Show(this, "Error writing point.dat \n" + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-          
+
             _psList.Clear();
             _psList.TrimExcess();
             _psList = null;
-            
+
             if (file == false)
             {
                 File.Delete(newPath);
             }
 
             //Area Source__________________________________________________________________
-            List <AreaSourceData> _asList = new List<AreaSourceData>();
+            List<AreaSourceData> _asList = new List<AreaSourceData>();
             AreaSourceDataIO _as = new AreaSourceDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Asources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Asources.txt");
             _as.LoadAreaData(_asList, _file);
             _as = null;
-            
+
             file = false;
-            newPath = Path.Combine(ProjectName, @"Computation","cadastre.dat");
+            newPath = Path.Combine(ProjectName, @"Computation", "cadastre.dat");
             //remove existing file
             File.Delete(newPath);
-            
+
             try
             {
                 using (StreamWriter myWriter = File.CreateText(newPath))
@@ -205,9 +205,9 @@ namespace Gral
                     myWriter.WriteLine(Header);
                     //List for points inside area source polygons
                     List<PointD> xyCell = new List<PointD>(10000);
-                    
+
                     foreach (AreaSourceData _asdata in _asList)
-                    {                 
+                    {
                         double xmin = double.MaxValue;
                         double xmax = double.MinValue;
                         double ymin = double.MaxValue;
@@ -249,7 +249,7 @@ namespace Gral
                                                 {
                                                     if (St_F.PointInPolygonD(new PointD(xraster, yraster), _asdata.Pt))
                                                     {
-                                                       xyCell.Add(new PointD(xraster, yraster));
+                                                        xyCell.Add(new PointD(xraster, yraster));
                                                     }
                                                     xraster += _asdata.RasterSize * rasterFactor;
                                                 }
@@ -281,7 +281,7 @@ namespace Gral
                                                 (_asdata.Poll.EmissionRate[j] / Convert.ToDouble(xyCell.Count)).ToString(ic) + "," +
                                                 "0,0,0," +
                                                 _asdata.Poll.SourceGroup.ToString(ic);
-                                            
+
                                             if (_asdata.GetDep() != null) // deposition entry exists
                                             {
                                                 cadestre += "," +
@@ -293,7 +293,7 @@ namespace Gral
                                                     _asdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
                                                     _asdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
                                                     _asdata.GetDep()[j].Conc.ToString(ic);
-                                            }                                         
+                                            }
                                             myWriter.WriteLine(cadestre);
                                             file = true;
                                         }
@@ -309,24 +309,24 @@ namespace Gral
             _asList.Clear();
             _asList.TrimExcess();
             _asList = null;
-            
+
             if (file == false)
             {
                 File.Delete(newPath);
             }
 
             //Line Source__________________________________________________________________
-            List <LineSourceData> _lsList = new List<LineSourceData>();
+            List<LineSourceData> _lsList = new List<LineSourceData>();
             LineSourceDataIO _ls = new LineSourceDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Lsources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Lsources.txt");
             _ls.LoadLineSources(_lsList, _file);
             _ls = null;
             file = false;
-            
-            newPath = Path.Combine(ProjectName, @"Computation","line.dat");
+
+            newPath = Path.Combine(ProjectName, @"Computation", "line.dat");
             //remove existing file
             File.Delete(newPath);
-            
+
             try
             {
                 using (StreamWriter myWriter = File.CreateText(newPath))
@@ -338,7 +338,7 @@ namespace Gral
                     string Header = "StrName,Section,Sourcegroup,x1,y1,z1,x2,y2,z2,width,noiseabatementwall,Length[km],--,";
                     Header += SelectedPollutant + "[kg/(km*h)],--,--,--,--,--,deposition data";
                     myWriter.WriteLine(Header);
-                    
+
                     foreach (LineSourceData _lsdata in _lsList)
                     {
                         //filter domain
@@ -346,7 +346,7 @@ namespace Gral
                         double xmax = double.MinValue;
                         double ymin = double.MaxValue;
                         double ymax = double.MinValue;
-                        
+
                         foreach (GralData.PointD_3d _pt in _lsdata.Pt)
                         {
                             xmin = Math.Min(xmin, _pt.X);
@@ -354,7 +354,7 @@ namespace Gral
                             ymin = Math.Min(ymin, _pt.Y);
                             ymax = Math.Max(ymax, _pt.Y);
                         }
-                        
+
                         if ((xmin >= GralDomRect.West) && (xmax <= GralDomRect.East) &&
                             (ymin >= GralDomRect.South) && (ymax <= GralDomRect.North))
                         {
@@ -364,7 +364,7 @@ namespace Gral
                                 if (SelectedSourceGroups.Contains(_poll.SourceGroup)) // SG is selected
                                 {
                                     double vert_extension = (-1) * Math.Abs(_lsdata.VerticalExt);
-                                    
+
                                     //filter pollutant
                                     for (int j = 0; j < 10; j++)
                                     {
@@ -373,7 +373,7 @@ namespace Gral
                                         {
                                             //write file line.dat
                                             int linesegments = _lsdata.Pt.Count - 1;
-                                            
+
                                             for (int i = 0; i < linesegments; i++)
                                             {
                                                 double x1 = _lsdata.Pt[i].X;
@@ -399,7 +399,7 @@ namespace Gral
                                                     "0," +
                                                     _poll.EmissionRate[j].ToString(ic) + "," +
                                                     "0,0,0,0,0";
-                                                
+
                                                 if (_lsdata.GetDep() != null) // deposition entry exists
                                                 {
                                                     line += "," +
@@ -411,9 +411,9 @@ namespace Gral
                                                         _lsdata.GetDep()[j].V_Dep2.ToString(ic) + "," +
                                                         _lsdata.GetDep()[j].V_Dep3.ToString(ic) + "," +
                                                         _lsdata.GetDep()[j].Conc.ToString(ic);
-                                                }                                              
+                                                }
                                                 myWriter.WriteLine(line);
-                                                file = true;                                         
+                                                file = true;
                                             }
                                         }
                                     }
@@ -423,37 +423,37 @@ namespace Gral
                     }
                 }
             }
-            catch (Exception ex) { MessageBox.Show(this, "Error writing line.dat \n" +ex.Message , "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);}
-            
+            catch (Exception ex) { MessageBox.Show(this, "Error writing line.dat \n" + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+
             _lsList.Clear();
             _lsList.TrimExcess();
             _lsList = null;
-            
+
             if (file == false)
             {
                 File.Delete(newPath);
             }
 
             Tunnelportals(SelectedSourceGroups);
-            
+
         }
-        
+
         /// <summary>
         /// Create Portalsources.txt file
         /// </summary>
         /// <param name="SelectedSourceGroups"></param>
-        private void Tunnelportals(List <int> SelectedSourceGroups)
+        private void Tunnelportals(List<int> SelectedSourceGroups)
         {
             string SelectedPollutant = Pollmod[listBox5.SelectedIndex];
-            
-            List <PortalsData> _poList = new List<PortalsData>();
+
+            List<PortalsData> _poList = new List<PortalsData>();
             PortalsDataIO _pd = new PortalsDataIO();
-            string _file = Path.Combine(Main.ProjectName,"Emissions","Portalsources.txt");
-            _pd.LoadPortalSources(_poList, _file, true, new RectangleF((float) GralDomRect.West, (float) GralDomRect.South, (float) (GralDomRect.East - GralDomRect.West), (float) (GralDomRect.North - GralDomRect.South)));
+            string _file = Path.Combine(Main.ProjectName, "Emissions", "Portalsources.txt");
+            _pd.LoadPortalSources(_poList, _file, true, new RectangleF((float)GralDomRect.West, (float)GralDomRect.South, (float)(GralDomRect.East - GralDomRect.West), (float)(GralDomRect.North - GralDomRect.South)));
             _pd = null;
-            
+
             bool file = false;
-            string newPath = Path.Combine(ProjectName, @"Computation","meteopgt.all");
+            string newPath = Path.Combine(ProjectName, @"Computation", "meteopgt.all");
             bool meteo = false;
             List<string> meteopgt = new List<string>();
             List<string> tunnel = new List<string>();
@@ -472,18 +472,18 @@ namespace Gral
                         }
                     }
                 }
-                catch{}
+                catch { }
             }
-            
-            newPath = Path.Combine(ProjectName, @"Computation","portals.dat");
+
+            newPath = Path.Combine(ProjectName, @"Computation", "portals.dat");
             //remove existing file
             File.Delete(newPath);
-            
+
             try
             {
-                List <string> TempTimeSeries = new List<string>();
-                List <string> VelTimeSeries = new List<string>();
-                
+                List<string> TempTimeSeries = new List<string>();
+                List<string> VelTimeSeries = new List<string>();
+
                 using (StreamWriter myWriter = File.CreateText(newPath))
                 {
                     myWriter.WriteLine("Generated: V2019");
@@ -510,7 +510,7 @@ namespace Gral
                                         {
                                             height *= (-1);
                                         }
-                                        
+
                                         string portal =
                                             Math.Round(_pdData.Pt1.X, 1).ToString(ic) + "," +
                                             Math.Round(_pdData.Pt1.Y, 1).ToString(ic) + "," +
@@ -521,7 +521,7 @@ namespace Gral
                                             _poll.EmissionRate[j].ToString(ic) + "," +
                                             "0,0,0," +
                                             _poll.SourceGroup.ToString(ic);
-                                        
+
                                         if (_pdData.GetDep() != null) // deposition entry exists
                                         {
                                             portal += "," +
@@ -534,10 +534,10 @@ namespace Gral
                                                 _pdData.GetDep()[j].V_Dep3.ToString(ic) + "," +
                                                 _pdData.GetDep()[j].Conc.ToString(ic);
                                         }
-                                        
+
                                         portal += "," + _pdData.DeltaT.ToString(ic) + "," +
                                             _pdData.ExitVel.ToString(ic);
-                                        
+
                                         if (!string.IsNullOrEmpty(_pdData.TemperatureTimeSeries))
                                         {
                                             portal += ",Temp@_" + _pdData.TemperatureTimeSeries;
@@ -554,11 +554,11 @@ namespace Gral
                                                 VelTimeSeries.Add(_pdData.VelocityTimeSeries);
                                             }
                                         }
-                                        
+
                                         //write file portals.dat
                                         myWriter.WriteLine(portal);
                                         file = true;
-                                        
+
                                         //write exit vel, temp. diff, stiffness to meteopgt.all ->compatibility to old GRAL versions before 20.01
                                         if (meteo == true)
                                         {
@@ -569,16 +569,16 @@ namespace Gral
                                             double ymax = _pdData.Pt2.Y;
                                             double winkel = 0;
                                             Angle(xmin, xmax, ymin, ymax, ref winkel);
-                                            tunnel.Add(_pdData.ExitVel.ToString(ic) + "," + _pdData.DeltaT.ToString(ic) + "," + Convert.ToString(Math.Round(winkel, 0), ic)+","+_pdData.Nemo.TrafficSit.ToString(ic) +"," + _pdData.Nemo.AvDailyTraffic.ToString(ic));
+                                            tunnel.Add(_pdData.ExitVel.ToString(ic) + "," + _pdData.DeltaT.ToString(ic) + "," + Convert.ToString(Math.Round(winkel, 0), ic) + "," + _pdData.Nemo.TrafficSit.ToString(ic) + "," + _pdData.Nemo.AvDailyTraffic.ToString(ic));
                                         }
                                     }
                                 }
                             }
                         }
-                        
+
                     }
                 }
-                
+
                 // create new Time Series for Temperature and Velocity
                 if (VelTimeSeries.Count > 0)
                 {
@@ -596,12 +596,12 @@ namespace Gral
                 {
                     AskAndDeleteFile(Path.Combine(Main.ProjectName, @"Computation", "TimeSeriesPortalSourceTemp.txt"));
                 }
-                
+
                 VelTimeSeries.Clear();
                 VelTimeSeries.TrimExcess();
                 TempTimeSeries.Clear();
                 TempTimeSeries.TrimExcess();
-                
+
             }
             catch (Exception ex) { MessageBox.Show(this, "Error writing portals.dat \n" + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
@@ -618,7 +618,7 @@ namespace Gral
             //		File.Delete(newPath);
             //		string[] values = new string[1000];
             //		string[] dummy = new string[5];
-                    
+
             //		using (StreamWriter myWriter = File.CreateText(newPath))
             //		{
             //			for (int a = 0; a < meteopgt.Count; a++)
@@ -656,11 +656,11 @@ namespace Gral
             //				myWriter.WriteLine(meteopgt[a]);
             //			}
             //		}
-                    
+
             //	}
             //}
         } // GRAL_emifiles
-        
+
         private void AskAndDeleteFile(string filePath)
         {
             if (File.Exists(filePath))
@@ -683,10 +683,10 @@ namespace Gral
         /// </summary>
         private void Write_Precipitation_txt()
         {
-            string Precip = Path.Combine(ProjectName, @"Computation","Precipitation.txt");
-            string mettimeseries = Path.Combine(ProjectName, @"Computation","mettimeseries.dat");
+            string Precip = Path.Combine(ProjectName, @"Computation", "Precipitation.txt");
+            string mettimeseries = Path.Combine(ProjectName, @"Computation", "mettimeseries.dat");
             CultureInfo CI = CultureInfo.InvariantCulture;
-            
+
             if (File.Exists(mettimeseries) == true)
             {
                 if (File.Exists(Precip))
@@ -697,14 +697,14 @@ namespace Gral
                         {
                             File.Delete(Precip);
                         }
-                        catch{}
+                        catch { }
                     }
                     else
                     {
                         return;
                     }
                 }
-                
+
                 if (File.Exists(Precip) == false) // do not overwrite existing file!
                 {
                     try
@@ -712,36 +712,36 @@ namespace Gral
                         // read mettimeseries
                         List<string> data_mettimeseries = new List<string>();
                         ReadMetTimeSeries(mettimeseries, ref data_mettimeseries);
-                        
+
                         if (data_mettimeseries.Count == 0) // no data available
                         {
                             MessageBox.Show(this, "mettimeseries.dat not available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        
+
                         // now cerate the file Precipitation.txt
                         using (StreamWriter myWriter = File.CreateText(Precip))
                         {
                             string header = "Day.Month\tHour\tPrecipitation[mm/h]";
                             myWriter.WriteLine(header);
-                            
+
                             string[] text2 = new string[5];
                             string[] text3 = new string[2];
-                            
-                            foreach(string met in data_mettimeseries)
+
+                            foreach (string met in data_mettimeseries)
                             {
                                 text2 = met.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                                 int month = Convert.ToInt32(text3[1]);
                                 string day = text3[0];
                                 int hour = Convert.ToInt32(text2[1]);
-                                
-                                string line = day + "." + month.ToString(CI) +"\t" + hour.ToString(CI) + "\t0.0";
+
+                                string line = day + "." + month.ToString(CI) + "\t" + hour.ToString(CI) + "\t0.0";
                                 myWriter.WriteLine(line);
                             }
                         } // using
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -752,34 +752,34 @@ namespace Gral
                 MessageBox.Show(this, "mettimeseries.dat not available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         } //
-        
-        
+
+
         // Write the emission_timeseries.txt
         private bool Write_Emission_Timeseries()
         {
-            string emission_ts = Path.Combine(ProjectName, @"Computation","emissions_timeseries.txt");
+            string emission_ts = Path.Combine(ProjectName, @"Computation", "emissions_timeseries.txt");
             if (Directory.Exists(ProjectSetting.EmissionModulationPath))
             {
                 emission_ts = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
             }
 
-            string mettimeseries = Path.Combine(ProjectName, @"Computation","mettimeseries.dat");
+            string mettimeseries = Path.Combine(ProjectName, @"Computation", "mettimeseries.dat");
             DialogResult dr;
             CultureInfo ic = CultureInfo.InvariantCulture;
             bool result = false;
-            
+
             if (File.Exists(mettimeseries) == true)
             {
-                
+
                 if (File.Exists(emission_ts))
                 {
-                    dr = MessageBox.Show(this, "Overwrite emission modulation file" + Environment.NewLine +"emissions_timeseries.txt", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    dr = MessageBox.Show(this, "Overwrite emission modulation file" + Environment.NewLine + "emissions_timeseries.txt", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 }
                 else
                 {
-                    dr = MessageBox.Show(this, "Create new emission modulation file" + Environment.NewLine +"emissions_timeseries.txt", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    dr = MessageBox.Show(this, "Create new emission modulation file" + Environment.NewLine + "emissions_timeseries.txt", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 }
-                
+
                 if (dr == DialogResult.Yes)
                 {
                     try
@@ -787,31 +787,31 @@ namespace Gral
                         // read mettimeseries
                         List<string> data_mettimeseries = new List<string>();
                         ReadMetTimeSeries(mettimeseries, ref data_mettimeseries);
-                        
+
                         if (data_mettimeseries.Count == 0) // no data available
                         {
                             MessageBox.Show(this, "File mettimeseries.dat not available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return result;
                         }
-                        
+
                         // read all emission factors
                         int SG_Count = listView1.Items.Count;
-                        
+
                         float[,,] fac_combined = new float[SG_Count, 13, 25]; // emission factor for each SG and month and day
                         int[] SG_Number = new int[SG_Count];
-                        
+
                         float[] fac_diurnal = new float[25];
                         float[] fac_seasonal = new float[13];
-                        
-                        
-                        for(int i=0;i<listView1.Items.Count;i++)
+
+
+                        for (int i = 0; i < listView1.Items.Count; i++)
                         {
                             string entry = listView1.Items[i].SubItems[0].Text;
-                            
+
                             // get the number of the selected Source Group = name
                             string[] sg = new string[2];
                             sg = entry.Split(new char[] { ':' });
-                            
+
                             string name = "";
                             try
                             {
@@ -822,7 +822,7 @@ namespace Gral
                             {
                                 name = sg[0];
                             }
-                            
+
                             SG_Number[i] = Convert.ToInt32(name); // remember the original SG_Number
 
                             // Read emission modulation
@@ -837,10 +837,10 @@ namespace Gral
                                 }
                             }
                         } //for each listbox items
-                        
+
                         fac_seasonal = null;
                         fac_diurnal = null;
-                        
+
                         // now cerate the file emission_timeseries.txt
                         using (StreamWriter myWriter = File.CreateText(emission_ts))
                         {
@@ -850,31 +850,31 @@ namespace Gral
                                 header += "\t" + SG_Number[SG_Class].ToString(ic);
                             }
                             myWriter.WriteLine(header);
-                            
+
                             string[] text2 = new string[5];
                             string[] text3 = new string[2];
-                            
-                            foreach(string met in data_mettimeseries)
+
+                            foreach (string met in data_mettimeseries)
                             {
                                 text2 = met.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                                 int month = Convert.ToInt32(text3[1]);
                                 string day = text3[0];
                                 int hour = Convert.ToInt32(text2[1]);
-                                
-                                string line = day + "." + month.ToString(ic) +"\t" + hour.ToString(ic);
-                                
+
+                                string line = day + "." + month.ToString(ic) + "\t" + hour.ToString(ic);
+
                                 for (int SG_Class = 0; SG_Class <= SG_Number.GetUpperBound(0); SG_Class++)
                                 {
                                     line += "\t" + fac_combined[SG_Class, month - 1, hour].ToString(ic);
                                 }
-                                
+
                                 myWriter.WriteLine(line);
                             }
                         } // using
                         result = true;
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -899,25 +899,25 @@ namespace Gral
             float[,] GridValues = new float[12, 4];
             string filePath = string.Empty;
             List<string> data_result = new List<string>();
-            
+
             // read mettimeseries
             List<string> data_mettimeseries = new List<string>();
-            ReadMetTimeSeries(Path.Combine(ProjectName, @"Computation","mettimeseries.dat"), ref data_mettimeseries);
-            
+            ReadMetTimeSeries(Path.Combine(ProjectName, @"Computation", "mettimeseries.dat"), ref data_mettimeseries);
+
             if (data_mettimeseries.Count == 0) // no data available
             {
                 return false;
             }
-                        
-            if (Mode == SetTimeSeriesModeEnum.PointSourceVelocity) 
+
+            if (Mode == SetTimeSeriesModeEnum.PointSourceVelocity)
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPointSourceVel.tsd");
             }
-            else if (Mode == SetTimeSeriesModeEnum.PointSourceTemperature) 
+            else if (Mode == SetTimeSeriesModeEnum.PointSourceTemperature)
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPointSourceTemp.tsd");
             }
-            else if (Mode == SetTimeSeriesModeEnum.PortalSourceVelocity) 
+            else if (Mode == SetTimeSeriesModeEnum.PortalSourceVelocity)
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPortalSourceVel.tsd");
             }
@@ -925,59 +925,59 @@ namespace Gral
             {
                 filePath = Path.Combine(Main.ProjectName, @"Emissions", "TimeSeriesPortalSourceTemp.tsd");
             }
-            
-            if (! File.Exists(filePath))
+
+            if (!File.Exists(filePath))
             {
                 return false;
             }
-            
+
             string header = "Day.Month\tHour";
-            foreach(string entry in EntryList)
+            foreach (string entry in EntryList)
             {
                 header += "\t" + entry;
             }
             data_result.Add(header);
-            
+
             string[] text2 = new string[5];
             string[] text3 = new string[2];
-            
-            foreach(string met in data_mettimeseries) // add date & Time
+
+            foreach (string met in data_mettimeseries) // add date & Time
             {
                 text2 = met.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                 int month = Convert.ToInt32(text3[1]);
                 string day = text3[0];
                 int hour = Convert.ToInt32(text2[1]);
-                data_result.Add(day + "." + month.ToString(ic) +"\t" + hour.ToString(ic));
+                data_result.Add(day + "." + month.ToString(ic) + "\t" + hour.ToString(ic));
             }
-            
-            foreach(string entry in EntryList)
+
+            foreach (string entry in EntryList)
             {
                 GridValues = edT.ReadValues(filePath, entry, false); // read Values from file
-                
+
                 int i = 1; // Header = 0
-                foreach(string met in data_mettimeseries)
+                foreach (string met in data_mettimeseries)
                 {
                     text2 = met.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
                     int month = Math.Max(0, Math.Min(11, Convert.ToInt32(text3[1]) - 1));
                     int hour = Convert.ToInt32(text2[1]);
                     string line = string.Empty;
-                    
+
                     if (GridValues != null)
                     {
-                        line += "\t" + GridValues[month, Math.Min(3, (int) (hour / 6))].ToString(ic);
+                        line += "\t" + GridValues[month, Math.Min(3, (int)(hour / 6))].ToString(ic);
                     }
                     else
                     {
                         line += "\t" + "0.0";
                     }
-                    
+
                     data_result[i] += line;
                     i++;
                 }
             }
-            
+
             // now create the timeseries file
             string write_path = Path.Combine(ProjectName, @"Computation", Path.GetFileName(filePath).Replace("tsd", "txt"));
 
@@ -1006,10 +1006,10 @@ namespace Gral
             data_result.TrimExcess();
             data_mettimeseries.Clear();
             data_mettimeseries.TrimExcess();
-            
+
             return true;
         }
-        
+
         /// <summary>
         /// Read the time series from file
         /// </summary>
@@ -1026,14 +1026,14 @@ namespace Gral
                 using (StreamReader mettimeseries = new StreamReader(fs_mettimeseries))
                 {
                     string text;
-                    
+
                     // read data
                     while (mettimeseries.EndOfStream == false)
                     {
                         text = mettimeseries.ReadLine();
                         data.Add(text);
                     }
-                    
+
                 }
             }
             catch
@@ -1042,17 +1042,17 @@ namespace Gral
             }
             return ok;
         }
-        
+
         //computes total emissions of selected source groups and pollutants
         private void ComputeTotalEmissions(double[] totalemissions)
         {
-            List <PollutantsData> AllPollutants    = new List<PollutantsData>();
-            List <int> SelectedSourceGroups = new List<int>();
-            
+            List<PollutantsData> AllPollutants = new List<PollutantsData>();
+            List<int> SelectedSourceGroups = new List<int>();
+
             AllPollutants = ReadAllPollutants();  // read all pollutants into this List
-            
+
             //read the seleceted source groups for the simulation
-            for(int i = 0; i < listView1.Items.Count; i++)
+            for (int i = 0; i < listView1.Items.Count; i++)
             {
                 string selpoll = listView1.Items[i].SubItems[0].Text;
                 string[] dummy = selpoll.Split(new char[] { ':' });
@@ -1067,11 +1067,11 @@ namespace Gral
                 }
                 SelectedSourceGroups.Add(sg);
             }
-            
-            foreach(PollutantsData _poll in AllPollutants)
+
+            foreach (PollutantsData _poll in AllPollutants)
             {
                 int sg = _poll.SourceGroup;
-                
+
                 if (SelectedSourceGroups.Contains(sg)) // SG is selected
                 {
                     //filter pollutant
@@ -1085,7 +1085,7 @@ namespace Gral
                             }
                             else
                             {
-                                MessageBox.Show(this, "Invalid source group nr: " + sg.ToString() ,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(this, "Invalid source group nr: " + sg.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
                     }
@@ -1093,86 +1093,86 @@ namespace Gral
             }
             //Cursor = Cursors.Default;
         }
-        
+
         /// <summary>
         /// Raster Buildings, Walls and Vegetation and write buildings.dat and vegetation.dat 
         /// </summary>
         private void GenerateObstacleRaster()
         {
-            CultureInfo ic  = CultureInfo.InvariantCulture;
+            CultureInfo ic = CultureInfo.InvariantCulture;
             List<BuildingData> _bdList = new List<BuildingData>();
             List<WallData> _wdList = new List<WallData>();
             List<VegetationData> _vdList = new List<VegetationData>();
-            
+
             IO_ReadFiles read_source = new IO_ReadFiles();
             // import walls
             try
             {
                 WallDataIO _wd = new WallDataIO();
-                string _file = Path.Combine(Main.ProjectName,"Emissions","Walls.txt");
+                string _file = Path.Combine(Main.ProjectName, "Emissions", "Walls.txt");
                 _wd.LoadWallData(_wdList, _file);
                 _wd = null;
             }
-            catch{}
-            
+            catch { }
+
             // import buildings
             try
             {
                 BuildingDataIO _bd = new BuildingDataIO();
-                string _file = Path.Combine(Main.ProjectName,"Emissions","Buildings.txt");
+                string _file = Path.Combine(Main.ProjectName, "Emissions", "Buildings.txt");
                 if (File.Exists(_file) == false) // try old Computation path
                 {
-                    _file = Path.Combine(Main.ProjectName,"Computation","Buildings.txt");
+                    _file = Path.Combine(Main.ProjectName, "Computation", "Buildings.txt");
                 }
                 _bd.LoadBuildings(_bdList, _file);
                 _bd = null;
             }
-            catch{}
-            
+            catch { }
+
             // import vegetation
             try
             {
                 VegetationDataIO _vdata = new VegetationDataIO();
-                string _file = Path.Combine(Main.ProjectName,"Emissions","Vegetation.txt");
+                string _file = Path.Combine(Main.ProjectName, "Emissions", "Vegetation.txt");
                 if (File.Exists(_file) == false) // try old Computation path
                 {
-                    _file = Path.Combine(Main.ProjectName,"Computation","Vegetation.txt");
+                    _file = Path.Combine(Main.ProjectName, "Computation", "Vegetation.txt");
                 }
                 _vdata.LoadVegetation(_vdList, _file);
                 _vdata = null;
             }
-            catch{}
-            
+            catch { }
+
             read_source = null;
-            
+
             bool file = false;
             double[] xcell = new double[1000];
             double[] ycell = new double[1000];
-            
+
             GralMessage.MessageWindow message = new GralMessage.MessageWindow();
             message.Show();
             message.listBox1.Items.Add("Raster buildings on GRAL grid....");
             message.Refresh();
-            
+
             double flow_field_grid = Convert.ToDouble(numericUpDown10.Value);
             double GRAL_West = GralDomRect.West;
             double GRAL_East = GralDomRect.East;
             double GRAL_South = GralDomRect.South;
             double GRAL_North = GralDomRect.North;
-          
-            int xRmax = (int) ((GRAL_East - GRAL_West) / flow_field_grid);
-            int yRmax = (int) ((GRAL_North - GRAL_South) / flow_field_grid);
-            
-//			try
-//			{
+
+            int xRmax = (int)((GRAL_East - GRAL_West) / flow_field_grid);
+            int yRmax = (int)((GRAL_North - GRAL_South) / flow_field_grid);
+
+            //			try
+            //			{
             string newPath = Path.Combine(ProjectName, @"Computation", "buildings.dat");
-            
+
             try
             {
                 //remove existing file
                 File.Delete(newPath);
             }
-            catch{}
+            catch { }
             try
             {
                 using (StreamWriter myWriter = File.CreateText(newPath))
@@ -1280,7 +1280,7 @@ namespace Gral
                             //write file buildings.dat
                             for (int l = 0; l < count; l++)
                             {
-                                myWriter.WriteLine(Math.Round(xcell[l], 1).ToString(ic) + "," + Math.Round(ycell[l], 1).ToString(ic) + "," 
+                                myWriter.WriteLine(Math.Round(xcell[l], 1).ToString(ic) + "," + Math.Round(ycell[l], 1).ToString(ic) + ","
                                     + _bd.LowerBound.ToString(ic) + "," + _bd.Height.ToString(ic));
                                 file = true;
                             }
@@ -1346,7 +1346,7 @@ namespace Gral
                     }  // Write wall data to buildings.dat
                 } // using()
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, "Rastering buildings " + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -1495,8 +1495,8 @@ namespace Gral
 
             message.Close();
             message.Dispose();
-            
-            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings , ButtonColorEnum.BlackHook); // Building label green
+
+            ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.BlackHook); // Building label green
 
             if (file == false) // problem at writing buildings.dat
             {
@@ -1523,7 +1523,7 @@ namespace Gral
             _wdList.Clear();
             _wdList.TrimExcess();
         }
-        
+
         private void Angle(double x1, double x2, double y1, double y2, ref double angle)
         {
             angle = 0;
@@ -1532,7 +1532,7 @@ namespace Gral
                 angle = Math.Atan((y2 - y1) / (x2 - x1)) * 180 / 3.14;
                 if ((x1 < x2) && (y1 < y2))
                 {
-                    angle = 360- angle;
+                    angle = 360 - angle;
                 }
 
                 if ((x1 > x2) && (y1 < y2))
@@ -1547,7 +1547,7 @@ namespace Gral
 
                 if ((x1 > x2) && (y1 > y2))
                 {
-                    angle = 180-angle;
+                    angle = 180 - angle;
                 }
             }
             else

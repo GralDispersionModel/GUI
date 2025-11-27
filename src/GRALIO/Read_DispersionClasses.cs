@@ -11,10 +11,10 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Windows.Forms;
-using System.IO.Compression;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.Windows.Forms;
 
 namespace GralIO
 {

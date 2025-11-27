@@ -10,18 +10,17 @@
 ///</remarks>
 #endregion
 
+using GralData;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using GralData;
-using GralItemData;
-using GralStaticFunctions;
-
 namespace GralDomain
 {
     public partial class Domain
-	{
+    {
         /// <summary>
         /// Search an item at the mouse position and if more than 1 item is found, a selection dialog appears
         /// </summary>
@@ -30,15 +29,15 @@ namespace GralDomain
         {
             int i = 0;
             // search items
-            List <string> ItemNames = new List<string>();
-            List <int> ItemNumber = new List<int>();
+            List<string> ItemNames = new List<string>();
+            List<int> ItemNumber = new List<int>();
             double fx = 1 / BmpScale / MapSize.SizeX;
             double fy = 1 / BmpScale / MapSize.SizeY;
-            
+
             PointD MousePosition = new PointD(e.X, e.Y);
-            
+
             PointD[] poly = new PointD[4];
-            
+
             foreach (LineSourceData _ls in EditLS.ItemData)
             {
                 double x2 = 0;
@@ -48,7 +47,7 @@ namespace GralDomain
                 {
                     double x1 = (_ls.Pt[j].X - MapSize.West) * fx + TransformX;
                     double y1 = (_ls.Pt[j].Y - MapSize.North) * fy + TransformY;
-                    
+
                     if (j < lastpoint)
                     {
                         x2 = (_ls.Pt[j + 1].X - MapSize.West) * fx + TransformX;
@@ -59,10 +58,10 @@ namespace GralDomain
                         x2 = (_ls.Pt[j - 1].X - MapSize.West) * fx + TransformX;
                         y2 = (_ls.Pt[j - 1].Y - MapSize.North) * fy + TransformY;
                     }
-                    
+
                     double length = Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
-                    
-                    if (Math.Abs (x1 - e.X) < 200 && Math.Abs(y1 - e.Y) < 200 && length > 0)
+
+                    if (Math.Abs(x1 - e.X) < 200 && Math.Abs(y1 - e.Y) < 200 && length > 0)
                     {
                         double cosalpha = (x2 - x1) / length;
                         double sinalpha = (y1 - y2) / length;
@@ -72,93 +71,93 @@ namespace GralDomain
                         poly[1] = new PointD((int)(x1 - dx), (int)(y1 - dy));
                         poly[2] = new PointD((int)(x2 - dx), (int)(y2 - dy));
                         poly[3] = new PointD((int)(x2 + dx), (int)(y2 + dy));
-                        
+
                         if (St_F.PointInPolygonArray(MousePosition, poly))
                         {
                             ItemNames.Add(_ls.Name);
                             ItemNumber.Add(i);
                             j = _ls.Pt.Count + 1; // break search
                         }
-                    }   
+                    }
                 }
                 i++;
             }
-            
+
             return SelectOverlappedItem(e, ItemNames, ItemNumber);
         }
-        
-		/// <summary>
+
+        /// <summary>
         /// Paste a line source
         /// </summary>
         private void RightClickLineSourcePaste(object sender, System.EventArgs e)
-		{
-			if (CopiedItem.LineSource != null && CopiedItem.LineSource.Pt.Count > 1)
-			{
-				double x = Convert.ToDouble(textBox1.Text);
-				double y = Convert.ToDouble(textBox2.Text);
-				double x0 = CopiedItem.LineSource.Pt[0].X;
-				double y0 = CopiedItem.LineSource.Pt[0].Y;
-				
-				for(int i = 0; i < CopiedItem.LineSource.Pt.Count; i++)
-				{
-					CopiedItem.LineSource.Pt[i] = new GralData.PointD_3d(x  - x0 + CopiedItem.LineSource.Pt[i].X, 
-																		 y - y0 + CopiedItem.LineSource.Pt[i].Y,
-																		 CopiedItem.LineSource.Pt[i].Z);
-				}
-				
-				LineSourceData Temp = new LineSourceData(CopiedItem.LineSource);
-				Temp.Name += "-Copy";
-				EditLS.ItemData.Add(Temp);
-				EditLS.SetTrackBarMaximum();
-				CopiedItem.LineSource = null;
-				EditAndSaveLineSourceData(null, null); // save changes
-				Picturebox1_Paint();
-				MouseControl = MouseMode.LineSourceSel;
+        {
+            if (CopiedItem.LineSource != null && CopiedItem.LineSource.Pt.Count > 1)
+            {
+                double x = Convert.ToDouble(textBox1.Text);
+                double y = Convert.ToDouble(textBox2.Text);
+                double x0 = CopiedItem.LineSource.Pt[0].X;
+                double y0 = CopiedItem.LineSource.Pt[0].Y;
+
+                for (int i = 0; i < CopiedItem.LineSource.Pt.Count; i++)
+                {
+                    CopiedItem.LineSource.Pt[i] = new GralData.PointD_3d(x - x0 + CopiedItem.LineSource.Pt[i].X,
+                                                                         y - y0 + CopiedItem.LineSource.Pt[i].Y,
+                                                                         CopiedItem.LineSource.Pt[i].Z);
+                }
+
+                LineSourceData Temp = new LineSourceData(CopiedItem.LineSource);
+                Temp.Name += "-Copy";
+                EditLS.ItemData.Add(Temp);
+                EditLS.SetTrackBarMaximum();
+                CopiedItem.LineSource = null;
+                EditAndSaveLineSourceData(null, null); // save changes
+                Picturebox1_Paint();
+                MouseControl = MouseMode.LineSourceSel;
                 ContextMenuStrip m = sender as ContextMenuStrip;
                 if (m != null)
                 {
                     m.Dispose();
                 }
             }
-		}
+        }
 
-		/// <summary>
-		/// ContextMenu Edit Line Source
-		/// </summary>
-		private void RightClickLineEdit(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mi = sender as ToolStripMenuItem;
-			if (mi != null)
-			{
-				int i = Convert.ToInt32(mi.Tag);
-				EditLS.SetTrackBar(i + 1);
-				EditLS.ItemDisplayNr = i;
-				EditLS.FillValues();
-				LineSourcesToolStripMenuItemClick(null, null);
-			}
+        /// <summary>
+        /// ContextMenu Edit Line Source
+        /// </summary>
+        private void RightClickLineEdit(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                int i = Convert.ToInt32(mi.Tag);
+                EditLS.SetTrackBar(i + 1);
+                EditLS.ItemDisplayNr = i;
+                EditLS.FillValues();
+                LineSourcesToolStripMenuItemClick(null, null);
+            }
         }
         /// <summary>
 		/// ContextMenu Move Edge Point Line Source
 		/// </summary>
 		private void RightClickLineMoveEdge(object sender, EventArgs e)
-		{
+        {
             ToolStripMenuItem mi = sender as ToolStripMenuItem;
-			if (mi != null)
-			{
-				PointD coor = (PointD)mi.Tag;
-				textBox1.Text = coor.X.ToString();
-				textBox2.Text = coor.Y.ToString();
-				MoveEdgepointLine();
-				MouseControl = MouseMode.LineSourceInlineEdit;
-			}
-		}
+            if (mi != null)
+            {
+                PointD coor = (PointD)mi.Tag;
+                textBox1.Text = coor.X.ToString();
+                textBox2.Text = coor.Y.ToString();
+                MoveEdgepointLine();
+                MouseControl = MouseMode.LineSourceInlineEdit;
+            }
+        }
         /// <summary>
 		/// ContextMenu Add Edge Point Line Source
 		/// </summary>
 		private void RightClickLineAddEdge(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mi = sender as ToolStripMenuItem;
-			if (mi != null)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
                 SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
                 int i = pt.Index;
@@ -211,14 +210,14 @@ namespace GralDomain
 
                 Picturebox1_Paint();
             }
-		}
+        }
         /// <summary>
 		/// ContextMenu Delete Edge Point Line Source
 		/// </summary>
 		private void RightClickLineDelEdge(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mi = sender as ToolStripMenuItem;
-			if (mi != null)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
             {
                 SelectedPointNumber pt = (SelectedPointNumber)(mi.Tag);
                 int i = pt.Index;
@@ -264,15 +263,15 @@ namespace GralDomain
 
                 Picturebox1_Paint();
             }
-		}
+        }
         /// <summary>
 		/// ContextMenu Delete Line Source
 		/// </summary>
 		private void RightClickLineDelete(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mi = sender as ToolStripMenuItem;
-			if (mi != null)
-			{
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
                 MouseControl = MouseMode.Default;
                 int i = Convert.ToInt32(mi.Tag);
                 EditLS.SetTrackBar(i + 1);
@@ -291,14 +290,14 @@ namespace GralDomain
 		/// ContextMenu Copy Line Source
 		/// </summary>
 		private void RightClickLineCopy(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mi = sender as ToolStripMenuItem;
-			if (mi != null)
-			{
-				CopiedItem.LineSource = new LineSourceData(EditLS.ItemData[Convert.ToInt32(mi.Tag)]);
-			}
-		}
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi != null)
+            {
+                CopiedItem.LineSource = new LineSourceData(EditLS.ItemData[Convert.ToInt32(mi.Tag)]);
+            }
+        }
 
-		
+
     }
 }

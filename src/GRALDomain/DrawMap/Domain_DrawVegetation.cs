@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using GralItemData;
 
 namespace GralDomain
 {
@@ -26,7 +26,7 @@ namespace GralDomain
                                      double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat1 = new StringFormat
             {
@@ -38,12 +38,12 @@ namespace GralDomain
 
             int n = -1;
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             int transparency = _drobj.Transparancy;
             int linewidth_l = _drobj.LineWidth;
             bool FillYesNo = _drobj.FillYesNo;
             bool filter_l = _drobj.Filter;
-            
+
             VegetationData _vdata;
 
             for (int ii = 0; ii < EditVegetation.ItemData.Count; ii++)
@@ -62,7 +62,7 @@ namespace GralDomain
                         int xmean = 0, xold = 0;
                         int ymean = 0, yold = 0;
                         bool dismiss = true;
-                        
+
                         for (int i = 0; i < _points.Count; i++)
                         {
 

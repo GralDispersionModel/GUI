@@ -43,7 +43,7 @@ namespace GralShape
             xMax = double.MinValue;
             yMax = double.MinValue;
             double x1, y1, x2, y2 = 0;
-            
+
             // loop over all contour points, create the bounding box
             for (int i = 0; i < _drobj.ContourPoints.Count; i++)
             {

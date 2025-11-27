@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace GralMainForms
 {
@@ -35,7 +35,7 @@ namespace GralMainForms
                 (int layer, int sit, int LY) = ReadLayerAndSituation(filename);
                 numericUpDown1.Value = sit;
                 FileNames.Add(filename);
-                OnlineCheckBoxes |= (1<<1);
+                OnlineCheckBoxes |= (1 << 1);
             }
             filename = Path.Combine(computationPath, "u.txt");
             if (File.Exists(filename))
@@ -758,7 +758,7 @@ namespace GralMainForms
         private string LayerAndSituation(int layer)
         {
             string layerString = Convert.ToString(layer);
-            
+
             //add situation number if > 0
             if (numericUpDown1.Value > 0)
             {
@@ -766,7 +766,7 @@ namespace GralMainForms
             }
             return layerString;
         }
-        
+
         /// <summary>
         /// Read layer and (if available) the situation number for GRAMM online 
         /// </summary>
@@ -793,7 +793,7 @@ namespace GralMainForms
                 {
                     Int32.TryParse(textSplit[1], out situation); // situation that should be shown
                 }
-                
+
                 Int32.TryParse(config2, out LY); // immer LY
             }
             catch
@@ -828,7 +828,7 @@ namespace GralMainForms
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            foreach(string filename in FileNames)
+            foreach (string filename in FileNames)
             {
                 if (File.Exists(filename))
                 {

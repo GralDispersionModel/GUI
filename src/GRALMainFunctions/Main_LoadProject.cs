@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Globalization;
 using System.IO;
 using System.Threading;
-using System.Collections.Generic;
-using System.Globalization;
-using GralIO;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -25,8 +25,8 @@ namespace Gral
     {
         private void LoadProject(string foldername)
         {
-            CultureInfo ic  = CultureInfo.InvariantCulture;
-            
+            CultureInfo ic = CultureInfo.InvariantCulture;
+
             //try
             {
                 if (!Directory.Exists(foldername))
@@ -34,9 +34,9 @@ namespace Gral
                     MessageBox.Show(this, "Can't find the project folder", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                
+
                 if (File.Exists(Path.Combine(foldername, @"Settings", "Settings.ini"))) // old settings file exists
-                { 
+                {
                     if (File.Exists(Path.Combine(foldername, @"Settings", "Settings2.ini")) == false &&
                         File.Exists(Path.Combine(foldername, @"Settings", "Settings1.ini")) == false) // old project before V16.01 -> cannot open that file
                     {
@@ -51,7 +51,7 @@ namespace Gral
 
                 EmifileReset = false;
                 IndatReset = false;
-                
+
                 try
                 {
                     if (DomainGISForm != null)
@@ -65,14 +65,14 @@ namespace Gral
                         DomainGISForm = null;
                     }
                 }
-                catch{}
-                
+                catch { }
+
                 ProjectName = foldername;
 
                 // Reset old project
                 textBoxGrammTerrain.Text = string.Empty;
                 textBoxGrammLandUseFile.Text = string.Empty;
-                
+
                 label95.Visible = false;
                 textBoxGrammTerrain.Visible = false;
                 button19.Visible = false;
@@ -86,24 +86,24 @@ namespace Gral
                 radioButton2.Checked = false;
                 checkBox25.Visible = false;
                 checkBox25.Checked = false;
-                
+
                 groupBox12.Visible = false;
                 groupBox15.Visible = false;
                 groupBox16.Visible = false;
                 groupBox17.Visible = false;
-                
+
                 GRAMM_Locked = false;
                 GRAMMwindfield = null;
                 GrammDomRect.East = 0; GrammDomRect.West = 0; GrammDomRect.North = 0; GrammDomRect.South = 0;
-                
+
                 //set header in main window
                 Text = "GRAL GUI  / " + Path.GetFileName(ProjectName);
                 GralStaticFunctions.St_F.SetTrimmedTextToTextBox(label87, ProjectName);
-                
+
                 //remove start up banner
                 //this.panel1.Visible = false;
                 button44.Visible = true; // show button for comments
-                
+
                 // test, if path exists, otherwise ask, if a new project should be created
                 string newPath = Path.Combine(ProjectName, "Settings");
                 if (Directory.Exists(newPath) == false)
@@ -114,29 +114,29 @@ namespace Gral
                         return;
                     }
                 }
-                
+
                 newPath = System.IO.Path.Combine(ProjectName, "Metfiles");
 
                 GUISettings.PreviousUsedProjectPath = ProjectName;
                 GUISettings.WriteToFile();
-                
+
                 try
                 {
                     //create subdirectories
                     System.IO.Directory.CreateDirectory(newPath);
-                    
+
                     newPath = System.IO.Path.Combine(ProjectName, "Computation");
                     System.IO.Directory.CreateDirectory(newPath);
-                    
+
                     newPath = System.IO.Path.Combine(ProjectName, "Emissions");
                     System.IO.Directory.CreateDirectory(newPath);
-                    
+
                     newPath = System.IO.Path.Combine(ProjectName, "Maps");
                     System.IO.Directory.CreateDirectory(newPath);
-                    
+
                     newPath = System.IO.Path.Combine(ProjectName, "Settings");
                     System.IO.Directory.CreateDirectory(newPath);
-                    
+
                     Thread.Sleep(250);
                 }
                 catch
@@ -149,11 +149,11 @@ namespace Gral
                 // load paths for evaluations results and the emission modulation
                 ProjectSetting = new GralData.ProjectSettings(ProjectName);
                 ProjectSetting.ReadFromFile();
-                
+
                 MaxProcFileRead(); // read and set the count of max processors
                 listBox4.Items.Clear(); // delete sourcegroups
                 listView1.Clear(); // delete sourcegroups
-                
+
                 //start file watcher for Percent.txt
 #if __MonoCS__
 #else
@@ -166,8 +166,8 @@ namespace Gral
                     //percent.SynchronizingObject = this;
                     percentGRAL.EnableRaisingEvents = false;
                 }
-                catch{}
-                
+                catch { }
+
                 try
                 {
                     //start file watcher for DispNr.txt
@@ -178,8 +178,8 @@ namespace Gral
                     //dispnr.SynchronizingObject = this;
                     dispnrGRAL.EnableRaisingEvents = false;
                 }
-                catch{}
-                
+                catch { }
+
                 //start file watcher for PercentGramm.txt
                 try
                 {
@@ -190,7 +190,7 @@ namespace Gral
                     //percentGramm.SynchronizingObject = this;
                     percentGramm.EnableRaisingEvents = false;
                 }
-                catch{}
+                catch { }
                 try
                 {
                     //start file watcher for DispNrGramm.txt
@@ -201,7 +201,7 @@ namespace Gral
                     //dispnrGramm.SynchronizingObject = this;
                     dispnrGramm.EnableRaisingEvents = false;
                 }
-                catch{}
+                catch { }
 
                 //start file watcher for Problemreport.txt
                 try
@@ -213,8 +213,8 @@ namespace Gral
                     //Problemreport_GRAMM.SynchronizingObject = this;
                     ProblemreportGRAMM.EnableRaisingEvents = true;
                 }
-                catch{}
-                
+                catch { }
+
                 //start file watcher for Problemreport_GRAL.txt
                 try
                 {
@@ -225,7 +225,7 @@ namespace Gral
                     //Problemreport_GRAL.SynchronizingObject = this;
                     ProblemreportGRAL.EnableRaisingEvents = true;
                 }
-                catch{}
+                catch { }
 #endif
 
                 IO_ReadFiles OpenProject = new IO_ReadFiles
@@ -240,15 +240,15 @@ namespace Gral
                 };
                 message.Show();
                 message.listBox1.Items.Add("Loading project " + ProjectName);
-                
+
                 //open file GRAMMin.dat
                 message.listBox1.Items.Add("Loading control file GRAMMin.dat...");
                 message.Refresh();
-                
+
                 if (OpenProject.ReadGrammInFile() == true)
                 {
                     numericUpDown38.Value = Convert.ToDecimal(OpenProject.Roughness, ic);
-                    GRALSettings.Roughness = (double) numericUpDown38.Value;
+                    GRALSettings.Roughness = (double)numericUpDown38.Value;
 
                     if (OpenProject.GRAMMstartsituation > 0 && OpenProject.GRAMMstartsituation <= numericUpDown24.Maximum)
                     {
@@ -256,16 +256,16 @@ namespace Gral
                     }
 
                     label95.Visible = false;
-                    
+
                     if (OpenProject.GRAMMsmooth.Length > 0)
                     {
                         label95.Text = "Number of cells used for smoothing orography laterally: " + OpenProject.GRAMMsmooth;
                         label95.Visible = true;
                         CellNrTopographySmooth = Convert.ToInt32(OpenProject.GRAMMsmooth); // that ensures, that the file is written alright, if an new calculation is started at a highermet situation
                     }
-                    
+
                     GRAMM_Sunrise = OpenProject.GRAMMsunrise;
-                    
+
                     checkBox27.Checked = OpenProject.GRAMMsteadystate;
                     if (GRAMM_Sunrise > 0)
                     {
@@ -291,19 +291,19 @@ namespace Gral
                 label69.Text = "Dispersion situation: " + "0" + "/" + "0" + "%";
                 label66.Text = "Flow situation: " + "0" + "/" + "0" + "%";
                 label67.Text = "Actual flow situation: 0%";
-                
+
                 message.listBox1.Items.Add("Loading GRAL DispNr.txt...");
                 message.Refresh();
-                
+
                 if (OpenProject.ReadDispNrFile() == true && OpenProject.GRALTrackbar > 0) // GRAL trackbar info readable
                 {
                     double frequency = 0;
                     int trackbar = OpenProject.GRALTrackbar;
-                    
+
                     //get information about the maximum number of dispersion situations for the progress bar
                     OpenProject.DispsituationFrequ = DispSituationfrequ;
                     OpenProject.ReadMeteopgtAllFile();
-                    checkBox19.Checked = OpenProject.MeteoClassification ; //  classification
+                    checkBox19.Checked = OpenProject.MeteoClassification; //  classification
                     DispSituationfrequ = OpenProject.DispsituationFrequ;
                     frequency = OpenProject.MeteoFrequ;
 
@@ -314,7 +314,7 @@ namespace Gral
                     {
                         InDatVariables data1 = new InDatVariables();
                         InDatFileIO ReadInData1 = new InDatFileIO();
-                        data1.InDatPath = Path.Combine(ProjectName, "Computation","in.dat");
+                        data1.InDatPath = Path.Combine(ProjectName, "Computation", "in.dat");
                         ReadInData1.Data = data1;
                         if (ReadInData1.ReadInDat() == true)
                         {
@@ -353,7 +353,7 @@ namespace Gral
                     else
                     {
                         progressBar4.Maximum = Convert.ToInt32(weathersit_count);
-                        frequency = trackbar / weathersit_count;                            
+                        frequency = trackbar / weathersit_count;
                         if (frequency <= progressBar4.Maximum)
                         {
                             progressBar4.Value = Convert.ToInt32(frequency);
@@ -372,20 +372,20 @@ namespace Gral
 
                 message.listBox1.Items.Add("Loading GRAMM DispNrGRAMM.txt...");
                 message.Refresh();
-                
+
                 if (OpenProject.ReadDispGrammNrFile() == true) // GRAMM trackbar info readable
                 {
                     double frequency = 0;
                     int trackbar = OpenProject.GRAMMTrackbar;
-                    
+
                     OpenProject.DispsituationFrequ = DispSituationfrequ;
                     OpenProject.ReadMeteopgtAllFile();
                     DispSituationfrequ = OpenProject.DispsituationFrequ;
                     frequency = OpenProject.MeteoFrequ;
                     progressBar1.Maximum = Convert.ToInt32(frequency);
-                    
+
                     frequency = 0;
-                    for (int i = 0; i < trackbar-1; i++)
+                    for (int i = 0; i < trackbar - 1; i++)
                     {
                         frequency += DispSituationfrequ[i];
                     }
@@ -395,8 +395,8 @@ namespace Gral
                         progressBar1.Value = Convert.ToInt32(frequency);
                     }
 
-                    label66.Text = "Flow situation: " + Convert.ToString(trackbar-1) + "/" + Convert.ToString(Math.Round(frequency / 10, 1)) + "%";
-                    
+                    label66.Text = "Flow situation: " + Convert.ToString(trackbar - 1) + "/" + Convert.ToString(Math.Round(frequency / 10, 1)) + "%";
+
                     progressBar4.Invalidate();
                     Refresh();
                 }
@@ -405,7 +405,7 @@ namespace Gral
                     message.listBox1.Items.Add("Can't open GRAMM DispNrGRAMM.txt...");
                     message.Refresh();
                 }
-                
+
                 /*if (File.Exists(Path.Combine(projectname, @"Settings\Windfield.txt")) == false)
                 {
                     GRAMMwindfield = Path.Combine(projectname, @"Computation\");
@@ -429,7 +429,7 @@ namespace Gral
                     groupBox5.Controls.Remove(LbTbox2[i]);
                 }
                 textBoxMeteoFile.Text = string.Empty;
-                
+
                 listBox4.Items.Clear();
                 listBox5.Items.Clear();
 
@@ -452,7 +452,7 @@ namespace Gral
                 ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.Invisible);  // meteo not visible
                 ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.Invisible); // Emission label not visible
                 ChangeButtonLabel(ButtonColorEnum.ButtonBuildings, ButtonColorEnum.Invisible); // Building label not visible
-                
+
                 GralDomRect.East = 0;
                 GralDomRect.West = 0;
                 GralDomRect.North = 0;
@@ -471,7 +471,7 @@ namespace Gral
                 groupBox3.Visible = false;
                 groupBox1.Visible = false;
                 groupBox9.Visible = false;
-                
+
                 CellsGralX = 0;
                 CellsGralY = 0;
                 TBox3[0].Value = 3;
@@ -505,18 +505,18 @@ namespace Gral
                     message.listBox1.Items.Add("Can't open source group definitions...");
                     message.Refresh();
                 }
-                
+
                 //load the file "in.dat"
                 message.listBox1.Items.Add("Loading control file \"in.dat\"...");
                 message.Refresh();
-                
+
                 //InDatVariables data = new InDatVariables();
                 InDatFileIO ReadInData = new InDatFileIO();
-                
-                GRALSettings.InDatPath = Path.Combine(ProjectName, @"Computation","in.dat");
+
+                GRALSettings.InDatPath = Path.Combine(ProjectName, @"Computation", "in.dat");
                 //data.Horslices = Horslices; // initialize array object !
                 ReadInData.Data = GRALSettings;
-                
+
                 if (ReadInData.ReadInDat() == true)
                 {
                     numericUpDown6.Value = Convert.ToDecimal(GRALSettings.ParticleNumber);
@@ -546,18 +546,18 @@ namespace Gral
                     ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook); // Control label OK
                     checkBox23.Checked = GRALSettings.BuildingHeightsWrite; // write building heights?
                     numericUpDown43.Value = GRALSettings.Compressed;        // use compressed *.con files?
-                    
+
                     // check if vertical concetration file should be written
                     string name = Path.Combine(ProjectName, @"Computation", "GRAL_Vert_Conc.txt");
                     if (File.Exists(name))
                     {
-                        checkBox34.Checked = true;    	
+                        checkBox34.Checked = true;
                     }
                     else
                     {
                         checkBox34.Checked = false;
                     }
-                    
+
                     if (GRALSettings.Transientflag == 1)
                     {
                         checkBox32.Checked = false;
@@ -586,18 +586,18 @@ namespace Gral
                             numericUpDown34.Value = OpenProject.TransConcThreshold;
                         }
                         catch { }
-                    }                 
+                    }
                 }
                 else
                 {
                     message.listBox1.Items.Add("Can't open control file \"in.dat\"...");
                     message.Refresh();
                 }
-                
+
                 //data = null;
                 ReadInData = null;
-                
-                
+
+
                 string[] sourcegr = new string[101];
                 OpenProject.Source_group_list = sourcegr; // define object!
 
@@ -611,15 +611,15 @@ namespace Gral
                     numericUpDown10.Maximum = OpenProject.FlowfieldGrid;
                     numericUpDown10.Value = OpenProject.FlowfieldGrid;
                     numericUpDown10.ValueChanged += new System.EventHandler(NumericUpDown10_ValueChanged); // add event listener
-                    
+
                     numericUpDown11.Value = OpenProject.FlowfieldVertical;
                     numericUpDown12.Value = OpenProject.FlowfieldStretch;
                     FlowFieldStretchFlexible = OpenProject.FlowFieldStretchFlexible;
-                    
+
                     CellsGralX = OpenProject.CellsGralX;
                     CellsGralY = OpenProject.CellsGralY;
                     GRALSettings.NumHorSlices = OpenProject.NumhorSlices;
-                    
+
                     textBox6.Text = Convert.ToString(OpenProject.West);
                     GralDomRect.West = OpenProject.West;
                     textBox7.Text = Convert.ToString(OpenProject.East);
@@ -628,19 +628,19 @@ namespace Gral
                     GralDomRect.South = OpenProject.South;
                     textBox2.Text = Convert.ToString(OpenProject.North);
                     GralDomRect.North = OpenProject.North;
-                    
+
                     HorGridSize = (GralDomRect.East - GralDomRect.West) / CellsGralX;
                     numericUpDown9.Value = Convert.ToDecimal(HorGridSize);
-                    
+
                     numericUpDown10.Value = Math.Min(numericUpDown10.Value, numericUpDown9.Value);
                     numericUpDown10.Maximum = numericUpDown9.Value; // Maximum of Flow Grid = counting grid!
-                    
+
                     message.listBox1.Items.Add("Update source groups within the model domain...");
                     message.Refresh();
-                    
+
                     //update source groups within the defined model domain
                     SelectAllUsedSourceGroups();
-                    
+
                     message.listBox1.Items.Add("Update selected source groups for the simulation...");
                     message.Refresh();
                     //fill listview1 with the selected source groups for the simulation
@@ -680,7 +680,7 @@ namespace Gral
                     message.listBox1.Items.Add("Can't open domain information \"GRAL.geb\"...");
                     message.Refresh();
                 }
-                
+
                 //read file micro_vert_layers.txt
                 message.listBox1.Items.Add("Loading flow field microlayers");
                 if (OpenProject.ReadMicroVertLayers() == true)
@@ -696,8 +696,8 @@ namespace Gral
                 message.listBox1.Items.Add("Loading flow field relaxation factors");
                 if (OpenProject.ReadRelaxFactorsFile() == true)
                 {
-                    ProjectSetting.RelaxationFactorGRALVelocity = (double)OpenProject.RelaxVel; 
-                    ProjectSetting.RelaxationFactorGRALPressure = (double)OpenProject.RelaxPress; 
+                    ProjectSetting.RelaxationFactorGRALVelocity = (double)OpenProject.RelaxVel;
+                    ProjectSetting.RelaxationFactorGRALPressure = (double)OpenProject.RelaxPress;
                 }
                 else
                 {
@@ -728,7 +728,7 @@ namespace Gral
 
                 //read file GRAL_FlowFields.txt
                 string gralflowfields = Path.Combine(ProjectName, @"Computation", "GRAL_FlowFields.txt");
-                
+
                 if (File.Exists(gralflowfields))
                 {
                     int _compression = 0;
@@ -744,7 +744,7 @@ namespace Gral
                     }
                     catch { }
                     checkBox26.Checked = true;
-                    numericUpDown41.Value = (decimal) Math.Max(Math.Min(_compression, numericUpDown41.Maximum), 0);
+                    numericUpDown41.Value = (decimal)Math.Max(Math.Min(_compression, numericUpDown41.Maximum), 0);
                 }
                 else
                 {
@@ -792,7 +792,7 @@ namespace Gral
                 //read the file "GRAMM.geb"
                 message.listBox1.Items.Add("Loading domain information \"GRAMM.geb\"...");
                 message.Refresh();
-                
+
                 if (OpenProject.ReadGrammGebFile() == true)
                 {
                     numericUpDown16.Value = OpenProject.GRAMMvertlayers;
@@ -824,7 +824,7 @@ namespace Gral
                 //read the file "IIN.dat"
                 message.listBox1.Items.Add("Loading GRAMM control file information \"IIN.dat\".....");
                 message.Refresh();
-                
+
                 if (OpenProject.ReadGrammIinFile() == true)
                 {
                     int yy = 2000;
@@ -832,13 +832,13 @@ namespace Gral
                     int dd = 1;
                     int hh = 0;
                     int mi = 0;
-                    
+
                     numericUpDown20.Value = OpenProject.GRAMMTimeStep; // max Time step
                     numericUpDown21.Value = OpenProject.GRAMMModellingTime;   // Modelling time
                     numericUpDown25.Value = OpenProject.GRAMMDebugLevel; // Debug level
                     numericUpDown22.Value = OpenProject.GRAMMRelaxvel; // Relax vel
                     numericUpDown23.Value = OpenProject.GRAMMRelaxscal; // Relax scal
-                    checkBox21.Checked = OpenProject.GRAMMCatabatic ; // catabatic forcing
+                    checkBox21.Checked = OpenProject.GRAMMCatabatic; // catabatic forcing
                     checkBox31.Checked = OpenProject.GRAMMBoundaryCondition; //flat terrain settings
                     checkBox35.Checked = OpenProject.GRAMMERA5;  //large-scale forcing using ERA5
                     try
@@ -887,14 +887,14 @@ namespace Gral
                     }
                 }
                 catch { }
-                
+
                 message.listBox1.Items.Add("Loading GRAMM control file information \"reinit.dat\".....");
                 message.Refresh();
                 //read the file "reinit.dat"
                 try
                 {
                     checkBox20.Checked = false;
-                    string newPath2 = Path.Combine(ProjectName, @"Computation","reinit.dat");
+                    string newPath2 = Path.Combine(ProjectName, @"Computation", "reinit.dat");
                     using (StreamReader myreader = new StreamReader(newPath2))
                     {
                         try
@@ -915,7 +915,7 @@ namespace Gral
                             }
                         }
                         catch
-                        {}
+                        { }
                     }
                 }
                 catch
@@ -928,7 +928,7 @@ namespace Gral
                 NumericUpDown3_ValueChanged(sender1, e3);
                 for (int i = 0; i < GRALSettings.NumHorSlices; i++)
                 {
-                    TBox3[i].Value = (decimal) GRALSettings.HorSlices[i];
+                    TBox3[i].Value = (decimal)GRALSettings.HorSlices[i];
                 }
                 IndatReset = true;
 
@@ -952,7 +952,7 @@ namespace Gral
                             name = "00" + sg[0];
                         }
                         name = name.Substring(name.Length - 3);
-                        newPath = Path.Combine(ProjectName, @"Computation","emissions" + name + ".dat");
+                        newPath = Path.Combine(ProjectName, @"Computation", "emissions" + name + ".dat");
                         if (Directory.Exists(ProjectSetting.EmissionModulationPath))
                         {
                             newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + name + ".dat");
@@ -971,7 +971,7 @@ namespace Gral
                 message.listBox1.Items.Add("Update pollutants for the selected source groups...");
                 message.Refresh();
                 CollectAllUsedPollutants();
-                
+
                 //fill listbox5 with the existing pollutants for the selected source groups within the model domain
                 foreach (string text in Pollmod)
                 {
@@ -979,7 +979,7 @@ namespace Gral
                     button21.Visible = true;
                     button48.Visible = true;
                     ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
-                    
+
                     listBox5.Items.Add(text);
                     listBox5.SelectedIndex = 0;
                 }
@@ -988,20 +988,20 @@ namespace Gral
                 ReadBuildingCoverageThreshold();
 
                 //set index in listbox5 to the selected pollutant
-                string newpath = Path.Combine(ProjectName, @"Computation","Pollutant.txt");
-                if (File.Exists(newpath) ==false)
+                string newpath = Path.Combine(ProjectName, @"Computation", "Pollutant.txt");
+                if (File.Exists(newpath) == false)
                 {
-                    newpath = Path.Combine(ProjectName, @"Settings","Pollutant.txt");
+                    newpath = Path.Combine(ProjectName, @"Settings", "Pollutant.txt");
                 }
-                
+
                 string selpollutant;
                 try
                 {
                     //get pollutant information
                     using (StreamReader myreader = new StreamReader(newpath))
                     {
-                        selpollutant=myreader.ReadLine();
-                        
+                        selpollutant = myreader.ReadLine();
+
                         try
                         {
                             if (myreader.EndOfStream == false)
@@ -1010,8 +1010,8 @@ namespace Gral
                                 double cW = Convert.ToDouble(a[0], ic);
                                 a = myreader.ReadLine().Split('\t');
                                 double alphaW = Convert.ToDouble(a[0], ic);
-                                numericUpDown36.Value = (decimal) (cW  * 1E6D);
-                                numericUpDown35.Value = (decimal) alphaW;
+                                numericUpDown36.Value = (decimal)(cW * 1E6D);
+                                numericUpDown35.Value = (decimal)alphaW;
                                 if (cW > 0 && alphaW > 0)
                                 {
                                     checkBox33.Checked = true;
@@ -1025,7 +1025,7 @@ namespace Gral
 
                                 string temp = myreader.ReadLine();
                                 if (!string.IsNullOrEmpty(temp))
-                                { 
+                                {
                                     string[] txt = temp.Split(new char[] { '\t', '!' }); // split groups
                                     for (int i = 0; i < txt.Length; i++)
                                     {
@@ -1059,16 +1059,16 @@ namespace Gral
                                 DecayRate.Sort();
                             }
                         }
-                        catch{}	
+                        catch { }
                     }
-                    int j=0;
+                    int j = 0;
                     foreach (string text in listBox5.Items)
                     {
                         if (text == selpollutant)
                         {
                             listBox5.SelectedIndex = j;
                         }
-                        j+=1;
+                        j += 1;
                     }
                 }
                 catch
@@ -1076,25 +1076,25 @@ namespace Gral
 
                 //check whether GRAL emission files exist
                 bool fileexist = false;
-                string pathy = Path.Combine(ProjectName, @"Computation","point.dat");
+                string pathy = Path.Combine(ProjectName, @"Computation", "point.dat");
                 if (File.Exists(pathy))
                 {
                     fileexist = true;
                 }
 
-                pathy = Path.Combine(ProjectName, @"Computation","portals.dat");
+                pathy = Path.Combine(ProjectName, @"Computation", "portals.dat");
                 if (File.Exists(pathy))
                 {
                     fileexist = true;
                 }
 
-                pathy = Path.Combine(ProjectName, @"Computation","cadastre.dat");
+                pathy = Path.Combine(ProjectName, @"Computation", "cadastre.dat");
                 if (File.Exists(pathy))
                 {
                     fileexist = true;
                 }
 
-                pathy = Path.Combine(ProjectName, @"Computation","line.dat");
+                pathy = Path.Combine(ProjectName, @"Computation", "line.dat");
                 if (File.Exists(pathy))
                 {
                     fileexist = true;
@@ -1107,11 +1107,11 @@ namespace Gral
 
                 message.listBox1.Items.Add("Loading meteorological data...");
                 message.Refresh();
-                
+
                 //load meteorological data
                 try
                 {
-                    string newPath2 = Path.Combine(ProjectName, @"Settings","Meteorology.txt");
+                    string newPath2 = Path.Combine(ProjectName, @"Settings", "Meteorology.txt");
                     if (File.Exists(newPath2))
                     {
                         using (StreamReader myreader = new StreamReader(newPath2))
@@ -1140,12 +1140,12 @@ namespace Gral
                                 TBox[WindSpeedClasses - 1].Text = NumUpDown[WindSpeedClasses - 2].Value.ToString(); ;
                             }
                             catch
-                            {}
+                            { }
                         }
                     }
-//				else
-//					MessageBox.Show(this, "Could not read Meteorology.txt");
-                    
+                    //				else
+                    //					MessageBox.Show(this, "Could not read Meteorology.txt");
+
                     //reading the file and storing the data in variables
                     if (MetfileName != string.Empty)
                     {
@@ -1178,7 +1178,7 @@ namespace Gral
                             WindData = winddata
                         };
 
-                        if (MetoColumnSeperator ==  '\0' ) // check if seperators are set
+                        if (MetoColumnSeperator == '\0') // check if seperators are set
                         {
                             MetoColumnSeperator = ',';
                         }
@@ -1193,32 +1193,32 @@ namespace Gral
                             MessageBox.Show(this, "Error when reading Meteo-File" + newPath2 + " in line" + winddata.Count, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         winddata = readwindfile.WindData;
-                        
+
                         if (winddata.Count == 0)
                         {
                             reader_ok = false;
                         }
 
                         readwindfile = null;
-                        
+
                         if (reader_ok)
                         {
                             string[] date = new string[3];
-                            
+
                             MeteoTimeSeries.Clear();
                             MeteoTimeSeries.TrimExcess();
                             MeteoTimeSeries = winddata;
-//						foreach(Wind_Data wd in winddata)
-//						{
-//							datum[n1] = wd.Date;
-//							zeit[n1] = wd.Time;
-//							stunde[n1] = wd.Hour;
-//							windge[n1] = wd.Vel;
-//							windri[n1] = wd.Dir;
-//							akla[n1] = wd.Stab_Class;
-//							n1++;
-//						}
-                            
+                            //						foreach(Wind_Data wd in winddata)
+                            //						{
+                            //							datum[n1] = wd.Date;
+                            //							zeit[n1] = wd.Time;
+                            //							stunde[n1] = wd.Hour;
+                            //							windge[n1] = wd.Vel;
+                            //							windri[n1] = wd.Dir;
+                            //							akla[n1] = wd.Stab_Class;
+                            //							n1++;
+                            //						}
+
                             groupBox1.Visible = true;
                             groupBox2.Visible = true;
                             checkBox19.Visible = true;
@@ -1228,11 +1228,11 @@ namespace Gral
                             button6.Visible = true;
                             button7.Visible = true;
                             ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, ButtonColorEnum.RedDot); // meteo button red
-                            
-                            groupBox23.Visible= true; // Anemometer height
+
+                            groupBox23.Visible = true; // Anemometer height
                             label100.Visible = true;
                             groupBox20.Visible = true;
-                            
+
                             if (Path.GetDirectoryName(newPath2).Length > 85)
                             {
                                 textBoxMeteoFile.Text = newPath2.Substring(0, 85) + "...." + Path.DirectorySeparatorChar +
@@ -1245,8 +1245,8 @@ namespace Gral
                         }
                         winddata = null;
                     }
-                    
-                    newPath2 = Path.Combine(ProjectName, @"Computation","meteopgt.all");
+
+                    newPath2 = Path.Combine(ProjectName, @"Computation", "meteopgt.all");
                     if (File.Exists(newPath2))
                     {
                         ChangeButtonLabel(ButtonColorEnum.ButtonMeteo, Gral.ButtonColorEnum.BlackHook); // meteo button green
@@ -1256,7 +1256,7 @@ namespace Gral
                 {
                     MessageBox.Show(this, "Could not read meteorology file");
                 }
-                
+
                 //loading building information
                 message.listBox1.Items.Add("Loading building information...");
                 message.Refresh();
@@ -1304,7 +1304,7 @@ namespace Gral
                 try
                 {
                     //read file information
-                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Settings","Topography.txt")))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Settings", "Topography.txt")))
                     {
                         Topofile = myreader.ReadLine();
                         numericUpDown19.Value = Convert.ToDecimal(myreader.ReadLine().Replace(".", DecimalSep));
@@ -1333,7 +1333,7 @@ namespace Gral
                             button43.Visible = true;
                             button23.Visible = true;
                             //check if GRAL_topofile.txt exists
-                            if (File.Exists(Path.Combine(ProjectName, @"Computation","GRAL_topofile.txt")))
+                            if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAL_topofile.txt")))
                             {
                                 checkBox25.Checked = true;
                             }
@@ -1344,7 +1344,7 @@ namespace Gral
                         }
                         //compute top height of GRAMM domain
                         ComputeGrammModelHeights();
-                        
+
                     }
                     else
                     {
@@ -1371,7 +1371,7 @@ namespace Gral
                 try
                 {
                     //read file information
-                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Settings","Landuse.txt")))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Settings", "Landuse.txt")))
                     {
                         if (!myreader.EndOfStream)
                         {
@@ -1388,9 +1388,9 @@ namespace Gral
                 //loading GRAMM windfield information
                 message.listBox1.Items.Add("Loading GRAMM windfield information...");
                 message.Refresh();
-                
+
                 // A windfield has been defined previously....
-                if (File.Exists(Path.Combine(ProjectName, "Computation","windfeld.txt")))
+                if (File.Exists(Path.Combine(ProjectName, "Computation", "windfeld.txt")))
                 {
                     bool GRAMMWindFieldsAvailable = true;
 
@@ -1438,7 +1438,7 @@ namespace Gral
                             DirectoryInfo di = new DirectoryInfo(GRAMMwindfield);
                             files_flow = di.GetFiles("*.wnd");
                         }
-                        catch {}
+                        catch { }
                         if (files_flow.Length == 0)
                         {
                             GRAMMWindFieldsAvailable = false;
@@ -1527,7 +1527,7 @@ namespace Gral
                             {
                                 //write file information for GRAMM windfield
                                 WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, false);
-                                
+
                                 Textbox16_Set("GRAMM Windfield: " + GRAMMwindfield); // write metfile to tab "Computation"
 
                                 //write file information for landuse file
@@ -1601,33 +1601,33 @@ namespace Gral
                                     GRAMM_Locked = true;                    // lock GRAMM project
                                 }
                             }
-                        
+
                         }
                         catch
                         { }
                     }
                 }
-                
+
                 // Show Logfile Button?
                 Check_for_Existing_Logfiles();
-                
+
                 //search for GRAL concentration files
                 message.listBox1.Items.Add("Search for GRAL concentration files...");
                 message.Refresh();
 
                 CheckConFiles();
-                
+
                 Gramm_locked_buttonClick(null, null);   // change locked-Button
-                
+
                 if ((Control.ModifierKeys & Keys.Shift) != Keys.Shift) // if shift key pressed, don't close the message window
                 {
                     message.Close();
                 }
 
                 EmifileReset = true;
-                
+
                 OpenProject = null; // relase object
-                
+
                 //enable/disable GRAL simulations
                 Enable_GRAL();
                 //enable/disable GRAMM simulations
@@ -1667,7 +1667,7 @@ namespace Gral
 #endif
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 if (message)
                 {
@@ -1707,7 +1707,7 @@ namespace Gral
                     WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMWindfieldPath, false);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1729,6 +1729,6 @@ namespace Gral
                 radioButton5.Checked = true;
             }
         }
-              
+
     }
 }

@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralIO;
 
 namespace Gral
 {

@@ -10,6 +10,10 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using Gral.GRALItemForms;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -17,10 +21,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using Gral;
-using Gral.GRALItemForms;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralItemForms
 {
@@ -2013,7 +2013,7 @@ namespace GralItemForms
             {
                 numericUpDown2.Increment = 0.01m;
             }
-            
+
             if (value > 0.09m && oldValue < 0.1m)
             {
                 numericUpDown2.Increment = 0.1m;

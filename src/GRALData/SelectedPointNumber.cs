@@ -19,15 +19,15 @@ namespace GralData
     /// Selected Point number and coordinates if an item is selected in the domain-form
     /// </summary>
     public struct SelectedPointNumber
-	{
-		public double X;
-		public double Y;
-		public int Index;
-		public SelectedPointNumber(string x, string y, int index, CultureInfo cul) 
-		{
-			X = Math.Round(Convert.ToDouble(x, cul), 1);
-			Y = Math.Round(Convert.ToDouble(y, cul), 1);
-			Index = index;
-		}
-	}
+    {
+        public double X;
+        public double Y;
+        public int Index;
+        public SelectedPointNumber(string x, string y, int index, CultureInfo cul)
+        {
+            X = Math.Round(Convert.ToDouble(x, cul), 1);
+            Y = Math.Round(Convert.ToDouble(y, cul), 1);
+            Index = index;
+        }
+    }
 }

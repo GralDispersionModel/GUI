@@ -11,8 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace GralBackgroundworkers
@@ -31,7 +31,7 @@ namespace GralBackgroundworkers
             //reading emission variations
             int maxsource = mydata.MaxSource;
             string decsep = mydata.DecSep;
-            string [] text=new string[5];
+            string[] text = new string[5];
             string newpath;
             string[] sg_numbers = new string[maxsource];
             string[] sg_names = mydata.SelectedSourceGroup.Split(',');
@@ -55,7 +55,7 @@ namespace GralBackgroundworkers
             }
 
             //read mettimeseries.dat
-            List<string> wgmettime=new List<string>();
+            List<string> wgmettime = new List<string>();
             List<string> wrmettime = new List<string>();
             List<string> akmettime = new List<string>();
             List<string> hour = new List<string>();
@@ -101,9 +101,9 @@ namespace GralBackgroundworkers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                BackgroundThreadMessageBox (ex.Message);
+                BackgroundThreadMessageBox(ex.Message);
                 return;
             }
 
@@ -111,8 +111,8 @@ namespace GralBackgroundworkers
             List<string> data_meteopgt = new List<string>();
             ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
             if (data_meteopgt.Count == 0) // no data available
-            { 
-                BackgroundThreadMessageBox ("Error reading meteopgt.all");
+            {
+                BackgroundThreadMessageBox("Error reading meteopgt.all");
             }
 
             int nnn = 0;
@@ -142,7 +142,7 @@ namespace GralBackgroundworkers
             {
                 for (int i = 0; i < hour.Count; i++)
                 {
-                    
+
                     if (Rechenknecht.CancellationPending)
                     {
                         e.Cancel = true;
@@ -150,9 +150,9 @@ namespace GralBackgroundworkers
                     }
                     if (i % 4 == 0)
                     {
-                        Rechenknecht.ReportProgress((int) (i / (double) hour.Count * 100D));
+                        Rechenknecht.ReportProgress((int)(i / (double)hour.Count * 100D));
                     }
-                    
+
                     bool exist = true;
                     //set variables to zero
                     RestoreJaggedArray(conc);
@@ -210,7 +210,7 @@ namespace GralBackgroundworkers
                         if (parallel_existconp == true)
                         {
                             string filename_p = Path.Combine(mydata.ProjectName, @"Computation", odr_files[itmp]);
-                            if(!ReadOdrFiles(filename_p, mydata, itmp, ref concp, ref concm, ref Q_cv0, ref td))
+                            if (!ReadOdrFiles(filename_p, mydata, itmp, ref concp, ref concm, ref Q_cv0, ref td))
                             {
                                 // Error reading the odr file -> Analysis not possible
                                 lock (thisLock)
@@ -393,7 +393,7 @@ namespace GralBackgroundworkers
             {
                 //break;
             }
-            
+
             //final computations
             if (nnn > 0)
             {
@@ -475,7 +475,7 @@ namespace GralBackgroundworkers
                 }
                 else
                 {
-                    name = mydata.Prefix + mydata.Pollutant	+ "_" + sg_names[itm1] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
+                    name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm1] + "_" + mydata.Slicename + "_" + Convert.ToString(mydata.OdourThreshold) + "GE_PM" + Convert.ToString(mydata.Peakmean);
                 }
 
                 file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
@@ -575,7 +575,7 @@ namespace GralBackgroundworkers
                 //write mean total standard deviation of the concentration flucutations
                 name5 = mydata.Prefix + mydata.Pollutant + "_total";
                 file5 = Path.Combine(mydata.PathEvaluationResults, "ConcentrationStandardDeviation_" + name5 + ".txt");
-                Result.Unit =  @"OU/m" + Gral.Main.CubeString;
+                Result.Unit = @"OU/m" + Gral.Main.CubeString;
                 Result.TwoDim = Conc_standard;
                 Result.FileName = file5;
                 Result.WriteFloatResult();

@@ -11,9 +11,9 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
-using System.Globalization;
 using System.Data;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace GralShape
 {
@@ -110,7 +110,7 @@ namespace GralShape
                 if (!dt.Columns.Contains(Column))
                 {
                     dt.Columns.Add(Column, typeof(String));
-                    
+
                     //check if there is a fix value or an equation given
                     if (Equation.Substring(0, 1) == "=")
                     {

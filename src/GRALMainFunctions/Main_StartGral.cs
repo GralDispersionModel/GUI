@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using GralIO;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -121,8 +121,8 @@ namespace Gral
                     filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL", SearchOption.TopDirectoryOnly);
                 }
 #else
-                filePaths = Directory.GetFiles(Path.Combine (ProjectName, "Computation"), "GRAL*.bat", SearchOption.TopDirectoryOnly);
-                #endif
+                filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL*.bat", SearchOption.TopDirectoryOnly);
+#endif
 
                 if (filePaths.Length > 0)
                 {
@@ -135,11 +135,11 @@ namespace Gral
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
-            #if __MonoCS__
+#if __MonoCS__
             dialog.Filter = "GRAL executables (GRAL*.dll;GRAL)|GRAL*.dll;GRAL";
-            #else
+#else
             dialog.Filter = "GRAL executables (GRAL*.exe;GRAL*.bat)|GRAL*.exe;GRAL*.bat";
-            #endif
+#endif
 
             dialog.Title = "Select GRAL executable";
             // dialog.ShowHelp = true;
@@ -170,7 +170,7 @@ namespace Gral
                         try
                         {
                             File.Copy(dialog.FileName, GRAL_Program_Path, true);
-                            
+
                             //copy System.Numerics.Vectors.dll for GRAL Version 19.01
                             string numerics_dll = Path.Combine(Path.GetDirectoryName(dialog.FileName), "System.Numerics.Vectors.dll");
                             if (Path.GetExtension(dialog.FileName) == ".exe" && File.Exists(numerics_dll))
@@ -180,10 +180,10 @@ namespace Gral
                             }
 
                             string batch = String.Empty;
-                            #if __MonoCS__
+#if __MonoCS__
                             if (Path.GetExtension(dialog.FileName).ToLower() == ".dll")
                                 batch = "GRAL*.dll";
-                            #else
+#else
                             if (Path.GetExtension(dialog.FileName).ToLower() == ".bat")
                             {
                                 batch = "GRAL*.bat";
@@ -262,7 +262,7 @@ namespace Gral
                             }
                         }
                     } // delete *.con & *.odr files in transient mode
-                    
+
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
 
@@ -322,7 +322,7 @@ namespace Gral
 #else
 
                     // multple instances
-                    int numberOfInstances = (int) numericUpDown33.Value;
+                    int numberOfInstances = (int)numericUpDown33.Value;
                     try
                     {
 
@@ -340,7 +340,7 @@ namespace Gral
                     }
                     catch { }
 
-                    int first_sit = Convert.ToInt32(numericUpDown5.Value); 
+                    int first_sit = Convert.ToInt32(numericUpDown5.Value);
                     int final_sit = weathersit_count;
                     int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
                     int instance_start = first_sit;
@@ -389,8 +389,8 @@ namespace Gral
                         instance_start = instance_end + 1;
                         count++;
                     }
-                    
-                    #endif
+
+#endif
 
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
@@ -408,18 +408,18 @@ namespace Gral
         //GRAL simulations finished or interrupted
         private void GralExited(object sender, EventArgs e)
         {
-            #if __MonoCS__
-            #else
+#if __MonoCS__
+#else
             GRALProcess.EnableRaisingEvents = false;
             GRALProcess.Dispose();
             System.Threading.Thread.Sleep(1000);
             //check if *.con files are existing for postprocessing routines
             Invoke(new showTopo(CheckConFiles));
-            WriteGralLogFile(3,"","");
-            MessageBox.Show("GRAL simulation stopped or interrupted", "Info",MessageBoxButtons.OK,MessageBoxIcon.Information,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
-            #endif
+            WriteGralLogFile(3, "", "");
+            MessageBox.Show("GRAL simulation stopped or interrupted", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+#endif
         }
-        
+
         /// <summary>
         /// stop GRAL simulations
         /// </summary>
@@ -427,10 +427,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALStopCalculation(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
-            #else
+#else
             try
             {
                 GRALProcess.Kill();
@@ -439,7 +439,7 @@ namespace Gral
             { }
             //check if *.con files are existing for postprocessing routines
             CheckConFiles();
-            #endif
+#endif
         }
 
         /// <summary>
@@ -449,10 +449,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALPauseCalculation(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
-            #endif
+#endif
             try
             {
                 GRALProcess.Kill();

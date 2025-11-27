@@ -10,16 +10,15 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-using GralItemData;
-
 namespace GralDomain
 {
-   public partial class Domain
-   {
+    public partial class Domain
+    {
         /// <summary>
         /// Draw Point Sources
         /// </summary>
@@ -27,22 +26,22 @@ namespace GralDomain
                                double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat2 = new StringFormat
             {
                 LineAlignment = StringAlignment.Far,
                 Alignment = StringAlignment.Center
-            }; 
+            };
 
             int n = -1;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             Pen penrec;
             if (_drobj.LineColors[0] == Color.Transparent || _drobj.LineColor == Color.Transparent)
             {
-                penrec = new Pen (Color.Red);
+                penrec = new Pen(Color.Red);
                 _drobj.LineColor = Color.Red;
             }
             else
@@ -59,12 +58,12 @@ namespace GralDomain
                 }
                 else
                 {
-                    width = Convert.ToInt32(Math.Max (1, Math.Min(200, 1.5 / BmpScale / MapSize.SizeX))); // 6 m diameter
+                    width = Convert.ToInt32(Math.Max(1, Math.Min(200, 1.5 / BmpScale / MapSize.SizeX))); // 6 m diameter
                 }
             }
             else
             {
-                width = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / 6 * factor_x)));
+                width = Math.Max(1, Math.Min(200, Convert.ToInt32((double)_drobj.LineWidth / 6 * factor_x)));
             }
 
             //width = 4;
@@ -77,16 +76,16 @@ namespace GralDomain
             };
 
             PointSourceData _psdata;
-            
+
             for (int ii = 0; ii < EditPS.ItemData.Count; ii++)
             {
                 _psdata = EditPS.ItemData[ii];
                 try
                 {
                     n++;
-                    float x1 = (float) ((_psdata.Pt.X - form1_west) * factor_x + TransformX);
-                    float y1 = (float) ((_psdata.Pt.Y - form1_north) * factor_y + TransformY);
-                    
+                    float x1 = (float)((_psdata.Pt.X - form1_west) * factor_x + TransformX);
+                    float y1 = (float)((_psdata.Pt.Y - form1_north) * factor_y + TransformY);
+
                     if ((x1 < 0) || (y1 < 0) || (x1 > pb1_width) || (y1 > pb1_height))
                     {
                     }
@@ -94,25 +93,25 @@ namespace GralDomain
                     {
                         //g.DrawImage(pointsource, x1 - 10, y1 - 10, 20, 20);
                         g.DrawArc(penrec, x1 - width, y1 - width, width * 2, width * 2, 1, 360);
-                        
+
                         if ((n == EditPS.ItemDisplayNr) && ((MouseControl == MouseMode.PointSourceSel) || (MouseControl == MouseMode.PointSourcePos)))
                         {
                             Pen penmarked = new Pen(Color.Green)
                             {
                                 Width = width / 2
                             };
-                            g.DrawRectangle(p1, x1 - width - width/4 -2 , y1 - width - width/4 - 2, width * 2  + width/2 +4, width * 2  + width/2 +4);
-                            g.DrawArc(penmarked, x1- width,y1-width,width * 2,width * 2,1,360);
+                            g.DrawRectangle(p1, x1 - width - width / 4 - 2, y1 - width - width / 4 - 2, width * 2 + width / 2 + 4, width * 2 + width / 2 + 4);
+                            g.DrawArc(penmarked, x1 - width, y1 - width, width * 2, width * 2, 1, 360);
                             penmarked.Dispose();
                         }
                         if (draw_label)
                         {
-                            g.DrawString(_psdata.Name , LabelFont, LabelBrush, x1 , y1 - width, StringFormat2);
+                            g.DrawString(_psdata.Name, LabelFont, LabelBrush, x1, y1 - width, StringFormat2);
                         }
                     }
-                    
+
                 }
-                catch{}
+                catch { }
             }
             p1.Dispose();
             penrec.Dispose();

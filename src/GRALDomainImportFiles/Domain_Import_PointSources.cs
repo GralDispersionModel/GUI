@@ -10,21 +10,21 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
-using GralShape;
 using GralItemData;
 using GralMessage;
+using GralShape;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
     public partial class Domain
     {
-    	/// <summary>
-    	/// Import point Sources from *.txt, *.dat or *.shp file
-    	/// </summary>
+        /// <summary>
+        /// Import point Sources from *.txt, *.dat or *.shp file
+        /// </summary>
         private void ImportPointSources(object sender, EventArgs e)
         {
             OpenFileDialog dialog = openFileDialog1;
@@ -40,7 +40,7 @@ namespace GralDomain
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 int numbpoints = EditPS.ItemData.Count;
-                
+
                 if (dialog.FileName.EndsWith("point.dat"))
                 {
                     int i = 1;
@@ -64,10 +64,10 @@ namespace GralDomain
                                         polli[i] = i1;
                                     }
                                 }
-                                
+
                                 if (polli[i] == Gral.Main.PollutantList.IndexOf("Unknown"))
                                 {
-                                    MessageBox.Show(this, text1[i + 3] + " is not a registered pollutant name","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show(this, text1[i + 3] + " is not a registered pollutant name", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
 
                             }
@@ -81,7 +81,7 @@ namespace GralDomain
                                     text1 = dummy.Split(new char[] { ',', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                     double x0 = Convert.ToDouble(text1[0], ic);
                                     double y0 = Convert.ToDouble(text1[1], ic);
-                                    
+
                                     if ((x0 >= MainForm.GralDomRect.West) && (x0 <= MainForm.GralDomRect.East) &&
                                         (y0 >= MainForm.GralDomRect.South) && (y0 <= MainForm.GralDomRect.North))
                                     {
@@ -121,21 +121,21 @@ namespace GralDomain
                                 }
                             }
                         }
-                        
+
                         EditPS.SetTrackBarMaximum();
                         EditAndSavePointSourceData(sender, e);
                         EditPS.FillValues();
 
                         //add POINT SOURCES layer if not already existing
                         CheckForExistingDrawingObject("POINT SOURCES");
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditPS.ItemData.Count - numbpoints) + " point sources imported.", Location);
                         Box.Show();
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editps.psourcedata.Count - numbpoints) + " point sources imported.");
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading point source data in line number " + Convert.ToString(i + 2),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading point source data in line number " + Convert.ToString(i + 2), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 if (dialog.FileName.EndsWith("Psources.txt"))
@@ -146,9 +146,9 @@ namespace GralDomain
                         try
                         {
                             PointSourceDataIO _ps = new PointSourceDataIO();
-                            _ps.LoadPointSources(EditPS.ItemData, dialog.FileName, true, new RectangleF((float) MainForm.GralDomRect.West, (float) MainForm.GralDomRect.South, (float) (MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float) (MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
+                            _ps.LoadPointSources(EditPS.ItemData, dialog.FileName, true, new RectangleF((float)MainForm.GralDomRect.West, (float)MainForm.GralDomRect.South, (float)(MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float)(MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
                             _ps = null;
-                            
+
                             EditPS.SetTrackBarMaximum();
                             if (EditPS.ItemData.Count > 0)
                             {
@@ -168,15 +168,15 @@ namespace GralDomain
 
                         //add POINT SOURCES layer if not already existing
                         CheckForExistingDrawingObject("POINT SOURCES");
-                        
-                        MessageBox.Show(this, "Data import successful: \r\n" + Convert.ToString(EditPS.ItemData.Count - numbpoints) + " point sources imported.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        MessageBox.Show(this, "Data import successful: \r\n" + Convert.ToString(EditPS.ItemData.Count - numbpoints) + " point sources imported.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading point source data in line number " + Convert.ToString(j + 2),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading point source data in line number " + Convert.ToString(j + 2), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                
+
                 if (dialog.FileName.EndsWith("shp"))
                 {
                     Waitprogressbar wait = new Waitprogressbar("Loading shape file");
@@ -184,7 +184,7 @@ namespace GralDomain
                     {
                         //add POINT SOURCES layer if not already existing
                         int index = CheckForExistingDrawingObject("POINT SOURCES");
-                        
+
                         //read geometry data from shape file
                         Cursor = Cursors.WaitCursor;
                         wait.Show();
@@ -208,14 +208,14 @@ namespace GralDomain
                         EditPS.SetTrackBarMaximum();
                         EditAndSavePointSourceData(sender, e);
                         EditPS.FillValues();
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditPS.ItemData.Count - numbpoints) + " point sources imported.", Location);
                         Box.Show();
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editps.psourcedata.Count - numbpoints) + " point sources imported.");
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading shape file","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading shape file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     wait.Close();
                 }

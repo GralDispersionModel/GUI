@@ -11,8 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.IO.Compression;
 
 namespace GralIO
@@ -122,7 +122,7 @@ namespace GralIO
                 _uk = Landuse.CreateArray<float[][]>(_NII + 2, () => Landuse.CreateArray<float[]>(_NJJ + 2, () => new float[_NKK + 2]));
                 _vk = Landuse.CreateArray<float[][]>(_NII + 2, () => Landuse.CreateArray<float[]>(_NJJ + 2, () => new float[_NKK + 2]));
                 _wk = Landuse.CreateArray<float[][]>(_NII + 2, () => Landuse.CreateArray<float[]>(_NJJ + 2, () => new float[_NKK + 2]));
-                
+
                 if (header == -1)
                 {
                     for (int i = 1; i <= _NII + 1; i++)
@@ -151,7 +151,7 @@ namespace GralIO
                     {
                         for (int i = 1; i <= _NII + 1; i++)
                         {
-                           
+
                             cts.ThrowIfCancellationRequested();
 
                             // read each component after the other one -> better compression
@@ -162,7 +162,7 @@ namespace GralIO
                             System.Threading.Tasks.Parallel.For(1, _NJJ + 1, j =>
                             {
                                 int index = (j - 1) * 2;
-                                
+
                                 _uk[i][j][k - 1] = (float)((Int16)(readData[index] | (readData[index + 1] << 8))) * 0.01F; // 2 Bytes  = word integer value
                                 index += offset;
                                 _vk[i][j][k - 1] = (float)((Int16)(readData[index] | (readData[index + 1] << 8))) * 0.01F;

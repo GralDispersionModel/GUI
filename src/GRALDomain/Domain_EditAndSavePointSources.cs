@@ -10,9 +10,9 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Windows.Forms;
-using GralItemData;
 
 namespace GralDomain
 {

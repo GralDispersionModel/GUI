@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gral.GralMainForms
@@ -33,8 +28,8 @@ namespace Gral.GralMainForms
 
         private void button3_Click(object sender, EventArgs e)
         {
-            StartSituation = (int) numericUpDown1.Value;
-            FinalSituation = (int) numericUpDown2.Value;
+            StartSituation = (int)numericUpDown1.Value;
+            FinalSituation = (int)numericUpDown2.Value;
         }
     }
 }

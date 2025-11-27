@@ -481,7 +481,7 @@ namespace GralDomain
             _drobj.ContourPolygons.Sort();
             _obj = null;
         }
-        
+
         /// <summary>
         /// Compute the inner angle of two lines
         /// </summary>

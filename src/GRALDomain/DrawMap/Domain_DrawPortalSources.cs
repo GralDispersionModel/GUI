@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using GralItemData;
 
 namespace GralDomain
 {
@@ -26,7 +26,7 @@ namespace GralDomain
                                        double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat1 = new StringFormat
             {
@@ -35,21 +35,21 @@ namespace GralDomain
             }; //format for names of sources
 
             Brush SelectedBrush = new SolidBrush(Color2Transparent(150, Color.Green));
-            
+
             int n = -1;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             PortalsData _pd;
             Point[] mypoint = new Point[7];
-            
+
             for (int ii = 0; ii < EditPortals.ItemData.Count; ii++)
             {
                 _pd = EditPortals.ItemData[ii];
                 try
                 {
                     n++;
-                    
+
                     int sourcegroups = _pd.Poll.Count;
                     if (_pd.Height > 0)
                     {
@@ -128,12 +128,12 @@ namespace GralDomain
                         }
 
                         //compute vector for indicating outlet direction
-                        
+
                         double xrot;
                         double yrot;
                         //x,y coordinates of the cell center
                         //length = 50;
-                        
+
                         if (_drobj.LineWidth <= 1)
                         {
                             if (_drobj.LineWidth == 0)
@@ -142,12 +142,12 @@ namespace GralDomain
                             }
                             else
                             {
-                                length = Math.Max (1, Math.Min(200, Convert.ToInt32(14 / BmpScale / MapSize.SizeX))); // 14 m lenght
+                                length = Math.Max(1, Math.Min(200, Convert.ToInt32(14 / BmpScale / MapSize.SizeX))); // 14 m lenght
                             }
                         }
                         else
                         {
-                            length = Math.Max (1, Math.Min(200, Convert.ToInt32((double) _drobj.LineWidth / BmpScale / MapSize.SizeX)));
+                            length = Math.Max(1, Math.Min(200, Convert.ToInt32((double)_drobj.LineWidth / BmpScale / MapSize.SizeX)));
                         }
 
                         //point 1 of arrow
@@ -199,11 +199,11 @@ namespace GralDomain
                         xrot = xmean + (x1 - xmean);
                         yrot = ymean + (y1 - ymean);
                         mypoint[6] = new Point(Convert.ToInt32(xrot), Convert.ToInt32(yrot));
-                        
+
                         Brush br1 = new SolidBrush(Color2Transparent(_drobj.Transparancy, _drobj.LineColors[0]));
                         g.FillPolygon(br1, mypoint);
                         br1.Dispose();
-                        
+
                         if ((n == EditPortals.ItemDisplayNr) && ((MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.PortalSourceSel)))
                         {
                             g.FillPolygon(SelectedBrush, mypoint);
@@ -217,7 +217,7 @@ namespace GralDomain
                         }
                     }
                 }
-                catch{}
+                catch { }
             }
 
             StringFormat1.Dispose();

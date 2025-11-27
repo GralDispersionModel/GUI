@@ -30,10 +30,10 @@ namespace GralShape
         private readonly string ShapeFileName;
         private double areapolygon = 0;  //area of a polygon
         private DataTable dt;
-        private bool  _vegetation = false;
-        public bool Vegetation {set {_vegetation = value;}}
+        private bool _vegetation = false;
+        public bool Vegetation { set { _vegetation = value; } }
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private readonly GralData.DomainArea GralDomRect;
         private readonly double _deltaZ;
         private readonly List<ComboBox> ComboColumnNames = new List<ComboBox>();
@@ -77,8 +77,8 @@ namespace GralShape
                 MessageBox.Show(this, "Not all needed values defined - data is not imported", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
-        
+
+
         private void Import_Receptor_Data()
         {
             double height = 3;
@@ -172,7 +172,7 @@ namespace GralShape
                 MessageBox.Show(this, "Please define a height columns", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
+
         private void Import_Vegegation_Data()
         {
             if (comboBox1.SelectedIndex != 0 && comboBox2.SelectedIndex != 0 &&
@@ -278,10 +278,10 @@ namespace GralShape
             {
                 Text = "Import vegetation areas";
             }
-            
+
             //open dbf file
             Cursor = Cursors.WaitCursor;
-            
+
             GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("Import data base");
             wait.Show();
 
@@ -326,7 +326,7 @@ namespace GralShape
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
-            
+
             if (_vegetation == false)
             {
                 label2.Visible = false;
@@ -338,7 +338,7 @@ namespace GralShape
                 comboBox5.Visible = false;
                 comboBox6.Visible = false;
             }
-            
+
         }
 
         //add column
@@ -387,7 +387,7 @@ namespace GralShape
                 }
             }
         }
-        
+
         void Shape_Receptor_DialogFormClosed(object sender, FormClosedEventArgs e)
         {
             if (dataGridView1 != null)
@@ -430,7 +430,7 @@ namespace GralShape
                 WaitDlg.Dispose();
             }
         }
-        
+
         //compute area of a polygon
         private void calc_area(int numpoints, GralDomain.PointD[] polypoints)
         {

@@ -43,7 +43,7 @@ namespace GralMainForms
 
         private void WindDistribution_Load(object sender, EventArgs e)
         {
-            Text = "Wind velocity - cumulative frequency distribution - " + MetFile; 
+            Text = "Wind velocity - cumulative frequency distribution - " + MetFile;
         }
 
         private void WindDistribution_Resize(object sender, EventArgs e)
@@ -103,11 +103,11 @@ namespace GralMainForms
             };
             RectangleF ClipBounds = new RectangleF(0, 0, HorSize, VertSize);
 
-            SizeF _lenght  = g.MeasureString(MetFile, _mediumFont);
+            SizeF _lenght = g.MeasureString(MetFile, _mediumFont);
             SizeF _lenght2 = g.MeasureString("100", _smallFont);
 
             int x0 = (int)(_lenght2.Width + _lenght2.Height) + 10;
-            int y0 = (int) VertSize - (int)_lenght2.Height * 2 - 30;
+            int y0 = (int)VertSize - (int)_lenght2.Height * 2 - 30;
 
             g.DrawString(MetFile, _mediumFont, _blackBrush, (HorSize - _lenght.Width) / 2, _lenght.Height + 4, format1);
             string infodata = StartDate + " - " + EndDate + " " + StartHour.ToString() + ":00 - " + FinalHour.ToString() + ":00  Mean wind speed: " + Math.Round(MeanWindSpeed, 1).ToString() + "m/s";
@@ -140,7 +140,7 @@ namespace GralMainForms
                 g.DrawString(fs, _smallFont, _blackBrush, new PointF(xr - _lenght2.Height / 2, y0 + 5), format1);
                 g.DrawLine(p3, xr, ymin, xr, y0 + 2);
             }
-            
+
             //draw axis
             p3.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             g.DrawLine(p2, x0, ymin, x0, y0 + 5);
@@ -149,8 +149,8 @@ namespace GralMainForms
             g.DrawLine(p2, xmax, ymin, xmax, y0);
 
             ClipBounds.Width = xr;
-            
-            g.DrawString("v [m/s]", _smallFont, _blackBrush, new PointF((int) (HorSize / 2 - 30), (int) (y0 + _lenght2.Height)), format1);
+
+            g.DrawString("v [m/s]", _smallFont, _blackBrush, new PointF((int)(HorSize / 2 - 30), (int)(y0 + _lenght2.Height)), format1);
 
             StringFormat verticalString = new StringFormat
             {
@@ -159,8 +159,8 @@ namespace GralMainForms
                 LineAlignment = StringAlignment.Near
             };
             SizeF _lenght3 = g.MeasureString("Frequency [%]", _smallFont);
-            g.DrawString("Frequency [%]", _smallFont, _blackBrush, 4, (int) ((VertSize - _lenght3.Width) / 2), verticalString);
-            
+            g.DrawString("Frequency [%]", _smallFont, _blackBrush, 4, (int)((VertSize - _lenght3.Width) / 2), verticalString);
+
             // Draw Graph
             Pen p4 = new Pen(Color.Blue, 3);
             PointF[] _pt = new PointF[WClassFrequency.Length];
@@ -168,14 +168,14 @@ namespace GralMainForms
             g.Clip = new Region(ClipBounds);
             for (int i = 0; i < WClassFrequency.Length; i++)
             {
-                _pt[i].X = (float) (x0 + vw * xfac);
+                _pt[i].X = (float)(x0 + vw * xfac);
                 _pt[i].Y = (float)(y0 - WClassFrequency[i] * 10 * yfac);
                 vw += 0.25;
             }
-             
+
             g.DrawCurve(p4, _pt, 0F);
             g.ResetClip();
-            
+
             p1.Dispose(); p2.Dispose(); p3.Dispose(); p4.Dispose();
             verticalString.Dispose();
             format1.Dispose();

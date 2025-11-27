@@ -10,13 +10,6 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
-using System.Windows.Forms;
 using Gral.GRALDomForms;
 using GralDomForms;
 using GralIO;
@@ -24,7 +17,13 @@ using GralItemData;
 using GralItemForms;
 using GralMessage;
 using GralStaticFunctions;
-using SocialExplorer.IO.FastDBF;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.Windows.Forms;
 
 namespace GralDomain
 {

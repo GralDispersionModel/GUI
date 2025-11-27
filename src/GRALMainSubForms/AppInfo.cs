@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using Gral;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Gral;
 
 namespace GralMainForms
 {
@@ -49,7 +49,7 @@ namespace GralMainForms
 
         private void label5_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = label5.Text, UseShellExecute = true }); 
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() { FileName = label5.Text, UseShellExecute = true });
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -59,7 +59,7 @@ namespace GralMainForms
 
         private void label5_MouseHover(object sender, EventArgs e)
         {
-            Label _l = (Label) sender;
+            Label _l = (Label)sender;
             _l.ForeColor = Color.DarkBlue;
         }
 

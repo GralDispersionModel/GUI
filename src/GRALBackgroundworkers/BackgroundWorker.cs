@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using GralMessage;
 using System;
-using System.Windows.Forms;
-using System.Threading;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Collections.Generic;
 using System.IO.Compression;
-using GralMessage;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace GralBackgroundworkers
 {
@@ -32,18 +32,18 @@ namespace GralBackgroundworkers
         private readonly GralBackgroundworkers.BackgroundworkerData MyBackData;
         // Flag, if calculation was successful
         private bool Computation_Completed = false;
-        
+
         /// <summary>
         /// Starts the backgroundworker for several functions depending on BackgroundworkerData.Rechenart 
         /// </summary> 		
         public ProgressFormBackgroundworker(GralBackgroundworkers.BackgroundworkerData InputData)
         {
-            
+
             InitializeComponent();
-            
+
             // Get the Data from Domain and Set FormCapture
             MyBackData = InputData;
-            
+
             usertext.Text = MyBackData.UserText;
         }
 
@@ -53,15 +53,16 @@ namespace GralBackgroundworkers
             // Close the form if backgroundworker has finished
             Rechenknecht.WorkerSupportsCancellation = true;
             Rechenknecht.WorkerReportsProgress = true;
-            Rechenknecht.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted); 
+            Rechenknecht.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted);
             Rechenknecht.ProgressChanged += new ProgressChangedEventHandler(SetProgressbar);
-            
+
             progressBar1.Maximum = 100;
-            
+
             // Update of form for LINUX version, otherwise the backgroundworker sometimes cant access this form -> app crashes
-            for (int i = 0; i < 20; i++) {
-                Thread.Sleep (5);
-                Application.DoEvents(); 
+            for (int i = 0; i < 20; i++)
+            {
+                Thread.Sleep(5);
+                Application.DoEvents();
             }
             // and let the backgroundworker working
             Rechenknecht.RunWorkerAsync(MyBackData);
@@ -79,22 +80,22 @@ namespace GralBackgroundworkers
 
         private void SetProgressbar(object sender, ProgressChangedEventArgs e)
         {
-           if (e.ProgressPercentage < progressBar1.Maximum && e.ProgressPercentage > progressBar1.Minimum)
-           {
-              progressBar1.Value = e.ProgressPercentage;
-           }
+            if (e.ProgressPercentage < progressBar1.Maximum && e.ProgressPercentage > progressBar1.Minimum)
+            {
+                progressBar1.Value = e.ProgressPercentage;
+            }
         }
-        
+
         void Button1Click(object sender, EventArgs e)
         {
             Rechenknecht.CancelAsync();
             button1.Enabled = false;
         }
-        
+
         void RechenknechtDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             GralBackgroundworkers.BackgroundworkerData MyData = (GralBackgroundworkers.BackgroundworkerData)e.Argument;
-            
+
             if (MyData.BackgroundWorkerFunction == BWMode.GrammMetFile)
             {
                 GenerateMeteofile(MyData, e);
@@ -211,8 +212,8 @@ namespace GralBackgroundworkers
                 }
             }
         }
-        
-        
+
+
         void RechenknechtRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // jetzt bin ich aus dem Rechenknecht-Thread wieder draußen
@@ -233,7 +234,7 @@ namespace GralBackgroundworkers
             }
             else
             {
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.GrammMetFile) // Meteo Files
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -267,7 +268,7 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.OdorCompost) // Compost
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -279,7 +280,7 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.OdorHours) // Odour hours
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -291,7 +292,7 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.MeanMeteoPGT) // Mean, Max concentrations
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -303,7 +304,7 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.OdorAllinAllout) // All in all out
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -315,7 +316,7 @@ namespace GralBackgroundworkers
                     }
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.GrammMeanWindVel) // Mean wind velocity
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -327,7 +328,7 @@ namespace GralBackgroundworkers
                     this.Close();
                     //MessageBox.Show("Contour plots can now be created in the menu Domain");
                 }
-                
+
                 if (MyBackData.BackgroundWorkerFunction == BWMode.ReceptorTimeSeries) // Receptor Concentration
                 {
                     MyBackData.BackgroundWorkerFunction = BWMode.None;
@@ -386,7 +387,7 @@ namespace GralBackgroundworkers
             }
             Rechenknecht.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(RechenknechtRunWorkerCompleted);
         }
-        
+
         private string GetSgNumbers(string Sourcegroupname)
         {
             int snumber = 1;
@@ -399,10 +400,10 @@ namespace GralBackgroundworkers
             {
                 Int32.TryParse(text11[0], out snumber); //snumber = Convert.ToInt16(text11[0]);
             }
-            
+
             return Convert.ToString(snumber);
         }
-            
+
         public bool ReadConFiles(string filename, GralBackgroundworkers.BackgroundworkerData mydata, int itm, ref float[][][] conc)
         {
             bool compressed = false;
@@ -452,7 +453,7 @@ namespace GralBackgroundworkers
                         result = ReadCon(reader, mydata, itm, ref conc);
                     }
                 }
-                
+
             }
             catch
             {
@@ -461,13 +462,13 @@ namespace GralBackgroundworkers
             //MessageBox.Show(filename + "/" + result.ToString());
             return result;
         }
-        
+
         private bool ReadCon(BinaryReader reader, GralBackgroundworkers.BackgroundworkerData mydata, int itm, ref float[][][] conc)
         {
             try
             {
                 int indexi, indexj;
-                
+
                 if (mydata.Horgridsize == 0)
                 {
                     return false; // no division by zero
@@ -489,7 +490,7 @@ namespace GralBackgroundworkers
                     return ReadConAllCompressed(reader, mydata, itm, ref conc);
                 }
 
-//#if NET6_0_OR_GREATER
+                //#if NET6_0_OR_GREATER
                 byte[] chunk = reader.ReadBytes(4800);
                 while (chunk.Length > 0)
                 {
@@ -512,31 +513,31 @@ namespace GralBackgroundworkers
                     }
                     chunk = reader.ReadBytes(4800);
                 }
-//#else
-//                for (;;) // endless loop until eof()
-//                {
-//                    int  x = reader.ReadInt32(); // read 4 bytes = i
-//                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
-//                    x = reader.ReadInt32();     // read 4 bytes = j
-//                    indexj = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
-//                    Single tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
-                    
-//                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                    {
-//                        conc[indexi][indexj][itm] = tempconc;
-//                    }
-//                    if (sequential == true)
-//                    {
-//                        // Read seperator bytes at the end of the loop, otherwise an error may occur and the last value wouldn´t be computed
-//                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if stream is formatted
-//                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if strem is formatted
-//                    }
-//                }
-//#endif
+                //#else
+                //                for (;;) // endless loop until eof()
+                //                {
+                //                    int  x = reader.ReadInt32(); // read 4 bytes = i
+                //                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                //                    x = reader.ReadInt32();     // read 4 bytes = j
+                //                    indexj = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                //                    Single tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
+
+                //                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                    {
+                //                        conc[indexi][indexj][itm] = tempconc;
+                //                    }
+                //                    if (sequential == true)
+                //                    {
+                //                        // Read seperator bytes at the end of the loop, otherwise an error may occur and the last value wouldn´t be computed
+                //                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if stream is formatted
+                //                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if strem is formatted
+                //                    }
+                //                }
+                //#endif
             }
-            catch(System.IO.EndOfStreamException)
+            catch (System.IO.EndOfStreamException)
             {
-               return true;
+                return true;
             }
             catch // other error
             {
@@ -559,7 +560,7 @@ namespace GralBackgroundworkers
 
                 int end = 0;
 
-//#if NET6_0_OR_GREATER
+                //#if NET6_0_OR_GREATER
                 // read entire file
                 do
                 {
@@ -578,8 +579,8 @@ namespace GralBackgroundworkers
                         indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
 
                         Single tempconc = 0;
-                        
-                        for (int i = 8; i < chunk.Length; i+=4)
+
+                        for (int i = 8; i < chunk.Length; i += 4)
                         {
                             tempconc = BitConverter.ToSingle(chunk, i); // read 4 bytes = Single concentration value
                             if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
@@ -600,48 +601,48 @@ namespace GralBackgroundworkers
                     }
                 }
                 while (end != -1);
-//#else
-//                // read entire file
-//                do
-//                {
-//                    int lenght = reader.ReadInt32(); // number of points at one row
+                //#else
+                //                // read entire file
+                //                do
+                //                {
+                //                    int lenght = reader.ReadInt32(); // number of points at one row
 
-//                    if (lenght > 0) // new dataset
-//                    {
-//                        int xi = reader.ReadInt32();
-//                        int xj = reader.ReadInt32();
-//                        double x = IKOOAGRAL + xi * dx - dx * 0.5F;
-//                        double y = JKOOAGRAL + xj * dy - dy * 0.5F;
+                //                    if (lenght > 0) // new dataset
+                //                    {
+                //                        int xi = reader.ReadInt32();
+                //                        int xj = reader.ReadInt32();
+                //                        double x = IKOOAGRAL + xi * dx - dx * 0.5F;
+                //                        double y = JKOOAGRAL + xj * dy - dy * 0.5F;
 
-//                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
-//                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                //                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                //                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
 
-//                        Single tempconc = 0;
-//                        for (int i = 0; i < lenght; i++)
-//                        {
-//                            tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                            if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                            {
-//                                conc[indexi][indexj][itm] = tempconc;
-//                            }
+                //                        Single tempconc = 0;
+                //                        for (int i = 0; i < lenght; i++)
+                //                        {
+                //                            tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                            if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                            {
+                //                                conc[indexi][indexj][itm] = tempconc;
+                //                            }
 
-//                            y += dy; // new y- coordinate of next point
-//                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
-//                        }
-//                    }
-//                    else if (lenght == -1) // end of file
-//                    {
-//                        end = lenght; // finish
-//                    }
-//                    else // wrong value -> error
-//                    {
-//                        throw new IOException();
-//                    }
+                //                            y += dy; // new y- coordinate of next point
+                //                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                //                        }
+                //                    }
+                //                    else if (lenght == -1) // end of file
+                //                    {
+                //                        end = lenght; // finish
+                //                    }
+                //                    else // wrong value -> error
+                //                    {
+                //                        throw new IOException();
+                //                    }
 
-//                }
-//                while (end != -1);
-//                return true;
-//#endif
+                //                }
+                //                while (end != -1);
+                //                return true;
+                //#endif
             }
             catch
             {
@@ -663,7 +664,7 @@ namespace GralBackgroundworkers
                 float dy = reader.ReadSingle();
                 int NX = reader.ReadInt32();
                 int NY = reader.ReadInt32();
-//#if NET6_0_OR_GREATER
+                //#if NET6_0_OR_GREATER
                 for (int i = 1; i <= NX; i++)
                 {
                     double x = IKOOAGRAL + i * dx - dx * 0.5F;
@@ -682,23 +683,23 @@ namespace GralBackgroundworkers
                         }
                     }
                 }
-//#else
-//                for (int i = 1; i <= NX; i++)
-//                {
-//                    double x = IKOOAGRAL + i * dx - dx * 0.5F;
-//                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                //#else
+                //                for (int i = 1; i <= NX; i++)
+                //                {
+                //                    double x = IKOOAGRAL + i * dx - dx * 0.5F;
+                //                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
 
-//                    for (int j = 1; j <= NY; j++)
-//                    {
-//                        double y = JKOOAGRAL + j * dy - dy * 0.5F;
-//                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
-//                        if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                        {
-//                            conc[indexi][indexj][itm] = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                        }
-//                    }
-//                }
-//#endif
+                //                    for (int j = 1; j <= NY; j++)
+                //                    {
+                //                        double y = JKOOAGRAL + j * dy - dy * 0.5F;
+                //                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                //                        if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                        {
+                //                            conc[indexi][indexj][itm] = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                        }
+                //                    }
+                //                }
+                //#endif
             }
             catch
             {
@@ -711,11 +712,11 @@ namespace GralBackgroundworkers
         private bool ReadOdrFiles(string filename, GralBackgroundworkers.BackgroundworkerData mydata, int itm, ref float[][][] concp, ref float[][][] concm, ref float[][][] Q_cv0, ref float[][][] td)
         {
             bool compressed = false;
-            string comp_file = Path.GetFileName(filename).Substring(0,5) + ".grz";   // filename of a compressed file
+            string comp_file = Path.GetFileName(filename).Substring(0, 5) + ".grz";   // filename of a compressed file
             string comp_filepath = Path.Combine(Path.GetDirectoryName(filename), comp_file);    // compressed file with path
-            string con_file  = Path.GetFileName(filename);  // original *.con filename
-                                                            //			MessageBox.Show(comp_filepath);
-                                                            //			MessageBox.Show(comp_file);
+            string con_file = Path.GetFileName(filename);  // original *.con filename
+                                                           //			MessageBox.Show(comp_filepath);
+                                                           //			MessageBox.Show(comp_file);
             bool result = false;
             if (File.Exists(comp_filepath))
             {
@@ -755,15 +756,15 @@ namespace GralBackgroundworkers
                     {
                         result = ReadOdr(reader, mydata, itm, ref concp, ref concm, ref Q_cv0, ref td);
                     }
-                }               
+                }
             }
             catch
             {
-                result =  false;
+                result = false;
             }
             return result;
         }
-        
+
         private bool ReadOdr(BinaryReader reader, GralBackgroundworkers.BackgroundworkerData mydata, int itm, ref float[][][] concp, ref float[][][] concm, ref float[][][] Q_cv0, ref float[][][] td)
         {
             try
@@ -789,7 +790,7 @@ namespace GralBackgroundworkers
                 {
                     return ReadOdrAllCompressed(reader, mydata, itm, ref concp, ref concm, ref Q_cv0, ref td);
                 }
-//#if NET6_0_OR_GREATER
+                //#if NET6_0_OR_GREATER
                 byte[] chunk = reader.ReadBytes(4800);
                 while (chunk.Length > 0)
                 {
@@ -814,43 +815,43 @@ namespace GralBackgroundworkers
                     }
                     chunk = reader.ReadBytes(4800);
                 }
-//#else
-//                for (; ; ) // endless loop until eof()
-//                {
-//                    int x = reader.ReadInt32(); // read 4 bytes = i
-//                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
-//                    x = reader.ReadInt32();     // read 4 bytes = j
-//                    indexj = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                //#else
+                //                for (; ; ) // endless loop until eof()
+                //                {
+                //                    int x = reader.ReadInt32(); // read 4 bytes = i
+                //                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                //                    x = reader.ReadInt32();     // read 4 bytes = j
+                //                    indexj = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
 
-//                    Single tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                    {
-//                        concp[indexi][indexj][itm] = tempconc;
-//                    }
-//                    tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                    {
-//                        concm[indexi][indexj][itm] = tempconc;
-//                    }
-//                    tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                    {
-//                        Q_cv0[indexi][indexj][itm] = tempconc;
-//                    }
-//                    tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                    {
-//                        td[indexi][indexj][itm] = tempconc;
-//                    }
+                //                    Single tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                    {
+                //                        concp[indexi][indexj][itm] = tempconc;
+                //                    }
+                //                    tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                    {
+                //                        concm[indexi][indexj][itm] = tempconc;
+                //                    }
+                //                    tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                    {
+                //                        Q_cv0[indexi][indexj][itm] = tempconc;
+                //                    }
+                //                    tempconc = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                    if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                    {
+                //                        td[indexi][indexj][itm] = tempconc;
+                //                    }
 
-//                    if (sequential == true)
-//                    {
-//                        // Read seperator bytes at the end of the loop, otherwise an error may occur and the last value wouldn´t be computed
-//                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if stream is formatted
-//                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if strem is formatted
-//                    }
-//                }
-//#endif
+                //                    if (sequential == true)
+                //                    {
+                //                        // Read seperator bytes at the end of the loop, otherwise an error may occur and the last value wouldn´t be computed
+                //                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if stream is formatted
+                //                        dummy = reader.ReadInt32(); // read 4 bytes from stream = "Seperator" if strem is formatted
+                //                    }
+                //                }
+                //#endif
             }
             catch (System.IO.EndOfStreamException)
             {
@@ -875,12 +876,12 @@ namespace GralBackgroundworkers
                 float dy = reader.ReadSingle();
 
                 int end = 0;
-//#if NET6_0_OR_GREATER
+                //#if NET6_0_OR_GREATER
                 // read entire file
                 do
                 {
                     int lenght = reader.ReadInt32(); // number of values at one row
-                    
+
                     if (lenght > 0) // new dataset
                     {
                         byte[] chunk = reader.ReadBytes(lenght / 4 * 16 + 8);
@@ -917,59 +918,59 @@ namespace GralBackgroundworkers
                 }
                 while (end != -1);
             }
-//#else
-//                // read entire file
-//                do
-//                {
-//                    int lenght = reader.ReadInt32(); // number of values at one row
-//                    if (lenght > 0) // new dataset
-//                    {
-//                        int xi = reader.ReadInt32();
-//                        int xj = reader.ReadInt32();
-//                        double x = IKOOAGRAL + xi * dx - dx * 0.5F;
-//                        double y = JKOOAGRAL + xj * dy - dy * 0.5F;
+            //#else
+            //                // read entire file
+            //                do
+            //                {
+            //                    int lenght = reader.ReadInt32(); // number of values at one row
+            //                    if (lenght > 0) // new dataset
+            //                    {
+            //                        int xi = reader.ReadInt32();
+            //                        int xj = reader.ReadInt32();
+            //                        double x = IKOOAGRAL + xi * dx - dx * 0.5F;
+            //                        double y = JKOOAGRAL + xj * dy - dy * 0.5F;
 
-//                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
-//                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+            //                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+            //                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
 
-//                        Single tempconcp = 0;
-//                        Single tempconcm = 0;
-//                        Single tempQ_cv = 0;
-//                        Single temptd = 0;
-//                        for (int i = 0; i < lenght; i += 4)
-//                        {
-//                            tempconcp = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                            tempconcm = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                            tempQ_cv = reader.ReadSingle();  // read 4 bytes = Single concentration value
-//                            temptd = reader.ReadSingle();    // read 4 bytes = Single concentration value
+            //                        Single tempconcp = 0;
+            //                        Single tempconcm = 0;
+            //                        Single tempQ_cv = 0;
+            //                        Single temptd = 0;
+            //                        for (int i = 0; i < lenght; i += 4)
+            //                        {
+            //                            tempconcp = reader.ReadSingle(); // read 4 bytes = Single concentration value
+            //                            tempconcm = reader.ReadSingle(); // read 4 bytes = Single concentration value
+            //                            tempQ_cv = reader.ReadSingle();  // read 4 bytes = Single concentration value
+            //                            temptd = reader.ReadSingle();    // read 4 bytes = Single concentration value
 
-//                            if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                            {
-//                                concp[indexi][indexj][itm] = tempconcp;
-//                                concm[indexi][indexj][itm] = tempconcm;
-//                                Q_cv0[indexi][indexj][itm] = tempQ_cv;
-//                                td[indexi][indexj][itm] = temptd;
-//                            }
+            //                            if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+            //                            {
+            //                                concp[indexi][indexj][itm] = tempconcp;
+            //                                concm[indexi][indexj][itm] = tempconcm;
+            //                                Q_cv0[indexi][indexj][itm] = tempQ_cv;
+            //                                td[indexi][indexj][itm] = temptd;
+            //                            }
 
-//                            y += dy; // new y- coordinate of next point
-//                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
-//                        }
-//                    }
-//                    else if (lenght == -1) // end of file
-//                    {
-//                        end = lenght; // finish
-//                    }
-//                    else // wrong value -> error
-//                    {
-//                        throw new IOException();
-//                    }
+            //                            y += dy; // new y- coordinate of next point
+            //                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+            //                        }
+            //                    }
+            //                    else if (lenght == -1) // end of file
+            //                    {
+            //                        end = lenght; // finish
+            //                    }
+            //                    else // wrong value -> error
+            //                    {
+            //                        throw new IOException();
+            //                    }
 
-//                }
-//                while (end != -1);
-                
-//                return true;
-//            }
-//#endif
+            //                }
+            //                while (end != -1);
+
+            //                return true;
+            //            }
+            //#endif
             catch
             {
                 RestoreJaggedArray(concp);
@@ -994,7 +995,7 @@ namespace GralBackgroundworkers
                 int NX = reader.ReadInt32();
                 int NY = reader.ReadInt32();
 
-//#if NET6_0_OR_GREATER
+                //#if NET6_0_OR_GREATER
                 for (int i = 1; i <= NX; i++)
                 {
                     double x = IKOOAGRAL + i * dx - dx * 0.5F;
@@ -1011,44 +1012,44 @@ namespace GralBackgroundworkers
                                 concp[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 16);
                                 concm[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 16 + 4);
                                 Q_cv0[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 16 + 8);
-                                td[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 16 + 12); 
+                                td[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 16 + 12);
                             }
                         }
                     }
-                }            
-//#else
-//                Single tempconcp = 0;
-//                Single tempconcm = 0;
-//                Single tempQ_cv = 0;
-//                Single temptd = 0;
+                }
+                //#else
+                //                Single tempconcp = 0;
+                //                Single tempconcm = 0;
+                //                Single tempQ_cv = 0;
+                //                Single temptd = 0;
 
-//                for (int i = 1; i <= NX; i++)
-//                {
-//                    double x = IKOOAGRAL + i * dx - dx * 0.5F;
-//                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                //                for (int i = 1; i <= NX; i++)
+                //                {
+                //                    double x = IKOOAGRAL + i * dx - dx * 0.5F;
+                //                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
 
-//                    for (int j = 1; j <= NY; j++)
-//                    {
-//                        double y = JKOOAGRAL + j * dy - dy * 0.5F;
-//                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                //                    for (int j = 1; j <= NY; j++)
+                //                    {
+                //                        double y = JKOOAGRAL + j * dy - dy * 0.5F;
+                //                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
 
-//                        tempconcp = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                        tempconcm = reader.ReadSingle(); // read 4 bytes = Single concentration value
-//                        tempQ_cv = reader.ReadSingle();  // read 4 bytes = Single concentration value
-//                        temptd = reader.ReadSingle();    // read 4 bytes = Single concentration value
+                //                        tempconcp = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                        tempconcm = reader.ReadSingle(); // read 4 bytes = Single concentration value
+                //                        tempQ_cv = reader.ReadSingle();  // read 4 bytes = Single concentration value
+                //                        temptd = reader.ReadSingle();    // read 4 bytes = Single concentration value
 
-//                        if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
-//                        {
-//                            concp[indexi][indexj][itm] = tempconcp;
-//                            concm[indexi][indexj][itm] = tempconcm;
-//                            Q_cv0[indexi][indexj][itm] = tempQ_cv;
-//                            td[indexi][indexj][itm] = temptd;
-//                        }
-//                    }
-//                }
+                //                        if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
+                //                        {
+                //                            concp[indexi][indexj][itm] = tempconcp;
+                //                            concm[indexi][indexj][itm] = tempconcm;
+                //                            Q_cv0[indexi][indexj][itm] = tempQ_cv;
+                //                            td[indexi][indexj][itm] = temptd;
+                //                        }
+                //                    }
+                //                }
 
-//                return true;
-//#endif
+                //                return true;
+                //#endif
             }
             catch
             {
@@ -1073,14 +1074,14 @@ namespace GralBackgroundworkers
                     // read header
                     string text = meteopgt.ReadLine();
                     text = meteopgt.ReadLine();
-                    
+
                     // read data
                     while (meteopgt.EndOfStream == false)
                     {
                         text = meteopgt.ReadLine();
                         data.Add(text);
                     }
-                    
+
                 }
             }
             catch
@@ -1089,7 +1090,7 @@ namespace GralBackgroundworkers
             }
             return ok;
         }
-        
+
         public bool ReadMettimeseries(string filename, ref List<string> data)
         {
             bool ok = true;
@@ -1100,14 +1101,14 @@ namespace GralBackgroundworkers
                 using (StreamReader mettimeseries = new StreamReader(fs_mettimeseries))
                 {
                     string text;
-                    
+
                     // read data
                     while (mettimeseries.EndOfStream == false)
                     {
                         text = mettimeseries.ReadLine();
                         data.Add(text);
                     }
-                    
+
                 }
             }
             catch
@@ -1121,7 +1122,7 @@ namespace GralBackgroundworkers
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => 
+                Invoke(new Action(() =>
                     { MessageBox.Show(this, text, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error); }));
             }
             else

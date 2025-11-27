@@ -13,7 +13,6 @@
 using Gral.GralMainForms;
 using GralData;
 using GralIO;
-using GralMainForms;
 using GralMessage;
 using GralStaticFunctions;
 using System;
@@ -22,7 +21,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 
 #if __MonoCS__
 #else
@@ -71,7 +69,7 @@ namespace Gral
         /// <summary>
         /// Global decimal separator of the system
         /// </summary>
-        private string DecimalSep;
+        private readonly string DecimalSep;
         /// <summary>
         /// Path of existing GRAMM project
         /// </summary>
@@ -324,7 +322,7 @@ namespace Gral
         /// Timer for updating the file size labels
         /// </summary>
         private System.Timers.Timer UpdateFileSizes;
-        
+
         /// <summary>
         /// Start the main form of this application
         /// </summary>
@@ -1400,8 +1398,7 @@ namespace Gral
         }
         private void RightClickButton33(object sender, EventArgs e)
         {
-            ContextMenuStrip m = sender as ContextMenuStrip;
-            if (m != null)
+            if (sender is ContextMenuStrip m)
             {
                 m.Dispose();
             }
@@ -2081,9 +2078,8 @@ namespace Gral
         {
             if (EmifileReset == true)
             {
-                bool istda = new bool();
                 string name = Path.Combine(ProjectName, @"Computation", "GRAL_Topography.txt");
-                istda = File.Exists(name);
+                bool istda = File.Exists(name);
                 if (checkBox24.Checked == true)
                 {
                     if (istda == false)
@@ -2909,8 +2905,8 @@ namespace Gral
                 !GRALSettings.WaitForKeyStroke ||
                 GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50 ||
                 GRALSettings.ReproducibleResults ||
-                Math.Abs (ProjectSetting.RelaxationFactorGRALPressure - 1)   > 0.0001 ||
-                Math.Abs (ProjectSetting.RelaxationFactorGRALVelocity - 0.1) > 0.0001)
+                Math.Abs(ProjectSetting.RelaxationFactorGRALPressure - 1) > 0.0001 ||
+                Math.Abs(ProjectSetting.RelaxationFactorGRALVelocity - 0.1) > 0.0001)
             {
                 button57.BackgroundImage = Gral.Properties.Resources.WrenchYellowTransparant;
             }
@@ -3027,7 +3023,7 @@ namespace Gral
             UpdateFileSizes.AutoReset = true;
             UpdateFileSizes.Enabled = true;
             UpdateFileSizes.Stop();
-            
+
             //enable support for high contrast themes
             if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
             {
@@ -3040,14 +3036,14 @@ namespace Gral
                 LoopAllControls(this.Controls);
                 LoopAllControls(this.Controls);
             }
-            this.numericUpDown10.MouseWheel += new MouseEventHandler(numericUpDown_MouseWheel);
-            this.numericUpDown9.MouseWheel += new MouseEventHandler(numericUpDown_MouseWheel);
+            this.numericUpDown10.MouseWheel += new MouseEventHandler(NumericUpDown_MouseWheel);
+            this.numericUpDown9.MouseWheel += new MouseEventHandler(NumericUpDown_MouseWheel);
         }
 
         /// <summary>
         /// Limit the Mousewheel to +- NumericUpDown.Increment
         /// </summary>
-        private void numericUpDown_MouseWheel(object sender, MouseEventArgs e)
+        private void NumericUpDown_MouseWheel(object sender, MouseEventArgs e)
         {
             NumericUpDown numupd = sender as NumericUpDown;
             if (numupd == null) return;
@@ -3446,7 +3442,7 @@ namespace Gral
                 }
             }
         }
-        
+
         /// <summary>
         /// Set the hook color depending on dark mode or not
         /// </summary>
@@ -3487,7 +3483,7 @@ namespace Gral
                         button60.Enabled = false;
                         ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
                         ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
-                        deleteReceptorConcentrationFiles();
+                        DeleteReceptorConcentrationFiles();
                     }
                     else
                     {
@@ -3497,7 +3493,7 @@ namespace Gral
                         checkBox34.Enabled = false;
                         groupBox21.Visible = false; // Wet Deposition settings
                         groupBox24.Visible = false; // Decay rate
-                        deleteReceptorConcentrationFiles(); 
+                        DeleteReceptorConcentrationFiles();
                     }
                     ResetInDat();
                 }
@@ -3511,18 +3507,20 @@ namespace Gral
         /// <summary>
         /// Delete receptor concentrations files
         /// </summary>
-        private void deleteReceptorConcentrationFiles()
+        private void DeleteReceptorConcentrationFiles()
         {
             string recFile = Path.Combine(ProjectName, @"Computation", "ReceptorConcentrations.dat");
             if (File.Exists(recFile))
             {
                 try
-                {  File.Delete(recFile); } catch { }
+                { File.Delete(recFile); }
+                catch { }
             }
             recFile = Path.Combine(ProjectName, @"Computation", "Receptor_Timeseries_Transient.txt");
             if (File.Exists(recFile))
             {
-                try { File.Delete(recFile); } catch { };
+                try { File.Delete(recFile); } catch { }
+                ;
             }
         }
         /// <summary>
@@ -3950,7 +3948,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button58_Click(object sender, EventArgs e)
+        private void Button58_Click(object sender, EventArgs e)
         {
             SaveMetData(MeteoTimeSeries);
         }
@@ -3960,7 +3958,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button59_Click(object sender, EventArgs e)
+        private void Button59_Click(object sender, EventArgs e)
         {
             global::GralMainForms.OnlineParameters online = new global::GralMainForms.OnlineParameters()
             {
@@ -4006,7 +4004,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void panel2_MouseClick(object sender, MouseEventArgs e)
+        private void Panel2_MouseClick(object sender, MouseEventArgs e)
         {
             Point point = panel1.PointToClient(Cursor.Position);
             MessageBox.Show(point.ToString());
@@ -4017,7 +4015,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void panel1_MouseClick(object sender, MouseEventArgs e)
+        private void Panel1_MouseClick(object sender, MouseEventArgs e)
         {
             Point point = panel1.PointToClient(Cursor.Position);
             if (OpenMailToIVT.Contains(point))
@@ -4032,7 +4030,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button60_Click(object sender, EventArgs e)
+        private void Button60_Click(object sender, EventArgs e)
         {
             string emissionModulation = Path.Combine(ProjectName, "Computation");
             if (Directory.Exists(Main.ProjectSetting.EmissionModulationPath))
@@ -4111,12 +4109,12 @@ namespace Gral
             catch { }
         }
 
-        private void listBox5_DoubleClick(object sender, EventArgs e)
+        private void ListBox5_DoubleClick(object sender, EventArgs e)
         {
             ShowTotalEmissions(sender, e);
         }
 
-        private void checkBoxAVX_Click(object sender, EventArgs e)
+        private void CheckBoxAVX_Click(object sender, EventArgs e)
         {
 #if __MonoCS__
             if (checkBoxAVX.Checked)

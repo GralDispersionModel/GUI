@@ -10,13 +10,13 @@
 ///</remarks>
 #endregion
 
+using GralDomForms;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.IO;
-using GralDomForms;
 using System.Data;
-using GralStaticFunctions;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -34,7 +34,7 @@ namespace GralDomain
         private void MetTimeSeries(object sender, EventArgs e)
         {
             List<GralBackgroundworkers.Point_3D> receptor_points = new List<GralBackgroundworkers.Point_3D>();
-            MeteoModelEmum meteoModel = MeteoModelEmum.None ;
+            MeteoModelEmum meteoModel = MeteoModelEmum.None;
             bool localSCL = false;
             int _timeSeriesYear = 2020;
 
@@ -45,7 +45,7 @@ namespace GralDomain
                 localSCL = _sl.LocalStability;
                 GRAMMmeteofile = _sl.MeteoInitFileName; //value + ".met";
                 meteoModel = _sl.MeteoModel;
-                
+
                 foreach (DataRow row in _sl.PointCoorData.Rows)
                 {
                     if (row[0] != DBNull.Value && row[1] != DBNull.Value && row[2] != DBNull.Value && row[3] != DBNull.Value)
@@ -66,7 +66,7 @@ namespace GralDomain
                 _timeSeriesYear = _sl.TimeSeriesYear;
                 _sl.Close();
             }
-            
+
             if (receptor_points.Count == 0)
             {
                 MessageBox.Show(this, "No points defined", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -125,7 +125,7 @@ namespace GralDomain
             // Reset mousecontrol
             MouseControl = MouseMode.Default;
         }
-        
+
         // Cancel the Mettime Dialog
         private void CancelMetTimeSeries(object sender, EventArgs e)
         {
@@ -135,7 +135,7 @@ namespace GralDomain
                 SendCoors -= _sl.ReceiveClickedCoordinates;
                 _sl.Close();
             }
-            MouseControl = MouseMode.Default;	
+            MouseControl = MouseMode.Default;
         }
 
         private void ComputeMeanWindVelocity(object sender, EventArgs e)
@@ -179,7 +179,7 @@ namespace GralDomain
                             BackgroundWorkerFunction = GralBackgroundworkers.BWMode.GrammMeanWindVel, // ; 31
                             Filename = file
                         };
-                        
+
                         GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                         {
                             Text = DataCollection.Caption

@@ -10,13 +10,13 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Windows.Forms;
-using GralStaticFunctions;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form for user defined compost settings
     /// </summary>
     public partial class Kompost : Form
@@ -33,7 +33,7 @@ namespace GralMainForms
             textBox5.KeyPress += new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
             textBox6.KeyPress += new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
             textBox7.KeyPress += new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
-            
+
             textBox1.TextChanged += new System.EventHandler(St_F.CheckInput);
             textBox2.TextChanged += new System.EventHandler(St_F.CheckInput);
             textBox3.TextChanged += new System.EventHandler(St_F.CheckInput);
@@ -52,7 +52,7 @@ namespace GralMainForms
         {
 
         }
-         
+
         void KompostFormClosed(object sender, FormClosedEventArgs e)
         {
             textBox1.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
@@ -62,7 +62,7 @@ namespace GralMainForms
             textBox5.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
             textBox6.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
             textBox7.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);  //only point as decimal seperator is allowed
-            
+
             textBox1.TextChanged -= new System.EventHandler(St_F.CheckInput);
             textBox2.TextChanged -= new System.EventHandler(St_F.CheckInput);
             textBox3.TextChanged -= new System.EventHandler(St_F.CheckInput);

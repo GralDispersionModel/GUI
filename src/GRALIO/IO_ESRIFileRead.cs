@@ -13,8 +13,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Windows.Forms;
-using System.Text;
 
 namespace GralIO
 {
@@ -125,7 +123,7 @@ namespace GralIO
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 A = null;
                 exception = ex.Message;
@@ -239,7 +237,7 @@ namespace GralIO
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 A = null;
                 exception = ex.Message;
@@ -313,7 +311,7 @@ namespace GralIO
                     }
                 }
             }
-            catch 
+            catch
             {
                 return false;
             }

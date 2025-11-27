@@ -18,14 +18,14 @@ using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form shows the diurnal wind directions
     /// </summary>
     public partial class DiurnalWinddirections : Form
     {
-        public double[,] meanwinddir = new double[24,16];
+        public double[,] meanwinddir = new double[24, 16];
         public string metfile;
-		public List <GralData.WindData> wind;
+        public List<GralData.WindData> wind;
 
         public int sector;
         public double scale;
@@ -40,7 +40,7 @@ namespace GralMainForms
 
         private void WindDirectionsFormLoad(object sender, EventArgs e)
         {
-        	Text = "Diurnal wind direction frequencies   -  " + metfile; // Kuntner
+            Text = "Diurnal wind direction frequencies   -  " + metfile; // Kuntner
             //scaling factor
             classmax = 0;
             for (int i = 0; i < 24; i++)
@@ -64,7 +64,7 @@ namespace GralMainForms
         }
 
         protected override void OnPaint(PaintEventArgs e)
-        {            
+        {
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -86,35 +86,35 @@ namespace GralMainForms
             Font _largeFont = new Font("Arial", 10);
             Brush _blackBrush = new SolidBrush(Color.Black);
             Pen p4 = new Pen(Color.Black, 3);
-			
-            string[] wrnamen ={ "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW" };
-            
-             SizeF _lenght = g.MeasureString(metfile, _smallFont);
-            int distance = (int) _lenght.Height + 2;
-            
+
+            string[] wrnamen = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW" };
+
+            SizeF _lenght = g.MeasureString(metfile, _smallFont);
+            int distance = (int)_lenght.Height + 2;
+
             float _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
             g.DrawString(metfile, _smallFont, _blackBrush, _x, 2, format1);
-            
+
             string _data = "Data points: " + Convert.ToString(wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
             _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
             g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + distance, format1);
-            
+
             if (wind.Count > 1)
-			{
-			    _data = wind[0].Date + " - " + wind[wind.Count - 1].Date;
-			   _lenght = g.MeasureString(_data, _smallFont);
-			    _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
-			    g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
-			}
-            
-			float _scale = Math.Min(panel1.Width / 852F, panel1.Height / 495F);
-			g.ScaleTransform(_scale, _scale);
+            {
+                _data = wind[0].Date + " - " + wind[wind.Count - 1].Date;
+                _lenght = g.MeasureString(_data, _smallFont);
+                _x = Math.Max(0, panel1.Width - _lenght.Width - 5);
+                g.DrawString(_data, _smallFont, _blackBrush, _x, 2 + 2 * distance, format1);
+            }
+
+            float _scale = Math.Min(panel1.Width / 852F, panel1.Height / 495F);
+            g.ScaleTransform(_scale, _scale);
 
             // draw all checked wind directions
             Color[] aColors = GetColorArray();
             int j = 0;
-            
+
             for (int n = 0; n < 16; n++)
             {
                 if (check[n] == 1)
@@ -135,7 +135,7 @@ namespace GralMainForms
                         }
 
                         hoehe2 = hoehe;
-                       // base.OnPaint(e);
+                        // base.OnPaint(e);
                     }
                 }
             }
@@ -144,26 +144,26 @@ namespace GralMainForms
             Pen p1 = new Pen(Color.Black, 2);
             Pen p2 = new Pen(Color.Black, 2);
             Pen p3 = new Pen(Color.Black, 1);
-            
-            
+
+
             p2.EndCap = LineCap.ArrowAnchor;
             g.DrawLine(p1, 55, 440, 695, 440);
             g.DrawLine(p2, 55, 440, 55, 20);
-            
+
             StringFormat string_Format = new StringFormat()
             {
-            	Alignment = StringAlignment.Center //Horizontale Orientieren
+                Alignment = StringAlignment.Center //Horizontale Orientieren
             };
-            
-            for (int i = 0; i < 24; i+= 3)
+
+            for (int i = 0; i < 24; i += 3)
             {
-            	string a = i.ToString("D2") + ":00";
-            	_x = 55 + (i + 1) * 25;
-            	g.DrawString(a, _mediumFont, _blackBrush, _x, 450, string_Format);
-            	g.DrawLine(p3, _x, 444, _x, 436);
+                string a = i.ToString("D2") + ":00";
+                _x = 55 + (i + 1) * 25;
+                g.DrawString(a, _mediumFont, _blackBrush, _x, 450, string_Format);
+                g.DrawLine(p3, _x, 444, _x, 436);
             }
             string_Format.Dispose();
-            
+
             p3.DashStyle = DashStyle.Dot;
 
             g.DrawString("  0", _largeFont, _blackBrush, 25, 435);
@@ -189,8 +189,8 @@ namespace GralMainForms
                 g.DrawString(s, _largeFont, _blackBrush, 25, lev1 - 5);
                 //base.OnPaint(e);
             }
-            
-            p1.Dispose();p2.Dispose();p3.Dispose(); p4.Dispose();
+
+            p1.Dispose(); p2.Dispose(); p3.Dispose(); p4.Dispose();
             format1.Dispose();
             _smallFont.Dispose();
             _mediumFont.Dispose();
@@ -200,9 +200,9 @@ namespace GralMainForms
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            for (int i=0;i<16;i++)
+            for (int i = 0; i < 16; i++)
             {
-                check[i] =0;
+                check[i] = 0;
             }
 
             foreach (int indexChecked in checkedListBox1.CheckedIndices)
@@ -250,13 +250,13 @@ namespace GralMainForms
             panel1.DrawToBitmap(bitMap, new Rectangle(0, 0, panel1.Width * 2, panel1.Height * 2));
             Clipboard.SetDataObject(bitMap);
         }
-		void DiurnalWinddirectionsFormClosed(object sender, FormClosedEventArgs e)
-		{
-			toolTip1.Dispose();
-			panel1.Dispose();
-			button1.Dispose();
-		}
-        
+        void DiurnalWinddirectionsFormClosed(object sender, FormClosedEventArgs e)
+        {
+            toolTip1.Dispose();
+            panel1.Dispose();
+            button1.Dispose();
+        }
+
         void DiurnalWinddirectionsResizeEnd(object sender, EventArgs e)
         {
             if (ClientSize.Width > 60)
@@ -265,20 +265,20 @@ namespace GralMainForms
                 panel1.Height = ClientSize.Height;
                 checkedListBox1.Left = panel1.Width - checkedListBox1.Width;
             }
-            
+
             panel1.Invalidate();
-			panel1.Update();
+            panel1.Update();
         }
-        
-        
+
+
         void DiurnalWinddirectionsResize(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Maximized) 
+            if (WindowState == FormWindowState.Maximized)
             {
                 DiurnalWinddirectionsResizeEnd(null, null);
                 // Maximized!
             }
-            if (WindowState == FormWindowState.Normal) 
+            if (WindowState == FormWindowState.Normal)
             {
                 DiurnalWinddirectionsResizeEnd(null, null);
                 // Restored!

@@ -18,10 +18,10 @@ namespace GralItemData
     /// This class is used for vertical wind velocity and wind direction window
     /// </summary>
     public class VerticalWindProfile
-	{
-		public int DispersionSituation   { get; set; }
-		public int GRALorGRAMM       	 { get; set; }
-		public VerticalProfile_Static VertProfileVelocity { get; set; }
-        public VerticalProfile_Static VertProfileDirection{ get; set; }
-	}
+    {
+        public int DispersionSituation { get; set; }
+        public int GRALorGRAMM { get; set; }
+        public VerticalProfile_Static VertProfileVelocity { get; set; }
+        public VerticalProfile_Static VertProfileDirection { get; set; }
+    }
 }

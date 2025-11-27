@@ -10,14 +10,13 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.IO;
-using GralIO;
-using GralStaticFunctions;
-using GralMessage;
 using GralDomForms;
+using GralIO;
+using GralMessage;
+using GralStaticFunctions;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -70,7 +69,7 @@ namespace GralDomain
 #if __MonoCS__
             wait.Width = 350;
 #endif
-            
+
             //copy and reading geometry file "ggeom.asc"
             wait.Text = "Reading geometry file ggeom.asc";
             wait.Show();
@@ -180,7 +179,7 @@ namespace GralDomain
                 // Remember the original Header
                 MMO.MeteoOriginalHeader[0] = meteopgt_ori.ReadLine();
                 MMO.MeteoOriginalHeader[1] = meteopgt_ori.ReadLine();
-                wait.ProgressbarUpdate(this, (int) NumberofWeatherSituations + 1);
+                wait.ProgressbarUpdate(this, (int)NumberofWeatherSituations + 1);
 
                 // Read original Meteo-Data
                 Windfield_Reader Reader = new Windfield_Reader();
@@ -222,7 +221,7 @@ namespace GralDomain
                         {
                             //read wind fields
                             string wndfilename = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".wnd");
-                            
+
                             if (Reader.Windfield_read(wndfilename, NX, NY, NZ, ref UWI, ref VWI, ref WWI) == false)
                             {
                                 throw new IOException();
@@ -236,7 +235,7 @@ namespace GralDomain
 
                                 ReadStability.FileName = stabilityfilename;
                                 ReadStability.Stabclasses = zlevel;
-                                
+
                                 if (ReadStability.ReadSclFile()) // true => reader = OK
                                 {
                                     zlevel = ReadStability.Stabclasses;
@@ -397,7 +396,7 @@ namespace GralDomain
             wait.Close();
 
             CancellationTokenReset();
-            
+
             //if (MessageInfoForm != null)
             //{
             //   MessageInfoForm.Close();
@@ -748,7 +747,8 @@ namespace GralDomain
                                 MainForm.TBox[MMOData.WsClasses - 1].Text = MainForm.NumUpDown[MMOData.WsClasses - 2].Text;
                             }
                             catch { }
-                        };
+                        }
+                        ;
                     }
                     catch { }
 
@@ -886,7 +886,7 @@ namespace GralDomain
                     {
                         MessageInfoForm.Close();
                     }
-                   
+
                     if (wait1 != null)
                     {
                         wait1.Close();

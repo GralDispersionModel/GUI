@@ -14,10 +14,10 @@ using System;
 
 namespace Gral
 {
-	/// <summary>
-	/// This class represents the source group data
-	/// </summary>
-	public class SG_Class : IEquatable<SG_Class> , IComparable<SG_Class>
+    /// <summary>
+    /// This class represents the source group data
+    /// </summary>
+    public class SG_Class : IEquatable<SG_Class>, IComparable<SG_Class>
     {
         public string SG_Name { get; set; }
 
@@ -27,7 +27,7 @@ namespace Gral
         {
             return SG_Name + "," + SG_Number.ToString();
         }
-        
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -45,7 +45,7 @@ namespace Gral
                 return Equals(objAsSG);
             }
         }
-        
+
         public int SortByNameAscending(string name1, string name2)
         {
 
@@ -65,12 +65,12 @@ namespace Gral
                 return SG_Number.CompareTo(compareSG.SG_Number);
             }
         }
-        
+
         public override int GetHashCode()
         {
             return SG_Number;
         }
-        
+
         public bool Equals(SG_Class other)
         {
             if (other == null)
@@ -80,5 +80,5 @@ namespace Gral
 
             return (SG_Number.Equals(other.SG_Number));
         }
-     }
+    }
 }

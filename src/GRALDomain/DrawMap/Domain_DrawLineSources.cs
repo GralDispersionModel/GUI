@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using GralItemData;
 
 namespace GralDomain
 {
@@ -27,7 +27,7 @@ namespace GralDomain
                                      double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat2 = new StringFormat
             {
@@ -36,14 +36,14 @@ namespace GralDomain
             }; //format for names of line sources
 
             Brush SelectedBrush = new SolidBrush(Color2Transparent(150, Color.Green));
-            
+
             int n = -1;
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
             bool filter_l = _drobj.Filter;
-            
+
             LineSourceData _ls;
             PollutantsData _poll;
-            
+
             for (int ii = 0; ii < EditLS.ItemData.Count; ii++)
             {
                 _ls = EditLS.ItemData[ii];
@@ -66,10 +66,10 @@ namespace GralDomain
                     {
                         //filter source group
                         double emi = 0;
-                        for (int jj = 0; jj <_ls.Poll.Count; jj++)
+                        for (int jj = 0; jj < _ls.Poll.Count; jj++)
                         {
                             _poll = _ls.Poll[jj];
-                            
+
                             if (_drobj.SourceGroup == _poll.SourceGroup)
                             {
                                 if (_drobj.Item == -1)
@@ -126,7 +126,7 @@ namespace GralDomain
                         {
                             for (int r = _drobj.LineColors.Count - 1; r > -1; r--)
                             {
-                                if ( _ls.Nemo.AvDailyTraffic >= _drobj.ItemValues[r])
+                                if (_ls.Nemo.AvDailyTraffic >= _drobj.ItemValues[r])
                                 {
                                     index = Math.Max(r, index);
                                     break;
@@ -161,23 +161,23 @@ namespace GralDomain
                     width = Math.Max(width, 2);
                     width = Math.Max(width, _drobj.LineWidth);
                     Pen mypen = new Pen(Color2Transparent(200, Color.Green), width);
-                    
-                    List <GralData.PointD_3d> _pts = _ls.Pt;
-                    
+
+                    List<GralData.PointD_3d> _pts = _ls.Pt;
+
                     x1 = (_pts[0].X - form1_west) * factor_x + TransformX;
                     y1 = (_pts[0].Y - form1_north) * factor_y + TransformY;
-                    
+
                     int lastpoint = _pts.Count;
                     int point_counter = 0;
                     //List<Point> linePoints = new List<Point>();
                     Point[] linePoints = new Point[lastpoint + 1];
-                    linePoints[point_counter] = new Point((int) x1, (int) y1); // start point
-                   
+                    linePoints[point_counter] = new Point((int)x1, (int)y1); // start point
+
                     for (int i = 0; i < lastpoint; i++)
                     {
                         x2 = (_pts[i].X - form1_west) * factor_x + TransformX; // end point
                         y2 = (_pts[i].Y - form1_north) * factor_y + TransformY;
-                        
+
                         if (filter_l == true &&
                             (Math.Abs(x1 - x2) < 5 && Math.Abs(y1 - y2) < 5) &&
                             i < lastpoint)
@@ -189,11 +189,11 @@ namespace GralDomain
                             if ((n == EditLS.ItemDisplayNr) && ((MouseControl == MouseMode.LineSourceSel) || (MouseControl == MouseMode.LineSourcePos)))
                             {
                                 Brush edges = new SolidBrush(Color.Green);
-                                g.DrawLine(mypen, (int) x1, (int) y1, (int) x2, (int) y2);
-                                g.FillRectangle(edges, new RectangleF((float) (x1 -6), (float) (y1 - 6), 12, 12));
+                                g.DrawLine(mypen, (int)x1, (int)y1, (int)x2, (int)y2);
+                                g.FillRectangle(edges, new RectangleF((float)(x1 - 6), (float)(y1 - 6), 12, 12));
                                 if (i == lastpoint - 1)
                                 {
-                                    g.FillRectangle(edges, new RectangleF((float) (x2 -6), (float) (y2 - 6), 12, 12));
+                                    g.FillRectangle(edges, new RectangleF((float)(x2 - 6), (float)(y2 - 6), 12, 12));
                                 }
                                 edges.Dispose();
                             }
@@ -202,14 +202,14 @@ namespace GralDomain
                                 if (index != -2)
                                 {
                                     point_counter++;
-                                    linePoints[point_counter] = new Point((int) x2, (int) y2); // 
+                                    linePoints[point_counter] = new Point((int)x2, (int)y2); // 
                                 }
                             }
-                            
+
                             if (draw_label)
                             {
                                 streetlength += Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-                                
+
                                 if (streetlength > _drobj.ContourLabelDist * factor_x)
                                 {
                                     streetlength = 0;
@@ -220,17 +220,17 @@ namespace GralDomain
                                         angle = (float)(Math.Atan((y2 - y1) / (x2 - x1)) * 180 / 3.14);
                                     }
 
-                                    m.RotateAt(angle, new Point((int) ((x1 + x2) * 0.5), (int) ((y1 + y2) * 0.5)));
+                                    m.RotateAt(angle, new Point((int)((x1 + x2) * 0.5), (int)((y1 + y2) * 0.5)));
                                     g.Transform = m;
-                                    g.DrawString(_ls.Name, LabelFont, LabelBrush, (int) ((x1 + x2) * 0.5), (int) ((y1 + y2) * 0.5), StringFormat2);
+                                    g.DrawString(_ls.Name, LabelFont, LabelBrush, (int)((x1 + x2) * 0.5), (int)((y1 + y2) * 0.5), StringFormat2);
                                     g.ResetTransform();
                                 }
                             }
-                            
+
                             x1 = x2; y1 = y2; // new start point = end point
                         }
                     }
-                   
+
                     if (point_counter > 0)
                     {
                         point_counter++;
@@ -238,7 +238,7 @@ namespace GralDomain
                         {
                             Array.Resize(ref linePoints, point_counter);
                         }
-                        
+
                         if (_drobj.FillYesNo == true)
                         {
                             Pen pen1 = new Pen(Color2Transparent(_drobj.Transparancy, _drobj.FillColors[index]), width);
@@ -246,18 +246,18 @@ namespace GralDomain
                             pen1.Dispose();
                         }
                         Pen pen2 = new Pen(Color2Transparent(_drobj.Transparancy, _drobj.LineColors[index]));
-                        g.DrawLines(pen2,linePoints);
+                        g.DrawLines(pen2, linePoints);
                         pen2.Dispose();
                     }
-                    
+
                     linePoints = null;
-                    
+
                     if (CancelDrawing)
                     {
                         break;
                     }
                 }
-                catch{}
+                catch { }
             }
 
             SelectedBrush.Dispose();

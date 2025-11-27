@@ -10,17 +10,17 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Data;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
-using System.Globalization;
 using GralItemData;
 using GralMessage;
 using GralShape;
 using GralStaticFunctions;
 using SocialExplorer.IO.FastDBF;
+using System;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -137,7 +137,7 @@ namespace GralDomain
                     wait.Dispose();
                 }
             }
-            dialog.Dispose();	
+            dialog.Dispose();
         }
 
         /// <summary>
@@ -378,10 +378,10 @@ namespace GralDomain
                     dsarea.Dispose();
                     Cursor = Cursors.Default;
                 }
-            }	
+            }
             dialog.Dispose();
         }
-        
+
         /// <summary>
         /// Export a point sources to a shape file with a dbf database
         /// </summary>
@@ -477,7 +477,7 @@ namespace GralDomain
             }
             dialog.Dispose();
         }
-        
+
         /// <summary>
         /// Export receptors to a shape file with a dbf database
         /// </summary>
@@ -754,14 +754,14 @@ namespace GralDomain
                     {
                         orec[col] = inhalt[0].Replace(",", ".");
                     }
-                    
+
                 }
-                
+
                 odbf.Write(orec, true);
             }
 
             odbf.Close();
         }
-                    
+
     }
 }
