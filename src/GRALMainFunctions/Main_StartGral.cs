@@ -344,57 +344,44 @@ namespace Gral
                     int final_sit = weathersit_count;
                     int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
                     int instance_start = first_sit;
-                    int instance_end;
-                    int count = 1;
+                    int instance_end = instance_start + offset;
 
-                    while (instance_start <= final_sit || (numberOfInstances == 1 && count == 1))
+                    GRALProcess = new Process();
+                    GRALProcess.EnableRaisingEvents = true;
+                    GRALProcess.Exited += new System.EventHandler(GralExited);
+                    GRALProcess.StartInfo.FileName = GRAL_Program_Path;
+                    GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                    GRALProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
+                    if (GUISettings.CopyCoresToProject == false)
                     {
-                        instance_end = instance_start + offset;
-                        if (count == numberOfInstances) // avoid rounding errors
-                        {
-                            instance_end = final_sit;
-                        }
-                        GRALProcess = new Process();
-                        if (count == 1) // first instance
-                        {
-                            GRALProcess.EnableRaisingEvents = true;
-                            GRALProcess.Exited += new System.EventHandler(GralExited);
-                        }
-                        else
-                        {
-                            GRALProcess.EnableRaisingEvents = false;
-                        }
-                        GRALProcess.StartInfo.FileName = GRAL_Program_Path;
-                        GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                        GRALProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
-                        if (GUISettings.CopyCoresToProject == false)
-                        {
-                            GRALProcess.StartInfo.Arguments = " " + "\"" + GRAL_Project_Path + "\"";
-                        }
-                        if (GRALSettings.Loglevel > 0)
-                        {
-                            GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
-                        }
-                        if (numberOfInstances > 1)
-                        {
-                            GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
-                        }
-                        if (StartSituation > 0 && FinalSituation > StartSituation) // start 1 instance with a chunk of siutations
-                        {
-                            GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
-                        }
-                        GRALProcess.Start();
-                        System.Threading.Thread.Sleep(250);
-                        // new start value, new instance
-                        instance_start = instance_end + 1;
-                        count++;
+                        GRALProcess.StartInfo.Arguments = " " + "\"" + GRAL_Project_Path + "\"";
                     }
+                    if (GRALSettings.Loglevel > 0)
+                    {
+                        GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
+                    }
+                    string consoleArgument = GRALProcess.StartInfo.Arguments;
+                    
+                    if (StartSituation > 0 && FinalSituation > StartSituation) // start 1 instance with a chunk of siutations
+                    {
+                        GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
+                    }
+                    else if (numberOfInstances > 1)
+                    {
+                        GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                    }
+                    GRALProcess.Start();
 
+                    if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsibles UI
+                    {
+                        System.Threading.Thread startThread = new System.Threading.Thread(() => StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument));
+                        startThread.Start();
+                        //StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument);
+                    }
 #endif
 
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
-
                     WriteGralLogFile(1, "", GRAL_Program_Path);
 
                 }
@@ -476,6 +463,38 @@ namespace Gral
             { }
             numericUpDown5.Value = Math.Max(numericUpDown5.Minimum, Math.Min(numericUpDown5.Maximum, trackbar));
             GenerateInDat();
+        }
+
+        /// <summary>
+        /// Start multiple GRAL instances
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StartMultipleInstances(int FirstSit, int FinalSit, int Offset, int NumberOfInstances, string GRAL_Program_Path, string GRAL_Arguments)
+        {
+            int instance_start = FirstSit;
+            int instance_end;
+            int count = 2; //start with instance 2
+            
+            while (instance_start <= FinalSit)
+            {
+                System.Threading.Thread.Sleep(2000); // wait for 2 seconds -> use all CPU groups
+                instance_end = instance_start + Offset;
+                if (count == NumberOfInstances) // avoid rounding errors
+                {
+                    instance_end = FinalSit;
+                }
+                Process GralProcess = new Process();
+                GralProcess.EnableRaisingEvents = false;
+                GralProcess.StartInfo.FileName = GRAL_Program_Path;
+                GralProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                GralProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
+                GralProcess.StartInfo.Arguments = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                GralProcess.Start();
+                // new start value, new instance
+                instance_start = instance_end + 1;
+                count++;
+            }
         }
     }
 }
