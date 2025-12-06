@@ -80,7 +80,7 @@ namespace GralDomain
 
                         myReader = new StreamReader(file);
                         int trans = Convert.ToInt32(mindist);
-                        if (InputBox1("Define raster for gridding buildings", "Suggested raster size:", 0, 10000, ref trans) == DialogResult.OK)
+                        if (GralStaticFunctions.St_F.InputBoxNumUpDown("Define raster for gridding buildings", "Suggested raster size:", 0, 10000, ref trans) == DialogResult.OK)
                         {
                             for (i = 1; i < 10000000; i++)
                             {
