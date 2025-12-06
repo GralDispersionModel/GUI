@@ -236,7 +236,7 @@ namespace GralIO
             DispersionSituation = 1;
             BuildingMode = Gral.BuildingModeEnum.None;
             BuildingHeightsWrite = false;
-            Compressed = 1;
+            Compressed = 2;
             Transientflag = 0;
             PrognosticSubDomains = 15;
             WaitForKeyStroke = true;
