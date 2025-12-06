@@ -2083,73 +2083,10 @@ namespace GralDomain
 
         //////////////////////////////////////////////////////////////////
         //
-        //       Addtional tools
+        //       Additional tools
         //
         //////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Temporary input box
-        /// </summary>
-        private DialogResult InputBox1(string title, string promptText, int lowlimit, int uplimit, ref int trans)
-        {
-            DialogResult dialogResult = DialogResult.Cancel;
-            using (Form form = new Form())
-            {
-                Label label = new Label();
-                NumericUpDown numdown = new NumericUpDown();
-                Button buttonOk = new Button();
-                Button buttonCancel = new Button();
-
-                form.Text = title;
-                label.Text = promptText;
-                numdown.Maximum = uplimit;
-                numdown.Minimum = lowlimit;
-                numdown.Value = trans;
-                numdown.Increment = 1;
-
-                buttonOk.Text = "OK";
-                buttonCancel.Text = "Cancel";
-                buttonOk.DialogResult = DialogResult.OK;
-                buttonCancel.DialogResult = DialogResult.Cancel;
-
-                label.AutoSize = false;
-                label.SetBounds(9, 10, 372, 13);
-                label.Location = new Point(9, 10);
-                label.Size = new System.Drawing.Size(372, 13);
-
-                numdown.SetBounds(12, 36, 372, 20);
-                numdown.Location = new Point(12, 36);
-                numdown.Size = new System.Drawing.Size(372, 20);
-
-                buttonOk.SetBounds(9, 72, 75, 23);
-                buttonCancel.SetBounds(109, 72, 75, 23);
-                buttonOk.Location = new Point(9, 72);
-                buttonOk.Size = new System.Drawing.Size(75, 23);
-                buttonCancel.Location = new Point(109, 72);
-                buttonCancel.Size = new System.Drawing.Size(75, 23);
-
-                numdown.Anchor |= AnchorStyles.Left;
-                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-
-                form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Width + 20), 110);
-                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.StartPosition = FormStartPosition.CenterScreen;
-                form.MinimizeBox = false;
-                form.MaximizeBox = false;
-                form.AcceptButton = buttonOk;
-                form.CancelButton = buttonCancel;
-
-                dialogResult = form.ShowDialog();
-                trans = Convert.ToInt32(numdown.Value);
-            }
-            return dialogResult;
-        }
-
+        
         /// <summary>
         /// Edit and define the size of the north arrow
         /// </summary>
@@ -2168,7 +2105,7 @@ namespace GralDomain
                 }
             }
 
-            if (InputBox1("Define the size of the north arrow", "Scaling factor (1000=10 times larger):", 0, 1000, ref trans) == DialogResult.OK)
+            if (GralStaticFunctions.St_F.InputBoxNumUpDown("Define the size of the north arrow", "Scaling factor (1000=10 times larger):", 0, 1000, ref trans) == DialogResult.OK)
             {
                 NorthArrow.Scale = Convert.ToDecimal(trans) / 100;
             }
@@ -2709,7 +2646,7 @@ namespace GralDomain
         {
             //select height above ground for the windfield analysis
             int trans = Convert.ToInt32(10);
-            if (InputBox1("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
+            if (GralStaticFunctions.St_F.InputBoxNumUpDown("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
             {
 
                 WriteGrammLog(2, Convert.ToString(TestPt.X), Convert.ToString(TestPt.Y), Convert.ToString(trans));
@@ -2848,7 +2785,7 @@ namespace GralDomain
 
                 //user defined background concentration
                 int background = 0;
-                if (InputBox1("Define background concentration", "Background concentration:", 0, 1000, ref background) == DialogResult.OK)
+                if (GralStaticFunctions.St_F.InputBoxNumUpDown("Define background concentration", "Background concentration:", 0, 1000, ref background) == DialogResult.OK)
                 {
                 }
 
