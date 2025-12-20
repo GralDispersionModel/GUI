@@ -495,6 +495,7 @@
             checkBox2.TabIndex = 93;
             checkBox2.Text = "Horizontal source";
             checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
             // EditPointSources
             // 

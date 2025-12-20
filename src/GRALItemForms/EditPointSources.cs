@@ -449,11 +449,13 @@ namespace GralItemForms
                 if (_pdata.HorizontalDirection >= 0)
                 {
                     checkBox2.Checked = true;
-                    numericUpDown5.Value = (decimal) _pdata.HorizontalDirection;
+                    numericUpDown5.Enabled = true;
+                    numericUpDown5.Value = (decimal)_pdata.HorizontalDirection;
                 }
                 else
                 {
                     checkBox2.Checked = false;
+                    numericUpDown5.Enabled = false;
                     numericUpDown5.Value = 0;
                 }
 
@@ -1087,6 +1089,18 @@ namespace GralItemForms
             {
                 trackBar1.Value--;
                 trackBar1_Scroll(null, null);
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                numericUpDown5.Enabled = true;
+            }
+            else
+            {
+                numericUpDown5.Enabled = false;
             }
         }
     }
