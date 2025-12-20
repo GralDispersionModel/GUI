@@ -90,10 +90,11 @@ namespace GralDomain
                                             Name = "Stack" + Convert.ToString(i),
                                             Pt = new PointD(x0, y0),
                                             Height = Convert.ToSingle(text1[2], ic),
-                                            Velocity = Convert.ToSingle(text1[7], ic),
                                             Diameter = Convert.ToSingle(text1[8], ic),
                                             Temperature = Convert.ToSingle(text1[9], ic)
                                         };
+
+                                        _psdata.Velocity = Convert.ToSingle(text1[7], ic);
 
                                         _psdata.Poll.SourceGroup = Convert.ToInt32(text1[10]);
                                         for (i = 0; i < 4; i++)
@@ -101,6 +102,7 @@ namespace GralDomain
                                             _psdata.Poll.Pollutant[i] = polli[i];
                                             _psdata.Poll.EmissionRate[i] = Convert.ToDouble(text1[3 + i], ic);
                                         }
+
                                         if (text1.Length > 16)
                                         {
                                             _psdata.GetDep()[0].Frac_2_5 = Convert.ToInt32(text1[11]);

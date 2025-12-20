@@ -103,13 +103,28 @@ namespace Gral
                                     _psdata.Poll.EmissionRate[j] > 0)
                                 {
                                     //write file point.dat
+                                    string pqExitVelocity = _psdata.Velocity.ToString(ic);
+                                    if (_psdata.HorizontalDirection > -0.2) // horizontal source
+                                    {
+                                        float vertVel = 0;
+                                        if (_psdata.Temperature > 285)
+                                        {
+                                            vertVel = 0.05F;
+                                        }
+                                        else if (_psdata.Temperature > 320)
+                                        {
+                                            vertVel = 0.1F;
+                                        }
+                                        pqExitVelocity = vertVel.ToString(ic) +":" + _psdata.Velocity.ToString(ic) +":" + _psdata.HorizontalDirection.ToString(ic);
+                                    }
+
                                     string pqline =
                                         _psdata.Pt.X.ToString(ic) + "," +
                                         _psdata.Pt.Y.ToString(ic) + "," +
                                         _psdata.Height.ToString(ic) + "," +
                                         _psdata.Poll.EmissionRate[j].ToString(ic) + "," +
                                         "0,0,0," +
-                                        _psdata.Velocity.ToString(ic) + "," +
+                                        pqExitVelocity + "," +
                                         _psdata.Diameter.ToString(ic) + "," +
                                         _psdata.Temperature.ToString(ic) + "," +
                                         _psdata.Poll.SourceGroup.ToString(ic);

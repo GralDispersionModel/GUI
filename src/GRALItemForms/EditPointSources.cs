@@ -368,6 +368,14 @@ namespace GralItemForms
                 _pdata.Velocity = (float)(numericUpDown2.Value);
                 _pdata.Temperature = (float)(numericUpDown3.Value + 273);
                 _pdata.Diameter = (float)(numericUpDown4.Value);
+                if (checkBox2.Checked)
+                {
+                    _pdata.HorizontalDirection = (float)(numericUpDown5.Value);
+                }
+                else
+                {
+                    _pdata.HorizontalDirection = -1;
+                }
 
                 _pdata.TemperatureTimeSeries = TempTimeSeries;
                 _pdata.VelocityTimeSeries = VelTimeSeries;
@@ -437,6 +445,17 @@ namespace GralItemForms
                     MessageBox.Show(this, "Problems when reading temperature value - set to zero", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 numericUpDown4.Value = St_F.ValueSpan(0, 1000, _pdata.Diameter);
+
+                if (_pdata.HorizontalDirection >= 0)
+                {
+                    checkBox2.Checked = true;
+                    numericUpDown5.Value = (decimal) _pdata.HorizontalDirection;
+                }
+                else
+                {
+                    checkBox2.Checked = false;
+                    numericUpDown5.Value = 0;
+                }
 
                 combo(_pdata.Poll.SourceGroup);
 
@@ -531,6 +550,8 @@ namespace GralItemForms
                 numericUpDown2.Value = 0;
                 numericUpDown3.Value = 0;
                 numericUpDown4.Value = 0;
+                numericUpDown5.Value = 0;
+                checkBox2.Checked = false;
                 comboBox1.SelectedIndex = 0;
                 for (int i = 0; i < 10; i++)
                 {
@@ -575,6 +596,8 @@ namespace GralItemForms
                 numericUpDown2.Value = 0;
                 numericUpDown3.Value = 0;
                 numericUpDown4.Value = 0;
+                numericUpDown5.Value = 0;
+                checkBox2.Checked = false;
                 comboBox1.SelectedIndex = 0;
                 for (int i = 0; i < 10; i++)
                 {
@@ -1066,6 +1089,5 @@ namespace GralItemForms
                 trackBar1_Scroll(null, null);
             }
         }
-
     }
 }

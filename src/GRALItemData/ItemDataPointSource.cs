@@ -28,6 +28,7 @@ namespace GralItemData
         public float Velocity { get; set; }
         public float Temperature { get; set; }
         public float Diameter { get; set; }
+        public float HorizontalDirection { get; set; }
         public GralDomain.PointD Pt { get; set; }
         public PollutantsData Poll { get; set; }
 
@@ -57,6 +58,7 @@ namespace GralItemData
             Temperature = 20;
             Diameter = 0.2F;
             Height = 10;
+            HorizontalDirection = -1; // vertical source
             Pt = new PointD(Double.NaN, Double.NaN);
 
             for (int i = 0; i < 10; i++)
@@ -100,6 +102,16 @@ namespace GralItemData
                     {
                         Poll.Pollutant[i] = Convert.ToInt32(text[index++]);
                         Poll.EmissionRate[i] = St_F.TxtToDbl(text[index++], false);
+                    }
+
+                    HorizontalDirection = -1;
+                    for (int i = text.Length - 1; i > 3; i--)
+                    {
+                        if (text[i] == "Horizontal@_" && text.Length > (i + 1))
+                        {
+                            HorizontalDirection = (float)(St_F.TxtToDbl(text[i + 1], false));
+                            break;
+                        }
                     }
 
                     {
@@ -151,7 +163,6 @@ namespace GralItemData
                             break;
                         }
                     }
-
                 }
                 else
                 {
@@ -186,6 +197,7 @@ namespace GralItemData
             Diameter = other.Diameter;
             Height = other.Height;
             Velocity = other.Velocity;
+            HorizontalDirection = other.HorizontalDirection;
 
             Pt = other.Pt;
 
@@ -254,6 +266,8 @@ namespace GralItemData
             {
                 dummy += "Temp@_," + TemperatureTimeSeries + ",";
             }
+
+            dummy += "Horizontal@_," + HorizontalDirection + ",";
 
             return dummy;
         }
