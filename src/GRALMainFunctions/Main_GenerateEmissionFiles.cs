@@ -106,15 +106,7 @@ namespace Gral
                                     string pqExitVelocity = _psdata.Velocity.ToString(ic);
                                     if (_psdata.HorizontalDirection > -0.2) // horizontal source
                                     {
-                                        float vertVel = 0;
-                                        if (_psdata.Temperature > 285)
-                                        {
-                                            vertVel = 0.05F;
-                                        }
-                                        else if (_psdata.Temperature > 320)
-                                        {
-                                            vertVel = 0.1F;
-                                        }
+                                        float vertVel = 0F; // not used at the moment
                                         pqExitVelocity = vertVel.ToString(ic) +":" + _psdata.Velocity.ToString(ic) +":" + _psdata.HorizontalDirection.ToString(ic);
                                     }
 

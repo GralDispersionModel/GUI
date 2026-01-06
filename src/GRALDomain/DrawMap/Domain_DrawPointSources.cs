@@ -93,6 +93,13 @@ namespace GralDomain
                     {
                         //g.DrawImage(pointsource, x1 - 10, y1 - 10, 20, 20);
                         g.DrawArc(penrec, x1 - width, y1 - width, width * 2, width * 2, 1, 360);
+                        if (_psdata.HorizontalDirection >= 0)
+                        {
+                            float angle = _psdata.HorizontalDirection * MathF.PI / 180;
+                            penrec.EndCap = LineCap.Triangle;
+                            g.DrawLine(penrec, x1, y1, x1 - width * 2 * MathF.Sin(angle), y1 + width * 2 * MathF.Cos(angle));
+                            penrec.EndCap = LineCap.Flat;
+                        }
 
                         if ((n == EditPS.ItemDisplayNr) && ((MouseControl == MouseMode.PointSourceSel) || (MouseControl == MouseMode.PointSourcePos)))
                         {
@@ -102,6 +109,12 @@ namespace GralDomain
                             };
                             g.DrawRectangle(p1, x1 - width - width / 4 - 2, y1 - width - width / 4 - 2, width * 2 + width / 2 + 4, width * 2 + width / 2 + 4);
                             g.DrawArc(penmarked, x1 - width, y1 - width, width * 2, width * 2, 1, 360);
+                            if (_psdata.HorizontalDirection >= 0)
+                            {
+                                float angle = _psdata.HorizontalDirection * MathF.PI / 180;
+                                penmarked.EndCap = LineCap.Triangle;
+                                g.DrawLine(penmarked, x1, y1, x1 - width * 2 * MathF.Sin(angle), y1 + width * 2 * MathF.Cos(angle));
+                            }
                             penmarked.Dispose();
                         }
                         if (draw_label)
