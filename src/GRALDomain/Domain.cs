@@ -2913,7 +2913,7 @@ namespace GralDomain
         private async void GetConcentrationFromFile(string FileName, PointD TestPt)
         {
             Cursor = Cursors.WaitCursor;
-            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(FileName, TestPt)) == false)
+            if (!GetConcentration(FileName, TestPt))
             {
                 MessageBoxTemporary Box = new MessageBoxTemporary("File not readable or sample point is outside the GRAL domain", Location);
                 Box.Show();
