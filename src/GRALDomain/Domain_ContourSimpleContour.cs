@@ -138,7 +138,7 @@ namespace GralDomain
                                     switch (q)
                                     {
                                         case 1: // direction right
-                                            if (xz < nx - 1) // border?
+                                            if (xz < nx - 2) // border?
                                             {
                                                 w2 = zlevel[xz + 1, yz];
                                                 if (w2 < contour_value) // if lower
