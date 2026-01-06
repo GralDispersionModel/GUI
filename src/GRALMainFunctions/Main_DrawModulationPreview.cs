@@ -321,7 +321,7 @@ namespace Gral
             {
                 version = version.Substring(0, 2) + "." + version.Substring(2);
             }
-            g.DrawString("GRAL GUI V" + version + "Beta1 - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
+            g.DrawString("GRAL GUI V" + version + " - Graz Lagrangian Model", titlefont, Solid_blue, x, 25, format1);
 #if __MonoCS__
             g.DrawString("Compiled for Linux - MONO", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #else
@@ -331,6 +331,8 @@ namespace Gral
             g.DrawString("Compiled for Windows .NET7", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #elif NET8_0
             g.DrawString("Compiled for Windows .NET8", subtitlefont, Solid_blue, x, 25 + distance, format1);
+#elif NET10_0
+            g.DrawString("Compiled for Windows .NET10", subtitlefont, Solid_blue, x, 25 + distance, format1);            
 #else
             g.DrawString("Compiled for Windows", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #endif
