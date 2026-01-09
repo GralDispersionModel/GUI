@@ -2279,11 +2279,27 @@ namespace GralItemForms
                         {
                             double u = Convert.ToDouble(data[j * 2], ic);
                             double v = Convert.ToDouble(data[j * 2 + 1], ic);
-                            zlevel[j, i] = Math.Sqrt(u * u + v * v); // u and v components are stored at the .vec file
+                            double value = Math.Sqrt(u * u + v * v); // u and v components are stored at the .vec file
+                            if (double.IsNaN(value) || double.IsInfinity(value))
+                            {
+                                zlevel[j, i] = nodata;
+                            }
+                            else
+                            {
+                                zlevel[j, i] = value; // u and v components are stored at the .vec file
+                            }
                         }
                         else
                         {
-                            zlevel[j, i] = Convert.ToDouble(data[j], ic);
+                            double value = Convert.ToDouble(data[j], ic);
+                            if (double.IsNaN(value) || double.IsInfinity(value))
+                            {
+                                zlevel[j, i] = nodata;
+                            }
+                            else
+                            {
+                                zlevel[j, i] = value;
+                            }
                         }
 
                         if (Convert.ToInt32(zlevel[j, i]) != nodata)

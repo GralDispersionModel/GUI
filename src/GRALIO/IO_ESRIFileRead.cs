@@ -75,11 +75,18 @@ namespace GralIO
                             {
                                 if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
                                 {
-                                    A[x++][y] = value;
-                                    if ((int)(value) != nodata)
+                                    if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
-                                        min = Math.Min(min, value);
-                                        max = Math.Max(max, value);
+                                        A[x++][y] = nodata;
+                                    }
+                                    else
+                                    {
+                                        A[x++][y] = value;
+                                        if ((int)(value) != nodata)
+                                        {
+                                            min = Math.Min(min, value);
+                                            max = Math.Max(max, value);
+                                        }
                                     }
                                 }
                                 else
@@ -92,11 +99,18 @@ namespace GralIO
                             {
                                 if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
                                 {
-                                    A[x][y] = value;
-                                    if ((int)(value) != nodata)
+                                    if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
-                                        min = Math.Min(min, value);
-                                        max = Math.Max(max, value);
+                                        A[x++][y] = nodata;
+                                    }
+                                    else
+                                    {
+                                        A[x][y] = value;
+                                        if ((int)(value) != nodata)
+                                        {
+                                            min = Math.Min(min, value);
+                                            max = Math.Max(max, value);
+                                        }
                                     }
                                 }
                                 else
@@ -189,11 +203,18 @@ namespace GralIO
                             {
                                 if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
                                 {
-                                    A[x++, y] = value;
-                                    if ((int)(value) != nodata)
+                                    if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
-                                        min = Math.Min(min, value);
-                                        max = Math.Max(max, value);
+                                        A[x++, y] = nodata;
+                                    }
+                                    else
+                                    {
+                                        A[x++, y] = value;
+                                        if ((int)(value) != nodata)
+                                        {
+                                            min = Math.Min(min, value);
+                                            max = Math.Max(max, value);
+                                        }
                                     }
                                 }
                                 else
@@ -206,11 +227,18 @@ namespace GralIO
                             {
                                 if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
                                 {
-                                    A[x, y] = value;
-                                    if ((int)(value) != nodata)
+                                    if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
-                                        min = Math.Min(min, value);
-                                        max = Math.Max(max, value);
+                                        A[x, y] = nodata;
+                                    }
+                                    else
+                                    {
+                                        A[x, y] = value;
+                                        if ((int)(value) != nodata)
+                                        {
+                                            min = Math.Min(min, value);
+                                            max = Math.Max(max, value);
+                                        }
                                     }
                                 }
                                 else
