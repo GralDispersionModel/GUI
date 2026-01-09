@@ -213,42 +213,30 @@ namespace Gral
                     }
 
                     //delete existing concentration fields
-                    string newPath1 = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
-                    DirectoryInfo di = new DirectoryInfo(newPath1);
-                    FileInfo[] files_conc = di.GetFiles("*.con");
-                    if (files_conc.Length == 0) // compressed files?
+                    if (StartSituation == 0) // no deletion of exiting files when running a chunk of situations
                     {
-                        files_conc = di.GetFiles("*.grz");
-                    }
-
-                    if (transient == 1) // steady state mode
-                    {
-                        if (files_conc.Length >= numericUpDown5.Value)
+                        string newPath1 = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
+                        DirectoryInfo di = new DirectoryInfo(newPath1);
+                        FileInfo[] files_conc = di.GetFiles("*.con");
+                        if (files_conc.Length == 0) // compressed files?
                         {
-                            DialogResult res = MessageBox.Show("The existing *.con files higher than dispersion number "
-                                                               + Convert.ToString(numericUpDown5.Value)
-                                                               + " will be deleted", "Delete existing concentration files",
-                                                               MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                            if (res == DialogResult.Cancel)
-                            {
-                                return; // exit, if user cancels
-                            }
+                            files_conc = di.GetFiles("*.grz");
                         }
 
-                        for (int i = 0; i < files_conc.Length; i++)
+                        if (transient == 1) // steady state mode
                         {
-                            try
+                            if (files_conc.Length >= numericUpDown5.Value)
                             {
-                                if (Convert.ToInt32(files_conc[i].Name.Substring(0, 5)) >= Convert.ToInt32(numericUpDown5.Value))
+                                DialogResult res = MessageBox.Show("The existing *.con files higher than dispersion number "
+                                                                   + Convert.ToString(numericUpDown5.Value)
+                                                                   + " will be deleted", "Delete existing concentration files",
+                                                                   MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                                if (res == DialogResult.Cancel)
                                 {
-                                    files_conc[i].Delete();
+                                    return; // exit, if user cancels
                                 }
                             }
-                            catch { }
-                        }
-                        files_conc = di.GetFiles("*.odr"); // delete *.odr files
-                        if (files_conc.Length > 0)
-                        {
+
                             for (int i = 0; i < files_conc.Length; i++)
                             {
                                 try
@@ -260,8 +248,23 @@ namespace Gral
                                 }
                                 catch { }
                             }
-                        }
-                    } // delete *.con & *.odr files in transient mode
+                            files_conc = di.GetFiles("*.odr"); // delete *.odr files
+                            if (files_conc.Length > 0)
+                            {
+                                for (int i = 0; i < files_conc.Length; i++)
+                                {
+                                    try
+                                    {
+                                        if (Convert.ToInt32(files_conc[i].Name.Substring(0, 5)) >= Convert.ToInt32(numericUpDown5.Value))
+                                        {
+                                            files_conc[i].Delete();
+                                        }
+                                    }
+                                    catch { }
+                                }
+                            }
+                        } // delete *.con & *.odr files in transient mode
+                    }
 
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
@@ -362,7 +365,7 @@ namespace Gral
                     }
                     string consoleArgument = GRALProcess.StartInfo.Arguments;
                     
-                    if (StartSituation > 0 && FinalSituation > StartSituation) // start 1 instance with a chunk of siutations
+                    if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations
                     {
                         GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
                     }
