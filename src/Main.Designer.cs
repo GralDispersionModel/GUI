@@ -1107,7 +1107,6 @@
             // 
             // numericUpDown9
             // 
-            numericUpDown9.DecimalPlaces = 1;
             numericUpDown9.Font = new System.Drawing.Font("Segoe UI", 10F);
             numericUpDown9.Location = new System.Drawing.Point(175, 42);
             numericUpDown9.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
@@ -3396,7 +3395,7 @@
             checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
             checkBoxAVX.Location = new System.Drawing.Point(13, 92);
             checkBoxAVX.Name = "checkBoxAVX";
-            checkBoxAVX.Size = new System.Drawing.Size(145, 19);
+            checkBoxAVX.Size = new System.Drawing.Size(146, 19);
             checkBoxAVX.TabIndex = 26;
             checkBoxAVX.Text = "Use AVX512 extensions";
             toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");

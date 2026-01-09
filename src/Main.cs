@@ -21,6 +21,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Threading;
+
 
 #if __MonoCS__
 #else
@@ -1441,7 +1443,7 @@ namespace Gral
                 startFinalSit.Close();
                 startFinalSit.Dispose();
             }
-            if (start < end)
+            if (start <= end)
             {
                 numericUpDown33.Value = 1;
                 GRALStartCalculation(start, end);
@@ -3038,6 +3040,7 @@ namespace Gral
             }
             this.numericUpDown10.MouseWheel += new MouseEventHandler(NumericUpDown_MouseWheel);
             this.numericUpDown9.MouseWheel += new MouseEventHandler(NumericUpDown_MouseWheel);
+            this.numericUpDown9.KeyPress += new KeyPressEventHandler(NumericUpDownInteger_KeyPress);
         }
 
         /// <summary>
@@ -3066,6 +3069,17 @@ namespace Gral
                     }
             }
             ((HandledMouseEventArgs)e).Handled = true;
+        }
+        
+        /// <summary>
+        /// Allow only integer values on the NumericUpDown control
+        /// </summary>
+        private void NumericUpDownInteger_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator))
+            {
+                e.Handled = true;
+            }
         }
 
         /// <summary>
