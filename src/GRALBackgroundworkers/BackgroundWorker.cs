@@ -490,6 +490,12 @@ namespace GralBackgroundworkers
                     return ReadConAllCompressed(reader, mydata, itm, ref conc);
                 }
 
+                double delta = 0.5 * mydata.Horgridsize;
+                if (mydata.Horgridsize < 2)
+                {
+                    delta = 0;
+                }
+
                 //#if NET6_0_OR_GREATER
                 byte[] chunk = reader.ReadBytes(4800);
                 while (chunk.Length > 0)
@@ -497,9 +503,9 @@ namespace GralBackgroundworkers
                     for (int ind = 0; ind < chunk.Length;)
                     {
                         int x = BitConverter.ToInt32(chunk, ind);
-                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                        indexi = Convert.ToInt32((x - delta - mydata.DomainWest) / mydata.Horgridsize);
                         x = BitConverter.ToInt32(chunk, ind + 4);
-                        indexj = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                        indexj = Convert.ToInt32((x - delta - mydata.DomainSouth) / mydata.Horgridsize);
                         Single tempconc = BitConverter.ToSingle(chunk, ind + 8);
                         ind += 12;
                         if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
@@ -559,6 +565,11 @@ namespace GralBackgroundworkers
                 float dy = reader.ReadSingle();
 
                 int end = 0;
+                double delta = 0.5 * mydata.Horgridsize;
+                if (mydata.Horgridsize < 2)
+                {
+                    delta = 0;
+                }
 
                 //#if NET6_0_OR_GREATER
                 // read entire file
@@ -575,8 +586,8 @@ namespace GralBackgroundworkers
                         double x = IKOOAGRAL + xi * dx - dx * 0.5F;
                         double y = JKOOAGRAL + xj * dy - dy * 0.5F;
 
-                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
-                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                        indexi = Convert.ToInt32((x - delta - mydata.DomainWest) / mydata.Horgridsize);
+                        indexj = Convert.ToInt32((y - delta - mydata.DomainSouth) / mydata.Horgridsize);
 
                         Single tempconc = 0;
 
@@ -588,7 +599,7 @@ namespace GralBackgroundworkers
                                 conc[indexi][indexj][itm] = tempconc;
                             }
                             y += dy; // new y- coordinate of next point
-                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                            indexj = Convert.ToInt32((y - delta - mydata.DomainSouth) / mydata.Horgridsize);
                         }
                     }
                     else if (lenght == -1) // end of file
@@ -664,18 +675,23 @@ namespace GralBackgroundworkers
                 float dy = reader.ReadSingle();
                 int NX = reader.ReadInt32();
                 int NY = reader.ReadInt32();
+                double delta = 0.5 * mydata.Horgridsize;
+                if (mydata.Horgridsize < 2)
+                {
+                    delta = 0;
+                }
                 //#if NET6_0_OR_GREATER
                 for (int i = 1; i <= NX; i++)
                 {
                     double x = IKOOAGRAL + i * dx - dx * 0.5F;
-                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                    indexi = Convert.ToInt32((x - delta - mydata.DomainWest) / mydata.Horgridsize);
                     byte[] chunk = reader.ReadBytes(NY * 4);
                     if (chunk.Length == NY * 4)
                     {
                         for (int j = 1; j <= NY; j++)
                         {
                             double y = JKOOAGRAL + j * dy - dy * 0.5F;
-                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                            indexj = Convert.ToInt32((y - delta - mydata.DomainSouth) / mydata.Horgridsize);
                             if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
                             {
                                 conc[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 4); // read 4 bytes = Single concentration value
@@ -790,6 +806,12 @@ namespace GralBackgroundworkers
                 {
                     return ReadOdrAllCompressed(reader, mydata, itm, ref concp, ref concm, ref Q_cv0, ref td);
                 }
+
+                double delta = 0.5 * mydata.Horgridsize;
+                if (mydata.Horgridsize < 2)
+                {
+                    delta = 0;
+                }
                 //#if NET6_0_OR_GREATER
                 byte[] chunk = reader.ReadBytes(4800);
                 while (chunk.Length > 0)
@@ -797,9 +819,9 @@ namespace GralBackgroundworkers
                     for (int ind = 0; ind < chunk.Length;)
                     {
                         int x = BitConverter.ToInt32(chunk, ind);
-                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                        indexi = Convert.ToInt32((x - delta - mydata.DomainWest) / mydata.Horgridsize);
                         x = BitConverter.ToInt32(chunk, ind + 4);
-                        indexj = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                        indexj = Convert.ToInt32((x - delta - mydata.DomainSouth) / mydata.Horgridsize);
                         if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
                         {
                             concp[indexi][indexj][itm] = BitConverter.ToSingle(chunk, ind + 8);
@@ -876,6 +898,11 @@ namespace GralBackgroundworkers
                 float dy = reader.ReadSingle();
 
                 int end = 0;
+                double delta = 0.5 * mydata.Horgridsize;
+                if (mydata.Horgridsize < 2)
+                {
+                    delta = 0;
+                }
                 //#if NET6_0_OR_GREATER
                 // read entire file
                 do
@@ -891,8 +918,8 @@ namespace GralBackgroundworkers
                         double x = IKOOAGRAL + xi * dx - dx * 0.5F;
                         double y = JKOOAGRAL + xj * dy - dy * 0.5F;
 
-                        indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
-                        indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                        indexi = Convert.ToInt32((x - delta - mydata.DomainWest) / mydata.Horgridsize);
+                        indexj = Convert.ToInt32((y - delta - mydata.DomainSouth) / mydata.Horgridsize);
 
                         for (int i = 8; i < chunk.Length; i += 16)
                         {
@@ -904,7 +931,7 @@ namespace GralBackgroundworkers
                                 td[indexi][indexj][itm] = BitConverter.ToSingle(chunk, i + 12);
                             }
                             y += dy; // new y- coordinate of next point
-                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                            indexj = Convert.ToInt32((y - delta - mydata.DomainSouth) / mydata.Horgridsize);
                         }
                     }
                     else if (lenght == -1) // end of file
@@ -994,19 +1021,24 @@ namespace GralBackgroundworkers
                 float dy = reader.ReadSingle();
                 int NX = reader.ReadInt32();
                 int NY = reader.ReadInt32();
-
+                
+                double delta = 0.5 * mydata.Horgridsize;
+                if (mydata.Horgridsize < 2)
+                {
+                    delta = 0;
+                }
                 //#if NET6_0_OR_GREATER
                 for (int i = 1; i <= NX; i++)
                 {
                     double x = IKOOAGRAL + i * dx - dx * 0.5F;
-                    indexi = Convert.ToInt32((x - 0.5 * mydata.Horgridsize - mydata.DomainWest) / mydata.Horgridsize);
+                    indexi = Convert.ToInt32((x - delta - mydata.DomainWest) / mydata.Horgridsize);
                     byte[] chunk = reader.ReadBytes(NY * 16);
                     if (chunk.Length > 0)
                     {
                         for (int j = 1; j <= NY; j++)
                         {
                             double y = JKOOAGRAL + j * dy - dy * 0.5F;
-                            indexj = Convert.ToInt32((y - 0.5 * mydata.Horgridsize - mydata.DomainSouth) / mydata.Horgridsize);
+                            indexj = Convert.ToInt32((y - delta - mydata.DomainSouth) / mydata.Horgridsize);
                             if (indexi >= 0 & indexj >= 0 & indexi <= (mydata.CellsGralX + 1) & indexj <= (mydata.CellsGralY + 1))
                             {
                                 concp[indexi][indexj][itm] = BitConverter.ToSingle(chunk, (j - 1) * 16);
