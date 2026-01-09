@@ -261,6 +261,8 @@ namespace GralDomain
                 double labellenght = Convert.ToDouble(_drobj.ContourLabelDist) * factor_x;
                 int lenght_of_string = (int)g.MeasureString("9999", LabelFont).Width;
                 labellenght = Math.Max(lenght_of_string, labellenght * 2);
+                form1_north -= _drobj.ContourGeometry.DX;
+                form1_west -=  0.5 * _drobj.ContourGeometry.DX;
 
                 for (int i = 0; i < _drobj.ContourPolygons.Count; i++)  // loop over all iso-rings
                 {
@@ -618,6 +620,8 @@ namespace GralDomain
 
                 if (_drobj.LineWidth > 0) // draw contour lines
                 {
+                    form1_north -= _drobj.ContourGeometry.DX;
+                    form1_west -= 0.5 * _drobj.ContourGeometry.DX;
                     //number of z-levels
                     List<Point> contouredges = new List<Point>();
                     int label_interval = Math.Max(1, _drobj.LabelInterval);
