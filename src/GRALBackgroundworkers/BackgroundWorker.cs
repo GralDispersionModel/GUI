@@ -566,11 +566,7 @@ namespace GralBackgroundworkers
 
                 int end = 0;
                 double delta = 0.5 * mydata.Horgridsize;
-                if (mydata.Horgridsize < 2)
-                {
-                    delta = 0;
-                }
-
+                
                 //#if NET6_0_OR_GREATER
                 // read entire file
                 do
@@ -676,10 +672,7 @@ namespace GralBackgroundworkers
                 int NX = reader.ReadInt32();
                 int NY = reader.ReadInt32();
                 double delta = 0.5 * mydata.Horgridsize;
-                if (mydata.Horgridsize < 2)
-                {
-                    delta = 0;
-                }
+                
                 //#if NET6_0_OR_GREATER
                 for (int i = 1; i <= NX; i++)
                 {
@@ -899,10 +892,7 @@ namespace GralBackgroundworkers
 
                 int end = 0;
                 double delta = 0.5 * mydata.Horgridsize;
-                if (mydata.Horgridsize < 2)
-                {
-                    delta = 0;
-                }
+                
                 //#if NET6_0_OR_GREATER
                 // read entire file
                 do
@@ -1023,10 +1013,7 @@ namespace GralBackgroundworkers
                 int NY = reader.ReadInt32();
                 
                 double delta = 0.5 * mydata.Horgridsize;
-                if (mydata.Horgridsize < 2)
-                {
-                    delta = 0;
-                }
+                
                 //#if NET6_0_OR_GREATER
                 for (int i = 1; i <= NX; i++)
                 {
