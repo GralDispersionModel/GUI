@@ -51,9 +51,7 @@ namespace GralDomain
                 byte[,] b = new byte[nx + 1, ny + 1];
                 // Array.Clear(b, 0, b.Length); // clear the "Belegungs" array
 
-                int ny_min = ny + 1;
                 int ny_max = 0;
-                int nx_min = nx + 1;
                 int nx_max = 0;
 
                 double contour_value = _drobj.ItemValues[k];
@@ -121,11 +119,9 @@ namespace GralDomain
                             pts.Add(new PointD(x_a_s, y_a_s)); //1st point
 
                             b[xz, yz] = 1; // set "Belegung" for this cell
-                            ny_max = Math.Max(ny_max, yz);
-                            nx_max = Math.Max(nx_max, xz);
-                            ny_min = Math.Min(ny_min, yz);
-                            nx_min = Math.Min(nx_min, xz);
-
+                            ny_max = Math.Max(ny_max, ny -1);
+                            nx_max = Math.Max(nx_max, nx -2);
+                            
                             // filter sinlge "islands"
                             double checkvalue = contour_value * 0.99;
                             if (xz > 0 && yz > 0 && zlevel[xz + 1, yz] > checkvalue && zlevel[xz - 1, yz] > checkvalue &&
@@ -138,7 +134,7 @@ namespace GralDomain
                                     switch (q)
                                     {
                                         case 1: // direction right
-                                            if (xz < nx - 2) // border?
+                                            if (xz < nx_max) // border?
                                             {
                                                 w2 = zlevel[xz + 1, yz];
                                                 if (w2 < contour_value) // if lower
@@ -178,7 +174,7 @@ namespace GralDomain
                                             break;
 
                                         case 2: // direction up
-                                            if (yz < ny - 1) // border?
+                                            if (yz < ny_max) // border?
                                             {
                                                 w2 = zlevel[xz, yz + 1];
                                                 if (w2 < contour_value) // if lower
@@ -294,6 +290,18 @@ namespace GralDomain
 
                                             break;
                                     }
+                                    if ((xz >= nx_max && yz <= 0) || (xz >= nx_max && yz >= ny_max) || (xz <= 0 && yz <= 0) || (xz <= 0 && yz >= ny_max))
+                                    {
+                                        b[xz, yz] = 1; // set "Belegung" for this cell
+
+                                        x_a = x11 + xz * dx;
+                                        y_a = y11 + yz * dx;
+                                        pts.Add(new PointD(x_a, y_a));
+                                        x_a_l = x_a; y_a_l = y_a;
+                                    }
+
+
+
                                     //MessageBox.Show(contour_value.ToString());
                                 } while (xz != x_start || yz != y_start);
                             }
