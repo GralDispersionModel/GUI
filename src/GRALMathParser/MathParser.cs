@@ -142,7 +142,7 @@ namespace MathParserMathos
 
                     LocalFunctions.Add("tan", x => (double)Math.Tan((double)x[0] * Math.PI / 180));
                     LocalFunctions.Add("tanh", x => (double)Math.Tanh((double)x[0] * Math.PI / 180));
-                    LocalFunctions.Add("arctan", x => (double)Math.Atan((double)x[0] * Math.PI / 180));
+                    LocalFunctions.Add("arctan", x => (double)Math.Atan((double)x[0]) * 180 / Math.PI);
                     //LocalFunctions.Add("arctan2", x => (double)Math.Atan2((double)x[0] * Math.PI / 180, (double)x[1]));
                 }
 
@@ -172,6 +172,34 @@ namespace MathParserMathos
                 LocalFunctions.Add("log", x => (double)Math.Log10((double)x[0]));
 
                 LocalFunctions.Add("rcp", x => (double)1 / (double)x[0]);
+
+                LocalFunctions.Add("max", delegate (double[] input)
+                {
+                    double max = double.MinValue;
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        max = Math.Max(max, (double)input[i]);
+                    }
+                    return max;
+                });
+                LocalFunctions.Add("min", delegate (double[] input)
+                {
+                    double min = double.MaxValue;
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        min = Math.Min(min, (double)input[i]);
+                    }
+                    return min;
+                });
+                LocalFunctions.Add("mean", delegate (double[] input)
+                {
+                    double sum= 0;
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        sum += (double)input[i];
+                    }
+                    return sum / input.Length;
+                });
 
                 LocalFunctions.Add("dbplus", delegate (double[] input)
                 {
