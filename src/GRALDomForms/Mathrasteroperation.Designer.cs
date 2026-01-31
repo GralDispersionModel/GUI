@@ -152,7 +152,7 @@
             groupBox3.Size = new System.Drawing.Size(656, 55);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Output Raster File F (size inherited from Raster File A)";
+            groupBox3.Text = "Output Raster File F (size inherited from raster file A)";
             // 
             // textBox8
             // 
@@ -178,7 +178,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Arial", 12F);
-            label1.Location = new System.Drawing.Point(14, 456);
+            label1.Location = new System.Drawing.Point(13, 471);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(31, 18);
@@ -189,12 +189,12 @@
             // 
             label2.AutoSize = true;
             label2.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            label2.Location = new System.Drawing.Point(15, 398);
+            label2.Location = new System.Drawing.Point(15, 390);
             label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(587, 34);
+            label2.Size = new System.Drawing.Size(587, 68);
             label2.TabIndex = 5;
-            label2.Text = "Enter a function of the form C = f(A,B). Allowed operators are: +, -, *, /, ( ), ^, sqrt(), sin(x), \r\ncos(x), tan(x),  abs(x), exp(x), e^x, log(x), ln(x), pi, e";
+            label2.Text = resources.GetString("label2.Text");
             // 
             // openFileDialog1
             // 
@@ -202,7 +202,7 @@
             // 
             // button4
             // 
-            button4.Location = new System.Drawing.Point(20, 523);
+            button4.Location = new System.Drawing.Point(19, 538);
             button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button4.Name = "button4";
             button4.Size = new System.Drawing.Size(100, 35);
@@ -214,7 +214,7 @@
             // button5
             // 
             button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            button5.Location = new System.Drawing.Point(203, 523);
+            button5.Location = new System.Drawing.Point(202, 538);
             button5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             button5.Name = "button5";
             button5.Size = new System.Drawing.Size(100, 35);
@@ -226,7 +226,7 @@
             // textBox1
             // 
             textBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            textBox1.Location = new System.Drawing.Point(57, 456);
+            textBox1.Location = new System.Drawing.Point(56, 471);
             textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             textBox1.Name = "textBox1";
             textBox1.Size = new System.Drawing.Size(428, 22);
@@ -248,7 +248,7 @@
             // groupBox4
             // 
             groupBox4.Controls.Add(button6);
-            groupBox4.Location = new System.Drawing.Point(497, 502);
+            groupBox4.Location = new System.Drawing.Point(496, 517);
             groupBox4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             groupBox4.Name = "groupBox4";
             groupBox4.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -364,7 +364,7 @@
             // 
             // label4
             // 
-            label4.Location = new System.Drawing.Point(509, 460);
+            label4.Location = new System.Drawing.Point(508, 475);
             label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(43, 25);
@@ -374,7 +374,7 @@
             // textBox2
             // 
             textBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            textBox2.Location = new System.Drawing.Point(559, 456);
+            textBox2.Location = new System.Drawing.Point(558, 471);
             textBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             textBox2.Name = "textBox2";
             textBox2.Size = new System.Drawing.Size(116, 25);
@@ -386,7 +386,7 @@
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = button5;
-            ClientSize = new System.Drawing.Size(705, 585);
+            ClientSize = new System.Drawing.Size(705, 602);
             Controls.Add(textBox2);
             Controls.Add(label4);
             Controls.Add(groupBox7);

@@ -87,8 +87,102 @@ namespace GralBackgroundworkers
                 }
             }
 
+            // sprecial case - reduce raster size
+            if (A != null && mydata.MathRasterEquation.ToUpper().Contains("RESAMPLE:"))
+            {
+                string[] rasterString = mydata.MathRasterEquation.Split(':');
+                if (double.TryParse(rasterString[1], out double newRasterSize))
+                {
+                    // create result raster
+                    double oldRasterSize = _fileHeader[0].Cellsize;
+                    if (oldRasterSize < newRasterSize)
+                    {
+                        int ncols = (int)(_fileHeader[0].NCols * oldRasterSize / newRasterSize) + 1;
+                        int nrows = (int)(_fileHeader[0].NRows * oldRasterSize / newRasterSize) + 1;
+                        int chunkSize = (int)(newRasterSize / oldRasterSize);
+
+                        F = CreateArray<double[]>(ncols, () => new double[nrows]);
+
+                        for (int xn = 0; xn < ncols; xn++)
+                        {
+                            for (int yn = 0; yn < nrows; yn++)
+                            {
+                                double mean = 0;
+                                int meanCount = 0; // part of the grid may remain at the edges or NAN values can be contained -> count the values
+                                int errorCount = 0;
+                                for (int x = xn * chunkSize; x < Math.Min(_fileHeader[0].NCols, (xn + 1) *chunkSize); x++)
+                                {
+                                    if (Rechenknecht.CancellationPending)
+                                    {
+                                        e.Cancel = true;
+                                        return;
+                                    }
+                                    if (x % 50 == 0)
+                                    {
+                                        Rechenknecht.ReportProgress((int)(x / (double)_fileHeader[0].NCols * 100D));
+                                    }
+                                    for (int y = yn * chunkSize ; y < Math.Min(_fileHeader[0].NRows, (yn +1) * chunkSize); y++)
+                                    {
+                                        double value = A[x][y];
+                                        if (!double.IsNaN(value) && Math.Abs(value + 9999) > 0.1 && value != 0) // check for NAN and nodata values and concentration inside buildings
+                                        {
+                                            mean += A[x][y];
+                                            meanCount++;
+                                        }
+                                        else if (value != 0)
+                                        {
+                                            errorCount++;
+                                        }
+                                    }
+                                }
+                                if (meanCount > 0)
+                                {
+                                    F[xn][yn] = mean / meanCount;
+                                }
+                                else if (errorCount == 0) // all values are 0
+                                {
+                                    F[xn][yn] = 0;
+                                }
+                                else // error values
+                                {
+                                    F[xn][yn] = -9999;
+                                }
+                            }
+                        }
+                        SetText("Writing output file");
+
+                        GralIO.WriteESRIFile _writer = new GralIO.WriteESRIFile();
+                        _writer.CellSize = newRasterSize;
+                        _writer.NCols = ncols;
+                        _writer.NRows = nrows;
+                        _writer.XllCorner = _fileHeader[0].XllCorner;
+                        _writer.YllCorner = _fileHeader[0].YllCorner;
+                        _writer.Round = 8;
+                        _writer.FileName = mydata.RasterF;
+                        _writer.Unit = mydata.Unit;
+
+                        if (_writer.WriteJaggedDblArrResult(F) == false)
+                        {
+                            BackgroundThreadMessageBox("Error when writing the result file");
+                            return;
+                        }
+                        _writer = null;
+                        AddInfoText(Environment.NewLine + "Writing result file " + mydata.RasterF);
+
+                        Computation_Completed = true; // set flag, that computation was successful
+                    }
+                    else
+                    {
+                        BackgroundThreadMessageBox("Cancelled: new raster size must be larger than the old raster size");
+                    }
+                }
+                else
+                {
+                    BackgroundThreadMessageBox("Cancelled: new raster size not a number");
+                }
+            }
             // Check if raster A is available
-            if (A != null)
+            else if (A != null)
             {
                 // create result raster
                 F = CreateArray<double[]>(_fileHeader[0].NCols, () => new double[_fileHeader[0].NRows]);
