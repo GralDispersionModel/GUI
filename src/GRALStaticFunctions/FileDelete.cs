@@ -23,7 +23,7 @@ namespace GralStaticFunctions
         {
             wFunc = FO_DELETE,
             fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION,
-            lpszProgressTitle = "Move files to the recycling bin" + '\0'
+            lpszProgressTitle = "Move files to the recycle bin" + '\0'
         };
 
         // Struct which contains information that the SHFileOperation function uses to perform file operations. 

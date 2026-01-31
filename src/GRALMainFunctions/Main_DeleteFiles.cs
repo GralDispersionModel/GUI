@@ -195,7 +195,7 @@ namespace Gral
             if (Main.GUISettings.DeleteFilesToRecyclingBin)
             {
                 System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
-                WaitProgressbarCancel wait = new WaitProgressbarCancel("Move files to the recycling bin", ref cts);
+                WaitProgressbarCancel wait = new WaitProgressbarCancel("Move files to the recycle bin", ref cts);
                 wait.ProgressbarUpdate(this, Math.Max(2, Files.Length / 40 + Files.Length % 40));
                 wait.Show();
 
