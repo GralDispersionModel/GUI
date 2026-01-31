@@ -210,7 +210,7 @@
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new System.Drawing.Size(532, 28);
             checkBox3.TabIndex = 9;
-            checkBox3.Text = "Delete *.con/*.grz/*.gff/*.wnd files to the recyling bin (safer but slower, Windows only)";
+            checkBox3.Text = "Delete *.con/*.grz/*.gff/*.wnd files to the recycle bin (safer but slower, Windows only)";
             checkBox3.UseVisualStyleBackColor = true;
             checkBox3.Click += checkBox3_Click_1;
             // 
