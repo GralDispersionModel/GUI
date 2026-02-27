@@ -23,7 +23,7 @@ namespace GralDomain
         /// </summary>
         private void DrawRubberPS(int x, int y, int mode)
         {
-            
+
             if (PictureBoxBitmap != null && RubberRedrawAllowed == 0)
             {
                 RubberRedrawAllowed = 2;
@@ -35,7 +35,7 @@ namespace GralDomain
                     }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
-                    
+
                     using (Graphics g = Graphics.FromImage(picturebox1.Image))
                     {
                         Pen pen = new Pen(Color.Black);
@@ -46,8 +46,8 @@ namespace GralDomain
 
                         if (mode == 0) // point source
                         {
-                            g.DrawArc(pen, x- 10,y-10,20,20,1,360);
-                            g.DrawArc(pen2, x- 10,y-10,20,20,1,360);
+                            g.DrawArc(pen, x - 10, y - 10, 20, 20, 1, 360);
+                            g.DrawArc(pen2, x - 10, y - 10, 20, 20, 1, 360);
                         }
                         else if (mode == 1) // Receptor
                         {
@@ -61,11 +61,11 @@ namespace GralDomain
                     }
                 }
                 catch
-                {}
+                { }
                 RubberRedrawAllowed = 0;
             }
         }
-        
+
         /// <summary>
         /// Draw rubber lines for copied buildings
         /// </summary>
@@ -79,7 +79,7 @@ namespace GralDomain
             {
                 return;
             }
-            
+
             if (mode == 2 && CopiedItem.AreaSource == null)
             {
                 return;
@@ -88,14 +88,14 @@ namespace GralDomain
             {
                 return;
             }
-            
+
             if (PictureBoxBitmap != null && RubberRedrawAllowed == 0)
             {
                 RubberRedrawAllowed = 2;
                 double form1_west = MapSize.West, form1_north = MapSize.North;
                 double factor_x = 1 / BmpScale / MapSize.SizeX;
                 double factor_y = 1 / BmpScale / MapSize.SizeY;
-                
+
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
@@ -104,7 +104,7 @@ namespace GralDomain
                     }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
-                    
+
                     using (Graphics g = Graphics.FromImage(picturebox1.Image))
                     {
                         Pen pen = new Pen(Color.Black);
@@ -117,7 +117,7 @@ namespace GralDomain
                         double y = Convert.ToDouble(textBox2.Text);
                         double x0;
                         double y0;
-                        
+
                         Point[] DrawPoint;
                         if (mode == 1)
                         {
@@ -133,9 +133,9 @@ namespace GralDomain
                             x0 = x - CopiedItem.AreaSource.Pt[0].X;
                             y0 = y - CopiedItem.AreaSource.Pt[0].Y;
                         }
-                        
+
                         int i = 0;
-                        foreach(PointD _pt in PtList)
+                        foreach (PointD _pt in PtList)
                         {
                             int x1 = (int)((x0 + _pt.X - form1_west) * factor_x + TransformX);
                             int y1 = (int)((y0 + _pt.Y - form1_north) * factor_y + TransformY);
@@ -144,17 +144,17 @@ namespace GralDomain
                         }
                         g.DrawPolygon(pen, DrawPoint);
                         g.DrawPolygon(pen2, DrawPoint);
-                        
+
                         pen.Dispose();
                         pen2.Dispose();
                     }
                 }
                 catch
-                {}
+                { }
                 RubberRedrawAllowed = 0;
             }
         }
-        
+
         /// <summary>
         /// Draw rubber lines for copied line sources
         /// </summary>
@@ -168,14 +168,14 @@ namespace GralDomain
             {
                 return;
             }
-            
+
             if (PictureBoxBitmap != null && RubberRedrawAllowed == 0)
             {
                 RubberRedrawAllowed = 2;
                 double form1_west = MapSize.West, form1_north = MapSize.North;
                 double factor_x = 1 / BmpScale / MapSize.SizeX;
                 double factor_y = 1 / BmpScale / MapSize.SizeY;
-                
+
                 try // if picture_box is used in an other thread
                 {
                     if (picturebox1.Image != null)
@@ -184,7 +184,7 @@ namespace GralDomain
                     }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
-                    
+
                     using (Graphics g = Graphics.FromImage(picturebox1.Image))
                     {
                         Pen pen = new Pen(Color.Black);
@@ -198,9 +198,9 @@ namespace GralDomain
                         double y = Convert.ToDouble(textBox2.Text);
                         double x0 = x - CopiedItem.LineSource.Pt[0].X;
                         double y0 = y - CopiedItem.LineSource.Pt[0].Y;
-                        
+
                         int i = 0;
-                        foreach(GralData.PointD_3d _pt in CopiedItem.LineSource.Pt)
+                        foreach (GralData.PointD_3d _pt in CopiedItem.LineSource.Pt)
                         {
                             int x1 = (int)((x0 + _pt.X - form1_west) * factor_x + TransformX);
                             int y1 = (int)((y0 + _pt.Y - form1_north) * factor_y + TransformY);
@@ -209,17 +209,17 @@ namespace GralDomain
                         }
                         g.DrawLines(pen, DrawPoint);
                         g.DrawLines(pen2, DrawPoint);
-                        
+
                         pen.Dispose();
                         pen2.Dispose();
                     }
                 }
                 catch
-                {}
+                { }
                 RubberRedrawAllowed = 0;
             }
         }
-        
+
         /// <summary>
         /// Draw rubber lines for copied portal sources
         /// </summary>
@@ -229,7 +229,7 @@ namespace GralDomain
             {
                 return;
             }
-            
+
             if (PictureBoxBitmap != null && RubberRedrawAllowed == 0)
             {
                 RubberRedrawAllowed = 2;
@@ -243,10 +243,10 @@ namespace GralDomain
                     double form1_west = MapSize.West, form1_north = MapSize.North;
                     double factor_x = 1 / BmpScale / MapSize.SizeX;
                     double factor_y = 1 / BmpScale / MapSize.SizeY;
-                    
+
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
-                    
+
                     using (Graphics g = Graphics.FromImage(picturebox1.Image))
                     {
                         Pen pen = new Pen(Color.Black);
@@ -265,20 +265,20 @@ namespace GralDomain
                         _pt = CopiedItem.PortalSource.Pt2;
                         int x2 = (int)((x0 + _pt.X - form1_west) * factor_x + TransformX);
                         int y2 = (int)((y0 + _pt.Y - form1_north) * factor_y + TransformY);
-                        
+
                         g.DrawLine(pen, x1, y1, x2, y2);
                         g.DrawLine(pen2, x1, y1, x2, y2);
-                        
+
                         pen.Dispose();
                         pen2.Dispose();
                     }
                 }
                 catch
-                {}
+                { }
                 RubberRedrawAllowed = 0;
             }
         }
-        
+
         /// <summary>
         /// Draw rubber lines 
         /// </summary>
@@ -295,7 +295,7 @@ namespace GralDomain
                     }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
-                    
+
                     using (Graphics g = Graphics.FromImage(picturebox1.Image))
                     {
                         Pen pen = new Pen(Color.Black);
@@ -306,19 +306,19 @@ namespace GralDomain
 
                         g.DrawLine(pen, CornerAreaSource[cornerline].X, CornerAreaSource[cornerline].Y, CornerAreaSource[cornerline + 1].X, CornerAreaSource[cornerline + 1].Y);
                         g.DrawLine(pen2, CornerAreaSource[cornerline].X, CornerAreaSource[cornerline].Y, CornerAreaSource[cornerline + 1].X, CornerAreaSource[cornerline + 1].Y);
-                        
+
                         if (mode == 2)
                         {
-                            g.DrawLine(pen,  RubberLineCoors[1].X, RubberLineCoors[1].Y, CornerAreaSource[cornerline + 1].X, CornerAreaSource[cornerline + 1].Y);
+                            g.DrawLine(pen, RubberLineCoors[1].X, RubberLineCoors[1].Y, CornerAreaSource[cornerline + 1].X, CornerAreaSource[cornerline + 1].Y);
                             g.DrawLine(pen2, RubberLineCoors[1].X, RubberLineCoors[1].Y, CornerAreaSource[cornerline + 1].X, CornerAreaSource[cornerline + 1].Y);
                         }
-                        
+
                         pen.Dispose();
                         pen2.Dispose();
                     }
                 }
                 catch
-                {}
+                { }
                 RubberRedrawAllowed = 0;
             }
         }
@@ -339,7 +339,7 @@ namespace GralDomain
                     }
                     // restore old image
                     picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
-                    
+
                     using (Graphics g = Graphics.FromImage(picturebox1.Image))
                     {
                         Pen pen = new Pen(Color.Black);
@@ -356,7 +356,7 @@ namespace GralDomain
                 }
             }
             catch
-            {}
+            { }
             RubberRedrawAllowed = 0;
         }
     }

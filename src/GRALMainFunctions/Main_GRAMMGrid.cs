@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
+using GralIO;
+using GralMessage;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralIO;
-using GralMessage;
 
 namespace Gral
 {
@@ -74,7 +74,8 @@ namespace Gral
                     Filter = "Topo files (*.txt;*.dat)|*.txt;*.dat",
                     Title = "Select topography"
 #if NET6_0_OR_GREATER
-                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
+                    ,
+                    ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
 #endif
                 };
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -101,7 +102,7 @@ namespace Gral
                             dx = Convert.ToDouble(data[1].Replace(".", DecimalSep));
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show("Error reading " + Path.GetFileName(Topofile) + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -150,7 +151,7 @@ namespace Gral
                 //user can define the number of grid cells at the boundaries used to smooth the topography
                 int n = (int)numericUpDown18.Value * 5; // smooth = max 1/5 of cell count!
                 n = (int)Math.Min((Math.Abs(Convert.ToDouble(textBox12.Text) - Convert.ToDouble(textBox13.Text)) / n), Math.Abs(Convert.ToDouble(textBox14.Text) - Convert.ToDouble(textBox15.Text)) / n);
-                
+
                 // n= minimal number of cells in x/y direction allowed for smoothing
                 CellNrTopographySmooth = Math.Min(CellNrTopographySmooth, n);
                 if (InputBox1("Define the number of cells at boundaries for smoothing topography", "Nr. of cells (default 0): ", 0, n, ref CellNrTopographySmooth) == DialogResult.Cancel)
@@ -164,7 +165,7 @@ namespace Gral
                     SmoothBorderCellNr = CellNrTopographySmooth,
                     ProjectName = ProjectName
                 };
-                
+
                 if (GRALSettings.Compressed > 0) // write compressed ggeom file if compressed con files = true
                 {
                     gr.WriteCompressedFile = true;
@@ -172,7 +173,7 @@ namespace Gral
 
                 if (gr.GenerateGgeomFile())
                 {
-                    Invoke(new showtopo(ShowTopo));
+                    Invoke(new showTopo(ShowTopo));
                 }
                 else
                 {
@@ -181,7 +182,7 @@ namespace Gral
                 //generate pointer for location of wind field files
                 GRAMMwindfield = Path.Combine(ProjectName, @"Computation") + Path.DirectorySeparatorChar;
                 WriteFileGRAMMWindfeld_txt(ProjectName, GRAMMwindfield, true);
-                
+
                 Cursor = Cursors.Default;
                 Textbox16_Set("GRAMM: " + GRAMMwindfield);
                 label95.Text = "Number of cells used for smoothing orography laterally: " + Convert.ToString(CellNrTopographySmooth); // show number of smooth cells
@@ -189,7 +190,7 @@ namespace Gral
                 //save GRAMM control file "GRAMMin.dat"
                 GRAMMin(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Cursor = Cursors.Default;
                 MessageBox.Show("Unable to generate the GRAMM grid!" + Environment.NewLine + ex.Message.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -231,7 +232,7 @@ namespace Gral
                     using (FileDeleteMessage fdm = new FileDeleteMessage())
                     {
                         System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
-                        
+
                         if (File.Exists(Path.Combine(ProjectName, @"Computation", "ggeom.asc")))
                         {
                             _message.Add("..Computation" + Path.DirectorySeparatorChar + "ggeom.asc");
@@ -256,8 +257,8 @@ namespace Gral
             }
         }
 
-                private delegate void showtopo();
-        
+        private delegate void showTopo();
+
         //generating GRAMM grid was successful
         private void ShowTopo()
         {
@@ -308,14 +309,14 @@ namespace Gral
             button22.Visible = true;
             groupBox12.Visible = true;
         }
-        
+
         //generating GRAMM grid failed
         public void HideTopo()
         {
             if (EmifileReset == true)
             {
                 //show file name in listbox
-                textBoxGrammTerrain.Text = string.Empty;    
+                textBoxGrammTerrain.Text = string.Empty;
                 Cursor = Cursors.Default;
 
                 DeleteFile(Path.Combine(ProjectName, @"Settings", "Topography.txt"));
@@ -409,7 +410,7 @@ namespace Gral
         private void GRAMMLoadCreateLanduse(object sender, EventArgs e)
         {
             //open dialog window to select between existing land-use file or to use homogenous default values
-            using (GralMainForms.LanduseSelect LS = new GralMainForms.LanduseSelect()
+            using (global::GralMainForms.LanduseSelect LS = new global::GralMainForms.LanduseSelect()
             {
                 Owner = this
             })
@@ -424,7 +425,8 @@ namespace Gral
                             Filter = "Landuse files (*.txt;*.dat)|*.txt;*.dat",
                             Title = "Select Landuse File"
 #if NET6_0_OR_GREATER
-                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
+                            ,
+                            ClientGuid = GralStaticFunctions.St_F.FileDialogTopo
 #endif
                         };
                         if (dialog.ShowDialog() == DialogResult.OK)
@@ -464,27 +466,27 @@ namespace Gral
 
                             try
                             {
-                                Cursor = Cursors.WaitCursor;
+                                base.Cursor = Cursors.WaitCursor;
                                 //clear textbox
                                 textBoxGrammLandUseFile.Text = string.Empty;
                                 //string file = Path.GetDirectoryName(Application.ExecutablePath);
 
-                                Cursor = Cursors.WaitCursor;
+                                base.Cursor = Cursors.WaitCursor;
                                 Landuse lu = new Landuse();
                                 lu.GenerateLanduseFile(Landusefile, checkBox36.Checked);
                                 if (lu.ok == true)
                                 {
-                                    Invoke(new showtopo(ShowLanduse));
+                                    Invoke(new showTopo(ShowLanduse));
                                 }
 
-                                Cursor = Cursors.Default;
+                                base.Cursor = Cursors.Default;
                             }
                             catch
                             {
                                 MessageBox.Show("Unable to generate landuse file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                Invoke(new showtopo(HideLanduse));
+                                Invoke(new showTopo(HideLanduse));
                             }
-                            Cursor = Cursors.Arrow;
+                            base.Cursor = Cursors.Arrow;
                         }
                     }
                     //use default value stored in the file Landuse_Default.txt
@@ -494,25 +496,25 @@ namespace Gral
 
                         try
                         {
-                            Cursor = Cursors.WaitCursor;
+                            base.Cursor = Cursors.WaitCursor;
                             //clear listbox
                             textBoxGrammLandUseFile.Text = string.Empty;
                             //string file = Path.GetDirectoryName(Application.ExecutablePath);
 
-                            Cursor = Cursors.WaitCursor;
+                            base.Cursor = Cursors.WaitCursor;
                             Landuse lu = new Landuse();
                             lu.GenerateLanduseFile(Landusefile, checkBox36.Checked);
                             if (lu.ok == true)
                             {
-                                Invoke(new showtopo(ShowLanduse));
+                                Invoke(new showTopo(ShowLanduse));
                             }
 
-                            Cursor = Cursors.Default;
+                            base.Cursor = Cursors.Default;
                         }
                         catch
                         {
                             MessageBox.Show("Unable to generate landuse file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            Invoke(new showtopo(HideLanduse));
+                            Invoke(new showTopo(HideLanduse));
                         }
                     }
 
@@ -522,7 +524,7 @@ namespace Gral
             }
         }
 
-       //generating GRAMM landuse file was successful
+        //generating GRAMM landuse file was successful
         private void ShowLanduse()
         {
             //show file name in textbox
@@ -542,7 +544,7 @@ namespace Gral
                 MessageBox.Show("Unable to write Landuse.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
+
         //generating GRAMM landuse file failed
         private void HideLanduse()
         {
@@ -583,7 +585,7 @@ namespace Gral
                 //File.Delete(Path.Combine(ProjectName, @"Computation", "windfeld.txt"));
             }
         }
-        
+
         //remove landuse file
         private void Button23_Click(object sender, EventArgs e)
         {
@@ -591,6 +593,6 @@ namespace Gral
             {
                 HideLanduse();
             }
-        }    
+        }
     }
 }

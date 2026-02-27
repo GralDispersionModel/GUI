@@ -41,120 +41,126 @@ namespace GralMainForms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Input_Odour));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.ID_OK = new System.Windows.Forms.Button();
-            this.ID_Cancel = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.SuspendLayout();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            checkBox1 = new System.Windows.Forms.CheckBox();
+            numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            radioButton2 = new System.Windows.Forms.RadioButton();
+            radioButton1 = new System.Windows.Forms.RadioButton();
+            ID_OK = new System.Windows.Forms.Button();
+            ID_Cancel = new System.Windows.Forms.Button();
+            groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.checkBox1);
-            this.groupBox1.Controls.Add(this.numericUpDown1);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(18, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(271, 137);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Define, how to compute the R90/Mean ratio";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Enabled = false;
-            this.numericUpDown1.Location = new System.Drawing.Point(157, 90);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(90, 20);
-            this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(18, 90);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(90, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "Constant ratio";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(18, 30);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(187, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Use concentration variance model";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // ID_OK
-            // 
-            this.ID_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ID_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ID_OK.Location = new System.Drawing.Point(18, 166);
-            this.ID_OK.Name = "ID_OK";
-            this.ID_OK.Size = new System.Drawing.Size(75, 23);
-            this.ID_OK.TabIndex = 3;
-            this.ID_OK.Text = "OK";
-            this.ID_OK.UseVisualStyleBackColor = true;
-            this.ID_OK.Click += new System.EventHandler(this.ID_OK_Click);
-            // 
-            // ID_Cancel
-            // 
-            this.ID_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ID_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ID_Cancel.Location = new System.Drawing.Point(214, 166);
-            this.ID_Cancel.Name = "ID_Cancel";
-            this.ID_Cancel.Size = new System.Drawing.Size(75, 23);
-            this.ID_Cancel.TabIndex = 4;
-            this.ID_Cancel.Text = "Cancel";
-            this.ID_Cancel.UseVisualStyleBackColor = true;
-            this.ID_Cancel.Click += new System.EventHandler(this.ID_Cancel_Click);
+            groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            groupBox1.Controls.Add(checkBox1);
+            groupBox1.Controls.Add(numericUpDown1);
+            groupBox1.Controls.Add(radioButton2);
+            groupBox1.Controls.Add(radioButton1);
+            groupBox1.Location = new System.Drawing.Point(21, 14);
+            groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox1.Size = new System.Drawing.Size(316, 158);
+            groupBox1.TabIndex = 1;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Define, how to compute the R90/Mean ratio";
             // 
             // checkBox1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(30, 53);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(217, 17);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "Write R90, fluctuation and deviation files";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new System.Drawing.Point(35, 61);
+            checkBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new System.Drawing.Size(239, 19);
+            checkBox1.TabIndex = 3;
+            checkBox1.Text = "Write R90, fluctuation and deviation files";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Enabled = false;
+            numericUpDown1.Location = new System.Drawing.Point(183, 104);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new System.Drawing.Size(105, 23);
+            numericUpDown1.TabIndex = 2;
+            numericUpDown1.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            // 
+            // radioButton2
+            // 
+            radioButton2.AutoSize = true;
+            radioButton2.Location = new System.Drawing.Point(21, 104);
+            radioButton2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            radioButton2.Name = "radioButton2";
+            radioButton2.Size = new System.Drawing.Size(100, 19);
+            radioButton2.TabIndex = 1;
+            radioButton2.Text = "Constant ratio";
+            radioButton2.UseVisualStyleBackColor = true;
+            radioButton2.CheckedChanged += radioButton2_CheckedChanged;
+            // 
+            // radioButton1
+            // 
+            radioButton1.AutoSize = true;
+            radioButton1.Checked = true;
+            radioButton1.Location = new System.Drawing.Point(21, 35);
+            radioButton1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new System.Drawing.Size(205, 19);
+            radioButton1.TabIndex = 0;
+            radioButton1.TabStop = true;
+            radioButton1.Text = "Use concentration variance model";
+            radioButton1.UseVisualStyleBackColor = true;
+            radioButton1.CheckedChanged += radioButton1_CheckedChanged;
+            // 
+            // ID_OK
+            // 
+            ID_OK.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            ID_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            ID_OK.Location = new System.Drawing.Point(21, 192);
+            ID_OK.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            ID_OK.Name = "ID_OK";
+            ID_OK.Size = new System.Drawing.Size(88, 27);
+            ID_OK.TabIndex = 3;
+            ID_OK.Text = "OK";
+            ID_OK.UseVisualStyleBackColor = true;
+            ID_OK.Click += ID_OK_Click;
+            // 
+            // ID_Cancel
+            // 
+            ID_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            ID_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            ID_Cancel.Location = new System.Drawing.Point(250, 192);
+            ID_Cancel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            ID_Cancel.Name = "ID_Cancel";
+            ID_Cancel.Size = new System.Drawing.Size(88, 27);
+            ID_Cancel.TabIndex = 4;
+            ID_Cancel.Text = "Cancel";
+            ID_Cancel.UseVisualStyleBackColor = true;
+            ID_Cancel.Click += ID_Cancel_Click;
             // 
             // Input_Odour
             // 
-            this.AcceptButton = this.ID_OK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.ID_Cancel;
-            this.ClientSize = new System.Drawing.Size(311, 206);
-            this.Controls.Add(this.ID_Cancel);
-            this.Controls.Add(this.ID_OK);
-            this.Controls.Add(this.groupBox1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Input_Odour";
-            this.Text = "Ratio 90P/Mean computation";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.ResumeLayout(false);
+            AcceptButton = ID_OK;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = ID_Cancel;
+            ClientSize = new System.Drawing.Size(363, 238);
+            Controls.Add(ID_Cancel);
+            Controls.Add(ID_OK);
+            Controls.Add(groupBox1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "Input_Odour";
+            Text = "Ratio 90P/Mean computation";
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ResumeLayout(false);
 
         }
 

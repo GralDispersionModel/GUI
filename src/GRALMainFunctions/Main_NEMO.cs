@@ -10,16 +10,16 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
+using GralStaticFunctions;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Globalization;
-using GralStaticFunctions;
-using GralItemData;
 
 namespace Gral
 {
@@ -36,8 +36,8 @@ namespace Gral
             private int[] sgroups = { 1, 1, 1, 1 };               //source groups road emissions splitting after NEMO computations
             private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;    //decimal separator of the system
             private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-            
-            public void NemoInput(bool seperation,int sg1,int sg2,int sg3,int sg4)
+
+            public void NemoInput(bool seperation, int sg1, int sg2, int sg3, int sg4)
             {
                 sep = seperation;
                 //select directory of NEMO executable
@@ -59,14 +59,14 @@ namespace Gral
                         // Load Line Source Data
                         List<LineSourceData> ItemData = new List<LineSourceData>(); //collection of all line source data
                         LineSourceDataIO _ls = new LineSourceDataIO();
-                        string _file = Path.Combine(Main.ProjectName,"Emissions","Lsources.txt");
+                        string _file = Path.Combine(Main.ProjectName, "Emissions", "Lsources.txt");
                         _ls.LoadLineSources(ItemData, _file);
                         _ls = null;
-                        
+
                         //search for the file "nemostat.txt"
                         //string[] filePaths = Directory.GetFiles(Path.GetDirectoryName(dialog.FileName), "nemostat.txt", SearchOption.AllDirectories);
                         //copy job file "GRAL.nemo"
-                        File.Copy(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),@"GRAL.nemo"),Path.Combine(Path.GetDirectoryName(dialog.FileName),@"GRAL.nemo"),true);
+                        File.Copy(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"GRAL.nemo"), Path.Combine(Path.GetDirectoryName(dialog.FileName), @"GRAL.nemo"), true);
                         string[] filePaths = Directory.GetFiles(Path.GetDirectoryName(dialog.FileName), "GRAL.nemo", SearchOption.AllDirectories);
 
                         //retrieve information about directories, where NEMO input files have to be placed (stored in GRAL.nemo)
@@ -91,9 +91,9 @@ namespace Gral
 
                         //write location of NEMO input file into the NEMO control file (usually "Strassennetz.txt")
                         File.Delete(inputfile);
-                        newPath = Path.Combine(Main.ProjectName, @"Emissions","NEMO.csv");
+                        newPath = Path.Combine(Main.ProjectName, @"Emissions", "NEMO.csv");
                         StreamWriter mywriter = new StreamWriter(inputfile);
-                        mywriter.WriteLine(newPath,Encoding.Default);
+                        mywriter.WriteLine(newPath, Encoding.Default);
                         //mywriter.WriteLine("e");
                         mywriter.Close();
 
@@ -119,7 +119,7 @@ namespace Gral
                             myWriter.WriteLine("c Bezugsjahr");
                             //get the year for NEMO simulations
                             string[] text1 = new string[1000];
-                            
+
                             foreach (LineSourceData _lines in ItemData)
                             {
                                 if (_lines.Nemo.TrafficSit != 0)
@@ -171,7 +171,7 @@ namespace Gral
                                 }
                             }
                             myReader.Close();
-                            
+
                             //read more kinematic parameters for each vehicle-type according to the driving pattern and the slope
                             Assembly _assembly_kin_KKR;
                             _assembly_kin_KKR = Assembly.GetExecutingAssembly();
@@ -393,7 +393,7 @@ namespace Gral
                                             velo = line[n].Split(new char[] { ('\t') }, StringSplitOptions.RemoveEmptyEntries);
                                             if ((velo[0] == Main.NemoTrafficSituations[_lines.Nemo.TrafficSit]) && (Convert.ToDouble(velo[2].Replace(".", decsep)) >= _lines.Nemo.Slope))
                                             {
-                                                velo_prev = line[n-1].Split(new char[] { ('\t') }, StringSplitOptions.RemoveEmptyEntries);
+                                                velo_prev = line[n - 1].Split(new char[] { ('\t') }, StringSplitOptions.RemoveEmptyEntries);
                                                 v1 = Convert.ToDouble(velo_prev[4].Replace(".", decsep)) + (Convert.ToDouble(velo[4].Replace(".", decsep)) - Convert.ToDouble(velo_prev[4].Replace(".", decsep))) / (Convert.ToDouble(velo[2].Replace(".", decsep)) - Convert.ToDouble(velo_prev[2].Replace(".", decsep))) * (_lines.Nemo.Slope - Convert.ToDouble(velo_prev[2].Replace(".", decsep)));
                                                 v3 = Convert.ToDouble(velo_prev[6].Replace(".", decsep)) + (Convert.ToDouble(velo[6].Replace(".", decsep)) - Convert.ToDouble(velo_prev[6].Replace(".", decsep))) / (Convert.ToDouble(velo[2].Replace(".", decsep)) - Convert.ToDouble(velo_prev[2].Replace(".", decsep))) * (_lines.Nemo.Slope - Convert.ToDouble(velo_prev[2].Replace(".", decsep)));
                                                 v5 = Convert.ToDouble(velo_prev[8].Replace(".", decsep)) + (Convert.ToDouble(velo[8].Replace(".", decsep)) - Convert.ToDouble(velo_prev[8].Replace(".", decsep))) / (Convert.ToDouble(velo[2].Replace(".", decsep)) - Convert.ToDouble(velo_prev[2].Replace(".", decsep))) * (_lines.Nemo.Slope - Convert.ToDouble(velo_prev[2].Replace(".", decsep)));
@@ -481,7 +481,7 @@ namespace Gral
                                                 kine_prev = kinematic[n - 14].Split(new char[] { ('\t') }, StringSplitOptions.RemoveEmptyEntries);
                                                 a_LNF2 = Convert.ToDouble(kine_prev[3].Replace(".", decsep)) + (Convert.ToDouble(kine[3].Replace(".", decsep)) - Convert.ToDouble(kine_prev[3].Replace(".", decsep))) / (Convert.ToDouble(kine[1].Replace(".", decsep)) - Convert.ToDouble(kine_prev[1].Replace(".", decsep))) * (_lines.Nemo.Slope - Convert.ToDouble(kine_prev[1].Replace(".", decsep)));
                                                 a_LNF = a_LNF2 + (a_LNF1 - a_LNF2) / (v_int - Convert.ToDouble(kine[0])) * (v1 - Convert.ToDouble(kine[0]));
-                                                
+
                                                 break;
                                             }
                                         }
@@ -646,7 +646,7 @@ namespace Gral
                                             if (v1 < Convert.ToDouble(kine_PKW[0]))
                                             {
                                                 //interpolate values
-                                                kine_PKW_prev = kinematic_PKW[n-1].Split(new char[] { ('\t') }, StringSplitOptions.RemoveEmptyEntries);
+                                                kine_PKW_prev = kinematic_PKW[n - 1].Split(new char[] { ('\t') }, StringSplitOptions.RemoveEmptyEntries);
                                                 stop_PKW = Convert.ToDouble(kine_PKW_prev[styp_col].Replace(".", decsep)) + (Convert.ToDouble(kine_PKW[styp_col].Replace(".", decsep)) - Convert.ToDouble(kine_PKW_prev[styp_col].Replace(".", decsep))) / (Convert.ToDouble(kine_PKW[0].Replace(".", decsep)) - Convert.ToDouble(kine_PKW_prev[0].Replace(".", decsep))) * (v1 - Convert.ToDouble(kine_PKW_prev[0].Replace(".", decsep)));
                                                 break;
                                             }
@@ -843,13 +843,13 @@ namespace Gral
                                         }
                                     }
                                 }
-                                linenumber+=1;
+                                linenumber += 1;
                             }
                             //myWriter.WriteLine("e");
                         }
                         catch
                         {
-                            MessageBox.Show("Error when writing file " + newPath + " in line " + Convert.ToString(linenumber + 1),"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Error when writing file " + newPath + " in line " + Convert.ToString(linenumber + 1), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         myWriter.Close();
 
@@ -865,7 +865,7 @@ namespace Gral
                         };
                         nemo.Exited += new System.EventHandler(NemoExited);
                         //generate batch file
-                        string batch = Path.Combine(Main.ProjectName, @"Emissions","NEMO.bat");
+                        string batch = Path.Combine(Main.ProjectName, @"Emissions", "NEMO.bat");
                         mywriter = new StreamWriter(batch);
                         mywriter.WriteLine(dialog.FileName + " " + filePaths[0] + " " + newdir + Path.DirectorySeparatorChar);
                         mywriter.Close();
@@ -873,7 +873,7 @@ namespace Gral
                         nemo.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
 
                         nemo.Start();
-                        
+
                         ItemData.Clear();
                         ItemData.TrimExcess();
 
@@ -890,23 +890,23 @@ namespace Gral
                 // Load Line Source Data
                 List<LineSourceData> ItemData = new List<LineSourceData>(); //collection of all line source data
                 LineSourceDataIO _ls = new LineSourceDataIO();
-                string _file = Path.Combine(Main.ProjectName,"Emissions","Lsources.txt");
+                string _file = Path.Combine(Main.ProjectName, "Emissions", "Lsources.txt");
                 _ls.LoadLineSources(ItemData, _file);
                 _ls = null;
-                
+
 
                 //read NEMO results
                 string line;
                 string[] text2 = new string[1000];
                 double PM10 = 0;
                 double PM2_5 = 0;
-                
+
                 string newpath = Path.Combine(Main.ProjectName, "Ergebnisse", "NEMO.nem");
-                
+
                 try
                 {
-                    using (StreamReader myreader=new StreamReader(newpath))
-                        
+                    using (StreamReader myreader = new StreamReader(newpath))
+
                     {
                         //five header lines
                         line = myreader.ReadLine();
@@ -936,7 +936,7 @@ namespace Gral
                                         PollutantsData _poll = new PollutantsData
                                         {
                                             SourceGroup = sgroups[0]
-                                        };										
+                                        };
 
                                         _poll.Pollutant[0] = 0; _poll.EmissionRate[0] = St_F.TxtToDbl(text2[14], false);
                                         _poll.Pollutant[1] = 1; _poll.EmissionRate[1] = PM10;
@@ -947,12 +947,12 @@ namespace Gral
                                         _poll.Pollutant[6] = 7; _poll.EmissionRate[6] = St_F.TxtToDbl(text2[39], false);
                                         _poll.Pollutant[7] = 8; _poll.EmissionRate[7] = St_F.TxtToDbl(text2[16], false);
                                         _poll.Pollutant[8] = 13; _poll.EmissionRate[8] = St_F.TxtToDbl(text2[17], false);
-                                        
+
                                         _lines.Poll.Add(_poll);
-                                        
+
                                         line = myreader.ReadLine();
                                         text2 = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                        
+
                                         //HDV cars exhaust
                                         PM10 = Convert.ToDouble(text2[19].Replace(".", decsep)) + Convert.ToDouble(text2[24].Replace(".", decsep));
                                         PM2_5 = Convert.ToDouble(text2[20].Replace(".", decsep)) + Convert.ToDouble(text2[25].Replace(".", decsep));
@@ -990,7 +990,7 @@ namespace Gral
                                         _poll.Pollutant[7] = 8; _poll.EmissionRate[7] = St_F.TxtToDbl(text2[16], false);
                                         _poll.Pollutant[8] = 13; _poll.EmissionRate[8] = St_F.TxtToDbl(text2[17], false);
                                         _lines.Poll.Add(_poll);
-                                        
+
                                         //Passenger cars-non-exhaust
                                         PM10 = Convert.ToDouble(text2[24].Replace(".", decsep));
                                         PM2_5 = Convert.ToDouble(text2[25].Replace(".", decsep));
@@ -1008,7 +1008,7 @@ namespace Gral
                                         _pollNonEx.Pollutant[7] = 8;
                                         _pollNonEx.Pollutant[8] = 13;
                                         _lines.Poll.Add(_pollNonEx);
-                                        
+
                                         line = myreader.ReadLine();
                                         text2 = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                                         //HDV cars exhaust
@@ -1028,7 +1028,7 @@ namespace Gral
                                         _pollHDV.Pollutant[7] = 8; _pollHDV.EmissionRate[7] = St_F.TxtToDbl(text2[16], false);
                                         _pollHDV.Pollutant[8] = 13; _pollHDV.EmissionRate[8] = St_F.TxtToDbl(text2[17], false);
                                         _lines.Poll.Add(_pollHDV);
-                                        
+
                                         //HDV cars-non-exhaust
                                         PM10 = Convert.ToDouble(text2[24].Replace(".", decsep));
                                         PM2_5 = Convert.ToDouble(text2[25].Replace(".", decsep));
@@ -1068,17 +1068,17 @@ namespace Gral
                     }
                 }
                 catch
-                {}
-                
+                { }
+
                 // Save modified Line Source Data
                 LineSourceDataIO _savels = new LineSourceDataIO();
                 _savels.SaveLineSources(ItemData, Main.ProjectName);
                 _savels = null;
-                
-                File.Copy(newpath, Path.Combine(Main.ProjectName, @"Emissions","NEMO.nem"), true);
-                Directory.Delete(Path.Combine(Main.ProjectName, @"Ergebnisse"),true);
-                MessageBox.Show("NEMO computations finished","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
+                File.Copy(newpath, Path.Combine(Main.ProjectName, @"Emissions", "NEMO.nem"), true);
+                Directory.Delete(Path.Combine(Main.ProjectName, @"Ergebnisse"), true);
+                MessageBox.Show("NEMO computations finished", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 ItemData.Clear();
                 ItemData.TrimExcess();
             }

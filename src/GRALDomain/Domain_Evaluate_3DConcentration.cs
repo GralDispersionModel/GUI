@@ -21,7 +21,7 @@ using System.IO;
 namespace GralDomain
 {
     public partial class Domain
-	{
+    {
         /// <summary>
         /// Routine evaluationg the vertical concentrations of transient GRAL results
         /// </summary>

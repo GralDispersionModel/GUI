@@ -86,7 +86,7 @@ namespace GralDomain
                     {
                         EditLS.CornerLineSource = 0;
                         EditAS.CornerAreaCount = 0;
-                        
+
                         // Tooltip for picturebox1
                         ToolTipMousePosition.Active = false; // don't show tool tip lenght of rubberline segments anymore
                         // Reset Rubber-Line Drawing
@@ -399,7 +399,7 @@ namespace GralDomain
             }
             Picturebox1_Paint();
             Picturebox1_MouseMove(null, new MouseEventArgs(MouseButtons.None, 0,
-                picturebox1.PointToClient(Cursor.Position).X, 
+                picturebox1.PointToClient(Cursor.Position).X,
                 picturebox1.PointToClient(Cursor.Position).Y, 0)); // needed to redraw rubber lines 
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -415,7 +415,7 @@ namespace GralDomain
             }
 
             //new coordinates for edited line source, walls or section drawing for wind fields
-            if ((MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.ViewDistanceMeasurement) || 
+            if ((MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.ViewDistanceMeasurement) ||
                 (MouseControl == MouseMode.SectionWindSel) || (MouseControl == MouseMode.SectionConcSel) || (MouseControl == MouseMode.LineSourceEditFinal) || (MouseControl == MouseMode.LineSourceInlineEdit))
 
             {
@@ -558,13 +558,13 @@ namespace GralDomain
                     CopiedItem.LineSource.Pt[i] = Rotate(dir, pt, pt0);
                 }
             }
-            
+
             if (CopiedItem.PortalSource != null)
             {
                 PointD pt0 = CopiedItem.PortalSource.Pt1;
                 PointD pt = CopiedItem.PortalSource.Pt2;
                 CopiedItem.PortalSource.Pt2 = Rotate(dir, pt, pt0);
-            }           
+            }
         }
 
         /// <summary>

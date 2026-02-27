@@ -10,13 +10,6 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
-using System.Windows.Forms;
 using Gral.GRALDomForms;
 using GralDomForms;
 using GralIO;
@@ -24,7 +17,13 @@ using GralItemData;
 using GralItemForms;
 using GralMessage;
 using GralStaticFunctions;
-using SocialExplorer.IO.FastDBF;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -471,9 +470,9 @@ namespace GralDomain
 
             // show section button if ggeom.asc does exist
             string ggeom_path;
-            if (MainForm.GRAMMwindfield != null)
+            if (Gral.Main.GRAMMwindfield != null)
             {
-                ggeom_path = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), @"ggeom.asc");
+                ggeom_path = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), @"ggeom.asc");
             }
             else
             {
@@ -784,7 +783,7 @@ namespace GralDomain
             {
                 GGeomFileIO ggeom = new GGeomFileIO
                 {
-                    PathWindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield)
+                    PathWindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield)
                 };
                 // Mean cell height
                 if (CellHeightsType == 1 || CellHeightsType == 0)
@@ -2084,73 +2083,10 @@ namespace GralDomain
 
         //////////////////////////////////////////////////////////////////
         //
-        //       Addtional tools
+        //       Additional tools
         //
         //////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Temporary input box
-        /// </summary>
-        private DialogResult InputBox1(string title, string promptText, int lowlimit, int uplimit, ref int trans)
-        {
-            DialogResult dialogResult = DialogResult.Cancel;
-            using (Form form = new Form())
-            {
-                Label label = new Label();
-                NumericUpDown numdown = new NumericUpDown();
-                Button buttonOk = new Button();
-                Button buttonCancel = new Button();
-
-                form.Text = title;
-                label.Text = promptText;
-                numdown.Maximum = uplimit;
-                numdown.Minimum = lowlimit;
-                numdown.Value = trans;
-                numdown.Increment = 1;
-
-                buttonOk.Text = "OK";
-                buttonCancel.Text = "Cancel";
-                buttonOk.DialogResult = DialogResult.OK;
-                buttonCancel.DialogResult = DialogResult.Cancel;
-
-                label.AutoSize = false;
-                label.SetBounds(9, 10, 372, 13);
-                label.Location = new Point(9, 10);
-                label.Size = new System.Drawing.Size(372, 13);
-
-                numdown.SetBounds(12, 36, 372, 20);
-                numdown.Location = new Point(12, 36);
-                numdown.Size = new System.Drawing.Size(372, 20);
-
-                buttonOk.SetBounds(9, 72, 75, 23);
-                buttonCancel.SetBounds(109, 72, 75, 23);
-                buttonOk.Location = new Point(9, 72);
-                buttonOk.Size = new System.Drawing.Size(75, 23);
-                buttonCancel.Location = new Point(109, 72);
-                buttonCancel.Size = new System.Drawing.Size(75, 23);
-
-                numdown.Anchor |= AnchorStyles.Left;
-                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-
-                form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Width + 20), 110);
-                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.StartPosition = FormStartPosition.CenterScreen;
-                form.MinimizeBox = false;
-                form.MaximizeBox = false;
-                form.AcceptButton = buttonOk;
-                form.CancelButton = buttonCancel;
-
-                dialogResult = form.ShowDialog();
-                trans = Convert.ToInt32(numdown.Value);
-            }
-            return dialogResult;
-        }
-
+        
         /// <summary>
         /// Edit and define the size of the north arrow
         /// </summary>
@@ -2169,7 +2105,7 @@ namespace GralDomain
                 }
             }
 
-            if (InputBox1("Define the size of the north arrow", "Scaling factor (1000=10 times larger):", 0, 1000, ref trans) == DialogResult.OK)
+            if (GralStaticFunctions.St_F.InputBoxNumUpDown("Define the size of the north arrow", "Scaling factor (1000=10 times larger):", 0, 1000, ref trans) == DialogResult.OK)
             {
                 NorthArrow.Scale = Convert.ToDecimal(trans) / 100;
             }
@@ -2470,12 +2406,12 @@ namespace GralDomain
             SendCoors += _selmp.ReceiveClickedCoordinates;
             _selmp.CancelComputation += CancelMetTimeSeries;
             _selmp.StartComputation += MetTimeSeries;
-            if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            if (Gral.Main.GRAMMwindfield != null && File.Exists(Path.Combine(Gral.Main.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
                 _selmp.LocalStability = true;
             }
             _selmp.MeteoModel = 0;
-            if (MainForm.GRAMMwindfield != null)
+            if (Gral.Main.GRAMMwindfield != null)
             {
                 _selmp.MeteoModel = MeteoModelEmum.GRAMM;
             }
@@ -2507,7 +2443,7 @@ namespace GralDomain
             //    Xs = XDomain,
             //    Ys = YDomain
             //};
-            //if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            //if (Gral.Main.GRAMMwindfield != null && File.Exists(Path.Combine(Gral.Main.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             //{
             //    MeteoDialog.Local_Stability = true;
             //}
@@ -2568,9 +2504,9 @@ namespace GralDomain
                 disp.Location = GetScreenPositionForNewDialog(2);
 
                 string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
-                if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                if (Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                 {
-                    grammpath = MainForm.GRAMMwindfield;
+                    grammpath = Gral.Main.GRAMMwindfield;
                 }
                 disp.SCLPath = grammpath;
 
@@ -2580,9 +2516,9 @@ namespace GralDomain
                     ReadSclUstOblClasses reader = new ReadSclUstOblClasses();
 
                     string filename = Path.Combine(Gral.Main.ProjectName, @"Computation", Convert.ToString(sel).PadLeft(5, '0') + ".scl");
-                    if (File.Exists(filename) == false && MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                    if (File.Exists(filename) == false && Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                     {
-                        filename = Path.Combine(MainForm.GRAMMwindfield, Convert.ToString(sel).PadLeft(5, '0') + ".scl");
+                        filename = Path.Combine(Gral.Main.GRAMMwindfield, Convert.ToString(sel).PadLeft(5, '0') + ".scl");
                     }
 
                     reader.FileName = filename;
@@ -2676,7 +2612,7 @@ namespace GralDomain
         {
             MouseControl = MouseMode.SetPointMatch;
             Cursor = Cursors.Cross;
-            if (MainForm.GRAMMwindfield != null && File.Exists(Path.Combine(MainForm.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
+            if (Gral.Main.GRAMMwindfield != null && File.Exists(Path.Combine(Gral.Main.GRAMMwindfield, "00001.scl"))) // at least one stability file exists
             {
                 MMO.LocalStabilityUsed = true;
             }
@@ -2686,7 +2622,7 @@ namespace GralDomain
             }
 
             MMO.SettingsPath = Path.Combine(Gral.Main.ProjectName, "Settings" + Path.DirectorySeparatorChar);
-            MMO.GRAMMPath = MainForm.GRAMMwindfield;
+            MMO.GRAMMPath = Gral.Main.GRAMMwindfield;
             MMO.Match_Mode = 0;    // start matching process
             MMO.StartPosition = FormStartPosition.Manual;
             MMO.Left = Math.Max(150, St_F.GetScreenAtMousePosition() + 150);
@@ -2710,7 +2646,7 @@ namespace GralDomain
         {
             //select height above ground for the windfield analysis
             int trans = Convert.ToInt32(10);
-            if (InputBox1("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
+            if (GralStaticFunctions.St_F.InputBoxNumUpDown("Height above ground", "Height above ground [m]:", 0, 10000, ref trans) == DialogResult.OK)
             {
 
                 WriteGrammLog(2, Convert.ToString(TestPt.X), Convert.ToString(TestPt.Y), Convert.ToString(trans));
@@ -2720,7 +2656,7 @@ namespace GralDomain
                     VericalIndex = Convert.ToDouble(trans),
                     MeteoFileName = GRAMMmeteofile,
                     ProjectName = Gral.Main.ProjectName,
-                    Path_GRAMMwindfield = Path.GetDirectoryName(MainForm.GRAMMwindfield),
+                    Path_GRAMMwindfield = Path.GetDirectoryName(Gral.Main.GRAMMwindfield),
                     XDomain = Convert.ToInt32(TestPt.X),
                     YDomain = Convert.ToInt32(TestPt.Y),
                     GrammWest = MainForm.GrammDomRect.West,
@@ -2761,9 +2697,9 @@ namespace GralDomain
                         {
                             disp.selectGRAMM_GRAL = 0; // default: no selection
                             string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
-                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            if (Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                             {
-                                grammpath = MainForm.GRAMMwindfield;
+                                grammpath = Gral.Main.GRAMMwindfield;
                             }
                             disp.GrammPath = grammpath;
                             disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
@@ -2772,9 +2708,9 @@ namespace GralDomain
                         {
                             disp.selectGRAMM_GRAL = 1; // default: select GRAMM
                             string grammpath = Path.Combine(Gral.Main.ProjectName, @"Computation");
-                            if (MainForm.GRAMMwindfield != null) // try GRAMMPATH
+                            if (Gral.Main.GRAMMwindfield != null) // try GRAMMPATH
                             {
-                                grammpath = MainForm.GRAMMwindfield;
+                                grammpath = Gral.Main.GRAMMwindfield;
                             }
                             disp.GrammPath = grammpath;
                             disp.GFFPath = St_F.GetGffFilePath(Path.Combine(Gral.Main.ProjectName, "Computation"));
@@ -2849,12 +2785,12 @@ namespace GralDomain
 
                 //user defined background concentration
                 int background = 0;
-                if (InputBox1("Define background concentration", "Background concentration:", 0, 1000, ref background) == DialogResult.OK)
+                if (GralStaticFunctions.St_F.InputBoxNumUpDown("Define background concentration", "Background concentration:", 0, 1000, ref background) == DialogResult.OK)
                 {
                 }
 
                 MessageInfoForm = new MessageWindow();
-                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                 MessageInfoForm.Show();
 
                 //read each of the files and extract the concentration at the selected location
@@ -2865,7 +2801,7 @@ namespace GralDomain
                         if (MessageInfoForm == null)
                         {
                             MessageInfoForm = new MessageWindow();
-                            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                            MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                             MessageInfoForm.Show();
                         }
                         MessageInfoForm.listBox1.Items.Add("Reading file: " + files_conc[i].Name);
@@ -2977,7 +2913,7 @@ namespace GralDomain
         private async void GetConcentrationFromFile(string FileName, PointD TestPt)
         {
             Cursor = Cursors.WaitCursor;
-            if (await System.Threading.Tasks.Task.Run(() => GetConcentration(FileName, TestPt)) == false)
+            if (!GetConcentration(FileName, TestPt))
             {
                 MessageBoxTemporary Box = new MessageBoxTemporary("File not readable or sample point is outside the GRAL domain", Location);
                 Box.Show();
@@ -3474,7 +3410,7 @@ namespace GralDomain
             // reset button behaviour
             button55.Click -= new System.EventHandler(this.CancelAnimatedGIF);
             this.button55.Click += new System.EventHandler(this.CreateAnmiatedGIF);
-            button55.BackgroundImage = Gral.Properties.Resources.RedDot;
+            button55.BackgroundImage = Gral.Properties.Resources.RedDotTransparent;
             toolTip1.SetToolTip(button55, "Create animated GIF from a series of *.con files");
             OnlineCounter = 0;
         }
@@ -4288,10 +4224,7 @@ namespace GralDomain
                                     if (i % 40 == 0)
                                     {
                                         wait.Text = "Writing GRAL topography " + ((int)(100 - (float)i / (ny + 2) * 100F)).ToString() + "%";
-                                        if (cts != null)
-                                        {
-                                            cts.ThrowIfCancellationRequested();
-                                        }
+                                        cts.ThrowIfCancellationRequested();
                                     }
 
                                     //string line = String.Empty;
@@ -4434,7 +4367,7 @@ namespace GralDomain
             }
             else
             {
-                TopoModifyBlocked = new bool[CellHeights.GetUpperBound(0), CellHeights.GetUpperBound(1)];
+                TopoModifyBlocked = new bool[CellHeights.GetUpperBound(0) + 1, CellHeights.GetUpperBound(1) + 1];
             }
 
             // Go to the dialog

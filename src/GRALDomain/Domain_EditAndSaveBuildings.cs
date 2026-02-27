@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
 using GralItemData;
+using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -103,7 +103,7 @@ namespace GralDomain
                     CornerAreaSource[EditB.CornerBuilding] = new Point();
                 }
                 EditB.CornerBuilding = 0;
-                
+
                 MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
 
                 if (MainForm.GRALSettings.BuildingMode != Gral.BuildingModeEnum.None)

@@ -20,7 +20,7 @@ namespace GralMainForms
         public Allinallout()
         {
             InitializeComponent();
-           
+
             button1.DialogResult = DialogResult.OK;
         }
 

@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Threading;
-using System.IO;
-using System.Collections.Generic;
 using GralIO;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GralBackgroundworkers
 {
@@ -90,7 +89,7 @@ namespace GralBackgroundworkers
                         // GFFFileData starts with index 1
                         int xG = _pt.IxGRAL + 1;
                         int yG = _pt.IyGRAL + 1;
-                        
+
                         if (xG > 0 && xG < gff.NII &&
                             yG > 0 && yG < gff.NJJ &&
                             _pt.IzGRAL > 0 && _pt.IzGRAL < gff.NKK)
@@ -303,8 +302,8 @@ namespace GralBackgroundworkers
                         foreach (Point_3D _pt in EvalPoints)
                         {
                             EvalPointsIndices _newPoint = new EvalPointsIndices();
-                            _newPoint.IxGRAL = (int) ((_pt.X - GRALwest) / mydata.GFFGridSize);
-                            _newPoint.IyGRAL = (int) ((_pt.Y - GRALsouth) / mydata.GFFGridSize);
+                            _newPoint.IxGRAL = (int)((_pt.X - GRALwest) / mydata.GFFGridSize);
+                            _newPoint.IyGRAL = (int)((_pt.Y - GRALsouth) / mydata.GFFGridSize);
                             _newPoint.Height = _pt.Z;
 
                             // GRAMM indices
@@ -408,7 +407,7 @@ namespace GralBackgroundworkers
             {
                 PathWindfield = GgeomPath
             };
-           
+
             if (ggeom.ReadGGeomAsc(0) == true)
             {
                 GRAMMGeom = new GRALGeometry();

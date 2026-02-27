@@ -10,26 +10,26 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Windows.Forms;
-using GralStaticFunctions;
 
 namespace GralDomForms
 {
-	public delegate void Georeference1_Closed(object sender, EventArgs e);
-	
-	/// <summary>
+    public delegate void Georeference1_Closed(object sender, EventArgs e);
+
+    /// <summary>
     /// Dialog geo referencing using 1 point and a scale
     /// </summary>
     public partial class Georeference1 : Form
     {
         public double XMouse;
         public double YMouse;
-        
+
         // delegate to send Message, that georeference1 is closed!
-		
- 		public event Georeference1_Closed Form_Georef1_Closed;
-		
+
+        public event Georeference1_Closed Form_Georef1_Closed;
+
 
         public Georeference1()
         {
@@ -38,10 +38,10 @@ namespace GralDomForms
             textBox5.TextChanged += new System.EventHandler(St_F.CheckInput);
             textBox8.TextChanged += new System.EventHandler(St_F.CheckInput);
             textBox9.TextChanged += new System.EventHandler(St_F.CheckInput);
-           
-			textBox5.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-			textBox8.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-			textBox9.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+
+            textBox5.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+            textBox8.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+            textBox9.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
 
         }
 
@@ -83,16 +83,16 @@ namespace GralDomForms
         private void Georeference1_Load(object sender, EventArgs e)
         {
             textBox3.Visible = false;
-            textBox4.Visible = false;   
-			#if __MonoCS__
+            textBox4.Visible = false;
+#if __MonoCS__
 				this.Height = 420;
-			#endif			
-            
+#endif
+
         }
 
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
-        	St_F.CheckInput(sender, e); // check if a valid number or show yellow background
+            St_F.CheckInput(sender, e); // check if a valid number or show yellow background
             groupBox2.Visible = true;
         }
 
@@ -113,33 +113,33 @@ namespace GralDomForms
             textBox6.Text = "0";
             textBox7.Text = "0";
         }
-        
+
         void TextBox1TextChanged(object sender, EventArgs e)
         {
-        	St_F.CheckInput(sender, e); // check if a valid number or show yellow background
+            St_F.CheckInput(sender, e); // check if a valid number or show yellow background
         }
-        
-      	void Button4Click(object sender, EventArgs e)
+
+        void Button4Click(object sender, EventArgs e)
         {
-        	try
-			{
-				if (Form_Georef1_Closed != null)
+            try
+            {
+                if (Form_Georef1_Closed != null)
                 {
                     Form_Georef1_Closed(this, e); // call function closed()
                 }
             }
-			catch{}
+            catch { }
         }
-        
-		void Georeference1FormClosed(object sender, FormClosedEventArgs e)
+
+        void Georeference1FormClosed(object sender, FormClosedEventArgs e)
         {
-        	 MouseMove -= new MouseEventHandler(Aktiv);
-        	 textBox5.TextChanged -= new System.EventHandler(St_F.CheckInput);
-             textBox8.TextChanged -= new System.EventHandler(St_F.CheckInput);
-             textBox9.TextChanged -= new System.EventHandler(St_F.CheckInput);
-             textBox5.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
-			 textBox8.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
-			 textBox9.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            MouseMove -= new MouseEventHandler(Aktiv);
+            textBox5.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            textBox8.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            textBox9.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            textBox5.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            textBox8.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            textBox9.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
         }
     }
 }

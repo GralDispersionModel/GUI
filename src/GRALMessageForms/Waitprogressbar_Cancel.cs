@@ -14,67 +14,67 @@ using System.Windows.Forms;
 
 namespace GralMessage
 {
-    
+
     public delegate void ProgressbarUpdateDelegate(object sender, int max);
-    
-	/// <summary>
+
+    /// <summary>
     /// Show a progress bar with cancel button
     /// </summary>
     public partial class WaitProgressbarCancel : Form
-	{
+    {
         private System.Threading.CancellationTokenSource cts;
         public ProgressbarUpdateDelegate UpdateProgressDelegate;
-		/// <summary>
+        /// <summary>
         /// Progress and Cancel form
         /// </summary>
         /// <param name="Title"></param>
         /// <param name="CTS">Cancellation token source</param>
         public WaitProgressbarCancel(string Title, ref System.Threading.CancellationTokenSource CTS)
-		{
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
-			InitializeComponent();
+        {
+            //
+            // The InitializeComponent() call is required for Windows Forms designer support.
+            //
+            InitializeComponent();
             cts = CTS;
-			progressbar.Minimum = 1;
-			progressbar.Maximum = 100;
-			progressbar.Value = 100;
-			progressbar.Step = 1;
-			UpdateProgressDelegate = new ProgressbarUpdateDelegate(ProgressbarUpdate);
+            progressbar.Minimum = 1;
+            progressbar.Maximum = 100;
+            progressbar.Value = 100;
+            progressbar.Step = 1;
+            UpdateProgressDelegate = new ProgressbarUpdateDelegate(ProgressbarUpdate);
             this.Left = GralStaticFunctions.St_F.GetScreenAtMousePosition() + 160;
             this.Top = GralStaticFunctions.St_F.GetTopScreenAtMousePosition() + 140;
             this.Text = Title;
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// Update the progress bar
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="max">0 = increment, >0 = set maximum</param>
         public void ProgressbarUpdate(object sender, int max)
-		{
-			if (max == 0)
-			{
-				progressbar.PerformStep();	
-			}
-			else
-			{
-				progressbar.Maximum = max;
-				progressbar.Value = 1;
-			}	
-		}
+        {
+            if (max == 0)
+            {
+                progressbar.PerformStep();
+            }
+            else
+            {
+                progressbar.Maximum = max;
+                progressbar.Value = 1;
+            }
+        }
 
-		/// <summary>
-		/// Set Cancellation Token
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		void Cancel_buttonMouseClick(object sender, MouseEventArgs e)
-		{
+        /// <summary>
+        /// Set Cancellation Token
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Cancel_buttonMouseClick(object sender, MouseEventArgs e)
+        {
             if (cts != null)
             {
                 cts.Cancel();
-            }	
-		}
-	}
+            }
+        }
+    }
 }

@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
 using GralDomForms;
+using System;
 using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -27,14 +27,14 @@ namespace GralDomain
         {
             //add meteo-station or correct coordinates of selected meteo-station
             MMO.dataGridView1.Rows.Add();
-            int zeilenindex = MMO.dataGridView1.Rows.Count-1;
-            
+            int zeilenindex = MMO.dataGridView1.Rows.Count - 1;
+
             MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(XDomain);
             MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(YDomain);
             MMO.dataGridView1.Rows[zeilenindex].Cells[6].Value = 1;
             MMO.dataGridView1.Rows[zeilenindex].Cells[7].Value = 1;
             MMO.dataGridView1.Rows[zeilenindex].Cells[8].Value = 1;
-            
+
             //launch routine to read meteo data
             MMOData.Meteo = false;
             MMOData.FileLenght = 0;
@@ -46,7 +46,8 @@ namespace GralDomain
                 Title = "Select meteorological data",
                 InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Metfiles" + Path.DirectorySeparatorChar)
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
             };
 
@@ -57,7 +58,7 @@ namespace GralDomain
                 double Anemometerheight = 0;
                 double x0 = double.MaxValue;
                 double y0 = 0;
-                
+
                 try
                 {
                     try
@@ -65,7 +66,7 @@ namespace GralDomain
                         using (StreamReader streamreader = new StreamReader(metfile))
                         {
                             string reihe;
-                            
+
                             //Evaluating the length of the file
                             if (MMOData.MetFileExt == ".met")
                             {
@@ -98,7 +99,7 @@ namespace GralDomain
                             else if (MMOData.MetFileExt == ".akterm")
                             {
                                 string[] text = new string[50];
-                                
+
                                 while (streamreader.EndOfStream == false)
                                 {
                                     reihe = streamreader.ReadLine();
@@ -106,7 +107,7 @@ namespace GralDomain
                                     if (text[0] == "AK")
                                     {
                                         text = reihe.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                        if((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
+                                        if ((text[7] != "9") && (text[8] != "9") && (text[12] != "7") && (text[12] != "9"))
                                         {
                                             MMOData.FileLenght++;
                                         }
@@ -114,16 +115,16 @@ namespace GralDomain
                                     if (text[0] == "+")
                                     {
                                         try
-                                    {
-                                        text = reihe.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                        {
+                                            text = reihe.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                                        //at this stage it is not allowed to delete existing meteoinput-data
-                                        //numericUpDown7.Value = Convert.ToDecimal(text[10]) / 10;
-                                        MMOData.AnemometerHeight = Convert.ToDouble(text[10]) / 10;
-                                    }
-                                    catch
-                                    {
-                                    }
+                                            //at this stage it is not allowed to delete existing meteoinput-data
+                                            //numericUpDown7.Value = Convert.ToDecimal(text[10]) / 10;
+                                            MMOData.AnemometerHeight = Convert.ToDouble(text[10]) / 10;
+                                        }
+                                        catch
+                                        {
+                                        }
                                     }
                                 }
                             }
@@ -141,19 +142,19 @@ namespace GralDomain
                     {
                         MMOData.FileLenght = 0;
                     }
-//
+                    //
                     if (MMOData.FileLenght < 1)
                     {
-                        MessageBox.Show(this, "Problems when reading selected met-file.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Problems when reading selected met-file.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    
+
                     // coordinate-Info available
                     if (x0 < (double.MaxValue - 1) && y0 < (double.MaxValue - 1))
                     {
                         MMO.dataGridView1.Rows[zeilenindex].Cells[1].Value = Convert.ToInt32(x0);
                         MMO.dataGridView1.Rows[zeilenindex].Cells[2].Value = Convert.ToInt32(y0);
-                        MMO.dataGridView1.Rows[zeilenindex].Cells[3].Value = Convert.ToInt32((int) (Anemometerheight));
+                        MMO.dataGridView1.Rows[zeilenindex].Cells[3].Value = Convert.ToInt32((int)(Anemometerheight));
                     }
 
                     MeteoInput_Matchlocalobs FormatMetFile = new MeteoInput_Matchlocalobs()
@@ -182,12 +183,12 @@ namespace GralDomain
                     MMO.DecsepUser.Add(0);
                     MMO.RowsepUser.Add(0);
                     MMO.StabilityClassObs.Add(new int[MMOData.FileLenght]);
-                    
+
                     int MMOdatagridindex = zeilenindex;
-                    
+
                     MMO.MetFileLenght[MMOdatagridindex] = MMOData.FileLenght;
-                    MMO.MetFileNames[MMOdatagridindex] =metfile;
-                    
+                    MMO.MetFileNames[MMOdatagridindex] = metfile;
+
                     for (int length = 0; length < MMOData.FileLenght; length++)
                     {
                         MMO.HourObsMetFile[MMOdatagridindex][length] = MMOData.GetHour()[length];
@@ -197,12 +198,12 @@ namespace GralDomain
                         MMO.TimeStapmsMetTimeSeries[MMOdatagridindex][length] = MMOData.GetTime()[length];
                         MMO.StabilityClassObs[MMOdatagridindex][length] = MMOData.GetSC()[length];
                     }
-                    
+
                     char temp = char.Parse(FormatMetFile.DecSepUser);
-                    MMO.DecsepUser[MMOdatagridindex] = (int) temp;
-                    MMO.RowsepUser[MMOdatagridindex] = (int) FormatMetFile.RowSep;
-                    
-                    
+                    MMO.DecsepUser[MMOdatagridindex] = (int)temp;
+                    MMO.RowsepUser[MMOdatagridindex] = (int)FormatMetFile.RowSep;
+
+
                     //get statistics and write it to the table
                     MMO.dataGridView1.Rows[zeilenindex].Cells[0].Value = Convert.ToString(Path.GetFileName(metfile));
                     MMO.dataGridView1.Rows[zeilenindex].Cells[3].Value = Convert.ToDouble(FormatMetFile.numericUpDown1.Value);
@@ -211,7 +212,7 @@ namespace GralDomain
 
                     //unselect rows
                     MMO.dataGridView1.ClearSelection();
-                    
+
                     FormatMetFile.Dispose();
                 }
                 catch
@@ -230,17 +231,17 @@ namespace GralDomain
                         MMO.RowsepUser.RemoveAt(zeilenindex);
                         MMO.StabilityClassObs.RemoveAt(zeilenindex);
                     }
-                    MessageBox.Show(this, "Problems when reading selected met-file.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Problems when reading selected met-file.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
+
             }
             dialog.Dispose();
             MMO.TopMost = false;
         }
-        
+
         public static double EvalMetFileHeader(string s)
         {
-            string[] _st = s.Split(new char[] { '='});
+            string[] _st = s.Split(new char[] { '=' });
             double x = double.MaxValue;
             if (_st.Length > 0)
             {
@@ -249,7 +250,7 @@ namespace GralDomain
                     x = Convert.ToDouble(_st[1], CultureInfo.InvariantCulture);
                 }
                 catch
-                {}
+                { }
             }
             return x;
         }

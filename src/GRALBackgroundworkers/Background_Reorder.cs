@@ -10,9 +10,9 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
 using System.IO;
-using GralIO;
 
 namespace GralBackgroundworkers
 {
@@ -21,7 +21,7 @@ namespace GralBackgroundworkers
         /// <summary>
         /// GRAMM re-order function
         /// </summary>
-        private void Reorder(GralBackgroundworkers.BackgroundworkerData mydata, 
+        private void Reorder(GralBackgroundworkers.BackgroundworkerData mydata,
                              System.ComponentModel.DoWorkEventArgs e)
         {
             //generate directory "Re-ordered"
@@ -35,13 +35,13 @@ namespace GralBackgroundworkers
             };
 
             double[,] AH = new double[1, 1];
-            double[, ,] ZSP = new double[1, 1, 1];
+            double[,,] ZSP = new double[1, 1, 1];
             string[] text = new string[1];
             int NX = 1;
             int NY = 1;
             int NZ = 1;
             int ischnitt = 1;
-            
+
             if (ggeom.ReadGGeomAsc(0) == true)
             {
                 NX = ggeom.NX;
@@ -51,13 +51,13 @@ namespace GralBackgroundworkers
                 ZSP = ggeom.ZSP;
                 ggeom = null;
             }
-                        
+
             int ix = 0;
             int iy = 1;
-            
-            double xsi=mydata.XDomain-mydata.GrammWest;
+
+            double xsi = mydata.XDomain - mydata.GrammWest;
             double eta = mydata.YDomain - mydata.GrammSouth;
-            
+
             //obtain indices of selected point
             //double schnitt = trans; // AK Kuntner
 
@@ -68,10 +68,10 @@ namespace GralBackgroundworkers
             for (int k = 1; k <= NZ; k++)
             {
                 if (ZSP[ix, iy, k] - AH[ix, iy] >= mydata.VericalIndex)
-            {
-                ischnitt = k;
-                break;
-            }
+                {
+                    ischnitt = k;
+                    break;
+                }
             }
 
             //windfield file Readers
@@ -95,16 +95,16 @@ namespace GralBackgroundworkers
             int iiwet = 0;
             double[] wgi = new double[100000];
             double richtung;
-            float[, ,] UWI = new float[NX + 1, NY + 1, NZ + 1];
-            float[, ,] VWI = new float[NX + 1, NY + 1, NZ + 1];
-            float[, ,] WWI = new float[NX + 1, NY + 1, NZ + 1];
+            float[,,] UWI = new float[NX + 1, NY + 1, NZ + 1];
+            float[,,] VWI = new float[NX + 1, NY + 1, NZ + 1];
+            float[,,] WWI = new float[NX + 1, NY + 1, NZ + 1];
             text = meteopgt.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
             text = meteopgt.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
             for (int n = 1; n < 100000; n++)
-            {				
+            {
                 iiwet += 1;
-                SetText("Reading windfields: "+ Convert.ToString(iiwet));
-                
+                SetText("Reading windfields: " + Convert.ToString(iiwet));
+
                 if (Rechenknecht.CancellationPending)
                 {
                     e.Cancel = true;
@@ -112,9 +112,9 @@ namespace GralBackgroundworkers
                 }
                 if (n % 4 == 0)
                 {
-                    Rechenknecht.ReportProgress((int) (n / (double) 100000 * 100D));
+                    Rechenknecht.ReportProgress((int)(n / (double)100000 * 100D));
                 }
-                
+
                 try
                 {
                     text = meteopgt.ReadLine().Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -139,28 +139,28 @@ namespace GralBackgroundworkers
                     {
                         throw new IOException();
                     }
-                    
+
                 }
                 catch
                 {
                     break;
                 }
 
-                Uoben = UWI[ix, iy+1, ischnitt];
-                Voben = VWI[ix, iy+1, ischnitt];
+                Uoben = UWI[ix, iy + 1, ischnitt];
+                Voben = VWI[ix, iy + 1, ischnitt];
                 if (ischnitt > 1)
                 {
-                    Uunten = UWI[ix, iy+1, ischnitt - 1];
-                    Vunten = VWI[ix, iy+1, ischnitt - 1];
-                    Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy+1, ischnitt] - ZSP[ix, iy+1, ischnitt - 1]) *
+                    Uunten = UWI[ix, iy + 1, ischnitt - 1];
+                    Vunten = VWI[ix, iy + 1, ischnitt - 1];
+                    Umittel = Uunten + (Uoben - Uunten) / (ZSP[ix, iy + 1, ischnitt] - ZSP[ix, iy + 1, ischnitt - 1]) *
                         (mydata.VericalIndex + AH[ix, iy] - ZSP[ix, iy, ischnitt - 1]);
-                    Vmittel = Vunten + (Voben - Vunten) / (ZSP[ix, iy+1, ischnitt] - ZSP[ix, iy+1, ischnitt - 1]) *
-                        (mydata.VericalIndex + AH[ix, iy] - ZSP[ix, iy+1, ischnitt - 1]);
+                    Vmittel = Vunten + (Voben - Vunten) / (ZSP[ix, iy + 1, ischnitt] - ZSP[ix, iy + 1, ischnitt - 1]) *
+                        (mydata.VericalIndex + AH[ix, iy] - ZSP[ix, iy + 1, ischnitt - 1]);
                 }
                 else
                 {
-                    Umittel = Uoben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.VericalIndex;
-                    Vmittel = Voben / (ZSP[ix, iy+1, ischnitt] - AH[ix, iy]) * mydata.VericalIndex;
+                    Umittel = Uoben / (ZSP[ix, iy + 1, ischnitt] - AH[ix, iy]) * mydata.VericalIndex;
+                    Vmittel = Voben / (ZSP[ix, iy + 1, ischnitt] - AH[ix, iy]) * mydata.VericalIndex;
                 }
                 if (Vmittel == 0)
                 {
@@ -202,7 +202,7 @@ namespace GralBackgroundworkers
             string windfieldfile;
             for (int i = 1; i <= iiwet; i++)
             {
-                SetText("Copy windfields: "+ Convert.ToString(i));
+                SetText("Copy windfields: " + Convert.ToString(i));
                 //initial differences in wind vector and -direction
                 diffwind1 = Math.Sqrt(Math.Pow(u_GRAMM[i] - u_METEO[i], 2) + Math.Pow(v_GRAMM[i] - v_METEO[i], 2));
                 diffwr1 = Math.Abs(iwr[i] - nsektor[i] * 10);
@@ -238,37 +238,37 @@ namespace GralBackgroundworkers
                          */
                     }
                 }
-                
+
                 //copy selected wind field file to subdirectory re-ordered
-                string orifile=Path.Combine(mydata.Path_GRAMMwindfield, windfieldfile);
-                string targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".wnd");
-                File.Copy(orifile, targetfile,true);
-                
+                string orifile = Path.Combine(mydata.Path_GRAMMwindfield, windfieldfile);
+                string targetfile = Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".wnd");
+                File.Copy(orifile, targetfile, true);
+
                 // copy .scl file
-                orifile=Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".scl");
-                targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".scl");
+                orifile = Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".scl");
+                targetfile = Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".scl");
                 if (File.Exists(orifile))
                 {
-                    File.Copy(orifile, targetfile,true);
+                    File.Copy(orifile, targetfile, true);
                 }
 
                 // copy .obl file
-                orifile =Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".obl");
-                targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".obl");
+                orifile = Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".obl");
+                targetfile = Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".obl");
                 if (File.Exists(orifile))
                 {
-                    File.Copy(orifile, targetfile,true);
+                    File.Copy(orifile, targetfile, true);
                 }
 
                 // copy .ust file
-                orifile =Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".ust");
-                targetfile=Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".ust");
+                orifile = Path.Combine(mydata.Path_GRAMMwindfield, Path.GetFileNameWithoutExtension(windfieldfile) + ".ust");
+                targetfile = Path.Combine(Path.Combine(mydata.ProjectName, "Re-ordered"), Convert.ToString(i).PadLeft(5, '0') + ".ust");
                 if (File.Exists(orifile))
                 {
-                    File.Copy(orifile, targetfile,true);
+                    File.Copy(orifile, targetfile, true);
                 }
             }
-            
+
         }
     }
 }

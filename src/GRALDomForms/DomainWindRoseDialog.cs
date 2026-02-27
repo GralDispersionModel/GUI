@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using Gral;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Globalization;
-using Gral;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
@@ -29,8 +29,8 @@ namespace GralDomForms
         public GralDomain.DrawingObjects DrawingObject; // Drawing Object with Windrose infos
         private CultureInfo ic = CultureInfo.InvariantCulture;
         private List<GralData.WindData> MeteoTimeSeries = new List<GralData.WindData>();      // time series of meteorological  data
-        private List <WindFileData> Windfiles = new List<WindFileData>();
-        
+        private List<WindFileData> Windfiles = new List<WindFileData>();
+
         public DomainWindRoseDialog()
         {
             //
@@ -38,14 +38,14 @@ namespace GralDomForms
             //
             InitializeComponent();
         }
-        
+
         void DomainWindRoseDialogLoad(object sender, EventArgs e)
         {
             string[] w = DrawingObject.ContourFilename.Split(new char[] { '\t' });
             Windfiles.Clear();
             Windfiles.TrimExcess();
-            
-            foreach(string _wnd in w)
+
+            foreach (string _wnd in w)
             {
                 string[] f = _wnd.Split(new char[] { '?' }); // get 1st entry = filename
                 if (f.Length > 2)
@@ -73,16 +73,16 @@ namespace GralDomForms
 
                         Windfiles.Add(_wdata);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
                 }
             }
             FillListBox();
-            
+
             numericUpDown1.Value = Math.Min(15000, Math.Max(1, Convert.ToDecimal(DrawingObject.ContourLabelDist)));
-            numericUpDown2.Value = Math.Min(15, Math.Max (6, Convert.ToDecimal(DrawingObject.LabelInterval)));
+            numericUpDown2.Value = Math.Min(15, Math.Max(6, Convert.ToDecimal(DrawingObject.LabelInterval)));
             if (DrawingObject.Filter)
             {
                 radioButton1.Checked = true;
@@ -96,16 +96,16 @@ namespace GralDomForms
             checkBox2.Checked = DrawingObject.Fill;
             checkBox3.Checked = DrawingObject.FillYesNo;
         }
-        
+
         void FillListBox()
         {
             listBox1.Items.Clear();
-            foreach(WindFileData _wdata in Windfiles)
+            foreach (WindFileData _wdata in Windfiles)
             {
                 listBox1.Items.Add(Path.GetFileName(_wdata.Filename));
             }
         }
-        
+
         // Add a Windrose
         void Button1Click(object sender, EventArgs e)
         {
@@ -114,9 +114,10 @@ namespace GralDomForms
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm; *.akt)|*.akterm;*.akt",
                 Title = "Select meteorological data",
                 InitialDirectory = Path.Combine(Main.ProjectName, "Mefiles"),
-                Multiselect = true  
+                Multiselect = true
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
             })
             {
@@ -124,14 +125,14 @@ namespace GralDomForms
                 double x0 = double.MaxValue;
                 double y0 = 0;
                 int filelength = 0;
-                
+
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     foreach (string metfile in dialog.FileNames)
                     {
                         MeteoTimeSeries.Clear();
                         MeteoTimeSeries.TrimExcess();
-                        
+
                         string metfileext = Path.GetExtension(metfile).ToLower();
                         try
                         {
@@ -243,17 +244,17 @@ namespace GralDomForms
                             }
 
                         }
-                        catch {}
+                        catch { }
                     }
                 }
             }
             MeteoTimeSeries.Clear();
             MeteoTimeSeries.TrimExcess();
         }
-        
+
         private double EvalMetFileHeader(string s)
         {
-            string[] _st = s.Split(new char[] {'='});
+            string[] _st = s.Split(new char[] { '=' });
             double x = double.MaxValue;
             if (s.Contains("=") && _st.Length > 0)
             {
@@ -262,11 +263,11 @@ namespace GralDomForms
                     x = Convert.ToDouble(_st[1], ic);
                 }
                 catch
-                {}
+                { }
             }
             return x;
         }
-        
+
         // Remove selected item
         void Button2Click(object sender, EventArgs e)
         {
@@ -279,18 +280,18 @@ namespace GralDomForms
                 FillListBox();
             }
         }
-        
+
         // cancel
         void Button3Click(object sender, EventArgs e)
         {
             return;
         }
-        
+
         //OK
         void Button4Click(object sender, EventArgs e)
         {
-            DrawingObject.ContourLabelDist = (int) numericUpDown1.Value;
-            DrawingObject.LabelInterval = (int) numericUpDown2.Value;
+            DrawingObject.ContourLabelDist = (int)numericUpDown1.Value;
+            DrawingObject.LabelInterval = (int)numericUpDown2.Value;
             DrawingObject.ContourDrawBorder = checkBox1.Checked;
             DrawingObject.Fill = checkBox2.Checked;
             DrawingObject.FillYesNo = checkBox3.Checked;
@@ -301,10 +302,10 @@ namespace GralDomForms
             }
             if (DrawingObject.ScaleLabelFont)
             {
-                DrawingObject.LabelFont = new Font("Arial", (int) (DrawingObject.ContourLabelDist / 20));
+                DrawingObject.LabelFont = new Font("Arial", (int)(DrawingObject.ContourLabelDist / 20));
             }
             DrawingObject.ContourFilename = string.Empty;
-            
+
             if (radioButton1.Checked) // velocity
             {
                 DrawingObject.Filter = true;
@@ -313,10 +314,10 @@ namespace GralDomForms
             {
                 DrawingObject.Filter = false;
             }
-            
+
             if (Windfiles.Count > 0)
             {
-                foreach(WindFileData _wdata in Windfiles)
+                foreach (WindFileData _wdata in Windfiles)
                 {
                     if (DrawingObject.ContourFilename.Length > 0)
                     {
@@ -329,14 +330,14 @@ namespace GralDomForms
                         _rowSep = "Tab";
                     }
 
-                    string txt = _wdata.Filename + "?" +_wdata.DecSep + "?" + _rowSep + "?"
+                    string txt = _wdata.Filename + "?" + _wdata.DecSep + "?" + _rowSep + "?"
                         + _wdata.X0.ToString(ic) + "?" + _wdata.Y0.ToString(ic) + "?" + _wdata.Z0.ToString(ic);
-                    
+
                     DrawingObject.ContourFilename += txt;
                 }
             }
         }
-        
+
         // remove a item via delete key
         void ListBox1KeyDown(object sender, KeyEventArgs e)
         {
@@ -345,7 +346,7 @@ namespace GralDomForms
                 Button2Click(null, null);
             }
         }
-        
+
         // select all listbox entries with control + A
         void ListBox1KeyUp(object sender, KeyEventArgs e)
         {
@@ -359,7 +360,7 @@ namespace GralDomForms
 
                 listBox1.EndUpdate();
             }
-            
+
         }
     }
 }

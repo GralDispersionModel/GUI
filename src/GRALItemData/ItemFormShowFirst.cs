@@ -16,16 +16,16 @@ namespace GralItemData
     /// This class holds the data about the first visible Item Form
     /// </summary>
     public class ShowFirstItem
-	{
-    	public bool Ps  { get; set; } 
-        public bool Ls  { get; set; } 
-        public bool As  { get; set; } 
-        public bool Ts  { get; set; } 
-        public bool Bu  { get; set; } 
-        public bool Re  { get; set; } 
-        public bool Wa  { get; set; } 
-        public bool Veg  { get; set; } 
-    	
+    {
+        public bool Ps { get; set; }
+        public bool Ls { get; set; }
+        public bool As { get; set; }
+        public bool Ts { get; set; }
+        public bool Bu { get; set; }
+        public bool Re { get; set; }
+        public bool Wa { get; set; }
+        public bool Veg { get; set; }
+
         public ShowFirstItem()
         {
             Reset();
@@ -45,5 +45,5 @@ namespace GralItemData
             Wa = true;
             Veg = true;
         }
-	}
+    }
 }

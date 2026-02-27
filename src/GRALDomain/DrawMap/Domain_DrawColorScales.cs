@@ -29,8 +29,8 @@ namespace GralDomain
             };
             StringFormat string_Format = new StringFormat()
             {
-                Alignment = StringAlignment.Far, 
-                LineAlignment = StringAlignment.Center,  
+                Alignment = StringAlignment.Far,
+                LineAlignment = StringAlignment.Center,
             };
             Brush blackBrush = new SolidBrush(Color.Black);
             Brush whiteBrush = new SolidBrush(Color.White);
@@ -39,7 +39,7 @@ namespace GralDomain
             for (int name = ItemOptions.Count - 1; name > -1; name--)
             {
                 DrawingObjects _drobj = ItemOptions[name];
-                
+
                 if ((_drobj.ColorScale != "-999,-999,-999") && (_drobj.Show == true))
                 {
                     try
@@ -56,7 +56,7 @@ namespace GralDomain
                             // RemoveSpikes ist used for Map based coordinates, otherwise there are screen based coordinates
                             if (_drobj.BasedOnMap)
                             {
-                                scale = (float) (scale / BmpScale);
+                                scale = (float)(scale / BmpScale);
                                 xpos1 = Convert.ToInt32(((Convert.ToDouble(dummy1[0]) - form1_west) * factor_x + TransformX) / _bmppbx_save / scale);
                                 ypos1 = Convert.ToInt32(((Convert.ToDouble(dummy1[1]) - form1_north) * factor_y + TransformY) / _bmppbx_save / scale);
                             }

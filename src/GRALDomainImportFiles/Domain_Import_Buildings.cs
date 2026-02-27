@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
-using GralStaticFunctions;
-using GralShape;
 using GralItemData;
 using GralMessage;
+using GralShape;
+using GralStaticFunctions;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -41,7 +41,7 @@ namespace GralDomain
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 int numbuildings = EditB.ItemData.Count;
-                
+
                 if (!dialog.FileName.EndsWith("shp") && dialog.FileName.EndsWith(".dat"))
                 {
                     int i = 1;
@@ -77,24 +77,24 @@ namespace GralDomain
                             }
                         }
                         myReader.Close();
-                        
+
                         myReader = new StreamReader(file);
                         int trans = Convert.ToInt32(mindist);
-                        if (InputBox1("Define raster for gridding buildings", "Suggested raster size:", 0, 10000, ref trans) == DialogResult.OK)
+                        if (GralStaticFunctions.St_F.InputBoxNumUpDown("Define raster for gridding buildings", "Suggested raster size:", 0, 10000, ref trans) == DialogResult.OK)
                         {
                             for (i = 1; i < 10000000; i++)
-                        {
-                            dummy = myReader.ReadLine();
-                            if (dummy != null)
                             {
-                                text1 = dummy.Split(new char[] { ',', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                x1 = Convert.ToDouble(text1[0].Replace(".", decsep));
-                                y1 = Convert.ToDouble(text1[1].Replace(".", decsep));
-                                double raster = Convert.ToDouble(trans);
-                                double areabuildings = raster * raster;
-                                if ((x1 >= MainForm.GralDomRect.West) && (x1 <= MainForm.GralDomRect.East) &&
-                                    (y1 >= MainForm.GralDomRect.South) && (y1 <= MainForm.GralDomRect.North))
+                                dummy = myReader.ReadLine();
+                                if (dummy != null)
                                 {
+                                    text1 = dummy.Split(new char[] { ',', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                    x1 = Convert.ToDouble(text1[0].Replace(".", decsep));
+                                    y1 = Convert.ToDouble(text1[1].Replace(".", decsep));
+                                    double raster = Convert.ToDouble(trans);
+                                    double areabuildings = raster * raster;
+                                    if ((x1 >= MainForm.GralDomRect.West) && (x1 <= MainForm.GralDomRect.East) &&
+                                        (y1 >= MainForm.GralDomRect.South) && (y1 <= MainForm.GralDomRect.North))
+                                    {
                                         BuildingData _bd = new BuildingData
                                         {
                                             Name = "Buildings" + Convert.ToString(i),
@@ -103,13 +103,13 @@ namespace GralDomain
                                             Area = (float)(areabuildings)
                                         };
                                         _bd.Pt.Add(new PointD(x1 - raster * 0.5, y1 - raster * 0.5));
-                                    _bd.Pt.Add(new PointD(x1 - raster * 0.5, y1 + raster * 0.5));
-                                    _bd.Pt.Add(new PointD(x1 + raster * 0.5, y1 + raster * 0.5));
-                                    _bd.Pt.Add(new PointD(x1 + raster * 0.5, y1 - raster * 0.5));
-                                    EditB.ItemData.Add(_bd);
+                                        _bd.Pt.Add(new PointD(x1 - raster * 0.5, y1 + raster * 0.5));
+                                        _bd.Pt.Add(new PointD(x1 + raster * 0.5, y1 + raster * 0.5));
+                                        _bd.Pt.Add(new PointD(x1 + raster * 0.5, y1 - raster * 0.5));
+                                        EditB.ItemData.Add(_bd);
+                                    }
                                 }
-                            }
-                            else
+                                else
                                 {
                                     break;
                                 }
@@ -123,14 +123,14 @@ namespace GralDomain
 
                         //add BUILDINGS layer if not already existing
                         CheckForExistingDrawingObject("BUILDINGS");
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditB.ItemData.Count - numbuildings) + " buildings imported.", Location);
                         Box.Show();
                         if (EditB.ItemData.Count - numbuildings > 0)
                         {
                             MainForm.ChangeButtonLabel(Gral.ButtonColorEnum.ButtonBuildings, Gral.ButtonColorEnum.RedDot); // Building label red & delete buildings.dat
                         }
-                        
+
                         //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editb.buildingsdata.Count - numbuildings) + " buildings imported.");
                     }
                     catch
@@ -143,16 +143,16 @@ namespace GralDomain
                     try
                     {
                         BuildingDataIO _bd = new BuildingDataIO();
-                        _bd.LoadBuildings(EditB.ItemData, dialog.FileName, true, new RectangleF((float) MainForm.GralDomRect.West, (float) MainForm.GralDomRect.South, (float) (MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float) (MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
+                        _bd.LoadBuildings(EditB.ItemData, dialog.FileName, true, new RectangleF((float)MainForm.GralDomRect.West, (float)MainForm.GralDomRect.South, (float)(MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float)(MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
                         _bd = null;
-                        
+
                         EditB.SetTrackBarMaximum();
                         EditAndSaveBuildingsData(sender, e);
                         EditB.FillValues();
 
                         //add BUILDINGS layer if not already existing
                         CheckForExistingDrawingObject("BUILDINGS");
-                        
+
                         MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditB.ItemData.Count - numbuildings) + " buildings imported.", Location);
                         Box.Show();
                         if (EditB.ItemData.Count - numbuildings > 0)
@@ -172,11 +172,11 @@ namespace GralDomain
                     {
                         //add BUILDINGS layer if not already existing
                         DrawingObjects _drobj = ItemOptions[CheckForExistingDrawingObject("BUILDINGS")];
-                        
+
                         //read geometry data from shape file
                         Cursor = Cursors.WaitCursor;
                         wait.Show();
-                        
+
                         SHPClear(_drobj);
                         //						ShapeReader shape = new ShapeReader(this);
                         //						shape.readShapeFile(dialog.FileName, index);
@@ -200,7 +200,7 @@ namespace GralDomain
                             EditB.SetTrackBarMaximum();
                             EditAndSaveBuildingsData(sender, e);
                             EditB.FillValues();
-                            
+
                             MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditB.ItemData.Count - numbuildings) + " buildings imported.", Location);
                             Box.Show();
                             if (EditB.ItemData.Count - numbuildings > 0)
@@ -211,7 +211,7 @@ namespace GralDomain
                         }
                         SHPClear(_drobj);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show(this, ex.Message + " Error when reading .shp file");
                     }

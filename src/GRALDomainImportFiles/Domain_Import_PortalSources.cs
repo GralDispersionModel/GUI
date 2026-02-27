@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
 using GralItemData;
 using GralMessage;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -139,7 +139,7 @@ namespace GralDomain
                     }
                     catch
                     {
-                        MessageBox.Show(this, "Error when reading or filtering portal source data","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Error when reading or filtering portal source data", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         //MessageBox.Show(Convert.ToString(i));
                         EditPortals.ItemData.RemoveRange(numbvorher, EditPortals.ItemData.Count - numbvorher);
                     }
@@ -147,14 +147,14 @@ namespace GralDomain
                     //add TUNNEL PORTALS layer if not already existing
                     CheckForExistingDrawingObject("TUNNEL PORTALS");
                 }
-                
+
                 if (dialog.FileName.EndsWith("Portalsources.txt"))
                 {
                     int numbportal = EditPortals.ItemData.Count;
                     PortalsDataIO _pd = new PortalsDataIO();
-                    _pd.LoadPortalSources(EditPortals.ItemData, dialog.FileName, true, new RectangleF((float) MainForm.GralDomRect.West, (float) MainForm.GralDomRect.South, (float) (MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float) (MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
+                    _pd.LoadPortalSources(EditPortals.ItemData, dialog.FileName, true, new RectangleF((float)MainForm.GralDomRect.West, (float)MainForm.GralDomRect.South, (float)(MainForm.GralDomRect.East - MainForm.GralDomRect.West), (float)(MainForm.GralDomRect.North - MainForm.GralDomRect.South)));
                     _pd = null;
-                    
+
                     EditPortals.SetTrackBarMaximum();
                     EditAndSavePortalSourceData(sender, e);
                     EditPortals.FillValues();
@@ -162,14 +162,14 @@ namespace GralDomain
                     MessageBoxTemporary Box = new MessageBoxTemporary("Data import successful: \r\n" + Convert.ToString(EditPortals.ItemData.Count - numbportal) + " portal sources imported.", Location);
                     Box.Show();
                     //MessageBox.Show("Data import successful: \r\n" + Convert.ToString(editportals.portalsourcedata.Count - numbportal) + " portal sources imported.");
-                
+
 
                     //add TUNNEL PORTALS layer if not already existing
                     CheckForExistingDrawingObject("TUNNEL PORTALS");
-                 }
+                }
             }
             dialog.Dispose();
-            
+
         }
     }
 }

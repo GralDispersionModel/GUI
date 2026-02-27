@@ -26,19 +26,19 @@ namespace Gral.GRALItemForms
 #else
 #endif
             numericUpDown1.DecimalPlaces = DecimalPlaces;
-            if((decimal) Value > numericUpDown1.Maximum)
+            if ((decimal)Value > numericUpDown1.Maximum)
             {
-                numericUpDown1.Maximum = (decimal) (Value + 10);
+                numericUpDown1.Maximum = (decimal)(Value + 10);
             }
-            if ((decimal) Value < numericUpDown1.Minimum)
+            if ((decimal)Value < numericUpDown1.Minimum)
             {
-                numericUpDown1.Minimum = (decimal) (Value - 10);
+                numericUpDown1.Minimum = (decimal)(Value - 10);
             }
-            numericUpDown1.Value = (decimal) Value;
+            numericUpDown1.Value = (decimal)Value;
             button1.BackColor = LineColor;
             button2.BackColor = FillColor;
         }
-     
+
         /// <summary>
         /// Select Line Color
         /// </summary>
@@ -82,7 +82,7 @@ namespace Gral.GRALItemForms
         //OK
         private void button3_Click(object sender, EventArgs e)
         {
-            Value = (double) numericUpDown1.Value;
+            Value = (double)numericUpDown1.Value;
         }
 
         /// <summary>

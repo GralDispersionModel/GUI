@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using Gral.GRALDomForms;
+using GralIO;
 using System;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
 //using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using System.Globalization;
-using GralIO;
-using Gral.GRALDomForms;
-using System.Drawing;
 
 namespace GralDomForms
 {
@@ -36,7 +36,7 @@ namespace GralDomForms
         public string RasterG;
         public string RasterF;
 
-        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
 
 
         public Mathrasteroperation(Gral.Main f, GralDomain.Domain f1)
@@ -45,20 +45,20 @@ namespace GralDomForms
             form1 = f;
             domain = f1;
             textBox1.KeyPress += new KeyPressEventHandler(Comma); //only point as decimal seperator is allowed
-         }
+        }
 
         private void Mathrasteroperation_Load(object sender, EventArgs e)
         {
             try
             {
-                Left = Math.Max(10, domain.Left + (int) (domain.Width * 0.5F) - 360);
+                Left = Math.Max(10, domain.Left + (int)(domain.Width * 0.5F) - 360);
                 Top = domain.Top + 80;
             }
             catch
             { }
         }
-        
-        private string OpenFileDialogRaster(ListBox listbox)
+
+        private string OpenFileDialogRaster(TextBox textBox)
         {
             string raster = string.Empty;
             using (OpenFileDialog dialog = new OpenFileDialog
@@ -70,26 +70,16 @@ namespace GralDomForms
                 //ShowHelp = true,
                 RestoreDirectory = true
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
             })
             {
                 dialog.HelpRequest += new System.EventHandler(LoadRasterFiles_HelpRequest);
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    listbox.Items.Clear();
                     raster = dialog.FileName;
-                    string lboxstring = raster;
-                    if (raster.Length > 55)
-                    {
-                        try
-                        {
-                            lboxstring = raster.Substring(0, 25) + "...." + Path.DirectorySeparatorChar +
-                                Path.GetFileName(raster);
-                        }
-                        catch { }
-                    }
-                    listbox.Items.Add(lboxstring);
+                    GralStaticFunctions.St_F.SetTrimmedTextToTextBox(textBox, raster);
                 }
             }
             return raster;
@@ -103,15 +93,15 @@ namespace GralDomForms
         //open raster data set A
         private void button1_Click(object sender, EventArgs e)
         {
-            RasterA = OpenFileDialogRaster(listBox1);
-            
+            RasterA = OpenFileDialogRaster(textBox3);
+
             unit = String.Empty;
             GralIO.ESRIHeader readESRIHeader = new ESRIHeader();
             if (readESRIHeader.ReadESRIHeader(RasterA))
             {
                 unit = readESRIHeader.Unit;
             }
-            
+
             textBox2.Text = unit;
             groupBox2.Enabled = true;
             groupBox3.Enabled = true;
@@ -123,25 +113,25 @@ namespace GralDomForms
         //open raster data set B
         private void button2_Click(object sender, EventArgs e)
         {
-            RasterB = OpenFileDialogRaster(listBox2);
+            RasterB = OpenFileDialogRaster(textBox4);
         }
 
         //open raster data set C
         private void button7_Click(object sender, EventArgs e)
         {
-            RasterC = OpenFileDialogRaster(listBox4);
+            RasterC = OpenFileDialogRaster(textBox5);
         }
 
         //open raster data set D
         private void button8_Click(object sender, EventArgs e)
         {
-            RasterD = OpenFileDialogRaster(listBox5);
+            RasterD = OpenFileDialogRaster(textBox6);
         }
 
         //open raster data set E
         private void button9_Click(object sender, EventArgs e)
         {
-            RasterG = OpenFileDialogRaster(listBox6);
+            RasterG = OpenFileDialogRaster(textBox7);
         }
 
         //define raster data set F
@@ -160,9 +150,8 @@ namespace GralDomForms
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    listBox3.Items.Clear();
                     RasterF = dialog.FileName;
-                    listBox3.Items.Add(RasterF);
+                    textBox8.Text = RasterF;
                 }
             }
         }
@@ -201,7 +190,7 @@ namespace GralDomForms
                 };
                 BackgroundStart.Show();
                 // now the backgroundworker works
-                
+
                 Close();
             }
             else

@@ -27,10 +27,10 @@ namespace GralShape
     public partial class ParseDBF : Form
     {
         private DataTable _dt;
-        public DataTable dt {set {_dt = value;} get {return _dt;} }
-        private Encoding encoding =  Encoding.GetEncoding(1252);
+        public DataTable dt { set { _dt = value; } get { return _dt; } }
+        private Encoding encoding = Encoding.GetEncoding(1252);
         private CultureInfo cultureSettings = CultureInfo.InvariantCulture;
-            
+
         // This is the file header for a DBF. We do this special layout with everything
         // packed so we can read straight from disk into the structure to populate it
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -71,7 +71,7 @@ namespace GralShape
             public byte[] reserved3;
             public byte indexFlag;
         }
-        
+
         public ParseDBF()
         {
             //
@@ -79,7 +79,7 @@ namespace GralShape
             //
             InitializeComponent();
         }
-        
+
         void Button1Click(object sender, EventArgs e)
         {
             if (radioButton1.Checked)
@@ -104,7 +104,7 @@ namespace GralShape
 
             if (radioButton5.Checked)
             {
-                encoding = Encoding.UTF7;
+                // encoding = Encoding.UTF7;
             }
 
             if (radioButton6.Checked)
@@ -122,12 +122,12 @@ namespace GralShape
                 cultureSettings = CultureInfo.CurrentCulture;
             }
         }
-                
+
         // Read an entire standard DBF file into a DataTable
         public void ReadDBF(string dbfFile)
         {
             ShowDialog();
-                    
+
             long start = DateTime.Now.Ticks;
             _dt = new DataTable();
             BinaryReader recReader;
@@ -138,7 +138,7 @@ namespace GralShape
             long lDate;
             long lTime;
             DataRow row;
-            int	fieldIndex;
+            int fieldIndex;
 
             // If there isn't even a file, just return an empty DataTable
             if ((false == File.Exists(dbfFile)))
@@ -155,9 +155,9 @@ namespace GralShape
 
                 // Marshall the header into a DBFHeader structure
                 GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-                DBFHeader header = (DBFHeader) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(DBFHeader));
+                DBFHeader header = (DBFHeader)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(DBFHeader));
                 handle.Free();
-                
+
                 // Read in all the field descriptors. Per the spec, 13 (0D) marks the end of the field descriptors
                 ArrayList fields = new ArrayList();
                 while ((13 != br.PeekChar()))
@@ -169,7 +169,7 @@ namespace GralShape
                 }
 
                 // Read in the first row of records, we need this to help determine column types below
-                ((FileStream) br.BaseStream).Seek(header.HeaderLen + 1, SeekOrigin.Begin);
+                ((FileStream)br.BaseStream).Seek(header.HeaderLen + 1, SeekOrigin.Begin);
                 buffer = br.ReadBytes(header.RecordLen);
                 recReader = new BinaryReader(new MemoryStream(buffer));
 
@@ -215,17 +215,17 @@ namespace GralShape
                 }
 
                 // Skip past the end of the header.
-                ((FileStream) br.BaseStream).Seek(header.HeaderLen, SeekOrigin.Begin);
-                
-                
+                ((FileStream)br.BaseStream).Seek(header.HeaderLen, SeekOrigin.Begin);
+
+
                 // Read in all the records
                 for (int counter = 0; counter <= header.NumRecords - 1; counter++)
                 {
                     // First we'll read the entire record into a buffer and then read each field from the buffer
                     // This helps account for any extra space at the end of each record and probably performs better
-                    
+
                     byte[] bufferloc = br.ReadBytes(header.RecordLen);
-                    
+
                     recReader = new BinaryReader(new MemoryStream(bufferloc));
 
                     // All dbf field records begin with a deleted flag field. Deleted - 0x2A (asterisk) else 0x20 (space)
@@ -236,7 +236,7 @@ namespace GralShape
 
                     // Loop through each field in a record
                     fieldIndex = 0;
-                    
+
                     row = _dt.NewRow();
                     foreach (FieldDescriptor field in fields)
                     {
@@ -246,7 +246,7 @@ namespace GralShape
                                 // If you port this to .NET 2.0, use the Decimal.TryParse method
                                 number = Encoding.Default.GetString(recReader.ReadBytes(field.fieldLen));
                                 decimal value;
-                                bool b = decimal.TryParse(number,NumberStyles.Any, cultureSettings, out value);
+                                bool b = decimal.TryParse(number, NumberStyles.Any, cultureSettings, out value);
                                 //Oettl, 2011: To enable floating point numbers (xxe+xx) this conversion is performed
                                 try
                                 {
@@ -256,7 +256,7 @@ namespace GralShape
                                 {
                                     number = "0";
                                 }
-                                
+
                                 if (IsNumber(number))
                                 {
                                     if (number.IndexOf(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator) > -1)
@@ -340,7 +340,7 @@ namespace GralShape
 
                             case 'L': // Boolean (Y/N) or T/F - Kuntner 20.8.2017
                                 byte bbool = recReader.ReadByte();
-                                if (bbool == 'Y'|| bbool == 84)
+                                if (bbool == 'Y' || bbool == 84)
                                 {
                                     row[fieldIndex] = true;
                                 }
@@ -353,7 +353,7 @@ namespace GralShape
 
                             case 'F':
                                 number = Encoding.Default.GetString(recReader.ReadBytes(field.fieldLen));
-                                b = decimal.TryParse(number,NumberStyles.Any, cultureSettings, out value);
+                                b = decimal.TryParse(number, NumberStyles.Any, cultureSettings, out value);
                                 //Oettl, 2011: To enable floating point numbers (xxe+xx) this conversion is performed
                                 //number = Convert.ToString(Convert.ToDouble(number.Replace(".", decsep))).Replace(decsep, ".");
                                 try
@@ -380,11 +380,11 @@ namespace GralShape
                     recReader.Close();
                     recReader.Dispose();
                     bufferloc = null;
-                    
+
                     _dt.Rows.Add(row);
 
                 }
-                
+
                 handle.Free();
             }
 
@@ -400,12 +400,12 @@ namespace GralShape
                     br.Close();
                     br.Dispose();
                 }
-                
+
             }
 
             long count = DateTime.Now.Ticks - start;
-            
-            
+
+
             Close();
             return;
         }
@@ -428,7 +428,7 @@ namespace GralShape
         /// </summary>
         /// <param name="lJDN">Julian Date to convert (days since 01/01/4713 BC)</param>
         /// <returns>DateTime</returns>
-        private  DateTime JulianToDateTime(long lJDN)
+        private DateTime JulianToDateTime(long lJDN)
         {
             try
             {
@@ -448,7 +448,7 @@ namespace GralShape
             catch
             {
                 return new DateTime(1901, 1, 1);
-            }            
+            }
         }
 
     }

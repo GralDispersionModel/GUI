@@ -125,8 +125,8 @@ namespace GralMainForms
                         sum_classes[n] += prozent;
                         summe += SectFrequency[i, n + 1];
                     }
-                workrow[n + 1] = prozent.ToString();
-            }
+                    workrow[n + 1] = prozent.ToString();
+                }
                 workrow[++n] = Math.Round(summe * 100, 1).ToString();
                 sum_classes[nmax] += summe * 100;
                 _data.Rows.Add(workrow);

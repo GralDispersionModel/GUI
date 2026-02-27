@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using GralItemData;
 
 namespace GralDomain
 {
@@ -29,33 +29,33 @@ namespace GralDomain
                                      double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             //format for names of sources
             StringFormat StringFormat1 = new StringFormat
             {
                 LineAlignment = StringAlignment.Center,
                 Alignment = StringAlignment.Center
-            }; 
+            };
 
             Brush SelectedBrush = new SolidBrush(Color.Green);
             int n = -1;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
             int transparency = _drobj.Transparancy;
             int linewidth_l = _drobj.LineWidth;
             bool FillYesNo = _drobj.FillYesNo;
             bool filter_l = _drobj.Filter;
-            
+
             BuildingData _bd;
-            
+
             for (int ii = 0; ii < EditB.ItemData.Count; ii++)
             {
                 try
                 {
                     _bd = EditB.ItemData[ii];
                     n++;
-                    List <PointD> _pt = _bd.Pt;
+                    List<PointD> _pt = _bd.Pt;
                     int vertices = _pt.Count;
                     int point_counter = 0;
 
@@ -70,14 +70,14 @@ namespace GralDomain
                         {
                             int x1 = (int)((_pt[i].X - form1_west) * factor_x + TransformX);
                             int y1 = (int)((_pt[i].Y - form1_north) * factor_y + TransformY);
-                            
+
                             if (dismiss && (x1 > 0) && (x1 < pb1_width) && (y1 > 0) && (y1 < pb1_height))
                             {
                                 dismiss = false;
                             }
 
-                            xmean +=  x1;
-                            ymean +=  y1;
+                            xmean += x1;
+                            ymean += y1;
 
                             if (filter_l == false || i == 0 || i == (vertices - 1) || Math.Abs(x1 - xold) > 2 || Math.Abs(y1 - yold) > 2)
                             {
@@ -105,7 +105,7 @@ namespace GralDomain
                                 {
                                     Array.Resize(ref myPoints, point_counter);
                                 }
-                                
+
                                 if ((n == EditB.ItemDisplayNr) && ((MouseControl == MouseMode.BuildingSel) || (MouseControl == MouseMode.BuildingPos)))
                                 {
                                     g.FillPolygon(SelectedBrush, myPoints);
@@ -151,9 +151,9 @@ namespace GralDomain
                         break;
                     }
                 }
-                catch{  	}
+                catch { }
             }
-            
+
             SelectedBrush.Dispose();
             StringFormat1.Dispose();
         }

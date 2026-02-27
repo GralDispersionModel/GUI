@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace GralMainForms
 {
-    public partial class Main_SpecialSettings : Form
+    public partial class SpecialSettings : Form
     {
         public bool WriteASCiiOutput = false;
         public bool KeyStrokeWhenExitGRAL = true;
@@ -12,8 +12,8 @@ namespace GralMainForms
         public int RadiusForPrognosticFlowField = 0;
         public bool GRALOnlineFunctions = true;
         public bool GRALReproducibleResults = false;
-
-        public Main_SpecialSettings()
+        private System.Globalization.CultureInfo ic = System.Globalization.CultureInfo.InvariantCulture;
+        public SpecialSettings()
         {
             InitializeComponent();
         }
@@ -56,6 +56,12 @@ namespace GralMainForms
                         catch { }
                     }
                 }
+
+                if (Gral.Main.ProjectSetting.RelaxationFactorGRALPressure != (double)numericUpDown27.Value ||
+                    Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity != (double)numericUpDown28.Value)
+                {
+                    SetGRALFlowFieldRelaxFactor();
+                }
             }
         }
 
@@ -66,6 +72,9 @@ namespace GralMainForms
 
             string KeepTransientPath = Path.Combine(Gral.Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat");
             numericUpDown1.Value = 24;
+            numericUpDown28.Value = (decimal)Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity;
+            numericUpDown27.Value = (decimal)Gral.Main.ProjectSetting.RelaxationFactorGRALPressure;
+
             if (File.Exists(KeepTransientPath))
             {
                 checkBox2.Checked = true;
@@ -149,6 +158,36 @@ namespace GralMainForms
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
         {
             GRALReproducibleResults = checkBox6.Checked;
+        }
+        /// <summary>
+        /// change relaxation factor of velocity for microscale flow field model of GRAL
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetGRALFlowFieldRelaxFactor()
+        {
+            Gral.Main.ProjectSetting.RelaxationFactorGRALPressure = (double)numericUpDown27.Value;
+            Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity = (double)numericUpDown28.Value;
+
+            try
+            {
+                string newPath1 = Path.Combine(Gral.Main.ProjectName, @"Computation", "relaxation_factors.txt");
+                try
+                {
+                    using (StreamWriter mywriter = new StreamWriter(newPath1))
+                    {
+                        mywriter.WriteLine(Convert.ToString(Gral.Main.ProjectSetting.RelaxationFactorGRALVelocity, ic));
+                        mywriter.WriteLine(Convert.ToString(Gral.Main.ProjectSetting.RelaxationFactorGRALPressure, ic));
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Error when writing file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }

@@ -9,11 +9,8 @@
 /// You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ///</remarks>
 #endregion
-using System;
-using System.IO;
-using System.Windows.Forms;
 using System.Globalization;
-using System.Diagnostics.Eventing.Reader;
+using System.IO;
 
 namespace GralData
 {
@@ -42,6 +39,14 @@ namespace GralData
             projectName = ProjectName;
             SetDefaultValues();
         }
+        /// <summary>
+        /// Relaxation factor velocity Gral flow field calculation 
+        /// </summary>
+        public double RelaxationFactorGRALVelocity = 0.1;
+        /// <summary>
+        /// Relaxation factor pressure Gral flow field calculation
+        /// </summary>
+        public double RelaxationFactorGRALPressure = 1;
 
         /// <summary>
         /// Write GUI Settings to the file GUISettings.txt
@@ -143,13 +148,13 @@ namespace GralData
         }
         public override int GetHashCode()
         {
-            return  EmissionModulationPath.GetHashCode();
+            return EmissionModulationPath.GetHashCode();
         }
-        public static bool operator == (ProjectSettings a, ProjectSettings b)
+        public static bool operator ==(ProjectSettings a, ProjectSettings b)
         {
             return a.EmissionModulationPath.Equals(b.EmissionModulationPath);
         }
-        public static bool operator != (ProjectSettings a, ProjectSettings b)
+        public static bool operator !=(ProjectSettings a, ProjectSettings b)
         {
             return !(a == b);
         }

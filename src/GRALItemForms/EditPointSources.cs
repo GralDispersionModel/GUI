@@ -10,17 +10,16 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralDomain;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-
-using Gral;
-using GralDomain;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralItemForms
 {
@@ -44,11 +43,11 @@ namespace GralItemForms
         public event ForceItemCancel ItemFormCancel;
 
         private int sourcegroup = 1; 			              //sourcegroup
-        private TextBox [] pemission = new TextBox [10];      //textboxes for emission strenght input of point sources
-        private ComboBox [] ppollutant = new ComboBox [10];   //ComboBoxes for selecting pollutants of point sources
-        private Label [] labelpollutant = new Label [10];     //labels for pollutant types
-        private Button [] but1 = new Button [10];             //Buttons for unit and deposition
-        private Deposition [] dep = new Deposition [10];
+        private TextBox[] pemission = new TextBox[10];      //textboxes for emission strenght input of point sources
+        private ComboBox[] ppollutant = new ComboBox[10];   //ComboBoxes for selecting pollutants of point sources
+        private Label[] labelpollutant = new Label[10];     //labels for pollutant types
+        private Button[] but1 = new Button[10];             //Buttons for unit and deposition
+        private Deposition[] dep = new Deposition[10];
         private CultureInfo ic = CultureInfo.InvariantCulture;
         private int Dialog_Initial_Width = 0;
         private int Button1_Width = 50;
@@ -62,16 +61,16 @@ namespace GralItemForms
         private string TempTimeSeries = string.Empty;
         private string VelTimeSeries = string.Empty;
 
-        public EditPointSources ()
+        public EditPointSources()
         {
-            InitializeComponent ();
+            InitializeComponent();
 
-            #if __MonoCS__
+#if __MonoCS__
             var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
             foreach (NumericUpDown nu in allNumUpDowns) {
                 nu.TextAlign = HorizontalAlignment.Left;
             }
-            #endif
+#endif
 
             int TBHeight = textBox2.Height;
             // get width of button for unit
@@ -91,8 +90,8 @@ namespace GralItemForms
             for (int i = 0; i < 10; i++)
             {
                 createTextbox(2, Convert.ToInt32(y_act) + Convert.ToInt32(i * (TBHeight + 7)), TBWidth, TBHeight, i);
-                dep [i] = new Deposition (); // initialize Deposition array
-                dep [i].init ();
+                dep[i] = new Deposition(); // initialize Deposition array
+                dep[i].init();
             }
 
             for (int nr = 0; nr < 10; nr++)
@@ -104,7 +103,7 @@ namespace GralItemForms
             }
         }
 
-        private void EditPointSources_Load (object sender, EventArgs e)
+        private void EditPointSources_Load(object sender, EventArgs e)
         {
             textBox2.TextChanged += new System.EventHandler(St_F.CheckInput);
             textBox3.TextChanged += new System.EventHandler(St_F.CheckInput);
@@ -126,7 +125,7 @@ namespace GralItemForms
             FillValues();
         }
 
-        private void createTextbox (int x0, int y0, int b, int h, int nr)
+        private void createTextbox(int x0, int y0, int b, int h, int nr)
         {
             //list box for selecting pollutants
             ppollutant[nr] = new ComboBox
@@ -224,10 +223,10 @@ namespace GralItemForms
         {
             if (e.KeyData == (Keys.Control | Keys.V))
             {
-                 string txt = Clipboard.GetText();
-                 double val = 0;
-                 try
-                 {
+                string txt = Clipboard.GetText();
+                double val = 0;
+                try
+                {
                     if (double.TryParse(txt, out val))
                     {
                         TextBox tbox = sender as TextBox;
@@ -235,7 +234,7 @@ namespace GralItemForms
                         tbox.SelectAll();
                     }
                 }
-                 catch{}
+                catch { }
             }
         }
 
@@ -266,7 +265,7 @@ namespace GralItemForms
 
         private void Comma2(object sender, KeyPressEventArgs e)
         {
-            MessageBox.Show(this, "Use the drop down buttons to choose the source group","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, "Use the drop down buttons to choose the source group", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             int asc = (int)e.KeyChar; //get ASCII code
             switch (asc)
             {
@@ -366,9 +365,17 @@ namespace GralItemForms
 
                 _pdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
                 _pdata.Pt = new PointD(x, y);
-                _pdata.Velocity = (float) (numericUpDown2.Value);
-                _pdata.Temperature = (float) (numericUpDown3.Value + 273);
-                _pdata.Diameter = (float) (numericUpDown4.Value);
+                _pdata.Velocity = (float)(numericUpDown2.Value);
+                _pdata.Temperature = (float)(numericUpDown3.Value + 273);
+                _pdata.Diameter = (float)(numericUpDown4.Value);
+                if (checkBox2.Checked)
+                {
+                    _pdata.HorizontalDirection = (float)(numericUpDown5.Value);
+                }
+                else
+                {
+                    _pdata.HorizontalDirection = -1;
+                }
 
                 _pdata.TemperatureTimeSeries = TempTimeSeries;
                 _pdata.VelocityTimeSeries = VelTimeSeries;
@@ -435,9 +442,22 @@ namespace GralItemForms
                 catch
                 {
                     numericUpDown3.Value = 0;
-                    MessageBox.Show(this, "Problems when reading temperature value - set to zero","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, "Problems when reading temperature value - set to zero", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 numericUpDown4.Value = St_F.ValueSpan(0, 1000, _pdata.Diameter);
+
+                if (_pdata.HorizontalDirection >= 0)
+                {
+                    checkBox2.Checked = true;
+                    numericUpDown5.Enabled = true;
+                    numericUpDown5.Value = (decimal)_pdata.HorizontalDirection;
+                }
+                else
+                {
+                    checkBox2.Checked = false;
+                    numericUpDown5.Enabled = false;
+                    numericUpDown5.Value = 0;
+                }
 
                 combo(_pdata.Poll.SourceGroup);
 
@@ -532,6 +552,8 @@ namespace GralItemForms
                 numericUpDown2.Value = 0;
                 numericUpDown3.Value = 0;
                 numericUpDown4.Value = 0;
+                numericUpDown5.Value = 0;
+                checkBox2.Checked = false;
                 comboBox1.SelectedIndex = 0;
                 for (int i = 0; i < 10; i++)
                 {
@@ -576,6 +598,8 @@ namespace GralItemForms
                 numericUpDown2.Value = 0;
                 numericUpDown3.Value = 0;
                 numericUpDown4.Value = 0;
+                numericUpDown5.Value = 0;
+                checkBox2.Checked = false;
                 comboBox1.SelectedIndex = 0;
                 for (int i = 0; i < 10; i++)
                 {
@@ -657,7 +681,7 @@ namespace GralItemForms
                 numericUpDown2.Width = dialog_width - Numericupdown_x2;
                 numericUpDown3.Width = dialog_width - Numericupdown_x2;
                 numericUpDown4.Width = dialog_width - Numericupdown_x0;
-                comboBox1.Width      = dialog_width - Numericupdown_x0;
+                comboBox1.Width = dialog_width - Numericupdown_x0;
             }
 
             int element_width = (groupBox1.Width - but1[1].Width - 20) / 2;
@@ -671,10 +695,10 @@ namespace GralItemForms
 
             for (int nr = 0; nr < 10; nr++)
             {
-                ppollutant[nr].Width  = element_width;
+                ppollutant[nr].Width = element_width;
                 labelpollutant[nr].Width = element_width;
-                pemission [nr].Location = new System.Drawing.Point (ppollutant[nr].Left + ppollutant[nr].Width + 5, ppollutant[nr].Top);
-                pemission [nr].Width = element_width;
+                pemission[nr].Location = new System.Drawing.Point(ppollutant[nr].Left + ppollutant[nr].Width + 5, ppollutant[nr].Top);
+                pemission[nr].Width = element_width;
                 but1[nr].Location = new System.Drawing.Point(pemission[nr].Left + pemission[nr].Width + 5, ppollutant[nr].Top - 1);
             }
             panel1.Width = ClientSize.Width;
@@ -696,7 +720,7 @@ namespace GralItemForms
                 }
             }
             catch
-            {}
+            { }
         }
 
         private void edit_deposition(object sender, EventArgs e)
@@ -722,7 +746,7 @@ namespace GralItemForms
                 {
                     edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
-                
+
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(pemission[nr].Text, true);
                 edit.Pollutant = ppollutant[nr].SelectedIndex;
@@ -791,12 +815,12 @@ namespace GralItemForms
 
         void EditPointSourcesFormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach(TextBox tex in pemission)
+            foreach (TextBox tex in pemission)
             {
                 tex.TextChanged -= new System.EventHandler(St_F.CheckInput);
                 tex.KeyPress -= new KeyPressEventHandler(St_F.NumericInput); //only point as decimal seperator is allowed
             }
-            foreach(Button but in but1)
+            foreach (Button but in but1)
             {
                 but.Click -= new EventHandler(edit_deposition);
             }
@@ -849,7 +873,7 @@ namespace GralItemForms
 
                 foreach (Control c in Controls)
                 {
-                    if (c != trackBar1 && c!= groupBox1 && c != ScrollRight && c != ScrollLeft)
+                    if (c != trackBar1 && c != groupBox1 && c != ScrollRight && c != ScrollLeft)
                     {
                         c.Enabled = enable;
                     }
@@ -944,7 +968,7 @@ namespace GralItemForms
                 }
                 else
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150 );
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150);
                 }
 
                 if (edT.ShowDialog() == DialogResult.OK)
@@ -1068,5 +1092,16 @@ namespace GralItemForms
             }
         }
 
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                numericUpDown5.Enabled = true;
+            }
+            else
+            {
+                numericUpDown5.Enabled = false;
+            }
+        }
     }
 }

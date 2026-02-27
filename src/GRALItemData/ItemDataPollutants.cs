@@ -14,63 +14,63 @@ using System;
 
 namespace GralItemData
 {
-	/// <summary>
-	/// This class represents the pollution data; Source group number is limited between 1 to 99
-	/// </summary>
-	[Serializable]
-	public class PollutantsData
-	{
-		private int _sourcegroup = 1;
-		
-		public int SourceGroup
-		{
-			get
-			{
-				return _sourcegroup;
-			}
-			set
-			{
-				if (value < 1)
-				{
-					_sourcegroup = 1;
-				}
-				else if (value > 99)
-				{
-					_sourcegroup = 99;
-				}
-				else
-				{
-					_sourcegroup = value;
-				}
-			}
-		}
-		public int[] Pollutant       { get; set; }
-		public double[] EmissionRate { get; set; }
-		
-		public PollutantsData()
-		{
-			SourceGroup = 0;
-			Pollutant = new int[10];
-			EmissionRate = new double[10];
-		}
-		
-		public PollutantsData(int SorceGroup)
-		{
-			SourceGroup = SourceGroup;
-			Pollutant = new int[10];
-			EmissionRate = new double[10];
-		}
-		
-		public PollutantsData(PollutantsData other)
-		{
-			SourceGroup = other.SourceGroup;
-			Pollutant = new int[10];
-			EmissionRate = new double[10];
-			for (int i = 0; i <10; i++)
-			{
-				Pollutant[i] = other.Pollutant[i];
-				EmissionRate[i] = other.EmissionRate[i];
-			}
-		}
-	}
+    /// <summary>
+    /// This class represents the pollution data; Source group number is limited between 1 to 99
+    /// </summary>
+    [Serializable]
+    public class PollutantsData
+    {
+        private int _sourcegroup = 1;
+
+        public int SourceGroup
+        {
+            get
+            {
+                return _sourcegroup;
+            }
+            set
+            {
+                if (value < 1)
+                {
+                    _sourcegroup = 1;
+                }
+                else if (value > 99)
+                {
+                    _sourcegroup = 99;
+                }
+                else
+                {
+                    _sourcegroup = value;
+                }
+            }
+        }
+        public int[] Pollutant { get; set; }
+        public double[] EmissionRate { get; set; }
+
+        public PollutantsData()
+        {
+            SourceGroup = 0;
+            Pollutant = new int[10];
+            EmissionRate = new double[10];
+        }
+
+        public PollutantsData(int SorceGroup)
+        {
+            SourceGroup = SourceGroup;
+            Pollutant = new int[10];
+            EmissionRate = new double[10];
+        }
+
+        public PollutantsData(PollutantsData other)
+        {
+            SourceGroup = other.SourceGroup;
+            Pollutant = new int[10];
+            EmissionRate = new double[10];
+            for (int i = 0; i < 10; i++)
+            {
+                Pollutant[i] = other.Pollutant[i];
+                EmissionRate[i] = other.EmissionRate[i];
+            }
+        }
+    }
 }

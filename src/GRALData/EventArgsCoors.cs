@@ -14,14 +14,14 @@ using System;
 
 namespace GralData
 {
-	/// <summary>
+    /// <summary>
     /// Data container for coordinates transmitted by an event
     /// </summary>
     public class EventArgsCoors : EventArgs
     {
-        private double  _x;
-        private double  _y;
-        
+        private double _x;
+        private double _y;
+
         public EventArgsCoors(double X, double Y)
         {
             _x = X;
@@ -32,9 +32,9 @@ namespace GralData
         {
             _x = double.Parse(X);
             _y = double.Parse(Y);
-        }         
+        }
 
-        public double X {get{return _x;} }
-        public double Y {get{return _y;} }
-    } 
+        public double X { get { return _x; } }
+        public double Y { get { return _y; } }
+    }
 }

@@ -10,9 +10,9 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.IO;
-using GralStaticFunctions;
 
 namespace GralIO
 {
@@ -27,7 +27,7 @@ namespace GralIO
         public double PixelMy { get; set; }
         public double West { get; set; }
         public double North { get; set; }
-        
+
         /// <summary>
         /// Read the Header of world files
         /// </summary>
@@ -39,14 +39,14 @@ namespace GralIO
                 using (StreamReader myReader = new StreamReader(Mapfile))
                 {
                     PixelMx = St_F.TxtToDbl(myReader.ReadLine(), false);
-                    
+
                     double dummy = St_F.TxtToDbl(myReader.ReadLine(), false);
                     dummy = St_F.TxtToDbl(myReader.ReadLine(), false);
-                    
+
                     PixelMy = St_F.TxtToDbl(myReader.ReadLine(), false);
                     West = St_F.TxtToDbl(myReader.ReadLine(), false);
                     North = St_F.TxtToDbl(myReader.ReadLine(), false);
-                    
+
                     if (myReader.EndOfStream)
                     {
                         Imagefile = String.Empty;
@@ -56,8 +56,8 @@ namespace GralIO
                         Imagefile = myReader.ReadLine();
                     }
                 }
-                
-                #if __MonoCS__
+
+#if __MonoCS__
                 if (Imagefile.Contains(@"\")) // compatibility to windows projects
                 {
                     string[] text = Imagefile.Split( '\\' );
@@ -67,8 +67,8 @@ namespace GralIO
                         Imagefile = Path.Combine(map_path, text[text.Length -1]);  // Filename
                     }
                 }
-                #endif
-                
+#endif
+
                 return true;
             }
             catch
@@ -76,5 +76,5 @@ namespace GralIO
                 return false;
             }
         }
-    }    
+    }
 }

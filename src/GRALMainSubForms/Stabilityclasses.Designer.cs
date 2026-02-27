@@ -28,52 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Stabilityclasses));
-            this.button1 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.SuspendLayout();
+            button1 = new System.Windows.Forms.Button();
+            panel1 = new System.Windows.Forms.Panel();
+            toolTip1 = new System.Windows.Forms.ToolTip(components);
+            SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button1.Location = new System.Drawing.Point(788, 438);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(36, 37);
-            this.button1.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.button1, "Copy to the clipoard");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            button1.BackgroundImage = (System.Drawing.Image)resources.GetObject("button1.BackgroundImage");
+            button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            button1.Location = new System.Drawing.Point(788, 438);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(36, 37);
+            button1.TabIndex = 1;
+            toolTip1.SetToolTip(button1, "Copy to the clipoard");
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(0, 2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(784, 473);
-            this.panel1.TabIndex = 2;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
-            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
+            panel1.Location = new System.Drawing.Point(0, 2);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(784, 473);
+            panel1.TabIndex = 2;
+            panel1.Paint += panel1_Paint;
+            panel1.MouseDown += panel1_MouseDown;
+            panel1.MouseMove += panel1_MouseMove;
+            panel1.MouseUp += panel1_MouseUp;
             // 
             // Stabilityclasses
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(825, 476);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.panel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Stabilityclasses";
-            this.Text = "Frequency distribution stability classes";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.StabilityclassesFormClosed);
-            this.Load += new System.EventHandler(this.Form5_Load);
-            this.ResizeEnd += new System.EventHandler(this.StabilityclassesResizeEnd);
-            this.Resize += new System.EventHandler(this.StabilityclassesResize);
-            this.ResumeLayout(false);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            BackColor = System.Drawing.SystemColors.Control;
+            ClientSize = new System.Drawing.Size(825, 476);
+            Controls.Add(button1);
+            Controls.Add(panel1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "Stabilityclasses";
+            Text = "Frequency distribution stability classes";
+            FormClosed += StabilityclassesFormClosed;
+            Load += Form5_Load;
+            ResizeEnd += StabilityclassesResizeEnd;
+            Resize += StabilityclassesResize;
+            ResumeLayout(false);
 
         }
         private System.Windows.Forms.ToolTip toolTip1;

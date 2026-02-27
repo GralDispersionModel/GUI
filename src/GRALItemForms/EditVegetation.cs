@@ -10,17 +10,16 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Windows.Forms;
-using System.IO;
-
 using Gral;
 using GralDomain;
 using GralItemData;
 using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralItemForms
 {
@@ -48,8 +47,8 @@ namespace GralItemForms
         /// <summary>
         /// Y corner points of a vegetation area in meters
         /// </summary>
-        public double[] CornerVegY = new double[1000];           
-        
+        public double[] CornerVegY = new double[1000];
+
         // delegate to send a message, that redraw is needed!
         public event ForceDomainRedraw VegetationRedraw;
 
@@ -70,8 +69,8 @@ namespace GralItemForms
             //
             InitializeComponent();
             Domain.EditSourceShape = true;  // allow input of new vertices
-            
-            #if __MonoCS__
+
+#if __MonoCS__
             // set Numericupdowns-Alignement to Left in Linux
             var allNumUpDowns  = Main.GetAllControls<NumericUpDown>(this);
             foreach (NumericUpDown nu in allNumUpDowns)
@@ -79,9 +78,9 @@ namespace GralItemForms
                 nu.TextAlign = HorizontalAlignment.Left;
             }
 
-            #else
-            
-            #endif
+#else
+
+#endif
 
             //fill vegetation list: type, height(m), trunk zone (%), Leave-area-index trunk (m²/m³), Leave-area-index crown (m²/m³),
             vegetation_type.Add("Deciduous forest,25,10,0.1,0.5");
@@ -100,7 +99,7 @@ namespace GralItemForms
             vegetation_type.Add("Magnolia,5,10,0.5,0.3");
             string[] text = new string[5];
 
-            for(int i=0;i<vegetation_type.Count;i++)
+            for (int i = 0; i < vegetation_type.Count; i++)
             {
                 text = vegetation_type[i].Split(new char[] { ',' });
                 comboBox1.Items.Add(text[0]);
@@ -118,9 +117,9 @@ namespace GralItemForms
                 }
             }
             catch
-            {}
+            { }
         }
-        
+
         void EditForestsFormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.ApplicationExitCall || e.CloseReason == CloseReason.WindowsShutDown)
@@ -138,7 +137,7 @@ namespace GralItemForms
                 // Hide form and send message to caller when user tries to close this form
                 if (!AllowClosing)
                 {
-                   this.Hide();
+                    this.Hide();
                     e.Cancel = true;
                 }
             }
@@ -149,7 +148,7 @@ namespace GralItemForms
             ItemDisplayNr = trackBar1.Value - 1;
             RedrawDomain(this, null);
         }
-        
+
         void EditForestsLoad(object sender, EventArgs e)
         {
             TrackBar_x0 = trackBar1.Left;
@@ -157,7 +156,7 @@ namespace GralItemForms
             Numericupdown_x0 = numericUpDown1.Left;
             FillValues();
         }
-        
+
         //increase the number of area sources by one
         private void Button1_Click(object sender, EventArgs e)
         {
@@ -167,14 +166,14 @@ namespace GralItemForms
                 //textBox1.Text = "";
                 textBox2.Text = "0";
                 textBox2.Text = "";
-                
+
                 trackBar1.Maximum += 1;
                 trackBar1.Value = trackBar1.Maximum;
                 ItemDisplayNr = trackBar1.Maximum - 1;
                 Domain.EditSourceShape = true;  // allow input of new vertices
             }
         }
-        
+
         //scroll between the area sources
         private void TrackBar1_Scroll(object sender, EventArgs e)
         {
@@ -183,7 +182,7 @@ namespace GralItemForms
             FillValues();
             RedrawDomain(this, null);
         }
-        
+
         //save data in array list
         /// <summary>
         /// Saves the recent dialog data in the item object and the item list
@@ -199,7 +198,7 @@ namespace GralItemForms
             {
                 _vdata = ItemData[ItemDisplayNr];
             }
-            
+
             if (textBox2.Text != "")
             {
                 if ((textBox1.Text != "") && (Convert.ToInt32(textBox2.Text) > 2))
@@ -208,14 +207,14 @@ namespace GralItemForms
                     int number_of_vertices = Convert.ToInt32(textBox2.Text);
                     _vdata.Pt.Clear();
                     _vdata.Pt.TrimExcess();
-                    
-                    for (int i = 0; i <number_of_vertices; i++)
+
+                    for (int i = 0; i < number_of_vertices; i++)
                     {
                         _vdata.Pt.Add(new PointD(CornerVegX[i], CornerVegY[i]));
                     }
                     double areapolygon = St_F.CalcArea(_vdata.Pt, false);
                     textBox3.Text = St_F.DblToIvarTxt(areapolygon);
-                    
+
                     if (number_of_vertices > 0)
                     {
                         Domain.EditSourceShape = false;  // block input of new vertices
@@ -227,8 +226,8 @@ namespace GralItemForms
                     _vdata.LADCrown = (float)(numericUpDown5.Value);
                     _vdata.Coverage = (float)(numericUpDown4.Value);
                     _vdata.Name = textBox1.Text;
-                    _vdata.Area = (float) (areapolygon);
-                    
+                    _vdata.Area = (float)(areapolygon);
+
                     if (ItemDisplayNr >= ItemData.Count) // new item
                     {
                         ItemData.Add(_vdata);
@@ -244,7 +243,7 @@ namespace GralItemForms
                 }
             }
         }
-        
+
         //fill actual values
         /// <summary>
         /// Fills the dialog with data from the recent item object
@@ -267,18 +266,18 @@ namespace GralItemForms
                     _vdata = new VegetationData();
                 }
             }
-            
+
             textBox1.Text = _vdata.Name;
             textBox2.Text = _vdata.Pt.Count.ToString();
             textBox3.Text = _vdata.Area.ToString();
-            
-            CultureInfo ic  = CultureInfo.InvariantCulture;
-            
-            numericUpDown2.Value = St_F.ValueSpan(0, 1000, (double) _vdata.VerticalExt);
-            numericUpDown1.Value = St_F.ValueSpan(0, 100, (double) _vdata.TrunkZone);
-            numericUpDown3.Value = St_F.ValueSpan(0, 10, (double) _vdata.LADTrunk);
-            numericUpDown5.Value = St_F.ValueSpan(0, 10, (double) _vdata.LADCrown);
-            numericUpDown4.Value = St_F.ValueSpan(0, 100, (double) _vdata.Coverage);
+
+            CultureInfo ic = CultureInfo.InvariantCulture;
+
+            numericUpDown2.Value = St_F.ValueSpan(0, 1000, (double)_vdata.VerticalExt);
+            numericUpDown1.Value = St_F.ValueSpan(0, 100, (double)_vdata.TrunkZone);
+            numericUpDown3.Value = St_F.ValueSpan(0, 10, (double)_vdata.LADTrunk);
+            numericUpDown5.Value = St_F.ValueSpan(0, 10, (double)_vdata.LADCrown);
+            numericUpDown4.Value = St_F.ValueSpan(0, 100, (double)_vdata.Coverage);
 
             if (_vdata.Pt.Count > CornerVegX.Length)
             {
@@ -290,20 +289,20 @@ namespace GralItemForms
                 CornerVegX[i] = _vdata.Pt[i].X;
                 CornerVegY[i] = _vdata.Pt[i].Y;
             }
-            
+
             if (Convert.ToInt32(textBox2.Text) > 0)
             {
                 Domain.EditSourceShape = false;  // block input of new vertices
             }
         }
-    
+
         //remove actual vegetation
         private void Button2_Click(object sender, EventArgs e)
         {
             RemoveOne(true);
             RedrawDomain(this, null);
         }
-        
+
         /// <summary>
         /// Remove the recent item object from the item list
         /// </summary> 
@@ -327,7 +326,7 @@ namespace GralItemForms
                 textBox2.Text = "0";
                 textBox3.Text = "0";
                 numericUpDown2.Value = 5;
-                
+
                 try
                 {
                     if (trackBar1.Maximum > 1)
@@ -353,12 +352,12 @@ namespace GralItemForms
             {
                 ItemData.Clear();
                 ItemData.TrimExcess(); // Kuntner Memory
-                
+
                 textBox1.Text = "";
                 textBox2.Text = "0";
                 textBox3.Text = "0";
                 numericUpDown2.Value = 5;
-                
+
                 trackBar1.Value = 1;
                 trackBar1.Maximum = 1;
                 ItemDisplayNr = trackBar1.Value - 1;
@@ -366,7 +365,7 @@ namespace GralItemForms
                 RedrawDomain(this, null);
             }
         }
-        
+
         void TextBox2Click(object sender, EventArgs e)
         {
             {
@@ -390,28 +389,28 @@ namespace GralItemForms
                     {
                         vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, St_F.GetTopScreenAtMousePosition() + 150);
                     }
-                    
+
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
                     if (vert.ShowDialog() == DialogResult.OK)
                     {
                         int cornerCount = vert.Lines;
                         SetNumberOfVerticesText(cornerCount.ToString());
                     }
-                    
+
                     SaveArray(true);
                     vert.Dispose();
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Nothing digitized","GRAL GUI",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Nothing digitized", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-        
+
         void EditForestsFormClosed(object sender, FormClosedEventArgs e)
         {
             FormClosing -= new FormClosingEventHandler(EditForestsFormClosing);
-            
+
             CornerVegX = null;
             CornerVegY = null;
             for (int nr = 0; nr < ItemData.Count; nr++)
@@ -436,8 +435,8 @@ namespace GralItemForms
             numericUpDown5.Value = Convert.ToDecimal(text[4], ic); // Leave area index Trunk
             numericUpDown4.Value = Convert.ToDecimal(100, ic);     // Coverage
         }
-        
-        
+
+
         void EditForestsVisibleChanged(object sender, EventArgs e)
         {
             if (!Visible)
@@ -465,7 +464,7 @@ namespace GralItemForms
             Exit.Enabled = true;
             panel1.Enabled = true;
         }
-        
+
         void EditForestsResizeEnd(object sender, EventArgs e)
         {
             int dialog_width = ClientSize.Width;
@@ -476,12 +475,12 @@ namespace GralItemForms
             }
             panel1.Width = ClientSize.Width;
         }
-        
+
         public void SetNumberOfVerticesText(string _s)
         {
             textBox2.Text = _s;
         }
-        
+
         /// <summary>
         /// Set the trackbar to the desired item number
         /// </summary> 
@@ -498,7 +497,7 @@ namespace GralItemForms
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Set the trackbar maximum to the maximum count in the item list
         /// </summary> 

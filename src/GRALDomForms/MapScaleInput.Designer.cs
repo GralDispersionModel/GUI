@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             OKButton = new System.Windows.Forms.Button();
-            CancelButton = new System.Windows.Forms.Button();
+            CancelButton2 = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -58,16 +58,16 @@
             OKButton.UseVisualStyleBackColor = true;
             OKButton.Click += OKButton_Click;
             // 
-            // CancelButton
+            // CancelButton2
             // 
-            CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            CancelButton.Location = new System.Drawing.Point(205, 275);
-            CancelButton.Name = "CancelButton";
-            CancelButton.Size = new System.Drawing.Size(121, 38);
-            CancelButton.TabIndex = 11;
-            CancelButton.Text = "&Cancel";
-            CancelButton.UseVisualStyleBackColor = true;
-            CancelButton.Click += CancelButton_Click;
+            CancelButton2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            CancelButton2.Location = new System.Drawing.Point(205, 275);
+            CancelButton2.Name = "CancelButton2";
+            CancelButton2.Size = new System.Drawing.Size(121, 38);
+            CancelButton2.TabIndex = 11;
+            CancelButton2.Text = "&Cancel";
+            CancelButton2.UseVisualStyleBackColor = true;
+            CancelButton2.Click += CancelButton_Click;
             // 
             // label1
             // 
@@ -206,7 +206,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(CancelButton);
+            Controls.Add(CancelButton2);
             Controls.Add(OKButton);
             MaximizeBox = false;
             MinimizeBox = false;
@@ -226,7 +226,7 @@
         #endregion
 
         private System.Windows.Forms.Button OKButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelButton2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;

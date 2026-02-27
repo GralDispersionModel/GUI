@@ -11,8 +11,8 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
@@ -148,12 +148,12 @@ namespace GralMainForms
             }
         }
 
-/// <summary>
-/// Try to load the update file using the System.Net.Http class
-/// </summary>
-/// <param name="Url">The web adress containing the xml file</param>
-/// <returns>The string with the xml file, a string with the error message</returns>
-private void LoadUpdateFileHttp(object sender, System.ComponentModel.DoWorkEventArgs e)
+        /// <summary>
+        /// Try to load the update file using the System.Net.Http class
+        /// </summary>
+        /// <param name="Url">The web adress containing the xml file</param>
+        /// <returns>The string with the xml file, a string with the error message</returns>
+        private void LoadUpdateFileHttp(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
             {

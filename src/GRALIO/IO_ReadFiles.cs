@@ -19,9 +19,9 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.IO;
-using System.Globalization;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 
 namespace GralIO
 {
@@ -32,104 +32,104 @@ namespace GralIO
     {
         //User defineddecimal seperator
         private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-        
+
         private string _projectname;
-        public string ProjectName { set {_projectname = value;} }
+        public string ProjectName { set { _projectname = value; } }
         private string _emissionfile;
-        public string EmissionFile { set {_emissionfile = value;} }
+        public string EmissionFile { set { _emissionfile = value; } }
         private string _roughness;
-        public string Roughness {get {return _roughness;} }
+        public string Roughness { get { return _roughness; } }
         private decimal _GRAMMstartsituation;
-        public decimal GRAMMstartsituation {get {return _GRAMMstartsituation;} }
+        public decimal GRAMMstartsituation { get { return _GRAMMstartsituation; } }
         private string _GRAMMsmooth = "";
-        public string GRAMMsmooth {get {return _GRAMMsmooth;} }
+        public string GRAMMsmooth { get { return _GRAMMsmooth; } }
         private string _unit = "";
-        public string Unit {get {return _unit;} }
+        public string Unit { get { return _unit; } }
         private bool _GRAMMsteadystate;
-        public bool GRAMMsteadystate {get {return _GRAMMsteadystate;} }
+        public bool GRAMMsteadystate { get { return _GRAMMsteadystate; } }
         private int _GRAMMsunrise;
-        public int GRAMMsunrise {get {return _GRAMMsunrise;} }
+        public int GRAMMsunrise { get { return _GRAMMsunrise; } }
         private int _GRALTrackbar;
-        public int GRALTrackbar {get {return _GRALTrackbar;} }
+        public int GRALTrackbar { get { return _GRALTrackbar; } }
         private int _GRAMMTrackbar;
-        public int GRAMMTrackbar {get {return _GRAMMTrackbar;} }
+        public int GRAMMTrackbar { get { return _GRAMMTrackbar; } }
         private bool _MeteoClassification;
-        public bool MeteoClassification {get {return _MeteoClassification;} }
+        public bool MeteoClassification { get { return _MeteoClassification; } }
         private double _GRAMMnumbcell;
-        public double GRAMMnumbcell {get {return _GRAMMnumbcell;} }
+        public double GRAMMnumbcell { get { return _GRAMMnumbcell; } }
         private decimal _GRAMMvertlayers;
-        public decimal GRAMMvertlayers {get {return _GRAMMvertlayers;} }
-        
+        public decimal GRAMMvertlayers { get { return _GRAMMvertlayers; } }
+
         private Int32 _GRAMMTimeStep;
-        public Int32 GRAMMTimeStep {get {return _GRAMMTimeStep;} }
+        public Int32 GRAMMTimeStep { get { return _GRAMMTimeStep; } }
         private Int32 _GRAMMModellingTime;
-        public Int32 GRAMMModellingTime {get {return _GRAMMModellingTime;} }
+        public Int32 GRAMMModellingTime { get { return _GRAMMModellingTime; } }
         private decimal _GRAMMRelaxvel;
-        public decimal GRAMMRelaxvel {get {return _GRAMMRelaxvel;} }
+        public decimal GRAMMRelaxvel { get { return _GRAMMRelaxvel; } }
         private decimal _GRAMMRelaxscal;
-        public decimal GRAMMRelaxscal {get {return _GRAMMRelaxscal;} }
+        public decimal GRAMMRelaxscal { get { return _GRAMMRelaxscal; } }
         private Int32 _GRAMMDebugLevel;
-        public Int32 GRAMMDebugLevel {get {return _GRAMMDebugLevel;} }
+        public Int32 GRAMMDebugLevel { get { return _GRAMMDebugLevel; } }
         private bool _GRAMMCatabatic;
         public bool GRAMMCatabatic { get { return _GRAMMCatabatic; } }
         private bool _GRAMMBoundaryCondition;
         public bool GRAMMBoundaryCondition { get { return _GRAMMBoundaryCondition; } }
-        
+
         private double[] _dispsituationfrequ;
-        public double[] DispsituationFrequ {set {_dispsituationfrequ = value;}  get {return _dispsituationfrequ;} }
+        public double[] DispsituationFrequ { set { _dispsituationfrequ = value; } get { return _dispsituationfrequ; } }
         private double _meteofrequ;
-        public double MeteoFrequ {get {return _meteofrequ;} }
-        
+        public double MeteoFrequ { get { return _meteofrequ; } }
+
         private decimal _flowfieldgrid;
-        public decimal FlowfieldGrid {get {return _flowfieldgrid;} }
+        public decimal FlowfieldGrid { get { return _flowfieldgrid; } }
         private decimal _flowfieldvertical;
-        public decimal FlowfieldVertical {get {return _flowfieldvertical;} }
+        public decimal FlowfieldVertical { get { return _flowfieldvertical; } }
         private decimal _flowfieldstretch;
-        public decimal FlowfieldStretch {get {return _flowfieldstretch;} }
+        public decimal FlowfieldStretch { get { return _flowfieldstretch; } }
 
         public List<float[]> FlowFieldStretchFlexible = new List<float[]>();
-        
+
         private int _cellsgralx;
-        public int CellsGralX {get {return _cellsgralx;} }
+        public int CellsGralX { get { return _cellsgralx; } }
         private int _cellsgraly;
-        public int CellsGralY {get {return _cellsgraly;} }
-        
+        public int CellsGralY { get { return _cellsgraly; } }
+
         private int _numhorslices;
-        public int NumhorSlices {get {return _numhorslices;} }
-        
+        public int NumhorSlices { get { return _numhorslices; } }
+
         private string[] _sourcegrp;
-        public string[] Source_group_list {set {_sourcegrp = value;}  get {return _sourcegrp;} }
-        
+        public string[] Source_group_list { set { _sourcegrp = value; } get { return _sourcegrp; } }
+
         private decimal _flowfieldmicrolayers;
-        public decimal FlowfieldMicrolayers {get {return _flowfieldmicrolayers;} }
+        public decimal FlowfieldMicrolayers { get { return _flowfieldmicrolayers; } }
         private decimal _relaxvel;
-        public decimal RelaxVel {get {return _relaxvel;} }
+        public decimal RelaxVel { get { return _relaxvel; } }
         private decimal _relaxpress;
-        public decimal RelaxPress {get {return _relaxpress;} }
+        public decimal RelaxPress { get { return _relaxpress; } }
         private decimal _buildingrough;
-        public decimal BuildingRough {get {return _buildingrough;} }
+        public decimal BuildingRough { get { return _buildingrough; } }
         private decimal _integrationmin;
-        public decimal IntegrationMin {get {return _integrationmin;} }
+        public decimal IntegrationMin { get { return _integrationmin; } }
         private decimal _integrationmax;
-        public decimal IntegrationMax {get {return _integrationmax;} }
-        
+        public decimal IntegrationMax { get { return _integrationmax; } }
+
         private double _west;
-        public double West {get {return _west;} }
+        public double West { get { return _west; } }
         private double _east;
-        public double East {get {return _east;} }
+        public double East { get { return _east; } }
         private double _north;
-        public double North {get {return _north;} }
+        public double North { get { return _north; } }
         private double _south;
-        public double South {get {return _south;} }
-        
-        private List<Gral.SG_Class> _source_group_list = new List<Gral.SG_Class>();   
-        public List<Gral.SG_Class> Source_Group_List { get {return _source_group_list;} }
-        
-        private List<string> _sourcedata = new List<string>();   
-        public List<string> SourceData { set {_sourcedata = value;} get {return _sourcedata;} }
-        
+        public double South { get { return _south; } }
+
+        private List<Gral.SG_Class> _source_group_list = new List<Gral.SG_Class>();
+        public List<Gral.SG_Class> Source_Group_List { get { return _source_group_list; } }
+
+        private List<string> _sourcedata = new List<string>();
+        public List<string> SourceData { set { _sourcedata = value; } get { return _sourcedata; } }
+
         private string _winddatafile;
-        public string WindDataFile { set {_winddatafile = value;} }
+        public string WindDataFile { set { _winddatafile = value; } }
         private List<GralData.WindData> _winddata;
         public List<GralData.WindData> WindData { set { _winddata = value; } get { return _winddata; } }
 
@@ -146,28 +146,28 @@ namespace GralIO
         /// </summary>
         public bool ReadGrammInFile()
         {
-            if (_projectname.Length == 0 )
+            if (_projectname.Length == 0)
             {
                 return false;
             }
 
-            if (File.Exists(Path.Combine(_projectname, @"Computation","GRAMMin.dat")))
+            if (File.Exists(Path.Combine(_projectname, @"Computation", "GRAMMin.dat")))
             {
                 try
                 {
                     string dummy;
                     string[] text5 = new string[10];
-                    using (StreamReader myreader = new StreamReader(Path.Combine(_projectname, @"Computation","GRAMMin.dat")))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(_projectname, @"Computation", "GRAMMin.dat")))
                     {
-                        dummy=myreader.ReadLine();
+                        dummy = myreader.ReadLine();
                         _GRAMMsunrise = 0; // no sunrise option
                         if (dummy.Contains("Version") == true)
                         {
-                            dummy=myreader.ReadLine(); // yes
+                            dummy = myreader.ReadLine(); // yes
                             _roughness = myreader.ReadLine(); // roughness lenght
-                            dummy=myreader.ReadLine(); // start number "," bound cells
+                            dummy = myreader.ReadLine(); // start number "," bound cells
                             text5 = dummy.Split(new char[] { ' ', ',', '\t', ';', '!' }, StringSplitOptions.RemoveEmptyEntries);
-                            if (text5.Length >1)
+                            if (text5.Length > 1)
                             {
                                 _GRAMMstartsituation = Convert.ToInt32(text5[0]);
                                 _GRAMMsmooth = text5[1];
@@ -175,7 +175,7 @@ namespace GralIO
                             // steady state files
                             if (myreader.EndOfStream == false)
                             {
-                                dummy=myreader.ReadLine(); // yes/no: write steady-state file
+                                dummy = myreader.ReadLine(); // yes/no: write steady-state file
                                 if (dummy.Contains("yes"))
                                 {
                                     _GRAMMsteadystate = true;
@@ -188,7 +188,7 @@ namespace GralIO
                             // sunrise option
                             if (myreader.EndOfStream == false)
                             {
-                                dummy=myreader.ReadLine(); // sunrise option
+                                dummy = myreader.ReadLine(); // sunrise option
                                 text5 = dummy.Split(new char[] { ' ', ',', '\t', ';', '!' }, StringSplitOptions.RemoveEmptyEntries);
                                 if (text5.Length >= 0)
                                 {
@@ -205,11 +205,11 @@ namespace GralIO
                     return true;
                 }
                 catch
-                { 
+                {
                     return false; // error reading this file
                 }
             }
-                return false;
+            return false;
         }
 
         /// <summary>
@@ -232,17 +232,17 @@ namespace GralIO
                 }
             }
         }
-        
+
         /// <summary>
         /// Read DispNr.txt file
         /// </summary>
         public bool ReadDispNrFile()
         {
-            if(File.Exists(Path.Combine(_projectname, @"Computation","DispNr.txt")))
+            if (File.Exists(Path.Combine(_projectname, @"Computation", "DispNr.txt")))
             {
                 try
                 {
-                    using (StreamReader myreader = new StreamReader(Path.Combine(_projectname, @"Computation","DispNr.txt")))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(_projectname, @"Computation", "DispNr.txt")))
                     {
                         _GRALTrackbar = Convert.ToInt32(myreader.ReadLine().Replace(" ", "")) - 1;
                     }
@@ -255,17 +255,17 @@ namespace GralIO
             }
             return false;
         }
-        
+
         /// <summary>
         /// Read DispNrGramm.txt file
         /// </summary>
         public bool ReadDispGrammNrFile()
         {
-            if(File.Exists(Path.Combine(_projectname, @"Computation","DispNrGramm.txt")))
+            if (File.Exists(Path.Combine(_projectname, @"Computation", "DispNrGramm.txt")))
             {
                 try
                 {
-                    using (StreamReader myreader = new StreamReader(Path.Combine(_projectname, @"Computation","DispNrGramm.txt")))
+                    using (StreamReader myreader = new StreamReader(Path.Combine(_projectname, @"Computation", "DispNrGramm.txt")))
                     {
                         _GRAMMTrackbar = Convert.ToInt32(myreader.ReadLine().Replace(" ", "")) - 1;
                     }
@@ -278,7 +278,7 @@ namespace GralIO
             }
             return false;
         }
-        
+
         /// <summary>
         /// Read Sourcegroups.txt file
         /// </summary>
@@ -286,7 +286,7 @@ namespace GralIO
         {
             try
             {
-                string newPath1 = Path.Combine(_projectname, @"Settings","Sourcegroups.txt");
+                string newPath1 = Path.Combine(_projectname, @"Settings", "Sourcegroups.txt");
                 if (File.Exists(newPath1))
                 {
                     using (StreamReader myReader = new StreamReader(newPath1))
@@ -294,7 +294,7 @@ namespace GralIO
                         string text1;
                         string[] text = new string[2];
                         _source_group_list.Clear();
-                        
+
                         text1 = myReader.ReadLine();
                         while (text1 != null)
                         {
@@ -304,13 +304,13 @@ namespace GralIO
                                 int _sg = 0;
                                 if (int.TryParse(text[1], out _sg))
                                 {
-                                    _source_group_list.Add(new Gral.SG_Class() {SG_Name = text[0], SG_Number = _sg});
+                                    _source_group_list.Add(new Gral.SG_Class() { SG_Name = text[0], SG_Number = _sg });
                                 }
                             }
                             text1 = myReader.ReadLine();
                         }
                     }
-                    
+
                     _source_group_list.Sort();
                     return true;
                 }
@@ -321,7 +321,7 @@ namespace GralIO
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read GRAL.geb file
         /// </summary>
@@ -329,20 +329,20 @@ namespace GralIO
         {
             try
             {
-                string newPath2 = Path.Combine(_projectname, @"Computation","GRAL.geb");
+                string newPath2 = Path.Combine(_projectname, @"Computation", "GRAL.geb");
                 using (StreamReader myreader = new StreamReader(newPath2))
                 {
                     string[] text = new string[10];
-                                    
+
                     text = myreader.ReadLine().Split(new char[] { '!' });
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
-                    
+
                     _flowfieldgrid = Convert.ToDecimal(text[0]);
-                    
+
                     text = myreader.ReadLine().Split(new char[] { '!' });
 
-                    text = myreader.ReadLine().Split(new char[] {'!' }); // Remove Comment
+                    text = myreader.ReadLine().Split(new char[] { '!' }); // Remove Comment
                     text = text[0].Split(new char[] { ',' });
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
@@ -360,7 +360,7 @@ namespace GralIO
                             text[i] = text[i].Trim();
                             text[i] = text[i].Replace(".", decsep);
                             FlowFieldStretchFlexible[FlowFieldStretchFlexible.Count - 1][0] = Convert.ToSingle(text[i]); // Height
-                            
+
                             text[i + 1] = text[i + 1].Trim();
                             text[i + 1] = text[i + 1].Replace(".", decsep);
                             FlowFieldStretchFlexible[FlowFieldStretchFlexible.Count - 1][1] = Convert.ToSingle(text[i + 1]); //Stretch
@@ -371,30 +371,30 @@ namespace GralIO
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
                     _cellsgralx = Convert.ToInt32(text[0]);
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
                     _cellsgraly = Convert.ToInt32(text[0]);
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
                     _numhorslices = Convert.ToInt32(text[0]);
-                    
+
                     _sourcegrp = myreader.ReadLine().Split(new char[] { ',', '!' }, StringSplitOptions.RemoveEmptyEntries);
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _west = Convert.ToDouble(text[0].Replace(".", decsep));
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _east = Convert.ToDouble(text[0].Replace(".", decsep));
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _south = Convert.ToDouble(text[0].Replace(".", decsep));
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _north = Convert.ToDouble(text[0].Replace(".", decsep));
@@ -407,7 +407,7 @@ namespace GralIO
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read micro_vert_layers.txt file
         /// </summary>
@@ -415,21 +415,21 @@ namespace GralIO
         {
             try
             {
-                string newPath1 = Path.Combine(_projectname, @"Computation","micro_vert_layers.txt");
+                string newPath1 = Path.Combine(_projectname, @"Computation", "micro_vert_layers.txt");
                 using (StreamReader myreader = new StreamReader(newPath1))
                 {
-                    string text = myreader.ReadLine().Replace(".",decsep);
+                    string text = myreader.ReadLine().Replace(".", decsep);
                     _flowfieldmicrolayers = Convert.ToDecimal(text);
                 }
-            
+
                 return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read relaxation_factors.txt file
         /// </summary>
@@ -437,12 +437,12 @@ namespace GralIO
         {
             try
             {
-                string newPath1 = Path.Combine(_projectname, @"Computation","relaxation_factors.txt");
+                string newPath1 = Path.Combine(_projectname, @"Computation", "relaxation_factors.txt");
                 using (StreamReader myreader = new StreamReader(newPath1))
                 {
-                    string text = myreader.ReadLine().Replace(".",decsep);
+                    string text = myreader.ReadLine().Replace(".", decsep);
                     _relaxvel = Convert.ToDecimal(text); //vel
-                    text = myreader.ReadLine().Replace(".",decsep);
+                    text = myreader.ReadLine().Replace(".", decsep);
                     _relaxpress = Convert.ToDecimal(text); //pres
                 }
 
@@ -453,7 +453,7 @@ namespace GralIO
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read building_roughness.txt file
         /// </summary>
@@ -461,10 +461,10 @@ namespace GralIO
         {
             try
             {
-                string newPath1 = Path.Combine(_projectname, @"Computation","building_roughness.txt");
+                string newPath1 = Path.Combine(_projectname, @"Computation", "building_roughness.txt");
                 using (StreamReader myreader = new StreamReader(newPath1))
                 {
-                    string text = myreader.ReadLine().Replace(".",decsep);
+                    string text = myreader.ReadLine().Replace(".", decsep);
                     _buildingrough = Convert.ToDecimal(text);
                 }
 
@@ -475,7 +475,7 @@ namespace GralIO
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read Integrationtime.txt file
         /// </summary>
@@ -483,12 +483,12 @@ namespace GralIO
         {
             try
             {
-                string newPath1 = Path.Combine(_projectname, @"Computation","Integrationtime.txt");
+                string newPath1 = Path.Combine(_projectname, @"Computation", "Integrationtime.txt");
                 using (StreamReader myreader = new StreamReader(newPath1))
                 {
                     string text = myreader.ReadLine().Replace(".", decsep);
                     _integrationmin = Convert.ToDecimal(text);  //min
-                    text = myreader.ReadLine().Replace(".",decsep); 
+                    text = myreader.ReadLine().Replace(".", decsep);
                     _integrationmax = Convert.ToDecimal(text); //max
                 }
 
@@ -499,7 +499,7 @@ namespace GralIO
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read GRAMM.geb file
         /// </summary>
@@ -507,7 +507,7 @@ namespace GralIO
         {
             try
             {
-                string newPath2 = Path.Combine(_projectname, @"Computation","GRAMM.geb");
+                string newPath2 = Path.Combine(_projectname, @"Computation", "GRAMM.geb");
                 using (StreamReader myreader = new StreamReader(newPath2))
                 {
                     string[] text = new string[10];
@@ -516,25 +516,25 @@ namespace GralIO
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
                     _GRAMMnumbcell = Convert.ToDouble(text[0]);
-                    
+
                     text = myreader.ReadLine().Split(new char[] { '!' });
                     text = myreader.ReadLine().Split(new char[] { '!' });
                     text[0] = text[0].Trim();
                     text[0] = text[0].Replace(".", decsep);
                     _GRAMMvertlayers = Convert.ToDecimal(text[0]);
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _west = Convert.ToDouble(text[0].Replace(".", decsep));
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _east = Convert.ToDouble(text[0].Replace(".", decsep));
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _south = Convert.ToDouble(text[0].Replace(".", decsep));
-                    
+
                     text = myreader.ReadLine().Split(new char[] { ',', '!' });
                     text[0] = text[0].Trim();
                     _north = Convert.ToDouble(text[0].Replace(".", decsep));
@@ -547,7 +547,7 @@ namespace GralIO
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read meteopgt.all file
         /// </summary>
@@ -560,7 +560,7 @@ namespace GralIO
                 double _meteofrequ_max = -100000000;
                 double _meteofrequ_min = 100000000;
 
-                using (StreamReader meteopgt = new StreamReader(Path.Combine(_projectname, @"Computation","meteopgt.all")))
+                using (StreamReader meteopgt = new StreamReader(Path.Combine(_projectname, @"Computation", "meteopgt.all")))
                 {
                     string[] text = new string[1];
                     //Header line 1
@@ -627,10 +627,10 @@ namespace GralIO
                     {
                         _MeteoClassification = false; // classified meteo
                         meteo_header_new = true;
-                    }                    
+                    }
                 }
-                
-                if(meteo_header_new)
+
+                if (meteo_header_new)
                 {
                     //correct the header in meteopgt.all
                     try
@@ -671,7 +671,7 @@ namespace GralIO
                 return false;
             }
         } // Read Meteopgt.all
-        
+
         /// <summary>
         /// Read IIN,dat file
         /// </summary>
@@ -679,7 +679,7 @@ namespace GralIO
         {
             try
             {
-                string newPath2 = Path.Combine(_projectname, @"Computation","IIN.dat");
+                string newPath2 = Path.Combine(_projectname, @"Computation", "IIN.dat");
                 using (StreamReader myreader = new StreamReader(newPath2))
                 {
                     string[] text = new string[10];
@@ -688,7 +688,7 @@ namespace GralIO
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     _GRAMMERA5DateTime += text[1].Trim(' '); //start time of transient GRAMM simulations
 
-                    text = myreader.ReadLine().Split(new char[] { ':','!' });
+                    text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     _GRAMMTimeStep = Convert.ToInt32(text[1]); // max Time step
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     _GRAMMModellingTime = Convert.ToInt32(text[1]);   // Modelling time
@@ -710,7 +710,7 @@ namespace GralIO
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
-                    _GRAMMRelaxvel = Convert.ToDecimal(text[1].Replace(".",decsep)); // Relax vel
+                    _GRAMMRelaxvel = Convert.ToDecimal(text[1].Replace(".", decsep)); // Relax vel
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
                     _GRAMMRelaxscal = Convert.ToDecimal(text[1].Replace(".", decsep)); // Relax scal
                     text = myreader.ReadLine().Split(new char[] { ':', '!' });
@@ -747,12 +747,12 @@ namespace GralIO
 
                 return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Read meteo files *.met, *.akterm, *.akt
         /// </summary>	
@@ -767,7 +767,7 @@ namespace GralIO
                     {
                         mode = 0;
                     }
-                    else if (Path.GetExtension(_winddatafile).ToLower()  == ".akterm")
+                    else if (Path.GetExtension(_winddatafile).ToLower() == ".akterm")
                     {
                         mode = 1;
                     }
@@ -782,22 +782,22 @@ namespace GralIO
                     int counter = 0;
                     double _dirOld = 0;
 
-                    while(reader.EndOfStream == false && counter < File_lenght) // read all lines until file_lenght is reached
+                    while (reader.EndOfStream == false && counter < File_lenght) // read all lines until file_lenght is reached
                     {
                         string readline = reader.ReadLine();
                         GralData.WindData wd = new GralData.WindData();
-                        
+
                         if (mode == 0) // met files
                         {
                             zeile = readline.Split(rowsep);
-                            
+
                             if (zeile.Length > 3)
                             {
                                 uhrzeit = zeile[1].Split(new char[] { ':', '-', '.' });
                                 wd.Date = zeile[0];
                                 wd.Time = zeile[1];
-                                wd.Vel  = Math.Round(Convert.ToDouble(zeile[2].Replace(decsepuser, decsep1)), 2);
-                                wd.Dir  = Math.Round(Convert.ToDouble(zeile[3].Replace(decsepuser, decsep1)), 1);
+                                wd.Vel = Math.Round(Convert.ToDouble(zeile[2].Replace(decsepuser, decsep1)), 2);
+                                wd.Dir = Math.Round(Convert.ToDouble(zeile[3].Replace(decsepuser, decsep1)), 1);
                                 wd.StabClass = Convert.ToInt32(zeile[4]);
                                 wd.Hour = Convert.ToInt32(uhrzeit[0]);
                                 if (wd.Hour == 24) // if met-file contains 24:00 instead of 00:00
@@ -818,7 +818,7 @@ namespace GralIO
                                 }
                             }
                         }
-                        
+
                         if (mode == 1) // AKTerm Files
                         {
                             text = readline.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -826,7 +826,7 @@ namespace GralIO
                             {
                                 wd.Date = text[4] + "." + text[3] + "." + text[2];
                                 wd.Time = text[5] + ":00";
-                                wd.Hour  = Convert.ToInt32(text[5]);
+                                wd.Hour = Convert.ToInt32(text[5]);
                                 if (text[8] == "0")
                                 {
                                     wd.Vel = Math.Round(Convert.ToDouble(text[10]) * 0.514, 2);
@@ -865,16 +865,16 @@ namespace GralIO
                                 }
                             }
                         }
-                        
+
                         if (mode == 2) // AKT Files
                         {
                             if (readline.Length > 19)
                             {
-                                wd.Date = readline.Substring(11,2) + "." + readline.Substring(9,2) + "." + readline.Substring(5,4);
-                                wd.Time = readline.Substring(13,2) + ":00";
-                                wd.Hour = Convert.ToInt32(readline.Substring(13,2));
-                                wd.Vel = Math.Round(Convert.ToDouble(readline.Substring(18,2)) * 0.514, 2);
-                                wd.Dir = Math.Round(Convert.ToDouble(readline.Substring(16,2)) * 10 , 1);
+                                wd.Date = readline.Substring(11, 2) + "." + readline.Substring(9, 2) + "." + readline.Substring(5, 4);
+                                wd.Time = readline.Substring(13, 2) + ":00";
+                                wd.Hour = Convert.ToInt32(readline.Substring(13, 2));
+                                wd.Vel = Math.Round(Convert.ToDouble(readline.Substring(18, 2)) * 0.514, 2);
+                                wd.Dir = Math.Round(Convert.ToDouble(readline.Substring(16, 2)) * 10, 1);
                                 //Klug-Manier stability classes are transformed to GRAL stability classes in a way to match subsequent Obukhov length calculations
                                 wd.StabClass = 8 - Convert.ToInt32(readline.Substring(20, 1));
                                 if (wd.StabClass < 6)
@@ -906,6 +906,6 @@ namespace GralIO
                 return false;
             }
         }
-            
+
     }
 }

@@ -14,12 +14,12 @@
 // Class used by the Modify Topography class 
 namespace GralData
 {
-	/// <summary>
-	/// Class that holds data for the topograhy modification
-	/// </summary>
-	public class TopoModifyClass
-	{
-		public float Height = 0;
+    /// <summary>
+    /// Class that holds data for the topograhy modification
+    /// </summary>
+    public class TopoModifyClass
+    {
+        public float Height = 0;
         public bool AbsoluteHeight = false;
         public int Raster = 0;
         public float Hmax = 10000;

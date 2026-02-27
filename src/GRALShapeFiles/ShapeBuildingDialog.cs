@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
+using GralDomain;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using GralDomain;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralShape
 {
@@ -27,13 +27,13 @@ namespace GralShape
     public partial class ShapeBuildingDialog : Form
     {
         private GralDomain.Domain domain = null;
-        
+
         private readonly string ShapeFileName;
         private double areapolygon = 0;
         public bool Wall = false;
         private DataTable dt;
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private readonly GralData.DomainArea GralDomRect;
         private readonly List<ComboBox> ComboColumnNames = new List<ComboBox>();
         private GralMessage.Waitprogressbar WaitDlg;
@@ -62,7 +62,7 @@ namespace GralShape
         {
             if (comboBox1.SelectedIndex != 0 && comboBox1.SelectedItem != null)
             {
-                string name="Building";
+                string name = "Building";
                 if (Wall)
                 {
                     name = "Wall";
@@ -89,12 +89,12 @@ namespace GralShape
                 }
 
                 bool inside;
-                                
+
                 WaitDlg = new GralMessage.Waitprogressbar("Import data base");
                 WaitDlg.Show();
-                
+
                 GralData.DouglasPeucker douglas = new GralData.DouglasPeucker();
-                
+
                 int SHP_Line = 0;
                 ShapeReader shape = new ShapeReader(domain);
                 foreach (object shp in shape.ReadShapeFile(ShapeFileName))
@@ -102,11 +102,11 @@ namespace GralShape
                     // Walls
                     if (Wall && shp is SHPLine)
                     {
-                        SHPLine lines = (SHPLine) shp;
-                        
+                        SHPLine lines = (SHPLine)shp;
+
                         inside = false;
                         int numbpt = lines.Points.Length;
-                        List <PointD> pt = new List<PointD>();
+                        List<PointD> pt = new List<PointD>();
                         //add only lines inside the GRAL domain
                         for (int j = 0; j < numbpt; j++)
                         {
@@ -116,7 +116,7 @@ namespace GralShape
                                 Y = Math.Round(lines.Points[j].Y, 1)
                             };
                             pt.Add(ptt);
-                            
+
                             if ((pt[j].X > GralDomRect.West) && (pt[j].X < GralDomRect.East) && (pt[j].Y > GralDomRect.South) && (pt[j].Y < GralDomRect.North))
                             {
                                 inside = true;
@@ -125,9 +125,9 @@ namespace GralShape
                         if (inside == true && numbpt > 1)
                         {
                             WallData _wd = new WallData();
-                            
-                            douglas.DouglasPeuckerRun(pt, (double) numericUpDown1.Value);
-                            
+
+                            douglas.DouglasPeuckerRun(pt, (double)numericUpDown1.Value);
+
                             //check for height
                             double height = 0;
                             if (!string.IsNullOrEmpty(dataColumnHeight))
@@ -163,7 +163,7 @@ namespace GralShape
                                 {
                                     abs = -1;
                                 }
-                                
+
                                 int i = 0;
                                 foreach (PointD _pt in pt)
                                 {
@@ -179,7 +179,7 @@ namespace GralShape
                             }
 
                             numbpt = pt.Count;
-                            
+
                             //check for names
                             if (!string.IsNullOrEmpty(dataColumnName))
                             {
@@ -195,21 +195,21 @@ namespace GralShape
                             }
 
                             _wd.Name = name;
-                            _wd.Lenght = (float) Math.Round(_wd.CalcLenght(), 1);
-                            
+                            _wd.Lenght = (float)Math.Round(_wd.CalcLenght(), 1);
+
                             domain.EditWall.ItemData.Add(_wd);
                         }
                         lines = null;
                     }
-                    
+
                     // Load Buildings
                     if (!Wall && shp is SHPPolygon)
                     {
-                        SHPPolygon polygons = (SHPPolygon) shp;
-                        
+                        SHPPolygon polygons = (SHPPolygon)shp;
+
                         inside = false;
                         int numbpt = polygons.Points.Length;
-                        
+
                         PointD[] pt = new PointD[numbpt];
                         //add only buildings inside the GRAL domain
                         for (int j = 0; j < numbpt; j++)
@@ -224,13 +224,13 @@ namespace GralShape
                         if (inside == true && numbpt > 2)
                         {
                             BuildingData _bd = new BuildingData();
-                            for (int i = 0; i < numbpt - 1; i ++)
+                            for (int i = 0; i < numbpt - 1; i++)
                             {
                                 _bd.Pt.Add(new PointD(pt[i].X, pt[i].Y));
                             }
-                            
-                            douglas.DouglasPeuckerRun(_bd.Pt, (double) numericUpDown1.Value);
-                            
+
+                            douglas.DouglasPeuckerRun(_bd.Pt, (double)numericUpDown1.Value);
+
                             //check if names are defined
                             if (!string.IsNullOrEmpty(dataColumnName))
                             {
@@ -256,27 +256,27 @@ namespace GralShape
                                 }
                             }
                             _bd.Name = name;
-                            
+
                             //compute area
                             calc_area(numbpt, pt);
-                            _bd.Area = (float) (Math.Round(areapolygon, 1));
-                            
+                            _bd.Area = (float)(Math.Round(areapolygon, 1));
+
                             double height = St_F.TxtToDbl(dt.Rows[SHP_Line][dataColumnHeight].ToString(), false);
                             height = Math.Round(height, 1);
-                            
+
                             if (checkBox1.Checked == true) // absolute heights
                             {
                                 height *= -1.0;
                             }
-                            _bd.Height = (float) height;
-                            
+                            _bd.Height = (float)height;
+
                             domain.EditB.ItemData.Add(_bd);
                         }
                         polygons = null;
                     }
-                    SHP_Line ++;
+                    SHP_Line++;
                 }
-                
+
                 shape = null;
 
                 WaitDlg.Close();
@@ -287,7 +287,7 @@ namespace GralShape
             else
             {
                 MessageBox.Show("Please define a height column", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }	
+            }
         }
 
         //read attribute table from dbf file
@@ -295,10 +295,10 @@ namespace GralShape
         {
             //open dbf file
             Cursor = Cursors.WaitCursor;
-            
+
             GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("Import data base");
             wait.Show();
-            
+
             if (Wall) // Wall mode
             {
                 Text = "Import walls";
@@ -323,7 +323,7 @@ namespace GralShape
             dbf_reader.Dispose();
 
             ShapeImport_AddColumn.SetDataGridViewSource(dataGridView1, dt, ShowEntireDataset.Checked);
-            
+
             wait.Close();
             wait.Dispose();
             Cursor = Cursors.Default;
@@ -343,7 +343,7 @@ namespace GralShape
                 }
                 _combo.SelectedIndex = 0;
             }
-            
+
             // disable sort!			
             foreach (DataGridViewColumn column in dataGridView1.Columns)
             {
@@ -369,7 +369,7 @@ namespace GralShape
                     }
                 }
             }
-            
+
             // disable sorting!			
             foreach (DataGridViewColumn column in dataGridView1.Columns)
             {

@@ -11,8 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Globalization;
+using System.IO;
 
 namespace GralIO
 {
@@ -32,12 +32,12 @@ namespace GralIO
         public int NJ { set { _NJ = value; } }
         private int _NK;
         public int NK { set { _NK = value; } }
-        private float[, ,] _U;
-        public float[, ,] U { set { _U = value; } }
-        private float[, ,] _V;
-        public float[, ,] V { set { _V = value; } }
-        private float[, ,] _W;
-        public float[, ,] W { set { _W = value; } }
+        private float[,,] _U;
+        public float[,,] U { set { _U = value; } }
+        private float[,,] _V;
+        public float[,,] V { set { _V = value; } }
+        private float[,,] _W;
+        public float[,,] W { set { _W = value; } }
 
 
         // methode to read windfield-data 
@@ -45,7 +45,7 @@ namespace GralIO
         ///Read a GRAMM wind field "*.wnd" 
         ///Called from await - async! 
         /// </summary>
-        public bool Windfield_read(string filename, int NX, int NY, int NZ, ref float[, ,] UWI, ref float[, ,] VWI, ref float[, ,] WWI)
+        public bool Windfield_read(string filename, int NX, int NY, int NZ, ref float[,,] UWI, ref float[,,] VWI, ref float[,,] WWI)
         {
             if (!File.Exists(filename))
             {
@@ -118,7 +118,7 @@ namespace GralIO
             catch
             {
                 return false; // Reader Error
-            }          
+            }
         }
 
         // methode to export windfield-data for sub-domains

@@ -17,7 +17,7 @@ using System.Drawing.Drawing2D;
 namespace GralDomain
 {
     public partial class Domain
-	{
+    {
         /// <summary>
         /// Draw Raster
         /// </summary>
@@ -25,87 +25,87 @@ namespace GralDomain
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
 #endif
         private void DrawRaster(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north,
-		                        double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
-		{
-			Pen raster = new Pen(_drobj.LineColors[0], 1);
+                                double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
+        {
+            Pen raster = new Pen(_drobj.LineColors[0], 1);
             Brush fontCBrush = new SolidBrush(_drobj.LineColors[0]);
-			int pb1_height = picturebox1.Height;
-			int pb1_width  = picturebox1.Width;
-			
-			raster.DashStyle = DashStyle.Dot;
-			double step =  Convert.ToDouble(_drobj.ContourLabelDist) * factor_x;
-			Font fontc = new Font(_drobj.LabelFont.Name, _drobj.LabelFont.Size, _drobj.LabelFont.Style);
-			SizeF stringSize = new SizeF();
-			stringSize = g.MeasureString("1234567", fontc); // get screen dimensions of that font
+            int pb1_height = picturebox1.Height;
+            int pb1_width = picturebox1.Width;
 
-			if (step > 20) // don´t show small grids
-			{
-				double xcoor0 = Math.Round((0-TransformX) * BmpScale * MapSize.SizeX + MapSize.West, 1, MidpointRounding.AwayFromZero);
-				double ycoor0 = Math.Round((0-TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
-				double x0 = Math.Floor(xcoor0 / Convert.ToDouble(_drobj.ContourLabelDist));
-				x0 *= Convert.ToDouble(_drobj.ContourLabelDist);
-				int  x0string = (int) x0;
-				x0 = Convert.ToInt32((x0 - form1_west) * factor_x) + TransformX;
-				int st = _drobj.ContourLabelDist;
-				Matrix mat = new Matrix();
-				
-				try
-				{
-					for (double xD = x0; xD <= pb1_width; xD += step)
-					{
-						if (xD > 0)
-						{
-							int x = (int) (xD + 0.5);
-							g.DrawLine(raster, x, 0, x, pb1_height);
-							
-							if (step > 100)
-							{
-								mat.Reset();
-								mat.RotateAt(270F, new Point( (int) (x - stringSize.Height), (int) (pb1_height - 5)));
-								g.Transform = mat;
-								g.DrawString(x0string.ToString(), fontc, fontCBrush, (int) (x - stringSize.Height), pb1_height - 5);
-								g.ResetTransform();
-								
-								x0string += st;
-							}
-						}
-						else
+            raster.DashStyle = DashStyle.Dot;
+            double step = Convert.ToDouble(_drobj.ContourLabelDist) * factor_x;
+            Font fontc = new Font(_drobj.LabelFont.Name, _drobj.LabelFont.Size, _drobj.LabelFont.Style);
+            SizeF stringSize = new SizeF();
+            stringSize = g.MeasureString("1234567", fontc); // get screen dimensions of that font
+
+            if (step > 20) // don´t show small grids
+            {
+                double xcoor0 = Math.Round((0 - TransformX) * BmpScale * MapSize.SizeX + MapSize.West, 1, MidpointRounding.AwayFromZero);
+                double ycoor0 = Math.Round((0 - TransformY) * BmpScale * MapSize.SizeY + MapSize.North, 1, MidpointRounding.AwayFromZero);
+                double x0 = Math.Floor(xcoor0 / Convert.ToDouble(_drobj.ContourLabelDist));
+                x0 *= Convert.ToDouble(_drobj.ContourLabelDist);
+                int x0string = (int)x0;
+                x0 = Convert.ToInt32((x0 - form1_west) * factor_x) + TransformX;
+                int st = _drobj.ContourLabelDist;
+                Matrix mat = new Matrix();
+
+                try
+                {
+                    for (double xD = x0; xD <= pb1_width; xD += step)
+                    {
+                        if (xD > 0)
+                        {
+                            int x = (int)(xD + 0.5);
+                            g.DrawLine(raster, x, 0, x, pb1_height);
+
+                            if (step > 100)
+                            {
+                                mat.Reset();
+                                mat.RotateAt(270F, new Point((int)(x - stringSize.Height), (int)(pb1_height - 5)));
+                                g.Transform = mat;
+                                g.DrawString(x0string.ToString(), fontc, fontCBrush, (int)(x - stringSize.Height), pb1_height - 5);
+                                g.ResetTransform();
+
+                                x0string += st;
+                            }
+                        }
+                        else
                         {
                             x0string += st;
                         }
                     }
 
                     x0 = Math.Floor(ycoor0 / Convert.ToDouble(_drobj.ContourLabelDist));
-					x0 *= Convert.ToDouble(_drobj.ContourLabelDist);
-					int  y0string = (int) x0;
-					x0 = Convert.ToInt32((x0 - form1_north) * factor_y) + TransformY;
-					
-					for (double yD = x0; yD <= pb1_height; yD += step)
-					{
-						if (yD > 0)
-						{
-							int y = (int) (yD + 0.5);
-							g.DrawLine(raster, 0 , y, pb1_width, y);
-							
-							if (step > 100)
-							{
-								g.DrawString(y0string.ToString(), fontc, fontCBrush, 5, y - stringSize.Height);
-								y0string -= st;
-							}
-						}
-						else
+                    x0 *= Convert.ToDouble(_drobj.ContourLabelDist);
+                    int y0string = (int)x0;
+                    x0 = Convert.ToInt32((x0 - form1_north) * factor_y) + TransformY;
+
+                    for (double yD = x0; yD <= pb1_height; yD += step)
+                    {
+                        if (yD > 0)
+                        {
+                            int y = (int)(yD + 0.5);
+                            g.DrawLine(raster, 0, y, pb1_width, y);
+
+                            if (step > 100)
+                            {
+                                g.DrawString(y0string.ToString(), fontc, fontCBrush, 5, y - stringSize.Height);
+                                y0string -= st;
+                            }
+                        }
+                        else
                         {
                             y0string -= st;
                         }
                     }
-				}
-				catch{}
-				
-				mat.Dispose();
-			}
+                }
+                catch { }
+
+                mat.Dispose();
+            }
             fontCBrush.Dispose();
-			raster.Dispose();
-			fontc.Dispose();				
-		}
-	}
+            raster.Dispose();
+            fontc.Dispose();
+        }
+    }
 }

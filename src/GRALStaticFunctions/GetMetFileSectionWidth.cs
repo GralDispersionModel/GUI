@@ -19,13 +19,13 @@ namespace GralStaticFunctions
     /// Analyze if there is a binned Meteo Time Series
     /// </summary>
     public static class GetMetFileSectionWidth
-	{
-		/// <summary>
-		/// Returns the section width of a MettimeSeries
-		/// </summary>
-		///<returns>Section width of a binned meteo time series or 1 if the time series is not binned</returns>  
-		public static float GetMetSectionWidth(List<GralData.WindData> MeteoTimeSeries)
-		{
+    {
+        /// <summary>
+        /// Returns the section width of a MettimeSeries
+        /// </summary>
+        ///<returns>Section width of a binned meteo time series or 1 if the time series is not binned</returns>  
+        public static float GetMetSectionWidth(List<GralData.WindData> MeteoTimeSeries)
+        {
             float sectionWidth = 10;
 
             if (MeteoTimeSeries.Count < 4)
@@ -37,7 +37,7 @@ namespace GralStaticFunctions
             HashSet<int> directionValues = new HashSet<int>();
             foreach (GralData.WindData data in MeteoTimeSeries)
             {
-                directionValues.Add((int) (data.Dir));
+                directionValues.Add((int)(data.Dir));
             }
 
             if (directionValues.Count < 3)
@@ -47,7 +47,7 @@ namespace GralStaticFunctions
 
             // create list for sorting
             List<int> sorted = new List<int>();
-            foreach(int _val in directionValues)
+            foreach (int _val in directionValues)
             {
                 sorted.Add(_val);
             }
@@ -56,12 +56,12 @@ namespace GralStaticFunctions
             // calculate min and mean value of direction delta
             int min = 1000000;
             int mean = 0;
-            for(int i = 0; i < sorted.Count - 1; i++)
+            for (int i = 0; i < sorted.Count - 1; i++)
             {
                 int delta = sorted[i + 1] - sorted[i];
                 min = Math.Min(min, delta);
                 mean += delta;
-            }        
+            }
             mean /= (sorted.Count - 1);
 
             sorted.Clear();
@@ -69,7 +69,7 @@ namespace GralStaticFunctions
             directionValues.Clear();
             directionValues.TrimExcess();
             //System.Windows.MessageBox.Show(min.ToString() + "/" + mean.ToString());
-            
+
             // meteo is binned or classified, if min value equals mean value
             if (Math.Abs(min - mean) > 0.1)
             {
@@ -80,7 +80,7 @@ namespace GralStaticFunctions
                 sectionWidth = min;
             }
             return sectionWidth;
-		}
+        }
 
-	}
+    }
 }

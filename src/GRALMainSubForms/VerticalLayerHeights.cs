@@ -24,7 +24,7 @@ namespace GralMainForms
         public List<float[]> StretchFlexible;
         public float StretchingFactor;
         public float LowestCellHeight;
-        
+
         public VerticalLayerHeights()
         {
             InitializeComponent();

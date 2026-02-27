@@ -135,7 +135,7 @@ namespace GralIO
             }
             set
             {
-                _buildingmode = (Gral.BuildingModeEnum) Math.Max(0, Math.Min(2, (int) value));
+                _buildingmode = (Gral.BuildingModeEnum)Math.Max(0, Math.Min(2, (int)value));
             }
         }
         /// <summary>
@@ -214,12 +214,11 @@ namespace GralIO
         /// <summary>
         ///Use AVX512 instructions - 512 bit Advanced Vector Extensions
         /// </summary>
-        public int AVX512Usage  { get; set; }
-
-        public bool ReproducibleResults { get; set; }
+        public int AVX512Usage { get; set; }
         /// <summary>
         ///GRAL reproducible results option
         /// </summary>
+        public bool ReproducibleResults { get; set; }
 
         public InDatVariables()
         {
@@ -237,7 +236,7 @@ namespace GralIO
             DispersionSituation = 1;
             BuildingMode = Gral.BuildingModeEnum.None;
             BuildingHeightsWrite = false;
-            Compressed = 1;
+            Compressed = 2;
             Transientflag = 0;
             PrognosticSubDomains = 15;
             WaitForKeyStroke = true;
@@ -279,7 +278,7 @@ namespace GralIO
             PrognosticSubDomainsSizeSourceRadius = other.PrognosticSubDomainsSizeSourceRadius;
             UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
             AVX512Usage = other.AVX512Usage;
-            ReproducibleResults = other.ReproducibleResults;   
+            ReproducibleResults = other.ReproducibleResults;
         }
 
     }

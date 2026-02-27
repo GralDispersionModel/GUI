@@ -10,6 +10,10 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using Gral.GRALItemForms;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -17,10 +21,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using Gral;
-using Gral.GRALItemForms;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralItemForms
 {
@@ -494,11 +494,6 @@ namespace GralItemForms
                     DrawObject.LabelFont = new Font("ARIAL", 8);
                 }
 
-                if (DrawObject.LineColors[0] != null)
-                {
-
-                }
-
                 CheckBox3.Text = "Show raster";
                 toolTip1.SetToolTip(CheckBox3, "Draw a grid raster");
                 CheckBox3.Visible = true;
@@ -576,7 +571,6 @@ namespace GralItemForms
             comboBox3.SelectedIndex = 0;
 
             listBox1.Refresh();
-            listBox1.BackColor = Color.White;
             init = true;
 
             checkBox8.Checked = DrawObject.BasedOnMap;
@@ -850,7 +844,7 @@ namespace GralItemForms
 
                 int width = (int)(e.Bounds.Width / 5D * 2);
                 RectangleF textColumn = new RectangleF(e.Bounds.Left, e.Bounds.Top, width, e.Bounds.Height);
-                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, Brushes.Black, textColumn, drawFormat);
+                e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.ControlText), textColumn, drawFormat);
 
                 int graphwidth = (e.Bounds.Width - width) / 2;
                 int x0 = width + graphwidth + 4;
@@ -862,7 +856,7 @@ namespace GralItemForms
                 y0 = e.Bounds.Top + e.Bounds.Height / 2;
                 e.Graphics.DrawLine(new Pen(DrawObject.LineColors[e.Index], 3), x0, y0, x0 + Math.Max(1, graphwidth - 8), y0);
 
-                Pen myPen = new Pen(Color.LightGray, 1);
+                Pen myPen = new Pen(SystemColors.ControlText, 1);
                 myPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                 e.Graphics.DrawLine(myPen, e.Bounds.Left + 4, e.Bounds.Bottom - 1, e.Bounds.Right - 8, e.Bounds.Bottom - 1);
             }
@@ -2019,7 +2013,7 @@ namespace GralItemForms
             {
                 numericUpDown2.Increment = 0.01m;
             }
-            
+
             if (value > 0.09m && oldValue < 0.1m)
             {
                 numericUpDown2.Increment = 0.1m;
@@ -2285,11 +2279,27 @@ namespace GralItemForms
                         {
                             double u = Convert.ToDouble(data[j * 2], ic);
                             double v = Convert.ToDouble(data[j * 2 + 1], ic);
-                            zlevel[j, i] = Math.Sqrt(u * u + v * v); // u and v components are stored at the .vec file
+                            double value = Math.Sqrt(u * u + v * v); // u and v components are stored at the .vec file
+                            if (double.IsNaN(value) || double.IsInfinity(value))
+                            {
+                                zlevel[j, i] = nodata;
+                            }
+                            else
+                            {
+                                zlevel[j, i] = value; // u and v components are stored at the .vec file
+                            }
                         }
                         else
                         {
-                            zlevel[j, i] = Convert.ToDouble(data[j], ic);
+                            double value = Convert.ToDouble(data[j], ic);
+                            if (double.IsNaN(value) || double.IsInfinity(value))
+                            {
+                                zlevel[j, i] = nodata;
+                            }
+                            else
+                            {
+                                zlevel[j, i] = value;
+                            }
                         }
 
                         if (Convert.ToInt32(zlevel[j, i]) != nodata)

@@ -40,208 +40,213 @@ namespace GralDomForms
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectMultiplePoints));
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.Year = new System.Windows.Forms.GroupBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.Year.SuspendLayout();
-            this.SuspendLayout();
+            dataGridView1 = new System.Windows.Forms.DataGridView();
+            button1 = new System.Windows.Forms.Button();
+            button2 = new System.Windows.Forms.Button();
+            button3 = new System.Windows.Forms.Button();
+            checkBox1 = new System.Windows.Forms.CheckBox();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            radioButton2 = new System.Windows.Forms.RadioButton();
+            radioButton1 = new System.Windows.Forms.RadioButton();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            textBox1 = new System.Windows.Forms.TextBox();
+            button8 = new System.Windows.Forms.Button();
+            toolTip1 = new System.Windows.Forms.ToolTip(components);
+            numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            Year = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            Year.SuspendLayout();
+            SuspendLayout();
             // 
             // dataGridView1
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(709, 282);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView1_DataError);
-            this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
+            dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Dock = System.Windows.Forms.DockStyle.Top;
+            dataGridView1.Location = new System.Drawing.Point(0, 0);
+            dataGridView1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new System.Drawing.Size(827, 325);
+            dataGridView1.TabIndex = 0;
+            dataGridView1.DataError += dataGridView1_DataError;
+            dataGridView1.KeyDown += dataGridView1_KeyDown;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(19, 311);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(113, 33);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "&Add receptor points";
-            this.toolTip1.SetToolTip(this.button1, "Add all receptor points to the datagrid");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Location = new System.Drawing.Point(22, 359);
+            button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(132, 38);
+            button1.TabIndex = 1;
+            button1.Text = "&Add receptor points";
+            toolTip1.SetToolTip(button1, "Add all receptor points to the datagrid");
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(19, 360);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(113, 45);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "&OK";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Location = new System.Drawing.Point(22, 415);
+            button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(132, 52);
+            button2.TabIndex = 2;
+            button2.Text = "&OK";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(575, 360);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(109, 45);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "&Cancel";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            button3.Location = new System.Drawing.Point(671, 415);
+            button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            button3.Name = "button3";
+            button3.Size = new System.Drawing.Size(127, 52);
+            button3.TabIndex = 2;
+            button3.Text = "&Cancel";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(327, 371);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(180, 24);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Use local stability classes";
-            this.toolTip1.SetToolTip(this.checkBox1, "Use the  GRAMM local stability classes");
-            this.checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.Location = new System.Drawing.Point(382, 428);
+            checkBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new System.Drawing.Size(210, 28);
+            checkBox1.TabIndex = 8;
+            checkBox1.Text = "Use local stability classes";
+            toolTip1.SetToolTip(checkBox1, "Use the  GRAMM local stability classes");
+            checkBox1.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(185, 305);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(136, 100);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Select flow field model";
+            groupBox1.Controls.Add(radioButton2);
+            groupBox1.Controls.Add(radioButton1);
+            groupBox1.Location = new System.Drawing.Point(216, 352);
+            groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox1.Size = new System.Drawing.Size(159, 115);
+            groupBox1.TabIndex = 9;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Select flow field model";
             // 
             // radioButton2
             // 
-            this.radioButton2.Location = new System.Drawing.Point(11, 19);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(104, 24);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "GRAL";
-            this.toolTip1.SetToolTip(this.radioButton2, "Analyze GRAL wind fields");
-            this.radioButton2.UseVisualStyleBackColor = true;
+            radioButton2.Location = new System.Drawing.Point(13, 22);
+            radioButton2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            radioButton2.Name = "radioButton2";
+            radioButton2.Size = new System.Drawing.Size(121, 28);
+            radioButton2.TabIndex = 1;
+            radioButton2.TabStop = true;
+            radioButton2.Text = "GRAL";
+            toolTip1.SetToolTip(radioButton2, "Analyze GRAL wind fields");
+            radioButton2.UseVisualStyleBackColor = true;
             // 
             // radioButton1
             // 
-            this.radioButton1.Location = new System.Drawing.Point(11, 65);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(110, 24);
-            this.radioButton1.TabIndex = 1;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "GRAMM";
-            this.toolTip1.SetToolTip(this.radioButton1, "Analyze GRAMM wind fields");
-            this.radioButton1.UseVisualStyleBackColor = true;
+            radioButton1.Location = new System.Drawing.Point(13, 75);
+            radioButton1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new System.Drawing.Size(128, 28);
+            radioButton1.TabIndex = 1;
+            radioButton1.TabStop = true;
+            radioButton1.Text = "GRAMM";
+            toolTip1.SetToolTip(radioButton1, "Analyze GRAMM wind fields");
+            radioButton1.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 289);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 13);
-            this.label1.TabIndex = 10;
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(22, 333);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(0, 15);
+            label1.TabIndex = 10;
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(327, 305);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(214, 19);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "File name prefix without extension";
+            label2.Location = new System.Drawing.Point(382, 352);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(250, 22);
+            label2.TabIndex = 12;
+            label2.Text = "File name prefix without extension";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(327, 328);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(322, 20);
-            this.textBox1.TabIndex = 11;
+            textBox1.Location = new System.Drawing.Point(382, 378);
+            textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new System.Drawing.Size(375, 23);
+            textBox1.TabIndex = 11;
             // 
             // button8
             // 
-            this.button8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button8.BackgroundImage")));
-            this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button8.Location = new System.Drawing.Point(655, 325);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(24, 24);
-            this.button8.TabIndex = 13;
-            this.toolTip1.SetToolTip(this.button8, "Set the filename for the results");
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            button8.Image = Gral.Properties.Resources.Open1;
+            button8.Location = new System.Drawing.Point(764, 375);
+            button8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            button8.Name = "button8";
+            button8.Size = new System.Drawing.Size(28, 28);
+            button8.TabIndex = 13;
+            toolTip1.SetToolTip(button8, "Set the filename for the results");
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(18, 18);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            2100,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            1900,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown1.TabIndex = 14;
-            this.toolTip1.SetToolTip(this.numericUpDown1, "Year for the result file");
-            this.numericUpDown1.Value = new decimal(new int[] {
-            2020,
-            0,
-            0,
-            0});
+            numericUpDown1.Location = new System.Drawing.Point(21, 21);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            numericUpDown1.Maximum = new decimal(new int[] { 2100, 0, 0, 0 });
+            numericUpDown1.Minimum = new decimal(new int[] { 1900, 0, 0, 0 });
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new System.Drawing.Size(66, 23);
+            numericUpDown1.TabIndex = 14;
+            toolTip1.SetToolTip(numericUpDown1, "Year for the result file");
+            numericUpDown1.Value = new decimal(new int[] { 2020, 0, 0, 0 });
             // 
             // Year
             // 
-            this.Year.Controls.Add(this.numericUpDown1);
-            this.Year.Location = new System.Drawing.Point(478, 354);
-            this.Year.Name = "Year";
-            this.Year.Size = new System.Drawing.Size(81, 51);
-            this.Year.TabIndex = 15;
-            this.Year.TabStop = false;
-            this.Year.Text = "Year";
+            Year.Controls.Add(numericUpDown1);
+            Year.Location = new System.Drawing.Point(558, 408);
+            Year.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            Year.Name = "Year";
+            Year.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            Year.Size = new System.Drawing.Size(94, 59);
+            Year.TabIndex = 15;
+            Year.TabStop = false;
+            Year.Text = "Year";
             // 
             // SelectMultiplePoints
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(709, 425);
-            this.Controls.Add(this.Year);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SelectMultiplePoints";
-            this.Text = "Select Multiple Points";
-            this.Load += new System.EventHandler(this.SelectMultiplePoints_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.Year.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(827, 490);
+            Controls.Add(Year);
+            Controls.Add(button8);
+            Controls.Add(label2);
+            Controls.Add(textBox1);
+            Controls.Add(label1);
+            Controls.Add(checkBox1);
+            Controls.Add(groupBox1);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(dataGridView1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            Name = "SelectMultiplePoints";
+            Text = "Select Multiple Points";
+            Load += SelectMultiplePoints_Load;
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            Year.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

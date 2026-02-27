@@ -19,53 +19,53 @@ namespace GralDomain
     /// <summary>
     /// PointD Structure used by Items 
     /// </summary>
-   public struct PointD 
-	{
-		public double X;
-		public double Y;
+    public struct PointD
+    {
+        public double X;
+        public double Y;
 
-		public PointD(double x, double y) 
-		{
-			X = Math.Round(x, 1);
-			Y = Math.Round(y, 1);
-		}
-		
-		public PointD(string x, string y, CultureInfo cul) 
-		{
-			X = Math.Round(Convert.ToDouble(x, cul), 1);
-			Y = Math.Round(Convert.ToDouble(y, cul), 1);
-		}
+        public PointD(double x, double y)
+        {
+            X = Math.Round(x, 1);
+            Y = Math.Round(y, 1);
+        }
 
-		public Point ToPoint() 
-		{
-			return new Point((int)X, (int)Y);
-		}
-		
-		public PointF ToPointF() 
-		{
-			return new PointF((float)X, (float)Y);
-		}
+        public PointD(string x, string y, CultureInfo cul)
+        {
+            X = Math.Round(Convert.ToDouble(x, cul), 1);
+            Y = Math.Round(Convert.ToDouble(y, cul), 1);
+        }
 
-		public GralData.PointD_3d ToPoint3d()
-		{
-			return new GralData.PointD_3d (X, Y, 0);
-		}
+        public Point ToPoint()
+        {
+            return new Point((int)X, (int)Y);
+        }
 
-		public override bool Equals(object obj) 
-		{
-			return obj is PointD d && this == d;
-		}
-		public override int GetHashCode() 
-		{
-			return X.GetHashCode() ^ Y.GetHashCode();
-		}
-		public static bool operator ==(PointD a, PointD b) 
-		{
-			return a.X == b.X && a.Y == b.Y;
-		}
-		public static bool operator !=(PointD a, PointD b) 
-		{
-			return !(a == b);
-		}
-	}
+        public PointF ToPointF()
+        {
+            return new PointF((float)X, (float)Y);
+        }
+
+        public GralData.PointD_3d ToPoint3d()
+        {
+            return new GralData.PointD_3d(X, Y, 0);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PointD d && this == d;
+        }
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode();
+        }
+        public static bool operator ==(PointD a, PointD b)
+        {
+            return a.X == b.X && a.Y == b.Y;
+        }
+        public static bool operator !=(PointD a, PointD b)
+        {
+            return !(a == b);
+        }
+    }
 }

@@ -29,8 +29,8 @@ namespace GralDomain
             }
 
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
-            float[] tabStops = {50.0f, 50.0f, 20.0f, 20f };
+            int pb1_width = picturebox1.Width;
+            float[] tabStops = { 50.0f, 50.0f, 20.0f, 20f };
 
             StringFormat StringFormat2 = new StringFormat
             {
@@ -42,7 +42,7 @@ namespace GralDomain
             Pen penrec;
             if (_drobj.LineColors[0] == Color.Transparent || _drobj.LineColor == Color.Transparent)
             {
-                penrec = new Pen (Color.Blue);
+                penrec = new Pen(Color.Blue);
                 _drobj.LineColor = Color.Blue;
             }
             else
@@ -62,28 +62,28 @@ namespace GralDomain
                 }
                 else
                 {
-                    width = Convert.ToInt32(Math.Max (1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
+                    width = Convert.ToInt32(Math.Max(1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
                 }
             }
             else
             {
-                width = Convert.ToInt32(Math.Max (1, Math.Min(200, (double) _drobj.LineWidth / 8 * factor_x)));
+                width = Convert.ToInt32(Math.Max(1, Math.Min(200, (double)_drobj.LineWidth / 8 * factor_x)));
             }
 
             //width = 3;
             penrec.Width = width;
             width *= 2;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
 
             int i = 0;
-            foreach(string info in _drobj.ItemInfo)
+            foreach (string info in _drobj.ItemInfo)
             {
                 try
                 {
                     if (i < _drobj.ShpPoints.Count)
                     {
-                        float x1 = (float)((_drobj.ShpPoints[i].X + _drobj.ContourLabelDist - form1_west) * factor_x + TransformX) ;
+                        float x1 = (float)((_drobj.ShpPoints[i].X + _drobj.ContourLabelDist - form1_west) * factor_x + TransformX);
                         float y1 = (float)((_drobj.ShpPoints[i].Y - _drobj.ContourLabelDist - form1_north) * factor_y + TransformY);
                         if ((x1 < 0) || (y1 < 0) || (x1 > pb1_width) || (y1 > pb1_height))
                         {

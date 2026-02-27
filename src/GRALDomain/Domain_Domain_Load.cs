@@ -10,12 +10,11 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
-using GralStaticFunctions;
-using GralItemData;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -353,6 +352,11 @@ namespace GralDomain
                 myIcon.Dispose();
                 //domain_lock_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
                 //toolTip1.SetToolTip(domain_lock_button, "GRAL project is unlocked");
+            }
+            //enable support for high contrast themes
+            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
+            {
+                Gral.Main.LoopAllControls(this.Controls);
             }
 
             Picturebox1_Paint();

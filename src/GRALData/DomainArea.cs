@@ -16,18 +16,18 @@ namespace GralData
     /// Data container for meteopgt.all lines with sortable frequency 
     /// </summary>
     public class DomainArea
-	{
-		public double North{ get; set; }
-		public double East{ get; set; }
-		public double South{ get; set; }
-		public double West{ get; set; }
-		
-		public DomainArea()
-		{
-			North = 0;
-			West = 0;
-			East = 0;
-			South = 0;
-		}
-	}
+    {
+        public double North { get; set; }
+        public double East { get; set; }
+        public double South { get; set; }
+        public double West { get; set; }
+
+        public DomainArea()
+        {
+            North = 0;
+            West = 0;
+            East = 0;
+            South = 0;
+        }
+    }
 }

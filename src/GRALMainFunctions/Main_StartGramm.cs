@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Windows.Forms;
 using GralIO;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -68,11 +68,11 @@ namespace Gral
             }
             else
             {
-                #if __MonoCS__
+#if __MonoCS__
                 filePaths = Directory.GetFiles(Project_Computation_Path, "GRAMM*.dll", SearchOption.TopDirectoryOnly);
-                #else
+#else
                 filePaths = Directory.GetFiles(Project_Computation_Path, "GRAMM*.bat", SearchOption.TopDirectoryOnly);
-                #endif
+#endif
                 if (filePaths.Length > 0)
                 {
                     dir = Path.GetDirectoryName(filePaths[0]);
@@ -84,12 +84,12 @@ namespace Gral
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
-            
-            #if __MonoCS__
+
+#if __MonoCS__
             dialog.Filter = "GRAMM executable (GRAMM*.dll;GRAMM)|GRAMM*.dll;GRAMM";
-            #else
+#else
             dialog.Filter = "GRAMM executable (GRAMM*.exe;GRAMM*.bat)|GRAMM*.exe;GRAMM*.bat";
-            #endif
+#endif
             dialog.Title = "Select GRAMM executable";
             // dialog.ShowHelp = true;
 
@@ -123,15 +123,15 @@ namespace Gral
 
                             // copy additional files for dotnet version
                             string batch = String.Empty;
-                            #if __MonoCS__
+#if __MonoCS__
                             if (Path.GetExtension(dialog.FileName).ToLower() == ".dll")
                                 batch = "GRAMM*.dll";
-                            #else
+#else
                             if (Path.GetExtension(dialog.FileName).ToLower() == ".bat")
                             {
                                 batch = "GRAMM*.bat";
                             }
-                            #endif
+#endif
 
                             if (batch != String.Empty)
                             {
@@ -169,7 +169,7 @@ namespace Gral
                     if (numericUpDown33.Value == 1) // one instance -> start GRAMM as usual
                     {
                         //start computation routine GRAMM*.exe to compute wind fields
-                        #if __MonoCS__
+#if __MonoCS__
                         try
                         {
                             string command = String.Empty;
@@ -209,7 +209,7 @@ namespace Gral
                         {
                             MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        #else
+#else
 
                         GRAMMProcess = new Process
                         {
@@ -221,8 +221,8 @@ namespace Gral
                         GRAMMProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
                         GRAMMProcess.StartInfo.Arguments = "\"" + GRAMM_Project_Path + "\"";
                         GRAMMProcess.Start();
-                        
-                        #endif
+
+#endif
                     }
                     else // multi instances -> start multiple instances of GRAMM
                     {
@@ -251,8 +251,7 @@ namespace Gral
                         }
 
                         // now loop through the GRAMM instances
-                        int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) /
-                                                              (double)numericUpDown33.Value));
+                        int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numericUpDown33.Value));
                         int instance_start = first_sit;
                         int instance_end;
                         int count = 1;
@@ -267,7 +266,7 @@ namespace Gral
                             if (count == 1) // first instance
                             {
                                 //start computation routine GRAMM*.exe to compute wind fields
-                                #if __MonoCS__
+#if __MonoCS__
                                 try
                                 {
                                     if (Path.GetFileName(GRAMM_Program_Path).Equals("GRAMM")) // new GRAMM version from .NET5
@@ -298,7 +297,7 @@ namespace Gral
                                 {
                                     MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
-                                #else
+#else
                                 GRAMMProcess = new Process
                                 {
                                     EnableRaisingEvents = true
@@ -317,7 +316,7 @@ namespace Gral
                                 }
 
                                 GRAMMProcess.Start();
-                                #endif
+#endif
                                 Thread.Sleep(5000);
                             }
                             else // further instances
@@ -369,7 +368,7 @@ namespace Gral
                                     gramm_local.StartInfo.Arguments = " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }
                                 gramm_local.Start();
-                                #endif
+#endif
                                 Thread.Sleep(500);
                             }
 
@@ -449,15 +448,15 @@ namespace Gral
         //GRAMM simulations finished or interrupted
         private void GrammExited(object sender, EventArgs e)
         {
-            #if __MonoCS__
-            #else
+#if __MonoCS__
+#else
             GRAMMProcess.EnableRaisingEvents = false;
             GRAMMProcess.Dispose();
             System.Threading.Thread.Sleep(1000);
             //check if GRAL simulation should be enabled
-            Invoke(new showtopo(Enable_GRAL));
+            Invoke(new showTopo(Enable_GRAL));
             MessageBox.Show("GRAMM simulation stopped or interrupted", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-            #endif
+#endif
         }
 
         /// <summary>
@@ -467,10 +466,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMStopCalculation(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
-            #else
+#else
             try
             {
                 GRAMMProcess.Kill();
@@ -484,7 +483,7 @@ namespace Gral
             GRAMMin(EmifileReset);
             //check if GRAL simulation should be enabled
             Enable_GRAL();
-            #endif
+#endif
         }
 
         /// <summary>
@@ -494,10 +493,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMPauseCalculation(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
-            #endif
+#endif
 
             try
             {

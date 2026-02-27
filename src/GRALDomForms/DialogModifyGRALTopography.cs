@@ -19,36 +19,36 @@ namespace GralDomForms
     /// Dialog for the modification of GRAL high resolution topography
     /// </summary>
     public partial class DialogModifyGRALTopography : Form
-	{
-		public GralData.TopoModifyClass modify;
-		
-		public DialogModifyGRALTopography()
-		{
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
-			InitializeComponent();
-		}
-		
-		void DialogModifyGRALTopographyLoad(object sender, EventArgs e)
-		{
-		    #if __MonoCS__
+    {
+        public GralData.TopoModifyClass modify;
+
+        public DialogModifyGRALTopography()
+        {
+            //
+            // The InitializeComponent() call is required for Windows Forms designer support.
+            //
+            InitializeComponent();
+        }
+
+        void DialogModifyGRALTopographyLoad(object sender, EventArgs e)
+        {
+#if __MonoCS__
             // set Numericupdowns-Alignement to Left in Linux
             var allNumUpDowns = Gral.Main.GetAllControls<NumericUpDown>(this);
             foreach (NumericUpDown nu in allNumUpDowns)
             {
                 nu.TextAlign = HorizontalAlignment.Left;
             }
-            #else
-			#endif
-			
-			numericUpDown1.Value = Convert.ToDecimal(modify.Height);
-			numericUpDown2.Value = Convert.ToDecimal(modify.Hmax);
-			numericUpDown1.Value = Convert.ToDecimal(modify.Hmin);
-			
-			checkBox1.Checked = modify.AbsoluteHeight;
-			
-			if ((modify.Raster) < comboBox1.Items.Count && (modify.Raster) > 0)
+#else
+#endif
+
+            numericUpDown1.Value = Convert.ToDecimal(modify.Height);
+            numericUpDown2.Value = Convert.ToDecimal(modify.Hmax);
+            numericUpDown1.Value = Convert.ToDecimal(modify.Hmin);
+
+            checkBox1.Checked = modify.AbsoluteHeight;
+
+            if ((modify.Raster) < comboBox1.Items.Count && (modify.Raster) > 0)
             {
                 comboBox1.SelectedIndex = modify.Raster;
             }
@@ -57,47 +57,47 @@ namespace GralDomForms
                 comboBox1.SelectedIndex = 0;
             }
         }
-		
-		// OK
-		void Button2Click(object sender, EventArgs e)
-		{
-			modify.Height = (float) (numericUpDown1.Value);
-			modify.AbsoluteHeight = checkBox1.Checked;
-			modify.Raster = comboBox1.SelectedIndex;
-			modify.Hmax = (float) (numericUpDown2.Value);
-			modify.Hmin = (float) (numericUpDown3.Value);
-		}
-		
-		// Cancel
-		void Button1Click(object sender, EventArgs e)
-		{
-			
-		}
-		
-		void DialogModifyGRALTopographyFormClosed(object sender, FormClosedEventArgs e)
-		{
-		
-		}
-		
-		void CheckBox1CheckedChanged(object sender, EventArgs e)
-		{
-			if (checkBox1.Checked)
-			{
-				numericUpDown2.Enabled = false;
-				numericUpDown3.Enabled = false;
-				label3.Enabled = false;
-				label4.Enabled = false;
-				label1.Text = "Height [m] (abs)";
-			}
-			else
-			{
-				numericUpDown2.Enabled = true;
-				numericUpDown3.Enabled = true;
-				label3.Enabled = true;
-				label4.Enabled = true;
-				label1.Text = "Height [m] (rel)";
-			}
-				
-		}
-	}
+
+        // OK
+        void Button2Click(object sender, EventArgs e)
+        {
+            modify.Height = (float)(numericUpDown1.Value);
+            modify.AbsoluteHeight = checkBox1.Checked;
+            modify.Raster = comboBox1.SelectedIndex;
+            modify.Hmax = (float)(numericUpDown2.Value);
+            modify.Hmin = (float)(numericUpDown3.Value);
+        }
+
+        // Cancel
+        void Button1Click(object sender, EventArgs e)
+        {
+
+        }
+
+        void DialogModifyGRALTopographyFormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+
+        void CheckBox1CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                numericUpDown2.Enabled = false;
+                numericUpDown3.Enabled = false;
+                label3.Enabled = false;
+                label4.Enabled = false;
+                label1.Text = "Height [m] (abs)";
+            }
+            else
+            {
+                numericUpDown2.Enabled = true;
+                numericUpDown3.Enabled = true;
+                label3.Enabled = true;
+                label4.Enabled = true;
+                label1.Text = "Height [m] (rel)";
+            }
+
+        }
+    }
 }

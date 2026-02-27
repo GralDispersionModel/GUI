@@ -38,14 +38,14 @@ namespace GralStaticFunctions
         public static readonly Guid FileDialogTopo = new Guid("A2234CDE-CC12-1AE2-BAD3-223CA12AB231");
         public static readonly Guid FileDialogExe = new Guid("A2234CDE-CC12-1AE2-BAD3-223CA12AB232");
         private static readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        
+
         /// <summary>
         /// Convert an invariant culture string with a double number to a local culture string
         /// </summary>
         public static string StrgToICult(string text)
         {
             double dblOut;
-        
+
             if (double.TryParse(text, out dblOut) == true) // try to parse with local culture settings
             {
                 text = dblOut.ToString(ic);
@@ -56,7 +56,7 @@ namespace GralStaticFunctions
             }
             return text;
         }
-        
+
         /// <summary>
         /// Convert a local culture string with a double number to an invariant culture string
         /// </summary>
@@ -75,11 +75,11 @@ namespace GralStaticFunctions
                     text = dblOut.ToString(NumberFormat); // use local culture for the conversion
                 }
             }
-            catch{}
+            catch { }
             return text;
         }
-        
-        
+
+
         /// <summary>
         /// Convert a local culture double number to a local culture string
         /// </summary>
@@ -96,7 +96,7 @@ namespace GralStaticFunctions
             }
             return text;
         }
-        
+
         /// <summary>
         /// Convert a local culture double number to an invariant culture string
         /// </summary>
@@ -105,7 +105,7 @@ namespace GralStaticFunctions
             String text = dblout.ToString(CultureInfo.InvariantCulture);
             return text;
         }
-        
+
         /// <summary>
         /// Dialog to set the static small font object
         /// </summary>
@@ -124,7 +124,7 @@ namespace GralStaticFunctions
                 }
             }
         }
-        
+
         /// <summary>
         /// Convert an invariant culture text (change , to .) to a double number
         /// </summary>
@@ -149,7 +149,7 @@ namespace GralStaticFunctions
             }
             return dblOut;
         }
-        
+
         /// <summary>
         /// Convert an invariant culture text to a double number
         /// </summary>
@@ -158,7 +158,7 @@ namespace GralStaticFunctions
         public static double TxtToDblICult(string Text, bool ShowMessage)
         {
             double dblOut;
-            
+
             try
             {
                 dblOut = double.Parse(Text, System.Globalization.CultureInfo.InvariantCulture);
@@ -173,7 +173,7 @@ namespace GralStaticFunctions
             }
             return dblOut;
         }
-        
+
         /// <summary>
         /// Convert a current cutlture text to a double number
         /// </summary>
@@ -182,7 +182,7 @@ namespace GralStaticFunctions
         public static double TxtToDblLCult(string Text, bool ShowMessage)
         {
             double dblOut;
-            
+
             try
             {
                 dblOut = double.Parse(Text, System.Globalization.CultureInfo.CurrentCulture);
@@ -234,8 +234,8 @@ namespace GralStaticFunctions
             }
             return inside;
         }
-        
-         
+
+
         //routine to check whether a point is within a polygon or not
         /// <summary>
         /// Check if a point is within a polygon
@@ -249,7 +249,7 @@ namespace GralStaticFunctions
             {
                 return isInside;
             }
-            
+
             for (int i = 0, j = poly.Count - 1; i < poly.Count; j = i++)
             {
                 if (((poly[i].Y > point.Y) != (poly[j].Y > point.Y)) &&
@@ -260,7 +260,7 @@ namespace GralStaticFunctions
             }
             return isInside;
         }
- 
+
         /// <summary>
         /// Check if a point is within a polygon
         /// </summary>
@@ -331,7 +331,7 @@ namespace GralStaticFunctions
             //MessageBox.Show(this, "Number of vertices is below 3\t\nNo area could be computed");
             return area;
         }
-        
+
 
         //compute lenght of a polygon
         /// <summary>
@@ -368,7 +368,7 @@ namespace GralStaticFunctions
                 polypoints[numpoints] = polypoints[0];
                 for (int i = 0; i < numpoints - 1; i++)
                 {
-                    lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) + 
+                    lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) +
                                         Math.Pow(polypoints[i].Y - polypoints[i + 1].Y, 2) +
                                         Math.Pow(polypoints[i].Z - polypoints[i + 1].Z, 2));
                 }
@@ -383,7 +383,7 @@ namespace GralStaticFunctions
         /// Compute the lenght of a polyline
         /// </summary>
         /// <param name="polypoints">List of PointD with polygon points</param>
-        public static double CalcLenght(List <GralDomain.PointD> polypoints)
+        public static double CalcLenght(List<GralDomain.PointD> polypoints)
         {
             double lenght = 0;
             if (polypoints.Count > 1)
@@ -409,7 +409,7 @@ namespace GralStaticFunctions
             {
                 for (int i = 0; i < polypoints.Count - 1; i++)
                 {
-                    lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) + 
+                    lenght += Math.Sqrt(Math.Pow(polypoints[i].X - polypoints[i + 1].X, 2) +
                                         Math.Pow(polypoints[i].Y - polypoints[i + 1].Y, 2) +
                                         Math.Pow(polypoints[i].Z - polypoints[i + 1].Z, 2));
                 }
@@ -482,13 +482,13 @@ namespace GralStaticFunctions
 
             return a;
         }
-        
+
         // counts the numbers of lines of a text file
         /// <summary>
         /// Counts the number of lines in a text file
         /// </summary>
         /// <param name="filename">Full path and name of a text file</param> 
-        public static long CountLinesInFile(string filename) 
+        public static long CountLinesInFile(string filename)
         {
             long count = 0;
             try
@@ -503,10 +503,10 @@ namespace GralStaticFunctions
                 }
             }
             catch
-            {}
+            { }
             return count;
         }
-        
+
         // Get a Source-Group Number from the string
         /// <summary>
         /// Returns the source group number in a comma seperated string
@@ -526,36 +526,36 @@ namespace GralStaticFunctions
             }
             return nr;
         }
-        
-        
-       // Retrieve a decimal span between min and max value
-       /// <summary>
-       /// Retrieve a decimal span between min and max value
-       /// </summary>
-       /// <param name="min">Allowed min value</param>
-       /// <param name="max">Allowed max value</param>
-       /// <param name="val">Value to check</param>
-       public static decimal ValueSpan(double min, double max, double val)
-       {
-            decimal v = (decimal) Math.Max(min, Math.Min(max, val));
+
+
+        // Retrieve a decimal span between min and max value
+        /// <summary>
+        /// Retrieve a decimal span between min and max value
+        /// </summary>
+        /// <param name="min">Allowed min value</param>
+        /// <param name="max">Allowed max value</param>
+        /// <param name="val">Value to check</param>
+        public static decimal ValueSpan(double min, double max, double val)
+        {
+            decimal v = (decimal)Math.Max(min, Math.Min(max, val));
             return v;
-       }
-       
-       /// <summary>
-       /// Retrieve a integer span between min and max value
-       /// </summary>
-       /// <param name="min">Allowed min value</param>
-       /// <param name="max">Allowed max value</param>
-       /// <param name="val">Value to check</param>
-       public static int ValueSpan(double min, double max, Int32 val)
-       {
-            int v = (int) Math.Max(min, Math.Min(max, val));
+        }
+
+        /// <summary>
+        /// Retrieve a integer span between min and max value
+        /// </summary>
+        /// <param name="min">Allowed min value</param>
+        /// <param name="max">Allowed max value</param>
+        /// <param name="val">Value to check</param>
+        public static int ValueSpan(double min, double max, Int32 val)
+        {
+            int v = (int)Math.Max(min, Math.Min(max, val));
             return v;
-       }
-       
+        }
+
         // Restricts the entry of characters to digits (including hex), the negative sign,
         // the decimal point, and editing keystrokes (backspace).
-        
+
         /// <summary>
         /// Restricts the entry of characters to digits (including hex), the negative sign, the decimal point, and editing keystrokes (backspace).
         /// </summary>
@@ -597,7 +597,7 @@ namespace GralStaticFunctions
                 e.Handled = true;
             }
         }
-        
+
         /// <summary>
         /// Shows a simple message box, similar to a MessageBox
         /// </summary>
@@ -623,23 +623,23 @@ namespace GralStaticFunctions
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
 
-                label.SetBounds(9, 20, 372, 13);
+                label.SetBounds(9, 20, 220, 30);
                 buttonOk.SetBounds(9, 72, 75, 23);
                 buttonCancel.SetBounds(100, 72, 75, 23);
 
-                label.AutoSize = false;
+                label.AutoSize = true;
                 label.Location = new Point(9, 20);
-                label.Size = new System.Drawing.Size(372, 13);
-
+                label.Size = new System.Drawing.Size(100,30);
+                
                 buttonOk.Location = new Point(9, 72);
                 buttonOk.Size = new System.Drawing.Size(75, 23);
                 buttonCancel.Location = new Point(100, 72);
                 buttonCancel.Size = new System.Drawing.Size(75, 23);
 
-                buttonOk.Anchor = AnchorStyles.Top| AnchorStyles.Left;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
                 buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
-                form.ClientSize = new Size(Math.Max(252, label.Width + 20), 110);
+                form.ClientSize = new Size(Math.Max(185, label.Width + 20), 110);
                 form.Controls.AddRange(new Control[] { label, buttonOk, buttonCancel });
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
@@ -653,7 +653,7 @@ namespace GralStaticFunctions
             }
             return dialogResult;
         }
-        
+
         /// <summary>
         /// Shows a simple message box, similar to a MessageBox and returns a string
         /// </summary>
@@ -671,7 +671,7 @@ namespace GralStaticFunctions
                 TextBox textBox = new TextBox();
                 Button buttonOk = new Button();
                 Button buttonCancel = new Button();
-                
+
                 form.Text = title;
                 label.Text = promptText;
                 textBox.Text = value;
@@ -681,28 +681,29 @@ namespace GralStaticFunctions
                 buttonOk.DialogResult = DialogResult.OK;
                 buttonCancel.DialogResult = DialogResult.Cancel;
 
-                label.SetBounds(9, 10, 372, 16);
-                textBox.SetBounds(12, 36, 372, 20);
+                label.SetBounds(9, 10, 180, 30);
+                textBox.SetBounds(12, 36, 190, 40);
                 buttonOk.SetBounds(9, 72, 75, 23);
                 buttonCancel.SetBounds(100, 72, 75, 23);
 
-                label.AutoSize = false;
+                label.AutoSize = true;
                 label.Location = new Point(9, 10);
-                label.Size = new System.Drawing.Size(372, 16);
+                label.Size = new System.Drawing.Size(172, 30);
                 buttonOk.Location = new Point(9, 72);
                 buttonOk.Size = new System.Drawing.Size(75, 23);
                 buttonCancel.Location = new Point(100, 72);
                 buttonCancel.Size = new System.Drawing.Size(75, 23);
-                textBox.Location = new Point(12, 36);
-                textBox.Size = new System.Drawing.Size(372, 20);
-
+                textBox.Location = new Point(12, 35);
+                textBox.Size = new System.Drawing.Size(175, 40);
+                //textBox.ScrollBars = ScrollBars.Horizontal;
+                
                 textBox.Anchor |= AnchorStyles.Top | AnchorStyles.Left;
                 buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
                 buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
-                form.ClientSize = new Size(Math.Max(396, label.Width + 20), 110);
+                form.ClientSize = new Size(Math.Max(185, label.Width + 20), 110);
                 form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+                //form.ClientSize = new Size(Math.Max(185, label.Right + 10), form.ClientSize.Height);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -744,13 +745,13 @@ namespace GralStaticFunctions
                 buttonOk.DialogResult = DialogResult.Yes;
                 buttonCancel.DialogResult = DialogResult.No;
 
-                label.SetBounds(9, 20, 372, 13);
+                label.SetBounds(9, 20, 175, 48);
                 buttonOk.SetBounds(9, 72, 75, 23);
                 buttonCancel.SetBounds(100, 72, 75, 23);
 
-                label.AutoSize = false;
+                label.AutoSize = true;
                 label.Location = new Point(9, 10);
-                label.Size = new System.Drawing.Size(372, 13);
+                label.Size = new System.Drawing.Size(175, 16);
                 buttonOk.Location = new Point(9, 72);
                 buttonOk.Size = new System.Drawing.Size(75, 23);
                 buttonCancel.Location = new Point(100, 72);
@@ -760,7 +761,7 @@ namespace GralStaticFunctions
                 buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
                 form.Controls.AddRange(new Control[] { label, buttonOk, buttonCancel });
-                form.ClientSize = new Size(Math.Max(396, label.Width + 20), 110);
+                form.ClientSize = new Size(Math.Max(185, label.Width + 20), 110);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
                 form.StartPosition = FormStartPosition.Manual;
                 form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -779,6 +780,75 @@ namespace GralStaticFunctions
         }
 
         /// <summary>
+        /// Input Box with a numeric up down item
+        /// </summary>
+        /// <param name="Title">Title of the message box</param> 
+        /// <param name="promtText">Text to be shown</param>
+        /// <param name="LowLimit">Lower limit of the numeric input box</param>
+        /// <param name="UpLimit">Upper limit of the numeric input box</param>
+        /// <param name="ReturnValue">User input</param>
+        /// <returns>DialogResul Yes or No</returns>
+        public static DialogResult InputBoxNumUpDown(string Title, string PromptText, int LowLimit, int UpLimit, ref int ReturnValue)
+        {
+            DialogResult dialogResult = DialogResult.Cancel;
+            using (Form form = new Form())
+            {
+                Label label = new Label();
+                NumericUpDown numdown = new NumericUpDown();
+                Button buttonOk = new Button();
+                Button buttonCancel = new Button();
+
+                form.Text = Title;
+                label.Text = PromptText;
+                numdown.Maximum = UpLimit;
+                numdown.Minimum = LowLimit;
+                numdown.Value = ReturnValue;
+                numdown.Increment = 1;
+
+                buttonOk.Text = "OK";
+                buttonCancel.Text = "Cancel";
+                buttonOk.DialogResult = DialogResult.OK;
+                buttonCancel.DialogResult = DialogResult.Cancel;
+
+                label.AutoSize = true;
+                label.SetBounds(9, 10, 185, 13);
+                label.Location = new Point(9, 10);
+                label.Size = new System.Drawing.Size(175, 30);
+
+                numdown.SetBounds(15, 36, 160, 20);
+                numdown.Location = new Point(15, 36);
+                numdown.Size = new System.Drawing.Size(160, 20);
+
+                buttonOk.SetBounds(9, 72, 75, 23);
+                buttonCancel.SetBounds(109, 72, 75, 23);
+                buttonOk.Location = new Point(9, 72);
+                buttonOk.Size = new System.Drawing.Size(75, 23);
+                buttonCancel.Location = new Point(109, 72);
+                buttonCancel.Size = new System.Drawing.Size(75, 23);
+
+                numdown.Anchor |= AnchorStyles.Left;
+                buttonOk.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+                form.Controls.AddRange(new Control[] { label, numdown, buttonOk, buttonCancel });
+                form.ClientSize = new Size(Math.Max(185, label.Width + 20), 110);
+                form.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                form.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
+                form.FormBorderStyle = FormBorderStyle.FixedDialog;
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.MinimizeBox = false;
+                form.MaximizeBox = false;
+                form.AcceptButton = buttonOk;
+                form.CancelButton = buttonCancel;
+
+                dialogResult = form.ShowDialog();
+                ReturnValue = Convert.ToInt32(numdown.Value);
+            }
+            return dialogResult;
+        }
+
+        /// <summary>
         /// Checks if the file GFF_Filepath.txt exist and reads the path to the flow field files
         /// </summary>
         /// <param name="ComputationPath">Path of the computation folder</param> 
@@ -786,7 +856,7 @@ namespace GralStaticFunctions
         public static string GetGffFilePath(string ComputationPath)
         {
             string gff_filepath = ComputationPath;
-            
+
             try
             {
                 if (File.Exists(Path.Combine(ComputationPath, "GFF_FilePath.txt")))
@@ -804,7 +874,7 @@ namespace GralStaticFunctions
                     }
                 }
             }
-            catch{}
+            catch { }
             return gff_filepath;
         }
 
@@ -814,7 +884,7 @@ namespace GralStaticFunctions
         public static int GetScreenAtMousePosition()
         {
             Screen screen = Screen.FromPoint(Cursor.Position);
-            return screen.Bounds.Left;            
+            return screen.Bounds.Left;
         }
 
         /// <summary>

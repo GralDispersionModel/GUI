@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralMessage;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralData;
-using GralMessage;
 
 namespace Gral
 {
@@ -61,7 +60,7 @@ namespace Gral
                         }
                     }
                 }
-                
+
                 files_conc = di.GetFiles("*.grz"); //compressed files ?
                 if (files_conc.Length > 0)
                 {
@@ -144,7 +143,7 @@ namespace Gral
                 }
 
                 DispNrChanged(null, null); // change displaynumber
-                GralFileSizes();
+                UpdateFileSize(null, null);
             }
             catch
             { }
@@ -196,7 +195,7 @@ namespace Gral
             if (Main.GUISettings.DeleteFilesToRecyclingBin)
             {
                 System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
-                WaitProgressbarCancel wait = new WaitProgressbarCancel("Move files to the recycling bin", ref cts);
+                WaitProgressbarCancel wait = new WaitProgressbarCancel("Move files to the recycle bin", ref cts);
                 wait.ProgressbarUpdate(this, Math.Max(2, Files.Length / 40 + Files.Length % 40));
                 wait.Show();
 
@@ -218,7 +217,7 @@ namespace Gral
                         break;
                     }
                 }
-               
+
                 for (; i < Files.Length; i++)
                 {
                     wait.ProgressbarUpdate(this, 0);
@@ -351,7 +350,7 @@ namespace Gral
                                     return;
                                 }
                             }
-                            
+
                             GRAMM_Locked = false;                 // unlock GRAMM project
                             Gramm_locked_buttonClick(null, null); // change locked-Button
                         }
@@ -365,7 +364,7 @@ namespace Gral
                 }
 
                 DispnrGrammChanged(null, null); // change displaynumber
-                GralFileSizes(); // actualize file size
+                UpdateFileSize(null, null); // actualize file size
             }
             catch
             { }
@@ -385,7 +384,7 @@ namespace Gral
 
             DeleteGralGffFile();
         }
-        
+
         //delete file GRAL_topofile.txt whenever items are changed by the user affecting the topography
         /// <summary>
         /// Deletes the high resolution GRAL_topofile.txt
@@ -422,7 +421,7 @@ namespace Gral
             dia = DialogResult.OK;
 
             string GffFilePath = GralStaticFunctions.St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation")) + Path.DirectorySeparatorChar;
-            
+
             DirectoryInfo di = new DirectoryInfo(GffFilePath);
             FileInfo[] files_conc = di.GetFiles("*.gff");
 
@@ -444,8 +443,7 @@ namespace Gral
                     }
                 }
             }
-
-            GralFileSizes();
+            UpdateFileSize(null, null);
             return dia;
         }
 
@@ -473,7 +471,7 @@ namespace Gral
                     button51.Visible = false;
                     TabControl1Click(null, null);
                 }
-                catch{}
+                catch { }
             }
         }
     }

@@ -10,6 +10,10 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralDomain;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,11 +21,6 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-
-using Gral;
-using GralDomain;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralItemForms
 {
@@ -118,7 +117,7 @@ namespace GralItemForms
             y_act = 10;
             for (int i = 0; i < 10; i++)
             {
-                createTextbox(6, Convert.ToInt32(y_act) + Convert.ToInt32(i * (TBHeight + 7)), TBWidth, TBHeight, i);
+                CreateTextbox(6, Convert.ToInt32(y_act) + Convert.ToInt32(i * (TBHeight + 7)), TBWidth, TBHeight, i);
                 dep[i] = new Deposition(); // initialize Deposition array
                 dep[i].init();
             }
@@ -158,7 +157,7 @@ namespace GralItemForms
 #endif
         }
 
-        private void createTextbox(int x0, int y0, int b, int h, int nr)
+        private void CreateTextbox(int x0, int y0, int b, int h, int nr)
         {
             //list box for selcting pollutants
             linepollutant[nr] = new ComboBox
@@ -207,10 +206,10 @@ namespace GralItemForms
             };
             tabPage1.Controls.Add(but1[nr]);
             toolTip1.SetToolTip(but1[nr], "Click to set deposition - green: deposition set");
-            but1[nr].Click += new EventHandler(edit_deposition);
+            but1[nr].Click += new EventHandler(Edit_deposition);
         }
 
-        private void listBox_DrawItem(object sender, DrawItemEventArgs e)
+        private void ListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
             // Define the default color of the brush as black.
@@ -264,7 +263,7 @@ namespace GralItemForms
                     }
                     else
                     {
-                       but1[nr].Text = "[MOU/h/km]";
+                        but1[nr].Text = "[MOU/h/km]";
                     }
                 }
                 else
@@ -288,7 +287,7 @@ namespace GralItemForms
         }
 
         //increase the number of line sources by one
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             if ((textBox1.Text != "") && (textBox2.Text != ""))
             {
@@ -307,7 +306,7 @@ namespace GralItemForms
         }
 
         //scroll between the line sources
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void TrackBar1_Scroll(object sender, EventArgs e)
         {
             SaveArray(false);
             ItemDisplayNr = trackBar1.Value - 1;
@@ -421,7 +420,7 @@ namespace GralItemForms
                     }
 
                     listBox1.SelectedIndex = listBox1.TopIndex; // NEMO
-                    
+
                     _ls.Name = textBox1.Text;
                     _ls.Section = textBox4.Text;
                     _ls.Height = height;
@@ -586,7 +585,7 @@ namespace GralItemForms
                     }
                 }
 
-                
+
                 trackBar2.Minimum = 1;
                 trackBar2.Maximum = _ldata.Pt.Count;
                 trackBar2.Value = 1;
@@ -603,7 +602,7 @@ namespace GralItemForms
                     trackBar2.Enabled = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
                 textBox1.Text = "Line Source";
@@ -634,7 +633,7 @@ namespace GralItemForms
         }
 
         //remove actual line source data
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             RemoveOne(true);
             RedrawDomain(this, null);
@@ -695,7 +694,7 @@ namespace GralItemForms
         }
 
         //remove all line sources
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             if (St_F.InputBox("Attention", "Delete all line sources??", this) == DialogResult.OK)
             {
@@ -735,7 +734,7 @@ namespace GralItemForms
         }
 
         //save source group
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
             if (listBox2.SelectedIndex < 0 && listBox2.Items.Count > 1) // no source group selected & more than 1 source groups available
             {
@@ -882,14 +881,14 @@ namespace GralItemForms
 
 
         //change traffic situation
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //compute PC speed
             PC_speed();
         }
 
         //change slope
-        private void numericUpDown4_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown4_ValueChanged(object sender, EventArgs e)
         {
             //compute PC speed
             PC_speed();
@@ -981,7 +980,7 @@ namespace GralItemForms
                     if (c != tabPage1 && c != trackBar2)
                     {
                         c.Enabled = enable;
-                    }    
+                    }
                 }
 
                 foreach (Control c in tabPage1.Controls)
@@ -998,7 +997,7 @@ namespace GralItemForms
                     labelpollutant[i].Visible = !enable;
                 }
                 // enable switch to show emission rate in kg/h/km or kg/h
-                checkBox3.Enabled = true; 
+                checkBox3.Enabled = true;
             }
             Exit.Enabled = true;
             panel1.Enabled = true;
@@ -1079,7 +1078,7 @@ namespace GralItemForms
             }
         }
 
-        private void edit_deposition(object sender, EventArgs e)
+        private void Edit_deposition(object sender, EventArgs e)
         {
             int nr = 0;
             for (int i = 0; i < 10; i++)
@@ -1264,7 +1263,7 @@ namespace GralItemForms
                 if (((sender as Form).ActiveControl is Button) == false)
                 {
                     // cancel if x has been pressed = restore old values!
-                    cancelButtonClick(null, null);
+                    CancelButtonClick(null, null);
                 }
                 // Hide form and send message to caller when user tries to close this form
                 if (!AllowClosing)
@@ -1286,7 +1285,7 @@ namespace GralItemForms
 
             foreach (Button but in but1)
             {
-                but.Click -= new EventHandler(edit_deposition);
+                but.Click -= new EventHandler(Edit_deposition);
             }
 
             textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
@@ -1441,7 +1440,7 @@ namespace GralItemForms
             textBox2.Text = _s;
         }
 
-        private void trackBar2_Scroll(object sender, EventArgs e)
+        private void TrackBar2_Scroll(object sender, EventArgs e)
         {
             int edge = Math.Max(0, trackBar2.Value - 1);
 
@@ -1475,7 +1474,7 @@ namespace GralItemForms
             }
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox2.Checked)
             {
@@ -1484,14 +1483,14 @@ namespace GralItemForms
             else
             {
                 trackBar2.Value = 1;
-                trackBar2.Enabled = false;             
+                trackBar2.Enabled = false;
             }
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs e)
         {
             {
-                get_edgepoint_height(); // get recent edgepoint height
+                Get_edgepoint_height(); // get recent edgepoint height
                 vertices = Convert.ToInt32(textBox2.Text);
                 if (vertices <= 1)
                 {
@@ -1501,7 +1500,7 @@ namespace GralItemForms
                 trackBar2.Maximum = vertices;
             }
         }
-        private void get_edgepoint_height()
+        private void Get_edgepoint_height()
         {
             int edge = Math.Max(0, trackBar2.Value - 1);
             if (edge < Convert.ToInt32(textBox2.Text))
@@ -1521,9 +1520,9 @@ namespace GralItemForms
             }
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            get_edgepoint_height(); // get recent edgepoint height	
+            Get_edgepoint_height(); // get recent edgepoint height	
         }
 
         /// <summary>
@@ -1531,9 +1530,9 @@ namespace GralItemForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button9_Click(object sender, EventArgs e)
+        private void Button9_Click(object sender, EventArgs e)
         {
-            button4_Click(sender, e);
+            Button4_Click(sender, e);
             FillValues();
             // send Message to domain Form, that OK button has been pressed
             try
@@ -1551,7 +1550,7 @@ namespace GralItemForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cancelButtonClick(object sender, EventArgs e)
+        private void CancelButtonClick(object sender, EventArgs e)
         {
             ReloadItemData();
             // send Message to domain Form, that Cancel button has been pressed
@@ -1585,11 +1584,11 @@ namespace GralItemForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox3_CheckedChanged(object sender, EventArgs e)
         {
             //lenght in km
-            double lenght = Convert.ToDouble(label15.Text) /1000;
-            
+            double lenght = Convert.ToDouble(label15.Text) / 1000;
+
             // kg/h
             if (checkBox3.Checked)
             {
@@ -1617,7 +1616,7 @@ namespace GralItemForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void label15_TextChanged(object sender, EventArgs e)
+        private void Label15_TextChanged(object sender, EventArgs e)
         {
             double lenght = 0;
             double.TryParse(label15.Text, out lenght);
@@ -1637,7 +1636,7 @@ namespace GralItemForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        private void Panel1_MouseDown(object sender, MouseEventArgs e)
         {
             const int WM_NCLBUTTONDOWN = 0x00A1;
             const int HTCAPTION = 2;
@@ -1652,7 +1651,7 @@ namespace GralItemForms
             if (trackBar1.Value < trackBar1.Maximum)
             {
                 trackBar1.Value++;
-                trackBar1_Scroll(null, null);
+                TrackBar1_Scroll(null, null);
             }
         }
 
@@ -1661,7 +1660,7 @@ namespace GralItemForms
             if (trackBar1.Value > trackBar1.Minimum)
             {
                 trackBar1.Value--;
-                trackBar1_Scroll(null, null);
+                TrackBar1_Scroll(null, null);
             }
         }
     }

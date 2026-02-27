@@ -16,16 +16,16 @@ namespace GralItemData
     /// This class holds the data for the north arrow bitmap
     /// </summary>
     public class NorthArrowData
-	{
-    	public int X     { get; set; }                     	   //x-coordinate of north arrow
-        public int Y     { get; set; }                         //y-coordinate of north arrow
-        public decimal Scale  { get; set; }                    //scale of north arrow
-        
+    {
+        public int X { get; set; }                     	   //x-coordinate of north arrow
+        public int Y { get; set; }                         //y-coordinate of north arrow
+        public decimal Scale { get; set; }                    //scale of north arrow
+
         public NorthArrowData()
         {
-        	X = 0;
-        	Y = 0;
-        	Scale = 1;
+            X = 0;
+            Y = 0;
+            Scale = 1;
         }
-	}
+    }
 }

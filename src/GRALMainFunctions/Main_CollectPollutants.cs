@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GralStaticFunctions;
-using GralItemData;
 
 namespace Gral
 {
@@ -27,13 +27,13 @@ namespace Gral
         {
             listBox5.Items.Clear();
             ChangeButtonLabel(Gral.ButtonColorEnum.ButtonEmission, ButtonColorEnum.RedDot); // Emission label red
-            
-            List <int> SelectedSourceGroups = new List<int>();
-            List <PollutantsData> AllPollutants    = new List<PollutantsData>();
+
+            List<int> SelectedSourceGroups = new List<int>();
+            List<PollutantsData> AllPollutants = new List<PollutantsData>();
             AllPollutants = ReadAllPollutants();  // read all pollutants into this List
-            
+
             //read the seleceted source groups for the simulation
-            for(int i = 0; i < listView1.Items.Count; i++)
+            for (int i = 0; i < listView1.Items.Count; i++)
             {
                 string selpoll = listView1.Items[i].SubItems[0].Text;
                 string[] dummy = selpoll.Split(new char[] { ':' });
@@ -48,9 +48,9 @@ namespace Gral
                 }
                 SelectedSourceGroups.Add(sg);
             }
-            
+
             //when the current source group is selected by the user, the corresponding pollutants are added
-            foreach(PollutantsData _poll in AllPollutants)
+            foreach (PollutantsData _poll in AllPollutants)
             {
                 if (SelectedSourceGroups.Contains(_poll.SourceGroup)) // SG is selected
                 {
@@ -68,23 +68,23 @@ namespace Gral
         /// <summary>
         /// Read pollutants from all sources within the GRAL domain area into this list
         /// </summary>
-        private List <PollutantsData> ReadAllPollutants()
+        private List<PollutantsData> ReadAllPollutants()
         {
             List<PollutantsData> AllPollutants = new List<PollutantsData>();
-            List <PointSourceData> _psList = new List<PointSourceData>();
-            List <AreaSourceData> _asList  = new List<AreaSourceData>();
-            List <LineSourceData> _lsList  = new List<LineSourceData>();
-            List <PortalsData>    _poList  = new List<PortalsData>();
-            
+            List<PointSourceData> _psList = new List<PointSourceData>();
+            List<AreaSourceData> _asList = new List<AreaSourceData>();
+            List<LineSourceData> _lsList = new List<LineSourceData>();
+            List<PortalsData> _poList = new List<PortalsData>();
+
             // load point sources
             PointSourceDataIO _ps = new PointSourceDataIO();
-            string _file = Path.Combine(Main.ProjectName,"Emissions","Psources.txt");
+            string _file = Path.Combine(Main.ProjectName, "Emissions", "Psources.txt");
             _ps.LoadPointSources(_psList, _file);
             _ps = null;
-            foreach(PointSourceData _psdata in _psList)
+            foreach (PointSourceData _psdata in _psList)
             {
-                if (( _psdata.Pt.X >= GralDomRect.West) && (_psdata.Pt.X <= GralDomRect.East) &&
-                    ( _psdata.Pt.Y >= GralDomRect.South) && (_psdata.Pt.Y <= GralDomRect.North) && _psdata.Poll != null)
+                if ((_psdata.Pt.X >= GralDomRect.West) && (_psdata.Pt.X <= GralDomRect.East) &&
+                    (_psdata.Pt.Y >= GralDomRect.South) && (_psdata.Pt.Y <= GralDomRect.North) && _psdata.Poll != null)
                 {
                     AllPollutants.Add(_psdata.Poll);
                 }
@@ -92,13 +92,13 @@ namespace Gral
             _psList.Clear();
             _psList.TrimExcess();
             _psList = null;
-            
+
             // load area sources
             AreaSourceDataIO _as = new AreaSourceDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Asources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Asources.txt");
             _as.LoadAreaData(_asList, _file);
             _as = null;
-            foreach(AreaSourceData _asdata in _asList)
+            foreach (AreaSourceData _asdata in _asList)
             {
                 double xmin = double.MaxValue;
                 double xmax = double.MinValue;
@@ -119,20 +119,20 @@ namespace Gral
             _asList.Clear();
             _asList.TrimExcess();
             _asList = null;
-            
+
             // load line sources
             LineSourceDataIO _ls = new LineSourceDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Lsources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Lsources.txt");
             _ls.LoadLineSources(_lsList, _file);
             _ls = null;
-            foreach(LineSourceData _lsdata in _lsList)
+            foreach (LineSourceData _lsdata in _lsList)
             {
                 double xmin = double.MaxValue;
                 double xmax = double.MinValue;
                 double ymin = double.MaxValue;
                 double ymax = double.MinValue;
                 double lenght = St_F.CalcLenght(_lsdata.Pt) / 1000;
-                
+
                 foreach (GralData.PointD_3d _pt in _lsdata.Pt)
                 {
                     xmin = Math.Min(xmin, _pt.X);
@@ -140,10 +140,10 @@ namespace Gral
                     ymin = Math.Min(ymin, _pt.Y);
                     ymax = Math.Max(ymax, _pt.Y);
                 }
-                
+
                 if ((xmin >= GralDomRect.West) && (xmax <= GralDomRect.East) && (ymin >= GralDomRect.South) && (ymax <= GralDomRect.North) && _lsdata.Poll != null)
                 {
-                    foreach(PollutantsData _lspoll in _lsdata.Poll)
+                    foreach (PollutantsData _lspoll in _lsdata.Poll)
                     {
                         for (int i = 0; i < 10; i++)
                         {
@@ -156,13 +156,13 @@ namespace Gral
             _lsList.Clear();
             _lsList.TrimExcess();
             _lsList = null;
-            
+
             // load portal data
             PortalsDataIO _pd = new PortalsDataIO();
-            _file = Path.Combine(Main.ProjectName,"Emissions","Portalsources.txt");
+            _file = Path.Combine(Main.ProjectName, "Emissions", "Portalsources.txt");
             _pd.LoadPortalSources(_poList, _file);
             _pd = null;
-            foreach(PortalsData _podata in _poList)
+            foreach (PortalsData _podata in _poList)
             {
                 double xmin = double.MaxValue;
                 double xmax = double.MinValue;
@@ -176,10 +176,10 @@ namespace Gral
                 xmax = Math.Max(xmax, _podata.Pt2.X);
                 ymin = Math.Min(ymin, _podata.Pt2.Y);
                 ymax = Math.Max(ymax, _podata.Pt2.Y);
-                
+
                 if ((xmin >= GralDomRect.West) && (xmax <= GralDomRect.East) && (ymin >= GralDomRect.South) && (ymax <= GralDomRect.North) && _podata.Poll != null)
                 {
-                    foreach(PollutantsData _popoll in _podata.Poll)
+                    foreach (PollutantsData _popoll in _podata.Poll)
                     {
                         AllPollutants.Add(_popoll);
                     }
@@ -188,7 +188,7 @@ namespace Gral
             _poList.Clear();
             _poList.TrimExcess();
             _poList = null;
-            
+
             return AllPollutants;
         }
 

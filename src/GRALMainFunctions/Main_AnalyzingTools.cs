@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
-using GralIO;
-using System.Collections.Generic;
 
 namespace Gral
 {
@@ -38,7 +38,7 @@ namespace Gral
         private void AnalyseMeanConcentration(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
+            using (global::GralMainForms.Selectslice sel_slice = new global::GralMainForms.Selectslice())
             {
                 sel_slice.HorSlices = CollectSliceHeights();
 
@@ -46,7 +46,7 @@ namespace Gral
                 {
                     int backgroundNumber = 0;
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
+                    using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 0, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
                     {
                         sel_sg.checkBox3.Visible = false;
                         sel_sg.checkBox1.Visible = false;
@@ -138,7 +138,7 @@ namespace Gral
         private void AnalyseMeanMaxMinConcentration(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
+            using (global::GralMainForms.Selectslice sel_slice = new global::GralMainForms.Selectslice())
             {
                 sel_slice.HorSlices = CollectSliceHeights();
 
@@ -146,7 +146,7 @@ namespace Gral
                 {
                     int backgroundNumber = 0;
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
+                    using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 0, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = true;
                         sel_sg.checkBox2.Visible = true;
@@ -252,7 +252,7 @@ namespace Gral
             }
 
             //select source groups
-            using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 0, ProjectSetting.EmissionModulationPath, Path.Combine(ProjectName, "Computation"), checkBox32.Checked))
+            using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 0, ProjectSetting.EmissionModulationPath, Path.Combine(ProjectName, "Computation"), checkBox32.Checked))
             {
                 sel_sg.checkBox1.Visible = false;
                 sel_sg.checkBox2.Visible = false;
@@ -375,18 +375,18 @@ namespace Gral
         private void AnalyseHighPercentiles(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
+            using (global::GralMainForms.Selectslice sel_slice = new global::GralMainForms.Selectslice())
             {
                 sel_slice.HorSlices = CollectSliceHeights();
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 1, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
+                    using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 1, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
                         sel_sg.checkBox3.Visible = false;
-                        if (numericUpDown4.Value < 3600 && (3600 / numericUpDown4.Value) == (int) (3600 / numericUpDown4.Value))
+                        if (numericUpDown4.Value < 3600 && (3600 / numericUpDown4.Value) == (int)(3600 / numericUpDown4.Value))
                         {
                             sel_sg.EnableHourlyMeanValuesCheckbox = true;
                         }
@@ -447,7 +447,7 @@ namespace Gral
 
                                 DataCollection.BackgroundWorkerFunction = GralBackgroundworkers.BWMode.HighPercentiles; // 40 = compute high percentils
                                 DataCollection.SubHourlyToMeanHourlyConcentrations = sel_sg.HourlyMeanValuesChecked;
-                                DataCollection.SubHourlyTimeSpan = (int) numericUpDown4.Value;
+                                DataCollection.SubHourlyTimeSpan = (int)numericUpDown4.Value;
 
                                 GralBackgroundworkers.ProgressFormBackgroundworker BackgroundStart = new GralBackgroundworkers.ProgressFormBackgroundworker(DataCollection)
                                 {
@@ -473,14 +473,14 @@ namespace Gral
         private void AnalyseOdourMultipleSources(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
+            using (global::GralMainForms.Selectslice sel_slice = new global::GralMainForms.Selectslice())
             {
                 sel_slice.HorSlices = CollectSliceHeights();
 
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 2, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
+                    using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 2, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
@@ -522,7 +522,7 @@ namespace Gral
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
                                 {
-                                    using (GralMainForms.Input_Odour inodour = new GralMainForms.Input_Odour()
+                                    using (global::GralMainForms.Input_Odour inodour = new global::GralMainForms.Input_Odour()
                                     {
                                         StartPosition = FormStartPosition.Manual,
                                         Location = new System.Drawing.Point(this.Left, this.Top),
@@ -712,7 +712,7 @@ namespace Gral
                         }
                     }
                 }
-            }            
+            }
             Cursor = Cursors.Default;
         }
 
@@ -724,27 +724,27 @@ namespace Gral
         private void AnalyseOdourCompostWorks(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
+            using (global::GralMainForms.Selectslice sel_slice = new global::GralMainForms.Selectslice())
             {
                 sel_slice.HorSlices = CollectSliceHeights();
 
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
+                    using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 3, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
                         sel_sg.checkBox3.Visible = false;
                         sel_sg.listBox1.SelectionMode = SelectionMode.One;
                         sel_sg.Prefix = FilePrefix;
-                        
+
                         if (sel_sg.ShowDialog() == DialogResult.OK)
                         {
                             ProjectSetting.EvaluationPath = sel_sg.PathForResultFiles;
                             int backgroundNumber = 0;
                             //select source groups
-                            GralMainForms.Kompost komp = new GralMainForms.Kompost()
+                            global::GralMainForms.Kompost komp = new global::GralMainForms.Kompost()
                             {
                                 StartPosition = FormStartPosition.Manual,
                                 Location = new System.Drawing.Point(this.Left, this.Top),
@@ -793,7 +793,7 @@ namespace Gral
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
                                 {
-                                    using(GralMainForms.Input_Odour inodour = new GralMainForms.Input_Odour()
+                                    using (global::GralMainForms.Input_Odour inodour = new global::GralMainForms.Input_Odour()
                                     {
                                         StartPosition = FormStartPosition.Manual,
                                         Location = new System.Drawing.Point(this.Left, this.Top),
@@ -804,7 +804,7 @@ namespace Gral
                                         {
                                             peakmean = inodour.MeanToPeak;
                                             writeAdditionalFiles = inodour.WriteAdditionalFiles;
-                                            
+
                                             input_correct = true;
                                         }
                                     }
@@ -904,14 +904,14 @@ namespace Gral
         private void AnalyseOdourAllInAllOut(object sender, EventArgs e)
         {
             //select slice
-            using (GralMainForms.Selectslice sel_slice = new GralMainForms.Selectslice())
+            using (global::GralMainForms.Selectslice sel_slice = new global::GralMainForms.Selectslice())
             {
                 sel_slice.HorSlices = CollectSliceHeights();
 
                 if (sel_slice.ShowDialog() == DialogResult.OK)
                 {
                     //select source groups
-                    using (GralMainForms.SelectSourcegroups sel_sg = new GralMainForms.SelectSourcegroups(this, 3, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
+                    using (global::GralMainForms.SelectSourcegroups sel_sg = new global::GralMainForms.SelectSourcegroups(this, 3, ProjectSetting.EmissionModulationPath, ProjectSetting.EvaluationPath, checkBox32.Checked))
                     {
                         sel_sg.checkBox1.Visible = false;
                         sel_sg.checkBox2.Visible = false;
@@ -923,7 +923,7 @@ namespace Gral
                             ProjectSetting.EvaluationPath = sel_sg.PathForResultFiles;
                             int backgroundNumber = 0;
                             //select source group with "all in all out" system
-                            GralMainForms.Allinallout allin = new GralMainForms.Allinallout()
+                            global::GralMainForms.Allinallout allin = new global::GralMainForms.Allinallout()
                             {
                                 Owner = this,
                                 StartPosition = FormStartPosition.Manual,
@@ -964,7 +964,7 @@ namespace Gral
                                 if (files_conc.Length > 0 &&
                                     (Convert.ToDouble(TBox3[0].Value) >= 1.5 * Convert.ToDouble(numericUpDown8.Value))) //use advanced input box if odour files available and lowest conc. layer > 1.5 * vert. extension
                                 {
-                                    using (GralMainForms.Input_Odour inodour = new GralMainForms.Input_Odour()
+                                    using (global::GralMainForms.Input_Odour inodour = new global::GralMainForms.Input_Odour()
                                     {
                                         StartPosition = FormStartPosition.Manual,
                                         Location = new System.Drawing.Point(this.Left, this.Top),
@@ -976,7 +976,7 @@ namespace Gral
                                             //select between constant R90 ratio or variance model
                                             peakmean = inodour.MeanToPeak;
                                             writeAdditionalFiles = inodour.WriteAdditionalFiles;
-                                            
+
                                             input_correct = true;
                                         }
                                     }

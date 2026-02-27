@@ -10,15 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-
 using GralData;
 using GralDomForms;
 using GralItemData;
 using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -31,20 +30,20 @@ namespace GralDomain
         private int RightClickSearchAreaSource(MouseEventArgs e)
         {
             int i = 0;
-            
+
             // search items
-            List <string> ItemNames = new List<string>();
-            List <int> ItemNumber = new List<int>();
+            List<string> ItemNames = new List<string>();
+            List<int> ItemNumber = new List<int>();
             double fx = 1 / BmpScale / MapSize.SizeX;
             double fy = 1 / BmpScale / MapSize.SizeY;
             Point MousePosition = new Point(e.X, e.Y);
-            
+
             foreach (AreaSourceData _as in EditAS.ItemData)
             {
-                List <Point> poly = new List <Point>();
+                List<Point> poly = new List<Point>();
                 poly.Clear();
-                
-                List <PointD> _pt = _as.Pt;
+
+                List<PointD> _pt = _as.Pt;
                 int x1 = 0;
                 int y1 = 0;
                 for (int j = 0; j < _pt.Count; j++)
@@ -53,24 +52,24 @@ namespace GralDomain
                     y1 = (int)((_pt[j].Y - MapSize.North) * fy) + TransformY;
                     poly.Add(new Point(x1, y1));
                 }
-                
+
                 if (St_F.PointInPolygon(MousePosition, poly))
                 {
                     ItemNames.Add(_as.Name);
                     ItemNumber.Add(i);
                 }
-                
+
                 i++;
             }
-            
+
             return SelectOverlappedItem(e, ItemNames, ItemNumber);
         }
-        
+
         /// <summary>
         /// Starts the ItemSelect Dialog of overlapped items if needed
         /// </summary>
         /// <returns>-1: no item at mouse position or number of item</returns>
-        private int SelectOverlappedItem(MouseEventArgs e, List <string> ItemNames, List<int> ItemNumber)
+        private int SelectOverlappedItem(MouseEventArgs e, List<string> ItemNames, List<int> ItemNumber)
         {
             if (ItemNames.Count == 0)
             {
@@ -103,8 +102,8 @@ namespace GralDomain
                 }
             }
         }
-        
-		/// <summary>
+
+        /// <summary>
         /// Paste an area source
         /// </summary>
         private void RightClickAreaSourcePaste(object sender, System.EventArgs e)
@@ -115,10 +114,10 @@ namespace GralDomain
                 double y = Convert.ToDouble(textBox2.Text);
                 double x0 = CopiedItem.AreaSource.Pt[0].X;
                 double y0 = CopiedItem.AreaSource.Pt[0].Y;
-                
-                for(int i = 0; i < CopiedItem.AreaSource.Pt.Count; i++)
+
+                for (int i = 0; i < CopiedItem.AreaSource.Pt.Count; i++)
                 {
-                    CopiedItem.AreaSource.Pt[i] = new PointD(x  - x0 + CopiedItem.AreaSource.Pt[i].X, y - y0 + CopiedItem.AreaSource.Pt[i].Y);
+                    CopiedItem.AreaSource.Pt[i] = new PointD(x - x0 + CopiedItem.AreaSource.Pt[i].X, y - y0 + CopiedItem.AreaSource.Pt[i].Y);
                 }
                 AreaSourceData Temp = new AreaSourceData(CopiedItem.AreaSource);
                 Temp.Name += "-Copy";
@@ -307,6 +306,6 @@ namespace GralDomain
                 CopiedItem.AreaSource = new AreaSourceData(EditAS.ItemData[Convert.ToInt32(mi.Tag)]);
             }
         }
-              
+
     }
 }

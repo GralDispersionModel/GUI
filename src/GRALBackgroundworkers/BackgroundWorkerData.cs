@@ -10,8 +10,8 @@
 ///</remarks>
 #endregion
 
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace GralBackgroundworkers
 {
@@ -52,7 +52,7 @@ namespace GralBackgroundworkers
         /// <summary>
         /// Prefix for reslut file name
         /// </summary>
-        public string Prefix {get; set;}
+        public string Prefix { get; set; }
         /// <summary>
         /// Local culture decimal seperator
         /// </summary>
@@ -108,11 +108,11 @@ namespace GralBackgroundworkers
         /// <summary>
         /// selected source group names
         /// </summary>
-        public string SelectedSourceGroup { get; set; } 
+        public string SelectedSourceGroup { get; set; }
         /// <summary>
         /// computed source group names
         /// </summary>
-        public string ComputedSourceGroup { get; set; } 
+        public string ComputedSourceGroup { get; set; }
         /// <summary>
         /// Number of GRAL concentration cells in X direction
         /// </summary>

@@ -10,17 +10,16 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralDomain;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms;
 using System.IO;
-
-using Gral;
-using GralItemData;
-using GralStaticFunctions;
-using GralDomain;
+using System.Windows.Forms;
 
 namespace GralItemForms
 {
@@ -41,13 +40,13 @@ namespace GralItemForms
         /// <summary>
         /// X corner points of an area source in meters
         /// </summary>
-        public double [] CornerAreaX = new double [1000];
+        public double[] CornerAreaX = new double[1000];
         /// <summary>
         /// Y corner points of an area source in meters
         /// </summary>
-        public double [] CornerAreaY = new double [1000];            
-        private int sourcegroup = 1; 			                     //sourcegroup
-        
+        public double[] CornerAreaY = new double[1000];
+        private int sourcegroup = 1;                                 //sourcegroup
+
         // delegate to send Message, that redraw is needed!
         public event ForceDomainRedraw AreaSourceRedraw;
 
@@ -56,12 +55,12 @@ namespace GralItemForms
         public event ForceItemOK ItemFormOK;
         public event ForceItemCancel ItemFormCancel;
 
-        private readonly TextBox [] areaemission = new TextBox [10];     //textboxes for emission strenght input of area sources
-        private readonly ComboBox [] areapollutant = new ComboBox [10];  //ComboBoxes for selecting pollutants of area sources
-        private readonly Label [] labelpollutant = new Label [10];       //labels for pollutant types
-        private readonly Button [] but1 = new Button [10];               //Buttons for units
-        
-        private readonly Deposition [] dep = new Deposition [10];
+        private readonly TextBox[] areaemission = new TextBox[10];     //textboxes for emission strenght input of area sources
+        private readonly ComboBox[] areapollutant = new ComboBox[10];  //ComboBoxes for selecting pollutants of area sources
+        private readonly Label[] labelpollutant = new Label[10];       //labels for pollutant types
+        private readonly Button[] but1 = new Button[10];               //Buttons for units
+
+        private readonly Deposition[] dep = new Deposition[10];
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
         private int Dialog_Initial_Width = 0;
         private readonly int Button1_Width = 50;
@@ -71,17 +70,17 @@ namespace GralItemForms
         private int Numericupdown_x0 = 0;
         private int TabControl_x0 = 0;
 
-        public EditAreaSources ()
+        public EditAreaSources()
         {
-            InitializeComponent ();
+            InitializeComponent();
             Domain.EditSourceShape = true;  // allow input of new vertices
-            //User defined column seperator and decimal seperator
-            #if __MonoCS__
+                                            //User defined column seperator and decimal seperator
+#if __MonoCS__
             var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
             foreach (NumericUpDown nu in allNumUpDowns) {
                 nu.TextAlign = HorizontalAlignment.Left;
             }
-            #endif
+#endif
 
             int TBHeight = textBox2.Height;
 
@@ -97,16 +96,16 @@ namespace GralItemForms
             Button1_Width = bt_test.Width;
             Button1_Height = bt_test.Height;
             bt_test.Dispose();
-            
+
             int y_act = 25;
-            
+
             for (int i = 0; i < 10; i++)
             {
                 createTextbox(2, Convert.ToInt32(y_act) + Convert.ToInt32(i * (TBHeight + 7)), TBWidth, TBHeight, i);
-                dep [i] = new Deposition (); // initialize Deposition array
-                dep [i].init ();
+                dep[i] = new Deposition(); // initialize Deposition array
+                dep[i].init();
             }
-            
+
             for (int nr = 0; nr < 10; nr++)
             {
                 for (int i = 0; i < Main.PollutantList.Count; i++)
@@ -115,24 +114,24 @@ namespace GralItemForms
                 }
             }
 
-            textBox1.KeyPress += new KeyPressEventHandler (Comma1); //only point as decimal seperator is allowed
-            comboBox1.KeyPress += new KeyPressEventHandler (Comma2); //only point as decimal seperator is allowed
+            textBox1.KeyPress += new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
+            comboBox1.KeyPress += new KeyPressEventHandler(Comma2); //only point as decimal seperator is allowed
         }
 
-        private void Editareasources_Load (object sender, EventArgs e)
+        private void Editareasources_Load(object sender, EventArgs e)
         {
             Dialog_Initial_Width = ClientSize.Width;
             TrackBar_x0 = trackBar1.Left;
             Numericupdown_x0 = numericUpDown1.Left;
             TabControl_x0 = groupBox1.Left;
-            
+
             FillValues();
-            
+
             ClientSize = new Size(Math.Max(textBox2.Right + 5, but1[1].Right + 5), groupBox1.Top + groupBox1.Height + 10);
             EditareasourcesResizeEnd(null, null);
         }
 
-        private void createTextbox (int x0, int y0, int b, int h, int nr)
+        private void createTextbox(int x0, int y0, int b, int h, int nr)
         {
             //list box for selcting pollutants
             areapollutant[nr] = new ComboBox
@@ -182,14 +181,14 @@ namespace GralItemForms
             toolTip1.SetToolTip(but1[nr], "Click to set deposition - green: deposition set");
             but1[nr].Click += new EventHandler(edit_deposition);
         }
-        
+
         private void listBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
             // Define the default color of the brush as black.
             ListBox lb = sender as ListBox;
             string poll = lb.Items[e.Index].ToString();
-            
+
             // See if the item is selected.
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
             {
@@ -198,7 +197,7 @@ namespace GralItemForms
                 {
                     e.Graphics.FillRectangle(brush, e.Bounds);
                 }
-                
+
                 // Draw the current item text based on the current Font
                 // and the custom brush settings.
                 Brush myBrush = Brushes.White;
@@ -220,7 +219,7 @@ namespace GralItemForms
                     e.Graphics.DrawString(poll, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
                 }
             }
-            
+
             // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
         }
@@ -240,7 +239,7 @@ namespace GralItemForms
                 }
             }
         }
-        
+
         private void Comma1(object sender, KeyPressEventArgs e)
         {
             //if (e.KeyChar == ',') e.KeyChar = '.';
@@ -294,7 +293,7 @@ namespace GralItemForms
         /// </summary> 
         public void SaveArray(bool redraw)
         {
-            AreaSourceData _as; 
+            AreaSourceData _as;
             if (ItemDisplayNr >= ItemData.Count) // new item
             {
                 _as = new AreaSourceData();
@@ -303,25 +302,25 @@ namespace GralItemForms
             {
                 _as = ItemData[ItemDisplayNr];
             }
-            
+
             if (textBox2.Text != "")
             {
                 if ((textBox1.Text != "") && (Convert.ToInt32(textBox2.Text) > 2))
                 {
                     // new area
                     int number_of_vertices = Convert.ToInt32(textBox2.Text);
-                    
+
                     _as.Pt.Clear();
                     _as.Pt.TrimExcess();
                     for (int i = 0; i < number_of_vertices; i++)
                     {
                         _as.Pt.Add(new PointD(CornerAreaX[i], CornerAreaY[i]));
                     }
-                    
+
                     double areapolygon = Math.Round(St_F.CalcArea(_as.Pt, false), 1);
                     textBox3.Text = St_F.DblToIvarTxt(areapolygon);
-                    _as.Area = (float) areapolygon;
-                    
+                    _as.Area = (float)areapolygon;
+
                     if (number_of_vertices > 0)
                     {
                         Domain.EditSourceShape = false;  // block input of new vertices
@@ -333,24 +332,24 @@ namespace GralItemForms
                         _as.Poll.EmissionRate[i] = St_F.TxtToDbl(areaemission[i].Text, false);
                     }
                     _as.Poll.SourceGroup = sourcegroup;
-                    
+
                     for (int i = 0; i < 10; i++) // save deposition
                     {
                         _as.GetDep()[i] = new Deposition(dep[i]);
                     }
-                    
-                    float height = (float) (numericUpDown1.Value);
-                    
+
+                    float height = (float)(numericUpDown1.Value);
+
                     if (checkBox1.Checked) // absolute height over sea
                     {
                         height *= (-1);
                     }
 
                     _as.Height = height;
-                    _as.VerticalExt = (float) (numericUpDown2.Value);
-                    _as.RasterSize = (float) (numericUpDown4.Value);
+                    _as.VerticalExt = (float)(numericUpDown2.Value);
+                    _as.RasterSize = (float)(numericUpDown4.Value);
                     _as.Name = textBox1.Text;
-                    
+
                     if (ItemDisplayNr >= ItemData.Count) // new item
                     {
                         ItemData.Add(_as);
@@ -359,7 +358,7 @@ namespace GralItemForms
                     {
                         ItemData[ItemDisplayNr] = _as;
                     }
-                    
+
                 }
             }
             if (redraw)
@@ -367,7 +366,7 @@ namespace GralItemForms
                 RedrawDomain(this, null);
             }
         }
-        
+
 
         //fill actual values
         /// <summary>
@@ -394,12 +393,12 @@ namespace GralItemForms
                     }
                     _as.Area = 0;
                 }
-                
+
                 textBox1.Text = _as.Name;
                 textBox2.Text = _as.Pt.Count.ToString();
                 textBox3.Text = St_F.DblToLocTxt(Math.Round(_as.Area, 1)); // area
-                
-                decimal height = (decimal) (_as.Height);
+
+                decimal height = (decimal)(_as.Height);
                 if (height >= 0) // height above ground
                 {
                     checkBox1.Checked = false;
@@ -409,14 +408,14 @@ namespace GralItemForms
                     checkBox1.Checked = true;
                 }
 
-                numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double) Math.Abs(height));
-                
+                numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double)Math.Abs(height));
+
                 numericUpDown2.Value = St_F.ValueSpan(0, 999, _as.VerticalExt);
-                
+
                 combo(_as.Poll.SourceGroup);
                 sourcegroup = _as.Poll.SourceGroup;
                 numericUpDown4.Value = St_F.ValueSpan(0.5, 100000, _as.RasterSize);
-                
+
                 for (int i = 0; i < 10; i++)
                 {
                     areapollutant[i].SelectedIndex = _as.Poll.Pollutant[i];
@@ -430,10 +429,10 @@ namespace GralItemForms
                     }
 
                     labelpollutant[i].Text = areapollutant[i].Text;
-                    areaemission[i].Text   = St_F.DblToLocTxt(_as.Poll.EmissionRate[i]);
+                    areaemission[i].Text = St_F.DblToLocTxt(_as.Poll.EmissionRate[i]);
                     but1[i].BackColor = SystemColors.ButtonFace;
                 }
-                
+
                 if (_as.Pt.Count > CornerAreaX.Length)
                 {
                     Array.Resize(ref CornerAreaX, _as.Pt.Count + 1);
@@ -447,7 +446,7 @@ namespace GralItemForms
                     CornerAreaY[j] = _pt.Y;
                     j++;
                 }
-                
+
                 if (_as.Pt.Count > 0)
                 {
                     Domain.EditSourceShape = false;  // block input of new vertices
@@ -456,7 +455,7 @@ namespace GralItemForms
                 for (int i = 0; i < 10; i++)
                 {
                     dep[i] = _as.GetDep()[i];
-                    
+
                     if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
                     {
                         but1[i].BackColor = Color.LightGreen; // mark that deposition is set
@@ -467,7 +466,7 @@ namespace GralItemForms
                     }
                 }
             }
-            catch{}		
+            catch { }
         }
 
         //remove actual area source data
@@ -476,7 +475,7 @@ namespace GralItemForms
             RemoveOne(true);
             RedrawDomain(this, null);
         }
-        
+
         /// <summary>
         /// Remove the recent item object from the item list
         /// </summary> 
@@ -541,7 +540,7 @@ namespace GralItemForms
                 }
                 ItemData.Clear();
                 ItemData.TrimExcess(); // Kuntner Memory
-                
+
                 textBox1.Text = "";
                 textBox2.Text = "0";
                 textBox3.Text = "";
@@ -587,7 +586,7 @@ namespace GralItemForms
             foreach (string text1 in comboBox1.Items)
             {
                 text = text1.Split(new char[] { ',' });
-                
+
                 if (text.Length > 1)
                 {
                     int.TryParse(text[1], out sg);
@@ -613,12 +612,12 @@ namespace GralItemForms
         void EditareasourcesResizeEnd(object sender, EventArgs e)
         {
             int dialog_width = ClientSize.Width;
-            
+
             if (dialog_width < Dialog_Initial_Width)
             {
                 dialog_width = Dialog_Initial_Width;
             }
-            
+
             if (dialog_width > 150)
             {
                 dialog_width -= 12;
@@ -630,30 +629,30 @@ namespace GralItemForms
                 numericUpDown1.Width = dialog_width - numericUpDown1.Left;
                 numericUpDown2.Width = dialog_width - numericUpDown2.Left;
                 numericUpDown4.Width = dialog_width - numericUpDown4.Left;
-                comboBox1.Width      = dialog_width - comboBox1.Left;
+                comboBox1.Width = dialog_width - comboBox1.Left;
             }
 
             button7.Left = Math.Max(100, this.Width - 103);
 
             int element_width = (groupBox1.Width - but1[1].Width - 20) / 2;
             groupBox1.Height = Math.Max(10, ClientSize.Height - groupBox1.Top - 5);
-            
+
             if (element_width < TBWidth)
             {
                 element_width = TBWidth;
             }
-            
+
             for (int nr = 0; nr < 10; nr++)
             {
-                areapollutant[nr].Width  = (int) (element_width);
-                labelpollutant[nr].Width = (int) (element_width);
-                areaemission [nr].Location = new System.Drawing.Point (areapollutant[nr].Left + areapollutant[nr].Width + 5, areapollutant[nr].Top);
-                areaemission [nr].Width = (int) (element_width);
+                areapollutant[nr].Width = (int)(element_width);
+                labelpollutant[nr].Width = (int)(element_width);
+                areaemission[nr].Location = new System.Drawing.Point(areapollutant[nr].Left + areapollutant[nr].Width + 5, areapollutant[nr].Top);
+                areaemission[nr].Width = (int)(element_width);
                 but1[nr].Location = new System.Drawing.Point(areaemission[nr].Left + areaemission[nr].Width + 5, areapollutant[nr].Top - 1);
             }
             panel1.Width = ClientSize.Width;
         }
-        
+
         private void RedrawDomain(object sender, EventArgs e)
         {
             // send Message to domain Form, that redraw is necessary
@@ -665,15 +664,15 @@ namespace GralItemForms
                 }
             }
             catch
-            {}
+            { }
         }
-        
+
         public void ShowForm()
         {
             ItemDisplayNr = trackBar1.Value - 1;
             RedrawDomain(this, null);
         }
-        
+
         void TextBox2Click(object sender, EventArgs e)
         {
             {
@@ -703,17 +702,17 @@ namespace GralItemForms
                         int cornerCount = vert.Lines;
                         SetNumberOfVerticesText(cornerCount.ToString());
                     }
-                    
+
                     SaveArray(true);
                     vert.Dispose();
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Nothing digitized","GRAL GUI",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Nothing digitized", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-        
+
         private void edit_deposition(object sender, EventArgs e)
         {
             int nr = 0;
@@ -738,14 +737,14 @@ namespace GralItemForms
                     edit.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 370, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 edit.Dep = dep[nr]; // set actual values
-                edit.Emission = St_F.TxtToDbl(areaemission[nr].Text,true);
+                edit.Emission = St_F.TxtToDbl(areaemission[nr].Text, true);
                 edit.Pollutant = areapollutant[nr].SelectedIndex;
                 if (edit.ShowDialog() == DialogResult.OK)
                 {
                     edit.Hide();
                 }
             }
-            
+
             if (Main.Project_Locked == false)
             {
                 if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
@@ -760,7 +759,7 @@ namespace GralItemForms
                 SaveArray(true); // save values
             }
         }
-        
+
         void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
@@ -798,21 +797,21 @@ namespace GralItemForms
 
         void EditareasourcesFormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach(TextBox tex in areaemission)
+            foreach (TextBox tex in areaemission)
             {
                 tex.TextChanged -= new System.EventHandler(St_F.CheckInput);
             }
-            foreach(Button but in but1)
+            foreach (Button but in but1)
             {
                 but.Click -= new EventHandler(edit_deposition);
             }
 
             textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
             comboBox1.KeyPress -= new KeyPressEventHandler(Comma2); //only point as decimal seperator is allowed
-            
+
             CornerAreaX = null;
             CornerAreaY = null;
-                        
+
             for (int nr = 0; nr < 10; nr++)
             {
                 areapollutant[nr].SelectedValueChanged -= new System.EventHandler(Odour);
@@ -821,9 +820,9 @@ namespace GralItemForms
                 areapollutant[nr].Dispose();
                 labelpollutant[nr].Dispose();
             }
-            
+
             comboBox1.Items.Clear();
-            
+
             for (int i = 0; i < ItemData.Count; i++)
             {
                 ItemData[i].Pt.Clear();
@@ -832,14 +831,14 @@ namespace GralItemForms
             ItemData.Clear();
             ItemData.TrimExcess();
         }
-        
+
         // store and reload the settings
         void Button4Click(object sender, EventArgs e)
         {
             SaveArray(true);
             FillValues();
         }
-        
+
         void EditareasourcesVisibleChanged(object sender, EventArgs e)
         {
             if (!Visible)
@@ -861,12 +860,12 @@ namespace GralItemForms
 
                 foreach (Control c in Controls)
                 {
-                    if (c != trackBar1 && c!= groupBox1 && c != ScrollRight && c != ScrollLeft)
+                    if (c != trackBar1 && c != groupBox1 && c != ScrollRight && c != ScrollLeft)
                     {
                         c.Enabled = enable;
                     }
                 }
-                
+
                 foreach (Control c in groupBox1.Controls)
                 {
                     if (c.GetType() != typeof(Button) && (c.GetType() != typeof(ListBox)))
@@ -874,7 +873,7 @@ namespace GralItemForms
                         c.Enabled = enable;
                     }
                 }
-                
+
                 for (int i = 0; i < 10; i++)
                 {
                     areapollutant[i].Visible = enable;
@@ -884,17 +883,17 @@ namespace GralItemForms
             Exit.Enabled = true;
             panel1.Enabled = true;
         }
-        
+
         public void SetNumberOfVerticesText(string _s)
         {
             textBox2.Text = _s;
         }
-                
+
         public void SetRasterSize(decimal _val)
         {
             numericUpDown4.Value = _val;
         }
-        
+
         /// <summary>
         /// Set the trackbar to the desired item number
         /// </summary> 
@@ -911,7 +910,7 @@ namespace GralItemForms
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Set the trackbar maximum to the maximum count in the item list
         /// </summary> 

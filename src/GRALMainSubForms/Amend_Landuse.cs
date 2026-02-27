@@ -10,22 +10,22 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
 using System.Globalization;
-using GralStaticFunctions;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Dialog to set user defined land-use settings
     /// </summary>
     public partial class Amend_Landuse : Form
     {
         private CultureInfo ic = CultureInfo.InvariantCulture;
-        
+
         public Amend_Landuse()
         {
             InitializeComponent();
@@ -42,16 +42,16 @@ namespace GralMainForms
             {
                 try
                 {
-                    using (StreamReader reader1 = new StreamReader(Path.Combine(Gral.Main.ProjectName, @"Computation","Landuse_Default.txt")))
+                    using (StreamReader reader1 = new StreamReader(Path.Combine(Gral.Main.ProjectName, @"Computation", "Landuse_Default.txt")))
                     {
                         string[] text1 = new string[10];
                         try
                         {
                             //header line
-                            text1 = reader1.ReadLine().Split(new char[] {'\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                            text1 = reader1.ReadLine().Split(new char[] { '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                             int n = 0;
                             //consecutive lines containing landuse values
-                            while ((text1 = reader1.ReadLine().Split(new char[] {'\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries)) != null)
+                            while ((text1 = reader1.ReadLine().Split(new char[] { '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries)) != null)
                             {
                                 dataGridView1.Rows.Add();
                                 dataGridView1.Rows[n].Cells[0].Value = St_F.ICultToLCult(text1[0]);
@@ -66,11 +66,11 @@ namespace GralMainForms
                         }
                         catch { }
                     }
-                    
+
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Unable to read file Landuse_Default.txt","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Unable to read file Landuse_Default.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -84,7 +84,7 @@ namespace GralMainForms
         {
             int col = e.ColumnIndex;
             int row = e.RowIndex;
-            
+
             //check that only numbers are input
             double val = 0;
 
@@ -149,7 +149,7 @@ namespace GralMainForms
                 }
             }
         }
-        
+
         void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //löschen einer zeile
@@ -177,10 +177,10 @@ namespace GralMainForms
         {
             try
             {
-                
+
                 bool Writing_OK = false;
-                
-                using (StreamWriter wr = new StreamWriter(Path.Combine(Gral.Main.ProjectName, @"Computation","Landuse_Default.txt")))
+
+                using (StreamWriter wr = new StreamWriter(Path.Combine(Gral.Main.ProjectName, @"Computation", "Landuse_Default.txt")))
                 {
                     wr.WriteLine("Code \t Albedo [-] \t Emissivity [-] \t Soil moisture [-] \t Roughness length [m] \t Heat conductivity [W/(mK)] \t Thermal conductivity [m2/s]");
 
@@ -281,7 +281,7 @@ namespace GralMainForms
                         }
                         if (leer == true)
                         {
-                            MessageBox.Show(this, "There are empty cells. Please fill in a suitable value or delete complete row.","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "There are empty cells. Please fill in a suitable value or delete complete row.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow].Cells[ncol];
                             notsave = true;
                             wr.Close();
@@ -289,7 +289,7 @@ namespace GralMainForms
                         }
                         if (CLCmax == true)
                         {
-                            MessageBox.Show(this, "The land-use code needs to be lower than 1000","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "The land-use code needs to be lower than 1000", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow1].Cells[0];
                             notsave = true;
                             wr.Close();
@@ -297,7 +297,7 @@ namespace GralMainForms
                         }
                         if (CLCmin == true)
                         {
-                            MessageBox.Show(this, "The number needs to be > 0","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "The number needs to be > 0", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow2].Cells[ncol2];
                             notsave = true;
                             wr.Close();
@@ -305,7 +305,7 @@ namespace GralMainForms
                         }
                         if (albedo == true)
                         {
-                            MessageBox.Show(this, "Albedo needs to be <= 1","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Albedo needs to be <= 1", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow3].Cells[1];
                             notsave = true;
                             wr.Close();
@@ -313,7 +313,7 @@ namespace GralMainForms
                         }
                         if (emi == true)
                         {
-                            MessageBox.Show(this, "Emissivity needs to be <= 1","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Emissivity needs to be <= 1", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow4].Cells[2];
                             notsave = true;
                             wr.Close();
@@ -321,7 +321,7 @@ namespace GralMainForms
                         }
                         if (FP == true)
                         {
-                            MessageBox.Show(this, "Soil moisture needs to be <= 1","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Soil moisture needs to be <= 1", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow5].Cells[3];
                             notsave = true;
                             wr.Close();
@@ -329,7 +329,7 @@ namespace GralMainForms
                         }
                         if (Z0 == true)
                         {
-                            MessageBox.Show(this, "Roughness length needs to be <= 5m","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Roughness length needs to be <= 5m", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow6].Cells[4];
                             notsave = true;
                             wr.Close();
@@ -337,7 +337,7 @@ namespace GralMainForms
                         }
                         if (HC == true)
                         {
-                            MessageBox.Show(this, "Heat conductivity needs to be <= 100","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Heat conductivity needs to be <= 100", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow7].Cells[5];
                             notsave = true;
                             wr.Close();
@@ -345,7 +345,7 @@ namespace GralMainForms
                         }
                         if (TC == true)
                         {
-                            MessageBox.Show(this, "Thermal conductivity needs to be <= 5E-6","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Thermal conductivity needs to be <= 5E-6", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             dataGridView1.CurrentCell = dataGridView1.Rows[nrow8].Cells[6];
                             notsave = true;
                             wr.Close();
@@ -378,7 +378,7 @@ namespace GralMainForms
             }
             catch
             {
-                MessageBox.Show(this, "Unable to write file Landuse_Default.txt","GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Unable to write file Landuse_Default.txt", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -386,15 +386,15 @@ namespace GralMainForms
         {
             if (Owner != null)
             {
-                Location = new Point(Math.Max(0,Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
-                                     Math.Max(0, Owner.Location.Y + Owner.Height / 2 - Height / 2 -100));
+                Location = new Point(Math.Max(0, Owner.Location.X + Owner.Width / 2 - Width / 2 - 100),
+                                     Math.Max(0, Owner.Location.Y + Owner.Height / 2 - Height / 2 - 100));
             }
         }
         void Amend_LanduseFormClosed(object sender, FormClosedEventArgs e)
         {
             toolTip1.Dispose();
         }
-        
-        
+
+
     }
 }

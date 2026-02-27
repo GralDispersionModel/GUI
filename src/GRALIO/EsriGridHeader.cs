@@ -11,9 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Globalization;
-using System.Windows.Forms;
+using System.IO;
 
 namespace GralIO
 {
@@ -25,12 +24,12 @@ namespace GralIO
         /// <summary>
         /// Number of cells in X-direction
         /// </summary>
-        public int NCols { set { _NCols = value;} get {return _NCols;}}
+        public int NCols { set { _NCols = value; } get { return _NCols; } }
         private int _NCols;
         /// <summary>
         /// Number of cells in Y-direction
         /// </summary>
-        public int NRows { set { _NRows = value; } get { return _NRows;}}
+        public int NRows { set { _NRows = value; } get { return _NRows; } }
         private int _NRows;
         /// <summary>
         /// X coordinate of the origin (west)
@@ -129,7 +128,7 @@ namespace GralIO
                 {
                     CellCenter = true;
                 }
-                
+
                 text = Reader.ReadLine().Split(splitchar, StringSplitOptions.RemoveEmptyEntries);
                 _NoDataValue = Convert.ToDouble(text[1].Replace(".", DecSep));  //no-data value
                 _NorthernBorder = _YllCorner + _NRows * _CellSize;

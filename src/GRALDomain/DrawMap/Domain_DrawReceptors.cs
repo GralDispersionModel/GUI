@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralItemData;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using GralItemData;
 
 namespace GralDomain
 {
@@ -26,7 +26,7 @@ namespace GralDomain
                                    double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
+            int pb1_width = picturebox1.Width;
 
             StringFormat StringFormat2 = new StringFormat
             {
@@ -41,13 +41,13 @@ namespace GralDomain
 
             string[] text1 = new string[28];
             int n = -1;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             Pen penrec;
             if (_drobj.LineColors[0] == Color.Transparent || _drobj.LineColor == Color.Transparent)
             {
-                penrec = new Pen (Color.Red);
+                penrec = new Pen(Color.Red);
                 _drobj.LineColor = Color.Red;
             }
             else
@@ -64,12 +64,12 @@ namespace GralDomain
                 }
                 else
                 {
-                    width = Convert.ToInt32(Math.Max (1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
+                    width = Convert.ToInt32(Math.Max(1, Math.Min(200, 1 / BmpScale / MapSize.SizeX))); // 4 m lenght
                 }
             }
             else
             {
-                width = Convert.ToInt32(Math.Max (1, Math.Min(200, (double) _drobj.LineWidth / 8 * factor_x)));
+                width = Convert.ToInt32(Math.Max(1, Math.Min(200, (double)_drobj.LineWidth / 8 * factor_x)));
             }
 
             //width = 3;
@@ -82,26 +82,26 @@ namespace GralDomain
             };
 
             ReceptorData _rd;
-            
+
             for (int ii = 0; ii < EditR.ItemData.Count; ii++)
             {
                 _rd = EditR.ItemData[ii];
                 try
                 {
                     n++;
-                    
-                    int x1 = (int) ((_rd.Pt.X - form1_west ) * factor_x + TransformX);
-                    int y1 = (int) ((_rd.Pt.Y - form1_north) * factor_y + TransformY);
-                   
+
+                    int x1 = (int)((_rd.Pt.X - form1_west) * factor_x + TransformX);
+                    int y1 = (int)((_rd.Pt.Y - form1_north) * factor_y + TransformY);
+
                     if ((x1 < 0) || (y1 < 0) || (x1 > pb1_width) || (y1 > pb1_height))
                     {
                     }
                     else
                     {
                         //g.DrawImage(receptor, x1 - 10, y1 - 10, 20, 20);
-                        g.DrawLine(penrec, x1, y1 - width * 2 +2 , x1, y1 + width * 2 -2);
-                        g.DrawLine(penrec , x1 - width*2 + 2, y1, x1 + width * 2 - 2, y1);
-                        
+                        g.DrawLine(penrec, x1, y1 - width * 2 + 2, x1, y1 + width * 2 - 2);
+                        g.DrawLine(penrec, x1 - width * 2 + 2, y1, x1 + width * 2 - 2, y1);
+
                         //draw filled circle, if display values are enabled
                         if (FillYesNo == true && text1.Length > 3)
                         {
@@ -111,51 +111,51 @@ namespace GralDomain
                             for (int r = _drobj.FillColors.Count - 1; r > -1; r--)
                             {
                                 if (display_value >= _drobj.ItemValues[r])
-                            {
-                                index = r;
-                                break;
-                            }
+                                {
+                                    index = r;
+                                    break;
+                                }
                             }
                             //values below the minimum are drawn completely transparant
                             int transparancy_new = transparency;
-                            if (index==-1)
+                            if (index == -1)
                             {
                                 transparancy_new = 0;
                                 index = 0;
                             }
-                            
+
                             Brush br1 = new SolidBrush(Color2Transparent(transparancy_new, _drobj.FillColors[index]));
                             g.FillEllipse(br1, x1 - width * 2, y1 - width * 2, width * 4, width * 4);
                             br1.Dispose();
-                            
+
                             g.DrawEllipse(penrec, x1 - width * 2, y1 - width * 2, width * 4, width * 4);
                             if (draw_label)
                             {
-                                g.DrawString( _rd.Name.Trim(), LabelFont, LabelBrush, x1, y1 - width * 2, StringFormat2);
+                                g.DrawString(_rd.Name.Trim(), LabelFont, LabelBrush, x1, y1 - width * 2, StringFormat2);
                             }
-                            
+
                         }
                         else if (draw_label)
                         {
-                            g.DrawString( _rd.Name.Trim(), LabelFont, LabelBrush, x1 + penrec.Width, y1 - penrec.Width - LabelFont.Height);
+                            g.DrawString(_rd.Name.Trim(), LabelFont, LabelBrush, x1 + penrec.Width, y1 - penrec.Width - LabelFont.Height);
                         }
-                        
+
                         if ((n == EditR.ItemDisplayNr) && ((MouseControl == MouseMode.ReceptorSel) || (MouseControl == MouseMode.ReceptorPos)))
                         {
                             Pen penmarked = new Pen(Color.Green)
                             {
                                 Width = width / 2
                             };
-                            g.DrawLine(penmarked, x1, y1 - width * 2 +2 , x1, y1 + width * 2 -2);
-                            g.DrawLine(penmarked, x1 - width*2 + 2, y1, x1 + width * 2 - 2, y1);
+                            g.DrawLine(penmarked, x1, y1 - width * 2 + 2, x1, y1 + width * 2 - 2);
+                            g.DrawLine(penmarked, x1 - width * 2 + 2, y1, x1 + width * 2 - 2, y1);
                             penmarked.Dispose();
-                            g.DrawRectangle(p1, x1 - width * 2 , y1 - width * 2 , width* 4, width * 4);
+                            g.DrawRectangle(p1, x1 - width * 2, y1 - width * 2, width * 4, width * 4);
                         }
-                        
+
                     }
                 }
-                catch{}
-            } 
+                catch { }
+            }
             p1.Dispose();
             penrec.Dispose();
             StringFormat2.Dispose();

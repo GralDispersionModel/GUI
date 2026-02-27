@@ -11,14 +11,14 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
-	/// <summary>
-	/// Map section (view frames) settings dialog 
-	/// </summary>         
+    /// <summary>
+    /// Map section (view frames) settings dialog 
+    /// </summary>         
     public partial class ViewFrameSaveAndLoad : Form
     {
         public string NewText = String.Empty;
@@ -29,7 +29,7 @@ namespace GralDomForms
         {
             InitializeComponent();
         }
-		
+
         private void ViewFrameSaveAndLoad_Load(object sender, EventArgs e)
         {
             string path;

@@ -10,16 +10,14 @@
 ///</remarks>
 #endregion
 
+using GralData;
+using GralDomain;
+using GralIO;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.IO;
 using System.Globalization;
-using GralIO;
-using GralData;
-using System.Threading.Tasks;
-using System.Diagnostics.Eventing.Reader;
-using GralDomain;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
@@ -37,7 +35,7 @@ namespace GralDomForms
         private List<string> spaltenbezeichnungen = new List<string>(); //liste mit spaltenbezeichnungen
         private int RemoveLine = -999;
         public bool StartMatch = false;
-        
+
         private string _settings_path;
         public string SettingsPath { set { _settings_path = value; } }
         public string GRAMMPath;
@@ -370,7 +368,7 @@ namespace GralDomForms
             TimeStapmsMetTimeSeries.Clear();
             dataGridView1.Rows.Clear();
             groupBox2.Enabled = false;
-            
+
             // send delegate - Message to domain Form, that match process should finish
             try
             {
@@ -395,7 +393,12 @@ namespace GralDomForms
             {
                 radioButton1.Checked = true;
             }
-
+            //enable support for high contrast themes
+            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
+            {
+                Gral.Main.LoopAllControls(this.Controls);
+                this.BackColor = System.Drawing.SystemColors.Window;
+            }
             Domain.CancellationTokenReset();
         }
 
@@ -530,8 +533,8 @@ namespace GralDomForms
                                     {
                                         // create a meteo file 
                                         string filename = "MatchPreview_" + Path.GetFileName(MetFileNames[RemoveLine]);
-                                        
                                         System.Globalization.CultureInfo ic = System.Globalization.CultureInfo.InvariantCulture;
+                                        DateTime dTime = new DateTime(2023, 1, 1, 0, 0, 0);
                                         //write new meteo file
                                         using (StreamWriter writer = new StreamWriter(Path.Combine(Gral.Main.ProjectName, "Metfiles", filename)))
                                         {
@@ -549,10 +552,12 @@ namespace GralDomForms
                                                     int stabClass = LocalStabilityClass[RemoveLine, index];
                                                     text = _mettimeSeries[i].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                                     date = text[0].Split('.');
-                                                    DateTime _date = new DateTime(DateTime.Now.Year, Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(text[1]), 0, 0);
-                                                    writer.WriteLine(_date.ToString("d", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
-                                                                     _date.ToString("t", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
-                                                                     Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
+                                                    //DateTime _date = new DateTime(DateTime.Now.Year, Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(text[1]), 0, 0);
+                                                    //writer.WriteLine(_date.ToString("d", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
+                                                    //                 _date.ToString("t", CultureInfo.CreateSpecificCulture("de-DE")) + "," +
+                                                    //                 Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
+                                                    writer.WriteLine(dTime.ToString("dd.MM.yy,HH:mm", CultureInfo.InvariantCulture) + "," + Math.Round(vel, 1).ToString(ic) + "," + Math.Round(dir).ToString(ic) + "," + stabClass.ToString(ic));
+                                                    dTime = dTime.AddHours(1);
                                                 }
                                             }
                                         }
@@ -740,7 +745,8 @@ namespace GralDomForms
                 Title = "Save match to oberservation data",
                 InitialDirectory = _settings_path
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
             })
             {
@@ -816,7 +822,8 @@ namespace GralDomForms
                 Title = "Load match to oberservation data",
                 InitialDirectory = _settings_path
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
             })
             {
@@ -877,7 +884,7 @@ namespace GralDomForms
 
                             if (MMOFileFormat > 2)
                             {
-                                temp = sr.ReadLine().Replace(".", decsep); 
+                                temp = sr.ReadLine().Replace(".", decsep);
                                 decimal.TryParse(temp, out v);
                                 numericUpDown2.Value = v;
                             }
@@ -957,7 +964,8 @@ namespace GralDomForms
                                                 " file not found - please select the file",
                                             FileName = Path.GetFileName(windfilename)
 #if NET6_0_OR_GREATER
-                                            ,ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
+                                            ,
+                                            ClientGuid = GralStaticFunctions.St_F.FileDialogSettings
 #endif
                                         };
 

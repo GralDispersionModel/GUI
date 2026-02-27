@@ -11,10 +11,9 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 
 namespace GralIO
 {
@@ -148,13 +147,13 @@ namespace GralIO
 
             // Terrain interpolation
             Gral.TerrainInterpolation TerrIpl = new Gral.TerrainInterpolation(ADH, Header.XllCorner, Header.NorthernBorder, Header.CellSize, Header.CellSize);
-            
+
             //interpolate heigt values for the GRAMM grid edge points
             for (int xInd = 1; xInd <= NX1; xInd++)
             {
                 for (int yInd = 1; yInd <= NY1; yInd++)
                 {
-                    double x = GrammWest  + (xInd - 1) * GrammDeltaX;
+                    double x = GrammWest + (xInd - 1) * GrammDeltaX;
                     double y = GrammSouth + (yInd - 1) * GrammDeltaX;
                     double height;
                     if (Header.CellCenter)
@@ -167,7 +166,7 @@ namespace GralIO
                     }
                     AHE[xInd, yInd, 1] = height;
                 }
-            } 
+            }
 
             //computation of cell heights
             double AHMIN = 10000;

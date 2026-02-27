@@ -16,14 +16,14 @@ namespace GralDomForms
     /// Wind file class used by the wind rose display in the GIS window
     /// </summary>
     public class WindFileData
-	{
-		public string Filename { get; set; }
-		public char RowSep     { get; set; }
-		public string DecSep   { get; set; } 
-		public int MaxValue    { get; set; }
-		public int Size        { get; set; }
-		public double X0	   { get; set; }
-		public double Y0	   { get; set; }
-		public double Z0	   { get; set; }
-	}
+    {
+        public string Filename { get; set; }
+        public char RowSep { get; set; }
+        public string DecSep { get; set; }
+        public int MaxValue { get; set; }
+        public int Size { get; set; }
+        public double X0 { get; set; }
+        public double Y0 { get; set; }
+        public double Z0 { get; set; }
+    }
 }

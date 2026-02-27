@@ -11,12 +11,11 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Globalization;
-using GralIO;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GralBackgroundworkers
 {
@@ -38,7 +37,7 @@ namespace GralBackgroundworkers
                 mydata.EmissionFactor = 1;
             }
 
-            bool CalculateMeanHourlyValues = mydata.SubHourlyToMeanHourlyConcentrations; 
+            bool CalculateMeanHourlyValues = mydata.SubHourlyToMeanHourlyConcentrations;
             int maxsource = mydata.MaxSource;
             string[] text = new string[5];
             string newpath;
@@ -50,7 +49,7 @@ namespace GralBackgroundworkers
 
             //get emission modulations for all source groups
             (double[,] emifac_day, double[,] emifac_mon, string[] sg_numbers) = ReadEmissionModulationFactors(maxsource, sg_names, mydata.PathEmissionModulation);
-            
+
             //reading emission variations
             List<string> wgmet = new List<string>();
             List<string> wrmet = new List<string>();
@@ -162,14 +161,14 @@ namespace GralBackgroundworkers
                 BackgroundThreadMessageBox("Error reading mettimeseries.dat");
             }
 
-            int arraylength = Math.Max (2, Convert.ToInt32(mettimefilelength * (100 - mydata.Percentile) / 100));            
+            int arraylength = Math.Max(2, Convert.ToInt32(mettimefilelength * (100 - mydata.Percentile) / 100));
             //reduce the array lenght, if sub hourly values should be analyzed as hourly values
             if (CalculateMeanHourlyValues && mydata.SubHourlyTimeSpan > 1 && mydata.SubHourlyTimeSpan < 3600)
             {
                 int numberOfHours = 0;
                 string hourOld = string.Empty;
                 // get number of full hours in mettimeseries.dat
-                foreach (string metline in data_mettimeseries) 
+                foreach (string metline in data_mettimeseries)
                 {
                     text2 = metline.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     if (text2.Length > 2 && !string.Equals(text2[1], hourOld))
@@ -192,14 +191,14 @@ namespace GralBackgroundworkers
             string oldhour = string.Empty;
             bool subHourValueEvaluate = true; // evaluate all situations by default
             int fullHourCount = 0;
-            
-            foreach(string mettimeseries in data_mettimeseries)
+
+            foreach (string mettimeseries in data_mettimeseries)
             {
                 text2 = mettimeseries.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                 text3 = text2[0].Split(new char[] { '.', ':', '-' }, StringSplitOptions.RemoveEmptyEntries);
-                
+
                 count_ws++;
-                
+
                 if (Rechenknecht.CancellationPending)
                 {
                     e.Cancel = true;
@@ -207,9 +206,9 @@ namespace GralBackgroundworkers
                 }
                 if (count_ws % 4 == 0)
                 {
-                    Rechenknecht.ReportProgress((int) (count_ws / (double) data_mettimeseries.Count * 100D));
+                    Rechenknecht.ReportProgress((int)(count_ws / (double)data_mettimeseries.Count * 100D));
                 }
-                
+
                 month = text3[1];
                 day = text3[0];
                 hour = text2[1];
@@ -383,7 +382,7 @@ namespace GralBackgroundworkers
                             }
                             itm++;
                         }
-                        
+
                         SetText("Day.Month: " + day + "." + month);
 
                         //evaluate sub hourly concentration values and calculate hourly mean value
@@ -466,9 +465,9 @@ namespace GralBackgroundworkers
                             }
                         }
                     }
-                }               
+                }
             }
-            
+
             string file;
             string name;
             //write mean concentration hour files for each source group
@@ -487,7 +486,7 @@ namespace GralBackgroundworkers
                     {
                         string[] text1a = new string[2];
                         text1a = Convert.ToString(sg_names[itm]).Split(new char[] { ':' });
-                        name = Convert.ToString(Math.Round(mydata.Percentile,1)).Replace(decsep, "_")  + "_" + mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename;
+                        name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_" + text1a[0] + "_" + mydata.Slicename;
                     }
                     else
                     {
@@ -495,15 +494,16 @@ namespace GralBackgroundworkers
                     }
 
                     file = Path.Combine(mydata.PathEvaluationResults, name + ".txt");
-                    
+
                     try
                     {
                         if (File.Exists(file))
                         {
-                            try{
+                            try
+                            {
                                 File.Delete(file);
                             }
-                            catch{}
+                            catch { }
                         }
 
                         using (StreamWriter myWriter = new StreamWriter(file, false))
@@ -522,7 +522,7 @@ namespace GralBackgroundworkers
                             {
                                 throw new Exception();
                             }
-                            
+
                             for (int j = mydata.CellsGralY - 1; j > -1; j--)
                             {
                                 for (int i = 0; i < mydata.CellsGralX; i++)
@@ -533,11 +533,11 @@ namespace GralBackgroundworkers
                             }
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        BackgroundThreadMessageBox ("Write results for source groups " + ex.Message);
+                        BackgroundThreadMessageBox("Write results for source groups " + ex.Message);
                     }
-                    
+
                     itm++;
                 }
 
@@ -550,17 +550,18 @@ namespace GralBackgroundworkers
                 //write mean total concentration
                 name = Convert.ToString(Math.Round(mydata.Percentile, 1)).Replace(decsep, "_") + "_" + mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
                 file = Path.Combine(mydata.PathEvaluationResults, name + ".txt");
-                
+
                 try
                 {
                     if (File.Exists(file))
                     {
-                        try{
+                        try
+                        {
                             File.Delete(file);
                         }
-                        catch{}
+                        catch { }
                     }
-                        
+
                     using (StreamWriter mywriter = new StreamWriter(file, false))
                     {
                         GralIO.WriteESRIFile writeHeader = new GralIO.WriteESRIFile
@@ -577,7 +578,7 @@ namespace GralBackgroundworkers
                         {
                             throw new Exception();
                         }
-                        
+
                         for (int j = mydata.CellsGralY - 1; j > -1; j--)
                         {
                             for (int i = 0; i < mydata.CellsGralX; i++)
@@ -589,9 +590,9 @@ namespace GralBackgroundworkers
                     }
                     AddInfoText(Environment.NewLine + "Writing result file " + file);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    BackgroundThreadMessageBox ("Write total result file " + ex.Message);
+                    BackgroundThreadMessageBox("Write total result file " + ex.Message);
                 }
             }
             string errorText = string.Empty;
@@ -621,7 +622,7 @@ namespace GralBackgroundworkers
         private int BinarySearch(float[] Perc, float Conc)
         {
             int low = 0;
-            
+
             if (Conc < Perc[0])
             {
                 low = -1; // return -1 if below Perc[0]

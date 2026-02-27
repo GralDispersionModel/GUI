@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using GralData;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -35,7 +35,8 @@ namespace Gral
                 Filter = "Met files (*.met)|*.met|DWD (*.akterm;*.akt)|*.akterm;*.akt",
                 Title = "Select meteorological data"
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
             })
             {
@@ -104,7 +105,7 @@ namespace Gral
                         while (streamreader.EndOfStream == false)
                         {
                             reihe = streamreader.ReadLine();
-                            
+
                             if (filelength < 5 && reihe.ToUpper().Contains("Z="))
                             {
                                 AnemometerheightRecent = GralDomain.Domain.EvalMetFileHeader(reihe);
@@ -166,7 +167,7 @@ namespace Gral
                 }
 
                 //MessageBox.Show(filelength.ToString());
-                GralMainForms.MeteoInput FormatMetFile = new GralMainForms.MeteoInput(this)
+                global::GralMainForms.MeteoInput FormatMetFile = new global::GralMainForms.MeteoInput(this)
                 {
                     MetFile1 = MetfileName,
                     FfileLength1 = filelength,
@@ -200,7 +201,7 @@ namespace Gral
             WindroseSetting.ShowMaxScaleGroupBox = false;
             WindroseSetting.ShowBias = true;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -341,7 +342,7 @@ namespace Gral
                             }
                         }
 
-                        GralMainForms.Windrose windrose = new GralMainForms.Windrose
+                        global::GralMainForms.Windrose windrose = new global::GralMainForms.Windrose
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -397,7 +398,7 @@ namespace Gral
             WindroseSetting.ShowMaxScaleGroupBox = false;
             WindroseSetting.ShowBias = true;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -492,7 +493,7 @@ namespace Gral
                             }
                         }
 
-                        GralMainForms.Windrose windrose = new GralMainForms.Windrose()
+                        global::GralMainForms.Windrose windrose = new global::GralMainForms.Windrose()
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -545,14 +546,14 @@ namespace Gral
             WindroseSetting.ShowBias = false;
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = true;
-            
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
                 Left = this.Left + 20,
                 Top = this.Top + 150,
-                
+
             })
             {
                 if (mts.ShowDialog() == DialogResult.OK)
@@ -602,7 +603,7 @@ namespace Gral
                             wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
                         }
 
-                        GralMainForms.Windclasses wclass = new GralMainForms.Windclasses()
+                        global::GralMainForms.Windclasses wclass = new global::GralMainForms.Windclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -619,7 +620,7 @@ namespace Gral
                         }
                         else
                         {
-                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                            MessageBox.Show(this, "No meteo data available", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
@@ -644,7 +645,7 @@ namespace Gral
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = false;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -699,7 +700,7 @@ namespace Gral
                                 wclassFrequency[i] = wclassFrequency[i] / Convert.ToDouble(count);
                             }
 
-                            GralMainForms.WindDistribution wDistr = new GralMainForms.WindDistribution()
+                            global::GralMainForms.WindDistribution wDistr = new global::GralMainForms.WindDistribution()
                             {
                                 StartPosition = FormStartPosition.Manual,
                                 Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -736,7 +737,7 @@ namespace Gral
             int count = 0;
             int startstunde = 0;
             int endstunden = 23;
-            
+
             List<WindData> wind = new List<WindData>();
             int maxvelocity = WindroseSetting.MaxVelocity;
             bool showBias = WindroseSetting.ShowBias;
@@ -745,7 +746,7 @@ namespace Gral
             WindroseSetting.ShowWindSectorGroupBox = false;
             WindroseSetting.ShowMaxScaleGroupBox = true;
 
-            using (GralMainForms.MeteoSelectTimeInterval mts = new GralMainForms.MeteoSelectTimeInterval
+            using (global::GralMainForms.MeteoSelectTimeInterval mts = new global::GralMainForms.MeteoSelectTimeInterval
             {
                 WindRoseSet = WindroseSetting,
                 StartPosition = FormStartPosition.Manual,
@@ -757,7 +758,7 @@ namespace Gral
                 {
                     startstunde = mts.WindRoseSet.StartStunde;
                     endstunden = mts.WindRoseSet.EndStunde;
-                   
+
                     if (startstunde == endstunden)
                     {
                         MessageBox.Show("Start- and endtime must be different values");
@@ -784,7 +785,7 @@ namespace Gral
                             sclassFrequency[i] = sclassFrequency[i] / Convert.ToDouble(count);
                         }
 
-                        GralMainForms.Stabilityclasses sclass = new GralMainForms.Stabilityclasses()
+                        global::GralMainForms.Stabilityclasses sclass = new global::GralMainForms.Stabilityclasses()
                         {
                             StartPosition = FormStartPosition.Manual,
                             Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -846,7 +847,7 @@ namespace Gral
                 }
             }
 
-            GralMainForms.DiurnalWindspeed mwind = new GralMainForms.DiurnalWindspeed()
+            global::GralMainForms.DiurnalWindspeed mwind = new global::GralMainForms.DiurnalWindspeed()
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -907,7 +908,7 @@ namespace Gral
                 }
             }
 
-            GralMainForms.DiurnalWinddirections mwinddir = new GralMainForms.DiurnalWinddirections()
+            global::GralMainForms.DiurnalWinddirections mwinddir = new global::GralMainForms.DiurnalWinddirections()
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left + 60, this.Top + 50),
@@ -990,7 +991,7 @@ namespace Gral
                 NumUpDown[1].Value = 1.0M;
                 NumUpDown[2].Value = 2.0M;
                 NumUpDown[3].Value = 3.0M;
-                numericUpDown7.Value = (decimal) AnemometerheightRecent;
+                numericUpDown7.Value = (decimal)AnemometerheightRecent;
 
                 for (int i = 1; i < WindSpeedClasses; i++)
                 {
@@ -1260,7 +1261,8 @@ namespace Gral
                     Filter = "Met files (*.met)|*.met",
                     Title = "Save new *.met file"
 #if NET6_0_OR_GREATER
-                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                    ,
+                    ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
                 })
                 {
@@ -1284,7 +1286,7 @@ namespace Gral
                                 }
                             }
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }

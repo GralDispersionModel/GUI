@@ -10,6 +10,7 @@
 ///</remarks>
 #endregion
 
+using Gral.GralMainForms;
 using GralData;
 using GralIO;
 using GralMessage;
@@ -20,12 +21,15 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Threading;
+
+
 #if __MonoCS__
 #else
-using System.Runtime.Intrinsics.X86;
+using System.Timers;
+
 #endif
 using System.Windows.Forms;
-using static System.Windows.Forms.DataFormats;
 
 namespace Gral
 {
@@ -67,7 +71,7 @@ namespace Gral
         /// <summary>
         /// Global decimal separator of the system
         /// </summary>
-        private string DecimalSep;
+        private readonly string DecimalSep;
         /// <summary>
         /// Path of existing GRAMM project
         /// </summary>
@@ -191,7 +195,7 @@ namespace Gral
         /// <summary>
         /// Path of GRAMM windfield
         /// </summary>
-        public string GRAMMwindfield;
+        public static string GRAMMwindfield;
         /// <summary>
         /// GRAL computation
         /// </summary>
@@ -312,8 +316,14 @@ namespace Gral
         public static readonly string My_p_m3 = "µg/m³";
         public static readonly string mg_p_m2 = "mg/m².d";
         private GralDomain.DomainformClosed DomainClosedHandle;
-
+        /// <summary>
+        /// Flag for the shown online parameters when running GRAMM
+        /// </summary>
         public Int32 OnlineParmeters = 0;
+        /// <summary>
+        /// Timer for updating the file size labels
+        /// </summary>
+        private System.Timers.Timer UpdateFileSizes;
 
         /// <summary>
         /// Start the main form of this application
@@ -488,6 +498,8 @@ namespace Gral
                     }
                 }
             }
+            UpdateFileSizes.Stop();
+            UpdateFileSizes.Dispose();
         }
 
         /// <summary>
@@ -775,7 +787,7 @@ namespace Gral
             {
                 newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
             }
-            GralMainForms.Emissionvariation emvar = new GralMainForms.Emissionvariation(this, newPath)
+            global::GralMainForms.Emissionvariation emvar = new global::GralMainForms.Emissionvariation(this, newPath)
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left, this.Top),
@@ -1115,16 +1127,6 @@ namespace Gral
         {
             SetGRALFlowFieldVerticalCellNumber(sender, e);
         }
-        //change relaxation factor of velocity for microscale flow field model of GRAL
-        private void NumericUpDown28_ValueChanged(object sender, EventArgs e)
-        {
-            SetGRALFlowFieldVelRelaxFactor(sender, e);
-        }
-        //change relaxation factor for pressure correction of microscale wind field model of GRAL
-        private void NumericUpDown27_ValueChanged(object sender, EventArgs e)
-        {
-            SetGRALFlowFieldPreRelaxFactor(sender, e);
-        }
         //change minimum number of iterations over timesteps in the microscale flow field model of GRAL
         private void NumericUpDown29_ValueChanged(object sender, EventArgs e)
         {
@@ -1382,8 +1384,73 @@ namespace Gral
         //Start GRAL simulation
         private void Button33_Click(object sender, EventArgs e)
         {
-            GRALStartCalculation(sender, e);
+            GRALStartCalculation(0, 0);
         }
+        private void Button33_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) // start a chunk of situations
+            {
+                ContextMenuStrip m = new ContextMenuStrip();
+                ToolStripMenuItem mi = new ToolStripMenuItem();
+                mi.Text = "Start a chunk of GRAL situations";
+                mi.Click += RightClickButton33;
+                m.Items.Add(mi);
+                m.Show(button33, button33.PointToClient(Cursor.Position));
+            }
+        }
+        private void RightClickButton33(object sender, EventArgs e)
+        {
+            if (sender is ContextMenuStrip m)
+            {
+                m.Dispose();
+            }
+            Cursor.Current = Cursors.WaitCursor;
+            int maxWeatherSituation = 1;
+            InDatVariables data = new InDatVariables();
+            InDatFileIO ReadInData = new InDatFileIO();
+            data.InDatPath = Path.Combine(ProjectName, @"Computation", "in.dat");
+            ReadInData.Data = data;
+            if (ReadInData.ReadInDat() == true)
+            {
+                if (data.Transientflag == 0)
+                {
+                    //read mettimeseries.dat
+                    string mettimeseries = Path.Combine(ProjectName, @"Computation", "mettimeseries.dat");
+                    List<string> data_mettimeseries = new List<string>();
+                    ReadMetTimeSeries(mettimeseries, ref data_mettimeseries);
+                    maxWeatherSituation = Math.Max(data_mettimeseries.Count, 1);
+                }
+                else
+                {
+                    maxWeatherSituation = (int)St_F.CountLinesInFile(Path.Combine(ProjectName, @"Computation", @"meteopgt.all")) - 2;
+                }
+            }
+            int start = 1; int end = 1;
+            Cursor.Current = Cursors.Default;
+            if (maxWeatherSituation > 1)
+            {
+                StartandFinalSituation startFinalSit = new StartandFinalSituation(maxWeatherSituation)
+                {
+                    StartPosition = FormStartPosition.Manual,
+                    Location = new System.Drawing.Point(this.Left, this.Top),
+                    Owner = this
+                };
+                if (startFinalSit.ShowDialog() == DialogResult.OK)
+                {
+                    start = startFinalSit.StartSituation;
+                    end = startFinalSit.FinalSituation;
+                }
+                startFinalSit.Close();
+                startFinalSit.Dispose();
+            }
+            if (start <= end)
+            {
+                numericUpDown33.Value = 1;
+                GRALStartCalculation(start, end);
+            }
+        }
+
+
         //stop GRAL simulations
         private void Button34_Click(object sender, EventArgs e)
         {
@@ -1511,7 +1578,7 @@ namespace Gral
             {
                 Main_NEMO NemoWork = new Main.Main_NEMO();
                 //source group seperation
-                GralMainForms.Nemostartwindow nemo = new GralMainForms.Nemostartwindow(this);
+                global::GralMainForms.Nemostartwindow nemo = new global::GralMainForms.Nemostartwindow(this);
                 DialogResult dr = new DialogResult();
                 dr = nemo.ShowDialog();
                 string[] text = new string[2];
@@ -2013,9 +2080,8 @@ namespace Gral
         {
             if (EmifileReset == true)
             {
-                bool istda = new bool();
                 string name = Path.Combine(ProjectName, @"Computation", "GRAL_Topography.txt");
-                istda = File.Exists(name);
+                bool istda = File.Exists(name);
                 if (checkBox24.Checked == true)
                 {
                     if (istda == false)
@@ -2051,90 +2117,6 @@ namespace Gral
                     File.Delete(Path.Combine(ProjectName, @"Computation", "GRAL_topofile.txt"));
                 }
             }
-        }
-
-        /// <summary>
-        /// Get *.con, *.gff and *.wnd file size and display it in the main form
-        /// </summary>
-        private void GralFileSizes()
-        {
-            if (string.IsNullOrEmpty(ProjectName))
-            {
-                return;
-            }
-
-            try // Kuntner: error if no project exists
-            {
-                string _file = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
-                DirectoryInfo _directory = new DirectoryInfo(_file);
-                FileInfo[] files_conc = _directory.GetFiles("*.con");
-                if (files_conc.Length == 0) // compressed files?
-                {
-                    files_conc = _directory.GetFiles("*.grz");
-                }
-
-                long file_size = 0;
-                for (int i = 0; i < files_conc.Length; i++)
-                {
-                    file_size += files_conc[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    label84.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
-                }
-                else
-                {
-                    label84.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
-                }
-                label57.Text = files_conc.Length.ToString() + " files";
-            }
-            catch { }
-
-            try
-            {
-                //size of GRAL flow field files
-                DirectoryInfo _directory = new DirectoryInfo(St_F.GetGffFilePath(Path.Combine(ProjectName, "Computation")) + Path.DirectorySeparatorChar);
-                FileInfo[] files_gff = _directory.GetFiles("*.gff");
-                long file_size = 0;
-                for (int i = 0; i < files_gff.Length; i++)
-                {
-                    file_size += files_gff[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    label85.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
-                }
-                else
-                {
-                    label85.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
-                }
-                label72.Text = files_gff.Length.ToString() + " files";
-            }
-            catch
-            { }
-
-            try
-            {
-                // Wnd Files
-                string _file = Path.Combine(GRAMMwindfield);
-                DirectoryInfo _directory = new DirectoryInfo(_file);
-                FileInfo[] files_wnd = _directory.GetFiles("*.wnd");
-                long file_size = 0;
-                for (int i = 0; i < files_wnd.Length; i++)
-                {
-                    file_size += files_wnd[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte";
-                }
-                else
-                {
-                    label97.Text = Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte";
-                }
-                label96.Text = files_wnd.Length.ToString() + " files";
-            }
-            catch { }
         }
 
         /// <summary>
@@ -2179,7 +2161,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button43_Click(object sender, EventArgs e)
         {
-            GralMainForms.Amend_Landuse AL = new GralMainForms.Amend_Landuse()
+            global::GralMainForms.Amend_Landuse AL = new global::GralMainForms.Amend_Landuse()
             {
                 Owner = this,
                 StartPosition = FormStartPosition.Manual,
@@ -2228,6 +2210,11 @@ namespace Gral
             if (GRAMM_Locked) // if locked Lock is closed!
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
+                    gramm_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(gramm_locked_button, "GRAMM project is locked");
                 toolTip1.SetToolTip(button105, "GRAMM project is locked");
                 GrammLockedLockElements(GRAMM_Locked);
@@ -2236,6 +2223,11 @@ namespace Gral
             else
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
+                    gramm_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(gramm_locked_button, "GRAMM project is unlocked");
                 toolTip1.SetToolTip(button105, "GRAMM project is unlocked");
                 GrammLockedLockElements(GRAMM_Locked);
@@ -2263,6 +2255,11 @@ namespace Gral
             if (Project_Locked) // if locked Lock is closed!
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
+                    project_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(project_locked_button, "GRAL project is locked - unlock: delete all *.con files");
                 toolTip1.SetToolTip(button101, "GRAL project is locked");
                 toolTip1.SetToolTip(button104, "GRAL project is locked");
@@ -2272,6 +2269,11 @@ namespace Gral
             else
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
+                if (System.Windows.SystemParameters.HighContrast)
+                {
+                    Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
+                    project_locked_button.Image = resized;
+                }
                 toolTip1.SetToolTip(project_locked_button, "GRAL project is unlocked");
                 toolTip1.SetToolTip(button101, "GRAL project is unlocked");
                 toolTip1.SetToolTip(button104, "GRAL project is unlocked");
@@ -2397,11 +2399,10 @@ namespace Gral
             numericUpDown11.Enabled = !locked;
             numericUpDown12.Enabled = !locked;
             numericUpDown26.Enabled = !locked;
-            numericUpDown27.Enabled = !locked;
-            numericUpDown28.Enabled = !locked;
             numericUpDown29.Enabled = !locked;
             numericUpDown30.Enabled = !locked;
             numericUpDown31.Enabled = !locked;
+            numericUpDown33.Enabled = !locked;
             numericUpDown34.Enabled = !locked; // GRAL transient
             numericUpDown38.Enabled = !locked; // Surface roughness lenght
             checkBox29.Enabled = !locked;      // Surface roughness lenght
@@ -2484,8 +2485,6 @@ namespace Gral
             numericUpDown11.Increment = Convert.ToDecimal(inc * 0.1);
             numericUpDown12.Increment = Convert.ToDecimal(inc * 0.01);
             numericUpDown26.Increment = inc;
-            numericUpDown27.Increment = Convert.ToDecimal(inc * 0.01);
-            numericUpDown28.Increment = Convert.ToDecimal(inc * 0.01);
             numericUpDown29.Increment = Convert.ToDecimal(inc * 10);
             numericUpDown30.Increment = Convert.ToDecimal(inc * 10);
             numericUpDown31.Increment = Convert.ToDecimal(inc * 0.001);
@@ -2553,6 +2552,7 @@ namespace Gral
         void TabControl1Click(object sender, EventArgs e)
         {
             double n = 0;
+            UpdateFileSizes.Stop();
             if (tabControl1.SelectedIndex == 0) // Project
             {
                 textBox17.Hide();
@@ -2735,8 +2735,8 @@ namespace Gral
             if (tabControl1.SelectedIndex == 6)
             {
                 CheckConFiles(); // check, if project is locked
-                GralFileSizes(); // calculate file sizes
-
+                UpdateFileSize(null, null); // calculate file sizes
+                UpdateFileSizes.Start(); // update the files size periodically
                 // Check, if GRAMM Windfield exists
                 if (Directory.Exists(GRAMMwindfield))
                 {
@@ -2906,13 +2906,15 @@ namespace Gral
                 File.Exists(Path.Combine(Main.ProjectName, "Computation", "KeepAndReadTransientTempFiles.dat")) ||
                 !GRALSettings.WaitForKeyStroke ||
                 GRALSettings.PrognosticSubDomainsSizeSourceRadius >= 50 ||
-                GRALSettings.ReproducibleResults)
+                GRALSettings.ReproducibleResults ||
+                Math.Abs(ProjectSetting.RelaxationFactorGRALPressure - 1) > 0.0001 ||
+                Math.Abs(ProjectSetting.RelaxationFactorGRALVelocity - 0.1) > 0.0001)
             {
-                button57.BackgroundImage = Gral.Properties.Resources.WrenchYellow;
+                button57.BackgroundImage = Gral.Properties.Resources.WrenchYellowTransparant;
             }
             else
             {
-                button57.BackgroundImage = Gral.Properties.Resources.WrenchBlue;
+                button57.BackgroundImage = Gral.Properties.Resources.WrenchBlueTransparent;
             }
         }
 
@@ -3016,7 +3018,234 @@ namespace Gral
         /// </summary>
         void MainLoad(object sender, EventArgs e)
         {
+            // Create the update timer with a 30 seconds interval
+            UpdateFileSizes = new System.Timers.Timer(30000);
+            // Hook up the Elapsed event for the timer running in its own thread
+            UpdateFileSizes.Elapsed += UpdateFileSize;
+            UpdateFileSizes.AutoReset = true;
+            UpdateFileSizes.Enabled = true;
+            UpdateFileSizes.Stop();
 
+            //enable support for high contrast themes
+            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
+            {
+                this.BackColor = System.Drawing.SystemColors.Control;
+                this.button57.BackColor = Color.Gainsboro;
+                this.button55.BackColor = Color.Gainsboro;
+                this.button55.FlatStyle = FlatStyle.Standard;
+                this.button55.Left = 760;
+                this.button55.Size = new Size(32, 32);
+                LoopAllControls(this.Controls);
+                LoopAllControls(this.Controls);
+            }
+            this.numericUpDown10.MouseWheel += new MouseEventHandler(NumericUpDown_MouseWheel);
+            this.numericUpDown9.MouseWheel += new MouseEventHandler(NumericUpDown_MouseWheel);
+            this.numericUpDown9.KeyPress += new KeyPressEventHandler(NumericUpDownInteger_KeyPress);
+        }
+
+        /// <summary>
+        /// Limit the Mousewheel to +- NumericUpDown.Increment
+        /// </summary>
+        private void NumericUpDown_MouseWheel(object sender, MouseEventArgs e)
+        {
+            NumericUpDown numupd = sender as NumericUpDown;
+            if (numupd == null) return;
+            //direction
+            if (e.Delta > 0)
+            {
+                decimal temp = numupd.Value + numupd.Increment;
+                if (temp < numupd.Maximum)
+                {
+                    numupd.Value = temp;
+                }
+            }
+            else if (e.Delta < 0)
+            {
+                decimal temp = numupd.Value - numupd.Increment;
+                if (temp < numupd.Maximum)
+                    if (temp > numupd.Minimum)
+                    {
+                        numupd.Value = temp;
+                    }
+            }
+            ((HandledMouseEventArgs)e).Handled = true;
+        }
+        
+        /// <summary>
+        /// Allow only integer values on the NumericUpDown control
+        /// </summary>
+        private void NumericUpDownInteger_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Loop over all buttons and set Button.Image to Button.Backgroundimage
+        /// </summary>
+        public static void LoopAllControls(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                if (control is Panel pnl)
+                {
+                    pnl.BackColor = System.Drawing.SystemColors.Control;
+                }
+                if (control is GroupBox grp)
+                {
+                    grp.BackColor = System.Drawing.SystemColors.Control;
+                    grp.ForeColor = System.Drawing.SystemColors.ControlText;
+                }
+                if (control.HasChildren)
+                {
+                    //Recursively loop through the child controls
+                    LoopAllControls(control.Controls);
+                }
+                else
+                {
+                    if (control is TextBox txt)
+                    {
+                        txt.ForeColor = System.Drawing.SystemColors.ControlText;
+                        txt.BackColor = System.Drawing.SystemColors.Control;
+                    }
+                    if (control is Label lbl)
+                    {
+                        lbl.ForeColor = System.Drawing.SystemColors.ControlText;
+                        lbl.BackColor = System.Drawing.SystemColors.Control;
+                    }
+                    if (control is NumericUpDown numupd)
+                    {
+                        numupd.BackColor = System.Drawing.SystemColors.Control;
+                        numupd.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+                    if (control is RadioButton rbtn)
+                    {
+                        rbtn.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+                    if (control is ListView lv)
+                    {
+                        lv.BackColor = System.Drawing.SystemColors.Control;
+                        lv.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+
+                    if (control is Button btn)
+                    {
+                        if (btn.BackgroundImage != null && System.Windows.SystemParameters.HighContrast)
+                        {
+                            Bitmap resized = new Bitmap(btn.BackgroundImage, new Size(btn.Width, btn.Height));
+                            btn.Image = resized;
+                        }
+                        btn.BackColor = System.Drawing.SystemColors.ButtonFace;
+                        btn.ForeColor = System.Drawing.SystemColors.ControlText;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update the file size and number of GRAL and GRAMM result files periodically
+        /// </summary>
+        private void UpdateFileSize(Object source, ElapsedEventArgs e)
+        {
+            string _projectName = ProjectName;
+
+            if (string.IsNullOrEmpty(_projectName))
+            {
+                return;
+            }
+            try // Kuntner: error if no project exists
+            {
+                string _file = Path.Combine(_projectName, "Computation" + Path.DirectorySeparatorChar);
+                DirectoryInfo _directory = new DirectoryInfo(_file);
+                FileInfo[] files_conc = _directory.GetFiles("*.con");
+                if (files_conc.Length == 0) // compressed files?
+                {
+                    files_conc = _directory.GetFiles("*.grz");
+                }
+
+                long file_size = 0;
+                for (int i = 0; i < files_conc.Length; i++)
+                {
+                    file_size += files_conc[i].Length;
+                }
+                if (file_size < 1000000000)
+                {
+                    SetLabel(label84, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
+                }
+                else
+                {
+                    SetLabel(label84, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
+                }
+                SetLabel(label57, files_conc.Length.ToString() + " files");
+            }
+            catch { }
+
+            try
+            {
+                //size of GRAL flow field files
+                DirectoryInfo _directory = new DirectoryInfo(St_F.GetGffFilePath(Path.Combine(_projectName, "Computation")) + Path.DirectorySeparatorChar);
+                FileInfo[] files_gff = _directory.GetFiles("*.gff");
+                long file_size = 0;
+                for (int i = 0; i < files_gff.Length; i++)
+                {
+                    file_size += files_gff[i].Length;
+                }
+                if (file_size < 1000000000)
+                {
+                    SetLabel(label85, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
+                }
+                else
+                {
+                    SetLabel(label85, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
+                }
+                SetLabel(label72, files_gff.Length.ToString() + " files");
+            }
+            catch
+            { }
+
+            try
+            {
+                // Wnd Files
+                string _GRAMMwindfield = GRAMMwindfield;
+                if (!string.IsNullOrEmpty(_GRAMMwindfield))
+                {
+                    string _file = Path.Combine(_GRAMMwindfield);
+                    DirectoryInfo _directory = new DirectoryInfo(_file);
+                    FileInfo[] files_wnd = _directory.GetFiles("*.wnd");
+                    long file_size = 0;
+                    for (int i = 0; i < files_wnd.Length; i++)
+                    {
+                        file_size += files_wnd[i].Length;
+                    }
+                    if (file_size < 1000000000)
+                    {
+                        SetLabel(label97, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
+                    }
+                    else
+                    {
+                        SetLabel(label97, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
+                    }
+                    SetLabel(label96, files_wnd.Length.ToString() + " files");
+                }
+            }
+            catch { }
+        }
+        /// <summary>
+        /// Invoke label text from other thread
+        /// </summary>
+        private void SetLabel(Label label, string text)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                { label.Text = text; }));
+            }
+            else
+            {
+                label.Text = text;
+            }
         }
 
         /// <summary>
@@ -3033,7 +3262,7 @@ namespace Gral
         /// </summary>
         void Button46Click(object sender, EventArgs e)
         {
-            using (GralMainForms.MostRecentFiles MRF = new GralMainForms.MostRecentFiles())
+            using (global::GralMainForms.MostRecentFiles MRF = new global::GralMainForms.MostRecentFiles())
             {
                 if (MRF.ShowDialog() == DialogResult.OK)
                 {
@@ -3106,17 +3335,18 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox1.Image = Gral.Properties.Resources.RedDotTransparent;
                     Control_OK = false;
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox1.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Control_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox1.Image = Gral.Properties.Resources.BlackHook;
+                    PictureboxSetHook(pictureBox1);
+                    //pictureBox1.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Control_OK = true;
                 }
             }
@@ -3134,17 +3364,18 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox2.Image = Gral.Properties.Resources.RedDotTransparent;
                     Meteo_OK = false;
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox2.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Meteo_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox2.Image = Gral.Properties.Resources.BlackHook;
+                    PictureboxSetHook(pictureBox2);
+                    //pictureBox2.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Meteo_OK = true;
                 }
             }
@@ -3162,17 +3393,18 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox3.Image = Gral.Properties.Resources.RedDotTransparent;
                     Emission_OK = false;
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox3.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Emission_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox3.Image = Gral.Properties.Resources.BlackHook;
+                    PictureboxSetHook(pictureBox3);
+                    //pictureBox3.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Emission_OK = true;
                 }
             }
@@ -3190,7 +3422,7 @@ namespace Gral
 
                 if (Mode == ButtonColorEnum.RedDot)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.RedDot;
+                    pictureBox4.Image = Gral.Properties.Resources.RedDotTransparent;
                     Building_OK = false;
                     try // delete buildings.dat if file exists
                     {
@@ -3213,14 +3445,31 @@ namespace Gral
                 }
                 if (Mode == ButtonColorEnum.GreenDot)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.GreenDot;
+                    pictureBox4.Image = Gral.Properties.Resources.GreenDotTransparent;
                     Building_OK = false;
                 }
                 if (Mode == ButtonColorEnum.BlackHook)
                 {
-                    pictureBox4.Image = Gral.Properties.Resources.BlackHook;
+                    PictureboxSetHook(pictureBox4);
+                    //pictureBox4.Image = Gral.Properties.Resources.BlackHookTransparent;
                     Building_OK = true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Set the hook color depending on dark mode or not
+        /// </summary>
+        /// <param name="sender"></param>
+        private void PictureboxSetHook(PictureBox pb)
+        {
+            if (Gral.Main.GUISettings.UseDarkMode && Gral.Main.GUISettings.UseDefaultColors)
+            {
+                pb.Image = Gral.Properties.Resources.WhiteHookTransparent;
+            }
+            else
+            {
+                pb.Image = Gral.Properties.Resources.BlackHookTransparent;
             }
         }
 
@@ -3248,6 +3497,7 @@ namespace Gral
                         button60.Enabled = false;
                         ProjectSetting.EmissionModulationPath = Path.Combine(ProjectName, @"Computation");
                         ProjectSetting.EvaluationPath = Path.Combine(ProjectName, @"Maps");
+                        DeleteReceptorConcentrationFiles();
                     }
                     else
                     {
@@ -3257,6 +3507,7 @@ namespace Gral
                         checkBox34.Enabled = false;
                         groupBox21.Visible = false; // Wet Deposition settings
                         groupBox24.Visible = false; // Decay rate
+                        DeleteReceptorConcentrationFiles();
                     }
                     ResetInDat();
                 }
@@ -3267,7 +3518,25 @@ namespace Gral
                 }
             }
         }
-
+        /// <summary>
+        /// Delete receptor concentrations files
+        /// </summary>
+        private void DeleteReceptorConcentrationFiles()
+        {
+            string recFile = Path.Combine(ProjectName, @"Computation", "ReceptorConcentrations.dat");
+            if (File.Exists(recFile))
+            {
+                try
+                { File.Delete(recFile); }
+                catch { }
+            }
+            recFile = Path.Combine(ProjectName, @"Computation", "Receptor_Timeseries_Transient.txt");
+            if (File.Exists(recFile))
+            {
+                try { File.Delete(recFile); } catch { }
+                ;
+            }
+        }
         /// <summary>
         /// Set the cut-off concentration for transient simulations
         /// </summary>
@@ -3310,7 +3579,7 @@ namespace Gral
         /// <param name="e"></param>
         void Button49Click(object sender, EventArgs e)
         {
-            GralMainForms.ShowEmissionTimeseries ets = new GralMainForms.ShowEmissionTimeseries()
+            global::GralMainForms.ShowEmissionTimeseries ets = new global::GralMainForms.ShowEmissionTimeseries()
             {
                 SG_Show = -1
             };
@@ -3378,7 +3647,7 @@ namespace Gral
         /// <param name="e"></param>
         void Button50Click(object sender, EventArgs e)
         {
-            GralMainForms.GUI_Settings settings = new GralMainForms.GUI_Settings
+            global::GralMainForms.GUI_Settings settings = new global::GralMainForms.GUI_Settings
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = new System.Drawing.Point(this.Left, this.Top),
@@ -3488,7 +3757,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button12_Click(object sender, EventArgs e)
         {
-            using (GralMainForms.FlexibleStretchingFactors FStF = new GralMainForms.FlexibleStretchingFactors()
+            using (global::GralMainForms.FlexibleStretchingFactors FStF = new global::GralMainForms.FlexibleStretchingFactors()
             {
                 FlexibleStretchingFactor = FlowFieldStretchFlexible,
                 ProjectLocked = Project_Locked,
@@ -3523,7 +3792,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button54_Click(object sender, EventArgs e)
         {
-            using (GralMainForms.DecayRateForm DRF = new GralMainForms.DecayRateForm()
+            using (global::GralMainForms.DecayRateForm DRF = new global::GralMainForms.DecayRateForm()
             {
                 DecayRate = DecayRate,
                 ProjectLocked = Project_Locked,
@@ -3548,7 +3817,7 @@ namespace Gral
         /// <param name="e"></param>
         private void Button53_Click(object sender, EventArgs e)
         {
-            using (GralMainForms.VerticalLayerHeights VLH = new GralMainForms.VerticalLayerHeights()
+            using (global::GralMainForms.VerticalLayerHeights VLH = new global::GralMainForms.VerticalLayerHeights()
             {
                 StretchFlexible = FlowFieldStretchFlexible,
                 StretchingFactor = (float)numericUpDown12.Value,
@@ -3581,7 +3850,7 @@ namespace Gral
             }
             if (!open)
             {
-                GralMainForms.AppInfo Ai = new GralMainForms.AppInfo()
+                global::GralMainForms.AppInfo Ai = new global::GralMainForms.AppInfo()
                 {
                     StartPosition = FormStartPosition.Manual,
                     Location = new System.Drawing.Point(this.Left, this.Top),
@@ -3600,7 +3869,7 @@ namespace Gral
         {
             if (MessageBox.Show(this, "These special settings are only intended for a few applications. Do not proceed if you cannot assess the effects", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                using (GralMainForms.Main_SpecialSettings MSp = new GralMainForms.Main_SpecialSettings())
+                using (global::GralMainForms.SpecialSettings MSp = new global::GralMainForms.SpecialSettings())
                 {
                     MSp.WriteASCiiOutput = GRALSettings.WriteESRIResult;
                     MSp.KeyStrokeWhenExitGRAL = GRALSettings.WaitForKeyStroke;
@@ -3693,7 +3962,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button58_Click(object sender, EventArgs e)
+        private void Button58_Click(object sender, EventArgs e)
         {
             SaveMetData(MeteoTimeSeries);
         }
@@ -3703,9 +3972,9 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button59_Click(object sender, EventArgs e)
+        private void Button59_Click(object sender, EventArgs e)
         {
-            GralMainForms.OnlineParameters online = new GralMainForms.OnlineParameters()
+            global::GralMainForms.OnlineParameters online = new global::GralMainForms.OnlineParameters()
             {
                 GRAMMGroupBoxVisible = groupBox15.Visible,
                 OnlineGroupBoxVisible = groupBox17.Visible,
@@ -3714,7 +3983,7 @@ namespace Gral
                 NumberOfGRALayers = Convert.ToInt32(numericUpDown26.Value),
                 ProjectName = ProjectName
             };
-            online.Closing += new System.ComponentModel.CancelEventHandler(OnlineParametersFormClosing);
+            online.FormClosing += new FormClosingEventHandler(OnlineParametersFormClosing);
             online.Location = new Point(this.Left + 150, this.Top + 50);
             online.Show();
         }
@@ -3725,7 +3994,7 @@ namespace Gral
         /// <param name="e"></param>
         private void OnlineParametersFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            GralMainForms.OnlineParameters online = (GralMainForms.OnlineParameters)sender;
+            global::GralMainForms.OnlineParameters online = (global::GralMainForms.OnlineParameters)sender;
             OnlineRefreshInterval = online.OnlineRefreshInterval;
             OnlineParmeters = online.OnlineCheckBoxes;
         }
@@ -3736,7 +4005,7 @@ namespace Gral
         /// <param name="ReportError">Show "error" and "No update available" messages?</param>
         public static void AutoUpdateStart(bool ReportError)
         {
-            GralMainForms.UpdateNotification upd = new GralMainForms.UpdateNotification()
+            global::GralMainForms.UpdateNotification upd = new global::GralMainForms.UpdateNotification()
             {
                 RecentVersion = Application.ProductVersion,
                 ShowUserInfo = ReportError
@@ -3749,7 +4018,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void panel2_MouseClick(object sender, MouseEventArgs e)
+        private void Panel2_MouseClick(object sender, MouseEventArgs e)
         {
             Point point = panel1.PointToClient(Cursor.Position);
             MessageBox.Show(point.ToString());
@@ -3760,7 +4029,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void panel1_MouseClick(object sender, MouseEventArgs e)
+        private void Panel1_MouseClick(object sender, MouseEventArgs e)
         {
             Point point = panel1.PointToClient(Cursor.Position);
             if (OpenMailToIVT.Contains(point))
@@ -3775,7 +4044,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button60_Click(object sender, EventArgs e)
+        private void Button60_Click(object sender, EventArgs e)
         {
             string emissionModulation = Path.Combine(ProjectName, "Computation");
             if (Directory.Exists(Main.ProjectSetting.EmissionModulationPath))
@@ -3854,12 +4123,12 @@ namespace Gral
             catch { }
         }
 
-        private void listBox5_DoubleClick(object sender, EventArgs e)
+        private void ListBox5_DoubleClick(object sender, EventArgs e)
         {
             ShowTotalEmissions(sender, e);
         }
 
-        private void checkBoxAVX_Click(object sender, EventArgs e)
+        private void CheckBoxAVX_Click(object sender, EventArgs e)
         {
 #if __MonoCS__
             if (checkBoxAVX.Checked)

@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -27,14 +26,14 @@ namespace GralItemForms
 {
     public partial class EditPortalSources : Form
     {
-        private TextBox [] portalemission = new TextBox [10];       //textboxes for emission strenght input of portal sources
-        private ComboBox [] portalpollutant = new ComboBox [10];    //ComboBoxes for selecting pollutants of portal sources
-        private Label [] labelpollutant = new Label [10];           //labels for pollutant types
-        private Button [] but1 = new Button [10];                   //Buttons for units
+        private TextBox[] portalemission = new TextBox[10];       //textboxes for emission strenght input of portal sources
+        private ComboBox[] portalpollutant = new ComboBox[10];    //ComboBoxes for selecting pollutants of portal sources
+        private Label[] labelpollutant = new Label[10];           //labels for pollutant types
+        private Button[] but1 = new Button[10];                   //Buttons for units
         /// <summary>
         /// Collection of all portal source data
         /// </summary>
-        public List<PortalsData> ItemData = new List<PortalsData>(); 
+        public List<PortalsData> ItemData = new List<PortalsData>();
         private List<PollutantsData> SourceGroupEmission = new List<PollutantsData>(); // emission data for various source group
         /// <summary>
         /// Number of actual portal source to be displayed
@@ -43,16 +42,16 @@ namespace GralItemForms
         /// <summary>
         /// X corner points of a portal source in meters
         /// </summary>
-        public double [] CornerPortalX = new double [2];            //x corner points of a portal source in meters
+        public double[] CornerPortalX = new double[2];            //x corner points of a portal source in meters
         /// <summary>
         /// Y corner points of a portal source in meters
         /// </summary>
-        public double [] CornerPortalY = new double [2];            //y corner points of a portal source in meters
-        private string [] emlinearr = new string [100];             //splitted emission data for various source groups
+        public double[] CornerPortalY = new double[2];            //y corner points of a portal source in meters
+        private string[] emlinearr = new string[100];             //splitted emission data for various source groups
         public List<string> SG_List = new List<string>();			//All source group names
-        private string [] defsourcegroup = new string [2];          //defined sourcegroups
+        private string[] defsourcegroup = new string[2];          //defined sourcegroups
 
-        private Deposition [] dep = new Deposition [10];
+        private Deposition[] dep = new Deposition[10];
         private CultureInfo ic = CultureInfo.InvariantCulture;
         private int Dialog_Initial_Width = 0;
         private int Button1_Width = 50;
@@ -75,17 +74,17 @@ namespace GralItemForms
         public event ForceItemOK ItemFormOK;
         public event ForceItemCancel ItemFormCancel;
 
-        public EditPortalSources ()
+        public EditPortalSources()
         {
-            InitializeComponent ();
-            
-            #if __MonoCS__
+            InitializeComponent();
+
+#if __MonoCS__
             var allNumUpDowns = Main.GetAllControls<NumericUpDown> (this);
             foreach (NumericUpDown nu in allNumUpDowns)
             {
                 nu.TextAlign = HorizontalAlignment.Left;
             }
-            #endif
+#endif
 
             int y_act = groupBox1.Top + groupBox1.Height + 5;
             int TBHeight = textBox2.Height;
@@ -101,28 +100,28 @@ namespace GralItemForms
             Button1_Width = bt_test.Width;
             Button1_Height = bt_test.Height;
             bt_test.Dispose();
-            
+
             y_act = 10;
 
             for (int i = 0; i < 10; i++)
             {
                 createTextbox(6, Convert.ToInt32(y_act) + Convert.ToInt32(i * (TBHeight + 7)), TBWidth, TBHeight, i);
-                dep [i] = new Deposition (); // initialize Deposition array
-                dep [i].init ();
+                dep[i] = new Deposition(); // initialize Deposition array
+                dep[i].init();
             }
-            
+
             listBox1.Items.AddRange(Main.NemoTrafficSituations);
-            textBox1.KeyPress += new KeyPressEventHandler (Comma1); //only point as decimal seperator is allowed
+            textBox1.KeyPress += new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
         }
 
-        private void Editportalsources_Load (object sender, EventArgs e)
+        private void Editportalsources_Load(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             int bw = this.Height - this.ClientSize.Height + SystemInformation.HorizontalScrollBarHeight;
             listBox1.Height = 25;
             trackBar1.Height = 12;
-            #endif
-            
+#endif
+
             //fill listboxes with default pollutants
             for (int nr = 0; nr < 10; nr++)
             {
@@ -131,7 +130,7 @@ namespace GralItemForms
                     portalpollutant[nr].Items.Add(Main.PollutantList[i]);
                 }
             }
-            
+
             tabControl1.Height = Math.Max(350, portalemission[9].Bottom + 5);
             tabControl1.Width = Math.Max(273, but1[1].Right + 4);
             Dialog_Initial_Width = ClientSize.Width;
@@ -140,15 +139,15 @@ namespace GralItemForms
             Numericupdown_x0 = numericUpDown1.Left;
             CheckedListbox_x0 = listBox2.Left;
             TabControl_x0 = tabControl1.Left;
-            
+
             FillValues();
-            
+
             ClientSize = new Size(Math.Max(textBox2.Right + 5, but1[1].Right + 5), tabControl1.Bottom + 5);
             TabControl1_Height = tabControl1.Height;
             EditportalsourcesResizeEnd(null, null);
         }
 
-        private void createTextbox (int x0, int y0, int b, int h, int nr)
+        private void createTextbox(int x0, int y0, int b, int h, int nr)
         {
             //list box for selcting pollutants
             portalpollutant[nr] = new ComboBox
@@ -198,14 +197,14 @@ namespace GralItemForms
             toolTip1.SetToolTip(but1[nr], "Click to set deposition - green: deposition set");
             but1[nr].Click += new EventHandler(edit_deposition);
         }
-        
+
         private void listBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
             // Define the default color of the brush as black.
             ListBox lb = sender as ListBox;
             string poll = lb.Items[e.Index].ToString();
-            
+
             // See if the item is selected.
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
             {
@@ -214,7 +213,7 @@ namespace GralItemForms
                 {
                     e.Graphics.FillRectangle(brush, e.Bounds);
                 }
-                
+
                 // Draw the current item text based on the current Font
                 // and the custom brush settings.
                 Brush myBrush = Brushes.White;
@@ -236,7 +235,7 @@ namespace GralItemForms
                     e.Graphics.DrawString(poll, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
                 }
             }
-            
+
             // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
         }
@@ -247,21 +246,21 @@ namespace GralItemForms
             int asc = (int)e.KeyChar; //get ASCII code
             switch (asc)
             {
-                    case 8: break;
-                    case 44: break;
-                    case 46: break;
-                    case 48: break;
-                    case 49: break;
-                    case 50: break;
-                    case 51: break;
-                    case 52: break;
-                    case 53: break;
-                    case 54: break;
-                    case 55: break;
-                    case 56: break;
-                    case 57: break;
-                    case 69: break; // E
-                    case 45: break; // -
+                case 8: break;
+                case 44: break;
+                case 46: break;
+                case 48: break;
+                case 49: break;
+                case 50: break;
+                case 51: break;
+                case 52: break;
+                case 53: break;
+                case 54: break;
+                case 55: break;
+                case 56: break;
+                case 57: break;
+                case 69: break; // E
+                case 45: break; // -
                 default:
                     e.Handled = true; break;
             }
@@ -281,7 +280,7 @@ namespace GralItemForms
                 }
             }
         }
-        
+
         private void Comma1(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == ',')
@@ -291,7 +290,7 @@ namespace GralItemForms
 
             int asc = (int)e.KeyChar; //get ASCII code
         }
-        
+
         //increase the number of portal sources by one
         private void Button1Click(object sender, EventArgs e)
         {
@@ -323,7 +322,7 @@ namespace GralItemForms
         {
             float height = Convert.ToSingle(numericUpDown1.Value);
             int crosssection = Convert.ToInt32(height * Math.Sqrt(Math.Pow(CornerPortalX[0] - CornerPortalX[1], 2) + Math.Pow(CornerPortalY[0] - CornerPortalY[1], 2)));
-                
+
             if (listBox2.Items.Count == 0) // no source group added
             {
                 if (crosssection > 0.1 && textBox1.Text.Length > 1)
@@ -340,7 +339,7 @@ namespace GralItemForms
                 }
                 return;
             }
-            
+
             PortalsData _ps;
             if (ItemDisplayNr >= ItemData.Count) // new item
             {
@@ -350,7 +349,7 @@ namespace GralItemForms
             {
                 _ps = ItemData[ItemDisplayNr];
             }
-            
+
             if (textBox2.Text != "")
             {
                 // collect pollutants
@@ -360,35 +359,35 @@ namespace GralItemForms
                 {
                     UpdateNewSourcegroupEmission();
                 }
-                
-                foreach(PollutantsData _pd in SourceGroupEmission)
+
+                foreach (PollutantsData _pd in SourceGroupEmission)
                 {
                     _ps.Poll.Add(_pd);
                 }
-                
+
                 for (int i = 0; i < 10; i++) // save deposition
                 {
                     _ps.GetDep()[i] = new Deposition(dep[i]);
                 }
-                
+
                 string tunneldirection = "1";      //indicates whether the tunnel is bi- or uni-directional
-                if(radioButton1.Checked==true)
+                if (radioButton1.Checked == true)
                 {
-                    tunneldirection ="1";
+                    tunneldirection = "1";
                 }
 
-                if (radioButton2.Checked==true)
+                if (radioButton2.Checked == true)
                 {
-                    tunneldirection ="2";
+                    tunneldirection = "2";
                 }
 
                 _ps.Pt1 = new PointD(CornerPortalX[0], CornerPortalY[0]);
                 _ps.Pt2 = new PointD(CornerPortalX[1], CornerPortalY[1]);
-                
+
                 listBox1.SelectedIndex = listBox1.TopIndex; // NEMO
                 _ps.Name = textBox1.Text;
                 _ps.Height = height;
-                
+
                 _ps.BaseHeight = Convert.ToSingle(numericUpDown5.Value);
                 if (checkBox1.Checked) // absolute height over sea
                 {
@@ -405,7 +404,7 @@ namespace GralItemForms
                 _ps.Nemo.BaseYear = Convert.ToInt32(numericUpDown8.Value);
                 _ps.TemperatureTimeSeries = TempTimeSeries;
                 _ps.VelocityTimeSeries = VelTimeSeries;
-                
+
                 if (ItemDisplayNr >= ItemData.Count) // new item
                 {
                     ItemData.Add(_ps);
@@ -421,9 +420,9 @@ namespace GralItemForms
             }
             else
             {
-                MessageBox.Show (this, "Digitize edge points, please", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "Digitize edge points, please", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
+
             // enable Remove SG if SG_count > 1 && a selected entry
             if (listBox2.Items.Count > 1 && listBox2.SelectedIndex >= 0)
             {
@@ -460,7 +459,7 @@ namespace GralItemForms
                         _pdata.Poll.Add(new PollutantsData(1));
                         _pdata.Name = "Portal";
                         _pdata.Height = 5;
-                        
+
                         for (int i = 0; i < 10; i++)
                         {
                             if (portalpollutant[i].SelectedIndex < 0 && portalpollutant[i].Items.Count > 0)
@@ -470,13 +469,13 @@ namespace GralItemForms
                         }
                     }
                 }
-                
+
                 listBox2.Items.Clear(); // clear Source groups
-                
+
                 textBox1.Text = _pdata.Name;    // name
-                
+
                 double height = Math.Round(_pdata.Height, 1);
-                
+
                 if (_pdata.BaseHeight >= 0) // height above ground
                 {
                     checkBox1.Checked = false;
@@ -485,10 +484,10 @@ namespace GralItemForms
                 {
                     checkBox1.Checked = true;
                 }
-                numericUpDown5.Value = St_F.ValueSpan(0, 7999, Math.Abs(_pdata.BaseHeight));	
-                
-                numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double) Math.Abs(height));
-                numericUpDown2.Value = St_F.ValueSpan(0, 100, (double) Math.Abs(_pdata.ExitVel));
+                numericUpDown5.Value = St_F.ValueSpan(0, 7999, Math.Abs(_pdata.BaseHeight));
+
+                numericUpDown1.Value = St_F.ValueSpan(0, 7999, (double)Math.Abs(height));
+                numericUpDown2.Value = St_F.ValueSpan(0, 100, (double)Math.Abs(_pdata.ExitVel));
                 numericUpDown3.Value = St_F.ValueSpan(-499, 499, _pdata.DeltaT);
                 if (_pdata.Direction == "1")
                 {
@@ -504,12 +503,12 @@ namespace GralItemForms
                 numericUpDown4.Value = St_F.ValueSpan(-10, 10, _pdata.Nemo.Slope);
                 listBox1.SelectedIndex = _pdata.Nemo.TrafficSit;
                 numericUpDown8.Value = St_F.ValueSpan(1990, 2200, _pdata.Nemo.BaseYear);
-                
+
                 SourceGroupEmission.Clear();
                 SourceGroupEmission.TrimExcess();
                 if (_pdata.Poll != null)
                 {
-                    foreach(PollutantsData _poll in _pdata.Poll)
+                    foreach (PollutantsData _poll in _pdata.Poll)
                     {
                         SourceGroupEmission.Add(new PollutantsData(_poll));
                         listBox2.Items.Add(SG_List[_poll.SourceGroup - 1]);
@@ -525,16 +524,16 @@ namespace GralItemForms
                 CornerPortalY[0] = _pdata.Pt1.Y;
                 CornerPortalX[1] = _pdata.Pt2.X;
                 CornerPortalY[1] = _pdata.Pt2.Y;
-                
+
                 int crosssection = Convert.ToInt32(height * Math.Sqrt(Math.Pow(CornerPortalX[0] - CornerPortalX[1], 2) + Math.Pow(CornerPortalY[0] - CornerPortalY[1], 2)));
                 textBox2.Text = crosssection.ToString();
-                
+
                 Domain.EditSourceShape = false;  // block input of new vertices
-                
+
                 for (int i = 0; i < 10; i++)
                 {
                     dep[i] = _pdata.GetDep()[i];
-                    
+
                     if (dep[i].V_Dep1 > 0 || dep[i].V_Dep2 > 0 || dep[i].V_Dep3 > 0)
                     {
                         but1[i].BackColor = Color.LightGreen; // mark that deposition is set
@@ -544,7 +543,7 @@ namespace GralItemForms
                         but1[i].BackColor = SystemColors.ButtonFace; // mark that deposition is reset
                     }
                 }
-                
+
                 TempTimeSeries = _pdata.TemperatureTimeSeries;
                 if (!string.IsNullOrEmpty(TempTimeSeries))
                 {
@@ -554,7 +553,7 @@ namespace GralItemForms
                 {
                     button8.BackgroundImage = Gral.Properties.Resources.TimeSeries;
                 }
-                
+
                 VelTimeSeries = _pdata.VelocityTimeSeries;
                 if (!string.IsNullOrEmpty(VelTimeSeries))
                 {
@@ -564,14 +563,14 @@ namespace GralItemForms
                 {
                     button9.BackgroundImage = Gral.Properties.Resources.TimeSeries;
                 }
-                
+
             }
             catch//*(Exception ex)*//
             {
                 //MessageBox.Show(ex.Message);
                 textBox1.Text = "Portal";
                 numericUpDown1.Value = 5;
-                
+
                 SourceGroupEmission.Clear();
                 SourceGroupEmission.TrimExcess();
 
@@ -586,7 +585,7 @@ namespace GralItemForms
                     dep[i].init();
                 }
             }
-            
+
             // enable Remove SG if SG_count > 1 && a selected entry
             if (listBox2.Items.Count > 1 && listBox2.SelectedIndex >= 0)
             {
@@ -604,7 +603,7 @@ namespace GralItemForms
             RemoveOne(true);
             RedrawDomain(this, null);
         }
-        
+
         /// <summary>
         /// Remove the recent item object from the item list
         /// </summary> 
@@ -622,7 +621,7 @@ namespace GralItemForms
                     ask = true; // Cancel -> do not delete!
                 }
             }
-            
+
             if (ask == false)
             {
                 textBox1.Text = "";
@@ -636,12 +635,12 @@ namespace GralItemForms
                 textBox3.Text = "0";
                 listBox1.TopIndex = 0;
                 listBox1.SelectedIndex = listBox1.TopIndex;
-                
+
                 for (int i = 0; i < 10; i++)
                 {
                     portalemission[i].Text = "0";
                 }
-                
+
                 if (ItemDisplayNr >= 0)
                 {
                     try
@@ -652,9 +651,9 @@ namespace GralItemForms
                         }
 
                         trackBar1.Value = Math.Min(trackBar1.Maximum, trackBar1.Value);
-                        
+
                         ItemData.RemoveAt(ItemDisplayNr);
-                        
+
                         ItemDisplayNr = trackBar1.Value - 1;
                         FillValues();
                     }
@@ -672,12 +671,12 @@ namespace GralItemForms
             {
                 SourceGroupEmission.Clear();
                 SourceGroupEmission.TrimExcess();
-                
+
                 ItemData.Clear();
                 ItemData.TrimExcess();
-                
+
                 listBox2.Items.Clear();
-                
+
                 textBox1.Text = "";
                 numericUpDown1.Value = 5;
                 numericUpDown2.Value = 0;
@@ -697,7 +696,7 @@ namespace GralItemForms
                     dep[i].init();
                     but1[i].BackColor = SystemColors.ButtonFace;
                 }
-                
+
                 trackBar1.Maximum = 1;
                 trackBar1.Value = 1;
                 ItemDisplayNr = trackBar1.Value - 1;
@@ -709,7 +708,7 @@ namespace GralItemForms
         //save source group
         private void Button4Click(object sender, EventArgs e)
         {
-            if (listBox2.SelectedIndex < 0  && listBox2.Items.Count > 1) // no source group selected & more than 1 source groups available
+            if (listBox2.SelectedIndex < 0 && listBox2.Items.Count > 1) // no source group selected & more than 1 source groups available
             {
                 Color _col = listBox2.BackColor;
                 listBox2.BackColor = Color.Yellow;
@@ -726,10 +725,10 @@ namespace GralItemForms
                 return;
             }
             UpdateNewSourcegroupEmission();
-            
+
             SaveArray(true);
         }
-        
+
         private void UpdateNewSourcegroupEmission()
         {
             try
@@ -743,20 +742,20 @@ namespace GralItemForms
                 {
                     sg_name = listBox2.SelectedItem.ToString();
                 }
-                
+
                 if (sg_name.Length > 0)
                 {
                     int sg_nr = St_F.GetSgNumber(sg_name);
                     int index = GetPollutantListIndex(sg_nr);
-                    
+
                     if (index < 0) // new entry
                     {
                         SourceGroupEmission.Add(new PollutantsData());
                         index = SourceGroupEmission.Count - 1;
                     }
-                    
+
                     SourceGroupEmission[index].SourceGroup = sg_nr;
-                    
+
                     for (int i = 0; i < 10; i++)
                     {
                         SourceGroupEmission[index].Pollutant[i] = portalpollutant[i].SelectedIndex;
@@ -768,25 +767,25 @@ namespace GralItemForms
             }
             catch
             {
-                
+
             }
         }
-        
+
         private int GetPollutantListIndex(int SourceGroupNumber)
         {
             int index = -1;
-            
+
             for (int i = 0; i < SourceGroupEmission.Count; i++)
             {
-                if(SourceGroupEmission[i].SourceGroup == SourceGroupNumber)
+                if (SourceGroupEmission[i].SourceGroup == SourceGroupNumber)
                 {
                     index = i;
                 }
             }
-            
+
             return index;
         }
-        
+
         //compute average PC speed based on the chosen traffic situation and the slope
         private void PC_speed()
         {
@@ -812,7 +811,7 @@ namespace GralItemForms
                 }
                 myReader.Close();
                 myReader.Dispose();
-                
+
                 for (int k = 1; k < 400; k++)
                 {
                     try
@@ -855,12 +854,12 @@ namespace GralItemForms
         void EditportalsourcesResizeEnd(object sender, EventArgs e)
         {
             int dialog_width = ClientSize.Width;
-            
+
             if (dialog_width < Dialog_Initial_Width)
             {
                 dialog_width = Dialog_Initial_Width;
             }
-            
+
             if (dialog_width > 200)
             {
                 dialog_width -= 12;
@@ -871,21 +870,21 @@ namespace GralItemForms
                 numericUpDown2.Width = dialog_width - Numericupdown_x0;
                 numericUpDown3.Width = dialog_width - Numericupdown_x0;
                 numericUpDown5.Width = dialog_width - Numericupdown_x0;
-                
+
                 groupBox3.Width = dialog_width - CheckedListbox_x0;
                 listBox2.Width = groupBox3.Width - listBox2.Left - 4;
                 tabControl1.Width = dialog_width - TabControl_x0;
                 button5.Left = groupBox3.Width - 5 - button5.Width;
                 button7.Left = groupBox3.Width / 2 - button7.Width / 2;
             }
-            
+
             panel1.Width = ClientSize.Width;
 
             if (ClientSize.Height > (tabControl1.Top + TabControl1_Height))
             {
                 tabControl1.Height = ClientSize.Height - tabControl1.Top;
             }
-            
+
             int element_width = (tabPage1.Width - but1[1].Width - 20) / 2;
             if (element_width < TBWidth)
             {
@@ -896,14 +895,14 @@ namespace GralItemForms
 
             for (int nr = 0; nr < 10; nr++)
             {
-                portalpollutant[nr].Width  = (int) (element_width);
-                labelpollutant[nr].Width = (int) (element_width);
-                portalemission [nr].Location = new System.Drawing.Point (portalpollutant[nr].Left + portalpollutant[nr].Width + 5, portalpollutant[nr].Top);
-                portalemission [nr].Width = (int) (element_width);
+                portalpollutant[nr].Width = (int)(element_width);
+                labelpollutant[nr].Width = (int)(element_width);
+                portalemission[nr].Location = new System.Drawing.Point(portalpollutant[nr].Left + portalpollutant[nr].Width + 5, portalpollutant[nr].Top);
+                portalemission[nr].Width = (int)(element_width);
                 but1[nr].Location = new System.Drawing.Point(portalemission[nr].Left + portalemission[nr].Width + 5, portalpollutant[nr].Top - 1);
             }
         }
-        
+
         void EditportalsourcesVisibleChanged(object sender, EventArgs e) // save source data if form is hidden
         {
             if (!Visible)
@@ -930,10 +929,10 @@ namespace GralItemForms
                 button4.Enabled = enable;
                 button5.Enabled = enable;
                 button7.Enabled = enable;
-                
+
                 foreach (Control c in tabControl1.Controls)
                 {
-                    if (c!= tabPage1)
+                    if (c != tabPage1)
                     {
                         c.Enabled = enable;
                     }
@@ -945,7 +944,7 @@ namespace GralItemForms
                         c.Enabled = enable;
                     }
                 }
-                
+
                 for (int i = 0; i < 10; i++)
                 {
                     portalpollutant[i].Visible = enable;
@@ -955,7 +954,7 @@ namespace GralItemForms
             Exit.Enabled = true;
             panel1.Enabled = true;
         }
-        
+
         private void RedrawDomain(object sender, EventArgs e)
         {
             // send Message to domain Form, that redraw is necessary
@@ -967,15 +966,15 @@ namespace GralItemForms
                 }
             }
             catch
-            {}
+            { }
         }
-        
+
         public void ShowForm()
         {
             ItemDisplayNr = trackBar1.Value - 1;
             RedrawDomain(this, null);
         }
-        
+
         private void edit_deposition(object sender, EventArgs e)
         {
             int nr = 0;
@@ -1002,13 +1001,13 @@ namespace GralItemForms
                 edit.Dep = dep[nr]; // set actual values
                 edit.Emission = St_F.TxtToDbl(portalemission[nr].Text, true);
                 edit.Pollutant = portalpollutant[nr].SelectedIndex;
-                
+
                 if (edit.ShowDialog() == DialogResult.OK)
                 {
                     edit.Hide();
                 }
             }
-            
+
             if (Main.Project_Locked == false)
             {
                 if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
@@ -1023,7 +1022,7 @@ namespace GralItemForms
                 SaveArray(true); // save values
             }
         }
-        
+
         void ListBox2SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1044,7 +1043,7 @@ namespace GralItemForms
                         sg_name = listBox2.Items[0].ToString();
                     }
                 }
-                
+
                 if (listBox2.Items.Count >= 1)
                 {
                     if (Main.Project_Locked == false)
@@ -1061,12 +1060,12 @@ namespace GralItemForms
                     button4.Enabled = false; // disable save source group button
                     button5.Enabled = false; // disable delete source group button
                 }
-                
+
                 if (sg_name.Length > 0)
                 {
                     int sg_nr = St_F.GetSgNumber(sg_name);
                     int index = GetPollutantListIndex(sg_nr);
-                    
+
                     // block change of pollutants
                     if (listBox2.SelectedIndex > 0 || Main.Project_Locked == true)
                     {
@@ -1084,7 +1083,7 @@ namespace GralItemForms
                             labelpollutant[i].Visible = false;
                         }
                     }
-                    
+
                     for (int i = 0; i < 10; i++)
                     {
                         if (index < 0)
@@ -1103,7 +1102,7 @@ namespace GralItemForms
                             {
                                 portalpollutant[i].SelectedIndex = SourceGroupEmission[index].Pollutant[i];
                             }
-                            
+
                             labelpollutant[i].Text = portalpollutant[i].Text;
                             portalemission[i].Text = SourceGroupEmission[index].EmissionRate[i].ToString();
                         }
@@ -1111,9 +1110,9 @@ namespace GralItemForms
                 }
             }
             catch
-            {}
+            { }
         }
-        
+
         // remove a SG - uncheck the checkbox
         void Button5Click(object sender, EventArgs e)
         {
@@ -1158,26 +1157,26 @@ namespace GralItemForms
 
         void EditportalsourcesFormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach(TextBox tex in portalemission)
+            foreach (TextBox tex in portalemission)
             {
                 tex.TextChanged -= new System.EventHandler(St_F.CheckInput);
                 tex.KeyPress -= new KeyPressEventHandler(Comma); //only point as decimal seperator is allowed
             }
-            foreach(Button but in but1)
+            foreach (Button but in but1)
             {
                 but.Click -= new EventHandler(edit_deposition);
             }
 
             textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
             textBox1.KeyPress -= new KeyPressEventHandler(Comma1); //only point as decimal seperator is allowed
-            
+
             CornerPortalX = null;
             CornerPortalY = null;
             ItemData.Clear();
             ItemData.TrimExcess();
             SourceGroupEmission.Clear();
             SourceGroupEmission.TrimExcess();
-            
+
             for (int nr = 0; nr < 10; nr++)
             {
                 portalpollutant[nr].SelectedValueChanged -= new System.EventHandler(Odour);
@@ -1186,14 +1185,14 @@ namespace GralItemForms
                 portalpollutant[nr].Dispose();
                 labelpollutant[nr].Dispose();
             }
-            
+
             listBox2.Items.Clear();
             SG_List.Clear();
             SG_List.TrimExcess();
-            
+
             toolTip1.Dispose();
         }
-        
+
         /// <summary>
         /// Select a source group
         /// </summary>
@@ -1219,7 +1218,7 @@ namespace GralItemForms
             {
                 sgsel.CopyFrom.Add(text.ToString());
             }
-            
+
             if (sgsel.ShowDialog() == DialogResult.OK)
             {
                 if (sgsel.ShiftCopy == 0) // add new sg
@@ -1237,7 +1236,7 @@ namespace GralItemForms
                 {
                     int new_sg = St_F.GetSgNumber(sgsel.SelectedSourceGroup);
                     int old_sg = St_F.GetSgNumber(sgsel.SelCopyFrom);
-                    
+
                     int indexold = GetPollutantListIndex(old_sg);
 
                     PollutantsData _poll = new PollutantsData(SourceGroupEmission[indexold])
@@ -1258,11 +1257,11 @@ namespace GralItemForms
                     {
                         int new_sg = St_F.GetSgNumber(sgsel.SelectedSourceGroup);
                         int old_sg = St_F.GetSgNumber(sgsel.SelCopyFrom);
-                        
+
                         int indexold = GetPollutantListIndex(old_sg);
                         SourceGroupEmission[indexold].SourceGroup = new_sg; // set new source group
-                        
-                        for(int i = 0; i < listBox2.Items.Count; i++)
+
+                        for (int i = 0; i < listBox2.Items.Count; i++)
                         {
                             if (St_F.GetSgNumber(listBox2.Items[i].ToString()) == old_sg)
                             {
@@ -1275,11 +1274,11 @@ namespace GralItemForms
                         //FillValues();
                     }
                 } //shift a source group
-                
+
             }
             sgsel.Dispose();
         }
-        
+
         /// <summary>
         /// Set the trackbar to the desired item number
         /// </summary> 
@@ -1296,7 +1295,7 @@ namespace GralItemForms
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Set the trackbar maximum to the maximum count in the item list
         /// </summary> 
@@ -1317,18 +1316,18 @@ namespace GralItemForms
         {
             return Convert.ToDouble(numericUpDown1.Value);
         }
-        
+
         // Time Series and Velocity
         void ButtonTSVelClick(object sender, EventArgs e)
         {
             bool Velocity = true;
-            
+
             Button bt = sender as Button;
             if (bt.Name == "button8")
             {
                 Velocity = false;
             }
-            
+
             using (EditTimeSeriesValues edT = new EditTimeSeriesValues())
             {
                 if (Velocity)
@@ -1347,17 +1346,17 @@ namespace GralItemForms
                     edT.TitleBarText = "Exit Temperature Above or Below Ambient Temperature [K] - Time Series - GRAL Transient Mode";
                 }
                 edT.StartPosition = FormStartPosition.Manual;
-                
-                
+
+
                 if (Right < SystemInformation.PrimaryMonitorSize.Width / 2)
                 {
                     edT.Location = new Point(St_F.GetScreenAtMousePosition() + Right + 4, St_F.GetTopScreenAtMousePosition() + 150);
                 }
                 else
                 {
-                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150 );
+                    edT.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 750, St_F.GetTopScreenAtMousePosition() + 150);
                 }
-                
+
                 if (edT.ShowDialog() == DialogResult.OK)
                 {
                     edT.Hide();
@@ -1373,7 +1372,7 @@ namespace GralItemForms
                         numericUpDown3.Value = Convert.ToDecimal(edT.MeanValue);
                         button8.BackgroundImage = Gral.Properties.Resources.TimeSeriesSelected;
                     }
-                    
+
                 }
                 else // cancel
                 {
@@ -1390,7 +1389,7 @@ namespace GralItemForms
                 }
             }
         }
-        
+
         // switch between absolute and realtive Height
         void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
@@ -1428,7 +1427,7 @@ namespace GralItemForms
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            double height = (double) (numericUpDown1.Value);
+            double height = (double)(numericUpDown1.Value);
             textBox2.Text = Convert.ToInt32(height * Math.Sqrt(Math.Pow(CornerPortalX[0] - CornerPortalX[1], 2) + Math.Pow(CornerPortalY[0] - CornerPortalY[1], 2))).ToString();
         }
         /// <summary>

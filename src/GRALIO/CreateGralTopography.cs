@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Globalization;
-using System.Windows.Forms;
-using System.Linq;
 using Gral;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 namespace GralIO
 {
     /// <summary>
@@ -53,7 +53,8 @@ namespace GralIO
                 Filter = "Topo files (*.txt;*.dat)|*.txt;*.dat",
                 Title = "Select topography"
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
             })
             {

@@ -27,13 +27,13 @@ namespace GralDomain
         private void DrawVectorMap(Graphics g, DrawingObjects _drobj, double form1_west, double form1_north, double factor_x, double factor_y)
         {
             int pb1_height = picturebox1.Height;
-			int pb1_width  = picturebox1.Width;
-			
+            int pb1_width = picturebox1.Width;
+
             List<PointF> _pts = _drobj.ContourPoints[0];
             int step = -7;
             int frequ_x = 0;
             //int frequ_y = 0;
-            
+
             Point[] mypoint = new Point[7];
             int indexx = -1;
             int indexy = _drobj.ContourGeometry.NY - 1;
@@ -41,23 +41,23 @@ namespace GralDomain
 
             double west = MapSize.West;
             double north = MapSize.North;
-            
+
             double gridsize = MainForm.GRAMMHorGridSize * factor_x;
-            
+
             if (gridsize > 5 && gridsize < 20 && _drobj.Filter == true) // smart draw for vectors
             {
                 int MaxXIndex = _drobj.ContourGeometry.NX;
                 while (step < _pts.Count - 8)
                 {
-                    frequ_x ++;
+                    frequ_x++;
                     step += 7;
-                    indexx ++;
+                    indexx++;
                     if (indexx >= MaxXIndex) // nx reached
                     {
                         indexx = 0;
-                        indexy --;
+                        indexy--;
                     }
-                    
+
                     if (frequency <= frequ_x && (indexy % frequency) == 0)  // horizontal vector spacing
                     {
                         frequ_x = 0;
@@ -65,7 +65,7 @@ namespace GralDomain
                         int y1 = (int)((_pts[step].Y - north) * factor_y) + TransformY;
                         int x7 = (int)((_pts[step + 6].X - west) * factor_x) + TransformX;
                         int y7 = (int)((_pts[step + 6].Y - north) * factor_y) + TransformY;
-                        
+
                         if (((x1 < 0) || (x1 > pb1_width)) && ((y1 < 0) || (y1 > pb1_height)) && ((x7 < 0) || (x7 > pb1_width)) && ((y7 < 0) || (y7 > pb1_height)))
                         {
                         }
@@ -89,21 +89,21 @@ namespace GralDomain
                     }
                 }
             }
-            
+
             else if (gridsize >= 20 || _drobj.Filter == false) // don´t show small grids
             {
                 int MaxXIndex = _drobj.ContourGeometry.NX;
                 while (step < _pts.Count - 8)
                 {
-                    frequ_x ++;
+                    frequ_x++;
                     step += 7;
-                    indexx ++;
+                    indexx++;
                     if (indexx >= MaxXIndex)
                     {
                         indexx = 0;
-                        indexy --;
+                        indexy--;
                     }
-                    
+
                     if (frequency <= frequ_x && (indexy % frequency) == 0) // horizontal vector spacing
                     {
                         frequ_x = 0;
@@ -128,7 +128,7 @@ namespace GralDomain
                         mypoint[4] = new Point(x5, y5);
                         mypoint[5] = new Point(x6, y6);
                         mypoint[6] = new Point(x7, y7);
-                        
+
                         if (((x1 < 0) || (x1 > pb1_width)) && ((y1 < 0) || (y1 > pb1_height)) && ((x7 < 0) || (x7 > pb1_width)) && ((y7 < 0) || (y7 > pb1_height)))
                         {
                         }

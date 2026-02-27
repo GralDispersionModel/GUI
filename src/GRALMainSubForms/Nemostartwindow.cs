@@ -10,14 +10,14 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
 using Gral;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Start a nemo procedure
     /// </summary>
     public partial class Nemostartwindow : Form

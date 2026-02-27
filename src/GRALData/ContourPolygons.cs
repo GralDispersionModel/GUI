@@ -17,13 +17,13 @@ namespace GralData
     /// <summary>
     /// Contour Polygons with the value of the polygon and the drawing order 
     /// </summary>
-    public class ContourPolygon : IEquatable<ContourPolygon> , IComparable<ContourPolygon>
-	 {
+    public class ContourPolygon : IEquatable<ContourPolygon>, IComparable<ContourPolygon>
+    {
         public int ItemValueIndex { get; set; }
-        public int DrawingOrder   { get; set; }
-        public GralDomain.PointD[] EdgePoints{ get; set; } // List of edge points for each polygon
-        public DomainArea Bounds  { get; set; }
-        
+        public int DrawingOrder { get; set; }
+        public GralDomain.PointD[] EdgePoints { get; set; } // List of edge points for each polygon
+        public DomainArea Bounds { get; set; }
+
         public ContourPolygon()
         {
             Bounds = new DomainArea()
@@ -31,10 +31,10 @@ namespace GralData
                 West = double.MaxValue,
                 East = double.MinValue,
                 North = double.MinValue,
-                South =  double.MaxValue,
+                South = double.MaxValue,
             };
         }
-        
+
         // Default comparer for Part type.
         public int CompareTo(ContourPolygon comparePart)
         {
@@ -48,7 +48,7 @@ namespace GralData
                 return DrawingOrder.CompareTo(comparePart.DrawingOrder);
             }
         }
-        
+
         public bool Equals(ContourPolygon other)
         {
             if (other == null)

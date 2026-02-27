@@ -10,17 +10,16 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Windows.Forms;
-
 using Gral;
 using GralData;
 using GralDomain;
 using GralItemData;
 using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace GralItemForms
 {
@@ -54,11 +53,11 @@ namespace GralItemForms
         /// <summary>
         /// Z corner points of a wall in meters
         /// </summary>
-        public double[] CornerWallZ  = new double[1000];   
-        
+        public double[] CornerWallZ = new double[1000];
+
         private int vertices;                              //number of maximum corner points
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        
+
         // delegate to send a message, that redraw is needed!
         public event ForceDomainRedraw WallRedraw;
 
@@ -75,10 +74,10 @@ namespace GralItemForms
         {
             InitializeComponent();
             Domain.EditSourceShape = true;  // allow input of new vertices
-            
-            #if __MonoCS__
+
+#if __MonoCS__
             numericUpDown1.TextAlign = HorizontalAlignment.Left;
-            #endif
+#endif
         }
 
         void EditWallsLoad(object sender, EventArgs e)
@@ -88,29 +87,29 @@ namespace GralItemForms
             Numericupdown_x0 = numericUpDown1.Left;
             FillValues();
         }
-        
+
         //increase the number of Walls by one
         void Button1Click(object sender, EventArgs e)
         {
-          if ((textBox1.Text != "") && (textBox2.Text != ""))
+            if ((textBox1.Text != "") && (textBox2.Text != ""))
             {
                 SaveArray(true);
                 trackBar1.Maximum += 1;
                 trackBar1.Value = trackBar1.Maximum;
                 ItemDisplayNr = trackBar1.Maximum - 1;
                 Domain.EditSourceShape = true;  // allow input of new vertices
-            }	
+            }
         }
-        
+
         //scroll between the line sources
         void TrackBar1Scroll(object sender, EventArgs e)
         {
             SaveArray(false);
             ItemDisplayNr = trackBar1.Value - 1;
             FillValues();
-            RedrawDomain(this, e);	
+            RedrawDomain(this, e);
         }
-        
+
         //save data in array list
         /// <summary>
         /// Saves the recent dialog data in the item object and the item list
@@ -126,7 +125,7 @@ namespace GralItemForms
             {
                 _wdata = ItemData[ItemDisplayNr];
             }
-            
+
             if (textBox2.Text != "") // Vertices
             {
                 if ((textBox1.Text != "") && (Convert.ToInt32(textBox2.Text) > 1))
@@ -134,7 +133,7 @@ namespace GralItemForms
                     int number_of_vertices = Convert.ToInt32(textBox2.Text);
                     _wdata.Pt.Clear();
                     _wdata.Pt.TrimExcess();
-                    
+
                     // new lenght
                     int absHeight = 1;
                     if (checkBox1.Checked == true)
@@ -142,25 +141,25 @@ namespace GralItemForms
                         absHeight = -1;
                     }
 
-                    for (int i = 0; i <number_of_vertices; i++)
+                    for (int i = 0; i < number_of_vertices; i++)
                     {
                         _wdata.Pt.Add(new PointD_3d(CornerWallX[i], CornerWallY[i], Math.Abs(CornerWallZ[i]) * absHeight));
                     }
-                    
+
                     double lenght = Math.Round(_wdata.CalcLenght(), 1);
                     textBox3.Text = St_F.DblToIvarTxt(lenght);
-                    
-                    if (Convert.ToInt32(textBox2.Text) > 0) 
+
+                    if (Convert.ToInt32(textBox2.Text) > 0)
                     {
                         Domain.EditSourceShape = false;  // block input of new vertices
                     }
-                    
+
                     // get recent edgepoint height
                     Get_edgepoint_height();
-                    
+
                     _wdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
-                    _wdata.Lenght = (float) (lenght);
-                    
+                    _wdata.Lenght = (float)(lenght);
+
                     if (ItemDisplayNr >= ItemData.Count) // new item
                     {
                         ItemData.Add(_wdata);
@@ -181,23 +180,23 @@ namespace GralItemForms
         {
             Get_edgepoint_height(); // get recent edgepoint height
             vertices = Convert.ToInt32(textBox2.Text);
-            if ( vertices <= 1)
+            if (vertices <= 1)
             {
                 return; // not enough vertices
             }
 
             trackBar2.Maximum = vertices;
         }
-        
+
         void NumericUpDown1ValueChanged(object sender, EventArgs e)
         {
             Get_edgepoint_height(); // get recent edgepoint height	
         }
-        
+
         void TrackBar2Scroll(object sender, EventArgs e)
         {
             int edge = trackBar2.Value - 1;
-            
+
             // absolut height allowed at point 0
             if (trackBar2.Value > 1 || Main.Project_Locked == true)
             {
@@ -210,11 +209,11 @@ namespace GralItemForms
 
             if (edge < Convert.ToInt32(textBox2.Text))
             {
-                numericUpDown1.Value = (decimal) Math.Abs(CornerWallZ[edge]);
-                
-                Domain.MarkerPoint.X =  CornerWallX[edge];
-                Domain.MarkerPoint.Y =  CornerWallY[edge];
-                
+                numericUpDown1.Value = (decimal)Math.Abs(CornerWallZ[edge]);
+
+                Domain.MarkerPoint.X = CornerWallX[edge];
+                Domain.MarkerPoint.Y = CornerWallY[edge];
+
                 if (checkBox1.Checked)
                 {
                     label5.BackColor = Color.Yellow;
@@ -269,11 +268,11 @@ namespace GralItemForms
                     _wdata = new WallData();
                 }
             }
-            
+
             textBox1.Text = _wdata.Name; // name of wall
             textBox2.Text = _wdata.Pt.Count.ToString(); // number of vertices
             textBox3.Text = _wdata.Lenght.ToString(); // lenght
-            
+
             if (_wdata.Pt.Count == 0)
             {
                 return;
@@ -282,8 +281,8 @@ namespace GralItemForms
             trackBar2.Value = 1;
             trackBar2.Minimum = 1;
             trackBar2.Maximum = _wdata.Pt.Count + 1;
-            
-            decimal height = Convert.ToDecimal (_wdata.Pt[0].Z); // check heigt at first edge point
+
+            decimal height = Convert.ToDecimal(_wdata.Pt[0].Z); // check heigt at first edge point
             if (height >= 0) // height above ground
             {
                 checkBox1.Checked = false;
@@ -303,15 +302,15 @@ namespace GralItemForms
             {
                 CornerWallX[i] = _wdata.Pt[i].X;
                 CornerWallY[i] = _wdata.Pt[i].Y;
-                CornerWallZ[i] = (float) (_wdata.Pt[i].Z);
+                CornerWallZ[i] = (float)(_wdata.Pt[i].Z);
             }
-            
+
             if (Convert.ToInt32(textBox2.Text) > 0)
             {
                 Domain.EditSourceShape = false;  // block input of new vertices
             }
 
-            numericUpDown1.Value = St_F.ValueSpan(0, 8000, (double) Math.Abs(CornerWallZ[0]));
+            numericUpDown1.Value = St_F.ValueSpan(0, 8000, (double)Math.Abs(CornerWallZ[0]));
         }
 
         //remove actual wall 
@@ -320,7 +319,7 @@ namespace GralItemForms
             RemoveOne(true);
             RedrawDomain(this, e);
         }
-        
+
         /// <summary>
         /// Remove the recent item object from the item list
         /// </summary> 
@@ -344,7 +343,7 @@ namespace GralItemForms
                 textBox2.Text = "0";
                 textBox3.Text = "0";
                 numericUpDown1.Value = 0;
-                
+
                 if (ItemDisplayNr >= 0)
                 {
                     try
@@ -374,14 +373,14 @@ namespace GralItemForms
             {
                 ItemData.Clear();
                 ItemData.TrimExcess(); // Kuntner Memory
-                
+
                 for (int i = 0; i < CornerWallX.Length; i++)
                 {
                     CornerWallX[i] = 0; // Kuntner
                     CornerWallY[i] = 0; // Kuntner
                     CornerWallZ[i] = 0; // Kuntner
                 }
-             
+
                 textBox1.Text = "Wall";
                 textBox2.Text = "0";
                 textBox3.Text = "0";
@@ -395,22 +394,22 @@ namespace GralItemForms
                 RedrawDomain(this, e);
             }
         }
-        
-        
-       private void RedrawDomain(object sender, EventArgs e)
+
+
+        private void RedrawDomain(object sender, EventArgs e)
         {
             // send Message to domain Form, that Section-Form is closed
             try
             {
-            if (WallRedraw != null)
+                if (WallRedraw != null)
                 {
                     WallRedraw(this, e);
                 }
             }
             catch
-            {}
+            { }
         }
-        
+
         public void ShowForm()
         {
             ItemDisplayNr = trackBar1.Value - 1;
@@ -440,7 +439,7 @@ namespace GralItemForms
                     {
                         vert.Location = new Point(St_F.GetScreenAtMousePosition() + Left - 250, St_F.GetTopScreenAtMousePosition() + 150);
                     }
-                
+
                     vert.Vertices_redraw += new ForceDomainRedraw(RedrawDomain);
                     if (vert.ShowDialog() == DialogResult.OK)
                     {
@@ -452,15 +451,15 @@ namespace GralItemForms
                         TrackBar2Scroll(null, null); // refresh dialog data
                     }
                     vert.Dispose();
-                    SaveArray(true);	
+                    SaveArray(true);
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Nothing digitized","GRAL GUI",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Nothing digitized", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-        
+
         void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
@@ -507,7 +506,7 @@ namespace GralItemForms
             ItemData.TrimExcess();
             toolTip1.Dispose();
         }
-        
+
         void EditWallsVisibleChanged(object sender, EventArgs e)
         {
             if (!Visible)
@@ -537,7 +536,7 @@ namespace GralItemForms
             Exit.Enabled = true;
             panel1.Enabled = true;
         }
-        
+
         void EditWallsResizeEnd(object sender, EventArgs e)
         {
             int dialog_width = ClientSize.Width;
@@ -551,7 +550,7 @@ namespace GralItemForms
             button4.Left = Math.Max(100, this.Width - 110);
             panel1.Width = ClientSize.Width;
         }
-        
+
         /// <summary>
         /// Set the trackbar to the desired item number
         /// </summary> 
@@ -568,7 +567,7 @@ namespace GralItemForms
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Set the trackbar maximum to the maximum count in the item list
         /// </summary> 
@@ -585,10 +584,10 @@ namespace GralItemForms
         {
             textBox2.Text = _s;
         }
-        
+
         public Single GetNumericUpDownHeightValue()
         {
-            return (Single) (numericUpDown1.Value);
+            return (Single)(numericUpDown1.Value);
         }
         public bool CheckboxAbsHeightChecked()
         {

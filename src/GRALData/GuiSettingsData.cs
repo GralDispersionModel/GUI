@@ -10,9 +10,9 @@
 ///</remarks>
 #endregion
 using System;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace GralData
 {
@@ -65,8 +65,16 @@ namespace GralData
         /// Check for an update at each start of the GUI
         /// </summary>
         public bool AutoCheckForUpdates;
-        
-        private CultureInfo ic = CultureInfo.InvariantCulture;
+        /// <summary>
+        /// Use default colors
+        /// </summary>
+        public bool UseDefaultColors;
+        /// <summary>
+        /// Use the system wide dark mode
+        /// </summary>
+        public bool UseDarkMode;
+
+        private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 
         /// <summary>
         /// Initialize and set default values for the GUI settings
@@ -91,6 +99,18 @@ namespace GralData
             IgnoreMeteo00Values = Gral.WindData00Enum.All;
             DeleteFilesToRecyclingBin = true;
             AutoCheckForUpdates = false;
+            UseDefaultColors = true;
+
+#if NET9_0_OR_GREATER
+            if (Application.IsDarkModeEnabled)
+            {
+                UseDarkMode = true;
+            }
+            else
+            {
+                UseDarkMode = false;
+            }
+#endif
         }
 
         /// <summary>
@@ -114,6 +134,7 @@ namespace GralData
                     write.WriteLine(DeleteFilesToRecyclingBin.ToString(ic));
                     write.WriteLine(DefaultPathForGRAMM);
                     write.WriteLine(AutoCheckForUpdates.ToString(ic));
+                    write.WriteLine(UseDefaultColors.ToString(ic));
                 }
             }
             catch
@@ -198,6 +219,18 @@ namespace GralData
                         }
                         catch { }
                     }
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            UseDefaultColors = Convert.ToBoolean(read.ReadLine(), ic);
+                        }
+                        catch { }
+                    }
+                    else
+                    {
+                        UseDefaultColors = true;
+                    }
                 }
             }
             catch
@@ -230,7 +263,7 @@ namespace GralData
                 ^ CopyCoresToProject.GetHashCode() ^ CompatibilityToVersion1901.GetHashCode() ^ VectorMapAutoScaling.GetHashCode()
                 ^ IgnoreMeteo00Values.GetHashCode() ^ DeleteFilesToRecyclingBin.GetHashCode() ^ DefaultPathForGRAMM.GetHashCode();
         }
-        public static bool operator == (GuiSettings a, GuiSettings b)
+        public static bool operator ==(GuiSettings a, GuiSettings b)
         {
             return a.PreviousUsedProjectPath.Equals(b.PreviousUsedProjectPath) && a.TopoFileName.Equals(b.TopoFileName) && a.DefaultPathForGRAL.Equals(b.DefaultPathForGRAL) &&
                    a.CopyCoresToProject == b.CopyCoresToProject && a.CompatibilityToVersion1901 == b.CompatibilityToVersion1901 &&

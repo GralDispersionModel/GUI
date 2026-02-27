@@ -116,10 +116,6 @@
             numericUpDown31 = new System.Windows.Forms.NumericUpDown();
             label80 = new System.Windows.Forms.Label();
             label74 = new System.Windows.Forms.Label();
-            label76 = new System.Windows.Forms.Label();
-            label77 = new System.Windows.Forms.Label();
-            numericUpDown28 = new System.Windows.Forms.NumericUpDown();
-            numericUpDown27 = new System.Windows.Forms.NumericUpDown();
             label25 = new System.Windows.Forms.Label();
             label26 = new System.Windows.Forms.Label();
             numericUpDown10 = new System.Windows.Forms.NumericUpDown();
@@ -263,6 +259,12 @@
             label53 = new System.Windows.Forms.Label();
             numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             Computation = new System.Windows.Forms.TabPage();
+            groupBox31 = new System.Windows.Forms.GroupBox();
+            checkBoxAVX = new System.Windows.Forms.CheckBox();
+            numericUpDown33 = new System.Windows.Forms.NumericUpDown();
+            label98 = new System.Windows.Forms.Label();
+            numericUpDown32 = new System.Windows.Forms.NumericUpDown();
+            label20 = new System.Windows.Forms.Label();
             label94 = new System.Windows.Forms.Label();
             textBox16 = new System.Windows.Forms.TextBox();
             groupBox17 = new System.Windows.Forms.GroupBox();
@@ -276,8 +278,6 @@
             label96 = new System.Windows.Forms.Label();
             button45 = new System.Windows.Forms.Button();
             label97 = new System.Windows.Forms.Label();
-            label98 = new System.Windows.Forms.Label();
-            numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             label67 = new System.Windows.Forms.Label();
             progressBar2 = new System.Windows.Forms.ProgressBar();
             label66 = new System.Windows.Forms.Label();
@@ -286,13 +286,10 @@
             button30 = new System.Windows.Forms.Button();
             button31 = new System.Windows.Forms.Button();
             groupBox6 = new System.Windows.Forms.GroupBox();
-            checkBoxAVX = new System.Windows.Forms.CheckBox();
             pictureBox4 = new System.Windows.Forms.PictureBox();
             pictureBox3 = new System.Windows.Forms.PictureBox();
             pictureBox2 = new System.Windows.Forms.PictureBox();
             pictureBox1 = new System.Windows.Forms.PictureBox();
-            label20 = new System.Windows.Forms.Label();
-            numericUpDown32 = new System.Windows.Forms.NumericUpDown();
             button18 = new System.Windows.Forms.Button();
             button9 = new System.Windows.Forms.Button();
             button7 = new System.Windows.Forms.Button();
@@ -377,8 +374,6 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown29).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown30).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown31).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown28).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown27).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown10).BeginInit();
             Domain.SuspendLayout();
             groupBox9.SuspendLayout();
@@ -417,16 +412,17 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown17).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown18).BeginInit();
             Computation.SuspendLayout();
+            groupBox31.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown33).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown32).BeginInit();
             groupBox17.SuspendLayout();
             groupBox15.SuspendLayout();
             groupBox30.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown33).BeginInit();
             groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown32).BeginInit();
             groupBox16.SuspendLayout();
             groupBox18.SuspendLayout();
             groupBox13.SuspendLayout();
@@ -478,7 +474,7 @@
             // 
             // button55
             // 
-            button55.BackgroundImage = Properties.Resources.Info;
+            button55.BackgroundImage = Properties.Resources.Info1;
             button55.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button55.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
             button55.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -492,7 +488,7 @@
             // 
             // button52
             // 
-            button52.BackColor = System.Drawing.Color.Gainsboro;
+            button52.BackColor = System.Drawing.SystemColors.Control;
             button52.BackgroundImage = (System.Drawing.Image)resources.GetObject("button52.BackgroundImage");
             button52.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button52.Location = new System.Drawing.Point(760, 108);
@@ -506,7 +502,7 @@
             // 
             // button50
             // 
-            button50.BackColor = System.Drawing.Color.Gainsboro;
+            button50.BackColor = System.Drawing.SystemColors.Control;
             button50.BackgroundImage = (System.Drawing.Image)resources.GetObject("button50.BackgroundImage");
             button50.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button50.Location = new System.Drawing.Point(760, 23);
@@ -531,7 +527,7 @@
             // 
             // button46
             // 
-            button46.BackColor = System.Drawing.Color.Gainsboro;
+            button46.BackColor = System.Drawing.SystemColors.Control;
             button46.BackgroundImage = (System.Drawing.Image)resources.GetObject("button46.BackgroundImage");
             button46.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button46.Location = new System.Drawing.Point(14, 74);
@@ -553,12 +549,12 @@
             panel1.Size = new System.Drawing.Size(610, 425);
             panel1.TabIndex = 1;
             panel1.Paint += Panel1Paint;
-            panel1.MouseClick += panel1_MouseClick;
+            panel1.MouseClick += Panel1_MouseClick;
             // 
             // button44
             // 
-            button44.BackColor = System.Drawing.Color.Gainsboro;
-            button44.ForeColor = System.Drawing.Color.Black;
+            button44.BackColor = System.Drawing.SystemColors.Control;
+            button44.ForeColor = System.Drawing.SystemColors.ControlText;
             button44.Location = new System.Drawing.Point(112, 18);
             button44.Name = "button44";
             button44.Size = new System.Drawing.Size(116, 28);
@@ -571,8 +567,8 @@
             // button38
             // 
             button38.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            button38.BackColor = System.Drawing.Color.Gainsboro;
-            button38.ForeColor = System.Drawing.Color.Black;
+            button38.BackColor = System.Drawing.SystemColors.Control;
+            button38.ForeColor = System.Drawing.SystemColors.ControlText;
             button38.Location = new System.Drawing.Point(263, 18);
             button38.Margin = new System.Windows.Forms.Padding(2);
             button38.Name = "button38";
@@ -595,7 +591,7 @@
             // 
             // button8
             // 
-            button8.BackColor = System.Drawing.Color.Gainsboro;
+            button8.BackColor = System.Drawing.SystemColors.Control;
             button8.BackgroundImage = (System.Drawing.Image)resources.GetObject("button8.BackgroundImage");
             button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             button8.Location = new System.Drawing.Point(14, 23);
@@ -673,7 +669,7 @@
             checkBox29.Size = new System.Drawing.Size(110, 23);
             checkBox29.TabIndex = 64;
             checkBox29.Text = "adapt. rough.";
-            toolTip1.SetToolTip(checkBox29, "Enable the transient GRAL mode");
+            toolTip1.SetToolTip(checkBox29, "Set the maximum value for the adaptive roughness option");
             checkBox29.UseVisualStyleBackColor = true;
             checkBox29.CheckStateChanged += CheckBox29_CheckStateChanged;
             // 
@@ -703,7 +699,7 @@
             // 
             // button57
             // 
-            button57.BackgroundImage = Properties.Resources.WrenchBlue;
+            button57.BackgroundImage = Properties.Resources.WrenchBlueTransparent;
             button57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button57.FlatAppearance.BorderSize = 0;
             button57.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1081,7 +1077,7 @@
             groupBox5.Controls.Add(label4);
             groupBox5.Controls.Add(numericUpDown3);
             groupBox5.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox5.ForeColor = System.Drawing.Color.Black;
+            groupBox5.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox5.Location = new System.Drawing.Point(266, 15);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new System.Drawing.Size(250, 517);
@@ -1111,7 +1107,6 @@
             // 
             // numericUpDown9
             // 
-            numericUpDown9.DecimalPlaces = 1;
             numericUpDown9.Font = new System.Drawing.Font("Segoe UI", 10F);
             numericUpDown9.Location = new System.Drawing.Point(175, 42);
             numericUpDown9.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
@@ -1205,15 +1200,11 @@
             groupBox8.Controls.Add(numericUpDown31);
             groupBox8.Controls.Add(label80);
             groupBox8.Controls.Add(label74);
-            groupBox8.Controls.Add(label76);
-            groupBox8.Controls.Add(label77);
-            groupBox8.Controls.Add(numericUpDown28);
-            groupBox8.Controls.Add(numericUpDown27);
             groupBox8.Controls.Add(label25);
             groupBox8.Controls.Add(label26);
             groupBox8.Controls.Add(numericUpDown10);
             groupBox8.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox8.ForeColor = System.Drawing.Color.Black;
+            groupBox8.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox8.Location = new System.Drawing.Point(522, 15);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new System.Drawing.Size(282, 517);
@@ -1368,7 +1359,7 @@
             groupBox26.Controls.Add(numericUpDown41);
             groupBox26.Controls.Add(checkBox26);
             groupBox26.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            groupBox26.Location = new System.Drawing.Point(2, 428);
+            groupBox26.Location = new System.Drawing.Point(2, 430);
             groupBox26.Name = "groupBox26";
             groupBox26.Size = new System.Drawing.Size(276, 77);
             groupBox26.TabIndex = 44;
@@ -1387,7 +1378,7 @@
             // 
             // button11
             // 
-            button11.BackColor = System.Drawing.Color.Gainsboro;
+            button11.BackColor = System.Drawing.SystemColors.Control;
             button11.BackgroundImage = (System.Drawing.Image)resources.GetObject("button11.BackgroundImage");
             button11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button11.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -1409,6 +1400,7 @@
             numericUpDown41.TabIndex = 44;
             numericUpDown41.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             toolTip1.SetToolTip(numericUpDown41, "0: lower compression rate 1: higher compression rate 2: faster for huge projects with terrain or many buildings");
+            numericUpDown41.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown41.ValueChanged += NumericUpDown41_ValueChanged;
             // 
             // checkBox26
@@ -1573,64 +1565,6 @@
             label74.TabIndex = 32;
             label74.Text = "m";
             // 
-            // label76
-            // 
-            label76.AutoSize = true;
-            label76.Font = new System.Drawing.Font("Segoe UI", 10F);
-            label76.Location = new System.Drawing.Point(9, 496);
-            label76.Name = "label76";
-            label76.Size = new System.Drawing.Size(176, 19);
-            label76.TabIndex = 35;
-            label76.Text = "Relaxation pressure correct.";
-            toolTip1.SetToolTip(label76, "Relaxation factor for temperature,\r\nhumidity, TKE, dissipation");
-            label76.Visible = false;
-            // 
-            // label77
-            // 
-            label77.AutoSize = true;
-            label77.Font = new System.Drawing.Font("Segoe UI", 10F);
-            label77.Location = new System.Drawing.Point(9, 484);
-            label77.Name = "label77";
-            label77.Size = new System.Drawing.Size(121, 19);
-            label77.TabIndex = 33;
-            label77.Text = "Relaxation velocity";
-            toolTip1.SetToolTip(label77, "Relaxation factor for velocity");
-            label77.Visible = false;
-            // 
-            // numericUpDown28
-            // 
-            numericUpDown28.DecimalPlaces = 2;
-            numericUpDown28.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown28.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown28.Location = new System.Drawing.Point(208, 482);
-            numericUpDown28.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown28.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown28.Name = "numericUpDown28";
-            numericUpDown28.Size = new System.Drawing.Size(68, 25);
-            numericUpDown28.TabIndex = 34;
-            numericUpDown28.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(numericUpDown28, "The lower the relaxation factor,\r\nthe higher the numerical stability");
-            numericUpDown28.Value = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericUpDown28.Visible = false;
-            numericUpDown28.ValueChanged += NumericUpDown28_ValueChanged;
-            // 
-            // numericUpDown27
-            // 
-            numericUpDown27.DecimalPlaces = 2;
-            numericUpDown27.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown27.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown27.Location = new System.Drawing.Point(208, 495);
-            numericUpDown27.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown27.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericUpDown27.Name = "numericUpDown27";
-            numericUpDown27.Size = new System.Drawing.Size(68, 25);
-            numericUpDown27.TabIndex = 36;
-            numericUpDown27.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(numericUpDown27, "The lower the relaxation factor,\r\nthe higher the numerical stability");
-            numericUpDown27.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown27.Visible = false;
-            numericUpDown27.ValueChanged += NumericUpDown27_ValueChanged;
-            // 
             // label25
             // 
             label25.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -1706,10 +1640,10 @@
             // 
             // button15
             // 
-            button15.BackColor = System.Drawing.Color.Gainsboro;
+            button15.BackColor = System.Drawing.SystemColors.Control;
             button15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             button15.Font = new System.Drawing.Font("Segoe UI", 10F);
-            button15.ForeColor = System.Drawing.Color.Black;
+            button15.ForeColor = System.Drawing.SystemColors.ControlText;
             button15.Location = new System.Drawing.Point(27, 127);
             button15.Name = "button15";
             button15.Size = new System.Drawing.Size(124, 88);
@@ -1732,7 +1666,7 @@
             groupBox9.Controls.Add(textBox14);
             groupBox9.Controls.Add(textBox15);
             groupBox9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            groupBox9.ForeColor = System.Drawing.Color.Black;
+            groupBox9.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox9.Location = new System.Drawing.Point(508, 295);
             groupBox9.Name = "groupBox9";
             groupBox9.Size = new System.Drawing.Size(275, 225);
@@ -1825,9 +1759,9 @@
             // 
             // button14
             // 
-            button14.BackColor = System.Drawing.Color.Gainsboro;
+            button14.BackColor = System.Drawing.SystemColors.Control;
             button14.Font = new System.Drawing.Font("Segoe UI", 10F);
-            button14.ForeColor = System.Drawing.Color.Black;
+            button14.ForeColor = System.Drawing.SystemColors.ControlText;
             button14.Location = new System.Drawing.Point(26, 19);
             button14.Name = "button14";
             button14.Size = new System.Drawing.Size(125, 88);
@@ -1852,7 +1786,7 @@
             groupBox7.Controls.Add(textBox5);
             groupBox7.Controls.Add(textBox2);
             groupBox7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            groupBox7.ForeColor = System.Drawing.Color.Black;
+            groupBox7.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox7.Location = new System.Drawing.Point(505, 8);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new System.Drawing.Size(275, 244);
@@ -1993,7 +1927,7 @@
             // 
             // button60
             // 
-            button60.BackColor = System.Drawing.Color.Gainsboro;
+            button60.BackColor = System.Drawing.SystemColors.Control;
             button60.BackgroundImage = (System.Drawing.Image)resources.GetObject("button60.BackgroundImage");
             button60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             button60.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -2003,7 +1937,7 @@
             button60.TabIndex = 46;
             toolTip1.SetToolTip(button60, "Optional: set a directory for emission modulation variations");
             button60.UseVisualStyleBackColor = false;
-            button60.Click += button60_Click;
+            button60.Click += Button60_Click;
             // 
             // groupBox24
             // 
@@ -2020,7 +1954,7 @@
             // 
             // button54
             // 
-            button54.ForeColor = System.Drawing.Color.Black;
+            button54.ForeColor = System.Drawing.SystemColors.ControlText;
             button54.Location = new System.Drawing.Point(0, 17);
             button54.Name = "button54";
             button54.Size = new System.Drawing.Size(66, 23);
@@ -2107,6 +2041,7 @@
             // 
             // pictureBox5
             // 
+            pictureBox5.BackColor = System.Drawing.SystemColors.Window;
             pictureBox5.Location = new System.Drawing.Point(460, 296);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new System.Drawing.Size(346, 227);
@@ -2140,7 +2075,7 @@
             // button21
             // 
             button21.Font = new System.Drawing.Font("Segoe UI Light", 8.25F);
-            button21.ForeColor = System.Drawing.Color.Black;
+            button21.ForeColor = System.Drawing.SystemColors.ControlText;
             button21.Location = new System.Drawing.Point(647, 90);
             button21.Name = "button21";
             button21.Size = new System.Drawing.Size(64, 51);
@@ -2164,14 +2099,13 @@
             // 
             listBox5.Font = new System.Drawing.Font("Segoe UI", 9F);
             listBox5.FormattingEnabled = true;
-            listBox5.ItemHeight = 15;
             listBox5.Location = new System.Drawing.Point(460, 90);
             listBox5.Name = "listBox5";
             listBox5.Size = new System.Drawing.Size(181, 109);
             listBox5.TabIndex = 5;
             toolTip1.SetToolTip(listBox5, "Select the pollutant");
             listBox5.SelectedIndexChanged += ListBox5_SelectedIndexChanged;
-            listBox5.DoubleClick += listBox5_DoubleClick;
+            listBox5.DoubleClick += ListBox5_DoubleClick;
             // 
             // listView1
             // 
@@ -2239,7 +2173,6 @@
             // 
             listBox4.Font = new System.Drawing.Font("Segoe UI", 9F);
             listBox4.FormattingEnabled = true;
-            listBox4.ItemHeight = 15;
             listBox4.Location = new System.Drawing.Point(6, 90);
             listBox4.Name = "listBox4";
             listBox4.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
@@ -2265,7 +2198,7 @@
             // button51
             // 
             button51.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button51.ForeColor = System.Drawing.Color.Black;
+            button51.ForeColor = System.Drawing.SystemColors.ControlText;
             button51.Location = new System.Drawing.Point(168, 16);
             button51.Name = "button51";
             button51.Size = new System.Drawing.Size(75, 25);
@@ -2279,7 +2212,7 @@
             // button49
             // 
             button49.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button49.ForeColor = System.Drawing.Color.Black;
+            button49.ForeColor = System.Drawing.SystemColors.ControlText;
             button49.Location = new System.Drawing.Point(87, 16);
             button49.Name = "button49";
             button49.Size = new System.Drawing.Size(75, 25);
@@ -2293,7 +2226,7 @@
             // button48
             // 
             button48.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button48.ForeColor = System.Drawing.Color.Black;
+            button48.ForeColor = System.Drawing.SystemColors.ControlText;
             button48.Location = new System.Drawing.Point(6, 16);
             button48.Name = "button48";
             button48.Size = new System.Drawing.Size(75, 25);
@@ -2339,9 +2272,9 @@
             // 
             // button58
             // 
-            button58.BackColor = System.Drawing.Color.Gainsboro;
+            button58.BackColor = System.Drawing.SystemColors.Control;
             button58.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button58.ForeColor = System.Drawing.Color.Black;
+            button58.ForeColor = System.Drawing.SystemColors.ControlText;
             button58.Image = Properties.Resources.SaveSmall;
             button58.Location = new System.Drawing.Point(139, 19);
             button58.Name = "button58";
@@ -2349,7 +2282,7 @@
             button58.TabIndex = 21;
             toolTip1.SetToolTip(button58, "Save as new *.met file");
             button58.UseVisualStyleBackColor = false;
-            button58.Click += button58_Click;
+            button58.Click += Button58_Click;
             // 
             // groupBox23
             // 
@@ -2564,9 +2497,9 @@
             // 
             // button6
             // 
-            button6.BackColor = System.Drawing.Color.Gainsboro;
+            button6.BackColor = System.Drawing.SystemColors.Control;
             button6.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button6.ForeColor = System.Drawing.Color.Black;
+            button6.ForeColor = System.Drawing.SystemColors.ControlText;
             button6.Location = new System.Drawing.Point(18, 71);
             button6.Name = "button6";
             button6.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -2600,7 +2533,7 @@
             // button39
             // 
             button39.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button39.ForeColor = System.Drawing.Color.Black;
+            button39.ForeColor = System.Drawing.SystemColors.ControlText;
             button39.Location = new System.Drawing.Point(8, 60);
             button39.Name = "button39";
             button39.Size = new System.Drawing.Size(116, 34);
@@ -2613,7 +2546,7 @@
             // button5
             // 
             button5.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button5.ForeColor = System.Drawing.Color.Black;
+            button5.ForeColor = System.Drawing.SystemColors.ControlText;
             button5.Location = new System.Drawing.Point(9, 250);
             button5.Name = "button5";
             button5.Size = new System.Drawing.Size(116, 34);
@@ -2626,7 +2559,7 @@
             // button4
             // 
             button4.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            button4.ForeColor = System.Drawing.Color.Black;
+            button4.ForeColor = System.Drawing.SystemColors.ControlText;
             button4.Location = new System.Drawing.Point(9, 212);
             button4.Name = "button4";
             button4.Size = new System.Drawing.Size(116, 34);
@@ -2639,7 +2572,7 @@
             // button3
             // 
             button3.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            button3.ForeColor = System.Drawing.Color.Black;
+            button3.ForeColor = System.Drawing.SystemColors.ControlText;
             button3.Location = new System.Drawing.Point(9, 174);
             button3.Name = "button3";
             button3.Size = new System.Drawing.Size(116, 34);
@@ -2652,7 +2585,7 @@
             // button56
             // 
             button56.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button56.ForeColor = System.Drawing.Color.Black;
+            button56.ForeColor = System.Drawing.SystemColors.ControlText;
             button56.Location = new System.Drawing.Point(9, 136);
             button56.Name = "button56";
             button56.Size = new System.Drawing.Size(116, 34);
@@ -2664,7 +2597,7 @@
             // button2
             // 
             button2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button2.ForeColor = System.Drawing.Color.Black;
+            button2.ForeColor = System.Drawing.SystemColors.ControlText;
             button2.Location = new System.Drawing.Point(9, 98);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(116, 34);
@@ -2677,7 +2610,7 @@
             // button1
             // 
             button1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button1.ForeColor = System.Drawing.Color.Black;
+            button1.ForeColor = System.Drawing.SystemColors.ControlText;
             button1.Location = new System.Drawing.Point(9, 22);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(116, 34);
@@ -2689,9 +2622,9 @@
             // 
             // OpenMetFile
             // 
-            OpenMetFile.BackColor = System.Drawing.Color.Gainsboro;
+            OpenMetFile.BackColor = System.Drawing.SystemColors.Control;
             OpenMetFile.Font = new System.Drawing.Font("Segoe UI", 9F);
-            OpenMetFile.ForeColor = System.Drawing.Color.Black;
+            OpenMetFile.ForeColor = System.Drawing.SystemColors.ControlText;
             OpenMetFile.Location = new System.Drawing.Point(17, 19);
             OpenMetFile.Name = "OpenMetFile";
             OpenMetFile.Size = new System.Drawing.Size(116, 34);
@@ -2920,9 +2853,9 @@
             // 
             // button43
             // 
-            button43.BackColor = System.Drawing.Color.Gainsboro;
+            button43.BackColor = System.Drawing.SystemColors.Control;
             button43.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button43.ForeColor = System.Drawing.Color.Black;
+            button43.ForeColor = System.Drawing.SystemColors.ControlText;
             button43.Location = new System.Drawing.Point(26, 296);
             button43.Name = "button43";
             button43.Size = new System.Drawing.Size(203, 40);
@@ -2936,10 +2869,10 @@
             // 
             // button24
             // 
-            button24.BackColor = System.Drawing.Color.Gainsboro;
+            button24.BackColor = System.Drawing.SystemColors.Control;
             button24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             button24.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button24.ForeColor = System.Drawing.Color.Black;
+            button24.ForeColor = System.Drawing.SystemColors.ControlText;
             button24.Location = new System.Drawing.Point(670, 25);
             button24.Name = "button24";
             button24.Size = new System.Drawing.Size(133, 108);
@@ -2969,7 +2902,7 @@
             groupBox12.Controls.Add(numericUpDown20);
             groupBox12.Controls.Add(label58);
             groupBox12.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox12.ForeColor = System.Drawing.Color.Black;
+            groupBox12.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox12.Location = new System.Drawing.Point(25, 395);
             groupBox12.Name = "groupBox12";
             groupBox12.Size = new System.Drawing.Size(764, 145);
@@ -3192,10 +3125,10 @@
             // 
             // button23
             // 
-            button23.BackColor = System.Drawing.Color.Gainsboro;
+            button23.BackColor = System.Drawing.SystemColors.Control;
             button23.BackgroundImage = Properties.Resources.Rueckgaenging;
             button23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            button23.ForeColor = System.Drawing.Color.Black;
+            button23.ForeColor = System.Drawing.SystemColors.ControlText;
             button23.Location = new System.Drawing.Point(759, 351);
             button23.Name = "button23";
             button23.Size = new System.Drawing.Size(30, 31);
@@ -3207,10 +3140,10 @@
             // 
             // button22
             // 
-            button22.BackColor = System.Drawing.Color.Gainsboro;
+            button22.BackColor = System.Drawing.SystemColors.Control;
             button22.BackgroundImage = Properties.Resources.Rueckgaenging;
             button22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            button22.ForeColor = System.Drawing.Color.Black;
+            button22.ForeColor = System.Drawing.SystemColors.ControlText;
             button22.Location = new System.Drawing.Point(759, 231);
             button22.Name = "button22";
             button22.Size = new System.Drawing.Size(30, 30);
@@ -3222,9 +3155,9 @@
             // 
             // button20
             // 
-            button20.BackColor = System.Drawing.Color.Gainsboro;
+            button20.BackColor = System.Drawing.SystemColors.Control;
             button20.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button20.ForeColor = System.Drawing.Color.Black;
+            button20.ForeColor = System.Drawing.SystemColors.ControlText;
             button20.Location = new System.Drawing.Point(25, 344);
             button20.Name = "button20";
             button20.Size = new System.Drawing.Size(104, 46);
@@ -3236,9 +3169,9 @@
             // 
             // button19
             // 
-            button19.BackColor = System.Drawing.Color.Gainsboro;
+            button19.BackColor = System.Drawing.SystemColors.Control;
             button19.Font = new System.Drawing.Font("Segoe UI", 9F);
-            button19.ForeColor = System.Drawing.Color.Black;
+            button19.ForeColor = System.Drawing.SystemColors.ControlText;
             button19.Location = new System.Drawing.Point(26, 224);
             button19.Name = "button19";
             button19.Size = new System.Drawing.Size(104, 46);
@@ -3264,7 +3197,7 @@
             groupBox10.Controls.Add(label53);
             groupBox10.Controls.Add(numericUpDown18);
             groupBox10.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox10.ForeColor = System.Drawing.Color.Black;
+            groupBox10.ForeColor = System.Drawing.SystemColors.ControlText;
             groupBox10.Location = new System.Drawing.Point(25, 12);
             groupBox10.Name = "groupBox10";
             groupBox10.Size = new System.Drawing.Size(358, 203);
@@ -3277,7 +3210,6 @@
             GRAMMmodelheight.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             GRAMMmodelheight.FormattingEnabled = true;
             GRAMMmodelheight.IntegralHeight = false;
-            GRAMMmodelheight.ItemHeight = 17;
             GRAMMmodelheight.Location = new System.Drawing.Point(204, 149);
             GRAMMmodelheight.MinimumSize = new System.Drawing.Size(4, 21);
             GRAMMmodelheight.Name = "GRAMMmodelheight";
@@ -3425,6 +3357,7 @@
             // Computation
             // 
             Computation.BackColor = System.Drawing.Color.FromArgb(192, 255, 255);
+            Computation.Controls.Add(groupBox31);
             Computation.Controls.Add(label94);
             Computation.Controls.Add(textBox16);
             Computation.Controls.Add(groupBox17);
@@ -3440,6 +3373,81 @@
             Computation.Size = new System.Drawing.Size(811, 539);
             Computation.TabIndex = 5;
             Computation.Text = "COMPUTATION";
+            // 
+            // groupBox31
+            // 
+            groupBox31.Controls.Add(checkBoxAVX);
+            groupBox31.Controls.Add(numericUpDown33);
+            groupBox31.Controls.Add(label98);
+            groupBox31.Controls.Add(numericUpDown32);
+            groupBox31.Controls.Add(label20);
+            groupBox31.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            groupBox31.Location = new System.Drawing.Point(212, 309);
+            groupBox31.Name = "groupBox31";
+            groupBox31.Size = new System.Drawing.Size(217, 129);
+            groupBox31.TabIndex = 81;
+            groupBox31.TabStop = false;
+            groupBox31.Text = "Processor cores";
+            // 
+            // checkBoxAVX
+            // 
+            checkBoxAVX.AutoSize = true;
+            checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
+            checkBoxAVX.Location = new System.Drawing.Point(13, 92);
+            checkBoxAVX.Name = "checkBoxAVX";
+            checkBoxAVX.Size = new System.Drawing.Size(146, 19);
+            checkBoxAVX.TabIndex = 26;
+            checkBoxAVX.Text = "Use AVX512 extensions";
+            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
+            checkBoxAVX.UseVisualStyleBackColor = true;
+            checkBoxAVX.Visible = false;
+            checkBoxAVX.Click += CheckBoxAVX_Click;
+            // 
+            // numericUpDown33
+            // 
+            numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
+            numericUpDown33.Location = new System.Drawing.Point(148, 56);
+            numericUpDown33.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            numericUpDown33.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown33.Name = "numericUpDown33";
+            numericUpDown33.Size = new System.Drawing.Size(59, 25);
+            numericUpDown33.TabIndex = 36;
+            numericUpDown33.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown33, "Use multiple instances to speed up the computation\r\nKeep in mind that each instance consumes the same amount of RAM.");
+            numericUpDown33.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown33.ValueChanged += NumericUpDown32ValueChanged;
+            // 
+            // label98
+            // 
+            label98.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            label98.Location = new System.Drawing.Point(10, 58);
+            label98.Name = "label98";
+            label98.Size = new System.Drawing.Size(130, 20);
+            label98.TabIndex = 24;
+            label98.Text = "Number of Instances";
+            // 
+            // numericUpDown32
+            // 
+            numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            numericUpDown32.Location = new System.Drawing.Point(148, 25);
+            numericUpDown32.Maximum = new decimal(new int[] { 128, 0, 0, 0 });
+            numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown32.Name = "numericUpDown32";
+            numericUpDown32.Size = new System.Drawing.Size(59, 25);
+            numericUpDown32.TabIndex = 5;
+            numericUpDown32.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(numericUpDown32, "Number of used cores per instance");
+            numericUpDown32.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            numericUpDown32.ValueChanged += NumericUpDown32ValueChanged;
+            // 
+            // label20
+            // 
+            label20.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            label20.Location = new System.Drawing.Point(10, 27);
+            label20.Name = "label20";
+            label20.Size = new System.Drawing.Size(130, 20);
+            label20.TabIndex = 24;
+            label20.Text = "Cores per Instance";
             // 
             // label94
             // 
@@ -3466,9 +3474,9 @@
             groupBox17.Controls.Add(button59);
             groupBox17.Controls.Add(button36);
             groupBox17.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox17.Location = new System.Drawing.Point(9, 327);
+            groupBox17.Location = new System.Drawing.Point(9, 309);
             groupBox17.Name = "groupBox17";
-            groupBox17.Size = new System.Drawing.Size(191, 111);
+            groupBox17.Size = new System.Drawing.Size(191, 129);
             groupBox17.TabIndex = 80;
             groupBox17.TabStop = false;
             groupBox17.Text = "GRAMM / GRAL Online";
@@ -3477,20 +3485,20 @@
             // button59
             // 
             button59.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button59.Location = new System.Drawing.Point(14, 29);
+            button59.Location = new System.Drawing.Point(13, 38);
             button59.Name = "button59";
             button59.Size = new System.Drawing.Size(166, 30);
             button59.TabIndex = 101;
             button59.Text = "Set parameters";
             button59.UseVisualStyleBackColor = true;
-            button59.Click += button59_Click;
+            button59.Click += Button59_Click;
             // 
             // button36
             // 
-            button36.BackColor = System.Drawing.Color.Gainsboro;
+            button36.BackColor = System.Drawing.SystemColors.Control;
             button36.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button36.ForeColor = System.Drawing.Color.Black;
-            button36.Location = new System.Drawing.Point(14, 70);
+            button36.ForeColor = System.Drawing.SystemColors.ControlText;
+            button36.Location = new System.Drawing.Point(13, 79);
             button36.Margin = new System.Windows.Forms.Padding(2);
             button36.Name = "button36";
             button36.Size = new System.Drawing.Size(166, 30);
@@ -3518,7 +3526,7 @@
             // 
             // gramm_locked_button
             // 
-            gramm_locked_button.BackColor = System.Drawing.Color.Gainsboro;
+            gramm_locked_button.BackColor = System.Drawing.SystemColors.Control;
             gramm_locked_button.BackgroundImage = (System.Drawing.Image)resources.GetObject("gramm_locked_button.BackgroundImage");
             gramm_locked_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             gramm_locked_button.Location = new System.Drawing.Point(335, 451);
@@ -3533,8 +3541,6 @@
             // 
             groupBox15.BackColor = System.Drawing.Color.FromArgb(192, 255, 255);
             groupBox15.Controls.Add(groupBox30);
-            groupBox15.Controls.Add(label98);
-            groupBox15.Controls.Add(numericUpDown33);
             groupBox15.Controls.Add(label67);
             groupBox15.Controls.Add(progressBar2);
             groupBox15.Controls.Add(label66);
@@ -3545,7 +3551,7 @@
             groupBox15.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
             groupBox15.Location = new System.Drawing.Point(212, 11);
             groupBox15.Name = "groupBox15";
-            groupBox15.Size = new System.Drawing.Size(217, 427);
+            groupBox15.Size = new System.Drawing.Size(217, 287);
             groupBox15.TabIndex = 30;
             groupBox15.TabStop = false;
             groupBox15.Text = "GRAMM";
@@ -3557,30 +3563,30 @@
             groupBox30.Controls.Add(button45);
             groupBox30.Controls.Add(label97);
             groupBox30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox30.Location = new System.Drawing.Point(5, 170);
+            groupBox30.Location = new System.Drawing.Point(6, 170);
             groupBox30.Name = "groupBox30";
-            groupBox30.Size = new System.Drawing.Size(192, 117);
+            groupBox30.Size = new System.Drawing.Size(201, 111);
             groupBox30.TabIndex = 38;
             groupBox30.TabStop = false;
             groupBox30.Text = "GRAMM file size";
             // 
             // label96
             // 
-            label96.Font = new System.Drawing.Font("Segoe UI", 9F);
-            label96.Location = new System.Drawing.Point(14, 45);
+            label96.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label96.Location = new System.Drawing.Point(14, 48);
             label96.Name = "label96";
-            label96.Size = new System.Drawing.Size(138, 23);
+            label96.Size = new System.Drawing.Size(110, 23);
             label96.TabIndex = 38;
             label96.Text = "0";
             // 
             // button45
             // 
-            button45.BackColor = System.Drawing.Color.Gainsboro;
+            button45.BackColor = System.Drawing.SystemColors.Control;
             button45.BackgroundImage = (System.Drawing.Image)resources.GetObject("button45.BackgroundImage");
             button45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button45.Location = new System.Drawing.Point(160, 30);
+            button45.Location = new System.Drawing.Point(158, 18);
             button45.Name = "button45";
-            button45.Size = new System.Drawing.Size(26, 25);
+            button45.Size = new System.Drawing.Size(32, 32);
             button45.TabIndex = 37;
             toolTip1.SetToolTip(button45, "Delete all GRAMM wind field files\r\n");
             button45.UseVisualStyleBackColor = false;
@@ -3588,35 +3594,12 @@
             // 
             // label97
             // 
-            label97.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label97.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label97.Location = new System.Drawing.Point(14, 25);
             label97.Name = "label97";
             label97.Size = new System.Drawing.Size(138, 23);
             label97.TabIndex = 16;
             label97.Text = "0 MByte";
-            // 
-            // label98
-            // 
-            label98.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label98.Location = new System.Drawing.Point(14, 330);
-            label98.Name = "label98";
-            label98.Size = new System.Drawing.Size(116, 20);
-            label98.TabIndex = 24;
-            label98.Text = "GRAMM instances";
-            // 
-            // numericUpDown33
-            // 
-            numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown33.Location = new System.Drawing.Point(142, 327);
-            numericUpDown33.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            numericUpDown33.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown33.Name = "numericUpDown33";
-            numericUpDown33.Size = new System.Drawing.Size(55, 25);
-            numericUpDown33.TabIndex = 36;
-            numericUpDown33.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(numericUpDown33, "Use multiple instances to speed up the computation");
-            numericUpDown33.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown33.ValueChanged += NumericUpDown32ValueChanged;
             // 
             // label67
             // 
@@ -3663,13 +3646,13 @@
             // button32
             // 
             button32.AutoSize = true;
-            button32.BackColor = System.Drawing.Color.Gainsboro;
+            button32.BackColor = System.Drawing.SystemColors.Control;
             button32.BackgroundImage = (System.Drawing.Image)resources.GetObject("button32.BackgroundImage");
             button32.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button32.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button32.Location = new System.Drawing.Point(123, 21);
+            button32.Location = new System.Drawing.Point(139, 22);
             button32.Name = "button32";
-            button32.Size = new System.Drawing.Size(45, 34);
+            button32.Size = new System.Drawing.Size(35, 35);
             button32.TabIndex = 32;
             toolTip1.SetToolTip(button32, "Start the GRAMM computation core");
             button32.UseVisualStyleBackColor = false;
@@ -3678,13 +3661,13 @@
             // button30
             // 
             button30.AutoSize = true;
-            button30.BackColor = System.Drawing.Color.Gainsboro;
+            button30.BackColor = System.Drawing.SystemColors.Control;
             button30.BackgroundImage = (System.Drawing.Image)resources.GetObject("button30.BackgroundImage");
             button30.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button30.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
             button30.Location = new System.Drawing.Point(6, 22);
             button30.Name = "button30";
-            button30.Size = new System.Drawing.Size(45, 34);
+            button30.Size = new System.Drawing.Size(35, 35);
             button30.TabIndex = 30;
             toolTip1.SetToolTip(button30, "Stop the simulation");
             button30.UseVisualStyleBackColor = false;
@@ -3693,13 +3676,13 @@
             // button31
             // 
             button31.AutoSize = true;
-            button31.BackColor = System.Drawing.Color.Gainsboro;
+            button31.BackColor = System.Drawing.SystemColors.Control;
             button31.BackgroundImage = (System.Drawing.Image)resources.GetObject("button31.BackgroundImage");
             button31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button31.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button31.Location = new System.Drawing.Point(65, 22);
+            button31.Location = new System.Drawing.Point(70, 23);
             button31.Name = "button31";
-            button31.Size = new System.Drawing.Size(45, 34);
+            button31.Size = new System.Drawing.Size(35, 35);
             button31.TabIndex = 31;
             toolTip1.SetToolTip(button31, "Pause");
             button31.UseVisualStyleBackColor = false;
@@ -3707,13 +3690,10 @@
             // 
             // groupBox6
             // 
-            groupBox6.Controls.Add(checkBoxAVX);
             groupBox6.Controls.Add(pictureBox4);
             groupBox6.Controls.Add(pictureBox3);
             groupBox6.Controls.Add(pictureBox2);
             groupBox6.Controls.Add(pictureBox1);
-            groupBox6.Controls.Add(label20);
-            groupBox6.Controls.Add(numericUpDown32);
             groupBox6.Controls.Add(button18);
             groupBox6.Controls.Add(button9);
             groupBox6.Controls.Add(button7);
@@ -3725,20 +3705,6 @@
             groupBox6.TabIndex = 1;
             groupBox6.TabStop = false;
             groupBox6.Text = "Generate input files";
-            // 
-            // checkBoxAVX
-            // 
-            checkBoxAVX.AutoSize = true;
-            checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
-            checkBoxAVX.Location = new System.Drawing.Point(14, 256);
-            checkBoxAVX.Name = "checkBoxAVX";
-            checkBoxAVX.Size = new System.Drawing.Size(146, 19);
-            checkBoxAVX.TabIndex = 26;
-            checkBoxAVX.Text = "Use AVX512 extensions";
-            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
-            checkBoxAVX.UseVisualStyleBackColor = true;
-            checkBoxAVX.Visible = false;
-            checkBoxAVX.Click += checkBoxAVX_Click;
             // 
             // pictureBox4
             // 
@@ -3784,33 +3750,11 @@
             pictureBox1.TabStop = false;
             pictureBox1.Visible = false;
             // 
-            // label20
-            // 
-            label20.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label20.Location = new System.Drawing.Point(13, 222);
-            label20.Name = "label20";
-            label20.Size = new System.Drawing.Size(105, 20);
-            label20.TabIndex = 24;
-            label20.Text = "Processor cores";
-            // 
-            // numericUpDown32
-            // 
-            numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            numericUpDown32.Location = new System.Drawing.Point(124, 219);
-            numericUpDown32.Maximum = new decimal(new int[] { 63, 0, 0, 0 });
-            numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown32.Name = "numericUpDown32";
-            numericUpDown32.Size = new System.Drawing.Size(59, 25);
-            numericUpDown32.TabIndex = 5;
-            numericUpDown32.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            numericUpDown32.Value = new decimal(new int[] { 16, 0, 0, 0 });
-            numericUpDown32.ValueChanged += NumericUpDown32ValueChanged;
-            // 
             // button18
             // 
-            button18.BackColor = System.Drawing.Color.Gainsboro;
+            button18.BackColor = System.Drawing.SystemColors.Control;
             button18.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button18.ForeColor = System.Drawing.Color.Black;
+            button18.ForeColor = System.Drawing.SystemColors.ControlText;
             button18.Location = new System.Drawing.Point(13, 123);
             button18.Name = "button18";
             button18.Size = new System.Drawing.Size(116, 34);
@@ -3823,9 +3767,9 @@
             // 
             // button9
             // 
-            button9.BackColor = System.Drawing.Color.Gainsboro;
+            button9.BackColor = System.Drawing.SystemColors.Control;
             button9.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button9.ForeColor = System.Drawing.Color.Black;
+            button9.ForeColor = System.Drawing.SystemColors.ControlText;
             button9.Location = new System.Drawing.Point(13, 164);
             button9.Name = "button9";
             button9.Size = new System.Drawing.Size(116, 34);
@@ -3838,9 +3782,9 @@
             // 
             // button7
             // 
-            button7.BackColor = System.Drawing.Color.Gainsboro;
+            button7.BackColor = System.Drawing.SystemColors.Control;
             button7.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button7.ForeColor = System.Drawing.Color.Black;
+            button7.ForeColor = System.Drawing.SystemColors.ControlText;
             button7.Location = new System.Drawing.Point(13, 83);
             button7.Name = "button7";
             button7.Size = new System.Drawing.Size(116, 34);
@@ -3854,9 +3798,9 @@
             // button10
             // 
             button10.AutoSize = true;
-            button10.BackColor = System.Drawing.Color.Gainsboro;
+            button10.BackColor = System.Drawing.SystemColors.Control;
             button10.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button10.ForeColor = System.Drawing.Color.Black;
+            button10.ForeColor = System.Drawing.SystemColors.ControlText;
             button10.Location = new System.Drawing.Point(13, 43);
             button10.Name = "button10";
             button10.Size = new System.Drawing.Size(116, 34);
@@ -3883,9 +3827,9 @@
             groupBox16.Controls.Add(button35);
             groupBox16.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             groupBox16.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            groupBox16.Location = new System.Drawing.Point(445, 11);
+            groupBox16.Location = new System.Drawing.Point(435, 11);
             groupBox16.Name = "groupBox16";
-            groupBox16.Size = new System.Drawing.Size(357, 427);
+            groupBox16.Size = new System.Drawing.Size(367, 427);
             groupBox16.TabIndex = 40;
             groupBox16.TabStop = false;
             groupBox16.Text = "GRAL";
@@ -3924,7 +3868,7 @@
             groupBox18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             groupBox18.Location = new System.Drawing.Point(5, 170);
             groupBox18.Name = "groupBox18";
-            groupBox18.Size = new System.Drawing.Size(176, 117);
+            groupBox18.Size = new System.Drawing.Size(186, 117);
             groupBox18.TabIndex = 8;
             groupBox18.TabStop = false;
             groupBox18.Text = "GRAL file size";
@@ -3932,11 +3876,11 @@
             // label72
             // 
             label72.AutoSize = true;
-            label72.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label72.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label72.Location = new System.Drawing.Point(5, 90);
             label72.Name = "label72";
             label72.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label72.Size = new System.Drawing.Size(13, 15);
+            label72.Size = new System.Drawing.Size(15, 17);
             label72.TabIndex = 11;
             label72.Text = "0";
             label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3944,11 +3888,11 @@
             // label57
             // 
             label57.AutoSize = true;
-            label57.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label57.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label57.Location = new System.Drawing.Point(5, 45);
             label57.Name = "label57";
             label57.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label57.Size = new System.Drawing.Size(16, 15);
+            label57.Size = new System.Drawing.Size(19, 17);
             label57.TabIndex = 10;
             label57.Text = "0 ";
             label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3956,11 +3900,11 @@
             // label85
             // 
             label85.AutoSize = true;
-            label85.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label85.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label85.Location = new System.Drawing.Point(5, 70);
             label85.Name = "label85";
             label85.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label85.Size = new System.Drawing.Size(50, 15);
+            label85.Size = new System.Drawing.Size(55, 17);
             label85.TabIndex = 5;
             label85.Text = "0 MByte";
             label85.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3968,24 +3912,24 @@
             // label84
             // 
             label84.AutoSize = true;
-            label84.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label84.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label84.Location = new System.Drawing.Point(5, 25);
             label84.Name = "label84";
             label84.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label84.Size = new System.Drawing.Size(50, 15);
+            label84.Size = new System.Drawing.Size(55, 17);
             label84.TabIndex = 4;
             label84.Text = "0 MByte";
             label84.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // button42
             // 
-            button42.BackColor = System.Drawing.Color.Gainsboro;
+            button42.BackColor = System.Drawing.SystemColors.Control;
             button42.BackgroundImage = (System.Drawing.Image)resources.GetObject("button42.BackgroundImage");
             button42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button42.ForeColor = System.Drawing.Color.Black;
-            button42.Location = new System.Drawing.Point(141, 74);
+            button42.ForeColor = System.Drawing.SystemColors.ControlText;
+            button42.Location = new System.Drawing.Point(151, 74);
             button42.Name = "button42";
-            button42.Size = new System.Drawing.Size(26, 25);
+            button42.Size = new System.Drawing.Size(32, 32);
             button42.TabIndex = 9;
             toolTip1.SetToolTip(button42, "Delete all intermediate GRAL flow field files");
             button42.UseVisualStyleBackColor = false;
@@ -3993,13 +3937,13 @@
             // 
             // button41
             // 
-            button41.BackColor = System.Drawing.Color.Gainsboro;
+            button41.BackColor = System.Drawing.SystemColors.Control;
             button41.BackgroundImage = (System.Drawing.Image)resources.GetObject("button41.BackgroundImage");
             button41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button41.ForeColor = System.Drawing.Color.Black;
-            button41.Location = new System.Drawing.Point(141, 34);
+            button41.ForeColor = System.Drawing.SystemColors.ControlText;
+            button41.Location = new System.Drawing.Point(151, 18);
             button41.Name = "button41";
-            button41.Size = new System.Drawing.Size(26, 25);
+            button41.Size = new System.Drawing.Size(32, 32);
             button41.TabIndex = 8;
             toolTip1.SetToolTip(button41, "Delete all intermediate GRAL concentration files");
             button41.UseVisualStyleBackColor = false;
@@ -4008,20 +3952,20 @@
             // label83
             // 
             label83.AutoSize = true;
-            label83.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label83.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label83.Location = new System.Drawing.Point(79, 79);
             label83.Name = "label83";
-            label83.Size = new System.Drawing.Size(54, 15);
+            label83.Size = new System.Drawing.Size(59, 17);
             label83.TabIndex = 1;
             label83.Text = "*.gff files";
             // 
             // label82
             // 
             label82.AutoSize = true;
-            label82.Font = new System.Drawing.Font("Segoe UI", 9F);
+            label82.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label82.Location = new System.Drawing.Point(79, 38);
             label82.Name = "label82";
-            label82.Size = new System.Drawing.Size(59, 15);
+            label82.Size = new System.Drawing.Size(64, 17);
             label82.TabIndex = 0;
             label82.Text = "*.con files";
             // 
@@ -4033,7 +3977,7 @@
             groupBox13.Controls.Add(button25);
             groupBox13.Controls.Add(button28);
             groupBox13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox13.Location = new System.Drawing.Point(190, 24);
+            groupBox13.Location = new System.Drawing.Point(200, 24);
             groupBox13.Name = "groupBox13";
             groupBox13.Size = new System.Drawing.Size(159, 170);
             groupBox13.TabIndex = 50;
@@ -4043,9 +3987,9 @@
             // 
             // button40
             // 
-            button40.BackColor = System.Drawing.Color.Gainsboro;
+            button40.BackColor = System.Drawing.SystemColors.Control;
             button40.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button40.ForeColor = System.Drawing.Color.Black;
+            button40.ForeColor = System.Drawing.SystemColors.ControlText;
             button40.Location = new System.Drawing.Point(8, 127);
             button40.Name = "button40";
             button40.Size = new System.Drawing.Size(145, 30);
@@ -4057,9 +4001,9 @@
             // 
             // button37
             // 
-            button37.BackColor = System.Drawing.Color.Gainsboro;
+            button37.BackColor = System.Drawing.SystemColors.Control;
             button37.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button37.ForeColor = System.Drawing.Color.Black;
+            button37.ForeColor = System.Drawing.SystemColors.ControlText;
             button37.Location = new System.Drawing.Point(8, 92);
             button37.Name = "button37";
             button37.Size = new System.Drawing.Size(145, 30);
@@ -4071,9 +4015,9 @@
             // 
             // button25
             // 
-            button25.BackColor = System.Drawing.Color.Gainsboro;
+            button25.BackColor = System.Drawing.SystemColors.Control;
             button25.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button25.ForeColor = System.Drawing.Color.Black;
+            button25.ForeColor = System.Drawing.SystemColors.ControlText;
             button25.Location = new System.Drawing.Point(8, 58);
             button25.Name = "button25";
             button25.Size = new System.Drawing.Size(145, 30);
@@ -4085,9 +4029,9 @@
             // 
             // button28
             // 
-            button28.BackColor = System.Drawing.Color.Gainsboro;
+            button28.BackColor = System.Drawing.SystemColors.Control;
             button28.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button28.ForeColor = System.Drawing.Color.Black;
+            button28.ForeColor = System.Drawing.SystemColors.ControlText;
             button28.Location = new System.Drawing.Point(8, 22);
             button28.Name = "button28";
             button28.Size = new System.Drawing.Size(145, 30);
@@ -4104,7 +4048,7 @@
             groupBox14.Controls.Add(button26);
             groupBox14.Controls.Add(button27);
             groupBox14.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox14.Location = new System.Drawing.Point(190, 200);
+            groupBox14.Location = new System.Drawing.Point(200, 200);
             groupBox14.Name = "groupBox14";
             groupBox14.Size = new System.Drawing.Size(159, 170);
             groupBox14.TabIndex = 60;
@@ -4114,9 +4058,9 @@
             // 
             // button29
             // 
-            button29.BackColor = System.Drawing.Color.Gainsboro;
+            button29.BackColor = System.Drawing.SystemColors.Control;
             button29.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button29.ForeColor = System.Drawing.Color.Black;
+            button29.ForeColor = System.Drawing.SystemColors.ControlText;
             button29.Location = new System.Drawing.Point(8, 92);
             button29.Name = "button29";
             button29.Size = new System.Drawing.Size(145, 30);
@@ -4128,9 +4072,9 @@
             // 
             // button47
             // 
-            button47.BackColor = System.Drawing.Color.Gainsboro;
+            button47.BackColor = System.Drawing.SystemColors.Control;
             button47.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button47.ForeColor = System.Drawing.Color.Black;
+            button47.ForeColor = System.Drawing.SystemColors.ControlText;
             button47.Location = new System.Drawing.Point(8, 127);
             button47.Name = "button47";
             button47.Size = new System.Drawing.Size(145, 30);
@@ -4142,9 +4086,9 @@
             // 
             // button26
             // 
-            button26.BackColor = System.Drawing.Color.Gainsboro;
+            button26.BackColor = System.Drawing.SystemColors.Control;
             button26.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button26.ForeColor = System.Drawing.Color.Black;
+            button26.ForeColor = System.Drawing.SystemColors.ControlText;
             button26.Location = new System.Drawing.Point(8, 57);
             button26.Name = "button26";
             button26.Size = new System.Drawing.Size(145, 30);
@@ -4156,9 +4100,9 @@
             // 
             // button27
             // 
-            button27.BackColor = System.Drawing.Color.Gainsboro;
+            button27.BackColor = System.Drawing.SystemColors.Control;
             button27.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            button27.ForeColor = System.Drawing.Color.Black;
+            button27.ForeColor = System.Drawing.SystemColors.ControlText;
             button27.Location = new System.Drawing.Point(8, 22);
             button27.Name = "button27";
             button27.Size = new System.Drawing.Size(145, 30);
@@ -4191,17 +4135,18 @@
             // button33
             // 
             button33.AutoSize = true;
-            button33.BackColor = System.Drawing.Color.Gainsboro;
+            button33.BackColor = System.Drawing.SystemColors.Control;
             button33.BackgroundImage = (System.Drawing.Image)resources.GetObject("button33.BackgroundImage");
             button33.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button33.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button33.Location = new System.Drawing.Point(136, 24);
+            button33.Location = new System.Drawing.Point(140, 24);
             button33.Name = "button33";
-            button33.Size = new System.Drawing.Size(45, 34);
+            button33.Size = new System.Drawing.Size(35, 35);
             button33.TabIndex = 42;
-            toolTip1.SetToolTip(button33, "Start the GRAL computation core");
+            toolTip1.SetToolTip(button33, "Start the GRAL computation core\r\nRight mouse key: start a chunk of situations");
             button33.UseVisualStyleBackColor = false;
             button33.Click += Button33_Click;
+            button33.MouseDown += Button33_MouseDown;
             // 
             // groupBox11
             // 
@@ -4211,7 +4156,7 @@
             groupBox11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             groupBox11.Location = new System.Drawing.Point(5, 300);
             groupBox11.Name = "groupBox11";
-            groupBox11.Size = new System.Drawing.Size(177, 111);
+            groupBox11.Size = new System.Drawing.Size(186, 121);
             groupBox11.TabIndex = 6;
             groupBox11.TabStop = false;
             groupBox11.Text = " GRAL Topography";
@@ -4219,10 +4164,10 @@
             // checkBox25
             // 
             checkBox25.AutoSize = true;
-            checkBox25.Font = new System.Drawing.Font("Segoe UI", 9F);
+            checkBox25.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             checkBox25.Location = new System.Drawing.Point(7, 68);
             checkBox25.Name = "checkBox25";
-            checkBox25.Size = new System.Drawing.Size(151, 34);
+            checkBox25.Size = new System.Drawing.Size(167, 38);
             checkBox25.TabIndex = 7;
             checkBox25.Text = "Use original topo-\r\ngraphical data for GRAL";
             toolTip1.SetToolTip(checkBox25, "Prompts you for high resolution topographical\r\ndata used to define the GRAL topography\r\nwhen starting the GRAL simulation.");
@@ -4234,10 +4179,10 @@
             // 
             radioButton2.AutoSize = true;
             radioButton2.Enabled = false;
-            radioButton2.Font = new System.Drawing.Font("Segoe UI", 9F);
+            radioButton2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton2.Location = new System.Drawing.Point(7, 45);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new System.Drawing.Size(71, 19);
+            radioButton2.Size = new System.Drawing.Size(75, 21);
             radioButton2.TabIndex = 1;
             radioButton2.Text = "complex";
             radioButton2.UseVisualStyleBackColor = true;
@@ -4247,10 +4192,10 @@
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
             radioButton1.Enabled = false;
-            radioButton1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            radioButton1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton1.Location = new System.Drawing.Point(7, 20);
             radioButton1.Name = "radioButton1";
-            radioButton1.Size = new System.Drawing.Size(42, 19);
+            radioButton1.Size = new System.Drawing.Size(44, 21);
             radioButton1.TabIndex = 6;
             radioButton1.TabStop = true;
             radioButton1.Text = "flat";
@@ -4259,13 +4204,13 @@
             // button34
             // 
             button34.AutoSize = true;
-            button34.BackColor = System.Drawing.Color.Gainsboro;
+            button34.BackColor = System.Drawing.SystemColors.Control;
             button34.BackgroundImage = (System.Drawing.Image)resources.GetObject("button34.BackgroundImage");
             button34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button34.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
             button34.Location = new System.Drawing.Point(8, 24);
             button34.Name = "button34";
-            button34.Size = new System.Drawing.Size(45, 34);
+            button34.Size = new System.Drawing.Size(35, 35);
             button34.TabIndex = 40;
             toolTip1.SetToolTip(button34, "Stop the simulation");
             button34.UseVisualStyleBackColor = false;
@@ -4274,13 +4219,13 @@
             // button35
             // 
             button35.AutoSize = true;
-            button35.BackColor = System.Drawing.Color.Gainsboro;
+            button35.BackColor = System.Drawing.SystemColors.Control;
             button35.BackgroundImage = (System.Drawing.Image)resources.GetObject("button35.BackgroundImage");
             button35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             button35.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.5F);
-            button35.Location = new System.Drawing.Point(70, 24);
+            button35.Location = new System.Drawing.Point(72, 24);
             button35.Name = "button35";
-            button35.Size = new System.Drawing.Size(45, 34);
+            button35.Size = new System.Drawing.Size(35, 35);
             button35.TabIndex = 41;
             toolTip1.SetToolTip(button35, "Pause");
             button35.UseVisualStyleBackColor = false;
@@ -4288,7 +4233,7 @@
             // 
             // project_locked_button
             // 
-            project_locked_button.BackColor = System.Drawing.Color.Gainsboro;
+            project_locked_button.BackColor = System.Drawing.SystemColors.Control;
             project_locked_button.BackgroundImage = (System.Drawing.Image)resources.GetObject("project_locked_button.BackgroundImage");
             project_locked_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             project_locked_button.Location = new System.Drawing.Point(572, 451);
@@ -4531,8 +4476,6 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown29).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown30).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown31).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown28).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown27).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown10).EndInit();
             Domain.ResumeLayout(false);
             groupBox9.ResumeLayout(false);
@@ -4582,18 +4525,20 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown18).EndInit();
             Computation.ResumeLayout(false);
             Computation.PerformLayout();
+            groupBox31.ResumeLayout(false);
+            groupBox31.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown33).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown32).EndInit();
             groupBox17.ResumeLayout(false);
             groupBox15.ResumeLayout(false);
             groupBox15.PerformLayout();
             groupBox30.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numericUpDown33).EndInit();
             groupBox6.ResumeLayout(false);
             groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown32).EndInit();
             groupBox16.ResumeLayout(false);
             groupBox16.PerformLayout();
             groupBox18.ResumeLayout(false);
@@ -4843,10 +4788,6 @@
         public System.Windows.Forms.NumericUpDown numericUpDown26;
         private System.Windows.Forms.Label label74;
         private System.Windows.Forms.Label label75;
-        public System.Windows.Forms.NumericUpDown numericUpDown27;
-        private System.Windows.Forms.Label label76;
-        public System.Windows.Forms.NumericUpDown numericUpDown28;
-        private System.Windows.Forms.Label label77;
         public System.Windows.Forms.NumericUpDown numericUpDown30;
         private System.Windows.Forms.Label label79;
         public System.Windows.Forms.NumericUpDown numericUpDown29;
@@ -4927,6 +4868,7 @@
         private System.Windows.Forms.Button button60;
         private System.Windows.Forms.Label LabelEmissionPath;
         public System.Windows.Forms.CheckBox checkBoxAVX;
+        private System.Windows.Forms.GroupBox groupBox31;
     }
 }
 

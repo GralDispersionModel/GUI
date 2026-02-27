@@ -10,16 +10,15 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Windows.Forms;
-using System.IO;
-
 using Gral;
 using GralDomain;
 using GralItemData;
 using GralStaticFunctions;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralItemForms
 {
@@ -53,12 +52,12 @@ namespace GralItemForms
         {
             InitializeComponent();
 
-            #if __MonoCS__
+#if __MonoCS__
 
                 numericUpDown1.TextAlign =  HorizontalAlignment.Left;
                 numericUpDown2.TextAlign = HorizontalAlignment.Left;
-            #else
-            #endif
+#else
+#endif
             MouseMove += new MouseEventHandler(Aktiv);
         }
 
@@ -88,7 +87,7 @@ namespace GralItemForms
 
             textBox2.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
             textBox3.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-            numericUpDown1.Minimum = (decimal) (MinReceptorHeight);
+            numericUpDown1.Minimum = (decimal)(MinReceptorHeight);
         }
 
         //increase the number of receptors by one
@@ -155,8 +154,8 @@ namespace GralItemForms
             {
                 _rdata.Name = St_F.RemoveinvalidChars(textBox1.Text);
                 _rdata.Pt = new PointD(x, y);
-                _rdata.Height = (float) (numericUpDown1.Value);
-                _rdata.DisplayValue = (float) (numericUpDown2.Value);
+                _rdata.Height = (float)(numericUpDown1.Value);
+                _rdata.DisplayValue = (float)(numericUpDown2.Value);
 
                 if (ItemDisplayNr >= ItemData.Count) // new item
                 {
@@ -170,7 +169,7 @@ namespace GralItemForms
                 {
                     RedrawDomain(this, null);
                 }
-             }
+            }
         }
 
         //fill actual values
@@ -279,13 +278,13 @@ namespace GralItemForms
             // send Message to domain Form, that Section-Form is closed
             try
             {
-            if (ReceptorRedraw != null)
+                if (ReceptorRedraw != null)
                 {
                     ReceptorRedraw(this, e);
                 }
             }
             catch
-            {}
+            { }
         }
 
         public void ShowForm()

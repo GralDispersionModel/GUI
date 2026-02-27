@@ -12,9 +12,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Windows.Forms;
-using System.Data;
 
 namespace GralDomForms
 {
@@ -75,12 +75,12 @@ namespace GralDomForms
                 radioButton1.Visible = false;
                 radioButton2.Visible = false;
 
-                if (((int) MeteoModel & 1) == (int) GralDomain.MeteoModelEmum.GRAMM) // GRAMM
+                if (((int)MeteoModel & 1) == (int)GralDomain.MeteoModelEmum.GRAMM) // GRAMM
                 {
                     radioButton1.Visible = true;
                     radioButton1.Checked = true;
                 }
-                if (((int) MeteoModel & 2) == (int) GralDomain.MeteoModelEmum.GRAL) // GRAL
+                if (((int)MeteoModel & 2) == (int)GralDomain.MeteoModelEmum.GRAL) // GRAL
                 {
                     radioButton2.Visible = true;
                     if (radioButton1.Visible == false)
@@ -134,7 +134,7 @@ namespace GralDomForms
             _rd.LoadReceptors(ItemData, Path.Combine(Gral.Main.ProjectName, "Computation", "Receptor.dat"));
             _rd = null;
 
-            foreach(GralItemData.ReceptorData _data in ItemData)
+            foreach (GralItemData.ReceptorData _data in ItemData)
             {
                 DataRow workrow;
                 workrow = PointCoorData.NewRow();
@@ -172,7 +172,7 @@ namespace GralDomForms
                     string _a = "Pt " + Convert.ToString(NameCounter++);
                     workrow[0] = _a;
                 }
-                
+
                 workrow[1] = _pt.X;
                 workrow[2] = _pt.Y;
                 if (!existingLine)
@@ -182,7 +182,7 @@ namespace GralDomForms
                 }
                 else
                 {
-               
+
                 }
                 this.Activate();
             }
@@ -224,7 +224,7 @@ namespace GralDomForms
             {
                 MeteoModel = GralDomain.MeteoModelEmum.GRAL;
             }
-            
+
             if (checkBox1.Checked)
             {
                 LocalStability = true;
@@ -303,7 +303,7 @@ namespace GralDomForms
                                 {
                                     sCells[i] = test.ToString("0.0");
                                 }
-                               
+
                                 oCell.Value = Convert.ChangeType(sCells[i].Replace("\r", ""), oCell.ValueType);
                             }
                             else
@@ -335,7 +335,8 @@ namespace GralDomForms
                 OverwritePrompt = true,
                 CheckPathExists = true
 #if NET6_0_OR_GREATER
-                ,ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
+                ,
+                ClientGuid = GralStaticFunctions.St_F.FileDialogMeteo
 #endif
             };
             saveFile.ShowDialog();

@@ -12,9 +12,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using System.Text;
 
 
 namespace SocialExplorer.IO.FastDBF
@@ -258,7 +258,7 @@ namespace SocialExplorer.IO.FastDBF
                             //set decimal point
                             //-----------------------------------------------------------------------
                             _data[ocol.DataAddress + ocol.Length - ocol.DecimalCount - 1] = (byte)'.';
-                            
+
 
                         }
 

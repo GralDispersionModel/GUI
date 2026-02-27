@@ -10,19 +10,19 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Globalization;
-using System.Windows.Forms;
-using GralStaticFunctions;
 using Gral;
+using GralStaticFunctions;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralIO
 {
     /////////////////////////////////////
     /// routine to generate landuse files for GRAMM and GRAL
     /////////////////////////////////////
-    
+
     /// <summary>
     /// This class creates the landuse file
     /// </summary>
@@ -57,7 +57,7 @@ namespace GralIO
         public double NODATA { set { _NODDATA = value; } }
         private double _DX;
         public double DX { set { _DX = value; } }
-        
+
         private CultureInfo ic = CultureInfo.InvariantCulture;
 
         //module to initialze a jagged array
@@ -73,20 +73,20 @@ namespace GralIO
             }
             return result;
         }
-        
+
         /// <summary>
         /// Create the landuse file
         /// </summary>
         public bool GenerateLanduseFile(string FileName, bool Mode)
-        {	
+        {
             GralMessage.Waitprogressbar wait = new GralMessage.Waitprogressbar("Reading landuse file");
             wait.Show();
-            
+
             //User defined column seperator and decimal seperator
             string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
- 
+
             //Albedo [%]
-            double [] AGL=new double[1000];
+            double[] AGL = new double[1000];
             //Emissivity of the surface [%]
             double[] EPSGL = new double[1000];
             //Soil moisture [%]
@@ -316,9 +316,9 @@ namespace GralIO
                                 ALAMBDAT[NR] = Convert.ToDouble(text1[6], ic);
                             }
                         }
-                        catch{ }
+                        catch { }
                     }
-                    
+
                 }
                 catch
                 {
@@ -329,32 +329,32 @@ namespace GralIO
             GralMessage.MessageWindow mw = new GralMessage.MessageWindow();
 
             //reading field sizes from file GRAMM.geb
-            StreamReader reader=new StreamReader(Path.Combine(Main.ProjectName, @"Computation", "GRAMM.geb"));
-            string [] text=new string[5];
-            text=reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            int NX=Convert.ToInt32(text[0]);  //number of horizontal cells in x direction
-            text=reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            int NY=Convert.ToInt32(text[0]);  //number of horizontal cells in y direction
-            text=reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            int NZ=Convert.ToInt32(text[0]);  //number of vertical cells in z direction
+            StreamReader reader = new StreamReader(Path.Combine(Main.ProjectName, @"Computation", "GRAMM.geb"));
+            string[] text = new string[5];
             text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            double xsimin=Convert.ToDouble(text[0].Replace(".",decsep)); //western boarder
+            int NX = Convert.ToInt32(text[0]);  //number of horizontal cells in x direction
             text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            double xsimax=Convert.ToDouble(text[0].Replace(".",decsep)); //eastern boarder
+            int NY = Convert.ToInt32(text[0]);  //number of horizontal cells in y direction
             text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            double etamin=Convert.ToDouble(text[0].Replace(".",decsep)); //southern boarder
+            int NZ = Convert.ToInt32(text[0]);  //number of vertical cells in z direction
             text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            double etamax=Convert.ToDouble(text[0].Replace(".",decsep)); //northern boarder
+            double xsimin = Convert.ToDouble(text[0].Replace(".", decsep)); //western boarder
+            text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            double xsimax = Convert.ToDouble(text[0].Replace(".", decsep)); //eastern boarder
+            text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            double etamin = Convert.ToDouble(text[0].Replace(".", decsep)); //southern boarder
+            text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            double etamax = Convert.ToDouble(text[0].Replace(".", decsep)); //northern boarder
             reader.Close();
 
             int DX = Convert.ToInt32((xsimax - xsimin) / NX);
             int DY = Convert.ToInt32((etamax - etamin) / NY);
-            
+
             int IKOOA = Convert.ToInt32(xsimin);
             int JKOOA = Convert.ToInt32(etamin);
 
-            int NX1=NX+2;
-            int NY1=NY+2;
+            int NX1 = NX + 2;
+            int NY1 = NY + 2;
             int NZ1 = NZ + 2;
             int NX2 = NX + 2;
             int NY2 = NY + 2;
@@ -364,7 +364,7 @@ namespace GralIO
             //Int16[, ,] LUSPROZ = new Int16[NX2, NY2, 1000];  //Corine-Landuse-frequencies within the chosen cell
             Int16[][][] LUSPROZ = CreateArray<Int16[][]>(1, () => CreateArray<Int16[]>(1, () => new Int16[1]));        //Absolute temperature in K
             LUSPROZ = CreateArray<Int16[][]>(NX2, () => CreateArray<Int16[]>(NY2, () => new Int16[1000]));
-            
+
             double[,] PROZGES = new double[NX2, NY2];  //Corine-Landuse-frequencies within the chosen cell
             double[,] RHOB = new double[NX1, NY1];  //soil density
             double[,] ALAMBDA = new double[NX1, NY1];  //soil temperature leitungsfaehigkeit
@@ -373,7 +373,7 @@ namespace GralIO
             double[,] Z0 = new double[NX1, NY1];  //surface roughness length
             double[,] FW = new double[NX1, NY1];  //soil moisture content
             double[,] EPSG = new double[NX1, NY1];  //surface emissivity
-            double NODDATA=0;
+            double NODDATA = 0;
 
             if (FileName != "Default-Values")
             {
@@ -390,7 +390,7 @@ namespace GralIO
                 double ICSIZE = Convert.ToDouble(text[1].Replace(".", decsep));  //grid size
                 text = reader.ReadLine().Split(new char[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                 NODDATA = Convert.ToDouble(text[1].Replace(".", decsep));  //no-data value
-                
+
                 int IKOOE = IKOOA + DX * NX;
                 int JKOOE = JKOOA + DY * NY;
 
@@ -407,22 +407,22 @@ namespace GralIO
 
                 //reading landuse file
                 int J = NY;
-                text = new string[NCOL+2];
+                text = new string[NCOL + 2];
                 int[] ADH = new int[NCOL + 1];
-                
+
                 for (int NNJ = 1; NNJ < NROW + 1; NNJ++)
                 {
                     Application.DoEvents(); // Kuntner
-                    
+
                     if (NNJ % 40 == 0)
                     {
-                        wait.Text =  "Reading landuse file " + ((int)((float)NNJ / (NROW + 2) * 100F)).ToString() +"%";
+                        wait.Text = "Reading landuse file " + ((int)((float)NNJ / (NROW + 2) * 100F)).ToString() + "%";
                     }
 
                     int I = 1;
                     int JKOO = Convert.ToInt32(JLIUN + (NROW - NNJ + 1) * ICSIZE);
                     string line_text = reader.ReadLine();
-                    
+
                     //check if landuse data point is within the model domain
                     if ((JKOO >= JKOOA) && (JKOO <= JKOOE))
                     {
@@ -436,9 +436,9 @@ namespace GralIO
                                 ADH[NNI] = int.Parse(text[NNI - 1], System.Globalization.CultureInfo.InvariantCulture);
                             }
                             catch
-                            {}
+                            { }
                         }
-                        
+
                         // ADH[NNI] = Convert.ToInt32(text[NNI - 1].Replace(".", form1.decsep));
                         for (int NNI = 1; NNI < NCOL + 1; NNI++)
                         {
@@ -672,36 +672,36 @@ namespace GralIO
             Result.DblArr = ALAMBDA;
             Result.FileName = Path.Combine(Main.ProjectName, @"Maps", "conductivity.txt");
             Result.WriteDblArrResult();
-            
+
             //output of surface moisture
             Result.Unit = string.Empty;
             Result.Round = 3;
             Result.DblArr = FW;
             Result.FileName = Path.Combine(Main.ProjectName, @"Maps", "moisture.txt");
             Result.WriteDblArrResult();
-            
+
             //output of emissivity
             Result.Unit = string.Empty;
             Result.Round = 3;
             Result.DblArr = EPSG;
             Result.FileName = Path.Combine(Main.ProjectName, @"Maps", "emissivity.txt");
             Result.WriteDblArrResult();
-            
+
             //output of surface albedo
             Result.Unit = string.Empty;
             Result.Round = 3;
             Result.DblArr = ALBEDO;
             Result.FileName = Path.Combine(Main.ProjectName, @"Maps", "albedo.txt");
             Result.WriteDblArrResult();
-            
-            
+
+
             mw.listBox1.Items.Add("Landuse File successfully generated. This window can be closed.");
             mw.Refresh();
             mw.Show();
 
             wait.Close();
             wait.Dispose();
-            
+
             return ok;
         }
 
@@ -889,28 +889,28 @@ namespace GralIO
                 Result.DblArr = _ALAMBDA;
                 Result.FileName = Path.Combine(_projectname, @"Maps", "conductivity.txt");
                 Result.WriteDblArrResult();
-                
+
                 //output of surface moisture
                 Result.Unit = string.Empty;
                 Result.Round = 3;
                 Result.DblArr = _FW;
                 Result.FileName = Path.Combine(_projectname, @"Maps", "moisture.txt");
                 Result.WriteDblArrResult();
-                
+
                 //output of emissivity
                 Result.Unit = string.Empty;
                 Result.Round = 3;
                 Result.DblArr = _EPSG;
                 Result.FileName = Path.Combine(_projectname, @"Maps", "emissivity.txt");
                 Result.WriteDblArrResult();
-                
+
                 //output of surface albedo
                 Result.Unit = string.Empty;
                 Result.Round = 3;
                 Result.DblArr = _ALBEDO;
                 Result.FileName = Path.Combine(_projectname, @"Maps", "albedo.txt");
                 Result.WriteDblArrResult();
-                
+
                 return true;
             }
             catch

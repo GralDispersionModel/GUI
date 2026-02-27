@@ -11,8 +11,8 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
@@ -21,47 +21,47 @@ namespace GralDomForms
     /// </summary>
     public partial class SelectItem : Form
     {
-        public List <string> ItemNames = new List<string>();
+        public List<string> ItemNames = new List<string>();
         public int SelectedIndex = 0;
-        
+
         public SelectItem()
         {
-            InitializeComponent();   
+            InitializeComponent();
         }
-        
+
         void SelectItemLoad(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
                this.AutoSizeMode = AutoSizeMode.GrowOnly;
-            #else
-            #endif
+#else
+#endif
             if (ItemNames.Count == 0)
             {
                 Close();
             }
-            foreach(string mn in ItemNames)
+            foreach (string mn in ItemNames)
             {
                 listBox1.Items.Add(mn);
             }
             listBox1.SelectedIndex = 0;
         }
-        
+
         void Button1Click(object sender, EventArgs e)
         {
-            SelectedIndex = (int) (listBox1.SelectedIndex);
+            SelectedIndex = (int)(listBox1.SelectedIndex);
         }
-        
+
         void Button2Click(object sender, EventArgs e)
         {
             SelectedIndex = -1; // nothing selected
         }
-        
+
         void ListBox1DoubleClick(object sender, EventArgs e)
         {
             Button1Click(null, null);
             this.Close();
         }
     }
-    
-    
+
+
 }

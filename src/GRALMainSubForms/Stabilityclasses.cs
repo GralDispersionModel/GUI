@@ -19,14 +19,14 @@ using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Form to show the stability classes of a meteo file
     /// </summary>
     public partial class Stabilityclasses : Form
     {
         public double[] ScClassFrequency = new double[7];
         public string MetFile;
-		public List <GralData.WindData> Wind;
+        public List<GralData.WindData> Wind;
         public GralData.WindRoseSettings WindRoseSetting;
         private const float HorSize = 762F;
         private const float VertSize = 508F;
@@ -41,7 +41,7 @@ namespace GralMainForms
             InitializeComponent();
         }
         protected override void OnPaint(PaintEventArgs e)
-        {            
+        {
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -60,27 +60,27 @@ namespace GralMainForms
             Font _mediumFont = new Font("Arial", 9);
             Font _largeFont = new Font("Arial", 10);
             Brush _blackBrush = new SolidBrush(Color.Black);
-                    
+
             format1.LineAlignment = StringAlignment.Near;
             format1.Alignment = StringAlignment.Near;
-            
+
             // draw legend
             SizeF _lenght = g.MeasureString(MetFile, _smallFont);
-            int distance = (int) _lenght.Height + 2;
+            int distance = (int)_lenght.Height + 2;
             g.DrawString(MetFile, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top, format1);
             string _data = "Data points: " + Convert.ToString(Wind.Count);
             _lenght = g.MeasureString(_data, _smallFont);
             g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + distance, format1);
             if (Wind.Count > 1)
-			{
-			    _data = Wind[0].Date + " - " + Wind[Wind.Count - 1].Date;
-			    g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + 2 * distance, format1);
-                _data = StartHour.ToString() + ":00 - " + FinalHour.ToString()+":00";
+            {
+                _data = Wind[0].Date + " - " + Wind[Wind.Count - 1].Date;
+                g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + 2 * distance, format1);
+                _data = StartHour.ToString() + ":00 - " + FinalHour.ToString() + ":00";
                 _lenght = g.MeasureString(_data, _smallFont);
                 g.DrawString(_data, _smallFont, _blackBrush, LegendPosition.Left, LegendPosition.Top + 3 * distance, format1);
             }
-            
-			//scaling factor
+
+            //scaling factor
             double classmax = 0;
             for (int i = 0; i < 7; i++)
             {
@@ -119,7 +119,7 @@ namespace GralMainForms
             g.DrawString("slightly stable", _smallFont, _blackBrush, 382, 450);
             g.DrawString("stable", _smallFont, _blackBrush, 475, 450);
             g.DrawString("very stable", _smallFont, _blackBrush, 545, 450);
-            
+
             StringFormat verticalString = new StringFormat
             {
                 FormatFlags = StringFormatFlags.DirectionVertical,
@@ -132,7 +132,7 @@ namespace GralMainForms
             g.DrawString("  0", _largeFont, _blackBrush, 25, 435);
             //base.OnPaint(e);
 
-          	//draw frequency levels
+            //draw frequency levels
             for (int i = 1; i < 11; i += 1)
             {
                 int levels = Convert.ToInt32(Convert.ToDouble(i) / 10 * scale);
@@ -146,7 +146,7 @@ namespace GralMainForms
                 g.DrawString(s, _largeFont, _blackBrush, 25, lev1 - 5);
                 base.OnPaint(e);
             }
-            p1.Dispose();p2.Dispose();p3.Dispose();
+            p1.Dispose(); p2.Dispose(); p3.Dispose();
             format1.Dispose();
             _smallFont.Dispose();
             _mediumFont.Dispose();
@@ -156,11 +156,11 @@ namespace GralMainForms
 
         private void Form5_Load(object sender, EventArgs e)
         {
-        	Text = "Frequency distribution stability classes   -  " + MetFile; // Kuntner
+            Text = "Frequency distribution stability classes   -  " + MetFile; // Kuntner
             Font _smallFont = new Font("Arial", 8);
             SizeF _fontsize = TextRenderer.MeasureText(MetFile, _smallFont);
             int distance = (int)_fontsize.Height + 2;
-            LegendPosition = new Rectangle((int) Math.Max(0, HorSize - _fontsize.Width - 5), 5, (int) _fontsize.Width, distance * 4);
+            LegendPosition = new Rectangle((int)Math.Max(0, HorSize - _fontsize.Width - 5), 5, (int)_fontsize.Width, distance * 4);
             _smallFont.Dispose();
         }
 
@@ -184,14 +184,14 @@ namespace GralMainForms
             panel1.Refresh();
         }
 
-        
+
         void StabilityclassesFormClosed(object sender, FormClosedEventArgs e)
         {
-        	toolTip1.Dispose();
-        	panel1.Dispose();
-        	button1.Dispose();
+            toolTip1.Dispose();
+            panel1.Dispose();
+            button1.Dispose();
         }
-        
+
         void StabilityclassesResizeEnd(object sender, EventArgs e)
         {
             if (ClientSize.Width > 60)
@@ -199,19 +199,19 @@ namespace GralMainForms
                 panel1.Width = ClientSize.Width - 55;
                 panel1.Height = ClientSize.Height;
             }
-            
+
             panel1.Invalidate();
-			panel1.Update();
+            panel1.Update();
         }
-        
+
         void StabilityclassesResize(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Maximized) 
+            if (WindowState == FormWindowState.Maximized)
             {
                 StabilityclassesResizeEnd(null, null);
                 // Maximized!
             }
-            if (WindowState == FormWindowState.Normal) 
+            if (WindowState == FormWindowState.Normal)
             {
                 StabilityclassesResizeEnd(null, null);
                 // Restored!

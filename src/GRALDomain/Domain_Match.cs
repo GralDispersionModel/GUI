@@ -10,14 +10,13 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.IO;
-using GralIO;
-using GralStaticFunctions;
-using GralMessage;
 using GralDomForms;
+using GralIO;
+using GralMessage;
+using GralStaticFunctions;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomain
 {
@@ -54,7 +53,7 @@ namespace GralDomain
                 Text = "GRAMM Match to Observation error",
                 ShowInTaskbar = false
             }; // Kuntner
-            MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+            MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
 
             //delete existing meteo files first
             if (File.Exists(Path.Combine(Gral.Main.ProjectName, "Computation", "meteopgt.all")))
@@ -70,7 +69,7 @@ namespace GralDomain
 #if __MonoCS__
             wait.Width = 350;
 #endif
-            
+
             //copy and reading geometry file "ggeom.asc"
             wait.Text = "Reading geometry file ggeom.asc";
             wait.Show();
@@ -78,7 +77,7 @@ namespace GralDomain
 
             try
             {
-                File.Copy(Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), @"ggeom.asc"), Path.Combine(Gral.Main.ProjectName, @"Computation", "ggeom.asc"), true);
+                File.Copy(Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), @"ggeom.asc"), Path.Combine(Gral.Main.ProjectName, @"Computation", "ggeom.asc"), true);
 
                 GGeomFileIO ggeom = new GGeomFileIO
                 {
@@ -155,9 +154,9 @@ namespace GralDomain
                 wait.Show();
                 Application.DoEvents(); // Kuntner
 
-                string path = Path.Combine(MainForm.GRAMMwindfield, @"meteopgt.all");
+                string path = Path.Combine(Gral.Main.GRAMMwindfield, @"meteopgt.all");
 
-                long NumberofWeatherSituations = St_F.CountLinesInFile(Path.Combine(MainForm.GRAMMwindfield, @"meteopgt.all")) - 2;
+                long NumberofWeatherSituations = St_F.CountLinesInFile(Path.Combine(Gral.Main.GRAMMwindfield, @"meteopgt.all")) - 2;
 
                 MMO.WindDirMeteoPGT = new double[NumberofWeatherSituations + 2];
                 MMO.WindVelMeteoPGT = new double[NumberofWeatherSituations + 2];
@@ -175,12 +174,12 @@ namespace GralDomain
                 float[,,] WWI = new float[NX + 1, NY + 1, NZ + 1];
                 MMO.MeteoOriginalHeader = new string[2];
 
-                StreamReader meteopgt_ori = new StreamReader(Path.Combine(MainForm.GRAMMwindfield, @"meteopgt.all")); // Read from original meteopgt.all
+                StreamReader meteopgt_ori = new StreamReader(Path.Combine(Gral.Main.GRAMMwindfield, @"meteopgt.all")); // Read from original meteopgt.all
 
                 // Remember the original Header
                 MMO.MeteoOriginalHeader[0] = meteopgt_ori.ReadLine();
                 MMO.MeteoOriginalHeader[1] = meteopgt_ori.ReadLine();
-                wait.ProgressbarUpdate(this, (int) NumberofWeatherSituations + 1);
+                wait.ProgressbarUpdate(this, (int)NumberofWeatherSituations + 1);
 
                 // Read original Meteo-Data
                 Windfield_Reader Reader = new Windfield_Reader();
@@ -221,8 +220,8 @@ namespace GralDomain
                         try
                         {
                             //read wind fields
-                            string wndfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".wnd");
-                            
+                            string wndfilename = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".wnd");
+
                             if (Reader.Windfield_read(wndfilename, NX, NY, NZ, ref UWI, ref VWI, ref WWI) == false)
                             {
                                 throw new IOException();
@@ -232,11 +231,11 @@ namespace GralDomain
                             if (MMO.LocalStabilityUsed)
                             {
                                 //wait.Text = "Match - Reading GRAMM stability field " + Convert.ToString(iiwet);
-                                string stabilityfilename = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
+                                string stabilityfilename = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), Convert.ToString(iiwet).PadLeft(5, '0') + ".scl");
 
                                 ReadStability.FileName = stabilityfilename;
                                 ReadStability.Stabclasses = zlevel;
-                                
+
                                 if (ReadStability.ReadSclFile()) // true => reader = OK
                                 {
                                     zlevel = ReadStability.Stabclasses;
@@ -268,7 +267,7 @@ namespace GralDomain
                                         Text = "GRAMM Match to Observation error",
                                         ShowInTaskbar = false
                                     }; // Kuntner
-                                    MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                    MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                                 }
                                 MessageInfoForm.listBox1.Items.Add("Unable to read wind field nr. " + Convert.ToString(iiwet));
                                 MessageInfoForm.Show();
@@ -397,7 +396,7 @@ namespace GralDomain
             wait.Close();
 
             CancellationTokenReset();
-            
+
             //if (MessageInfoForm != null)
             //{
             //   MessageInfoForm.Close();
@@ -509,7 +508,7 @@ namespace GralDomain
                                         Text = "GRAMM Match to Observation error",
                                         ShowInTaskbar = false
                                     }; // Kuntner
-                                    MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                    MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                                 }
                                 MessageInfoForm.listBox1.Items.Add("Concatenate failed"); // Kuntner
                                 MessageInfoForm.Show();
@@ -580,13 +579,13 @@ namespace GralDomain
                             {
                                 //copy corresponding GRAMM fields
                                 string windfieldfile = Convert.ToString(a_Line.PGTNumber).PadLeft(5, '0') + ".wnd";//copy selected wind field file
-                                string orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
+                                string orifile = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), windfieldfile);
                                 string targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".wnd");
                                 File.Copy(orifile, targetfile, true);
 
                                 // copy .scl file
                                 windfieldfile = Convert.ToString(a_Line.PGTNumber).PadLeft(5, '0') + ".scl";//copy selected .scl file
-                                orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
+                                orifile = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), windfieldfile);
                                 targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".scl");
                                 if (File.Exists(orifile))
                                 {
@@ -595,7 +594,7 @@ namespace GralDomain
 
                                 // copy .obl file
                                 windfieldfile = Convert.ToString(a_Line.PGTNumber).PadLeft(5, '0') + ".obl";//copy selected .scl file
-                                orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
+                                orifile = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), windfieldfile);
                                 targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".obl");
                                 if (File.Exists(orifile))
                                 {
@@ -604,7 +603,7 @@ namespace GralDomain
 
                                 // copy .ust file
                                 windfieldfile = Convert.ToString(a_Line.PGTNumber).PadLeft(5, '0') + ".ust";//copy selected .scl file
-                                orifile = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), windfieldfile);
+                                orifile = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), windfieldfile);
                                 targetfile = Path.Combine(Path.Combine(Gral.Main.ProjectName, "Computation"), Convert.ToString(i + 1).PadLeft(5, '0') + ".ust");
                                 if (File.Exists(orifile))
                                 {
@@ -641,7 +640,7 @@ namespace GralDomain
                                     Text = "GRAMM Match to Observation error",
                                     ShowInTaskbar = false
                                 }; // Kuntner
-                                MessageInfoForm.Closed += new EventHandler(MessageFormClosed);
+                                MessageInfoForm.FormClosed += new FormClosedEventHandler(MessageFormClosed);
                             }
                             MessageInfoForm.listBox1.Items.Add("Flow field copying error/canceled"); // Kuntner
                             MessageInfoForm.Show();
@@ -676,7 +675,7 @@ namespace GralDomain
                     //get classification of dispersion situations
                     try
                     {
-                        string metclassification = MainForm.GRAMMwindfield.Replace("Computation" + Path.DirectorySeparatorChar, Path.Combine("Settings", "Meteorology.txt"));
+                        string metclassification = Gral.Main.GRAMMwindfield.Replace("Computation" + Path.DirectorySeparatorChar, Path.Combine("Settings", "Meteorology.txt"));
                         if (File.Exists(metclassification))
                         {
                             using (StreamReader streamreader = new StreamReader(metclassification))
@@ -748,7 +747,8 @@ namespace GralDomain
                                 MainForm.TBox[MMOData.WsClasses - 1].Text = MainForm.NumUpDown[MMOData.WsClasses - 2].Text;
                             }
                             catch { }
-                        };
+                        }
+                        ;
                     }
                     catch { }
 
@@ -816,8 +816,8 @@ namespace GralDomain
                         }
 
                         //update pointer for new wind field files
-                        MainForm.GRAMMwindfield = Path.Combine(Gral.Main.ProjectName, @"Computation") + Path.DirectorySeparatorChar;
-                        MainForm.WriteFileGRAMMWindfeld_txt(Gral.Main.ProjectName, MainForm.GRAMMwindfield, true);
+                        Gral.Main.GRAMMwindfield = Path.Combine(Gral.Main.ProjectName, @"Computation") + Path.DirectorySeparatorChar;
+                        MainForm.WriteFileGRAMMWindfeld_txt(Gral.Main.ProjectName, Gral.Main.GRAMMwindfield, true);
                     }
 
                     catch (Exception ex)
@@ -886,7 +886,7 @@ namespace GralDomain
                     {
                         MessageInfoForm.Close();
                     }
-                   
+
                     if (wait1 != null)
                     {
                         wait1.Close();
@@ -913,7 +913,6 @@ namespace GralDomain
         {
             if (MessageInfoForm != null)
             {
-                MessageInfoForm.Closed -= new EventHandler(MessageFormClosed);
                 MessageInfoForm.Dispose();
                 MessageInfoForm = null;
             }

@@ -517,7 +517,7 @@ namespace GralDomain
                 {
                     for (int i = 0; i < ShpPolygons.Count; i++)
                     {
-                       ShpPolygons[i] = null;
+                        ShpPolygons[i] = null;
                     }
                     ShpPolygons.Clear();
                     ShpPolygons.TrimExcess();

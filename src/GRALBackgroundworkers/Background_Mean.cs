@@ -11,10 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.IO.Compression;
-using GralIO;
+using System.IO;
 
 namespace GralBackgroundworkers
 {
@@ -122,9 +120,9 @@ namespace GralBackgroundworkers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                BackgroundThreadMessageBox (ex.Message);
+                BackgroundThreadMessageBox(ex.Message);
                 return;
             }
 
@@ -133,8 +131,8 @@ namespace GralBackgroundworkers
             ReadMeteopgtAll(Path.Combine(mydata.ProjectName, "Computation", "meteopgt.all"), ref data_meteopgt);
 
             if (data_meteopgt.Count == 0) // no data available
-            { 
-                BackgroundThreadMessageBox ("Error reading meteopgt.all");
+            {
+                BackgroundThreadMessageBox("Error reading meteopgt.all");
             }
 
             string wgmet;
@@ -145,7 +143,7 @@ namespace GralBackgroundworkers
             int nnn = 0;
             int situationCount = 0;
             double ntot = 0;
-            
+
             float[][][] conc = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
             float[][][] dep = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource]));
             float[][][] concmit = CreateArray<float[][]>(mydata.CellsGralX + 1, () => CreateArray<float[]>(mydata.CellsGralY + 1, () => new float[maxsource + 1]));
@@ -154,13 +152,13 @@ namespace GralBackgroundworkers
             double[] emmit = new double[maxsource];
             double[] fmod = new double[maxsource];
 
-            foreach(string line_meteopgt in data_meteopgt)
+            foreach (string line_meteopgt in data_meteopgt)
             {
                 try
                 {
                     //meteopgt.all
                     wl += 1;
-                    
+
                     if (Rechenknecht.CancellationPending)
                     {
                         e.Cancel = true;
@@ -168,13 +166,13 @@ namespace GralBackgroundworkers
                     }
                     if (wl % 4 == 0)
                     {
-                       Rechenknecht.ReportProgress((int) (wl / (double) data_meteopgt.Count * 100D));
+                        Rechenknecht.ReportProgress((int)(wl / (double)data_meteopgt.Count * 100D));
                     }
-                    
+
                     bool exist = true;
                     bool exist_dep = true;
                     text = line_meteopgt.Split(new char[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                    
+
                     wrmet = text[0];
                     wgmet = text[1];
                     akmet = text[2];
@@ -231,7 +229,7 @@ namespace GralBackgroundworkers
                                 wl_freq++; // frequency of this weather situation
                                 int std = Convert.ToInt32(hour[i]);
                                 int mon = Convert.ToInt32(month[i]) - 1;
-                                itm=0;
+                                itm = 0;
                                 foreach (string source_group_name in sg_names)
                                 {
                                     emmit[itm] = emmit[itm] + emifac_day[std - hourplus, itm] * emifac_mon[mon, itm];
@@ -251,7 +249,7 @@ namespace GralBackgroundworkers
 
                         ntot += frequency / 10;
                         SetText("Dispersion situation " + Convert.ToString(wl) + ": " + Convert.ToString(Math.Round(ntot, 1) + "%"));
-                        
+
                         string[] concdata = new string[3];
 
                         //read GRAL concentration and deposition files
@@ -260,13 +258,13 @@ namespace GralBackgroundworkers
                         {
                             RestoreJaggedArray(conc);
                             RestoreJaggedArray(dep);
-                            
+
                             //read GRAL concentration files
                             string filename = Path.Combine(mydata.ProjectName, @"Computation", con_files[itm]);
                             bool ConFileOK = ReadConFiles(filename, mydata, itm, ref conc);
 
                             // at least one con file OK -> add frequency of this weather situation to the total frequency
-                            if (itm == 0  && ConFileOK) 
+                            if (itm == 0 && ConFileOK)
                             {
                                 nnn += wl_freq;
                                 situationCount++;
@@ -305,7 +303,7 @@ namespace GralBackgroundworkers
                     //break;
                 }
             }
-            
+
             SetText("Finalizing....");
 
             //final computations
@@ -320,10 +318,10 @@ namespace GralBackgroundworkers
                     {
                         for (int i = 0; i <= mydata.CellsGralX; i++)
                             for (int j = 0; j <= mydata.CellsGralY; j++)
-                        {
-                            concmit[i][j][itm] = concmit[i][j][itm] / (float)nnn;
-                            depmit[i][j][itm] = depmit[i][j][itm] / (float)nnn;
-                        }
+                            {
+                                concmit[i][j][itm] = concmit[i][j][itm] / (float)nnn;
+                                depmit[i][j][itm] = depmit[i][j][itm] / (float)nnn;
+                            }
                     }
                     itm++;
                 }
@@ -332,10 +330,10 @@ namespace GralBackgroundworkers
                     //total concentration
                     for (int i = 0; i <= mydata.CellsGralX; i++)
                         for (int j = 0; j <= mydata.CellsGralY; j++)
-                    {
-                        concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
-                        depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
-                    }
+                        {
+                            concmit[i][j][maxsource] = concmit[i][j][maxsource] / (float)nnn;
+                            depmit[i][j][maxsource] = depmit[i][j][maxsource] / (float)nnn;
+                        }
                 }
             }
 
@@ -370,7 +368,7 @@ namespace GralBackgroundworkers
                     }
                     else
                     {
-                        name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm] ;
+                        name = mydata.Prefix + mydata.Pollutant + "_" + sg_names[itm];
                     }
 
                     file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + "_" + mydata.Slicename + ".txt");
@@ -385,7 +383,7 @@ namespace GralBackgroundworkers
                     if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
                     {
                         file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + "_" + name + ".txt");
-                        
+
                         Result.Unit = Gral.Main.mg_p_m2;
                         Result.Round = 9;
                         Result.Z = itm;
@@ -407,7 +405,7 @@ namespace GralBackgroundworkers
                 //write mean total concentration and deposition file
                 name = mydata.Prefix + mydata.Pollutant + "_total" + "_" + mydata.Slicename;
                 file = Path.Combine(mydata.PathEvaluationResults, "Mean_" + name + ".txt");
-                
+
                 Result.Unit = Gral.Main.My_p_m3;
                 Result.Round = 5;
                 Result.Z = maxsource;
@@ -422,10 +420,10 @@ namespace GralBackgroundworkers
                     return;
                 }
 
-                if (deposition_files_exists && mydata.WriteDepositionOrOdourData) 
+                if (deposition_files_exists && mydata.WriteDepositionOrOdourData)
                 {
                     file = Path.Combine(mydata.PathEvaluationResults, "Deposition_Mean_" + mydata.Prefix + mydata.Pollutant + "_total.txt");
-                    
+
                     Result.Unit = Gral.Main.mg_p_m2;
                     Result.Round = 9;
                     Result.Z = maxsource;
@@ -439,7 +437,7 @@ namespace GralBackgroundworkers
             if (wl > situationCount)
             {
                 errorText = " -- " + (wl - situationCount).ToString() + " situation";
-                if (wl - situationCount > 1) 
+                if (wl - situationCount > 1)
                 {
                     errorText += "s";
                 }

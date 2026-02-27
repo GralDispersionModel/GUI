@@ -11,8 +11,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 
 namespace GralIO
@@ -21,9 +21,9 @@ namespace GralIO
     /// GGEOMFileIO: read and write ggeom.asc in binary or ascii mode
     /// </summary>
     public class GGeomFileIO
-	{
-		private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-		private string _pathwindfield;
+    {
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
+        private string _pathwindfield;
         public string PathWindfield { set { _pathwindfield = value; } }
         private string _projectname;
         public string ProjectName { set { _projectname = value; } }
@@ -51,20 +51,20 @@ namespace GralIO
         public double[] Y { set { _Y = value; } get { return _Y; } }
         private double[] _Z;
         public double[] Z { set { _Z = value; } get { return _Z; } }
-        private double[, ,] _VOL;
-        public double[, ,] VOL { set { _VOL = value; } get { return _VOL; } }
-        private double[, ,] _AREAX;
-        public double[, ,] AREAX { set { _AREAX = value; } get { return _AREAX; } }
-        private double[, ,] _AREAY;
-        public double[, ,] AREAY { set { _AREAY = value; } get { return _AREAY; } }
-        private double[, ,] _AREAZ;
-        public double[, ,] AREAZ { set { _AREAZ = value; } get { return _AREAZ; } }
-        private double[, ,] _AREAZY;
-        public double[, ,] AREAZY { set { _AREAZY = value; } get { return _AREAZY; } }
-        private double[, ,] _AREAZX;
-        public double[, ,] AREAZX { set { _AREAZX = value; } get { return _AREAZX; } }
-        private double[, ,] _ZSP;
-        public double[, ,] ZSP { set { _ZSP = value; } get { return _ZSP; } }
+        private double[,,] _VOL;
+        public double[,,] VOL { set { _VOL = value; } get { return _VOL; } }
+        private double[,,] _AREAX;
+        public double[,,] AREAX { set { _AREAX = value; } get { return _AREAX; } }
+        private double[,,] _AREAY;
+        public double[,,] AREAY { set { _AREAY = value; } get { return _AREAY; } }
+        private double[,,] _AREAZ;
+        public double[,,] AREAZ { set { _AREAZ = value; } get { return _AREAZ; } }
+        private double[,,] _AREAZY;
+        public double[,,] AREAZY { set { _AREAZY = value; } get { return _AREAZY; } }
+        private double[,,] _AREAZX;
+        public double[,,] AREAZX { set { _AREAZX = value; } get { return _AREAZX; } }
+        private double[,,] _ZSP;
+        public double[,,] ZSP { set { _ZSP = value; } get { return _ZSP; } }
         private double[] _DDX;
         public double[] DDX { set { _DDX = value; } get { return _DDX; } }
         private double[] _DDY;
@@ -79,30 +79,30 @@ namespace GralIO
         public int JKOOA { set { _JKOOA = value; } get { return _JKOOA; } }
         private double _winkel;
         public double Winkel { set { _winkel = value; } }
-        private double[, ,] _AHE;
-        public double[, ,] AHE { set { _AHE = value; } get { return _AHE; } }
+        private double[,,] _AHE;
+        public double[,,] AHE { set { _AHE = value; } get { return _AHE; } }
         private double _NODATA;
         public double NODATA { set { _NODATA = value; } get { return _NODATA; } }
         private static CultureInfo ic = CultureInfo.InvariantCulture;
-		
-        
+
+
         /// <summary>
-    	/// Read the ggeom.asc file
-    	/// </summary>
-    	/// <param name="mode">0: read AH and ZSP, 1: read AH, 2: read NX, NY, NZ, -1: read the complete file</param> 
-		public bool ReadGGeomAsc(int mode)
-		{
+        /// Read the ggeom.asc file
+        /// </summary>
+        /// <param name="mode">0: read AH and ZSP, 1: read AH, 2: read NX, NY, NZ, -1: read the complete file</param> 
+        public bool ReadGGeomAsc(int mode)
+        {
             // mode 0 = read AH and ZSP, 1 = read AH, 2 = read NX, NY, NZ, -1 = read the complete file
-			try
-			{
-				bool result = false;
-				
-				
-				string[] text = new string[1];
-				using (StreamReader reader = new StreamReader(Path.Combine(_pathwindfield, @"ggeom.asc")))
-				{
-					text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				}
+            try
+            {
+                bool result = false;
+
+
+                string[] text = new string[1];
+                using (StreamReader reader = new StreamReader(Path.Combine(_pathwindfield, @"ggeom.asc")))
+                {
+                    text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                }
 
                 if (Convert.ToDouble(text[0]) < 0)
                 {
@@ -114,25 +114,25 @@ namespace GralIO
                     result = ReadGgeomStream(mode);
                     _write_compressed_file = false;
                 }
-				
-				return result;
-			}
-			catch
-			{
-				return false;
-			}
-		}
-		
-		/// <summary>
+
+                return result;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Read binary ggeom.asc file
         /// </summary>
         /// <param name="mode"></param>
         /// <returns></returns>
         private bool ReadGgeomBinary(int mode)
-		{
-			// mode 0 = read AH and ZSP, 1 = read AH, 2 = read NX, NY, NZ, -1 = read the complete file
-			try
-			{
+        {
+            // mode 0 = read AH and ZSP, 1 = read AH, 2 = read NX, NY, NZ, -1 = read the complete file
+            try
+            {
                 string ggeomfile = Path.Combine(_pathwindfield, @"ggeom.asc");
                 using (FileStream fs = new FileStream(ggeomfile, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -357,116 +357,116 @@ namespace GralIO
                             } // mode 1
                         }
                     }
-				} // file stream
-				return true;
-			}
-			
-			catch(Exception e)
-			{
-				MessageBox.Show(e.Message,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return false;
-			}
-		}
-				
-		/// <summary>
+                } // file stream
+                return true;
+            }
+
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Read old ASCII ggeom file format
         /// </summary>
         /// <param name="mode"></param>
         /// <returns></returns>
         private bool ReadGgeomStream(int mode)
-		{
+        {
             // mode 0 = read AH and ZSP, 1 = read AH, 2 = read NX, NY, NZ, -1 = read the complete file
-			try
-			{
-				StreamReader reader = new StreamReader(Path.Combine(_pathwindfield, @"ggeom.asc"));
-				string[] text = new string[1];
-				int count = 0;
-				while (count < 3)
-				{
-					text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-					count += text.Length;
-				}
-				//obtain array size in x,y,z direction
-				_NX = Convert.ToInt32(text[0]);
-				_NY = Convert.ToInt32(text[1]);
-				_NZ = Convert.ToInt32(text[2]);
+            try
+            {
+                StreamReader reader = new StreamReader(Path.Combine(_pathwindfield, @"ggeom.asc"));
+                string[] text = new string[1];
+                int count = 0;
+                while (count < 3)
+                {
+                    text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    count += text.Length;
+                }
+                //obtain array size in x,y,z direction
+                _NX = Convert.ToInt32(text[0]);
+                _NY = Convert.ToInt32(text[1]);
+                _NZ = Convert.ToInt32(text[2]);
 
                 if ((mode < 2) && (mode > -1)) // read further details
-				{
-					int ix = 0;
-					int iy = 1;
-					
-					//obtain surface heights
-					_AHmin = 10000000; _AHmax = 0;
-					
-					_AH = new double[_NX + 1, _NY + 1];
-					while (count <= (_NX * _NY + _NX + _NY + _NZ + 6))
-					{
-						Application.DoEvents(); // Kuntner
-						text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-						count += text.Length;
-						if ((count >= (_NX + _NY + _NZ + 6)) && (count - text.Length < (_NX * _NY + _NX + _NY + _NZ + 6)))
-						{
-							for (int i = 1; i <= text.Length; i++)
-							{
-								if (((count - text.Length + i) > (_NX + _NY + _NZ + 6)) && ((count - text.Length + i) <= (_NX * _NY + _NX + _NY + _NZ + 6)))
-								{
-									ix += 1;
-									if (ix == _NX + 1)
-									{
-										ix = 1;
-										iy += 1;
-									}
-									_AH[ix, iy] = Convert.ToDouble(text[i - 1].Replace(".", decsep));
-									_AHmin = Math.Min(_AHmin, _AH[ix, iy]);
-									_AHmax = Math.Max(_AHmax, _AH[ix, iy]);
-								}
-							}
-						}
-					}
-					
-					if (mode < 1) // read all
-					{
-						//obtain cell heights
-						_ZSP = new double[_NX + 1, _NY + 1, _NZ + 1];
-						int begin = (_NX * _NY + _NX + _NY + _NZ + 6) + _NX * _NY * _NZ + (_NX + 1) * _NY * _NZ + _NX * (_NY + 1) * _NZ + _NX * _NY * (_NZ + 1) + _NX * _NY * (_NZ + 1) + _NX * _NY * (_NZ + 1);
-						ix = 0;
-						iy = 1;
-						int iz = 1;
-						while (count <= (begin + _NX * _NY * _NZ))
-						{
-							Application.DoEvents(); // Kuntner
-							text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-							count += text.Length;
-							if ((count >= (begin)) && (count - text.Length < (begin + _NX * _NY * _NZ)))
-							{
-								for (int i = 1; i <= text.Length; i++)
-								{
-									if (((count - text.Length + i) > (begin)) && ((count - text.Length + i) <= (begin + _NX * _NY * _NZ)))
-									{
+                {
+                    int ix = 0;
+                    int iy = 1;
 
-										ix += 1;
-										if (ix == _NX + 1)
-										{
-											ix = 1;
-											iy += 1;
-										}
-										if (iy == _NY + 1)
-										{
-											iy = 1;
-											iz += 1;
-										}
-										_ZSP[ix, iy, iz] = Convert.ToDouble(text[i - 1].Replace(".", decsep));
-									}
-								}
-							}
-							if (ix > 2 && iy > 2 && iz >=_NZ)
+                    //obtain surface heights
+                    _AHmin = 10000000; _AHmax = 0;
+
+                    _AH = new double[_NX + 1, _NY + 1];
+                    while (count <= (_NX * _NY + _NX + _NY + _NZ + 6))
+                    {
+                        Application.DoEvents(); // Kuntner
+                        text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                        count += text.Length;
+                        if ((count >= (_NX + _NY + _NZ + 6)) && (count - text.Length < (_NX * _NY + _NX + _NY + _NZ + 6)))
+                        {
+                            for (int i = 1; i <= text.Length; i++)
+                            {
+                                if (((count - text.Length + i) > (_NX + _NY + _NZ + 6)) && ((count - text.Length + i) <= (_NX * _NY + _NX + _NY + _NZ + 6)))
+                                {
+                                    ix += 1;
+                                    if (ix == _NX + 1)
+                                    {
+                                        ix = 1;
+                                        iy += 1;
+                                    }
+                                    _AH[ix, iy] = Convert.ToDouble(text[i - 1].Replace(".", decsep));
+                                    _AHmin = Math.Min(_AHmin, _AH[ix, iy]);
+                                    _AHmax = Math.Max(_AHmax, _AH[ix, iy]);
+                                }
+                            }
+                        }
+                    }
+
+                    if (mode < 1) // read all
+                    {
+                        //obtain cell heights
+                        _ZSP = new double[_NX + 1, _NY + 1, _NZ + 1];
+                        int begin = (_NX * _NY + _NX + _NY + _NZ + 6) + _NX * _NY * _NZ + (_NX + 1) * _NY * _NZ + _NX * (_NY + 1) * _NZ + _NX * _NY * (_NZ + 1) + _NX * _NY * (_NZ + 1) + _NX * _NY * (_NZ + 1);
+                        ix = 0;
+                        iy = 1;
+                        int iz = 1;
+                        while (count <= (begin + _NX * _NY * _NZ))
+                        {
+                            Application.DoEvents(); // Kuntner
+                            text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                            count += text.Length;
+                            if ((count >= (begin)) && (count - text.Length < (begin + _NX * _NY * _NZ)))
+                            {
+                                for (int i = 1; i <= text.Length; i++)
+                                {
+                                    if (((count - text.Length + i) > (begin)) && ((count - text.Length + i) <= (begin + _NX * _NY * _NZ)))
+                                    {
+
+                                        ix += 1;
+                                        if (ix == _NX + 1)
+                                        {
+                                            ix = 1;
+                                            iy += 1;
+                                        }
+                                        if (iy == _NY + 1)
+                                        {
+                                            iy = 1;
+                                            iz += 1;
+                                        }
+                                        _ZSP[ix, iy, iz] = Convert.ToDouble(text[i - 1].Replace(".", decsep));
+                                    }
+                                }
+                            }
+                            if (ix > 2 && iy > 2 && iz >= _NZ)
                             {
                                 break;
                             }
                         }
-					} // mode 0
-				} // mode 1
+                    } // mode 0
+                } // mode 1
 
                 if (mode < 0) // read complete file
                 {
@@ -659,34 +659,34 @@ namespace GralIO
                     text = reader.ReadLine().Split(new char[] { ' ', ',', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                     for (int k = 1; k < _NZ + 2; k++)
                     {
-                    	Application.DoEvents(); // Kuntner
-                    	for (int j = 1; j < _NY + 2; j++)
-                    	{
-                    		for (int i = 1; i < _NX + 2; i++)
-                    		{
+                        Application.DoEvents(); // Kuntner
+                        for (int j = 1; j < _NY + 2; j++)
+                        {
+                            for (int i = 1; i < _NX + 2; i++)
+                            {
                                 _AHE[i, j, k] = Convert.ToDouble(text[n].Replace(".", decsep));
                                 n++;
-                    		}
-                    	}
+                            }
+                        }
                     }
-                    
-                } // mode -1
-				
-				reader.Close();
-				reader.Dispose();
-				return true;
-			}
-			
-			catch(Exception e)
-			{
-				MessageBox.Show(e.Message,"GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return false;
-			}
-		}
 
-		/// <summary>
-    	/// Write the ggeom.asc file
-    	/// </summary>
+                } // mode -1
+
+                reader.Close();
+                reader.Dispose();
+                return true;
+            }
+
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Write the ggeom.asc file
+        /// </summary>
         public bool WriteGGeomFile()
         {
             try
@@ -844,7 +844,7 @@ namespace GralIO
                 {
                     try
                     {
-                        string ggeom = Path.Combine(_projectname, @"Computation","ggeom.asc");
+                        string ggeom = Path.Combine(_projectname, @"Computation", "ggeom.asc");
                         using (FileStream fs_ggeom = new FileStream(ggeom, FileMode.Create, FileAccess.Write))
                         {
                             using (BufferedStream buf_ggeom = new BufferedStream(fs_ggeom, 32768))
@@ -1016,7 +1016,7 @@ namespace GralIO
                     }
                 }
 
-                writer = new StreamWriter(Path.Combine(_projectname, @"Maps","ggeom.txt"), false);
+                writer = new StreamWriter(Path.Combine(_projectname, @"Maps", "ggeom.txt"), false);
                 writer.WriteLine("ncols             " + Convert.ToString(_NX));
                 writer.WriteLine("nrows             " + Convert.ToString(_NY));
                 writer.WriteLine("xllcorner         " + Convert.ToString(_IKOOA + Convert.ToInt32(_DDX[1] * 0.5), ic));
@@ -1041,5 +1041,5 @@ namespace GralIO
                 return false;
             }
         }
-	}
+    }
 }

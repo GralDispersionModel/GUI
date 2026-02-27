@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralIO;
 
 namespace Gral
 {
@@ -101,7 +101,7 @@ namespace Gral
         private void GRAMMSetFlatTerrainOption(object sender, EventArgs e)
         {
             SaveIINDatFile();
-            
+
             if (checkBox31.Checked == false) // no flat terrain -> sunrise allowed
             {
                 checkBox30.Enabled = true;
@@ -125,8 +125,8 @@ namespace Gral
                     SaveIINDatFile(); // reset value for flat terrain in this case
                 }
             }
-        }		        
-        
+        }
+
         //write file "GRAMM.geb"
         public void WriteGrammGebFile()
         {
@@ -168,7 +168,7 @@ namespace Gral
                         string yy = selTime.Year.ToString();
                         if (!checkBox35.Checked)
                         {
-                            yy = selTime.Year.ToString().Substring(2,2);
+                            yy = selTime.Year.ToString().Substring(2, 2);
                         }
                         string mm = selTime.Month.ToString("00");
                         string dd = selTime.Day.ToString("00");
@@ -283,6 +283,6 @@ namespace Gral
             //enable/disable GRAMM simulations
             Enable_GRAMM();
         }
-        
+
     }
 }

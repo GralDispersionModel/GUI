@@ -10,16 +10,15 @@
 ///</remarks>
 #endregion
 
+using GralData;
+using GralDomForms;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-
-using GralData;
-using GralDomForms;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -825,9 +824,9 @@ namespace GralDomain
 
 
                         string ggeom_path;
-                        if (MainForm.GRAMMwindfield != null)
+                        if (Gral.Main.GRAMMwindfield != null)
                         {
-                            ggeom_path = Path.Combine(Path.GetDirectoryName(MainForm.GRAMMwindfield), "ggeom.asc");
+                            ggeom_path = Path.Combine(Path.GetDirectoryName(Gral.Main.GRAMMwindfield), "ggeom.asc");
                         }
                         else
                         {

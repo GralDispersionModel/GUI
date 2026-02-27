@@ -10,15 +10,15 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Windows.Forms;
-using GralStaticFunctions;
 
 namespace GralDomForms
 {
-	public delegate void Georeference2_Closed(object sender, EventArgs e);
-	
-	/// <summary>
+    public delegate void Georeference2_Closed(object sender, EventArgs e);
+
+    /// <summary>
     /// Dialog geo referencing using 2 points
     /// </summary>
     public partial class Georeference2 : Form
@@ -26,7 +26,7 @@ namespace GralDomForms
         public double XMouse;
         public double YMouse;
         // delegate to send Message, that georeference2 is closed!
-		public event Georeference2_Closed Form_Georef2_Closed;
+        public event Georeference2_Closed Form_Georef2_Closed;
 
         public Georeference2()
         {
@@ -39,8 +39,8 @@ namespace GralDomForms
 
             textBox1.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
             textBox2.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-			textBox8.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
-			textBox9.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+            textBox8.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
+            textBox9.KeyPress += new KeyPressEventHandler(St_F.NumericInput);
 
         }
 
@@ -56,7 +56,7 @@ namespace GralDomForms
                 textBox6.Text = Convert.ToString(XMouse);
                 textBox7.Text = Convert.ToString(YMouse);
                 XMouse = 0;
-                YMouse = 0;                
+                YMouse = 0;
             }
             else if (textBox4.Text == "0")
             {
@@ -78,42 +78,42 @@ namespace GralDomForms
             textBox3.Text = "0";
             textBox4.Text = "0";
         }
-        
+
         void TextBox6TextChanged(object sender, EventArgs e)
         {
-        	St_F.CheckInput(sender, e); // check if a valid number or show yellow background
+            St_F.CheckInput(sender, e); // check if a valid number or show yellow background
         }
-        
-       	void Button2Click(object sender, EventArgs e)
+
+        void Button2Click(object sender, EventArgs e)
         {
-        	try
-			{
-				if (Form_Georef2_Closed != null)
+            try
+            {
+                if (Form_Georef2_Closed != null)
                 {
                     Form_Georef2_Closed(this, e); // call function closed()
                 }
             }
-			catch{}
+            catch { }
         }
-        
+
         void Georeference2Load(object sender, EventArgs e)
         {
-        	#if __MonoCS__
+#if __MonoCS__
 				this.Height = 400;
-			#endif	
+#endif
         }
-        
+
         void Georeference2FormClosed(object sender, FormClosedEventArgs e)
         {
-        	MouseMove -= new MouseEventHandler(Aktiv);
-        	textBox1.TextChanged -= new System.EventHandler(St_F.CheckInput);
+            MouseMove -= new MouseEventHandler(Aktiv);
+            textBox1.TextChanged -= new System.EventHandler(St_F.CheckInput);
             textBox2.TextChanged -= new System.EventHandler(St_F.CheckInput);
             textBox8.TextChanged -= new System.EventHandler(St_F.CheckInput);
             textBox9.TextChanged -= new System.EventHandler(St_F.CheckInput);
             textBox1.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
             textBox2.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
-			textBox8.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
-			textBox9.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            textBox8.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
+            textBox9.KeyPress -= new KeyPressEventHandler(St_F.NumericInput);
         }
     }
 }

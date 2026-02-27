@@ -35,7 +35,8 @@ namespace GralDomain
                     Title = "Select raster data (ASCII Format)",
                     InitialDirectory = Gral.Main.ProjectSetting.EvaluationPath
 #if NET6_0_OR_GREATER
-                    ,ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
+                    ,
+                    ClientGuid = GralStaticFunctions.St_F.FileDialogMaps
 #endif
                 })
                 {

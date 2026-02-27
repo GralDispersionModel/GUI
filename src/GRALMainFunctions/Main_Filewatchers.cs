@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
 using GralIO;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Gral
 {
@@ -256,7 +256,7 @@ namespace Gral
         void DispnrGrammChanged(object sender, FileSystemEventArgs e)
         {
             progressBar1.Minimum = 0;
-            UpdateProgressBar2(0); 
+            UpdateProgressBar2(0);
             UpdateLabel67("Actual flow situation: 0 %");
             double frequency = 0;
             int trackbar = -1;

@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
+using GralData;
+using GralItemData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using GralItemData;
-using GralData;
 
 namespace GralDomain
 {
@@ -28,27 +28,27 @@ namespace GralDomain
                                double factor_x, double factor_y, Font LabelFont, Brush LabelBrush)
         {
             int pb1_height = picturebox1.Height;
-            int pb1_width  = picturebox1.Width;
-            
+            int pb1_width = picturebox1.Width;
+
             //format for names of line sources
             StringFormat StringFormat2 = new StringFormat
             {
                 LineAlignment = StringAlignment.Far,
                 Alignment = StringAlignment.Center
-            }; 
+            };
 
             Brush SelectedBrush = new SolidBrush(Color2Transparent(150, Color.Green));
-            
+
             int n = -1;
-            
+
             bool draw_label = (_drobj.Label == 2 || _drobj.Label == 3) && LabelFont.Height > 2;
-            
+
             bool filter_l = _drobj.Filter;
             double x1 = 0;
             double y1 = 0;
             double x2 = 0;
             double y2 = 0;
-            
+
             WallData _wd;
 
             for (int ii = 0; ii < EditWall.ItemData.Count; ii++)
@@ -65,18 +65,18 @@ namespace GralDomain
                         width = Math.Max(width, _drobj.LineWidth);
 
                         Pen mypen = new Pen(Color2Transparent(200, Color.Green), width);
-                        List <PointD_3d> _pt = _wd.Pt;
+                        List<PointD_3d> _pt = _wd.Pt;
 
-                        x1 = (_pt[0].X - form1_west ) * factor_x + TransformX;
+                        x1 = (_pt[0].X - form1_west) * factor_x + TransformX;
                         y1 = (_pt[0].Y - form1_north) * factor_y + TransformY;
 
                         int point_counter = 0;
                         Point[] linePoints = new Point[_pt.Count + 1];
                         linePoints[point_counter] = new Point((int)x1, (int)y1); // start point
-                        
+
                         for (int i = 1; i < _pt.Count; i++)
                         {
-                            x2 = (_pt[i].X - form1_west ) * factor_x + TransformX; // end point
+                            x2 = (_pt[i].X - form1_west) * factor_x + TransformX; // end point
                             y2 = (_pt[i].Y - form1_north) * factor_y + TransformY;
 
                             if (filter_l == true &&
@@ -91,10 +91,10 @@ namespace GralDomain
                                 {
                                     Brush edges = new SolidBrush(Color.Green);
                                     g.DrawLine(mypen, (int)x1, (int)y1, (int)x2, (int)y2);
-                                    g.FillRectangle(edges, new RectangleF((float) (x1 -6), (float) (y1 - 6), 12, 12));
+                                    g.FillRectangle(edges, new RectangleF((float)(x1 - 6), (float)(y1 - 6), 12, 12));
                                     if (i == _pt.Count - 1)
                                     {
-                                        g.FillRectangle(edges, new RectangleF((float) (x2 -6), (float) (y2 - 6), 12, 12));
+                                        g.FillRectangle(edges, new RectangleF((float)(x2 - 6), (float)(y2 - 6), 12, 12));
                                     }
                                     edges.Dispose();
                                 }
@@ -120,9 +120,9 @@ namespace GralDomain
 
                                         m.RotateAt(angle, new Point((int)((x1 + x2) * 0.5), (int)((y1 + y2) * 0.5)));
                                         g.Transform = m;
-                                        
+
                                         g.DrawString(_drobj.Name, LabelFont, LabelBrush, (int)((x1 + x2) * 0.5), (int)((y1 + y2) * 0.5), StringFormat2);
-                                        
+
                                         g.ResetTransform();
                                     }
                                 }
@@ -130,7 +130,7 @@ namespace GralDomain
                                 x1 = x2; y1 = y2; // new start point = end point
                             }
                         }
-                        
+
                         if (point_counter > 0)
                         {
                             point_counter++;
@@ -138,7 +138,7 @@ namespace GralDomain
                             {
                                 Array.Resize(ref linePoints, point_counter);
                             }
-                            
+
                             if (_drobj.FillYesNo == true)
                             {
                                 Pen pen1 = new Pen(Color2Transparent(_drobj.Transparancy, _drobj.FillColors[0]), width);
@@ -149,7 +149,7 @@ namespace GralDomain
                             g.DrawLines(pen2, linePoints);
                             pen2.Dispose();
                         }
-                        
+
                         linePoints = null;
 
                     }
@@ -158,9 +158,9 @@ namespace GralDomain
                         break;
                     }
                 }
-                catch{}
+                catch { }
             } // foreach
-            
+
             SelectedBrush.Dispose();
             StringFormat2.Dispose();
         }

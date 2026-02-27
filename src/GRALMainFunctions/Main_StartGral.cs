@@ -10,12 +10,12 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using GralIO;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Gral
 {
@@ -27,9 +27,9 @@ namespace Gral
         /// <summary>
         /// Start GRAL simulation
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GRALStartCalculation(object sender, EventArgs e)
+        /// <param name="StartSituation">First situation when starting a chunk of situations</param>
+        /// <param name="FinalSituation">Final situation when starting a chunk of situations</param>
+        private void GRALStartCalculation(int StartSituation, int FinalSituation)
         {
             if (Convert.ToString(listBox5.SelectedItem).Contains("Odour")) // check if the lowest conc. layer > 1.5 * vert. extension
             {
@@ -82,7 +82,7 @@ namespace Gral
             catch
             { }
 
-            if (transient == 1)
+            if (transient == 1) // steady state
             {
                 if (ReadFile.ReadMeteopgtAllFile() == true)
                 {
@@ -94,7 +94,7 @@ namespace Gral
                     DispSituationfrequ = ReadFile.DispsituationFrequ;
                 }
             }
-            else
+            else //transient
             {
                 if (weathersit_count > 0)
                 {
@@ -121,8 +121,8 @@ namespace Gral
                     filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL", SearchOption.TopDirectoryOnly);
                 }
 #else
-                filePaths = Directory.GetFiles(Path.Combine (ProjectName, "Computation"), "GRAL*.bat", SearchOption.TopDirectoryOnly);
-                #endif
+                filePaths = Directory.GetFiles(Path.Combine(ProjectName, "Computation"), "GRAL*.bat", SearchOption.TopDirectoryOnly);
+#endif
 
                 if (filePaths.Length > 0)
                 {
@@ -135,11 +135,11 @@ namespace Gral
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
-            #if __MonoCS__
+#if __MonoCS__
             dialog.Filter = "GRAL executables (GRAL*.dll;GRAL)|GRAL*.dll;GRAL";
-            #else
+#else
             dialog.Filter = "GRAL executables (GRAL*.exe;GRAL*.bat)|GRAL*.exe;GRAL*.bat";
-            #endif
+#endif
 
             dialog.Title = "Select GRAL executable";
             // dialog.ShowHelp = true;
@@ -170,7 +170,7 @@ namespace Gral
                         try
                         {
                             File.Copy(dialog.FileName, GRAL_Program_Path, true);
-                            
+
                             //copy System.Numerics.Vectors.dll for GRAL Version 19.01
                             string numerics_dll = Path.Combine(Path.GetDirectoryName(dialog.FileName), "System.Numerics.Vectors.dll");
                             if (Path.GetExtension(dialog.FileName) == ".exe" && File.Exists(numerics_dll))
@@ -180,10 +180,10 @@ namespace Gral
                             }
 
                             string batch = String.Empty;
-                            #if __MonoCS__
+#if __MonoCS__
                             if (Path.GetExtension(dialog.FileName).ToLower() == ".dll")
                                 batch = "GRAL*.dll";
-                            #else
+#else
                             if (Path.GetExtension(dialog.FileName).ToLower() == ".bat")
                             {
                                 batch = "GRAL*.bat";
@@ -213,42 +213,30 @@ namespace Gral
                     }
 
                     //delete existing concentration fields
-                    string newPath1 = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
-                    DirectoryInfo di = new DirectoryInfo(newPath1);
-                    FileInfo[] files_conc = di.GetFiles("*.con");
-                    if (files_conc.Length == 0) // compressed files?
+                    if (StartSituation == 0) // no deletion of exiting files when running a chunk of situations
                     {
-                        files_conc = di.GetFiles("*.grz");
-                    }
-
-                    if (transient == 1) // steady state mode
-                    {
-                        if (files_conc.Length >= numericUpDown5.Value)
+                        string newPath1 = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
+                        DirectoryInfo di = new DirectoryInfo(newPath1);
+                        FileInfo[] files_conc = di.GetFiles("*.con");
+                        if (files_conc.Length == 0) // compressed files?
                         {
-                            DialogResult res = MessageBox.Show("The existing *.con files higher than dispersion number "
-                                                               + Convert.ToString(numericUpDown5.Value)
-                                                               + " will be deleted", "Delete existing concentration files",
-                                                               MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                            if (res == DialogResult.Cancel)
-                            {
-                                return; // exit, if user cancels
-                            }
+                            files_conc = di.GetFiles("*.grz");
                         }
 
-                        for (int i = 0; i < files_conc.Length; i++)
+                        if (transient == 1) // steady state mode
                         {
-                            try
+                            if (files_conc.Length >= numericUpDown5.Value)
                             {
-                                if (Convert.ToInt32(files_conc[i].Name.Substring(0, 5)) >= Convert.ToInt32(numericUpDown5.Value))
+                                DialogResult res = MessageBox.Show("The existing *.con files higher than dispersion number "
+                                                                   + Convert.ToString(numericUpDown5.Value)
+                                                                   + " will be deleted", "Delete existing concentration files",
+                                                                   MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                                if (res == DialogResult.Cancel)
                                 {
-                                    files_conc[i].Delete();
+                                    return; // exit, if user cancels
                                 }
                             }
-                            catch { }
-                        }
-                        files_conc = di.GetFiles("*.odr"); // delete *.odr files
-                        if (files_conc.Length > 0)
-                        {
+
                             for (int i = 0; i < files_conc.Length; i++)
                             {
                                 try
@@ -260,9 +248,24 @@ namespace Gral
                                 }
                                 catch { }
                             }
-                        }
-                    } // delete *.con & *.odr files in transient mode
-                    
+                            files_conc = di.GetFiles("*.odr"); // delete *.odr files
+                            if (files_conc.Length > 0)
+                            {
+                                for (int i = 0; i < files_conc.Length; i++)
+                                {
+                                    try
+                                    {
+                                        if (Convert.ToInt32(files_conc[i].Name.Substring(0, 5)) >= Convert.ToInt32(numericUpDown5.Value))
+                                        {
+                                            files_conc[i].Delete();
+                                        }
+                                    }
+                                    catch { }
+                                }
+                            }
+                        } // delete *.con & *.odr files in transient mode
+                    }
+
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
 
@@ -281,7 +284,7 @@ namespace Gral
                     }
 
                     //start routine GRAL*.exe to compute concentrations
-                    #if __MonoCS__
+#if __MonoCS__
                     try
                     {
                         string command = String.Empty;
@@ -319,12 +322,35 @@ namespace Gral
                     {
                         MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    #else
+#else
 
-                    GRALProcess = new Process
+                    // multple instances
+                    int numberOfInstances = (int)numericUpDown33.Value;
+                    try
                     {
-                        EnableRaisingEvents = true
-                    };
+
+                        if (transient == 1) // steady state mode, in transient mode, weathersitcount is already available
+                        {
+                            weathersit_count = (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(ProjectName, "Computation", "meteopgt.all")) - 2;
+                        }
+                        else
+                        {
+                            //read mettimeseries.dat
+                            List<string> data_mettimeseries = new List<string>();
+                            ReadMetTimeSeries(Path.Combine(ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
+                            weathersit_count = Math.Max(data_mettimeseries.Count, 1);
+                        }
+                    }
+                    catch { }
+
+                    int first_sit = Convert.ToInt32(numericUpDown5.Value);
+                    int final_sit = weathersit_count;
+                    int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
+                    int instance_start = first_sit;
+                    int instance_end = instance_start + offset;
+
+                    GRALProcess = new Process();
+                    GRALProcess.EnableRaisingEvents = true;
                     GRALProcess.Exited += new System.EventHandler(GralExited);
                     GRALProcess.StartInfo.FileName = GRAL_Program_Path;
                     GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
@@ -337,13 +363,28 @@ namespace Gral
                     {
                         GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
                     }
-                    GRALProcess.Start();
+                    string consoleArgument = GRALProcess.StartInfo.Arguments;
                     
-                    #endif
+                    if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations
+                    {
+                        GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
+                    }
+                    else if (numberOfInstances > 1)
+                    {
+                        GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                    }
+                    GRALProcess.Start();
+
+                    if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsibles UI
+                    {
+                        System.Threading.Thread startThread = new System.Threading.Thread(() => StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument));
+                        startThread.Start();
+                        //StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument);
+                    }
+#endif
 
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
-
                     WriteGralLogFile(1, "", GRAL_Program_Path);
 
                 }
@@ -357,18 +398,18 @@ namespace Gral
         //GRAL simulations finished or interrupted
         private void GralExited(object sender, EventArgs e)
         {
-            #if __MonoCS__
-            #else
+#if __MonoCS__
+#else
             GRALProcess.EnableRaisingEvents = false;
             GRALProcess.Dispose();
             System.Threading.Thread.Sleep(1000);
             //check if *.con files are existing for postprocessing routines
-            Invoke(new showtopo(CheckConFiles));
-            WriteGralLogFile(3,"","");
-            MessageBox.Show("GRAL simulation stopped or interrupted", "Info",MessageBoxButtons.OK,MessageBoxIcon.Information,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
-            #endif
+            Invoke(new showTopo(CheckConFiles));
+            WriteGralLogFile(3, "", "");
+            MessageBox.Show("GRAL simulation stopped or interrupted", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+#endif
         }
-        
+
         /// <summary>
         /// stop GRAL simulations
         /// </summary>
@@ -376,10 +417,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALStopCalculation(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
-            #else
+#else
             try
             {
                 GRALProcess.Kill();
@@ -388,7 +429,7 @@ namespace Gral
             { }
             //check if *.con files are existing for postprocessing routines
             CheckConFiles();
-            #endif
+#endif
         }
 
         /// <summary>
@@ -398,10 +439,10 @@ namespace Gral
         /// <param name="e"></param>
         private void GRALPauseCalculation(object sender, EventArgs e)
         {
-            #if __MonoCS__
+#if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
-            #endif
+#endif
             try
             {
                 GRALProcess.Kill();
@@ -423,8 +464,40 @@ namespace Gral
             }
             catch
             { }
-            numericUpDown5.Value = trackbar;
+            numericUpDown5.Value = Math.Max(numericUpDown5.Minimum, Math.Min(numericUpDown5.Maximum, trackbar));
             GenerateInDat();
+        }
+
+        /// <summary>
+        /// Start multiple GRAL instances
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StartMultipleInstances(int FirstSit, int FinalSit, int Offset, int NumberOfInstances, string GRAL_Program_Path, string GRAL_Arguments)
+        {
+            int instance_start = FirstSit;
+            int instance_end;
+            int count = 2; //start with instance 2
+            
+            while (instance_start <= FinalSit)
+            {
+                System.Threading.Thread.Sleep(2000); // wait for 2 seconds -> use all CPU groups
+                instance_end = instance_start + Offset;
+                if (count == NumberOfInstances) // avoid rounding errors
+                {
+                    instance_end = FinalSit;
+                }
+                Process GralProcess = new Process();
+                GralProcess.EnableRaisingEvents = false;
+                GralProcess.StartInfo.FileName = GRAL_Program_Path;
+                GralProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                GralProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
+                GralProcess.StartInfo.Arguments = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                GralProcess.Start();
+                // new start value, new instance
+                instance_start = instance_end + 1;
+                count++;
+            }
         }
     }
 }

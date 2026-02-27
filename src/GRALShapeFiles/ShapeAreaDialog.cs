@@ -10,16 +10,16 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralDomain;
+using GralItemData;
+using GralStaticFunctions;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using GralStaticFunctions;
-using Gral;
-using GralDomain;
-using GralItemData;
-using System.Collections.Generic;
 
 namespace GralShape
 {
@@ -29,14 +29,14 @@ namespace GralShape
     public partial class ShapeAreaDialog : Form
     {
         private GralDomain.Domain domain = null;
-        
+
         private readonly string ShapeFileName;
         private double areapolygon = 0;  //area of a polygon
         private readonly Deposition[] dep = new Deposition[10];
         private readonly Button[] but1 = new Button[10];                     //Buttons for deposition
         private DataTable dt;
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private readonly GralData.DomainArea GralDomRect;
         private readonly List<ComboBox> ComboPollNames = new List<ComboBox>();
         private readonly List<ComboBox> ComboColumnNames = new List<ComboBox>();
@@ -54,14 +54,14 @@ namespace GralShape
             domain = d;
             GralDomRect = GralDomainRectangle;
             ShapeFileName = Filename;
-            
+
             // init deposition data
             for (int i = 0; i < 10; i++)
             {
                 dep[i] = new Deposition(); // initialize Deposition array
                 dep[i].init();
             }
-            
+
             int x = 0; int y = comboBox1P.Top - 3 - comboBox6P.Height; int a = comboBox6P.Width + 5;
             for (int nr = 0; nr < 10; nr++)
             {
@@ -106,7 +106,7 @@ namespace GralShape
                 toolTip1.SetToolTip(but1[nr], "Click to set deposition - green: deposition set");
                 but1[nr].Click += new EventHandler(Edit_deposition);
                 x++;
-            }		
+            }
         }
 
         //add area data
@@ -118,14 +118,14 @@ namespace GralShape
                 float height = 0;
                 float vert = 0;
                 float raster = 0.5F;
-                int   sgroup =  1;
-                
+                int sgroup = 1;
+
                 WaitDlg = new GralMessage.Waitprogressbar("Import data base");
                 WaitDlg.Show();
-                
+
                 bool inside;
                 GralData.DouglasPeucker douglas = new GralData.DouglasPeucker();
-            
+
                 int SHP_Line = 0;
                 ShapeReader shape = new ShapeReader(domain);
                 //for (int i = 0; i < SHPPolygons[index].Count; i++)
@@ -133,8 +133,8 @@ namespace GralShape
                 {
                     if (shp is SHPPolygon)
                     {
-                        SHPPolygon polygons = (SHPPolygon) shp;
-                        
+                        SHPPolygon polygons = (SHPPolygon)shp;
+
                         inside = false;
                         int numbpt = polygons.Points.Length;
                         GralDomain.PointD[] pt = new GralDomain.PointD[numbpt];
@@ -166,12 +166,12 @@ namespace GralShape
                             }
 
                             _as.Name = name;
-                            
+
                             //check for heights
                             if (comboBox1.SelectedIndex != 0)
                             {
                                 height = Convert.ToSingle(St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox1.SelectedItem)].ToString(), false));
-                                height = (float) (Math.Round(height, 1));
+                                height = (float)(Math.Round(height, 1));
                             }
                             else
                             {
@@ -179,12 +179,12 @@ namespace GralShape
                             }
 
                             _as.Height = height;
-                            
+
                             //check for vertical extension
                             if (comboBox2.SelectedIndex != 0)
                             {
                                 vert = Convert.ToSingle(St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox2.SelectedItem)].ToString(), false));
-                                vert = (float) (Math.Round(vert, 1));
+                                vert = (float)(Math.Round(vert, 1));
                             }
                             else
                             {
@@ -192,15 +192,15 @@ namespace GralShape
                             }
 
                             _as.VerticalExt = vert;
-                            
+
                             //compute area
                             calc_area(numbpt, pt);
-                            _as.Area = (float) Math.Round(areapolygon, 1);
-                            
+                            _as.Area = (float)Math.Round(areapolygon, 1);
+
                             //compute raster size
-                            raster =  (float) (Math.Max(Math.Round(Math.Sqrt(areapolygon / Convert.ToDouble(numericUpDown1.Value)), 1), 0.5));
+                            raster = (float)(Math.Max(Math.Round(Math.Sqrt(areapolygon / Convert.ToDouble(numericUpDown1.Value)), 1), 0.5));
                             _as.RasterSize = raster;
-                            
+
                             //check for source group
                             if (comboBox4.SelectedIndex != 0)
                             {
@@ -229,7 +229,7 @@ namespace GralShape
                             }
 
                             _as.Poll.SourceGroup = sgroup;
-                            
+
                             double emission_factor = Convert.ToDouble(numericUpDown2.Value);
                             if (checkBox2.Checked)
                             {
@@ -248,29 +248,29 @@ namespace GralShape
                                 _as.Poll.Pollutant[_count] = _combo.SelectedIndex;
                                 _count++;
                             }
-                            
-                            for (int i = 0; i < numbpt - 1; i ++)
+
+                            for (int i = 0; i < numbpt - 1; i++)
                             {
                                 _as.Pt.Add(new PointD(pt[i].X, pt[i].Y));
                             }
-                            
-                            douglas.DouglasPeuckerRun(_as.Pt, (double) numericUpDown3.Value);
-                            
+
+                            douglas.DouglasPeuckerRun(_as.Pt, (double)numericUpDown3.Value);
+
                             for (int di = 0; di < 10; di++) // save deposition
                             {
                                 _as.GetDep()[di] = dep[di];
                             }
-                            
+
                             domain.EditAS.ItemData.Add(_as);
                             Application.DoEvents();
                         }
                         polygons = null;
                     }
-                    SHP_Line ++;
+                    SHP_Line++;
                 }
-                
+
                 shape = null;
-             
+
                 WaitDlg.Close();
                 WaitDlg.Dispose();
                 DialogResult = DialogResult.OK;
@@ -302,7 +302,7 @@ namespace GralShape
             dt = dbf_reader.dt;
 
             ShapeImport_AddColumn.SetDataGridViewSource(dataGridView1, dt, ShowEntireDataset.Checked);
-            
+
             dbf_reader.Close();
             dbf_reader.Dispose();
             wait.Close();
@@ -335,7 +335,7 @@ namespace GralShape
             ComboColumnNames.Add(comboBox2);
             ComboColumnNames.Add(comboBox3);
             ComboColumnNames.Add(comboBox4);
-            
+
             foreach (ComboBox _combo in ComboPollNames)
             {
                 for (int i = 0; i < Main.PollutantList.Count; i++)
@@ -408,7 +408,7 @@ namespace GralShape
                 }
             }
         }
-        
+
         //compute area of a polygon
         private void calc_area(int numpoints, GralDomain.PointD[] polypoints)
         {
@@ -417,23 +417,23 @@ namespace GralShape
                 areapolygon = 0;
                 try
                 {
-                  for (int i = 0; i < numpoints-1; i++)
-                  {
+                    for (int i = 0; i < numpoints - 1; i++)
+                    {
                         areapolygon = areapolygon + (polypoints[i + 1].X - polypoints[i].X) * polypoints[i].Y +
                             (polypoints[i + 1].X - polypoints[i].X) * (polypoints[i + 1].Y - polypoints[i].Y) / 2;
-                  }
+                    }
                 }
-                catch{}
+                catch { }
                 areapolygon = Math.Abs(areapolygon);
             }
         }
-        
+
         void LabelMouseDoubleClick(object sender, MouseEventArgs e)
         {
             //MessageBox.Show(this, sender.ToString());
             Edit_deposition(sender, e);
         }
-        
+
         private void Edit_deposition(object sender, EventArgs e)
         {
             int nr = -1;
@@ -498,7 +498,7 @@ namespace GralShape
                 }
 
                 edit.Dispose();
-                
+
                 if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
                 {
                     but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
@@ -509,10 +509,10 @@ namespace GralShape
                 }
             }
         }
-        
+
         void Shape_Area_DialogFormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach(Button but in but1)
+            foreach (Button but in but1)
             {
                 but.Click -= new EventHandler(Edit_deposition);
             }

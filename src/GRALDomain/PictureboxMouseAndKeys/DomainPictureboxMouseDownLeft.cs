@@ -10,16 +10,15 @@
 ///</remarks>
 #endregion
 
+using GralDomForms;
+using GralIO;
+using GralItemData;
+using GralStaticFunctions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
-using GralDomForms;
-using GralIO;
-using GralItemData;
-using GralStaticFunctions;
 
 namespace GralDomain
 {
@@ -351,9 +350,9 @@ namespace GralDomain
                             //Skip double click on same coor
                             if (EditLS.CornerLineSource > 1 && Math.Abs(x - EditLS.CornerLineX[EditLS.CornerLineSource - 1]) < 0.01 &&
                                                                Math.Abs(y - EditLS.CornerLineY[EditLS.CornerLineSource - 1]) < 0.01)
-                            {}
+                            { }
                             else
-                            { 
+                            {
                                 // set new line-source edge point - get x,y coordinates
                                 CornerAreaSource[EditLS.CornerLineSource] = new Point(e.X, e.Y);
                                 EditLS.CornerLineX[EditLS.CornerLineSource] = x;
@@ -456,7 +455,7 @@ namespace GralDomain
                     }
                     break;
 
-                    // Tooltip for picturebox1
+                // Tooltip for picturebox1
 
                 case MouseMode.PointSourceSel:
                     //select point sources
@@ -464,7 +463,7 @@ namespace GralDomain
                         int i = 0;
                         int found = -1;
                         PointSourceData _foundobj = null;
-                        
+
                         foreach (PointSourceData _psdata in EditPS.ItemData)
                         {
                             int x1 = (int)((_psdata.Pt.X - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
@@ -502,7 +501,7 @@ namespace GralDomain
                             infotext += "Exit temperature [K]: " + Math.Round(_foundobj.Temperature, 1).ToString() + "\n";
                             infotext += "Diameter [m]: " + Math.Round(_foundobj.Diameter, 2).ToString() + "\n";
                             infotext += "Source group: " + Convert.ToString(_foundobj.Poll.SourceGroup) + "\n";
-                            
+
                             double[] emission = new double[Gral.Main.PollutantList.Count];
                             for (int r = 0; r < 10; r++)
                             {
@@ -737,7 +736,7 @@ namespace GralDomain
                             }
                             i += 1;
                         }
-                        if (found > -1 && _foundobj !=  null)
+                        if (found > -1 && _foundobj != null)
                         {
                             EditB.SetTrackBar(found + 1);
                             EditB.ItemDisplayNr = found;
@@ -813,7 +812,7 @@ namespace GralDomain
                             EditLS.ItemDisplayNr = found;
                             SelectedItems.Add(found);
                             EditLS.FillValues();
-                            
+
                             //Ausgabe der Info in Infobox
                             string infotext = "'" + _foundobj.Name + "'\n";
                             if (_foundobj.Height >= 0)
@@ -877,7 +876,7 @@ namespace GralDomain
                         int i = 0;
                         int found = -1;
                         PortalsData _foundobj = null;
-                        
+
                         foreach (PortalsData _po in EditPortals.ItemData)
                         {
                             int sourcegroups = _po.Poll.Count;
@@ -964,7 +963,7 @@ namespace GralDomain
                         int i = 0;
                         int found = -1;
                         WallData _foundobj = null;
-                        
+
                         List<Point> poly = new List<Point>();
                         foreach (WallData _wd in EditWall.ItemData)
                         {
@@ -1059,8 +1058,8 @@ namespace GralDomain
                         }
                         else
                         {
-                            MapScale.X = (int) Convert.ToDouble(textBox1.Text.Replace(".", decsep));
-                            MapScale.Y = (int) Convert.ToDouble(textBox2.Text.Replace(".", decsep));
+                            MapScale.X = (int)Convert.ToDouble(textBox1.Text.Replace(".", decsep));
+                            MapScale.Y = (int)Convert.ToDouble(textBox2.Text.Replace(".", decsep));
                         }
                         bool exist = false;
                         foreach (DrawingObjects _drobj in ItemOptions)
@@ -1167,7 +1166,7 @@ namespace GralDomain
                         {
                             string[] dummy = new string[3];
                             dummy = ActualEditedDrawingObject.ColorScale.Split(new char[] { ',' });
-                            
+
                             // RemoveSpikes ist used for Map based coordinates, otherwise there are screen based coordinates
                             if (ActualEditedDrawingObject.BasedOnMap)
                             {
@@ -1442,7 +1441,7 @@ namespace GralDomain
             {
                 _drobj.ItemInfo = new List<string>();
             }
-            _drobj.ShpPoints.Add(new PointF((float) x1, (float) y1));
+            _drobj.ShpPoints.Add(new PointF((float)x1, (float)y1));
             _drobj.ItemInfo.Add(info);
             Picturebox1_Paint();
         }

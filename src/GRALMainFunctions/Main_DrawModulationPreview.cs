@@ -32,10 +32,10 @@ namespace Gral
             {
                 return;
             }
-            
+
             //load information about the selected diurnal and seasonal modulation for this source group
             string newPath = Path.Combine(ProjectName, @"Settings", "emissionmodulations.txt");
-            
+
             // in case of an emissionmodulation variation use the emissionmodulations.txt from the variation folder
             if (!string.Equals(Path.Combine(ProjectName, @"Computation"), ProjectSetting.EmissionModulationPath))
             {
@@ -43,11 +43,11 @@ namespace Gral
             }
 
             string[] text2 = new string[26];
-            
-            string[] months = new string[12]{"Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+
+            string[] months = new string[12] { "Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
             float[] fac_diurnal = new float[25];
             float[] fac_seasonal = new float[13];
-            
+
             try
             {
                 // get the number of the selected Source Group = name
@@ -63,7 +63,7 @@ namespace Gral
                 {
                     name = sg[0];
                 }
-                
+
                 //MessageBox.Show(modseasonal_index.ToString() +"/" + moddirunal_index.ToString());
                 // now paint the modulation
                 //pictureBox5.Refresh();
@@ -77,9 +77,9 @@ namespace Gral
                     int y0 = pictureBox5.Height / 2 - 7;
                     int y1 = pictureBox5.Height - 17;
                     Pen mypen = new Pen(Color.Black, 1);
-                    Brush whitebrush = new SolidBrush(Color.White);
-                    Brush b1 = new SolidBrush(Color.LightGray);
-                    Brush b2 = new SolidBrush(Color.Black);
+                    Brush whitebrush = new SolidBrush(SystemColors.Window);
+                    Brush b1 = new SolidBrush(SystemColors.GrayText);
+                    Brush b2 = new SolidBrush(SystemColors.WindowText);
                     Font _smallFont = new Font("Arial", 6);
                     StringFormat format2 = new StringFormat
                     {
@@ -96,7 +96,7 @@ namespace Gral
                     {
                         _smallFont = new Font("Arial", 9);
                         g.DrawString("File emissionmodulations.txt is not available at: ", _smallFont, b2, 14, _smallFont.Height);
-                        g.DrawString(ProjectSetting.EmissionModulationPath, _smallFont, b2, 14, (int) (2 + _smallFont.Height * 2));
+                        g.DrawString(ProjectSetting.EmissionModulationPath, _smallFont, b2, 14, (int)(2 + _smallFont.Height * 2));
                         string newpath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
                         if (File.Exists(newpath)) // emission_timeseries ist used instead of modulation settings
                         {
@@ -183,9 +183,9 @@ namespace Gral
                     mypen.Dispose();
                 }
             }
-            catch{}
+            catch { }
         }
-        
+
         private bool ReadEmissionModulation(string SG_name, ref float[] fac_diurnal, ref float[] fac_seasonal)
         {
             List<string> emissionmodulation = new List<string>();
@@ -198,10 +198,10 @@ namespace Gral
             {
                 newPath = Path.Combine(ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
             }
-            
+
             try
             {
-                
+
                 using (StreamReader _myReader = new StreamReader(newPath))
                 {
                     while (_myReader.EndOfStream == false)
@@ -209,26 +209,26 @@ namespace Gral
                         emissionmodulation.Add(_myReader.ReadLine().Replace('\t', ','));
                     }
                 }
-                
+
                 newPath = Path.Combine(ProjectName, @"Settings", "seasonal_emissionmod.txt");
                 using (StreamReader _myReader = new StreamReader(newPath))
                 {
-                    while(_myReader.EndOfStream == false)
+                    while (_myReader.EndOfStream == false)
                     {
                         modseasonal.Add(_myReader.ReadLine().Replace('\t', ','));
                     }
                 }
-                
+
                 newPath = Path.Combine(ProjectName, @"Settings", "diurnal_emissionmod.txt");
                 using (StreamReader _myReader = new StreamReader(newPath))
                 {
-                    while(_myReader.EndOfStream == false)
+                    while (_myReader.EndOfStream == false)
                     {
                         moddiurnal.Add(_myReader.ReadLine().Replace('\t', ','));
                     }
                 }
-                
-                foreach(string dum in emissionmodulation)
+
+                foreach (string dum in emissionmodulation)
                 {
                     sg = dum.Split(new char[] { ',' }); // sg[0] = Source group
                     if (sg.Count() < 2)
@@ -251,14 +251,14 @@ namespace Gral
                                 {
                                     if (k < fac_diurnal.Length)
                                     {
-                                        fac_diurnal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
+                                        fac_diurnal[k - 1] = (float)St_F.TxtToDbl(text1[k], false);
                                     }
                                 }
                                 break;
                             }
                         }
                         //find the seasonal modulation
-                        
+
                         foreach (string dum2 in modseasonal)
                         {
                             text1 = dum2.Split(new char[] { '\t', ',' });
@@ -269,39 +269,40 @@ namespace Gral
                                 {
                                     if (k < fac_seasonal.Length)
                                     {
-                                        fac_seasonal[k - 1] = (float) St_F.TxtToDbl(text1[k], false);
+                                        fac_seasonal[k - 1] = (float)St_F.TxtToDbl(text1[k], false);
                                     }
                                 }
                                 break;
                             }
                         }
-                   }
+                    }
                 }
-                
+
                 emissionmodulation.Clear();
                 moddiurnal.Clear();
                 modseasonal.Clear();
-                
-                return true;	
+
+                return true;
             }
             catch
             {
                 emissionmodulation.Clear();
                 moddiurnal.Clear();
                 modseasonal.Clear();
-                
+
                 return false;
             }
         }
-        
+
         void Panel1Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;			
-            
-            Font titlefont = new Font("Arial", 19, FontStyle.Bold);
-            Font subtitlefont = new Font("Arial", 11, FontStyle.Bold);
-            Font subtitlefontUnderlined = new Font("Arial", 11, FontStyle.Bold | FontStyle.Underline);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            FontFamily fontFam = new FontFamily("Arial");
+            Font titlefont = new Font(fontFam, 19, FontStyle.Bold);
+            Font subtitlefont = new Font(fontFam, 11, FontStyle.Bold);
+            Font subtitlefontUnderlined = new Font(fontFam, 11, FontStyle.Bold | FontStyle.Underline);
 
             StringFormat format1 = new StringFormat
             {
@@ -310,10 +311,10 @@ namespace Gral
             };
             Brush Solid_blue = new SolidBrush(Color.Blue);
             Brush Solid_black = new SolidBrush(Color.Black);
-            
+
             int x = panel1.Width / 2;
-            int distance =  (int) (g.MeasureString("J", titlefont, 200).Height);
-            int distance2 =  (int) (g.MeasureString("J", subtitlefont, 200).Height);
+            int distance = (int)(g.MeasureString("J", titlefont, 200).Height);
+            int distance2 = (int)(g.MeasureString("J", subtitlefont, 200).Height);
             string version = Application.ProductVersion.Replace(".", string.Empty);
 
             if (version.Length > 3)
@@ -330,6 +331,8 @@ namespace Gral
             g.DrawString("Compiled for Windows .NET7", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #elif NET8_0
             g.DrawString("Compiled for Windows .NET8", subtitlefont, Solid_blue, x, 25 + distance, format1);
+#elif NET10_0
+            g.DrawString("Compiled for Windows .NET10", subtitlefont, Solid_blue, x, 25 + distance, format1);            
 #else
             g.DrawString("Compiled for Windows", subtitlefont, Solid_blue, x, 25 + distance, format1);
 #endif
@@ -341,9 +344,9 @@ namespace Gral
             int stringlen2 = (int)(g.MeasureString("Support and Training: Graz University of Technology", subtitlefont).Width);
             g.DrawString("gral@ivt.tugraz.at", subtitlefontUnderlined, Solid_blue, x - stringlen / 2 + stringlen2, 25 + 2 * distance + distance2);
 
-            OpenMailToIVT = new Rectangle(x - stringlen / 2 + stringlen2, 
-                                          25 + 2 * distance + distance2, 
-                                          (int)(g.MeasureString("gral@ivt.tugraz.at", subtitlefontUnderlined).Width), 
+            OpenMailToIVT = new Rectangle(x - stringlen / 2 + stringlen2,
+                                          25 + 2 * distance + distance2,
+                                          (int)(g.MeasureString("gral@ivt.tugraz.at", subtitlefontUnderlined).Width),
                                           distance);
 
             format1.Dispose();
@@ -352,7 +355,8 @@ namespace Gral
             subtitlefontUnderlined.Dispose();
             Solid_black.Dispose();
             Solid_blue.Dispose();
-            g.Dispose();	
+            fontFam.Dispose();
+            g.Dispose();
         }
     }
 }

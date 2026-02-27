@@ -10,11 +10,11 @@
 ///</remarks>
 #endregion
 
+using Gral;
+using GralDomain;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using Gral;
-using GralDomain;
 
 namespace GralItemData
 {
@@ -27,21 +27,21 @@ namespace GralItemData
         {
             return LoadBuildings(_data, _filename, false, new RectangleF());
         }
-        
+
         public bool LoadBuildings(List<BuildingData> _data, string _filename, bool _filterData, RectangleF _domainRect)
         {
             bool reading_ok = false;
             try
             {
-                string _file = Path.Combine(_filename,"Emissions","Buildings.txt");
+                string _file = Path.Combine(_filename, "Emissions", "Buildings.txt");
                 if (File.Exists(_file) == false) // try old Computation path
                 {
-                    _file = Path.Combine(_filename,"Computation","Buildings.txt");
+                    _file = Path.Combine(_filename, "Computation", "Buildings.txt");
                 }
-                
+
                 if (File.Exists(_filename) && _data != null)
                 {
-                    using(StreamReader myReader = new StreamReader(_filename))
+                    using (StreamReader myReader = new StreamReader(_filename))
                     {
                         string text; // read header
                         int version = 0;
@@ -51,11 +51,11 @@ namespace GralItemData
                             version = 1;
                         }
                         text = myReader.ReadLine(); // header 2nd line
-                        
+
                         while (myReader.EndOfStream == false) // read until EOF
                         {
                             text = version.ToString() + "," + myReader.ReadLine(); // read data and add version number
-                            
+
                             if (_filterData == false)
                             {
                                 _data.Add(new BuildingData(text));
@@ -64,8 +64,8 @@ namespace GralItemData
                             {
                                 BuildingData _dta = new BuildingData(text);
                                 bool inside = false;
-                                                                
-                                foreach(PointD _pti in _dta.Pt)
+
+                                foreach (PointD _pti in _dta.Pt)
                                 {
                                     if (_domainRect.Contains(_pti.ToPointF()))
                                     {
@@ -81,16 +81,16 @@ namespace GralItemData
                         }
                     }
                     reading_ok = true;
-                }				
+                }
             }
             catch
             {
                 reading_ok = false;
             }
-            
+
             return reading_ok;
         }
-        
+
         public bool SaveBuildings(List<BuildingData> _data, string _projectPath, bool Compatibility)
         {
             bool writing_ok = false;
@@ -98,12 +98,12 @@ namespace GralItemData
             writing_ok = WriteFile(_data, newPath);
             if (Compatibility)
             {
-                newPath = Path.Combine(Main.ProjectName,"Computation","Buildings.txt");
+                newPath = Path.Combine(Main.ProjectName, "Computation", "Buildings.txt");
                 writing_ok = WriteFile(_data, newPath);
             }
             return writing_ok;
         }
-        
+
         private bool WriteFile(List<BuildingData> _data, string newPath)
         {
             bool ok = false;
@@ -122,7 +122,7 @@ namespace GralItemData
                 ok = true;
             }
             catch
-            {	
+            {
             }
             return ok;
         }

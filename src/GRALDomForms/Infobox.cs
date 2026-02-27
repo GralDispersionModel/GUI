@@ -16,13 +16,13 @@ using System.Windows.Forms;
 
 namespace GralDomForms
 {
-	/// <summary>
+    /// <summary>
     /// Simple info box for item data
     /// </summary>
     public partial class Infobox : Form
     {
-    	private Point ToolTipMousePosition;
-        
+        private Point ToolTipMousePosition;
+
         private void MainFormMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             ToolTipMousePosition = new Point(-e.X, -e.Y);
@@ -36,23 +36,23 @@ namespace GralDomForms
                 mousePos.Offset(ToolTipMousePosition.X, ToolTipMousePosition.Y);
                 Location = mousePos;
             }
-        }  
+        }
 
         public Infobox()
-        {     	
-        	InitializeComponent();
+        {
+            InitializeComponent();
         }
-        
+
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
         }
-        
+
         void InfoboxLoad(object sender, EventArgs e)
         {
-        	System.Drawing.Point point = System.Windows.Forms.Control.MousePosition;
-        	Left = point.X;
-			Top = point.Y; 
-		}
+            System.Drawing.Point point = System.Windows.Forms.Control.MousePosition;
+            Left = point.X;
+            Top = point.Y;
+        }
     }
 }

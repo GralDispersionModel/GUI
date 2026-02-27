@@ -33,7 +33,7 @@ namespace GralShape
         public readonly Button[] but1 = new Button[10];                     //Buttons for deposition
         private DataTable dt;
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
-        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;  
+        private readonly string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private readonly GralData.DomainArea GralDomRect;
         private readonly List<ComboBox> ComboPollNames = new List<ComboBox>();
         private readonly List<ComboBox> ComboColumnNames = new List<ComboBox>();
@@ -51,14 +51,14 @@ namespace GralShape
             domain = d;
             GralDomRect = GralDomainRectangle;
             ShapeFileName = Filename;
-           
+
             // init deposition data
             for (int i = 0; i < 10; i++)
             {
                 dep[i] = new Deposition(); // initialize Gral.Deposition array
                 dep[i].init();
             }
-            
+
             int x = 0; int y = comboBox1P.Top - 3 - comboBox6P.Height; int a = comboBox6P.Width + 5;
             for (int nr = 0; nr < 10; nr++)
             {
@@ -113,13 +113,13 @@ namespace GralShape
             {
                 WaitDlg = new GralMessage.Waitprogressbar("Import data base");
                 WaitDlg.Show();
-                
+
                 bool inside;
-                
+
                 // for (int SHP_Line = 0; i < domain.shppoints[index].Count; SHP_Line++)
                 int SHP_Line = 0;
                 ShapeReader shape = new ShapeReader(domain);
-                
+
                 foreach (object shp in shape.ReadShapeFile(ShapeFileName))
                 {
                     if (shp is PointF || shp is GralDomain.PointD || shp is GralData.PointD_3d)
@@ -135,10 +135,10 @@ namespace GralShape
                         }
 
                         GralDomain.PointD pt = new GralDomain.PointD();
-                        pt.X =  Math.Round(_ptshp.X, 1);
-                        pt.Y =  Math.Round(_ptshp.Y, 1);
+                        pt.X = Math.Round(_ptshp.X, 1);
+                        pt.Y = Math.Round(_ptshp.Y, 1);
                         double ptZ = Math.Round(_ptshp.Z, 1);
-     
+
                         inside = false;
                         //add only point sources inside the GRAL domain
                         if ((pt.X > GralDomRect.West) && (pt.X < GralDomRect.East) && (pt.Y > GralDomRect.South) && (pt.Y < GralDomRect.North))
@@ -149,7 +149,7 @@ namespace GralShape
                         if (inside == true)
                         {
                             PointSourceData _psdata = new PointSourceData();
-                            
+
                             //check for names
                             if (comboBox3.SelectedIndex != 0)
                             {
@@ -173,14 +173,14 @@ namespace GralShape
                             }
                             else
                             {
-                                _psdata.Height = (float) ptZ;
+                                _psdata.Height = (float)ptZ;
                             }
 
                             //check for exit velocity
                             if (comboBox2.SelectedIndex != 0)
                             {
                                 _psdata.Velocity = Convert.ToSingle(St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox2.SelectedItem)].ToString(), false));
-                                _psdata.Velocity = (float) (Math.Round(_psdata.Velocity, 1));
+                                _psdata.Velocity = (float)(Math.Round(_psdata.Velocity, 1));
                             }
                             else
                             {
@@ -217,21 +217,21 @@ namespace GralShape
                                     {
                                         sgroup = 1;
                                     }
-                                    
+
                                 }
                                 catch
                                 {
                                     sgroup = 1;
                                 }
                             }
-                            
+
                             _psdata.Poll.SourceGroup = sgroup;
-                            
+
                             //check for exit temperature
                             if (comboBox25.SelectedIndex != 0)
                             {
                                 double tempkelvin = 273 + Convert.ToDouble(St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox25.SelectedItem)].ToString(), false));
-                                _psdata.Temperature = (float) (Math.Round(tempkelvin, 1));
+                                _psdata.Temperature = (float)(Math.Round(tempkelvin, 1));
                             }
                             else
                             {
@@ -242,9 +242,9 @@ namespace GralShape
                             if (comboBox26.SelectedIndex != 0)
                             {
                                 _psdata.Diameter = Convert.ToSingle(St_F.TxtToDbl(dt.Rows[SHP_Line][Convert.ToString(comboBox26.SelectedItem)].ToString(), false));
-                                _psdata.Diameter = (float) (Math.Round(_psdata.Diameter, 1));
+                                _psdata.Diameter = (float)(Math.Round(_psdata.Diameter, 1));
                             }
-                            
+
                             double emission_factor = Convert.ToDouble(numericUpDown2.Value);
                             if (checkBox2.Checked)
                             {
@@ -265,14 +265,14 @@ namespace GralShape
                             }
 
                             _psdata.Pt = pt;
-                            
+
                             for (int di = 0; di < 10; di++) // save deposition
                             {
                                 _psdata.GetDep()[di] = dep[di];
                             }
-                            
+
                             domain.EditPS.ItemData.Add(_psdata);
-                            
+
                         }
                     }
                     SHP_Line++;
@@ -338,7 +338,7 @@ namespace GralShape
             ComboColumnNames.Add(comboBox8E);
             ComboColumnNames.Add(comboBox9E);
             ComboColumnNames.Add(comboBox10E);
-            
+
             ComboColumnNames.Add(comboBox1);
             ComboColumnNames.Add(comboBox2);
             ComboColumnNames.Add(comboBox3);
@@ -364,7 +364,7 @@ namespace GralShape
                 }
                 _combo.SelectedIndex = 0;
             }
-            
+
             // disable sort!
             foreach (DataGridViewColumn column in dataGridView1.Columns)
             {
@@ -418,13 +418,13 @@ namespace GralShape
                 }
             }
         }
-        
+
         void LabelMouseDoubleClick(object sender, MouseEventArgs e)
         {
             //MessageBox.Show(sender.ToString());
             Edit_deposition(sender, e);
         }
-        
+
         private void Edit_deposition(object sender, EventArgs e)
         {
             int nr = -1;
@@ -489,7 +489,7 @@ namespace GralShape
                 }
 
                 edit.Dispose();
-                
+
                 if (dep[nr].V_Dep1 > 0 || dep[nr].V_Dep2 > 0 || dep[nr].V_Dep3 > 0)
                 {
                     but1[nr].BackColor = Color.LightGreen; // mark that deposition is set
@@ -500,10 +500,10 @@ namespace GralShape
                 }
             }
         }
-        
+
         void Shape_Point_DialogFormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach(Button but in but1)
+            foreach (Button but in but1)
             {
                 but.Click -= new EventHandler(Edit_deposition);
             }

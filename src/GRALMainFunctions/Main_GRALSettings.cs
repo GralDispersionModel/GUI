@@ -10,11 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralIO;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralIO;
-using System.Drawing;
 
 namespace Gral
 {
@@ -69,12 +68,12 @@ namespace Gral
                     GRALSettings.DispersionTime = Convert.ToInt32(numericUpDown4.Value);
                     GRALSettings.ParticleNumber = Convert.ToInt32(numericUpDown6.Value);
                     GRALSettings.DispersionSituation = Convert.ToInt32(numericUpDown5.Value);
-                    
+
                     //save data to "in.dat"
                     GRALSettings.InDatPath = newPath;
                     GRALSettings.BuildingHeightsWrite = checkBox23.Checked;
                     GRALSettings.PrognosticSubDomains = (int)numericUpDown42.Value;
-               
+
                     if (checkBox32.Checked == true)
                     {
                         GRALSettings.Transientflag = 0;
@@ -90,11 +89,11 @@ namespace Gral
                     };
                     if (writer.WriteInDat()) // if writing = OK
                     {
-                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook); 
+                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.BlackHook);
                     }
                     else // error writing in.dat
                     {
-                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot); 
+                        ChangeButtonLabel(ButtonColorEnum.ButtonControl, ButtonColorEnum.RedDot);
                     }
                     writer = null;
                 }
@@ -190,61 +189,49 @@ namespace Gral
                 {
                     numericUpDown10.ValueChanged -= new System.EventHandler(NumericUpDown10_ValueChanged); // remove event listener
                     decimal val = Convert.ToDecimal(numericUpDown10.Text); // get last value (still in the Text)
-
+                    //direction up
                     if ((numericUpDown10.Value > numericUpDown9.Value) || val < numericUpDown10.Value)
                     {
-                        int wertint = (int)(numericUpDown10.Value / numericUpDown9.Value);
-                        decimal wertdec = (numericUpDown10.Value / numericUpDown9.Value);
-                        if ((decimal)wertint != wertdec)
+                        decimal concGrid = numericUpDown9.Value;
+                        int divisorMerk = 1;
+                        for (int divisor = 1; divisor < 40; divisor++)
                         {
-                            //search for the next lower value until a natural divisor is found
-                            wertint = (int)(Math.Floor(numericUpDown10.Value / numericUpDown9.Value));
-                            if (wertint != 0)
+                            decimal temp = (decimal)(concGrid / divisor);
+                            if (temp <= val)
                             {
-                                numericUpDown10.Value = numericUpDown9.Value * (decimal)wertint;
+                                break;
                             }
-                            else
+                            if (Math.Round(temp, 1) == temp)
                             {
-                                numericUpDown10.Value = numericUpDown9.Value;
+                                divisorMerk = divisor;
                             }
                         }
+                        numericUpDown10.Value = numericUpDown9.Value / divisorMerk;
                     }
-                    else
+                    else // direction down
                     {
-                        int wertint = (int)(numericUpDown9.Value / numericUpDown10.Value);
-                        decimal wertdec = (numericUpDown9.Value / numericUpDown10.Value);
-                        if ((decimal)wertint != wertdec)
+                        decimal concGrid = numericUpDown9.Value;
+                        int divisorMerk = 1;
+                        for (int divisor = 1; divisor < 40; divisor++)
                         {
-                            //search for the next lower value until a natural divisor is found
-                            wertint = (int)(Math.Ceiling(numericUpDown9.Value / numericUpDown10.Value));
-                            numericUpDown10.Value = numericUpDown9.Value / (decimal)wertint;
+                            decimal temp = (decimal)(concGrid / divisor);
+                            if (Math.Round(temp, 1) == temp)
+                            {
+                                divisorMerk = divisor;
+                                if (temp < val)
+                                {
+                                    break;
+                                }
+                            }
                         }
-
+                        numericUpDown10.Value = numericUpDown9.Value / divisorMerk;
                     }
-
-                    /*
-                    if (val > numericUpDown10.Value) // increase button
-                    {
-                        if ((decimal)(val / 2)  > (decimal) 1.2 && Math.Round(val /2, 2) == (val /2))
-                            numericUpDown10.Value = (decimal) (val / 2);
-                        else
-                            numericUpDown10.Value = (decimal) (val);
-                    }
-                    else
-                    {
-                        if ((val * 2) <= numericUpDown10.Maximum)
-                            numericUpDown10.Value = val * 2;
-                        else
-                            numericUpDown10.Value = numericUpDown10.Maximum;
-                    }
-                     */
-
                     numericUpDown10.ValueChanged += new System.EventHandler(NumericUpDown10_ValueChanged); // add event listener
                 }
             }
             //catch
-            {
-            }
+            //{
+            //}
         }
 
         /// <summary>
@@ -430,68 +417,6 @@ namespace Gral
         }
 
         /// <summary>
-        /// change relaxation factor of velocity for microscale flow field model of GRAL
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SetGRALFlowFieldVelRelaxFactor(object sender, EventArgs e)
-        {
-            try
-            {
-                if (EmifileReset == true)
-                {
-                    string newPath1 = Path.Combine(ProjectName, @"Computation", "relaxation_factors.txt");
-                    try
-                    {
-                        using (StreamWriter mywriter = new StreamWriter(newPath1))
-                        {
-                            mywriter.WriteLine(Convert.ToString(numericUpDown28.Value, ic));
-                            mywriter.WriteLine(Convert.ToString(numericUpDown27.Value, ic));
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not write file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        /// <summary>
-        /// change relaxation factor for pressure correction of microscale wind field model of GRAL
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SetGRALFlowFieldPreRelaxFactor(object sender, EventArgs e)
-        {
-            try
-            {
-                if (EmifileReset == true)
-                {
-                    string newPath1 = Path.Combine(ProjectName, @"Computation", "relaxation_factors.txt");
-                    try
-                    {
-                        using (StreamWriter mywriter = new StreamWriter(newPath1))
-                        {
-                            mywriter.WriteLine(Convert.ToString(numericUpDown28.Value, ic));
-                            mywriter.WriteLine(Convert.ToString(numericUpDown27.Value, ic));
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not write file \"Computation\\relaxation_factors.txt\"", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        /// <summary>
         /// change minimum number of iterations over timesteps in the microscale flow field model of GRAL
         /// </summary>
         /// <param name="sender"></param>
@@ -607,7 +532,7 @@ namespace Gral
                 numericUpDown30.Value = 500;
             }
         }
-        
+
         //decide, whether iterations shall be performed until steady-state conditions are reached, or not
         private void SetGRALFlowFieldSteadyStateIterationChanged(object sender, EventArgs e)
         {

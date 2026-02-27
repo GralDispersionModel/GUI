@@ -10,16 +10,16 @@
 ///</remarks>
 #endregion
 
-using System;
-using System.Windows.Forms;
-using System.IO;
-using GralIO;
 using Gral;
+using GralIO;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralMainForms
 {
-	/// <summary>
+    /// <summary>
     /// Select one or multiple horizontal slices
     /// </summary>
     public partial class Selectslice : Form
@@ -36,11 +36,11 @@ namespace GralMainForms
         {
             //fill listbox with heights of horizontal slices
             InDatVariables data = new InDatVariables();
-			InDatFileIO ReadInData = new InDatFileIO();
-			
-			double[] horslice = new double[10];
-			data.InDatPath = Path.Combine(Main.ProjectName, @"Computation","in.dat");
-			data.HorSlices = horslice; // initialize array object !
+            InDatFileIO ReadInData = new InDatFileIO();
+
+            double[] horslice = new double[10];
+            data.InDatPath = Path.Combine(Main.ProjectName, @"Computation", "in.dat");
+            data.HorSlices = horslice; // initialize array object !
             ReadInData.Data = data;
 
             for (int i = 0; i < HorSlices.Count; i++)
@@ -53,7 +53,7 @@ namespace GralMainForms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int i  = 0; i < listBox1.Items.Count; i++)
+            for (int i = 0; i < listBox1.Items.Count; i++)
             {
                 if (listBox1.GetSelected(i) == true)
                 {

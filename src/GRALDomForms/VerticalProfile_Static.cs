@@ -13,15 +13,15 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
 
 namespace GralDomForms
 {
-	/// <summary>
-	/// Show static vertical profiles
-	/// </summary>       
+    /// <summary>
+    /// Show static vertical profiles
+    /// </summary>       
     public partial class VerticalProfile_Static : Form
     {
         public string FileName;      //file, which is spotted
@@ -61,7 +61,7 @@ namespace GralDomForms
             {
                 long number_of_lines = GralStaticFunctions.St_F.CountLinesInFile(FileName) + 2;
                 zsp = new double[number_of_lines];  //height of the GRAMM grid point
-                val  = new double[number_of_lines];  //value of the GRAMM grid point
+                val = new double[number_of_lines];  //value of the GRAMM grid point
 
                 using (StreamReader reader = new StreamReader(FileName))
                 {
@@ -84,7 +84,7 @@ namespace GralDomForms
             }
             catch
             {
-                
+
             }
             Refresh();
         }
@@ -98,17 +98,17 @@ namespace GralDomForms
         // zoom out
         private void button2_Click(object sender, EventArgs e)
         {
-        	zlevels_userdefined = Math.Min(zlevels, zlevels_userdefined + 1);
+            zlevels_userdefined = Math.Min(zlevels, zlevels_userdefined + 1);
             Refresh();
         }
-        
+
         void VerticalProfile_StaticResizeEnd(object sender, EventArgs e)
         {
-        	Refresh();
+            Refresh();
         }
-        
+
         void VerticalProfile_StaticKeyDown(object sender, KeyEventArgs e)
-        { 
+        {
             if (e.KeyCode == Keys.Add)
             {
                 button1_Click(null, null);
@@ -132,7 +132,7 @@ namespace GralDomForms
             }
             line += Environment.NewLine;
 
-            for (int i = 0; i <  val.Length - 2; i++)
+            for (int i = 0; i < val.Length - 2; i++)
             {
                 line += zsp[i].ToString() + "\t" + val[i].ToString() + Environment.NewLine;
             }
@@ -213,7 +213,7 @@ namespace GralDomForms
                 g.DrawString("<" + Convert.ToString(Math.Round(max, 2)) + ">", font, new SolidBrush(Color.Black), x1 + (rightbound - leftbound) - font.Size * 2, y1 + 2 * font.Size, format1);
 
                 g.DrawString(this.Text, font, new SolidBrush(Color.Black), x1 + 5, y1 + 10 + 3 * font.Size, format1);
-                
+
                 int y_step = 1000;
                 if (zsp[zlevels_userdefined - 1] < 4000)
                 {

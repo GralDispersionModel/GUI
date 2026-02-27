@@ -10,10 +10,10 @@
 ///</remarks>
 #endregion
 
+using GralMessage;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using GralMessage;
 
 namespace Gral
 {
@@ -68,7 +68,7 @@ namespace Gral
                         using (FileDeleteMessage fdm = new FileDeleteMessage())
                         {
                             System.Collections.Generic.List<string> _message = new System.Collections.Generic.List<string>();
-                            
+
                             if (File.Exists(Path.Combine(ProjectName, @"Computation", "GRAMM.geb")))
                             {
                                 _message.Add("..Computation" + Path.DirectorySeparatorChar + "GRAMM.geb");
@@ -290,7 +290,7 @@ namespace Gral
         {
             GRAMMin(EmifileReset);
         }
-        
+
         private bool SunriseResetMeteoFiles()
         {
             if (File.Exists(Path.Combine(ProjectName, @"Computation", "meteopgt.all")))
@@ -304,18 +304,18 @@ namespace Gral
                     {
                         File.Delete(Path.Combine(ProjectName, @"Computation", "meteopgt.all"));
                     }
-                    catch{}
-                    
+                    catch { }
+
                     return true;
                 }
                 else
                 {
                     return false;
-                }	
+                }
             }
             return true;
         }
-        
+
         /// <summary>
         /// set GRAMM sunrise option
         /// </summary>
@@ -325,7 +325,7 @@ namespace Gral
         {
             if (SunriseResetMeteoFiles() == false) // Check, if meteopgt can be changed, otherwise set sunrise option to previous value 
             {
-                checkBox30.Checked =! checkBox30.Checked;
+                checkBox30.Checked = !checkBox30.Checked;
             }
             // create new GRAMMin.dat
             GRAMMin(true);

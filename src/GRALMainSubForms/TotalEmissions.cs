@@ -39,7 +39,7 @@ namespace GralMainForms
         private List<string> Date_Time = new List<string>();
         private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private bool transientMode = false;
-        
+
         public TotalEmissions(double[] totemi, Gral.Main f, string poll, bool TransientMode)
         {
             totalemissions = totemi;

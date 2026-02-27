@@ -16,35 +16,35 @@ namespace GralItemData
     /// This class represents the deposition data
     /// </summary>
     public class Deposition_Settings
-	{
-		public string Title   { get; set; }
+    {
+        public string Title { get; set; }
         /// <summary>
         /// Fraction for PM10 particle class
         /// </summary>
-        public int Frac_10 	  { get; set; }
+        public int Frac_10 { get; set; }
         /// <summary>
         /// Fraction for PM2,5 particle class
         /// </summary>
-		public int Frac_25	  { get; set; }
+		public int Frac_25 { get; set; }
         /// <summary>
         /// Diameter for PM30 particle class
         /// </summary>
-		public int DM_30 	  { get; set; }
+		public int DM_30 { get; set; }
         /// <summary>
         /// Deposition velocity for PM2,5 or gases
         /// </summary>
-		public double V_Dep1  { get; set; }
+		public double V_Dep1 { get; set; }
         /// <summary>
         /// Deposition velocity for PM10
         /// </summary>
-		public double V_Dep2  { get; set; }
+		public double V_Dep2 { get; set; }
         /// <summary>
         /// Deposition velocity for PM30
         /// </summary>
-		public double V_Dep3  { get; set; }
+		public double V_Dep3 { get; set; }
         /// <summary>
         /// Density for that particle
         /// </summary>
 		public double Density { get; set; }
-	}
+    }
 }

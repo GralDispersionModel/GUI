@@ -10,44 +10,44 @@
 ///</remarks>
 #endregion
 
+using GralStaticFunctions;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using GralStaticFunctions;
 
 namespace GralDomain
 {
     public partial class Domain
-	{
-		/// <summary>
+    {
+        /// <summary>
         /// Mouse Move Events on the picturebox
         /// </summary>
-		public void Picturebox1_MouseMove(object sender, MouseEventArgs e)
-		{
-			double lenght=0;
-			
-			if ((MouseControl == MouseMode.BaseMapGeoReference1) || (MouseControl == MouseMode.BaseMapGeoReference2))
+        public void Picturebox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            double lenght = 0;
+
+            if ((MouseControl == MouseMode.BaseMapGeoReference1) || (MouseControl == MouseMode.BaseMapGeoReference2))
             {
                 Activate();
             }
 
-            double x_real = (e.X-TransformX) * BmpScale * MapSize.SizeX + MapSize.West;
-			double y_real = (e.Y-TransformY) * BmpScale * MapSize.SizeY + MapSize.North;
-			
-			textBox1.Text = x_real.ToString("F1");
-			textBox2.Text = y_real.ToString("F1");
-			toolStripTextBox1.Text = textBox1.Text;
-			toolStripTextBox2.Text = textBox2.Text;
-			
-			if (CellHeightsType == 2) // Show GRAL height
-			{
-				try
-				{
-					double flowfieldraster = Convert.ToDouble(MainForm.numericUpDown10.Value);
-					if (flowfieldraster > 0)
-					{
-						int i = (int) ((x_real - MainForm.GralDomRect.West)/flowfieldraster) + 1;
-						int j = (int) ((y_real - MainForm.GralDomRect.South)/flowfieldraster) + 1;
+            double x_real = (e.X - TransformX) * BmpScale * MapSize.SizeX + MapSize.West;
+            double y_real = (e.Y - TransformY) * BmpScale * MapSize.SizeY + MapSize.North;
+
+            textBox1.Text = x_real.ToString("F1");
+            textBox2.Text = y_real.ToString("F1");
+            toolStripTextBox1.Text = textBox1.Text;
+            toolStripTextBox2.Text = textBox2.Text;
+
+            if (CellHeightsType == 2) // Show GRAL height
+            {
+                try
+                {
+                    double flowfieldraster = Convert.ToDouble(MainForm.numericUpDown10.Value);
+                    if (flowfieldraster > 0)
+                    {
+                        int i = (int)((x_real - MainForm.GralDomRect.West) / flowfieldraster) + 1;
+                        int j = (int)((y_real - MainForm.GralDomRect.South) / flowfieldraster) + 1;
 
                         if ((x_real - MainForm.GralDomRect.West) > 0 && (y_real - MainForm.GralDomRect.South) > 0 && i <= CellHeights.GetUpperBound(0) && j <= CellHeights.GetUpperBound(1))
                         {
@@ -144,39 +144,39 @@ namespace GralDomain
                             toolStripTextBox3.Text = string.Empty;
                             textBox3.Text = string.Empty;
                         }
-					}
-				}
-				catch
-				{}
-			}
-			if (Math.Abs(CellHeightsType) == 1) // Show GRAMM height
-			{
-				try
-				{
-					if (MainForm.GRAMMHorGridSize > 0)
-					{
-						int i = 0; int j = 0;
-						// GRAMM mean height
-						if (CellHeightsType == 1)
-						{
-							i = (int)((x_real - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
-							j = (int)((y_real - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
-						}
-						else // GRAMM edge height
+                    }
+                }
+                catch
+                { }
+            }
+            if (Math.Abs(CellHeightsType) == 1) // Show GRAMM height
+            {
+                try
+                {
+                    if (MainForm.GRAMMHorGridSize > 0)
+                    {
+                        int i = 0; int j = 0;
+                        // GRAMM mean height
+                        if (CellHeightsType == 1)
                         {
-							i = (int)((x_real - MainForm.GrammDomRect.West + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
-							j = (int)((y_real - MainForm.GrammDomRect.South + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
-						}
+                            i = (int)((x_real - MainForm.GrammDomRect.West) / MainForm.GRAMMHorGridSize) + 1;
+                            j = (int)((y_real - MainForm.GrammDomRect.South) / MainForm.GRAMMHorGridSize) + 1;
+                        }
+                        else // GRAMM edge height
+                        {
+                            i = (int)((x_real - MainForm.GrammDomRect.West + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
+                            j = (int)((y_real - MainForm.GrammDomRect.South + MainForm.GRAMMHorGridSize * 0.5) / MainForm.GRAMMHorGridSize) + 1;
+                        }
                         if (i > 0 && j > 0 && i <= CellHeights.GetUpperBound(0) && j <= CellHeights.GetUpperBound(1))
                         {
-							string _prefix = "M: ";
-							if (CellHeightsType == -1)
-							{
-								_prefix = "E: ";
-							}
-							
-							string heightString = _prefix + CellHeights[i, j].ToString("F1");
-							toolStripTextBox3.Text = heightString;
+                            string _prefix = "M: ";
+                            if (CellHeightsType == -1)
+                            {
+                                _prefix = "E: ";
+                            }
+
+                            string heightString = _prefix + CellHeights[i, j].ToString("F1");
+                            toolStripTextBox3.Text = heightString;
                             textBox3.Text = heightString;
                         }
                         else
@@ -184,173 +184,173 @@ namespace GralDomain
                             toolStripTextBox3.Text = string.Empty;
                             textBox3.Text = string.Empty;
                         }
-					}
-				}
-				catch{}
-			}
+                    }
+                }
+                catch { }
+            }
 
-			//draw GRAL model domain
-			if ((MouseControl == MouseMode.GralDomainEndPoint) && (XDomain > 0))
-			{
-				int x1 = Math.Min(e.X, XDomain);
-				int y1 = Math.Min(e.Y, YDomain);
-				int x2 = Math.Max(e.X, XDomain);
-				int y2 = Math.Max(e.Y, YDomain);
-				int recwidth = x2 - x1;
-				int recheigth = y2 - y1;
-				GRALDomain = new Rectangle(x1, y1, recwidth, recheigth);
-				//this.picturebox1_Paint();
-				DrawRubberRect(GRALDomain);
-			}
+            //draw GRAL model domain
+            if ((MouseControl == MouseMode.GralDomainEndPoint) && (XDomain > 0))
+            {
+                int x1 = Math.Min(e.X, XDomain);
+                int y1 = Math.Min(e.Y, YDomain);
+                int x2 = Math.Max(e.X, XDomain);
+                int y2 = Math.Max(e.Y, YDomain);
+                int recwidth = x2 - x1;
+                int recheigth = y2 - y1;
+                GRALDomain = new Rectangle(x1, y1, recwidth, recheigth);
+                //this.picturebox1_Paint();
+                DrawRubberRect(GRALDomain);
+            }
 
-			//draw GRAMM model domain
-			if ((MouseControl == MouseMode.GrammDomainEndPoint) && (XDomain > 0))
-			{
-				int x1 = Math.Min(e.X, XDomain);
-				int y1 = Math.Min(e.Y, YDomain);
-				int x2 = Math.Max(e.X, XDomain);
-				int y2 = Math.Max(e.Y, YDomain);
-				int recwidth = x2 - x1;
-				int recheigth = y2 - y1;
-				GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
-				DrawRubberRect(GRAMMDomain);
-				//this.picturebox1_Paint();
-			}
+            //draw GRAMM model domain
+            if ((MouseControl == MouseMode.GrammDomainEndPoint) && (XDomain > 0))
+            {
+                int x1 = Math.Min(e.X, XDomain);
+                int y1 = Math.Min(e.Y, YDomain);
+                int x2 = Math.Max(e.X, XDomain);
+                int y2 = Math.Max(e.Y, YDomain);
+                int recwidth = x2 - x1;
+                int recheigth = y2 - y1;
+                GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
+                DrawRubberRect(GRAMMDomain);
+                //this.picturebox1_Paint();
+            }
 
-			//draw GRAMM sub-domain for export
-			if ((MouseControl == MouseMode.GrammExportFinal) && (XDomain > 0))
-			{
-				int x1 = Math.Min(e.X, XDomain);
-				int y1 = Math.Min(e.Y, YDomain);
-				int x2 = Math.Max(e.X, XDomain);
-				int y2 = Math.Max(e.Y, YDomain);
-				int recwidth = x2 - x1;
-				int recheigth = y2 - y1;
-				GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
-				DrawRubberRect(GRAMMDomain);
-				//this.picturebox1_Paint();
-			}
+            //draw GRAMM sub-domain for export
+            if ((MouseControl == MouseMode.GrammExportFinal) && (XDomain > 0))
+            {
+                int x1 = Math.Min(e.X, XDomain);
+                int y1 = Math.Min(e.Y, YDomain);
+                int x2 = Math.Max(e.X, XDomain);
+                int y2 = Math.Max(e.Y, YDomain);
+                int recwidth = x2 - x1;
+                int recheigth = y2 - y1;
+                GRAMMDomain = new Rectangle(x1, y1, recwidth, recheigth);
+                DrawRubberRect(GRAMMDomain);
+                //this.picturebox1_Paint();
+            }
 
-			//draw area source
-			if ((MouseControl == MouseMode.AreaSourcePos)||(MouseControl == MouseMode.ViewAreaMeasurement))
-			{
-				CornerAreaSource[EditAS.CornerAreaCount + 1] = new Point(e.X, e.Y);
-				DrawRubberLine(EditAS.CornerAreaCount, 1);
-				//this.picturebox1_Paint();
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
-			
-			// Copy or Move Point Source
-			if (CopiedItem.PointSource != null || MouseControl == MouseMode.PointSourceInlineEdit) 
-			{
-				DrawRubberPS(e.X, e.Y, 0);
-			}
-			if (CopiedItem.Building != null)
-			{
-				DrawRubberBuilding(1);
-			}
-			if (CopiedItem.LineSource != null)
-			{
-				DrawRubberLineSource();
-			}
-			//Copy or Move Receptor
-			if (CopiedItem.Receptor != null || MouseControl == MouseMode.ReceptorInlineEdit)
-			{
-				DrawRubberPS(e.X, e.Y, 1);
-			}
-			if (CopiedItem.AreaSource != null)
-			{
-				DrawRubberBuilding(2);
-			}
-			if (CopiedItem.PortalSource != null)
-			{
-				DrawRubberPortal();
-			}
-			
-			//draw rubber line for changing edge points
-			if ((MouseControl == MouseMode.AreaSourceEditFinal) ||(MouseControl == MouseMode.LineSourceEditFinal) || (MouseControl == MouseMode.BuildingEditFinal) || (MouseControl == MouseMode.WallEditFinal))
-			{
-				CornerAreaSource[2] = new Point(e.X, e.Y);
-				DrawRubberLine(1, 1);
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
-			
-			// draw rubberlines of edited buildings, area sources, line sources, walls
-			if (MouseControl == MouseMode.BuildingInlineEdit || MouseControl == MouseMode.AreaInlineEdit || MouseControl == MouseMode.VegetationInlineEdit || (MouseControl == MouseMode.LineSourceInlineEdit) || (MouseControl == MouseMode.WallInlineEdit))
-			{
-				CornerAreaSource[2] = new Point(e.X, e.Y);
-				DrawRubberLine(1, 2);
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
-			
-			//draw vegetation
-			if ((MouseControl == MouseMode.VegetationPosCorner))
-			{
-				CornerAreaSource[EditVegetation.CornerVegetation + 1] = new Point(e.X, e.Y);
-				DrawRubberLine(EditVegetation.CornerVegetation, 1);
-				//this.picturebox1_Paint();
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
-			
-			//draw building
-			if (MouseControl == MouseMode.BuildingPos)
-			{
-				CornerAreaSource[EditB.CornerBuilding + 1] = new Point(e.X, e.Y);
-				DrawRubberLine(EditB.CornerBuilding, 1);
-				//this.picturebox1_Paint();
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
-			//draw line source, tunnel portals source, measuring tool distance or section drawing for windfields
-			if ((MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.ViewDistanceMeasurement) || (MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.SectionWindSel) || (MouseControl == MouseMode.SectionConcSel))
-			{
-				CornerAreaSource[EditLS.CornerLineSource + 1] = new Point(e.X, e.Y);
-				DrawRubberLine(EditLS.CornerLineSource, 1);
-				//this.picturebox1_Paint();
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
+            //draw area source
+            if ((MouseControl == MouseMode.AreaSourcePos) || (MouseControl == MouseMode.ViewAreaMeasurement))
+            {
+                CornerAreaSource[EditAS.CornerAreaCount + 1] = new Point(e.X, e.Y);
+                DrawRubberLine(EditAS.CornerAreaCount, 1);
+                //this.picturebox1_Paint();
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
 
-			//draw walls
-			if (MouseControl == MouseMode.WallSet)
-			{
-				CornerAreaSource[EditWall.CornerWallCount + 1] = new Point(e.X, e.Y);
-				DrawRubberLine(EditWall.CornerWallCount, 1);
-				//this.picturebox1_Paint();
-				RubberLineCoors[0].X = -2; // reset lenght label
-			}
-			
-			//draw rectangle for panel zoom
-			if ((MouseControl == MouseMode.ViewPanelZoomArea) && (XDomain > 0))
-			{
-				int x1 = Math.Min(e.X, XDomain);
-				int y1 = Math.Min(e.Y, YDomain);
-				int x2 = Math.Max(e.X, XDomain);
-				int y2 = Math.Max(e.Y, YDomain);
-				int recwidth = x2 - x1;
-				int recheigth = y2 - y1;
-				PanelZoom = new Rectangle(x1, y1, recwidth, recheigth);
-				DrawRubberRect(PanelZoom);
-				//this.picturebox1_Paint();
-			}
-			
-			#if __MonoCS__
-			#else
-			// Tooltip for picturebox1
-			if (ToolTipMousePosition.Active == true) // show lenght at the mouse position
-			{
-				if (RubberLineCoors[0].X == -1 && RubberLineCoors[0].Y == -1) // first point of lenght label
-				{
-					FirstPointLenght.X = (float) St_F.TxtToDbl(textBox1.Text, false);
-					FirstPointLenght.Y = (float) St_F.TxtToDbl(textBox2.Text, false);
-					RubberLineCoors[0].X = -2;
-				}
-				else
-				{
-					lenght = Math.Sqrt(Math.Pow((St_F.TxtToDbl(textBox1.Text, false) - FirstPointLenght.X),2)  +
-					                   Math.Pow((St_F.TxtToDbl(textBox2.Text, false) -FirstPointLenght.Y),2));
-					ToolTipMousePosition.ToolTipTitle = Convert.ToString(Math.Round(lenght,1));
-				}
-			}
-			#endif
-		}		
-	}
+            // Copy or Move Point Source
+            if (CopiedItem.PointSource != null || MouseControl == MouseMode.PointSourceInlineEdit)
+            {
+                DrawRubberPS(e.X, e.Y, 0);
+            }
+            if (CopiedItem.Building != null)
+            {
+                DrawRubberBuilding(1);
+            }
+            if (CopiedItem.LineSource != null)
+            {
+                DrawRubberLineSource();
+            }
+            //Copy or Move Receptor
+            if (CopiedItem.Receptor != null || MouseControl == MouseMode.ReceptorInlineEdit)
+            {
+                DrawRubberPS(e.X, e.Y, 1);
+            }
+            if (CopiedItem.AreaSource != null)
+            {
+                DrawRubberBuilding(2);
+            }
+            if (CopiedItem.PortalSource != null)
+            {
+                DrawRubberPortal();
+            }
+
+            //draw rubber line for changing edge points
+            if ((MouseControl == MouseMode.AreaSourceEditFinal) || (MouseControl == MouseMode.LineSourceEditFinal) || (MouseControl == MouseMode.BuildingEditFinal) || (MouseControl == MouseMode.WallEditFinal))
+            {
+                CornerAreaSource[2] = new Point(e.X, e.Y);
+                DrawRubberLine(1, 1);
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
+
+            // draw rubberlines of edited buildings, area sources, line sources, walls
+            if (MouseControl == MouseMode.BuildingInlineEdit || MouseControl == MouseMode.AreaInlineEdit || MouseControl == MouseMode.VegetationInlineEdit || (MouseControl == MouseMode.LineSourceInlineEdit) || (MouseControl == MouseMode.WallInlineEdit))
+            {
+                CornerAreaSource[2] = new Point(e.X, e.Y);
+                DrawRubberLine(1, 2);
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
+
+            //draw vegetation
+            if ((MouseControl == MouseMode.VegetationPosCorner))
+            {
+                CornerAreaSource[EditVegetation.CornerVegetation + 1] = new Point(e.X, e.Y);
+                DrawRubberLine(EditVegetation.CornerVegetation, 1);
+                //this.picturebox1_Paint();
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
+
+            //draw building
+            if (MouseControl == MouseMode.BuildingPos)
+            {
+                CornerAreaSource[EditB.CornerBuilding + 1] = new Point(e.X, e.Y);
+                DrawRubberLine(EditB.CornerBuilding, 1);
+                //this.picturebox1_Paint();
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
+            //draw line source, tunnel portals source, measuring tool distance or section drawing for windfields
+            if ((MouseControl == MouseMode.LineSourcePos) || (MouseControl == MouseMode.ViewDistanceMeasurement) || (MouseControl == MouseMode.PortalSourcePos) || (MouseControl == MouseMode.SectionWindSel) || (MouseControl == MouseMode.SectionConcSel))
+            {
+                CornerAreaSource[EditLS.CornerLineSource + 1] = new Point(e.X, e.Y);
+                DrawRubberLine(EditLS.CornerLineSource, 1);
+                //this.picturebox1_Paint();
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
+
+            //draw walls
+            if (MouseControl == MouseMode.WallSet)
+            {
+                CornerAreaSource[EditWall.CornerWallCount + 1] = new Point(e.X, e.Y);
+                DrawRubberLine(EditWall.CornerWallCount, 1);
+                //this.picturebox1_Paint();
+                RubberLineCoors[0].X = -2; // reset lenght label
+            }
+
+            //draw rectangle for panel zoom
+            if ((MouseControl == MouseMode.ViewPanelZoomArea) && (XDomain > 0))
+            {
+                int x1 = Math.Min(e.X, XDomain);
+                int y1 = Math.Min(e.Y, YDomain);
+                int x2 = Math.Max(e.X, XDomain);
+                int y2 = Math.Max(e.Y, YDomain);
+                int recwidth = x2 - x1;
+                int recheigth = y2 - y1;
+                PanelZoom = new Rectangle(x1, y1, recwidth, recheigth);
+                DrawRubberRect(PanelZoom);
+                //this.picturebox1_Paint();
+            }
+
+#if __MonoCS__
+#else
+            // Tooltip for picturebox1
+            if (ToolTipMousePosition.Active == true) // show lenght at the mouse position
+            {
+                if (RubberLineCoors[0].X == -1 && RubberLineCoors[0].Y == -1) // first point of lenght label
+                {
+                    FirstPointLenght.X = (float)St_F.TxtToDbl(textBox1.Text, false);
+                    FirstPointLenght.Y = (float)St_F.TxtToDbl(textBox2.Text, false);
+                    RubberLineCoors[0].X = -2;
+                }
+                else
+                {
+                    lenght = Math.Sqrt(Math.Pow((St_F.TxtToDbl(textBox1.Text, false) - FirstPointLenght.X), 2) +
+                                       Math.Pow((St_F.TxtToDbl(textBox2.Text, false) - FirstPointLenght.Y), 2));
+                    ToolTipMousePosition.ToolTipTitle = Convert.ToString(Math.Round(lenght, 1));
+                }
+            }
+#endif
+        }
+    }
 }

@@ -85,7 +85,7 @@ namespace Gral.GRALDomForms
             }
             else if (radioButton2.Checked)
             {
-                temp =  temp * (49/(temp + 65) + 0.12);
+                temp = temp * (49 / (temp + 65) + 0.12);
             }
             else if (radioButton3.Checked)
             {
