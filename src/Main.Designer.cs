@@ -260,6 +260,7 @@
             numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             Computation = new System.Windows.Forms.TabPage();
             groupBox31 = new System.Windows.Forms.GroupBox();
+            comboBox1 = new System.Windows.Forms.ComboBox();
             checkBoxAVX = new System.Windows.Forms.CheckBox();
             numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             label98 = new System.Windows.Forms.Label();
@@ -3376,29 +3377,43 @@
             // 
             // groupBox31
             // 
+            groupBox31.Controls.Add(comboBox1);
             groupBox31.Controls.Add(checkBoxAVX);
             groupBox31.Controls.Add(numericUpDown33);
             groupBox31.Controls.Add(label98);
             groupBox31.Controls.Add(numericUpDown32);
             groupBox31.Controls.Add(label20);
             groupBox31.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            groupBox31.Location = new System.Drawing.Point(212, 309);
+            groupBox31.Location = new System.Drawing.Point(212, 303);
             groupBox31.Name = "groupBox31";
-            groupBox31.Size = new System.Drawing.Size(217, 129);
+            groupBox31.Size = new System.Drawing.Size(217, 135);
             groupBox31.TabIndex = 81;
             groupBox31.TabStop = false;
             groupBox31.Text = "Processor cores";
+            // 
+            // comboBox1
+            // 
+            comboBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "NUMA node 0", "NUMA node 1", "NUMA node 2", "NUMA node 3", "Shuffle nodes 0 and 1", "Shuffle nodes 0 to 3" });
+            comboBox1.Location = new System.Drawing.Point(13, 84);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new System.Drawing.Size(194, 23);
+            comboBox1.TabIndex = 37;
+            comboBox1.Text = "Select a NUMA node (GRAL)";
+            toolTip1.SetToolTip(comboBox1, "On HPC systems with multiple NUMA nodes, this option \r\nallows you to select a NUMA node for the computation\r\nin order to use all cores on the system");
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // checkBoxAVX
             // 
             checkBoxAVX.AutoSize = true;
             checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
-            checkBoxAVX.Location = new System.Drawing.Point(13, 92);
+            checkBoxAVX.Location = new System.Drawing.Point(13, 112);
             checkBoxAVX.Name = "checkBoxAVX";
-            checkBoxAVX.Size = new System.Drawing.Size(146, 19);
+            checkBoxAVX.Size = new System.Drawing.Size(145, 19);
             checkBoxAVX.TabIndex = 26;
             checkBoxAVX.Text = "Use AVX512 extensions";
-            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
+            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function for GRAL calculations");
             checkBoxAVX.UseVisualStyleBackColor = true;
             checkBoxAVX.Visible = false;
             checkBoxAVX.Click += CheckBoxAVX_Click;
@@ -3406,7 +3421,7 @@
             // numericUpDown33
             // 
             numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown33.Location = new System.Drawing.Point(148, 56);
+            numericUpDown33.Location = new System.Drawing.Point(148, 53);
             numericUpDown33.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             numericUpDown33.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown33.Name = "numericUpDown33";
@@ -3420,7 +3435,7 @@
             // label98
             // 
             label98.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label98.Location = new System.Drawing.Point(10, 58);
+            label98.Location = new System.Drawing.Point(10, 55);
             label98.Name = "label98";
             label98.Size = new System.Drawing.Size(130, 20);
             label98.TabIndex = 24;
@@ -3429,7 +3444,7 @@
             // numericUpDown32
             // 
             numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            numericUpDown32.Location = new System.Drawing.Point(148, 25);
+            numericUpDown32.Location = new System.Drawing.Point(148, 22);
             numericUpDown32.Maximum = new decimal(new int[] { 128, 0, 0, 0 });
             numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown32.Name = "numericUpDown32";
@@ -3443,7 +3458,7 @@
             // label20
             // 
             label20.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label20.Location = new System.Drawing.Point(10, 27);
+            label20.Location = new System.Drawing.Point(10, 24);
             label20.Name = "label20";
             label20.Size = new System.Drawing.Size(130, 20);
             label20.TabIndex = 24;
@@ -4154,9 +4169,9 @@
             groupBox11.Controls.Add(radioButton2);
             groupBox11.Controls.Add(radioButton1);
             groupBox11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox11.Location = new System.Drawing.Point(5, 300);
+            groupBox11.Location = new System.Drawing.Point(5, 293);
             groupBox11.Name = "groupBox11";
-            groupBox11.Size = new System.Drawing.Size(186, 121);
+            groupBox11.Size = new System.Drawing.Size(186, 128);
             groupBox11.TabIndex = 6;
             groupBox11.TabStop = false;
             groupBox11.Text = " GRAL Topography";
@@ -4869,6 +4884,7 @@
         private System.Windows.Forms.Label LabelEmissionPath;
         public System.Windows.Forms.CheckBox checkBoxAVX;
         private System.Windows.Forms.GroupBox groupBox31;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

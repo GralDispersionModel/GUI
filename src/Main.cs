@@ -308,6 +308,10 @@ namespace Gral
         /// Project settings and project paths
         /// </summary>
         public static ProjectSettings ProjectSetting = new ProjectSettings("");
+        /// <summary>
+        /// Store the GRAL processId's for each started GRAL process
+        /// </summary>
+        private static List<int> GRALProcessID = new List<int>();
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -324,6 +328,10 @@ namespace Gral
         /// Timer for updating the file size labels
         /// </summary>
         private System.Timers.Timer UpdateFileSizes;
+        /// <summary>
+        /// CPU Node for GRAL calculation
+        /// </summary>
+        private int CPUNode = 0;
 
         /// <summary>
         /// Start the main form of this application
@@ -3070,7 +3078,7 @@ namespace Gral
             }
             ((HandledMouseEventArgs)e).Handled = true;
         }
-        
+
         /// <summary>
         /// Allow only integer values on the NumericUpDown control
         /// </summary>
@@ -4156,6 +4164,11 @@ namespace Gral
             };
             write_in_dat.WriteInDat();
             write_in_dat = null;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CPUNode = comboBox1.SelectedIndex;
         }
     }
 }

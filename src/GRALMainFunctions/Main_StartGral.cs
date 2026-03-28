@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Gral
@@ -31,6 +32,7 @@ namespace Gral
         /// <param name="FinalSituation">Final situation when starting a chunk of situations</param>
         private void GRALStartCalculation(int StartSituation, int FinalSituation)
         {
+            Random rnd = new Random();
             if (Convert.ToString(listBox5.SelectedItem).Contains("Odour")) // check if the lowest conc. layer > 1.5 * vert. extension
             {
                 if (Convert.ToDouble(TBox3[0].Value) < 1.5 * Convert.ToDouble(numericUpDown8.Value))
@@ -348,38 +350,46 @@ namespace Gral
                     int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
                     int instance_start = first_sit;
                     int instance_end = instance_start + offset;
+                   
+                    string param = GRAL_Program_Path;
 
-                    GRALProcess = new Process();
-                    GRALProcess.EnableRaisingEvents = true;
-                    GRALProcess.Exited += new System.EventHandler(GralExited);
-                    GRALProcess.StartInfo.FileName = GRAL_Program_Path;
-                    GRALProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                    GRALProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
                     if (GUISettings.CopyCoresToProject == false)
                     {
-                        GRALProcess.StartInfo.Arguments = " " + "\"" + GRAL_Project_Path + "\"";
+                       param += " " + "\"" + GRAL_Project_Path + "\"";
                     }
                     if (GRALSettings.Loglevel > 0)
                     {
-                        GRALProcess.StartInfo.Arguments += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
+                       param += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
                     }
-                    string consoleArgument = GRALProcess.StartInfo.Arguments;
+                    string consoleArgument = param;
                     
                     if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations
                     {
-                        GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
+                        param += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
                     }
                     else if (numberOfInstances > 1)
                     {
-                        GRALProcess.StartInfo.Arguments += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                        param += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
                     }
-                    GRALProcess.Start();
+                    //GRALProcess.Start();
+                    int node = CPUNode;
+                    if (CPUNode == 4)
+                    {
+                        node = rnd.Next(0, 2);
+                    }
+                    else if (CPUNode == 5)
+                    {
+                        node = rnd.Next(0, 4);
+                    }
+                    int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
+                    if (processID > 0) //sucessful start
+                    {
+                        GRALProcessID.Add(processID);
+                    }
 
                     if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsibles UI
                     {
-                        System.Threading.Thread startThread = new System.Threading.Thread(() => StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument));
-                        startThread.Start();
-                        //StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument);
+                        StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument);
                     }
 #endif
 
@@ -421,12 +431,32 @@ namespace Gral
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #else
+#if NET6_0_OR_GREATER
+            try
+            {
+                foreach (int processID in GRALProcessID)
+                {
+                    try
+                    {
+                        Process localById = Process.GetProcessById(processID);
+                        localById.Kill();
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+            finally
+            {
+                GRALProcessID.Clear();
+            }
+#else
             try
             {
                 GRALProcess.Kill();
             }
             catch
             { }
+#endif
             //check if *.con files are existing for postprocessing routines
             CheckConFiles();
 #endif
@@ -443,13 +473,32 @@ namespace Gral
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #endif
+#if NET6_0_OR_GREATER
+            try
+            {
+                foreach (int processID in GRALProcessID)
+                {
+                    try
+                    {
+                        Process localById = Process.GetProcessById(processID);
+                        localById.Kill();
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+            finally
+            {
+                GRALProcessID.Clear();
+            }
+#else
             try
             {
                 GRALProcess.Kill();
             }
             catch
             { }
-
+#endif
             //check if *.con files are existing for postprocessing routines
             CheckConFiles();
 
@@ -475,29 +524,170 @@ namespace Gral
         /// <param name="e"></param>
         private void StartMultipleInstances(int FirstSit, int FinalSit, int Offset, int NumberOfInstances, string GRAL_Program_Path, string GRAL_Arguments)
         {
+            Random rnd = new Random();
             int instance_start = FirstSit;
             int instance_end;
             int count = 2; //start with instance 2
+            int nodeCounter = 0;
             
             while (instance_start <= FinalSit)
             {
-                System.Threading.Thread.Sleep(2000); // wait for 2 seconds -> use all CPU groups
+                System.Threading.Thread.Sleep(100); // wait for 0.1 seconds -> use all CPU groups
                 instance_end = instance_start + Offset;
                 if (count == NumberOfInstances) // avoid rounding errors
                 {
                     instance_end = FinalSit;
                 }
-                Process GralProcess = new Process();
-                GralProcess.EnableRaisingEvents = false;
-                GralProcess.StartInfo.FileName = GRAL_Program_Path;
-                GralProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                GralProcess.StartInfo.WorkingDirectory = @Path.GetDirectoryName(GRAL_Program_Path);
-                GralProcess.StartInfo.Arguments = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
-                GralProcess.Start();
+                                 
+                string param = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                int node = CPUNode;
+                if (CPUNode == 4)
+                {
+                    nodeCounter++;
+                    node = nodeCounter % 2;
+                }
+                else if (CPUNode == 5)
+                {
+                    nodeCounter++;
+                    node = nodeCounter % 4;
+                }
+                int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
+                if (processID > 0) //sucessful start
+                {
+                    GRALProcessID.Add(processID);
+                }
                 // new start value, new instance
                 instance_start = instance_end + 1;
                 count++;
             }
+        }
+    }
+    public class NumaProcessStarter
+    {
+        // Necessary P/Invoke constants and structs
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        struct STARTUPINFOEX
+        {
+            public STARTUPINFO StartupInfo;
+            public IntPtr lpAttributeList;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        struct STARTUPINFO
+        {
+            public int cb;
+            public string lpReserved;
+            public string lpDesktop;
+            public string lpTitle;
+            public int dwX;
+            public int dwY;
+            public int dwXSize;
+            public int dwYSize;
+            public int dwXCountChars;
+            public int dwYCountChars;
+            public int dwFillAttribute;
+            public int dwFlags;
+            public short wShowWindow;
+            public short cbReserved2;
+            public IntPtr lpReserved2;
+            public IntPtr hStdInput;
+            public IntPtr hStdOutput;
+            public IntPtr hStdError;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern bool CreateProcess(
+            string lpApplicationName,
+            string lpCommandLine,
+            IntPtr lpProcessAttributes,
+            IntPtr lpThreadAttributes,
+            bool bInheritHandles,
+            uint dwCreationFlags,
+            IntPtr lpEnvironment,
+            string lpCurrentDirectory,
+            ref STARTUPINFOEX lpStartupInfo,
+            out PROCESS_INFORMATION lpProcessInformation);
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct PROCESS_INFORMATION
+        {
+            public IntPtr hProcess;
+            public IntPtr hThread;
+            public int dwProcessId;
+            public int dwThreadId;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool InitializeProcThreadAttributeList(
+            IntPtr lpAttributeList,
+            int dwAttributeCount,
+            int dwFlags,
+            ref IntPtr lpSize);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool UpdateProcThreadAttribute(
+            IntPtr lpAttributeList,
+            uint dwFlags,
+            IntPtr attribute,
+            IntPtr lpValue,
+            IntPtr cbSize,
+            IntPtr lpPreviousValue,
+            IntPtr lpReturnSize);
+
+        // PROC_THREAD_ATTRIBUTE_PREFERRED_NODE = 0x00020004
+        static readonly IntPtr PROC_THREAD_ATTRIBUTE_PREFERRED_NODE = (IntPtr)0x00020004;
+        const uint EXTENDED_STARTUPINFO_PRESENT = 0x00080000;
+
+        public static int StartProcessOnNumaNode(string commandLine, int numaNode)
+        {
+            var si = new STARTUPINFOEX();
+            si.StartupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFOEX));
+            IntPtr lpSize = IntPtr.Zero;
+
+            // Initialize Attribute List
+            InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref lpSize);
+            si.lpAttributeList = Marshal.AllocHGlobal(lpSize);
+            InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, ref lpSize);
+
+            // Set the NUMA Node
+            Int16 numa = (Int16)numaNode;
+            IntPtr numaNodePtr = Marshal.AllocHGlobal(Marshal.SizeOf(numa));
+            Marshal.WriteInt16(numaNodePtr, numa);
+            UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
+
+            var pi = new PROCESS_INFORMATION();
+            bool success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, null, ref si, out pi);
+
+            if (!success)
+            {
+                //try with numa node 0
+                si = new STARTUPINFOEX();
+                si.StartupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFOEX));
+                
+                // Initialize Attribute List
+                InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref lpSize);
+                si.lpAttributeList = Marshal.AllocHGlobal(lpSize);
+                InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, ref lpSize);
+                // use node 0
+                numa = (Int16) 0;
+                numaNodePtr = Marshal.AllocHGlobal(Marshal.SizeOf(numa));
+                Marshal.WriteInt16(numaNodePtr, numa);
+                UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
+                success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, null, ref si, out pi);
+            }
+            // Cleanup
+            Marshal.FreeHGlobal(si.lpAttributeList);
+            Marshal.FreeHGlobal(numaNodePtr);
+            int processID = 0;
+            if (!success)
+            {
+                throw new Exception($"Failed to start process. Error: {Marshal.GetLastWin32Error()}");
+            }
+            else
+            {
+              processID = pi.dwProcessId;
+            }
+            return processID;
         }
     }
 }
