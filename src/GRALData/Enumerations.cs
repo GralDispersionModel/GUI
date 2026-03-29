@@ -89,6 +89,7 @@ namespace GralDomain
         ReceptorInlineEdit = 2400,
         PointSourceInlineEdit = 6000,
         BaseMapMoveScale = 7000,
+        GRALEsriModify = 9998,
         GRALTopographyModify = 9999
     }
 }

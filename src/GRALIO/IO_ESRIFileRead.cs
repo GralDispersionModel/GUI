@@ -277,6 +277,93 @@ namespace GralIO
 #endif
         }
 
+        /// <summary>
+        /// Read an ESRI ASCii File to multi dimensional array
+        /// </summary>
+        /// <param name="FileName"></param>
+        /// <returns>Array, Header object
+
+        public (float[,], String) ReadESRIFileMultiDimFloat(string FileName)
+        {
+            float[,] A = null;
+            ESRIHeader header = new ESRIHeader();
+            string exception = string.Empty;
+            try
+            {
+                using (FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    using (StreamReader myReader = new StreamReader(fs))
+                    {
+                        if (!header.ReadESRIHeader(myReader))
+                        {
+                            throw new IOException();
+                        }
+
+                        int col = header.NCols;
+                        int Row = header.NRows;
+                        int nodata = header.NoDataValue;
+                        double value = 0;
+                        A = new float[col, Row];
+                        char[] seperat = new char[] { ' ', '\t', ';', ',' };
+                        string oneLine = String.Empty;
+
+                        for (int y = header.NRows - 1; y >= 0; y--)
+                        {
+                            oneLine = myReader.ReadLine();
+                            ReadOnlySpan<char> _span = oneLine.AsSpan();
+                            int nextSep = 0;
+                            int startSearch = 0;
+                            int spanLenght = _span.Length;
+                            int x = 0;
+                            while ((nextSep = _span.Slice(startSearch).IndexOfAny(seperat)) >= 0)
+                            {
+                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                {
+                                    if (double.IsNaN(value) || double.IsInfinity(value))
+                                    {
+                                        A[x++, y] = nodata;
+                                    }
+                                    else
+                                    {
+                                        A[x++, y] = (float) value;
+                                    }
+                                }
+                                else
+                                {
+                                    A[x++, y] = nodata;
+                                }
+                                startSearch += nextSep + 1;
+                            }
+                            if (startSearch < nextSep)
+                            {
+                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                {
+                                    if (double.IsNaN(value) || double.IsInfinity(value))
+                                    {
+                                        A[x, y] = nodata;
+                                    }
+                                    else
+                                    {
+                                        A[x, y] = (float) value;
+                                    }
+                                }
+                                else
+                                {
+                                    A[x, y] = nodata;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                A = null;
+                exception = ex.Message;
+            }
+            return (A, exception);
+        }
+
         ///<summary>
         /// Create a jagged array
         /// </summary>

@@ -225,6 +225,18 @@ namespace GralDomain
         /// </summary>
         private float[,] CellHeights = new float[1, 1];           // Cell heights
         /// <summary>
+        /// Array for an ESRI Ascii raster
+        /// </summary>
+        private float[,] EsriRaster = new float[1, 1];           // Cell heights
+        /// <summary>
+        /// Header for an ESRI Ascii raster
+        /// </summary>
+        private EsriGridHeader EsriRasterHeader = new EsriGridHeader();
+        /// <summary>
+        /// Modify data for an ESRI Ascii raster
+        /// </summary>
+        private GralData.TopoModifyClass EsriRasterModify = new GralData.TopoModifyClass();
+        /// <summary>
         /// Height - Type: 0 = no, 1= GRAMM, 2 = GRAL, -1 GRAMM edge points
         /// </summary>
         private int CellHeightsType = 0;
@@ -2086,7 +2098,7 @@ namespace GralDomain
         //       Additional tools
         //
         //////////////////////////////////////////////////////////////////
-        
+
         /// <summary>
         /// Edit and define the size of the north arrow
         /// </summary>
@@ -4797,6 +4809,122 @@ namespace GralDomain
                 // Reset position of child forms
                 ShowFirst.Reset();
             }
+        }
+
+        private void createmodifyESRIAsciiRasterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // create a new raster
+            if (EsriRaster.GetLength(0) < 3)
+            {
+                EsriRasterHeader.CellSize = Convert.ToDouble(MainForm.numericUpDown9.Value);
+                EsriRasterHeader.XllCorner = MainForm.GralDomRect.West;
+                EsriRasterHeader.YllCorner = MainForm.GralDomRect.South;
+                EsriRasterHeader.NCols = (int)((MainForm.GralDomRect.East - MainForm.GralDomRect.West) / Convert.ToDouble(MainForm.numericUpDown9.Value));
+                EsriRasterHeader.NRows = (int)((MainForm.GralDomRect.North - MainForm.GralDomRect.South) / Convert.ToDouble(MainForm.numericUpDown9.Value));
+                EsriRaster = new float[EsriRasterHeader.NCols + 1, EsriRasterHeader.NRows + 1];
+            }
+            // Go to the dialog
+            using (DialogModifyGRALTopography mod = new DialogModifyGRALTopography
+            {
+                modify = EsriRasterModify,
+                mode = 1,
+                StartPosition = FormStartPosition.Manual
+            })
+            {
+                mod.Location = new Point(St_F.GetScreenAtMousePosition() + 200, St_F.GetTopScreenAtMousePosition() + 150);
+                if (mod.ShowDialog() == DialogResult.OK)
+                {
+                    EsriRasterModify = mod.modify;
+                }
+            }
+            MouseControl = MouseMode.GRALEsriModify;
+            saveESRIAsciiRasterToolStripMenuItem.Enabled = true;
+            Picturebox1_Paint();
+        }
+
+        private void loadESRIAsciiRasterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = openFileDialog1;
+            dialog.Filter = "Esri Ascii file|*.asc";
+            dialog.Title = "Load an Esri Ascii file";
+            dialog.FileName = "";
+            // dialog.ShowHelp = true;
+#if NET6_0_OR_GREATER
+            dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogSources;
+#endif
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                ESRIHeader header = new ESRIHeader();
+
+                try
+                {
+                    using (FileStream fs = new FileStream(dialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        using (StreamReader myReader = new StreamReader(fs))
+                        {
+                            if (!header.ReadESRIHeader(myReader))
+                            {
+                                throw new IOException();
+                            }
+                            EsriRasterHeader.CellSize = Convert.ToDouble(MainForm.numericUpDown9.Value);
+                            EsriRasterHeader.XllCorner = MainForm.GralDomRect.West;
+                            EsriRasterHeader.YllCorner = MainForm.GralDomRect.South;
+                            EsriRasterHeader.NCols = (int)((MainForm.GralDomRect.East - MainForm.GralDomRect.West) / Convert.ToDouble(MainForm.numericUpDown9.Value));
+                            EsriRasterHeader.NRows = (int)((MainForm.GralDomRect.North - MainForm.GralDomRect.South) / Convert.ToDouble(MainForm.numericUpDown9.Value));
+                            EsriRaster = new float[EsriRasterHeader.NCols + 1, EsriRasterHeader.NRows + 1];
+
+                            if (header.Cellsize != EsriRasterHeader.CellSize | header.XllCorner != EsriRasterHeader.XllCorner |
+                                header.YllCorner != EsriRasterHeader.YllCorner | header.NCols != EsriRasterHeader.NCols |
+                                header.NRows != EsriRasterHeader.NRows)
+                            {
+                                MessageBox.Show("Esri file does not match the current grid", "Mismatching Esri file", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                            else
+                            {
+                                // Read ESRI file
+                                GralIO.ReadESRIFile readESRIFile = new GralIO.ReadESRIFile();
+                                (EsriRaster, string exception) = readESRIFile.ReadESRIFileMultiDimFloat(dialog.FileName);
+                                if (exception != string.Empty)
+                                {
+                                    throw new Exception(exception);
+                                }
+                                saveESRIAsciiRasterToolStripMenuItem.Enabled = true;
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void saveESRIAsciiRasterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = saveFileDialog1;
+            dialog.Filter = "Esri Ascii file|*.asc";
+            dialog.Title = "Save ESRI Ascii file";
+            dialog.InitialDirectory = Path.Combine(Gral.Main.ProjectName, "Maps" + Path.DirectorySeparatorChar);
+            // dialog.ShowHelp = true;
+#if NET6_0_OR_GREATER
+            dialog.ClientGuid = GralStaticFunctions.St_F.FileDialogMaps;
+#endif
+
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                GralIO.WriteESRIFile writeEsri = new GralIO.WriteESRIFile
+                {
+                    NCols = EsriRasterHeader.NCols,
+                    NRows = EsriRasterHeader.NRows,
+                    YllCorner = EsriRasterHeader.YllCorner,
+                    XllCorner = EsriRasterHeader.XllCorner,
+                    CellSize = EsriRasterHeader.CellSize,
+                    Unit = "",
+                    Round = 2,
+                    Z = -1,
+                    TwoDim = EsriRaster,
+                    FileName = dialog.FileName
+                };
+                writeEsri.WriteFloatResult();
+            }            
         }
     }
 }

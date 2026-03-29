@@ -21,6 +21,7 @@ namespace GralDomForms
     public partial class DialogModifyGRALTopography : Form
     {
         public GralData.TopoModifyClass modify;
+        public int mode; // set to 1 for Esri file modification
 
         public DialogModifyGRALTopography()
         {
@@ -55,6 +56,16 @@ namespace GralDomForms
             else
             {
                 comboBox1.SelectedIndex = 0;
+            }
+            if (mode == 1)
+            {
+                numericUpDown2.Visible = false;
+                numericUpDown3.Visible = false;
+                checkBox1 .Visible = false;
+                label3 .Visible = false;
+                label4 .Visible = false;
+                label1.Text = "Value";
+                this.Text = "Modify Esri file";
             }
         }
 

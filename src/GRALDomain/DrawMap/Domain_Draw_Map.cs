@@ -393,6 +393,32 @@ namespace GralDomain
                 NorthFont.Dispose();
             } // Object-Loop
 
+            // draw modified GRAL Esri File
+            if (MouseControl == MouseMode.GRALEsriModify)
+            {
+                double flowfieldraster = Convert.ToDouble(MainForm.numericUpDown9.Value);
+                if (flowfieldraster > 0)
+                {
+                    int step = (int)(flowfieldraster * (EsriRasterModify.Raster * 2 + 1) / BmpScale / MapSize.SizeX / 2);
+                    Brush br = new SolidBrush(Color.FromArgb(128, 255, 255, 0));
+                    for (int i = 0; i < EsriRasterHeader.NCols; i++)
+                    {
+                        for (int j = 0; j < EsriRasterHeader.NRows; j++)
+                        {
+                            if (EsriRaster[i, j] != 0)
+                            {
+                                float x0 = (float)(MainForm.GralDomRect.West + i * flowfieldraster + flowfieldraster / 2);
+                                float y0 = (float)(MainForm.GralDomRect.South + j * flowfieldraster + flowfieldraster / 2);
+                                int x1 = Convert.ToInt32((x0 - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
+                                int y1 = Convert.ToInt32((y0 - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
+                                g.FillRectangle(br, new Rectangle(x1 - step, y1 - step, step * 2, step * 2));
+                            }
+                        }
+                    }
+                    br.Dispose();
+                }
+            }
+
             Pen p = new Pen(Color.LightBlue, 3);
             //draw actual edited GRAL model domain
             if (MouseControl == MouseMode.GralDomainEndPoint)

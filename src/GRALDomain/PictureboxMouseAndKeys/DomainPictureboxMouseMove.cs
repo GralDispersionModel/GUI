@@ -39,7 +39,64 @@ namespace GralDomain
             toolStripTextBox1.Text = textBox1.Text;
             toolStripTextBox2.Text = textBox2.Text;
 
-            if (CellHeightsType == 2) // Show GRAL height
+            if (MouseControl == MouseMode.GRALEsriModify)
+            {
+                double flowfieldraster = Convert.ToDouble(MainForm.numericUpDown9.Value);
+                if (flowfieldraster > 0)
+                {
+                    int i = (int)((x_real - MainForm.GralDomRect.West) / flowfieldraster);
+                    int j = (int)((y_real - MainForm.GralDomRect.South) / flowfieldraster);
+
+                    if ((x_real - MainForm.GralDomRect.West) > 0 && (y_real - MainForm.GralDomRect.South) > 0 && i < EsriRaster.GetUpperBound(0) && j < EsriRaster.GetUpperBound(1))
+                    {
+                        string heightString = EsriRaster[i, j].ToString("F1");
+                        toolStripTextBox3.Text = heightString + " (Esri)";
+                        textBox3.Text = heightString;
+
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            for (int x = i - EsriRasterModify.Raster; x <= i + EsriRasterModify.Raster; x++)
+                            {
+                                for (int y = j - EsriRasterModify.Raster; y <= j + EsriRasterModify.Raster; y++)
+                                {
+                                    if (x >= 0 && y >= 0 && x < EsriRaster.GetUpperBound(0) && y < EsriRaster.GetUpperBound(1))
+                                    {
+                                        EsriRaster[x, y] = EsriRasterModify.Height;
+                                    }
+                                }
+                            }
+
+                            // draw "pen"
+                            int step = (int)(flowfieldraster * (EsriRasterModify.Raster * 2 + 1) / BmpScale / MapSize.SizeX / 2);
+                            using (Graphics g = Graphics.FromImage(PictureBoxBitmap))
+                            {
+                                Brush br = new SolidBrush(Color.FromArgb(128, 255, 255, 0));
+
+                                float x0 = (float)(MainForm.GralDomRect.West + i * flowfieldraster + flowfieldraster / 2);
+                                float y0 = (float)(MainForm.GralDomRect.South + j * flowfieldraster + flowfieldraster / 2);
+                                int x1 = Convert.ToInt32((x0 - MapSize.West) / BmpScale / MapSize.SizeX) + TransformX;
+                                int y1 = Convert.ToInt32((y0 - MapSize.North) / BmpScale / MapSize.SizeY) + TransformY;
+
+                                Rectangle rect = new Rectangle(x1 - step, y1 - step, step * 2, step * 2);
+                                g.FillRectangle(br, rect);
+                                br.Dispose();
+                            }
+
+                            if (picturebox1.Image != null)
+                            {
+                                picturebox1.Image.Dispose();
+                            }
+
+                            if (PictureBoxBitmap != null)
+                            {
+                                picturebox1.Image = PictureBoxBitmap.Clone(new Rectangle(0, 0, PictureBoxBitmap.Width, PictureBoxBitmap.Height), PictureBoxBitmap.PixelFormat);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (CellHeightsType == 2 && MouseControl != MouseMode.GRALEsriModify) // Show GRAL height
             {
                 try
                 {
