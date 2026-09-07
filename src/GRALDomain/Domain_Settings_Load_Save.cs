@@ -743,49 +743,30 @@ namespace GralDomain
             int _nx = NX;
             int _ny = NY;
             int _step = 1;
-            if (NX > 3000 || NY > 3000)
+            if (NX > 600 || NY > 600)
             {
-                _nx /= 5;
-                _ny /= 5;
-                _step = 5;
+                _step = (int) (Math.Max(NX, NY) / 500) + 1; 
             }
-            else if (NX > 2300 || NY > 2300)
-            {
-                _nx /= 3;
-                _ny /= 3;
-                _step = 3;
-            }
-            else if (NX > 1300 || NY > 1300)
-            {
-                _nx /= 2;
-                _ny /= 2;
-                _step = 2;
-            }
-            else if (NX > 1000 || NY > 1000)
-            {
-                _nx /= 1;
-                _ny /= 1;
-                _step = 1;
-            }
-            else if (NX > 400 || NY > 400)
-            {
-                _nx /= 1;
-                _ny /= 1;
-                _step = 1;
-            }
-            double x_step = 10.0 / (double)(_nx - 2); // -5 to +5 = 10
-
+            double x_step = 10.0 / (double)(_nx / _step - 2); // -5 to +5 = 10
 
             Random zufall = new Random();
             int randnum = zufall.Next(1, 100000);
             string path = Path.Combine(Gral.Main.ProjectName, @"Settings", "3D_VIEW" + Convert.ToString(randnum) + ".dta");
+            int xcount = 0, ycount = 0;
+            for (int z = NY - 1; z > 0; z -= _step)
+            {
+                ycount++;
+            }
+            for (int i = 1; i < NX; i += _step)
+            {
+                xcount++;
+            }
             using (BinaryWriter mywriter = new BinaryWriter(File.Open(path, FileMode.Create)))
             {
                 mywriter.Write(x_step); // x-Step
                 mywriter.Write(x_step); // y-Step
-                mywriter.Write(_nx - 2); // x-Anzahl
-                mywriter.Write(_ny - 2); // y-Anzahl
-
+                mywriter.Write(xcount); // x-Anzahl
+                mywriter.Write(ycount); // y-Anzahl
 
                 for (int i = 1; i < NX; i += _step)
                 {
