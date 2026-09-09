@@ -31,6 +31,8 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMStartCalculation(object sender, EventArgs e)
         {
+            Random rnd = new Random();
+
             //set the maximum of the progressbar for the actual dispersion situation (simulation time)
             progressBar2.Maximum = Convert.ToInt32(numericUpDown21.Value);
 
@@ -211,17 +213,14 @@ namespace Gral
                         }
 #else
 
-                        GRAMMProcess = new Process
+                        string param = GRAMM_Program_Path;
+                        param += " " + "\"" + GRAMM_Project_Path + "\"";
+                        int node = NumaNode(CPUNode);
+                        int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
+                        if (processID > 0) //sucessful start
                         {
-                            EnableRaisingEvents = true
-                        };
-                        GRAMMProcess.Exited += new System.EventHandler(GrammExited);
-                        GRAMMProcess.StartInfo.FileName = GRAMM_Program_Path;
-                        GRAMMProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                        GRAMMProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
-                        GRAMMProcess.StartInfo.Arguments = "\"" + GRAMM_Project_Path + "\"";
-                        GRAMMProcess.Start();
-
+                            CoreProcessID.Add(processID);
+                        }
 #endif
                     }
                     else // multi instances -> start multiple instances of GRAMM
@@ -298,26 +297,23 @@ namespace Gral
                                     MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
 #else
-                                GRAMMProcess = new Process
-                                {
-                                    EnableRaisingEvents = true
-                                };
-                                GRAMMProcess.Exited += new System.EventHandler(GrammExited);
-                                GRAMMProcess.StartInfo.FileName = GRAMM_Program_Path;
-                                GRAMMProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                                GRAMMProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
+                                string param = GRAMM_Program_Path;
+                                
                                 if (string.IsNullOrEmpty(GRAMM_Project_Path))
                                 {
-                                    GRAMMProcess.StartInfo.Arguments = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                    param += " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }
                                 else
                                 {
-                                    GRAMMProcess.StartInfo.Arguments = " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
+                                    param += " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }
-
-                                GRAMMProcess.Start();
-#endif
-                                Thread.Sleep(5000);
+                                int node = NumaNode(CPUNode);
+                                int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
+                                if (processID > 0) //sucessful start
+                                {
+                                    CoreProcessID.Add(processID);
+                                }
+                                #endif
                             }
                             else // further instances
                             {
@@ -354,22 +350,31 @@ namespace Gral
                                     MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
 #else
-                                Process gramm_local;
-                                gramm_local = new Process();
-                                gramm_local.StartInfo.FileName = GRAMM_Program_Path;
-                                gramm_local.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                                gramm_local.StartInfo.WorkingDirectory = Path.GetDirectoryName(GRAMM_Program_Path);
+                                string param = GRAMM_Program_Path;
                                 if (GRAMM_Project_Path == String.Empty)
                                 {
-                                    gramm_local.StartInfo.Arguments = " " + instance_start.ToString() + " " + instance_end.ToString();
+                                    param += " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }
                                 else
                                 {
-                                    gramm_local.StartInfo.Arguments = " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
+                                    param += " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }
-                                gramm_local.Start();
+                                
+                                int node = NumaNode(CPUNode);
+                                if (CPUNode == 4)
+                                {
+                                    node = count % 2;
+                                }
+                                else if (CPUNode == 5)
+                                {
+                                    node = count % 4;
+                                }
+                                int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
+                                if (processID > 0) //sucessful start
+                                {
+                                    CoreProcessID.Add(processID);
+                                }
 #endif
-                                Thread.Sleep(500);
                             }
 
 
@@ -470,12 +475,20 @@ namespace Gral
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #else
+
             try
             {
-                GRAMMProcess.Kill();
+                foreach (int processID in CoreProcessID)
+                {
+                    Process localById = Process.GetProcessById(processID);
+                    localById.Kill();
+                }
             }
-            catch
-            { }
+            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
+            finally
+            {
+                CoreProcessID.Clear();
+            }
             progressBar2.Value = 0;
             numericUpDown24.Value = 1;
             label67.Text = "Actual flow situation: " + "0" + "%";
@@ -497,14 +510,20 @@ namespace Gral
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #endif
-
             try
             {
-                GRAMMProcess.Kill();
+                foreach (int processID in CoreProcessID)
+                {
+                    Process localById = Process.GetProcessById(processID);
+                    localById.Kill();
+                }
             }
-            catch
-            { }
-
+            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
+            finally
+            {
+                CoreProcessID.Clear();
+            }
+            
             //refresh actual computed dispersion situation
             int trackbar = 1;
             try

@@ -32,7 +32,6 @@ namespace Gral
         /// <param name="FinalSituation">Final situation when starting a chunk of situations</param>
         private void GRALStartCalculation(int StartSituation, int FinalSituation)
         {
-            Random rnd = new Random();
             if (Convert.ToString(listBox5.SelectedItem).Contains("Odour")) // check if the lowest conc. layer > 1.5 * vert. extension
             {
                 if (Convert.ToDouble(TBox3[0].Value) < 1.5 * Convert.ToDouble(numericUpDown8.Value))
@@ -350,19 +349,19 @@ namespace Gral
                     int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
                     int instance_start = first_sit;
                     int instance_end = instance_start + offset;
-                   
+
                     string param = GRAL_Program_Path;
 
                     if (GUISettings.CopyCoresToProject == false)
                     {
-                       param += " " + "\"" + GRAL_Project_Path + "\"";
+                        param += " " + "\"" + GRAL_Project_Path + "\"";
                     }
                     if (GRALSettings.Loglevel > 0)
                     {
-                       param += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
+                        param += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
                     }
                     string consoleArgument = param;
-                    
+
                     if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations
                     {
                         param += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
@@ -372,19 +371,11 @@ namespace Gral
                         param += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
                     }
                     //GRALProcess.Start();
-                    int node = CPUNode;
-                    if (CPUNode == 4)
-                    {
-                        node = rnd.Next(0, 2);
-                    }
-                    else if (CPUNode == 5)
-                    {
-                        node = rnd.Next(0, 4);
-                    }
+                    int node = NumaNode(CPUNode);
                     int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
                     if (processID > 0) //sucessful start
                     {
-                        GRALProcessID.Add(processID);
+                        CoreProcessID.Add(processID);
                     }
 
                     if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsibles UI
@@ -434,20 +425,16 @@ namespace Gral
 #if NET6_0_OR_GREATER
             try
             {
-                foreach (int processID in GRALProcessID)
+                foreach (int processID in CoreProcessID)
                 {
-                    try
-                    {
-                        Process localById = Process.GetProcessById(processID);
-                        localById.Kill();
-                    }
-                    catch { }
+                    Process localById = Process.GetProcessById(processID);
+                    localById.Kill();
                 }
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
             finally
             {
-                GRALProcessID.Clear();
+                CoreProcessID.Clear();
             }
 #else
             try
@@ -476,20 +463,16 @@ namespace Gral
 #if NET6_0_OR_GREATER
             try
             {
-                foreach (int processID in GRALProcessID)
+                foreach (int processID in CoreProcessID)
                 {
-                    try
-                    {
-                        Process localById = Process.GetProcessById(processID);
-                        localById.Kill();
-                    }
-                    catch { }
+                    Process localById = Process.GetProcessById(processID);
+                    localById.Kill();
                 }
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
             finally
             {
-                GRALProcessID.Clear();
+                CoreProcessID.Clear();
             }
 #else
             try
@@ -529,7 +512,7 @@ namespace Gral
             int instance_end;
             int count = 2; //start with instance 2
             int nodeCounter = 0;
-            
+
             while (instance_start <= FinalSit)
             {
                 System.Threading.Thread.Sleep(100); // wait for 0.1 seconds -> use all CPU groups
@@ -538,7 +521,7 @@ namespace Gral
                 {
                     instance_end = FinalSit;
                 }
-                                 
+
                 string param = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
                 int node = CPUNode;
                 if (CPUNode == 4)
@@ -554,14 +537,30 @@ namespace Gral
                 int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
                 if (processID > 0) //sucessful start
                 {
-                    GRALProcessID.Add(processID);
+                    CoreProcessID.Add(processID);
                 }
                 // new start value, new instance
                 instance_start = instance_end + 1;
                 count++;
             }
         }
+        private static int NumaNode(int CPUNode)
+        {
+            Random rnd = new Random();
+            int node = CPUNode;
+            if (CPUNode == 4)
+            {
+                node = rnd.Next(0, 2);
+            }
+            else if (CPUNode == 5)
+            {
+                node = rnd.Next(0, 4);
+            }
+            return node;
+        }
     }
+
+
     public class NumaProcessStarter
     {
         // Necessary P/Invoke constants and structs
@@ -663,13 +662,13 @@ namespace Gral
                 //try with numa node 0
                 si = new STARTUPINFOEX();
                 si.StartupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFOEX));
-                
+
                 // Initialize Attribute List
                 InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref lpSize);
                 si.lpAttributeList = Marshal.AllocHGlobal(lpSize);
                 InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, ref lpSize);
                 // use node 0
-                numa = (Int16) 0;
+                numa = (Int16)0;
                 numaNodePtr = Marshal.AllocHGlobal(Marshal.SizeOf(numa));
                 Marshal.WriteInt16(numaNodePtr, numa);
                 UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
@@ -685,7 +684,7 @@ namespace Gral
             }
             else
             {
-              processID = pi.dwProcessId;
+                processID = pi.dwProcessId;
             }
             return processID;
         }
