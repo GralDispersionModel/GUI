@@ -309,9 +309,9 @@ namespace Gral
         /// </summary>
         public static ProjectSettings ProjectSetting = new ProjectSettings("");
         /// <summary>
-        /// Store the GRAL processId's for each started GRAL process
+        /// Store the GRAL&GRAMM cores processId's
         /// </summary>
-        private static List<int> GRALProcessID = new List<int>();
+        private static List<int> CoreProcessID = new List<int>();
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -329,7 +329,7 @@ namespace Gral
         /// </summary>
         private System.Timers.Timer UpdateFileSizes;
         /// <summary>
-        /// CPU Node for GRAL calculation
+        /// CPU Node for GRAL & GRAMM calculation
         /// </summary>
         private int CPUNode = 0;
 
@@ -957,7 +957,12 @@ namespace Gral
                             }
                         }
                         mywriter.WriteLine(cW.ToString(ic) + "\t ! Wet deposition cW setting");
-                        mywriter.WriteLine(alphaW.ToString(ic) + "\t ! Wet deposition alphaW setting");
+                        int dropdrift = 0;
+                        if (checkBox55.Checked)
+                        {
+                            dropdrift = 1;
+                        }
+                        mywriter.WriteLine(alphaW.ToString(ic) + "\t" + dropdrift + "\t ! Wet deposition alphaW setting \t Drop drift (1 = activated)");
                         mywriter.WriteLine("0" + "\t ! Decay rate for all source groups");
                         if (Convert.ToString(listBox5.SelectedItem) == "Bioaerosols" || Convert.ToString(listBox5.SelectedItem) == "Unknown")
                         {
@@ -4169,6 +4174,11 @@ namespace Gral
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             CPUNode = comboBox1.SelectedIndex;
+        }
+
+        private void checkBox55_CheckedChanged(object sender, EventArgs e)
+        {
+            ListBox5_SelectedIndexChanged(sender, null);
         }
     }
 }

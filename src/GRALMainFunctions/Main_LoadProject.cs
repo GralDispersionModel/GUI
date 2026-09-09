@@ -995,6 +995,7 @@ namespace Gral
                 }
 
                 string selpollutant;
+                checkBox55.Checked = false;
                 try
                 {
                     //get pollutant information
@@ -1015,6 +1016,13 @@ namespace Gral
                                 if (cW > 0 && alphaW > 0)
                                 {
                                     checkBox33.Checked = true;
+                                    if (a.Length > 0) // set deposition drop drift
+                                    {
+                                        if (Int32.TryParse(a[1], out int dropdrift) && dropdrift == 1)
+                                        {
+                                            checkBox55.Checked = true; // drop drift activated
+                                        }
+                                    }
                                 }
                                 else
                                 {
