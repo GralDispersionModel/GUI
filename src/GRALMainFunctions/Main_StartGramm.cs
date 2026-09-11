@@ -14,7 +14,6 @@ using GralIO;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Gral
@@ -475,20 +474,17 @@ namespace Gral
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #else
-
-            try
+            foreach (int processID in CoreProcessID)
             {
-                foreach (int processID in CoreProcessID)
+                try
                 {
                     Process localById = Process.GetProcessById(processID);
                     localById.Kill();
                 }
+                catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
-            finally
-            {
-                CoreProcessID.Clear();
-            }
+            CoreProcessID.Clear();
+            
             progressBar2.Value = 0;
             numericUpDown24.Value = 1;
             label67.Text = "Actual flow situation: " + "0" + "%";
@@ -510,20 +506,17 @@ namespace Gral
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #endif
-            try
+            foreach (int processID in CoreProcessID)
             {
-                foreach (int processID in CoreProcessID)
+                try
                 {
                     Process localById = Process.GetProcessById(processID);
                     localById.Kill();
                 }
+                catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
-            finally
-            {
-                CoreProcessID.Clear();
-            }
-            
+            CoreProcessID.Clear();
+
             //refresh actual computed dispersion situation
             int trackbar = 1;
             try

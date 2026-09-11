@@ -423,19 +423,19 @@ namespace Gral
             return;
 #else
 #if NET6_0_OR_GREATER
-            try
+            foreach (int processID in CoreProcessID)
             {
-                foreach (int processID in CoreProcessID)
+                try
                 {
                     Process localById = Process.GetProcessById(processID);
                     localById.Kill();
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
-            finally
-            {
-                CoreProcessID.Clear();
-            }
+            CoreProcessID.Clear();
 #else
             try
             {
@@ -461,19 +461,19 @@ namespace Gral
             return;
 #endif
 #if NET6_0_OR_GREATER
-            try
+            foreach (int processID in CoreProcessID)
             {
-                foreach (int processID in CoreProcessID)
+                try
                 {
                     Process localById = Process.GetProcessById(processID);
                     localById.Kill();
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
-            finally
-            {
-                CoreProcessID.Clear();
-            }
+            CoreProcessID.Clear();
 #else
             try
             {
