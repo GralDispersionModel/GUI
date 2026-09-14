@@ -888,6 +888,7 @@ namespace GralDomForms
         void Section_picturePaint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            int omittedGrammVectors = 0;
             Pen p = new Pen(Color.Black, 1);
 
             int xmax = Math.Max(1, section_picture.Width - 50);
@@ -982,14 +983,23 @@ namespace GralDomForms
                             {
                                 if ((index + k) >= 0 && (index + k) < Uw.Count)
                                 {
-                                    height = Convert.ToInt32((GRAMMcell[index + k] - AH_Min) * VerticalFactor);
+                                    if (index + k >= Vw.Count || index + k >= Ww.Count || index + k >= GRAMMcell.Count ||
+                                        !SectionWindMath.TryCoordinate((GRAMMcell[index + k] - AH_Min) * VerticalFactor, out height))
+                                    {
+                                        omittedGrammVectors++;
+                                        continue;
+                                    }
 
                                     if (height > 0)
                                     {
                                         if (domainUpDown1.SelectedIndex == 1) // Vector Sum
                                         {
                                             double v = Math.Sqrt(Math.Pow(Uw[index + k] * 0.01, 2) + Math.Pow(Vw[index + k] * 0.01, 2));
-                                            int vd = Convert.ToInt32(v * Ws_factor);
+                                            if (!SectionWindMath.TryArrowPixels(v, Ws_factor, out int vd))
+                                            {
+                                                omittedGrammVectors++;
+                                                continue;
+                                            }
 
                                             int y0 = Math.Min(32000, Math.Max(-32000, ymax - height));
 
@@ -1002,36 +1012,23 @@ namespace GralDomForms
                                         if (domainUpDown1.SelectedIndex == 0) // u,v projection and w
                                         {
 
-                                            double dx = myData.X1 - myData.X0;
-                                            double dy = myData.Y1 - myData.Y0;
-                                            double dw = 0;
-#if __MonoCS__
-
-											double sin = dx * Vw[index + k] - Uw[index + k] * dy;
-											double cos = dx * Uw[index + k] + dy * Vw[index + k];
-											dw = Math.Atan2(sin, cos) * 180/Math.PI;
-
-#else
-
-                                            System.Windows.Media.Media3D.Vector3D plane = new System.Windows.Media.Media3D.Vector3D(dx, dy, 0);
-                                            System.Windows.Media.Media3D.Vector3D arrow = new System.Windows.Media.Media3D.Vector3D(Uw[index + k], Vw[index + k], 0);
-                                            dw = System.Windows.Media.Media3D.Vector3D.AngleBetween(plane, arrow);
-
-#endif
-
+                                            // Project directly: AngleBetween is undefined when u = v = 0.
+                                            if (!SectionWindMath.TryProject(myData.X1 - myData.X0, myData.Y1 - myData.Y0,
+                                                    Uw[index + k] * 0.01, Vw[index + k] * 0.01, out double along, out double vv) ||
+                                                !SectionWindMath.TryArrowPixels(along, Ws_factor, out int vd) ||
+                                                !SectionWindMath.TryArrowPixels(Ww[index + k] * 0.01, Ws_factor, out int vvert))
+                                            {
+                                                omittedGrammVectors++;
+                                                continue;
+                                            }
                                             windpen.CustomEndCap = new System.Drawing.Drawing2D.CustomLineCap(null, capPath);
-                                            double v = Math.Sqrt(Math.Pow(Uw[index + k] * 0.01, 2) + Math.Pow(Vw[index + k] * 0.01, 2));
-                                            int vd = Convert.ToInt32(v * Math.Cos(dw * Math.PI / 180) * Ws_factor);
-                                            double vv = v * Math.Sin(dw * Math.PI / 180);
-
-                                            int vvert = Convert.ToInt32(Ww[index + k] * 0.01 * Ws_factor);
                                             //windpen.EndCap = LineCap.ArrowAnchor;
 
                                             windpen.Color = Arrow_color(vv);
 
                                             int y0 = Math.Min(20000, Math.Max(-20000, ymax - height));
 
-                                            if (Math.Abs(vd) > 2)
+                                            if (Math.Abs(vd) > 2 || Math.Abs(vvert) > 2)
                                             {
                                                 g.DrawLine(windpen, xl, y0, xl + vd, y0 - vvert);
                                             }
@@ -1218,6 +1215,15 @@ namespace GralDomForms
 
 
             g.ResetClip();
+            if (omittedGrammVectors > 0)
+            {
+                using (var warningFont = new Font("Arial", 9))
+                {
+                    g.DrawString("GRAMM: " + omittedGrammVectors +
+                        " vector(s) not drawn (invalid data/section or excessive scale).",
+                        warningFont, Brushes.DarkRed, 35, 10);
+                }
+            }
 
             // scale x - direction
             string value = "";
@@ -1873,6 +1879,11 @@ namespace GralDomForms
         void Wind_data_pictureboxPaint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            if (!double.IsFinite(Ws_factor) || Ws_factor < 0)
+            {
+                g.DrawString("Invalid wind scale; reload the wind field.", Font, Brushes.DarkRed, 5, 5);
+                return;
+            }
 
             if (GRAL_cellsize_ff > 0)
             {
