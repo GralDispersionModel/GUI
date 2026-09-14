@@ -28,25 +28,31 @@ namespace GralMainForms
         //private Domain domain = null;
         private Gral.Main form1 = null;
         private string polli;
-        private double[,] moddiurnal = new double[100, 24];     //collection of diurnal emission modulation data
-        private double[,] modseasonal = new double[100, 12];   //collection of seasonal emission modulation data
-        private double[] EmissionFactor = new double[100];
-        private bool[] TimeSeriesUsed = new bool[100];
+        private double[,] moddiurnal;     //collection of diurnal emission modulation data
+        private double[,] modseasonal;   //collection of seasonal emission modulation data
+        private double[] EmissionFactor;
+        private bool[] TimeSeriesUsed;
         private double scalefactor = 1;
-        private double[] totalemissions;
+        private Dictionary<int, double> totalemissions;
         private CultureInfo ic = CultureInfo.InvariantCulture;
         private bool Emissions_Time_Series_Used = false;
         private List<string> Date_Time = new List<string>();
         private string decsep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
         private bool transientMode = false;
 
-        public TotalEmissions(double[] totemi, Gral.Main f, string poll, bool TransientMode)
+        public TotalEmissions(Dictionary<int, double> totemi, Gral.Main f, string poll, bool TransientMode)
         {
             totalemissions = totemi;
             InitializeComponent();
             polli = poll;
             form1 = f;
             transientMode = TransientMode;
+            int count = form1.listView1.Items.Count;
+            moddiurnal = new double[count, 24];
+            modseasonal = new double[count, 12];
+            EmissionFactor = new double[count];
+            TimeSeriesUsed = new bool[count];
+            for (int i = 0; i < count; i++) EmissionFactor[i] = 1;
         }
 
         //compute mean emission factor for each source group based on the chosen diurnal/seasonal variation
@@ -75,30 +81,8 @@ namespace GralMainForms
 
                         //get source group
                         selpoll = form1.listView1.Items[i].SubItems[0].Text.Split(new char[] { ':' });
-                        try
-                        {
-                            sgroup = Convert.ToInt32(selpoll[1]);
-                            if (sgroup > 9)
-                            {
-                                snumb = "0" + selpoll[1].Trim();
-                            }
-                            else
-                            {
-                                snumb = "00" + selpoll[1].Trim();
-                            }
-                        }
-                        catch
-                        {
-                            sgroup = Convert.ToInt32(selpoll[0]);
-                            if (sgroup > 9)
-                            {
-                                snumb = "0" + selpoll[0].Trim();
-                            }
-                            else
-                            {
-                                snumb = "00" + selpoll[0].Trim();
-                            }
-                        }
+                        sgroup = Gral.SourceGroupCatalog.GetNumber(form1.listView1.Items[i].Text);
+                        snumb = sgroup.ToString("D3", ic);
 
                         //get variation for source group
                         newPath = Path.Combine("Computation", "emissions" + snumb + ".dat");
@@ -106,7 +90,7 @@ namespace GralMainForms
                         {
                             newPath = Path.Combine(Gral.Main.ProjectSetting.EmissionModulationPath, "emissions" + snumb + ".dat");
                         }
-                        if (sgroup < moddiurnal.GetUpperBound(0))
+                        if (i < moddiurnal.GetLength(0))
                         {
                             newPath = Path.Combine(Gral.Main.ProjectName, newPath);
                             if (File.Exists(newPath))
@@ -116,24 +100,30 @@ namespace GralMainForms
                                     for (int j = 0; j < 24; j++)
                                     {
                                         text = myreader.ReadLine().Split(new char[] { ',' });
-                                        moddiurnal[sgroup, j] = Convert.ToDouble(text[1].Replace(".", decsep));
+                                        moddiurnal[i, j] = Convert.ToDouble(text[1].Replace(".", decsep));
                                         if (j < 12)
                                         {
-                                            modseasonal[sgroup, j] = Convert.ToDouble(text[2].Replace(".", decsep));
+                                            modseasonal[i, j] = Convert.ToDouble(text[2].Replace(".", decsep));
                                         }
                                     }
                                 }
                             }
 
+                            else
+                            {
+                                for (int j = 0; j < 24; j++) moddiurnal[i, j] = 1;
+                                for (int j = 0; j < 12; j++) modseasonal[i, j] = 1;
+                            }
+
                             //diurnal variation
                             for (int j = 0; j < 24; j++)
                             {
-                                emifac_diurnal += moddiurnal[sgroup, j] / 24;
+                                emifac_diurnal += moddiurnal[i, j] / 24;
                             }
                             //seasonal variation
                             for (int j = 0; j < 12; j++)
                             {
-                                emifac_seasonal += modseasonal[sgroup, j] / 12;
+                                emifac_seasonal += modseasonal[i, j] / 12;
                             }
                             if (!TimeSeriesUsed[i] && transientMode == false)
                             {
@@ -159,119 +149,31 @@ namespace GralMainForms
 
         private bool Emission_Timeseries_Read()
         {
-            int[] sg_numbers = new int[102];
-            int[] sg_Listbox = new int[102];
-
-            // Get SG Numbers from Listbox
-            for (int i = 0; i < form1.listView1.Items.Count; i++)
-            {
-                //get source group
-                string[] selpoll = new string[2];
-                selpoll = form1.listView1.Items[i].SubItems[0].Text.Split(new char[] { ':' });
-                try
-                {
-                    int sgroup = Convert.ToInt32(selpoll[1]);
-                    if (sgroup < 100)
-                    {
-                        sg_Listbox[i] = sgroup;
-                    }
-                }
-                catch
-                {
-                    int sgroup = Convert.ToInt32(selpoll[0]);
-                    if (sgroup < 100)
-                    {
-                        sg_Listbox[i] = sgroup;
-                    }
-                }
-            }
-
-
-            string newpath = Path.Combine(Gral.Main.ProjectName, "Computation", "emissions_timeseries.txt");
+            string path = Path.Combine(Gral.Main.ProjectName, "Computation", "emissions_timeseries.txt");
             if (Directory.Exists(Gral.Main.ProjectSetting.EmissionModulationPath))
+                path = Path.Combine(Gral.Main.ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
+            if (!File.Exists(path)) return false;
+            try
             {
-                newpath = Path.Combine(Gral.Main.ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");
-            }
-
-            if (File.Exists(newpath) == true)
-            {
-                try
+                var ids = new List<int>();
+                foreach (ListViewItem item in form1.listView1.Items)
+                    ids.Add(Gral.SourceGroupCatalog.GetNumber(item.Text));
+                Date_Time.Clear();
+                var factors = Gral.SourceGroupCatalog.ReadMeanFactors(path, ids, Date_Time);
+                for (int i = 0; i < ids.Count; i++)
                 {
-                    //read timeseries of emissions
-                    string[] text10 = new string[1];
-                    int _sg_number = 0;
-                    int _count = 0;
-
-                    using (StreamReader read = new StreamReader(newpath))
-                    {
-                        //get source group numbers
-                        text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        _sg_number = text10.Length - 2;
-
-                        if (text10.Length > 1)
-                        {
-                            for (int i = 2; i < text10.Length; i++)
-                            {
-                                //get the column corresponding with the source group number stored in sg_numbers
-                                string sg_temp = text10[i];
-                                int sg = 0;
-                                if (Int32.TryParse(sg_temp, out sg))
-                                {
-                                    if (sg < 100)
-                                    {
-                                        sg_numbers[i - 2] = sg;
-                                    }
-                                    //MessageBox.Show(sg.ToString());
-                                }
-                            }
-                        }
-
-                        while (read.EndOfStream == false)
-                        {
-                            text10 = read.ReadLine().Split(new char[] { ' ', ':', '-', '\t', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                            if (text10.Length >= _sg_number + 2)
-                            {
-                                Date_Time.Add(text10[0] + ". " + text10[1] + ":00");
-
-                                for (int i = 0; i < _sg_number; i++)
-                                {
-                                    float _val = Convert.ToSingle(text10[i + 2], ic);
-
-                                    for (int j = 0; j < form1.listView1.Items.Count; j++)
-                                    {
-                                        if (sg_numbers[i] == sg_Listbox[j])
-                                        {
-                                            EmissionFactor[j] += _val;
-                                            TimeSeriesUsed[i] = true;
-                                            //MessageBox.Show(emifac[sg_numbers[i]].ToString());
-                                        }
-                                    }
-                                }
-                                _count++;
-                            }
-                        }
-
-                        for (int i = 0; i < 100; i++)
-                        {
-                            if (_count > 0)
-                            {
-                                EmissionFactor[i] = EmissionFactor[i] / _count;
-                            }
-                            // set emission factor to 1 by default (like GRAL does)
-                            else if (EmissionFactor[i] < float.Epsilon)
-                            {
-                                EmissionFactor[i] = 1;
-                            }
-                        }
-
-                    } // using
-                    Emissions_Time_Series_Used = true;
-                    return true;
+                    TimeSeriesUsed[i] = factors.TryGetValue(ids[i], out double factor);
+                    EmissionFactor[i] = TimeSeriesUsed[i] ? factor : 1;
                 }
-                catch { }
+                Emissions_Time_Series_Used = true;
+                return true;
             }
-            return false;
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Unable to read emission factors: " + ex.Message,
+                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
         }
 
         void PictureBox1Paint(object sender, PaintEventArgs e)
@@ -350,7 +252,7 @@ namespace GralMainForms
                     sgroup = Convert.ToInt32(selpoll[0]);
                 }
 
-                if (sgroup <= totalemissions.GetUpperBound(0))
+                if (totalemissions.ContainsKey(sgroup))
                 {
                     if (checkBox1.Checked == true)
                     {
@@ -406,7 +308,7 @@ namespace GralMainForms
 
                 double value = 0;
 
-                if (sgroup <= totalemissions.GetUpperBound(0))
+                if (totalemissions.ContainsKey(sgroup))
                 {
                     if (checkBox1.Checked == true)
                     {

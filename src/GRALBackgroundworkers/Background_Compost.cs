@@ -154,8 +154,8 @@ namespace GralBackgroundworkers
                     akmet = text[2];
                     frequency = Convert.ToDouble(text[3].Replace(".", decsep));
                     //GRAL filenames
-                    string[] con_files = new string[100];
-                    string[] odr_files = new string[100];
+                    string[] con_files = new string[sg_names.Length];
+                    string[] odr_files = new string[sg_names.Length];
                     string[] concdata = new string[3];
                     itm = 0;
                     foreach (string source_group_name in sg_names)

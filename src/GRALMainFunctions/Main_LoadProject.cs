@@ -945,13 +945,13 @@ namespace Gral
                         try
                         {
                             sg[1] = sg[1].Trim();
-                            name = "00" + sg[1];
+                            name = sg[1].Trim();
                         }
                         catch
                         {
-                            name = "00" + sg[0];
+                            name = sg[0].Trim();
                         }
-                        name = name.Substring(name.Length - 3);
+                        name = name.PadLeft(3, '0');
                         newPath = Path.Combine(ProjectName, @"Computation", "emissions" + name + ".dat");
                         if (Directory.Exists(ProjectSetting.EmissionModulationPath))
                         {
@@ -1044,7 +1044,7 @@ namespace Gral
                                             if (int.TryParse(_values[0], out sg_number))
                                             {
                                                 double decay = 0;
-                                                if (sg_number > 0 && sg_number < 100)
+                                                if (sg_number > 0)
                                                 {
                                                     try
                                                     {

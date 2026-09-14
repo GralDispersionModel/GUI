@@ -364,70 +364,27 @@ namespace GralDomain
 
         public void LoadSourceGroups()
         {
-            // import source groups and fill source dialogs 
-            for (int i = 1; i < 100; i++)
-            {
-                EditLS.SG_List.Add(i.ToString());
-                EditPortals.SG_List.Add(i.ToString());
-            }
-
             try
             {
-                //import source group definitions
-                string newPath = Path.Combine(Gral.Main.ProjectName, @"Settings", "Sourcegroups.txt");
-
-                using (StreamReader myReader = new StreamReader(newPath))
+                var definitions = Gral.SourceGroupCatalog.ReadDefinitions(
+                    Path.Combine(Gral.Main.ProjectName, "Settings", "Sourcegroups.txt"));
+                var choices = Gral.SourceGroupCatalog.Choices(definitions);
+                EditLS.SG_List.Clear();
+                EditPortals.SG_List.Clear();
+                EditAS.comboBox1.Items.Clear();
+                EditPS.comboBox1.Items.Clear();
+                foreach (string choice in choices)
                 {
-                    string[] text = new string[2];
-                    string text1;
-                    EditAS.comboBox1.Items.Clear();
-                    EditPS.comboBox1.Items.Clear();
-
-                    while (myReader.EndOfStream == false)
-                    {
-                        text1 = myReader.ReadLine();
-                        text = text1.Split(new char[] { ',' });
-                        EditAS.comboBox1.Items.Add(text1);
-                        EditPS.comboBox1.Items.Add(text1);
-                        EditLS.SG_List[St_F.GetSgNumber(text1) - 1] = text1;
-                        EditPortals.SG_List[St_F.GetSgNumber(text1) - 1] = text1;
-                    }
+                    EditLS.SG_List.Add(choice);
+                    EditPortals.SG_List.Add(choice);
+                    EditAS.comboBox1.Items.Add(choice);
+                    EditPS.comboBox1.Items.Add(choice);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            //fill comboboxes to define source groups for the different sources
-            int comboboxitems = EditPS.comboBox1.Items.Count;
-            for (int i = 1; i < 100; i++)
-            {
-                string[] text = new string[2];
-                string text3;
-                int sg = 0;
-                for (int k = 0; k < comboboxitems; k++)
-                {
-                    text3 = Convert.ToString(EditPS.comboBox1.Items[k]);
-                    text = text3.Split(new char[] { ',' });
-                    try
-                    {
-                        if (i == Convert.ToInt32(text[1]))
-                        {
-                            sg = i;
-                            break;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-                if (sg == 0)
-                {
-                    EditAS.comboBox1.Items.Add(Convert.ToString(i));
-                    EditPS.comboBox1.Items.Add(Convert.ToString(i));
-                }
-            }
-
         }
     }
 }

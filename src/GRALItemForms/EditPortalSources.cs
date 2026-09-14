@@ -511,7 +511,7 @@ namespace GralItemForms
                     foreach (PollutantsData _poll in _pdata.Poll)
                     {
                         SourceGroupEmission.Add(new PollutantsData(_poll));
-                        listBox2.Items.Add(SG_List[_poll.SourceGroup - 1]);
+                        listBox2.Items.Add(Gral.SourceGroupCatalog.DisplayName(SG_List, _poll.SourceGroup));
                     }
                 }
                 if (listBox2.Items.Count > 0)

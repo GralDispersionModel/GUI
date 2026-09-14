@@ -160,8 +160,8 @@ namespace GralBackgroundworkers
                     RestoreJaggedArray(concm);
 
                     //GRAL filenames
-                    string[] con_files = new string[100];
-                    string[] odr_files = new string[100];
+                    string[] con_files = new string[sg_names.Length];
+                    string[] odr_files = new string[sg_names.Length];
 
                     Object thisLock = new Object();
                     Parallel.For(0, sg_names.Length, itmp =>

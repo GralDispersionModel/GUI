@@ -2787,11 +2787,10 @@ namespace GralDomain
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 string fname = dialog.FileName.Replace("total", "*");
-                double[] conc = new double[101];               //concentrations for source apportionment
-                FileInfo[] files_conc = new FileInfo[100];     //list of GRAL concentration files MEAN*.txt used for source apportionment
 
                 DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(dialog.FileName));
-                files_conc = di.GetFiles(Path.GetFileName(fname));
+                FileInfo[] files_conc = di.GetFiles(Path.GetFileName(fname));
+                double[] conc = new double[files_conc.Length + 2]; // source values and background
 
                 string[] dummy = new string[1000000];
 

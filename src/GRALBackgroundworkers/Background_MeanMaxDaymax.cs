@@ -226,9 +226,9 @@ namespace GralBackgroundworkers
                     {
                         //GRAL filenames
                         exist = true;
-                        string[] con_files = new string[100];
+                        string[] con_files = new string[sg_names.Length];
                         existdep = true;
-                        string[] dep_files = new string[100];
+                        string[] dep_files = new string[sg_names.Length];
 
                         //get correct weather number in dependence on steady-state or transient simulation
                         int weanumb = n;
