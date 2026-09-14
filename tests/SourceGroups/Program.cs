@@ -180,8 +180,7 @@ internal static class SourceGroupTests
         Gral.SourceGroupCatalog.UpdateModulation(file, 299, "Updated", "Winter");
         Gral.SourceGroupCatalog.UpdateModulation(file, int.MaxValue, "Sparse", "Annual");
         string[] rows = File.ReadAllLines(file);
-        Check(rows.Length == 301 && rows[299] == "300,D,S" && rows[298] == "299,Updated,Winter", "preserve rows after 101");
-        Check(rows[300] == "2147483647,Sparse,Annual", "append full ID");
+        Check(rows.Length == 301 && rows[299] == "300,D,S" && rows[298] == "299,Updated,Winter" && rows[300] == "2147483647,Sparse,Annual", "preserve all rows and append full ID");
         var selected = ExtendedIds().Reverse().ToArray();
         string times = Path.Combine(path,"Computation","emissions_timeseries.txt");
         // Extra unselected column, reversed selection, missing selected ID 1001, and a true zero.
@@ -214,6 +213,9 @@ internal static class SourceGroupTests
             Invoke(form, "TotalEmissionsLoad", null, EventArgs.Empty);
             Check(Field<double[]>(form,"EmissionFactor").All(v => Math.Abs(v-6)<1e-12), "full modulation filenames and compact factors");
         }
+        File.WriteAllText(times, "date hour 100 2147483647\n01.01.2022 00 2 4\n01.01.2022 01 4 6\n");
+        var spaced = Gral.SourceGroupCatalog.ReadMeanFactors(times, selected, new List<string>());
+        Check(spaced[100] == 3 && spaced[int.MaxValue] == 5, "legacy space-delimited factors");
         foreach (string bad in new[] { "date;hour;100;100\n01.01.2022;00;1;1", "date;hour;2147483648\n01.01.2022;00;1",
             "date;hour;100\n01.01.2022;00;NaN", "date;hour;100\n01.01.2022;00;Infinity" })
         {

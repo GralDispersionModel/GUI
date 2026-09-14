@@ -72,7 +72,14 @@ namespace Gral
             {
                 string header = reader.ReadLine();
                 if (header == null) throw new InvalidDataException("Empty emissions time series.");
-                string[] columns = header.Split(separators);
+                // Also retain the GUI's legacy space-delimited time-series format.
+                var splitOptions = StringSplitOptions.None;
+                if (header.IndexOfAny(separators) < 0)
+                {
+                    separators = new[] { ' ' };
+                    splitOptions = StringSplitOptions.RemoveEmptyEntries;
+                }
+                string[] columns = header.Split(separators, splitOptions);
                 var seen = new HashSet<int>();
                 var positions = new Dictionary<int, int>();
                 for (int i = 2; i < columns.Length; i++)
@@ -84,7 +91,7 @@ namespace Gral
                 int count = 0;
                 while (!reader.EndOfStream)
                 {
-                    string[] fields = reader.ReadLine().Split(separators);
+                    string[] fields = reader.ReadLine().Split(separators, splitOptions);
                     foreach (var group in positions)
                     {
                         float factor = group.Value < fields.Length
