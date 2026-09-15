@@ -339,6 +339,7 @@ namespace Gral
         public Main()
         {
             InitializeComponent();
+            InitializeGrammInitialConditions();
             //CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             St_F.Small_Font = new Font("Arial", 8);
             St_F.Pin_Wind_Scale = 0;
