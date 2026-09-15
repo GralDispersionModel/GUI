@@ -58,6 +58,7 @@ namespace GralItemForms
                  new System.Windows.Forms.DrawItemEventHandler(ListBox1_DrawItem); //do not update the redraw when building new listbox entries
             try
             {
+                textBox1.Text = string.Empty;
                 listBox1.Items.Clear();
                 foreach (DrawingObjects _dr in domain.ItemOptions)
                 {
@@ -686,13 +687,16 @@ namespace GralItemForms
                 e.DrawBackground();
                 if (e.Index < domain.ItemOptions.Count)
                 {
-                    if (domain.ItemOptions[e.Index].Show == false)
+                    if (textBox1.Text.Length == 0 || listBox1.Items[e.Index].ToString().ToUpper().Contains(textBox1.Text.ToUpper())) //do not draw filtered listbox entries 
                     {
-                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.GrayText), e.Bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.ControlText), e.Bounds);
+                        if (domain.ItemOptions[e.Index].Show == false)
+                        {
+                            e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.GrayText), e.Bounds);
+                        }
+                        else
+                        {
+                            e.Graphics.DrawString(listBox1.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.ControlText), e.Bounds);
+                        }
                     }
                 }
             }
@@ -919,6 +923,10 @@ namespace GralItemForms
             catch
             { }
         }
-
+        //update the listbox with new string filter value
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            listBox1.Invalidate();
+        }
     }
 }
