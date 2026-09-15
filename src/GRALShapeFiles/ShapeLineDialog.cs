@@ -311,7 +311,7 @@ namespace GralShape
                                     int s = 0;
                                     if (int.TryParse(_sgroup, out s) == true)
                                     {
-                                        if (s < 1 || s > 99)
+                                        if (!Gral.SourceGroupFileName.IsSupported(s))
                                         {
                                             sgroup = 1;
                                         }

@@ -3814,6 +3814,8 @@ namespace Gral
                 Top = this.Top + 200
             })
             {
+                foreach (ListViewItem item in listView1.Items)
+                    DRF.SourceGroups.Add(SourceGroupCatalog.GetNumber(item.Text));
                 DRF.ShowDialog();
                 if (!Project_Locked)
                 {
@@ -4087,11 +4089,11 @@ namespace Gral
                         if (!string.Equals(ProjectSetting.EmissionModulationPath, Path.Combine(ProjectName, "Computation")))
                         {
                             string src, dest;
-                            for (int itm = 1; itm < 100; itm++)
+                            foreach (string file in Directory.EnumerateFiles(Path.Combine(ProjectName, "Computation"), "emissions*.dat"))
                             {
-                                src = Path.Combine(ProjectName, "Computation", "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
-                                dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions" + itm.ToString().PadLeft(3, '0') + ".dat");
-                                CopyFilesIfNotExistant(src, dest);
+                                string name = Path.GetFileNameWithoutExtension(file);
+                                if (SourceGroupFileName.TryModulationStem(name, out int id))
+                                    CopyFilesIfNotExistant(file, Path.Combine(ProjectSetting.EmissionModulationPath, Path.GetFileName(file)));
                             }
                             src = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");
                             dest = Path.Combine(ProjectSetting.EmissionModulationPath, "emissions_timeseries.txt");

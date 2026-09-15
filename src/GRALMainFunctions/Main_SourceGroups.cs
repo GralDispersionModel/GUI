@@ -443,13 +443,13 @@ namespace Gral
                     try
                     {
                         sg[1] = sg[1].Trim();
-                        name = "00" + sg[1];
+                        name = sg[1].Trim();
                     }
                     catch
                     {
-                        name = "00" + sg[0];
+                        name = sg[0].Trim();
                     }
-                    name = name.Substring(name.Length - 3);
+                    name = Gral.SourceGroupFileName.ModulationToken(name);
                     try
                     {
                         string newPath = Path.Combine(ProjectName, @"Computation", "emissions" + name + ".dat");
@@ -549,7 +549,7 @@ namespace Gral
         private void ShowTotalEmissions(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-            double[] totalemissions = new double[100];           //total emissions for the selected pollutant and source groups within the model domain
+            var totalemissions = new Dictionary<int, double>();           //total emissions for the selected pollutant and source groups within the model domain
 
             ComputeTotalEmissions(totalemissions);
 

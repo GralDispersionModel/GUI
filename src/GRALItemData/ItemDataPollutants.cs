@@ -15,7 +15,7 @@ using System;
 namespace GralItemData
 {
     /// <summary>
-    /// This class represents the pollution data; Source group number is limited between 1 to 99
+    /// This class represents the pollution data; Source group numbers are IDs in 1..1295
     /// </summary>
     [Serializable]
     public class PollutantsData
@@ -34,12 +34,10 @@ namespace GralItemData
                 {
                     _sourcegroup = 1;
                 }
-                else if (value > 99)
-                {
-                    _sourcegroup = 99;
-                }
                 else
                 {
+                    if (!Gral.SourceGroupFileName.IsSupported(value))
+                        throw new System.ArgumentOutOfRangeException(nameof(value), "Source groups must be in 1..1295.");
                     _sourcegroup = value;
                 }
             }
@@ -56,7 +54,7 @@ namespace GralItemData
 
         public PollutantsData(int SorceGroup)
         {
-            SourceGroup = SourceGroup;
+            SourceGroup = SorceGroup;
             Pollutant = new int[10];
             EmissionRate = new double[10];
         }
