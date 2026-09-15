@@ -162,6 +162,7 @@ namespace Gral
             {
                 try
                 {
+                    var initial = GrammInitialConditions.ReadIin(Path.Combine(ProjectName, "Computation", "IIN.dat"), (double)numericUpDown39.Value);
                     using (StreamWriter mywriter = new StreamWriter(Path.Combine(ProjectName, @"Computation", "IIN.dat")))
                     {
                         DateTime selTime = dateTimePicker1.Value;
@@ -189,14 +190,14 @@ namespace Gral
                         mywriter.WriteLine("MODELLING TIME (FOR VALUES >1(s) AND <1[%])   :  " + Convert.ToString(numericUpDown21.Value, ic) + "                 !Range 0.01-1% or 2-infinite sec.");
                         mywriter.WriteLine("BUFFERING AFTER TIMESTEPS                     :  3600                 !No influence for steady-state simulations");
                         mywriter.WriteLine("MAX. PERMISSIBLE W-DEVIATION ABOVE < 1 [mm/s] :  0.01                 !Not used    ");
-                        mywriter.WriteLine("RELATIVE INITIAL HUMIDITY  [ % ] GT.0         :  20                   !No influence for steady-state simulations");
+                        mywriter.WriteLine("RELATIVE INITIAL HUMIDITY  [ % ] GT.0         :  " + GrammInitialConditions.Number(initial.HumidityPercent) + "  !No influence for steady-state simulations");
                         mywriter.WriteLine("HEIGHT OF THE LOWEST COMPUTATION HEIGHT [ m ] :  330.                 !Not used    ");
-                        mywriter.WriteLine("AIR TEMPERATURE AT GROUND  [ K ]              :  280.0                !No influence when using meteopgt.all");
-                        mywriter.WriteLine("MOIST-ADIABATIC TEMPERATURE GRADIENT  [K/100m]:  -0.0065              !No influence for steady-state simulations");
-                        mywriter.WriteLine("NEUTRAL LAYERING UP TO THE HEIGHT ABOVE GROUND:  5000                 !used when using meteopgt.all");
-                        mywriter.WriteLine("SURFACE TEMPERATURE [ K ]                     :  280.0                !No influence when using meteopgt.all");
-                        mywriter.WriteLine("TEMPERATURE OF THE SOIL IN 1 M DEPTH  [ K ]   :  280.0                !No influence when using meteopgt.all");
-                        mywriter.WriteLine("LATITUDE                                      :  " + numericUpDown39.Value.ToString(ic) + "                   !Range -90 - +90 deg.");
+                        mywriter.WriteLine("AIR TEMPERATURE AT GROUND  [ K ]              :  " + GrammInitialConditions.Number(initial.AirTemperatureC + 273.15) + "  !No influence when using meteopgt.all");
+                        mywriter.WriteLine("MOIST-ADIABATIC TEMPERATURE GRADIENT  [K/100m]:  " + GrammInitialConditions.Number(initial.TemperatureGradient) + "  !No influence for steady-state simulations");
+                        mywriter.WriteLine("NEUTRAL LAYERING UP TO THE HEIGHT ABOVE GROUND:  " + GrammInitialConditions.Number(initial.NeutralHeight) + "  !used when using meteopgt.all");
+                        mywriter.WriteLine("SURFACE TEMPERATURE [ K ]                     :  " + GrammInitialConditions.Number(initial.SurfaceTemperatureC + 273.15) + "  !No influence when using meteopgt.all");
+                        mywriter.WriteLine("TEMPERATURE OF THE SOIL IN 1 M DEPTH  [ K ]   :  " + GrammInitialConditions.Number(initial.SoilTemperatureC + 273.15) + "  !No influence when using meteopgt.all");
+                        mywriter.WriteLine("LATITUDE                                      :  " + GrammInitialConditions.Number(initial.Latitude) + "                   !Range -90 - +90 deg.");
                         mywriter.WriteLine("UPDATE OF RADIATION (TIMESTEPS)               :  300                  !No influence when using meteopgt.all");
                         mywriter.WriteLine("DEBUG LEVEL 0 none, 3 highest                 :  " + Convert.ToString(numericUpDown25.Value).Replace(" ", "") + "                    !not used    ");
                         if (checkBox31.Checked == false)
