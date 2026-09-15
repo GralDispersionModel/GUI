@@ -70,6 +70,17 @@ internal static class Program
             maxError = Math.Max(maxError, Math.Max(Math.Abs((double)a[4] - oldAlong), Math.Abs((double)a[5] - oldAcross)));
             Check(Math.Abs((double)a[4] - oldAlong) < 1e-10 && Math.Abs((double)a[5] - oldAcross) < 1e-10, "projection differs from legacy finite wind");
         }
+        // The legacy MONO angle avoids AngleBetween's undefined zero-vector angle.
+        Check(Math.Atan2(0d, 0d) == 0d, "MONO calm angle");
+        foreach (double transverse in new[] { -4d, 4d })
+        {
+            double angle = Math.Atan2(100 * transverse, 100 * 3d);
+            double monoAcross = 5d * Math.Sin(angle);
+            object[] a = { 100d, 0d, 3d, transverse, 0d, 0d };
+            Check((bool)project.Invoke(null, a), "MONO comparison rejected");
+            Check(Math.Abs((double)a[4] - 5d * Math.Cos(angle)) < 1e-12, "MONO along changed");
+            Check(Math.Abs((double)a[5] - Math.Abs(monoAcross)) < 1e-12, "Windows transverse colour changed");
+        }
         File.WriteAllText(Path.Combine(output, "projection_metrics.json"), JsonSerializer.Serialize(new { cases = 10000, maximum_absolute_error_m_s = maxError }));
         foreach (var values in new[] { new[] { 100d, 0d, 0d, 0d }, new[] { 1e300, 1e300, 0d, 0d }, new[] { 1e-300, 0d, 5d, 0d } }) { object[] a = { values[0], values[1], values[2], values[3], 0d, 0d }; Check((bool)project.Invoke(null, a), "calm/scaled axis rejected"); }
         foreach (var values in new[] { new[] { 0d, 0d, 5d, 1d }, new[] { 100d, 0d, double.NaN, 1d }, new[] { double.PositiveInfinity, 1d, 0d, 0d } }) { object[] a = { values[0], values[1], values[2], values[3], 0d, 0d }; Check(!(bool)project.Invoke(null, a), "invalid input accepted"); }
@@ -81,11 +92,16 @@ internal static class Program
     static int Main(string[] args)
     {
         string dll = Path.GetFullPath(args[0]); output = Path.GetFullPath(args[1]); Directory.CreateDirectory(output); Directory.SetCurrentDirectory(output);
-        gui = Assembly.LoadFrom(dll); bool patched = args[2] == "patched";
+        gui = Assembly.LoadFrom(dll); bool patched = args[2] == "patched"; bool monoOnly = args[2] == "mono-only";
         Test("finite_projection_paint", () => Render("finite_projection", 300, 100, 25));
         Test("finite_sum_paint", () => Render("finite_sum", 300, 100, 25, 1));
-        Test("calm_horizontal", () => Render("calm", 0, 0, 0, expectOverflow: !patched));
-        Test("vertical_only", () => Render("vertical", 0, 0, 100, expectOverflow: !patched));
+        Test("calm_horizontal", () => Render("calm", 0, 0, 0, expectOverflow: !patched && !monoOnly));
+        Test("vertical_only", () => Render("vertical", 0, 0, 100, expectOverflow: !patched && !monoOnly));
+        if (monoOnly)
+        {
+            Test("mono_invalid_nan_still_overflows", () => Render("mono_nan", float.NaN, 100, 0, expectOverflow: true));
+            Test("mono_excessive_zoom_still_overflows", () => Render("mono_scale", 300, 100, 0, scale: 1e200, expectOverflow: true));
+        }
         if (patched)
         {
             Test("calm_sum", () => Render("calm_sum", 0, 0, 0, 1));

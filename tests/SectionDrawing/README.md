@@ -25,3 +25,11 @@ Results are written as JSON, PNGs, and expected exception text. The test returns
 The synthetic normal-wind images match the original byte for byte. The formulas are mathematically equivalent for finite nonzero wind, but floating-point operation order differs. Real wind fields can differ at pixel or colour rounding boundaries; exact image identity is not a general guarantee.
 
 These tests exercise the rendering functions, not the full interactive project-opening workflow. Linux/Mono execution is not tested. The GUI source-group limit is outside this change.
+
+## Comparison with the legacy MONO code
+
+The MONO branch computes the angle with Math.Atan2(cross, dot). For horizontal calm wind both arguments are zero, so it avoids the Windows AngleBetween exception. A Windows build with only that MONO branch substituted passes the calm and vertical-only paint cases. It still raises OverflowException for NaN wind and excessive scaling.
+
+The current direct projection is algebraically equivalent to that MONO projection for finite nonzero winds. It avoids the angle-to-degrees-to-radians conversion and the subsequent sine/cosine calls. Windows uses the absolute transverse component to retain its existing colour convention; copying MONO verbatim would make that component signed. The guard checks and the vertical-arrow visibility condition remain useful independently of the calm-wind fix.
+
+For a build in which only the original MONO branch replaces AngleBetween, pass mono-only as the third harness argument. Six comparison cases check normal wind, calm wind, vertical-only paint, and the two expected remaining exceptions. The patched math test also compares both signs of transverse wind with the MONO formula. These comparisons run on Windows/.NET; they do not establish Linux/Mono runtime compatibility.

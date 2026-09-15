@@ -21,6 +21,7 @@ namespace GralDomForms
             double length = Math.Sqrt(ex * ex + ey * ey);
             ex /= length;
             ey /= length;
+            // Equivalent to the legacy MONO atan2(cross, dot) projection, without trigonometry.
             along = u * ex + v * ey;
             across = ex * v - ey * u;
 #if !__MonoCS__
