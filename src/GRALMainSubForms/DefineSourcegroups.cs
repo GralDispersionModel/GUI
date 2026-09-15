@@ -83,7 +83,7 @@ namespace GralMainForms
                 foreach (DataRow row in sourceGroups.Rows)
                     if (row.RowState != DataRowState.Deleted && row[0] != DBNull.Value) used.Add((int)row[0]);
             int next = 1;
-            while (used.Contains(next)) next++;
+            while (next <= SourceGroupFileName.MaximumId && used.Contains(next)) next++;
             return next;
         }
 
@@ -98,9 +98,9 @@ namespace GralMainForms
                 if (row.RowState == DataRowState.Deleted) continue;
                 string name = Convert.ToString(row[1]).Trim();
                 if (string.IsNullOrWhiteSpace(name)) continue;
-                if (row[0] == DBNull.Value || (int)row[0] <= 0 || definitions.ContainsKey((int)row[0]))
+                if (row[0] == DBNull.Value || !SourceGroupFileName.IsSupported((int)row[0]) || definitions.ContainsKey((int)row[0]))
                 {
-                    MessageBox.Show(this, "Each named group needs a unique positive Int32 number.",
+                    MessageBox.Show(this, "Each named group needs a unique number in 1..1295.",
                         "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -173,7 +173,7 @@ namespace GralMainForms
             }
             catch (Exception ex) when (ex is FormatException || ex is OverflowException)
             {
-                MessageBox.Show(this, "Enter positive Int32 numbers in the Number column.",
+                MessageBox.Show(this, "Enter numbers in 1..1295 in the Number column.",
                     "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

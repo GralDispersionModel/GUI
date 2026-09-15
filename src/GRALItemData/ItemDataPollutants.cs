@@ -15,7 +15,7 @@ using System;
 namespace GralItemData
 {
     /// <summary>
-    /// This class represents the pollution data; Source group numbers are positive Int32 IDs
+    /// This class represents the pollution data; Source group numbers are IDs in 1..1295
     /// </summary>
     [Serializable]
     public class PollutantsData
@@ -36,6 +36,8 @@ namespace GralItemData
                 }
                 else
                 {
+                    if (!Gral.SourceGroupFileName.IsSupported(value))
+                        throw new System.ArgumentOutOfRangeException(nameof(value), "Source groups must be in 1..1295.");
                     _sourcegroup = value;
                 }
             }

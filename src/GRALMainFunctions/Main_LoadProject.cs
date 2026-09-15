@@ -951,7 +951,7 @@ namespace Gral
                         {
                             name = sg[0].Trim();
                         }
-                        name = name.PadLeft(3, '0');
+                        name = Gral.SourceGroupFileName.ModulationToken(name);
                         newPath = Path.Combine(ProjectName, @"Computation", "emissions" + name + ".dat");
                         if (Directory.Exists(ProjectSetting.EmissionModulationPath))
                         {

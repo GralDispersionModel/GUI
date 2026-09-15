@@ -4092,7 +4092,7 @@ namespace Gral
                             foreach (string file in Directory.EnumerateFiles(Path.Combine(ProjectName, "Computation"), "emissions*.dat"))
                             {
                                 string name = Path.GetFileNameWithoutExtension(file);
-                                if (int.TryParse(name.Substring("emissions".Length), out int id) && id > 0)
+                                if (SourceGroupFileName.TryModulationStem(name, out int id))
                                     CopyFilesIfNotExistant(file, Path.Combine(ProjectSetting.EmissionModulationPath, Path.GetFileName(file)));
                             }
                             src = Path.Combine(ProjectName, "Computation", "emissions_timeseries.txt");

@@ -162,13 +162,13 @@ namespace GralBackgroundworkers
                     {
                         if (sg_names.Length > 0)
                         {
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".con";
-                            odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".odr";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".con";
+                            odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".odr";
                         }
                         else
                         {
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".con";
-                            odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".odr";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_names[itm]) + ".con";
+                            odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_names[itm]) + ".odr";
                         }
 
                         if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itm])) == false &&

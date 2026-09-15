@@ -449,7 +449,7 @@ namespace Gral
                     {
                         name = sg[0].Trim();
                     }
-                    name = name.PadLeft(3, '0');
+                    name = Gral.SourceGroupFileName.ModulationToken(name);
                     try
                     {
                         string newPath = Path.Combine(ProjectName, @"Computation", "emissions" + name + ".dat");

@@ -99,7 +99,7 @@ namespace GralBackgroundworkers
                                 }
                             }
 
-                            string ConFile = Convert.ToString(meteoSit + 1).PadLeft(5, '0') + "-" + Convert.ToString(_slice + 1) + sg_numbers[sgNumber].PadLeft(2, '0') + ".con";
+                            string ConFile = Convert.ToString(meteoSit + 1).PadLeft(5, '0') + "-" + Convert.ToString(_slice + 1) + Gral.SourceGroupFileName.Encode(sg_numbers[sgNumber]) + ".con";
                             string filename = Path.Combine(mydata.ProjectName, @"Computation", ConFile);
                             if (ReadConFiles(filename, mydata, sgNumber, ref conc))
                             {
@@ -319,7 +319,7 @@ namespace GralBackgroundworkers
                     }
 
                     SourceGroupNumbers[itm] = GetSgNumbers(sourceGroupName);
-                    string newpath = Path.Combine(ModulationPath, "emissions" + SourceGroupNumbers[itm].PadLeft(3, '0') + ".dat");
+                    string newpath = Path.Combine(ModulationPath, "emissions" + Gral.SourceGroupFileName.ModulationToken(SourceGroupNumbers[itm]) + ".dat");
 
                     if (File.Exists(newpath))
                     {

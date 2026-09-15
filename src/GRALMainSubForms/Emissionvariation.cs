@@ -564,11 +564,11 @@ namespace GralMainForms
             {
                 name = sg[0].Trim();
             }
-            name = name.PadLeft(3, '0');
-            newPath = Path.Combine(Main.ProjectName, @"Computation", "emissions" + name + ".dat");
+            string filenameToken = Gral.SourceGroupFileName.ModulationToken(name);
+            newPath = Path.Combine(Main.ProjectName, @"Computation", "emissions" + filenameToken + ".dat");
             if (Directory.Exists(Main.ProjectSetting.EmissionModulationPath))
             {
-                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissions" + name + ".dat");
+                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissions" + filenameToken + ".dat");
             }
 
             string[] text1 = new string[25];

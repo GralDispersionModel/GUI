@@ -82,7 +82,7 @@ namespace GralMainForms
                         //get source group
                         selpoll = form1.listView1.Items[i].SubItems[0].Text.Split(new char[] { ':' });
                         sgroup = Gral.SourceGroupCatalog.GetNumber(form1.listView1.Items[i].Text);
-                        snumb = sgroup.ToString("D3", ic);
+                        snumb = Gral.SourceGroupFileName.ModulationToken(sgroup);
 
                         //get variation for source group
                         newPath = Path.Combine("Computation", "emissions" + snumb + ".dat");

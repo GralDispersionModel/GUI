@@ -33,9 +33,25 @@ internal static class SourceGroupTests
         catch (TargetInvocationException ex) { throw ex.InnerException; }
     }
     static T Field<T>(object instance, string name) => (T)instance.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).GetValue(instance);
+    static void FilenameProtocol()
+    {
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        for (int id = 1; id <= 1295; id++)
+        {
+            string code = Gral.SourceGroupFileName.Encode(id);
+            Check(code.Length == 2 && names.Add(code), "Windows filename collision");
+            Check(Gral.SourceGroupFileName.TryDecode(code, out int decoded) && decoded == id, "token round trip");
+            Check(Gral.SourceGroupFileName.TryModulationStem("emissions" + Gral.SourceGroupFileName.ModulationToken(id), out decoded) && decoded == id, "modulation round trip");
+            if (id < 100) Check(Gral.SourceGroupFileName.ModulationToken(id) == id.ToString("D3"), "legacy modulation name");
+        }
+        foreach (var pair in new[] { (1,"01"),(99,"99"),(100,"A0"),(359,"Z9"),(360,"0A"),(619,"9Z"),(620,"AA"),(1295,"ZZ") })
+            Check(Gral.SourceGroupFileName.Encode(pair.Item1) == pair.Item2, "encoding boundary");
+        foreach (string bad in new[] { "", "00", "100", "A*", "é0", "ſ0" })
+            Check(!Gral.SourceGroupFileName.TryDecode(bad,out _), "invalid filename token");
+    }
     static void Storage()
     {
-        foreach (int id in new[] { 1, 99, 100, 300, 1001, int.MaxValue })
+        foreach (int id in new[] { 1, 99, 100, 300, 1001, 1295 })
         {
             var value = new PollutantsData { SourceGroup = id };
             Check(value.SourceGroup == id, "setter " + id);
@@ -43,10 +59,14 @@ internal static class SourceGroupTests
             Check(new PollutantsData(value).SourceGroup == id, "copy " + id);
         }
         Check(new PollutantsData().SourceGroup == 1, "legacy default");
+        bool rejected = false;
+        try { new PollutantsData(1296); } catch (ArgumentOutOfRangeException) { rejected = true; }
+        Check(rejected, "out-of-range ID must not be clamped or saved");
+
     }
     static void Serialization()
     {
-        foreach (int id in new[] { 1, 99, 100, 300, 1001, int.MaxValue })
+        foreach (int id in new[] { 1, 99, 100, 300, 1001, 1295 })
         {
             var ps = new PointSourceData(); ps.Poll.SourceGroup = id;
             Check(new PointSourceData("1," + ps.ToString()).Poll.SourceGroup == id, "point " + id);
@@ -61,15 +81,15 @@ internal static class SourceGroupTests
     static void Catalog()
     {
         string file = Path.Combine(Output, "definitions.txt");
-        File.WriteAllLines(file, new[] { "Hour100,100", "Hour300,300", "Sparse,2147483647" });
+        File.WriteAllLines(file, new[] { "Hour100,100", "Hour300,300", "Sparse,1295" });
         var groups = Gral.SourceGroupCatalog.ReadDefinitions(file);
-        Check(groups.Count == 3 && groups[int.MaxValue] == "Sparse", "read sparse definitions");
+        Check(groups.Count == 3 && groups[1295] == "Sparse", "read sparse definitions");
         var choices = Gral.SourceGroupCatalog.Choices(groups);
         Check(choices.Count == 102, "compact choices");
         Check(choices.Contains("Hour100,100"), "100 selection");
-        Check(Gral.SourceGroupCatalog.DisplayName(choices, int.MaxValue) == "Sparse,2147483647", "sparse label");
-        Check(Gral.SourceGroupCatalog.DisplayName(choices, 8760) == "8760", "unnamed source");
-        foreach (string invalid in new[] { "A,0", "A,-1", "A,2147483648", "A,100\nB,100" })
+        Check(Gral.SourceGroupCatalog.DisplayName(choices, 1295) == "Sparse,1295", "sparse label");
+        Check(Gral.SourceGroupCatalog.DisplayName(choices, 1294) == "1294", "unnamed source");
+        foreach (string invalid in new[] { "A,1296", "A,0", "A,-1", "A,2147483648", "A,100\nB,100" })
         {
             File.WriteAllText(file, invalid);
             bool rejected = false;
@@ -83,7 +103,7 @@ internal static class SourceGroupTests
         string project = Path.Combine(Output, "editor");
         Directory.CreateDirectory(Path.Combine(project, "Settings"));
         string file = Path.Combine(project, "Settings", "Sourcegroups.txt");
-        File.WriteAllLines(file, new[] { "Keep,1", "Hour100,100", "Sparse,2147483647" });
+        File.WriteAllLines(file, new[] { "Keep,1", "Hour100,100", "Sparse,1295" });
         Gral.Main.ProjectName = project;
         using (var main = new Gral.Main())
         using (var form = new GralMainForms.Sourcegroups(main))
@@ -100,7 +120,7 @@ internal static class SourceGroupTests
         }
         var saved = Gral.SourceGroupCatalog.ReadDefinitions(file);
         Check(saved.Count == 203, "all named rows saved");
-        Check(saved[1] == "Keep" && saved[100] == "Hour100" && saved[300] == "Hour300" && saved[int.MaxValue] == "Sparse", "IDs preserved on save");
+        Check(saved[1] == "Keep" && saved[100] == "Hour100" && saved[300] == "Hour300" && saved[1295] == "Sparse", "IDs preserved on save");
         using (var main = new Gral.Main())
         using (var form = new GralMainForms.Sourcegroups(main))
         {
@@ -112,12 +132,28 @@ internal static class SourceGroupTests
             Check(table.Rows.Count == 301, "reopen all definitions");
             var grid = Field<DataGridView>(form, "dataGridView1");
             grid.FirstDisplayedScrollingRowIndex = Math.Max(0, grid.RowCount - 9);
+            for (int id = 301; id < 1295; id++) table.Rows.Add(id, "Hour" + id);
+            foreach (DataRow row in table.Rows)
+                if (string.IsNullOrWhiteSpace(Convert.ToString(row[1]))) row[1] = "Hour" + row[0];
+            Invoke(form, "Button3_Click", null, EventArgs.Empty);
+        }
+        Check(Gral.SourceGroupCatalog.ReadDefinitions(file).Count == 1295, "maximum catalog saved");
+        using (var main = new Gral.Main())
+        using (var form = new GralMainForms.Sourcegroups(main))
+        {
+            form.StartPosition = FormStartPosition.Manual;
+            form.Location = new Point(-30000,-30000); form.ShowInTaskbar = false;
+            form.Show(); Application.DoEvents();
+            var table = Field<DataTable>(form, "sourceGroups");
+            Check(table.Rows.Count == 1295, "maximum catalog reopened");
+            var grid = Field<DataGridView>(form, "dataGridView1");
+            grid.FirstDisplayedScrollingRowIndex = grid.RowCount - 9;
             using (var bitmap = new Bitmap(form.Width, form.Height))
             { form.DrawToBitmap(bitmap, new Rectangle(Point.Empty, bitmap.Size)); bitmap.Save(Path.Combine(Output, "source_group_editor.png")); }
         }
     }
     static bool Legacy;
-    static int[] ExtendedIds() => Legacy ? Enumerable.Range(1, 99).ToArray() : Enumerable.Range(1, 300).Concat(new[] { 1001, int.MaxValue }).ToArray();
+    static int[] ExtendedIds() => Legacy ? Enumerable.Range(1, 99).ToArray() : Enumerable.Range(1, 300).Concat(new[] { 1001, 1295 }).ToArray();
     static string Project(string name)
     {
         string path = Path.Combine(Output, name);
@@ -135,8 +171,8 @@ internal static class SourceGroupTests
         {
             var combo = Field<ComboBox>(form, "comboBox1");
             combo.Items.Add("Legacy,1");
-            Invoke(form, "combo", int.MaxValue);
-            Check(Gral.SourceGroupCatalog.GetNumber(combo.Text) == int.MaxValue, "unnamed imported ID selected");
+            Invoke(form, "combo", 1295);
+            Check(Gral.SourceGroupCatalog.GetNumber(combo.Text) == 1295, "unnamed imported ID selected");
             Check(combo.Items.Count == 2, "sparse combo allocation");
         }
     }
@@ -178,18 +214,18 @@ internal static class SourceGroupTests
         string path = Project("modulation"), file = Path.Combine(path,"Settings","emissionmodulations.txt");
         File.WriteAllLines(file, Enumerable.Range(1, 300).Select(id => id + ",D,S"));
         Gral.SourceGroupCatalog.UpdateModulation(file, 299, "Updated", "Winter");
-        Gral.SourceGroupCatalog.UpdateModulation(file, int.MaxValue, "Sparse", "Annual");
+        Gral.SourceGroupCatalog.UpdateModulation(file, 1295, "Sparse", "Annual");
         string[] rows = File.ReadAllLines(file);
-        Check(rows.Length == 301 && rows[299] == "300,D,S" && rows[298] == "299,Updated,Winter" && rows[300] == "2147483647,Sparse,Annual", "preserve all rows and append full ID");
+        Check(rows.Length == 301 && rows[299] == "300,D,S" && rows[298] == "299,Updated,Winter" && rows[300] == "1295,Sparse,Annual", "preserve all rows and append full ID");
         var selected = ExtendedIds().Reverse().ToArray();
         string times = Path.Combine(path,"Computation","emissions_timeseries.txt");
         // Extra unselected column, reversed selection, missing selected ID 1001, and a true zero.
-        var columns = Enumerable.Range(1,300).Concat(new[] { int.MaxValue, 8760 }).ToArray();
+        var columns = Enumerable.Range(1,300).Concat(new[] { 1295, 1294 }).ToArray();
         File.WriteAllLines(times, new[] { "date;hour;" + string.Join(";", columns),
             "01.01.2022;00;" + string.Join(";", columns.Select(id => id == 1 ? "0" : "2")),
             "01.01.2022;01;" + string.Join(";", columns.Select(id => id == 1 ? "0" : "4")) });
         var means = Gral.SourceGroupCatalog.ReadMeanFactors(times, selected, new List<string>());
-        Check(means.Count == 301 && means[int.MaxValue] == 3 && means[1] == 0 && !means.ContainsKey(1001), "ID mapped means and zero/default");
+        Check(means.Count == 301 && means[1295] == 3 && means[1] == 0 && !means.ContainsKey(1001), "ID mapped means and zero/default");
         using var main = new Gral.Main();
         foreach (int id in selected) main.listView1.Items.Add("Hour: " + id);
         var totals = selected.ToDictionary(id => id, _ => 1.0);
@@ -206,16 +242,16 @@ internal static class SourceGroupTests
         }
         File.Delete(times);
         foreach (int id in selected)
-            File.WriteAllLines(Path.Combine(path,"Computation","emissions" + id.ToString("D3") + ".dat"),
+            File.WriteAllLines(Path.Combine(path,"Computation","emissions" + Gral.SourceGroupFileName.ModulationToken(id) + ".dat"),
                 Enumerable.Range(0,24).Select(h => h + ",2" + (h < 12 ? ",3" : "")));
         using (var form = new GralMainForms.TotalEmissions(totals, main, "NOx", false))
         {
             Invoke(form, "TotalEmissionsLoad", null, EventArgs.Empty);
             Check(Field<double[]>(form,"EmissionFactor").All(v => Math.Abs(v-6)<1e-12), "full modulation filenames and compact factors");
         }
-        File.WriteAllText(times, "date hour 100 2147483647\n01.01.2022 00 2 4\n01.01.2022 01 4 6\n");
+        File.WriteAllText(times, "date hour 100 1295\n01.01.2022 00 2 4\n01.01.2022 01 4 6\n");
         var spaced = Gral.SourceGroupCatalog.ReadMeanFactors(times, selected, new List<string>());
-        Check(spaced[100] == 3 && spaced[int.MaxValue] == 5, "legacy space-delimited factors");
+        Check(spaced[100] == 3 && spaced[1295] == 5, "legacy space-delimited factors");
         foreach (string bad in new[] { "date;hour;100;100\n01.01.2022;00;1;1", "date;hour;2147483648\n01.01.2022;00;1",
             "date;hour;100\n01.01.2022;00;NaN", "date;hour;100\n01.01.2022;00;Infinity" })
         {
@@ -233,11 +269,11 @@ internal static class SourceGroupTests
         {
             if (row.IsNewRow) continue;
             int id=int.Parse(row.Cells[0].Value.ToString().TrimEnd(':'));
-            row.Cells[1].Value=id==int.MaxValue ? 0.125 : id==100 ? 0.25 : 0;
+            row.Cells[1].Value=id==1295 ? 0.125 : id==100 ? 0.25 : 0;
         }
         Invoke(form,"button3_Click",null,EventArgs.Empty);
         Check(form.DecayRate.Count==2,"sparse decay count");
-        Check(form.DecayRate.Any(d=>d.SourceGroup==int.MaxValue && d.DecayRate==0.125),"sparse decay mapping");
+        Check(form.DecayRate.Any(d=>d.SourceGroup==1295 && d.DecayRate==0.125),"sparse decay mapping");
         Check(form.DecayRate.Any(d=>d.SourceGroup==100 && d.DecayRate==0.25),"ID100 decay mapping");
     }
     static void Receptors()
@@ -297,7 +333,7 @@ internal static class SourceGroupTests
         File.WriteAllText(Path.Combine(comp,"meteopgt.all"),"10,1,10\nwind_dir,wind_speed,stability,frequency\n27,1,4,1\n");
         File.WriteAllText(Path.Combine(comp,"mettimeseries.dat"),"01.01.2022 00 1 27 4\n01.01.2022 01 1 27 4\n");
         File.WriteAllLines(Path.Combine(comp,"emissions_timeseries.txt"),new[]{"date;hour;"+string.Join(";",groups.Reverse()),
-            "01.01.2022;00;"+string.Join(";",groups.Reverse().Select(id=>id==int.MaxValue?"1":"0")),
+            "01.01.2022;00;"+string.Join(";",groups.Reverse().Select(id=>id==1295?"1":"0")),
             "01.01.2022;01;"+string.Join(";",groups.Reverse().Select(id=>id==300?"1":"0"))});
         var start=new System.Diagnostics.ProcessStartInfo("dotnet") { WorkingDirectory=comp,UseShellExecute=false,CreateNoWindow=true,RedirectStandardOutput=true,RedirectStandardError=true };
         start.ArgumentList.Add(CoreDll);
@@ -312,7 +348,7 @@ internal static class SourceGroupTests
         {
             using var archive=System.IO.Compression.ZipFile.OpenRead(Path.Combine(comp,hour.ToString("D5")+".grz"));
             Check(archive.Entries.Count==groups.Length,"core output group count");
-            foreach(int id in groups) Check(archive.GetEntry(hour.ToString("D5")+"-1"+id.ToString("D2")+".con")!=null,"core output "+id);
+            foreach(int id in groups) Check(archive.GetEntry(hour.ToString("D5")+"-1"+Gral.SourceGroupFileName.Encode(id)+".con")!=null,"core output "+id);
         }
         var data=new GralBackgroundworkers.BackgroundworkerData { ProjectName=path,PathEmissionModulation=comp,
             PathEvaluationResults=Path.Combine(path,"Maps"), SelectedSourceGroup=string.Join(",",groups.Select(id=>"Hour"+id+": "+id)),
@@ -322,16 +358,16 @@ internal static class SourceGroupTests
         Field<System.ComponentModel.BackgroundWorker>(worker,"Rechenknecht").WorkerReportsProgress=true;
         Invoke(worker,"Mean",data,new System.ComponentModel.DoWorkEventArgs(null));
         Check(Directory.GetFiles(Path.Combine(path,"Maps"),"Mean_*.txt").Length==groups.Length+1,"GUI reads all core result groups");
-        foreach (int id in new[]{1,300,int.MaxValue})
+        foreach (int id in new[]{1,300,1295})
         {
             using var zip=System.IO.Compression.ZipFile.OpenRead(Path.Combine(comp,"00001.grz"));
-            using var stream=zip.GetEntry("00001-1"+id.ToString("D2")+".con").Open();
+            using var stream=zip.GetEntry("00001-1"+Gral.SourceGroupFileName.Encode(id)+".con").Open();
             using var memory=new MemoryStream();stream.CopyTo(memory);
             byte[] payload=memory.ToArray();
             Check(BitConverter.ToInt32(payload,0)==-3 && payload.Length==428,"binary result shape");
             var grid=Enumerable.Range(0,100).Select(i=>(double)BitConverter.ToSingle(payload,28+4*i)).ToArray();
             Check(grid.All(v=>double.IsFinite(v)&&v>=0),"finite core values");
-            Check(id==int.MaxValue ? grid.Sum()>0 : grid.Sum()==0,"hour1 active group identity");
+            Check(id==1295 ? grid.Sum()>0 : grid.Sum()==0,"hour1 active group identity");
             var gui=File.ReadAllLines(Path.Combine(path,"Maps","Mean_NOx_Hour"+id+"_2m.txt")).Skip(6)
                 .SelectMany(line=>line.Split(' ',StringSplitOptions.RemoveEmptyEntries)).Select(double.Parse).OrderBy(v=>v).ToArray();
             var expected=grid.OrderBy(v=>v).ToArray();
@@ -360,10 +396,11 @@ internal static class SourceGroupTests
                 File.WriteAllText(Path.Combine(Output,"legacy.json"), JsonSerializer.Serialize(new { status="pass", assertions=Assertions }));
                 return 0;
             }
-            Run("positive_int32_storage", Storage);
+            Run("bounded_source_group_storage", Storage);
+            Run("windows_safe_filename_protocol", FilenameProtocol);
             Run("four_source_serialization", Serialization);
             Run("sparse_definitions_and_validation", Catalog);
-            Run("editor_save_and_reopen_300", Editor);
+            Run("editor_save_and_reopen_1295", Editor);
             Run("unnamed_imported_source_selection", Selectors);
             Run("four_source_files_302_groups", FileIO);
             Run("modulation_302_groups_and_sparse_headers", Modulation);

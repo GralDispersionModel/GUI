@@ -255,13 +255,13 @@ namespace GralBackgroundworkers
 
                                 if (sg_names.Length > 0)
                                 {
-                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itmp].PadLeft(2, '0') + ".con";
-                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + sg_numbers[itmp].PadLeft(2, '0') + ".dep";
+                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itmp]) + ".con";
+                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Gral.SourceGroupFileName.Encode(sg_numbers[itmp]) + ".dep";
                                 }
                                 else
                                 {
-                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".con";
-                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(sg_numbers[itmp]).PadLeft(2, '0') + ".dep";
+                                    con_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itmp]) + ".con";
+                                    dep_files[itmp] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Gral.SourceGroupFileName.Encode(sg_numbers[itmp]) + ".dep";
                                 }
 
                                 if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itmp])) == false &&

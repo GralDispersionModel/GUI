@@ -1,12 +1,14 @@
-# Extended source groups in the GUI
+# Source groups through 1295 in the GUI
 
-Use this GUI with the [companion GRAL core](https://github.com/Borealis-Thoon/GRAL/tree/codex/extend-source-groups) for projects beyond 99 source groups. IDs must be positive Int32 values, through `2147483647`. Array sizes follow the groups present or selected, not the largest ID.
+Use this GUI with [core PR #54](https://github.com/GralDispersionModel/GRAL/pull/54). The public range is 1..1295. [FilenameProtocol.md](FilenameProtocol.md) defines the shared, Windows-safe names. Original names for IDs 1..99 remain unchanged.
 
-The Define Source Groups dialog keeps 1–99 as initial choices and allows additional rows and explicit IDs. Paste tab-separated Number/Name columns or add a row at the bottom. Only named rows are saved as definitions; imported sources may use unnamed IDs. Changing a definition's number does not remap IDs already assigned to sources. Unmodified GUIs can still clamp extended IDs to 99.
+The definition dialog supports additional rows, explicit IDs, paste, save and reopen. Only named rows are stored. Changing a definition number does not remap existing sources. An imported ID may be unnamed, but must still be in range. Unsupported IDs are rejected rather than clamped.
+
+Source files, temporal and receptor headers, and decay settings keep numeric IDs. Output and modulation filenames use the shared codec in all result workers and modulation read/write/delete/copy paths. The earlier Int32 extension is preserved on [codex/archive-source-groups-int32-20260915](https://github.com/Borealis-Thoon/GUI/tree/codex/archive-source-groups-int32-20260915).
 
 ## Regression tests
 
-Use Windows and the .NET 10 SDK, with the patched GRAL repository beside this repository. From the GUI repository root:
+Use Windows and the .NET 10 SDK with the core repository beside the GUI repository.
 
 ```powershell
 dotnet build src/Gral.csproj -c Release -o artifacts/source-groups/gui
@@ -14,16 +16,10 @@ dotnet build ../GRAL/src/GRAL.csproj -c Release -o artifacts/source-groups/core
 dotnet run --project tests/SourceGroups/SourceGroups.csproj -c Release "-p:GralGuiAssembly=$PWD/artifacts/source-groups/gui/GRAL_GUI.dll" -- "$PWD/artifacts/source-groups/results" "$PWD/artifacts/source-groups/core/GRAL.dll"
 ```
 
-Use a new results directory. The harness calls actual GUI methods on the STA thread, renders the definition dialog offscreen, writes synthetic inputs, runs the core in an isolated computation directory, and checks GUI mean-result evaluation.
+Use a new output directory. The harness has 11 cases and 5923 assertions. It checks all 1295 filename tokens for uniqueness without case sensitivity and round trips, 1295 definition rows saved and reopened, all four source types, 302 groups in file I/O and modulation/decay paths, 302 computed and 301 selected receptor groups in reverse order, and GUI inputs through the core to GUI mean-result evaluation.
 
-There are ten cases and 1920 assertions: sparse IDs; all four source serializers and file readers/writers; definition save/reopen; unnamed imported source selection; 302-group modulation/totals; decay mapping; 302 computed/301 selected receptor groups in reversed order; and a two-step GUI → core → GUI test. The group set is 1–300, 1001, and 2147483647. Numeric checks verify the active first-step group and GUI concentration values.
+The source-file and integration group set is 1..300, 1001 and 1295. The GUI integration runs two synthetic steps. IDs beyond 1295 are rejected. A separate core test runs all 1295 groups.
 
-For legacy comparison, build an unmodified GUI at the same base. Run the compiled harness with `--legacy` in separate harness directories containing each corresponding `GRAL_GUI.dll` and runtime dependencies:
+For legacy comparison, run this compiled harness with --legacy in separate harness directories containing the original or patched GRAL_GUI.dll and matching runtime dependencies. Compare the five files in file_io/Emissions by SHA256. This covers four source types and IDs 1..99.
 
-```powershell
-dotnet SourceGroups.dll path/to/new/legacy-results --legacy
-```
-
-Compare the five files under `legacy-results/file_io/Emissions` by SHA256. This covers four source types and IDs 1–99. Use identical harness code and inputs for both builds.
-
-These tests do not cover every interactive workflow or establish production-scale performance, scientific accuracy, or convergence. Memory, particles, and storage grow with selected group count. The existing core checkpoint format requires the identical ordered group list and unchanged inputs on restart. The Section drawing fix is separate.
+These tests invoke GUI methods and offscreen rendering; they do not cover every interactive workflow. The core memory change reduces sparse concentration storage but does not establish production-scale speed, convergence or cross-device reproducibility. The Section drawing fix remains independent in [PR #95](https://github.com/GralDispersionModel/GUI/pull/95).

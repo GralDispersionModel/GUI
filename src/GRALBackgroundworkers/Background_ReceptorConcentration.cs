@@ -75,7 +75,7 @@ namespace GralBackgroundworkers
                     for (int j = 0; j < 12; j++) emifac_mon[j, itm] = 1;
                     if (transient) continue; // Already applied by the core.
                     newpath = Path.Combine(mydata.PathEmissionModulation,
-                        "emissions" + sg_numbers[itm].ToString("D3") + ".dat");
+                        "emissions" + Gral.SourceGroupFileName.ModulationToken(sg_numbers[itm]) + ".dat");
                     if (!File.Exists(newpath)) continue;
                     try
                     {

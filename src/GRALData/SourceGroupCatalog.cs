@@ -12,7 +12,7 @@ namespace Gral
         {
             string[] parts = (text ?? string.Empty).Split(',', ':');
             return int.TryParse(parts[parts.Length - 1].Trim(), NumberStyles.Integer,
-                CultureInfo.InvariantCulture, out int id) && id > 0 ? id : 0;
+                CultureInfo.InvariantCulture, out int id) && SourceGroupFileName.IsSupported(id) ? id : 0;
         }
 
         public static SortedDictionary<int, string> ReadDefinitions(string path)
@@ -24,8 +24,8 @@ namespace Gral
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 string[] fields = line.Split(',');
                 if (fields.Length != 2 || !int.TryParse(fields[1], NumberStyles.Integer,
-                    CultureInfo.InvariantCulture, out int id) || id <= 0 || definitions.ContainsKey(id))
-                    throw new InvalidDataException("Source groups must have unique positive Int32 numbers: " + line);
+                    CultureInfo.InvariantCulture, out int id) || !SourceGroupFileName.IsSupported(id) || definitions.ContainsKey(id))
+                    throw new InvalidDataException("Source groups must have unique numbers in 1..1295: " + line);
                 definitions.Add(id, fields[0]);
             }
             return definitions;
@@ -52,7 +52,7 @@ namespace Gral
 
         public static void UpdateModulation(string path, int id, string diurnal, string seasonal)
         {
-            if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
+            if (!SourceGroupFileName.IsSupported(id)) throw new ArgumentOutOfRangeException(nameof(id));
             var lines = File.Exists(path) ? new List<string>(File.ReadAllLines(path)) : new List<string>();
             string entry = id.ToString(CultureInfo.InvariantCulture) + "," + diurnal + "," + seasonal;
             int index = lines.FindIndex(line => int.TryParse(line.Split(',')[0], out int number) && number == id);
@@ -84,7 +84,7 @@ namespace Gral
                 var positions = new Dictionary<int, int>();
                 for (int i = 2; i < columns.Length; i++)
                 {
-                    if (!int.TryParse(columns[i], out int id) || id <= 0 || !seen.Add(id))
+                    if (!int.TryParse(columns[i], out int id) || !SourceGroupFileName.IsSupported(id) || !seen.Add(id))
                         throw new InvalidDataException("Invalid or duplicate source group in emissions time series.");
                     if (wanted.Contains(id)) { positions.Add(id, i); means.Add(id, 0); }
                 }
