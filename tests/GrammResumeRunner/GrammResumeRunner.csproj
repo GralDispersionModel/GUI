@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>disable</ImplicitUsings><EnableNETAnalyzers>false</EnableNETAnalyzers></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/GRALIO/GrammResumePlan.cs" Link="GrammResumePlan.cs" />
+    <Compile Include="../../src/GRALIO/GrammResumeRunner.cs" Link="GrammResumeRunner.cs" />
+    <Compile Include="../../src/GRALIO/GrammProgress.cs" Link="GrammProgress.cs" />
+  <Compile Include="../../src/GRALIO/GrammConsoleMonitor.cs" Link="GrammConsoleMonitor.cs" /><Compile Include="../../src/GRALIO/GrammCpuScheduler.cs" Link="GrammCpuScheduler.cs" /></ItemGroup>
+</Project>

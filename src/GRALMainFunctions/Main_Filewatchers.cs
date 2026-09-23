@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
 /// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
@@ -141,6 +141,10 @@ namespace Gral
 
         void UpdateLabel66(string _value)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null) return;
+
+#endif
             if (InvokeRequired)
             {
                 Invoke(new Action<string>(UpdateLabel66), _value);
@@ -150,6 +154,10 @@ namespace Gral
         }
         void UpdateLabel67(string _value)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null) return;
+
+#endif
             if (InvokeRequired)
             {
                 Invoke(new Action<string>(UpdateLabel67), _value);
@@ -159,6 +167,10 @@ namespace Gral
         }
         void UpdateProgressBar1(int _value)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null) return;
+
+#endif
             if (InvokeRequired)
             {
                 Invoke(new Action<int>(UpdateProgressBar1), _value);
@@ -169,6 +181,10 @@ namespace Gral
         }
         void UpdateProgressBar2(int _value)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null) return;
+
+#endif
             if (InvokeRequired)
             {
                 Invoke(new Action<int>(UpdateProgressBar2), _value);
@@ -219,6 +235,10 @@ namespace Gral
         //read the file PercentGramm.txt when it is changed by GRAMM.exe
         void PercentGrammChanged(object sender, FileSystemEventArgs e)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null) return;
+
+#endif
             //progressBar2.Minimum = 0;
             //progressBar2.Maximum = 101;
 
@@ -255,6 +275,10 @@ namespace Gral
         //read the file DispNrGramm.txt when it is changed by GRAMM.exe
         void DispnrGrammChanged(object sender, FileSystemEventArgs e)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null) return;
+
+#endif
             progressBar1.Minimum = 0;
             UpdateProgressBar2(0);
             UpdateLabel67("Actual flow situation: 0 %");
