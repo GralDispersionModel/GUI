@@ -30,6 +30,8 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMStartCalculation(object sender, EventArgs e)
         {
+            if (!ValidateGrammCustomConditions()) return;
+
             Random rnd = new Random();
 
             //set the maximum of the progressbar for the actual dispersion situation (simulation time)
