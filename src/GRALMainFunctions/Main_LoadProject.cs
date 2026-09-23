@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
 /// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
@@ -25,6 +25,14 @@ namespace Gral
     {
         private void LoadProject(string foldername)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null)
+            {
+                MessageBox.Show(this, "Pause or stop all GRAMM instances before changing projects.", "GRAL GUI");
+                return;
+            }
+
+#endif
             CultureInfo ic = CultureInfo.InvariantCulture;
 
             //try
@@ -47,6 +55,13 @@ namespace Gral
                     }
                 }
 
+#if !__MonoCS__
+                if (grammProgressForm != null)
+                {
+                    grammProgressForm.Dispose(); grammProgressForm = null;
+                    SetGrammProgressLayout(false);
+                }
+#endif
                 Cursor = Cursors.WaitCursor;
 
                 EmifileReset = false;

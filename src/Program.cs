@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
 /// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
@@ -21,8 +21,16 @@ namespace Gral
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
+#if !__MonoCS__
+        static void Main(string[] args)
+#else
         static void Main()
+#endif
         {
+#if !__MonoCS__
+            if (args.Length == 1 && args[0] == "--gramm-console-monitor")
+            { GralIO.GrammConsoleMonitor.RunHost(); return; }
+#endif
 #if NET6_0_OR_GREATER
             //ApplicationConfiguration.Initialize();
             Application.EnableVisualStyles();

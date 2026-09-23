@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
 /// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
@@ -28,8 +28,20 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+#if !__MonoCS__
+        private async void GRAMMStartCalculation(object sender, EventArgs e)
+#else
         private void GRAMMStartCalculation(object sender, EventArgs e)
+#endif
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null)
+            {
+                MessageBox.Show(this, "GRAMM is already running. Pause or stop it before restarting.", "GRAL GUI");
+                return;
+            }
+            if (numericUpDown33.Value <= 1) SetGrammProgressLayout(false);
+#endif
             Random rnd = new Random();
 
             //set the maximum of the progressbar for the actual dispersion situation (simulation time)
@@ -110,6 +122,15 @@ namespace Gral
             {
                 try
                 {
+#if !__MonoCS__
+#if !__MonoCS__
+                    if (numericUpDown33.Value > 1)
+                    {
+                        await StartGrammResumeAsync(dialog.FileName);
+                        return;
+                    }
+#endif
+#endif
                     string GRAMM_Program_Path = dialog.FileName;
                     string GRAMM_Project_Path = String.Empty;
 
@@ -470,6 +491,14 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMStopCalculation(object sender, EventArgs e)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null)
+            {
+                grammResumeCancellation.Cancel();
+                return;
+            }
+
+#endif
 #if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
@@ -502,6 +531,14 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMPauseCalculation(object sender, EventArgs e)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null)
+            {
+                grammResumeCancellation.Cancel();
+                return;
+            }
+
+#endif
 #if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;

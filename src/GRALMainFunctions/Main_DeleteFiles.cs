@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
 /// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
@@ -280,6 +280,14 @@ namespace Gral
         /// <param name="e"></param>
         void GRAMMDeleteWindFields(object sender, EventArgs e)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null)
+            {
+                MessageBox.Show(this, "Pause or stop all GRAMM instances before deleting wind fields.", "GRAL GUI");
+                return;
+            }
+
+#endif
             if (string.IsNullOrEmpty(ProjectName))
             {
                 return; // exit if no project loaded

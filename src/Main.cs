@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 ///<remarks>
 /// <GRAL Graphical User Interface GUI>
 /// Copyright (C) [2019]  [Dietmar Oettl, Markus Kuntner]
@@ -339,6 +339,9 @@ namespace Gral
         public Main()
         {
             InitializeComponent();
+#if !__MonoCS__
+            InitializeGrammCpuOptions();
+#endif
             //CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             St_F.Small_Font = new Font("Arial", 8);
             St_F.Pin_Wind_Scale = 0;
@@ -479,6 +482,15 @@ namespace Gral
         /// </summary>
         void MainFormClosing(object sender, FormClosingEventArgs e)
         {
+#if !__MonoCS__
+            if (grammResumeCancellation != null)
+            {
+                e.Cancel = true;
+                MessageBox.Show(this, "Pause or stop all GRAMM instances before closing the GUI.", "GRAL GUI");
+                return;
+            }
+
+#endif
             if (Directory.Exists(Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar))) // a project selected?
             {
                 if (Control_OK == false) // indat not valid
@@ -2208,6 +2220,14 @@ namespace Gral
         /// </summary>
         void Gramm_locked_buttonClick(object sender, EventArgs e)
         {
+#if !__MonoCS__
+            if (sender != null && grammResumeCancellation != null)
+            {
+                MessageBox.Show(this, "Pause or stop all GRAMM instances before changing the project lock.", "GRAL GUI");
+                return;
+            }
+
+#endif
             if (sender != null && GRAMM_Locked == true) // Project is unlocked by the user!
             {
                 if (MessageBox.Show("The GRAMM project is locked - Unlocking the Project may invalidate the calculated windfields", "GRAMM project locked", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.OK)
