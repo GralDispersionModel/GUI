@@ -30,8 +30,10 @@ namespace Gral
         /// </summary>
         /// <param name="StartSituation">First situation when starting a chunk of situations</param>
         /// <param name="FinalSituation">Final situation when starting a chunk of situations</param>
-        private void GRALStartCalculation(int StartSituation, int FinalSituation)
+        private void GRALStartCalculation(object sender, int StartSituation, int FinalSituation)
         {
+            bool continueCalculation = sender == button35;
+
             if (Convert.ToString(listBox5.SelectedItem).Contains("Odour")) // check if the lowest conc. layer > 1.5 * vert. extension
             {
                 if (Convert.ToDouble(TBox3[0].Value) < 1.5 * Convert.ToDouble(numericUpDown8.Value))
@@ -214,10 +216,9 @@ namespace Gral
                     }
 
                     //delete existing concentration fields
-                    if (StartSituation == 0) // no deletion of exiting files when running a chunk of situations
+                    DirectoryInfo di = new DirectoryInfo(Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar));
+                    if (StartSituation == 0 && !continueCalculation) // no deletion of exiting files when running a chunk of situations or continue a calculation
                     {
-                        string newPath1 = Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar);
-                        DirectoryInfo di = new DirectoryInfo(newPath1);
                         FileInfo[] files_conc = di.GetFiles("*.con");
                         if (files_conc.Length == 0) // compressed files?
                         {
@@ -362,13 +363,20 @@ namespace Gral
                     }
                     string consoleArgument = param;
 
-                    if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations
+                    if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations or when continue a calculation
                     {
+                        StartSituation = GetNextMissingSituation(StartSituation, FinalSituation, di.GetFiles("*.grz"));
                         param += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
                     }
                     else if (numberOfInstances > 1)
                     {
+                        instance_start = GetNextMissingSituation(instance_start, instance_end, di.GetFiles("*.grz"));
                         param += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
+                    }
+                    else if (continueCalculation)
+                    {
+                        instance_start = GetNextMissingSituation(instance_start, final_sit, di.GetFiles("*.grz"));
+                        param += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + final_sit.ToString() + "\"";
                     }
                     //GRALProcess.Start();
                     int node = NumaNode(CPUNode);
@@ -378,9 +386,9 @@ namespace Gral
                         CoreProcessID.Add(processID);
                     }
 
-                    if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsibles UI
+                    if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsible UI
                     {
-                        StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument);
+                        StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, GRAL_Program_Path, consoleArgument, di);
                     }
 #endif
 
@@ -505,7 +513,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StartMultipleInstances(int FirstSit, int FinalSit, int Offset, int NumberOfInstances, string GRAL_Program_Path, string GRAL_Arguments)
+        private void StartMultipleInstances(int FirstSit, int FinalSit, int Offset, int NumberOfInstances, string GRAL_Program_Path, string GRAL_Arguments, DirectoryInfo Di)
         {
             Random rnd = new Random();
             int instance_start = FirstSit;
@@ -521,7 +529,7 @@ namespace Gral
                 {
                     instance_end = FinalSit;
                 }
-
+                instance_start = GetNextMissingSituation(instance_start, instance_end, Di.GetFiles("*.grz"));
                 string param = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
                 int node = CPUNode;
                 if (CPUNode == 4)

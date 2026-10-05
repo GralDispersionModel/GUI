@@ -30,6 +30,8 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMStartCalculation(object sender, EventArgs e)
         {
+            bool continueCalculation = sender == button31;
+
             Random rnd = new Random();
 
             //set the maximum of the progressbar for the actual dispersion situation (simulation time)
@@ -167,6 +169,8 @@ namespace Gral
                     GRAMM_Locked = true;                    // lock project
                     Gramm_locked_buttonClick(null, null);   // change locked-Button
 
+                    DirectoryInfo di = new DirectoryInfo(Project_Computation_Path);
+
                     if (numericUpDown33.Value == 1) // one instance -> start GRAMM as usual
                     {
                         //start computation routine GRAMM*.exe to compute wind fields
@@ -211,9 +215,24 @@ namespace Gral
                             MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 #else
-
                         string param = GRAMM_Program_Path;
-                        param += " " + "\"" + GRAMM_Project_Path + "\"";
+                        if (continueCalculation)
+                        {
+                            int startSituation = 1;
+                            startSituation = GetNextMissingSituation(startSituation, 10000, di.GetFiles("*.wnd"));
+                            if (GRAMM_Project_Path == String.Empty && startSituation > 0)
+                            {
+                                param += " " + startSituation.ToString() + " " + 9999999.ToString();
+                            }
+                            else
+                            {
+                                param += " " + "\"" + GRAMM_Project_Path + "\"" + " " + startSituation.ToString() + " " + 9999999.ToString();
+                            }
+                        }
+                        else
+                        {
+                            param += " " + "\"" + GRAMM_Project_Path + "\"";
+                        }
                         int node = NumaNode(CPUNode);
                         int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
                         if (processID > 0) //sucessful start
@@ -297,7 +316,11 @@ namespace Gral
                                 }
 #else
                                 string param = GRAMM_Program_Path;
-                                
+                                if (continueCalculation)
+                                {
+                                    instance_start = GetNextMissingSituation(instance_start, instance_end, di.GetFiles("*.wnd"));
+                                }
+
                                 if (string.IsNullOrEmpty(GRAMM_Project_Path))
                                 {
                                     param += " " + instance_start.ToString() + " " + instance_end.ToString();
@@ -312,7 +335,7 @@ namespace Gral
                                 {
                                     CoreProcessID.Add(processID);
                                 }
-                                #endif
+#endif
                             }
                             else // further instances
                             {
@@ -350,6 +373,10 @@ namespace Gral
                                 }
 #else
                                 string param = GRAMM_Program_Path;
+                                if (continueCalculation)
+                                {
+                                    instance_start = GetNextMissingSituation(instance_start, instance_end, di.GetFiles("*.wnd"));
+                                }
                                 if (GRAMM_Project_Path == String.Empty)
                                 {
                                     param += " " + instance_start.ToString() + " " + instance_end.ToString();
@@ -358,7 +385,7 @@ namespace Gral
                                 {
                                     param += " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
                                 }
-                                
+
                                 int node = NumaNode(CPUNode);
                                 if (CPUNode == 4)
                                 {
@@ -484,7 +511,7 @@ namespace Gral
                 catch (Exception ex) { MessageBox.Show(ex.Message.ToString()); }
             }
             CoreProcessID.Clear();
-            
+
             progressBar2.Value = 0;
             numericUpDown24.Value = 1;
             label67.Text = "Actual flow situation: " + "0" + "%";
@@ -535,6 +562,27 @@ namespace Gral
             GRAMMin(EmifileReset);
             //check if GRAL simulation should be enabled
             Enable_GRAL();
+        }
+
+        /// <summary>
+        /// Check any existing calculated results when continuing a calculation
+        /// </summary>
+        /// <param name="StartSituation">1st situation that should be calculated</param>
+        /// <param name="FinalSituation">final situation that should be calculated</param>
+        /// <param name="Files">FileInfo array</param>
+        /// <returns></returns>
+        private int GetNextMissingSituation(int StartSituation, int FinalSituation, FileInfo[] Files)
+        {
+            int firstnewSit = StartSituation;
+            for (; firstnewSit <= FinalSituation; firstnewSit++)
+            {
+                string number = firstnewSit.ToString("00000");
+                if (!Array.Exists(Files, element => element.Name.StartsWith(number)))
+                {
+                    break;
+                }
+            }
+            return firstnewSit;
         }
     }
 }

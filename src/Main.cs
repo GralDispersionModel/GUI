@@ -1397,7 +1397,7 @@ namespace Gral
         //Start GRAL simulation
         private void Button33_Click(object sender, EventArgs e)
         {
-            GRALStartCalculation(0, 0);
+            GRALStartCalculation(sender, 0, 0);
         }
         private void Button33_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1459,7 +1459,7 @@ namespace Gral
             if (start <= end)
             {
                 numericUpDown33.Value = 1;
-                GRALStartCalculation(start, end);
+                GRALStartCalculation(sender, start, end);
             }
         }
 
@@ -1469,12 +1469,12 @@ namespace Gral
         {
             GRALStopCalculation(sender, e);
         }
-        //pause for GRAL simulations
+        //continue the GRAL simulations
         private void Button35_Click(object sender, EventArgs e)
         {
-            GRALPauseCalculation(sender, e);
+            GRALStartCalculation(sender, 0, 0);
         }
-        //start GRAMM simulation
+        //start a new GRAMM simulation
         private void Button32_Click(object sender, EventArgs e)
         {
             GRAMMStartCalculation(sender, e);
@@ -1484,10 +1484,10 @@ namespace Gral
         {
             GRAMMStopCalculation(sender, e);
         }
-        //pause GRAMM simulations
+        //continue a GRAMM simulations
         private void Button31_Click(object sender, EventArgs e)
         {
-            GRAMMPauseCalculation(sender, e);
+            GRAMMStartCalculation(sender, e);
         }
         //Computing mean concentrations
         private void Button28_Click(object sender, EventArgs e)

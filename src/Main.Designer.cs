@@ -3683,7 +3683,7 @@
             button32.Name = "button32";
             button32.Size = new System.Drawing.Size(35, 35);
             button32.TabIndex = 32;
-            toolTip1.SetToolTip(button32, "Start the GRAMM computation core");
+            toolTip1.SetToolTip(button32, "Start a new calculation");
             button32.UseVisualStyleBackColor = false;
             button32.Click += Button32_Click;
             // 
@@ -3698,7 +3698,7 @@
             button30.Name = "button30";
             button30.Size = new System.Drawing.Size(35, 35);
             button30.TabIndex = 30;
-            toolTip1.SetToolTip(button30, "Stop the simulation");
+            toolTip1.SetToolTip(button30, "Stop the calculation cores");
             button30.UseVisualStyleBackColor = false;
             button30.Click += Button30_Click;
             // 
@@ -3713,7 +3713,7 @@
             button31.Name = "button31";
             button31.Size = new System.Drawing.Size(35, 35);
             button31.TabIndex = 31;
-            toolTip1.SetToolTip(button31, "Pause");
+            toolTip1.SetToolTip(button31, "Continue a calculation");
             button31.UseVisualStyleBackColor = false;
             button31.Click += Button31_Click;
             // 
@@ -4172,7 +4172,7 @@
             button33.Name = "button33";
             button33.Size = new System.Drawing.Size(35, 35);
             button33.TabIndex = 42;
-            toolTip1.SetToolTip(button33, "Start the GRAL computation core\r\nRight mouse key: start a chunk of situations");
+            toolTip1.SetToolTip(button33, "Start a new calculation\r\nRight mouse key: start a chunk of situations");
             button33.UseVisualStyleBackColor = false;
             button33.Click += Button33_Click;
             button33.MouseDown += Button33_MouseDown;
@@ -4241,7 +4241,7 @@
             button34.Name = "button34";
             button34.Size = new System.Drawing.Size(35, 35);
             button34.TabIndex = 40;
-            toolTip1.SetToolTip(button34, "Stop the simulation");
+            toolTip1.SetToolTip(button34, "Stop the calculation cores");
             button34.UseVisualStyleBackColor = false;
             button34.Click += Button34_Click;
             // 
@@ -4256,7 +4256,7 @@
             button35.Name = "button35";
             button35.Size = new System.Drawing.Size(35, 35);
             button35.TabIndex = 41;
-            toolTip1.SetToolTip(button35, "Pause");
+            toolTip1.SetToolTip(button35, "Continue a calculation");
             button35.UseVisualStyleBackColor = false;
             button35.Click += Button35_Click;
             // 
