@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gral
@@ -424,24 +425,38 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GRALStopCalculation(object sender, EventArgs e)
+        private async Task GRALStopCalculation(object sender, EventArgs e)
         {
 #if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
 #else
 #if NET6_0_OR_GREATER
+
             foreach (int processID in CoreProcessID)
             {
                 try
                 {
-                    Process localById = Process.GetProcessById(processID);
-                    localById.Kill();
+                    using var server = new System.IO.Pipes.NamedPipeServerStream("GRALServerStream", System.IO.Pipes.PipeDirection.Out);
+                    await server.WaitForConnectionAsync();
+                    using (StreamWriter writer = new StreamWriter(server) { AutoFlush = true })
+                    {
+                        await writer.WriteLineAsync("Finish");
+                    }
                 }
-                catch (Exception ex)
+                catch (System.TimeoutException)
                 {
-                    MessageBox.Show(ex.Message.ToString());
-                }
+                    // Console app might already be busy or closed
+                    try
+                    {
+                        Process localById = Process.GetProcessById(processID);
+                        localById.Kill();
+                    }
+                    catch (Exception ex)
+                    {
+                        //MessageBox.Show(ex.Message.ToString());
+                    }
+                }       
             }
             CoreProcessID.Clear();
 #else
