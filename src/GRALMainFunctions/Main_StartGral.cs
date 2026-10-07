@@ -396,7 +396,6 @@ namespace Gral
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
                     WriteGralLogFile(1, "", GRAL_Program_Path);
-
                 }
                 catch
                 {
@@ -437,12 +436,7 @@ namespace Gral
             {
                 try
                 {
-                    using var server = new System.IO.Pipes.NamedPipeServerStream("GRALServerStream", System.IO.Pipes.PipeDirection.Out);
-                    await server.WaitForConnectionAsync();
-                    using (StreamWriter writer = new StreamWriter(server) { AutoFlush = true })
-                    {
-                        await writer.WriteLineAsync("Finish");
-                    }
+                    WaitForClientConnect(processID);   
                 }
                 catch (System.TimeoutException)
                 {
@@ -452,11 +446,9 @@ namespace Gral
                         Process localById = Process.GetProcessById(processID);
                         localById.Kill();
                     }
-                    catch (Exception ex)
-                    {
-                        //MessageBox.Show(ex.Message.ToString());
-                    }
+                    catch { }
                 }       
+                finally { }
             }
             CoreProcessID.Clear();
 #else
@@ -471,6 +463,19 @@ namespace Gral
             CheckConFiles();
 #endif
         }
+        public async Task<bool> WaitForClientConnect(int processID)
+        {
+            using (System.IO.Pipes.NamedPipeServerStream server = new System.IO.Pipes.NamedPipeServerStream("GRALServerStream" + processID.ToString(), System.IO.Pipes.PipeDirection.Out))
+            {
+                await server.WaitForConnectionAsync();
+                using (StreamWriter writer = new StreamWriter(server) { AutoFlush = true })
+                {
+                    await writer.WriteLineAsync("StopGRAL");
+                }
+            }
+            return true;
+        }
+        
 
         /// <summary>
         /// pause for GRAL simulations
