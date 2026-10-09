@@ -210,21 +210,21 @@ namespace GralBackgroundworkers
                     akmet = text[2];
                     frequency = Convert.ToDouble(text[3].Replace(".", decsep));
                     //GRAL filenames
-                    string[] con_files = new string[100];
-                    string[] odr_files = new string[100];
+                    string[] con_files = new string[sg_names.Length];
+                    string[] odr_files = new string[sg_names.Length];
                     string[] concdata = new string[3];
                     itm = 0;
                     foreach (string source_group_name in sg_names)
                     {
                         if (sg_names.Length > 0)
                         {
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".con";
-                            odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".odr";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".con";
+                            odr_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".odr";
                         }
                         else
                         {
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".con";
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".odr";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_names[itm]) + ".con";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_names[itm]) + ".odr";
                         }
 
                         if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itm])) == false &&

@@ -630,33 +630,16 @@ namespace GralItemForms
         //search for the correct source group within the combobox
         private void combo(int SourceGroupNumber)
         {
-            string[] text = new string[2];
-            int i = 0;
-            int sg = 0;
-            foreach (string text1 in comboBox1.Items)
+            for (int i = 0; i < comboBox1.Items.Count; i++)
             {
-                text = text1.Split(new char[] { ',' });
-
-                if (text.Length > 1)
+                if (Gral.SourceGroupCatalog.GetNumber(comboBox1.Items[i].ToString()) == SourceGroupNumber)
                 {
-                    int.TryParse(text[1], out sg);
-                    if (sg == SourceGroupNumber)
-                    {
-                        comboBox1.SelectedIndex = i;
-                        break;
-                    }
+                    comboBox1.SelectedIndex = i;
+                    return;
                 }
-                else
-                {
-                    int.TryParse(text[0], out sg);
-                    if (sg == SourceGroupNumber)
-                    {
-                        comboBox1.SelectedIndex = i;
-                        break;
-                    }
-                }
-                i++;
             }
+            // Imported sources need not have a named definition.
+            comboBox1.SelectedIndex = comboBox1.Items.Add(SourceGroupNumber.ToString());
         }
 
         void EditPointSourcesResizeEnd(object sender, EventArgs e)
