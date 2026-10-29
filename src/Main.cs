@@ -1453,6 +1453,10 @@ namespace Gral
                     start = startFinalSit.StartSituation;
                     end = startFinalSit.FinalSituation;
                 }
+                else
+                {
+                    return; // Cancel button
+                }
                 startFinalSit.Close();
                 startFinalSit.Dispose();
             }
