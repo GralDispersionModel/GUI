@@ -41,12 +41,29 @@ If you find a bug in the source code, you can help us by submitting an issue to 
 Please test the bug fix by one ore more projects and document the changes.
 
 ## What should I know before I get started?
-GRAL GUI is developed for the .NetFramework. You can use MonoDevelop for development across platforms or Visual Studio 2017 or above in Windows.
+GRAL GUI is developed for the .NetCore10 framework.
 
-## Styleguides
-We are trying to comply with the Microsoft design rules for new developments but the application has been grown historically.
+## Type of Change
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+- [ ] Code refactoring / Cleanup
 
-### Git Commit Messages
+## AI Disclosure & Verification
+- [ ] **AI-Assisted:** This Pull Request contains code generated or assisted by AI tools (e.g., GitHub Copilot, ChatGPT, Claude).
+- [ ] **Human-Only:** This Pull Request was written entirely without AI generation.
+
+*If AI-assisted, I confirm that:*
+- [ ] I have reviewed every line of the generated code, understand its logic, and verify its correctness.
+- [ ] I have verified that the AI did not introduce legacy, insecure, or hallucinated APIs.
+
+## Quality Assurance Checklist
+- [ ] **Local Build:** The project builds successfully locally with zero warnings (`dotnet build` with `TreatWarningsAsErrors`).
+- [ ] **Nullable Safety:** No new compiler warnings regarding nullable reference types have been introduced.
+- [ ] **Documentation:** Code comments and public API documentation have been updated accordingly.
+
+## Git Commit Messages
 * Use the present tense ("Add feature" not "Added feature")
 * Use the imperative mood ("Change array a[] to..." not "Changes array a[] to...")
 * Reference issues and pull requests liberally after the first line

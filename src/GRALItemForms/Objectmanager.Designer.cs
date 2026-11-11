@@ -38,6 +38,8 @@
             button4 = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(components);
             button6 = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
+            textBox1 = new System.Windows.Forms.TextBox();
             SuspendLayout();
             // 
             // button1
@@ -111,7 +113,7 @@
             listBox1.Font = new System.Drawing.Font("Arial", 9F);
             listBox1.FormattingEnabled = true;
             listBox1.HorizontalScrollbar = true;
-            listBox1.Location = new System.Drawing.Point(102, 8);
+            listBox1.Location = new System.Drawing.Point(102, 41);
             listBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             listBox1.Name = "listBox1";
             listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
@@ -152,6 +154,23 @@
             button6.Visible = false;
             button6.Click += Button6Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(103, 12);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(58, 15);
+            label1.TabIndex = 9;
+            label1.Text = "Filter text:";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new System.Drawing.Point(167, 10);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new System.Drawing.Size(246, 23);
+            textBox1.TabIndex = 10;
+            textBox1.TextChanged += textBox1_TextChanged;
+            // 
             // Objectmanager
             // 
             AcceptButton = button3;
@@ -160,6 +179,8 @@
             CancelButton = button5;
             ClientSize = new System.Drawing.Size(425, 404);
             ControlBox = false;
+            Controls.Add(textBox1);
+            Controls.Add(label1);
             Controls.Add(button4);
             Controls.Add(listBox1);
             Controls.Add(button6);
@@ -190,5 +211,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

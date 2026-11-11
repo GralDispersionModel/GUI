@@ -308,6 +308,10 @@ namespace Gral
         /// Project settings and project paths
         /// </summary>
         public static ProjectSettings ProjectSetting = new ProjectSettings("");
+        /// <summary>
+        /// Store the GRAL&GRAMM cores processId's
+        /// </summary>
+        private static List<int> CoreProcessID = new List<int>();
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -324,6 +328,10 @@ namespace Gral
         /// Timer for updating the file size labels
         /// </summary>
         private System.Timers.Timer UpdateFileSizes;
+        /// <summary>
+        /// CPU Node for GRAL & GRAMM calculation
+        /// </summary>
+        private int CPUNode = 0;
 
         /// <summary>
         /// Start the main form of this application
@@ -949,7 +957,12 @@ namespace Gral
                             }
                         }
                         mywriter.WriteLine(cW.ToString(ic) + "\t ! Wet deposition cW setting");
-                        mywriter.WriteLine(alphaW.ToString(ic) + "\t ! Wet deposition alphaW setting");
+                        int dropdrift = 0;
+                        if (checkBox55.Checked)
+                        {
+                            dropdrift = 1;
+                        }
+                        mywriter.WriteLine(alphaW.ToString(ic) + "\t" + dropdrift + "\t ! Wet deposition alphaW setting \t Drop drift (1 = activated)");
                         mywriter.WriteLine("0" + "\t ! Decay rate for all source groups");
                         if (Convert.ToString(listBox5.SelectedItem) == "Bioaerosols" || Convert.ToString(listBox5.SelectedItem) == "Unknown")
                         {
@@ -1384,7 +1397,7 @@ namespace Gral
         //Start GRAL simulation
         private void Button33_Click(object sender, EventArgs e)
         {
-            GRALStartCalculation(0, 0);
+            GRALStartCalculation(sender, 0, 0);
         }
         private void Button33_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1440,13 +1453,17 @@ namespace Gral
                     start = startFinalSit.StartSituation;
                     end = startFinalSit.FinalSituation;
                 }
+                else
+                {
+                    return; // Cancel button
+                }
                 startFinalSit.Close();
                 startFinalSit.Dispose();
             }
             if (start <= end)
             {
                 numericUpDown33.Value = 1;
-                GRALStartCalculation(start, end);
+                GRALStartCalculation(sender, start, end);
             }
         }
 
@@ -1456,12 +1473,12 @@ namespace Gral
         {
             GRALStopCalculation(sender, e);
         }
-        //pause for GRAL simulations
+        //continue the GRAL simulations
         private void Button35_Click(object sender, EventArgs e)
         {
-            GRALPauseCalculation(sender, e);
+            GRALStartCalculation(sender, 0, 0);
         }
-        //start GRAMM simulation
+        //start a new GRAMM simulation
         private void Button32_Click(object sender, EventArgs e)
         {
             GRAMMStartCalculation(sender, e);
@@ -1471,10 +1488,10 @@ namespace Gral
         {
             GRAMMStopCalculation(sender, e);
         }
-        //pause GRAMM simulations
+        //continue a GRAMM simulations
         private void Button31_Click(object sender, EventArgs e)
         {
-            GRAMMPauseCalculation(sender, e);
+            GRAMMStartCalculation(sender, e);
         }
         //Computing mean concentrations
         private void Button28_Click(object sender, EventArgs e)
@@ -3070,7 +3087,7 @@ namespace Gral
             }
             ((HandledMouseEventArgs)e).Handled = true;
         }
-        
+
         /// <summary>
         /// Allow only integer values on the NumericUpDown control
         /// </summary>
@@ -4156,6 +4173,16 @@ namespace Gral
             };
             write_in_dat.WriteInDat();
             write_in_dat = null;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CPUNode = comboBox1.SelectedIndex;
+        }
+
+        private void checkBox55_CheckedChanged(object sender, EventArgs e)
+        {
+            ListBox5_SelectedIndexChanged(sender, null);
         }
     }
 }

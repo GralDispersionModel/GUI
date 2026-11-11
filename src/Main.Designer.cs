@@ -149,14 +149,15 @@
             Sources = new System.Windows.Forms.TabPage();
             LabelEmissionPath = new System.Windows.Forms.Label();
             button60 = new System.Windows.Forms.Button();
-            groupBox24 = new System.Windows.Forms.GroupBox();
-            button54 = new System.Windows.Forms.Button();
             groupBox21 = new System.Windows.Forms.GroupBox();
+            checkBox55 = new System.Windows.Forms.CheckBox();
             checkBox33 = new System.Windows.Forms.CheckBox();
             numericUpDown36 = new System.Windows.Forms.NumericUpDown();
             numericUpDown35 = new System.Windows.Forms.NumericUpDown();
             label33 = new System.Windows.Forms.Label();
             label32 = new System.Windows.Forms.Label();
+            groupBox24 = new System.Windows.Forms.GroupBox();
+            button54 = new System.Windows.Forms.Button();
             pictureBox5 = new System.Windows.Forms.PictureBox();
             button104 = new System.Windows.Forms.Button();
             button13 = new System.Windows.Forms.Button();
@@ -260,6 +261,7 @@
             numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             Computation = new System.Windows.Forms.TabPage();
             groupBox31 = new System.Windows.Forms.GroupBox();
+            comboBox1 = new System.Windows.Forms.ComboBox();
             checkBoxAVX = new System.Windows.Forms.CheckBox();
             numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             label98 = new System.Windows.Forms.Label();
@@ -379,10 +381,10 @@
             groupBox9.SuspendLayout();
             groupBox7.SuspendLayout();
             Sources.SuspendLayout();
-            groupBox24.SuspendLayout();
             groupBox21.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown36).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown35).BeginInit();
+            groupBox24.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             groupBox27.SuspendLayout();
             Meteorology.SuspendLayout();
@@ -1892,8 +1894,8 @@
             Sources.BackColor = System.Drawing.Color.FromArgb(224, 224, 224);
             Sources.Controls.Add(LabelEmissionPath);
             Sources.Controls.Add(button60);
-            Sources.Controls.Add(groupBox24);
             Sources.Controls.Add(groupBox21);
+            Sources.Controls.Add(groupBox24);
             Sources.Controls.Add(pictureBox5);
             Sources.Controls.Add(button104);
             Sources.Controls.Add(button13);
@@ -1939,12 +1941,100 @@
             button60.UseVisualStyleBackColor = false;
             button60.Click += Button60_Click;
             // 
+            // groupBox21
+            // 
+            groupBox21.BackColor = System.Drawing.Color.FromArgb(224, 224, 224);
+            groupBox21.Controls.Add(checkBox55);
+            groupBox21.Controls.Add(checkBox33);
+            groupBox21.Controls.Add(numericUpDown36);
+            groupBox21.Controls.Add(numericUpDown35);
+            groupBox21.Controls.Add(label33);
+            groupBox21.Controls.Add(label32);
+            groupBox21.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            groupBox21.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            groupBox21.Location = new System.Drawing.Point(714, 25);
+            groupBox21.Margin = new System.Windows.Forms.Padding(2);
+            groupBox21.Name = "groupBox21";
+            groupBox21.Padding = new System.Windows.Forms.Padding(2);
+            groupBox21.Size = new System.Drawing.Size(90, 174);
+            groupBox21.TabIndex = 8;
+            groupBox21.TabStop = false;
+            groupBox21.Text = "Wet Deposition";
+            groupBox21.Visible = false;
+            // 
+            // checkBox55
+            // 
+            checkBox55.Location = new System.Drawing.Point(6, 150);
+            checkBox55.Margin = new System.Windows.Forms.Padding(2);
+            checkBox55.Name = "checkBox55";
+            checkBox55.Size = new System.Drawing.Size(80, 19);
+            checkBox55.TabIndex = 12;
+            checkBox55.Text = "Drop drift";
+            toolTip1.SetToolTip(checkBox55, "Enable drop drift calculation");
+            checkBox55.UseVisualStyleBackColor = true;
+            checkBox55.CheckedChanged += checkBox55_CheckedChanged;
+            // 
+            // checkBox33
+            // 
+            checkBox33.Location = new System.Drawing.Point(5, 22);
+            checkBox33.Margin = new System.Windows.Forms.Padding(2);
+            checkBox33.Name = "checkBox33";
+            checkBox33.Size = new System.Drawing.Size(70, 19);
+            checkBox33.TabIndex = 8;
+            checkBox33.Text = "Enabled";
+            toolTip1.SetToolTip(checkBox33, "Enable wet deposition settings");
+            checkBox33.UseVisualStyleBackColor = true;
+            checkBox33.CheckedChanged += ListBox5_SelectedIndexChanged;
+            // 
+            // numericUpDown36
+            // 
+            numericUpDown36.DecimalPlaces = 1;
+            numericUpDown36.Location = new System.Drawing.Point(4, 122);
+            numericUpDown36.Margin = new System.Windows.Forms.Padding(2);
+            numericUpDown36.Maximum = new decimal(new int[] { 500, 0, 0, 0 });
+            numericUpDown36.Name = "numericUpDown36";
+            numericUpDown36.Size = new System.Drawing.Size(71, 22);
+            numericUpDown36.TabIndex = 10;
+            toolTip1.SetToolTip(numericUpDown36, "Wet deposition\r\nCW value for this pollutant");
+            numericUpDown36.ValueChanged += NumericUpDown35ValueChanged;
+            // 
+            // numericUpDown35
+            // 
+            numericUpDown35.DecimalPlaces = 2;
+            numericUpDown35.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown35.Location = new System.Drawing.Point(5, 63);
+            numericUpDown35.Margin = new System.Windows.Forms.Padding(2);
+            numericUpDown35.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown35.Name = "numericUpDown35";
+            numericUpDown35.Size = new System.Drawing.Size(71, 22);
+            numericUpDown35.TabIndex = 9;
+            toolTip1.SetToolTip(numericUpDown35, "Wet deposition\r\nAlhaW value for this pollutant");
+            numericUpDown35.ValueChanged += NumericUpDown35ValueChanged;
+            // 
+            // label33
+            // 
+            label33.Location = new System.Drawing.Point(4, 93);
+            label33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label33.Name = "label33";
+            label33.Size = new System.Drawing.Size(71, 38);
+            label33.TabIndex = 1;
+            label33.Text = "Cw * 1E-6 \r\n[1/s]";
+            // 
+            // label32
+            // 
+            label32.Location = new System.Drawing.Point(5, 44);
+            label32.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label32.Name = "label32";
+            label32.Size = new System.Drawing.Size(70, 18);
+            label32.TabIndex = 0;
+            label32.Text = "Alphaw";
+            // 
             // groupBox24
             // 
             groupBox24.BackColor = System.Drawing.Color.FromArgb(224, 224, 224);
             groupBox24.Controls.Add(button54);
             groupBox24.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            groupBox24.Location = new System.Drawing.Point(717, 185);
+            groupBox24.Location = new System.Drawing.Point(718, 205);
             groupBox24.Name = "groupBox24";
             groupBox24.Size = new System.Drawing.Size(75, 45);
             groupBox24.TabIndex = 11;
@@ -1963,81 +2053,6 @@
             toolTip1.SetToolTip(button54, "Set decay rates for each source group");
             button54.UseVisualStyleBackColor = true;
             button54.Click += Button54_Click;
-            // 
-            // groupBox21
-            // 
-            groupBox21.BackColor = System.Drawing.Color.FromArgb(224, 224, 224);
-            groupBox21.Controls.Add(checkBox33);
-            groupBox21.Controls.Add(numericUpDown36);
-            groupBox21.Controls.Add(numericUpDown35);
-            groupBox21.Controls.Add(label33);
-            groupBox21.Controls.Add(label32);
-            groupBox21.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            groupBox21.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            groupBox21.Location = new System.Drawing.Point(714, 25);
-            groupBox21.Margin = new System.Windows.Forms.Padding(2);
-            groupBox21.Name = "groupBox21";
-            groupBox21.Padding = new System.Windows.Forms.Padding(2);
-            groupBox21.Size = new System.Drawing.Size(90, 160);
-            groupBox21.TabIndex = 8;
-            groupBox21.TabStop = false;
-            groupBox21.Text = "Wet Deposition";
-            groupBox21.Visible = false;
-            // 
-            // checkBox33
-            // 
-            checkBox33.Location = new System.Drawing.Point(5, 25);
-            checkBox33.Margin = new System.Windows.Forms.Padding(2);
-            checkBox33.Name = "checkBox33";
-            checkBox33.Size = new System.Drawing.Size(70, 19);
-            checkBox33.TabIndex = 8;
-            checkBox33.Text = "Enabled";
-            toolTip1.SetToolTip(checkBox33, "Enable wet deposition settings");
-            checkBox33.UseVisualStyleBackColor = true;
-            checkBox33.CheckedChanged += ListBox5_SelectedIndexChanged;
-            // 
-            // numericUpDown36
-            // 
-            numericUpDown36.DecimalPlaces = 1;
-            numericUpDown36.Location = new System.Drawing.Point(4, 128);
-            numericUpDown36.Margin = new System.Windows.Forms.Padding(2);
-            numericUpDown36.Maximum = new decimal(new int[] { 500, 0, 0, 0 });
-            numericUpDown36.Name = "numericUpDown36";
-            numericUpDown36.Size = new System.Drawing.Size(71, 22);
-            numericUpDown36.TabIndex = 10;
-            toolTip1.SetToolTip(numericUpDown36, "Wet deposition\r\nCW value for this pollutant");
-            numericUpDown36.ValueChanged += NumericUpDown35ValueChanged;
-            // 
-            // numericUpDown35
-            // 
-            numericUpDown35.DecimalPlaces = 2;
-            numericUpDown35.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericUpDown35.Location = new System.Drawing.Point(5, 69);
-            numericUpDown35.Margin = new System.Windows.Forms.Padding(2);
-            numericUpDown35.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown35.Name = "numericUpDown35";
-            numericUpDown35.Size = new System.Drawing.Size(71, 22);
-            numericUpDown35.TabIndex = 9;
-            toolTip1.SetToolTip(numericUpDown35, "Wet deposition\r\nAlhaW value for this pollutant");
-            numericUpDown35.ValueChanged += NumericUpDown35ValueChanged;
-            // 
-            // label33
-            // 
-            label33.Location = new System.Drawing.Point(4, 98);
-            label33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            label33.Name = "label33";
-            label33.Size = new System.Drawing.Size(71, 38);
-            label33.TabIndex = 1;
-            label33.Text = "Cw * 1E-6 \r\n[1/s]";
-            // 
-            // label32
-            // 
-            label32.Location = new System.Drawing.Point(5, 47);
-            label32.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            label32.Name = "label32";
-            label32.Size = new System.Drawing.Size(70, 18);
-            label32.TabIndex = 0;
-            label32.Text = "Alphaw";
             // 
             // pictureBox5
             // 
@@ -2190,7 +2205,7 @@
             groupBox27.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             groupBox27.Location = new System.Drawing.Point(454, 218);
             groupBox27.Name = "groupBox27";
-            groupBox27.Size = new System.Drawing.Size(329, 45);
+            groupBox27.Size = new System.Drawing.Size(257, 45);
             groupBox27.TabIndex = 24;
             groupBox27.TabStop = false;
             groupBox27.Text = "Emission-time-series";
@@ -3376,29 +3391,43 @@
             // 
             // groupBox31
             // 
+            groupBox31.Controls.Add(comboBox1);
             groupBox31.Controls.Add(checkBoxAVX);
             groupBox31.Controls.Add(numericUpDown33);
             groupBox31.Controls.Add(label98);
             groupBox31.Controls.Add(numericUpDown32);
             groupBox31.Controls.Add(label20);
             groupBox31.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            groupBox31.Location = new System.Drawing.Point(212, 309);
+            groupBox31.Location = new System.Drawing.Point(212, 303);
             groupBox31.Name = "groupBox31";
-            groupBox31.Size = new System.Drawing.Size(217, 129);
+            groupBox31.Size = new System.Drawing.Size(217, 135);
             groupBox31.TabIndex = 81;
             groupBox31.TabStop = false;
             groupBox31.Text = "Processor cores";
+            // 
+            // comboBox1
+            // 
+            comboBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "NUMA node 0", "NUMA node 1", "NUMA node 2", "NUMA node 3", "Shuffle nodes 0 and 1", "Shuffle nodes 0 to 3" });
+            comboBox1.Location = new System.Drawing.Point(13, 84);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new System.Drawing.Size(194, 23);
+            comboBox1.TabIndex = 37;
+            comboBox1.Text = "Select a NUMA node (GRAL)";
+            toolTip1.SetToolTip(comboBox1, "On HPC systems with multiple NUMA nodes, this option \r\nallows you to select a NUMA node for the computation\r\nin order to use all cores on the system");
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // checkBoxAVX
             // 
             checkBoxAVX.AutoSize = true;
             checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
-            checkBoxAVX.Location = new System.Drawing.Point(13, 92);
+            checkBoxAVX.Location = new System.Drawing.Point(13, 112);
             checkBoxAVX.Name = "checkBoxAVX";
-            checkBoxAVX.Size = new System.Drawing.Size(146, 19);
+            checkBoxAVX.Size = new System.Drawing.Size(145, 19);
             checkBoxAVX.TabIndex = 26;
             checkBoxAVX.Text = "Use AVX512 extensions";
-            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function.");
+            toolTip1.SetToolTip(checkBoxAVX, "AVX512 is faster on certain processor types and slower on others. \r\nTherefore, this is an opt-in function for GRAL calculations");
             checkBoxAVX.UseVisualStyleBackColor = true;
             checkBoxAVX.Visible = false;
             checkBoxAVX.Click += CheckBoxAVX_Click;
@@ -3406,7 +3435,7 @@
             // numericUpDown33
             // 
             numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
-            numericUpDown33.Location = new System.Drawing.Point(148, 56);
+            numericUpDown33.Location = new System.Drawing.Point(148, 53);
             numericUpDown33.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
             numericUpDown33.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown33.Name = "numericUpDown33";
@@ -3420,7 +3449,7 @@
             // label98
             // 
             label98.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label98.Location = new System.Drawing.Point(10, 58);
+            label98.Location = new System.Drawing.Point(10, 55);
             label98.Name = "label98";
             label98.Size = new System.Drawing.Size(130, 20);
             label98.TabIndex = 24;
@@ -3429,7 +3458,7 @@
             // numericUpDown32
             // 
             numericUpDown32.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            numericUpDown32.Location = new System.Drawing.Point(148, 25);
+            numericUpDown32.Location = new System.Drawing.Point(148, 22);
             numericUpDown32.Maximum = new decimal(new int[] { 128, 0, 0, 0 });
             numericUpDown32.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDown32.Name = "numericUpDown32";
@@ -3443,7 +3472,7 @@
             // label20
             // 
             label20.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            label20.Location = new System.Drawing.Point(10, 27);
+            label20.Location = new System.Drawing.Point(10, 24);
             label20.Name = "label20";
             label20.Size = new System.Drawing.Size(130, 20);
             label20.TabIndex = 24;
@@ -3654,7 +3683,7 @@
             button32.Name = "button32";
             button32.Size = new System.Drawing.Size(35, 35);
             button32.TabIndex = 32;
-            toolTip1.SetToolTip(button32, "Start the GRAMM computation core");
+            toolTip1.SetToolTip(button32, "Start a new calculation");
             button32.UseVisualStyleBackColor = false;
             button32.Click += Button32_Click;
             // 
@@ -3669,7 +3698,7 @@
             button30.Name = "button30";
             button30.Size = new System.Drawing.Size(35, 35);
             button30.TabIndex = 30;
-            toolTip1.SetToolTip(button30, "Stop the simulation");
+            toolTip1.SetToolTip(button30, "Stop the calculation cores");
             button30.UseVisualStyleBackColor = false;
             button30.Click += Button30_Click;
             // 
@@ -3684,7 +3713,7 @@
             button31.Name = "button31";
             button31.Size = new System.Drawing.Size(35, 35);
             button31.TabIndex = 31;
-            toolTip1.SetToolTip(button31, "Pause");
+            toolTip1.SetToolTip(button31, "Continue a calculation");
             button31.UseVisualStyleBackColor = false;
             button31.Click += Button31_Click;
             // 
@@ -4143,7 +4172,7 @@
             button33.Name = "button33";
             button33.Size = new System.Drawing.Size(35, 35);
             button33.TabIndex = 42;
-            toolTip1.SetToolTip(button33, "Start the GRAL computation core\r\nRight mouse key: start a chunk of situations");
+            toolTip1.SetToolTip(button33, "Start a new calculation\r\nRight mouse key: start a chunk of situations");
             button33.UseVisualStyleBackColor = false;
             button33.Click += Button33_Click;
             button33.MouseDown += Button33_MouseDown;
@@ -4154,9 +4183,9 @@
             groupBox11.Controls.Add(radioButton2);
             groupBox11.Controls.Add(radioButton1);
             groupBox11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            groupBox11.Location = new System.Drawing.Point(5, 300);
+            groupBox11.Location = new System.Drawing.Point(5, 293);
             groupBox11.Name = "groupBox11";
-            groupBox11.Size = new System.Drawing.Size(186, 121);
+            groupBox11.Size = new System.Drawing.Size(186, 128);
             groupBox11.TabIndex = 6;
             groupBox11.TabStop = false;
             groupBox11.Text = " GRAL Topography";
@@ -4212,7 +4241,7 @@
             button34.Name = "button34";
             button34.Size = new System.Drawing.Size(35, 35);
             button34.TabIndex = 40;
-            toolTip1.SetToolTip(button34, "Stop the simulation");
+            toolTip1.SetToolTip(button34, "Stop the calculation cores");
             button34.UseVisualStyleBackColor = false;
             button34.Click += Button34_Click;
             // 
@@ -4227,7 +4256,7 @@
             button35.Name = "button35";
             button35.Size = new System.Drawing.Size(35, 35);
             button35.TabIndex = 41;
-            toolTip1.SetToolTip(button35, "Pause");
+            toolTip1.SetToolTip(button35, "Continue a calculation");
             button35.UseVisualStyleBackColor = false;
             button35.Click += Button35_Click;
             // 
@@ -4483,10 +4512,10 @@
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
             Sources.ResumeLayout(false);
-            groupBox24.ResumeLayout(false);
             groupBox21.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDown36).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown35).EndInit();
+            groupBox24.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             groupBox27.ResumeLayout(false);
             Meteorology.ResumeLayout(false);
@@ -4869,6 +4898,8 @@
         private System.Windows.Forms.Label LabelEmissionPath;
         public System.Windows.Forms.CheckBox checkBoxAVX;
         private System.Windows.Forms.GroupBox groupBox31;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox checkBox55;
     }
 }
 

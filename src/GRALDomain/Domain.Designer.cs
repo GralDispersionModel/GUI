@@ -202,6 +202,10 @@
             lowPassGRALTopographyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             saveTopographyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             restoreGRALTopographyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem19 = new System.Windows.Forms.ToolStripSeparator();
+            createmodifyESRIAsciiRasterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            loadESRIAsciiRasterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            saveESRIAsciiRasterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             arrowCursorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             crossCursorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1965,7 +1969,7 @@
             // 
             pointSourcesToolStripMenuItem1.Name = "pointSourcesToolStripMenuItem1";
             pointSourcesToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1;
-            pointSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            pointSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             pointSourcesToolStripMenuItem1.Text = "Point sources";
             pointSourcesToolStripMenuItem1.Click += Button8_Click;
             // 
@@ -1973,7 +1977,7 @@
             // 
             areaSourcesToolStripMenuItem1.Name = "areaSourcesToolStripMenuItem1";
             areaSourcesToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F2;
-            areaSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            areaSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             areaSourcesToolStripMenuItem1.Text = "Area sources";
             areaSourcesToolStripMenuItem1.Click += Button10_Click;
             // 
@@ -1981,7 +1985,7 @@
             // 
             lineSourcesToolStripMenuItem1.Name = "lineSourcesToolStripMenuItem1";
             lineSourcesToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F3;
-            lineSourcesToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            lineSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             lineSourcesToolStripMenuItem1.Text = "Line sources";
             lineSourcesToolStripMenuItem1.Click += Button12_Click;
             // 
@@ -1989,7 +1993,7 @@
             // 
             tunnelPortalsToolStripMenuItem1.Name = "tunnelPortalsToolStripMenuItem1";
             tunnelPortalsToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4;
-            tunnelPortalsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            tunnelPortalsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             tunnelPortalsToolStripMenuItem1.Text = "Tunnel portals";
             tunnelPortalsToolStripMenuItem1.Click += Button14_Click;
             // 
@@ -1997,7 +2001,7 @@
             // 
             buildingsToolStripMenuItem1.Name = "buildingsToolStripMenuItem1";
             buildingsToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5;
-            buildingsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            buildingsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             buildingsToolStripMenuItem1.Text = "Buildings";
             buildingsToolStripMenuItem1.Click += Button16_Click;
             // 
@@ -2005,7 +2009,7 @@
             // 
             receptorPointsToolStripMenuItem1.Name = "receptorPointsToolStripMenuItem1";
             receptorPointsToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6;
-            receptorPointsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            receptorPointsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             receptorPointsToolStripMenuItem1.Text = "Receptor points";
             receptorPointsToolStripMenuItem1.Click += Button23_Click;
             // 
@@ -2013,7 +2017,7 @@
             // 
             wallsToolStripMenuItem1.Name = "wallsToolStripMenuItem1";
             wallsToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F7;
-            wallsToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            wallsToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             wallsToolStripMenuItem1.Text = "Walls";
             wallsToolStripMenuItem1.Click += Button49Click;
             // 
@@ -2021,27 +2025,27 @@
             // 
             VegetationtToolStripMenuItem1.Name = "VegetationtToolStripMenuItem1";
             VegetationtToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F10;
-            VegetationtToolStripMenuItem1.Size = new System.Drawing.Size(203, 22);
+            VegetationtToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             VegetationtToolStripMenuItem1.Text = "Vegetation";
             VegetationtToolStripMenuItem1.Click += Button50Click;
             // 
             // toolStripMenuItem17
             // 
             toolStripMenuItem17.Name = "toolStripMenuItem17";
-            toolStripMenuItem17.Size = new System.Drawing.Size(200, 6);
+            toolStripMenuItem17.Size = new System.Drawing.Size(202, 6);
             // 
             // searchItemToolStripMenuItem
             // 
             searchItemToolStripMenuItem.Name = "searchItemToolStripMenuItem";
             searchItemToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S;
-            searchItemToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            searchItemToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             searchItemToolStripMenuItem.Text = "Search items";
             searchItemToolStripMenuItem.Click += SearchItemToolStripMenuItemClick;
             // 
             // toolsToolStripMenuItem
             // 
             toolsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { measureLenghtToolStripMenuItem, measureAreaToolStripMenuItem, toolStripMenuItem4, modifyTopographyToolStripMenuItem, lowPassGRALTopographyToolStripMenuItem, saveTopographyToolStripMenuItem, restoreGRALTopographyToolStripMenuItem, toolStripMenuItem1, arrowCursorToolStripMenuItem, crossCursorToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { measureLenghtToolStripMenuItem, measureAreaToolStripMenuItem, toolStripMenuItem4, modifyTopographyToolStripMenuItem, lowPassGRALTopographyToolStripMenuItem, saveTopographyToolStripMenuItem, restoreGRALTopographyToolStripMenuItem, toolStripMenuItem19, createmodifyESRIAsciiRasterToolStripMenuItem, loadESRIAsciiRasterToolStripMenuItem, saveESRIAsciiRasterToolStripMenuItem, toolStripMenuItem1, arrowCursorToolStripMenuItem, crossCursorToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.ShortcutKeyDisplayString = "T";
             toolsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T;
@@ -2098,6 +2102,33 @@
             restoreGRALTopographyToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             restoreGRALTopographyToolStripMenuItem.Text = "Restore GRAL topography";
             restoreGRALTopographyToolStripMenuItem.Click += RestoreGRALTopographyToolStripMenuItemClick;
+            // 
+            // toolStripMenuItem19
+            // 
+            toolStripMenuItem19.Name = "toolStripMenuItem19";
+            toolStripMenuItem19.Size = new System.Drawing.Size(243, 6);
+            // 
+            // createmodifyESRIAsciiRasterToolStripMenuItem
+            // 
+            createmodifyESRIAsciiRasterToolStripMenuItem.Name = "createmodifyESRIAsciiRasterToolStripMenuItem";
+            createmodifyESRIAsciiRasterToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            createmodifyESRIAsciiRasterToolStripMenuItem.Text = "Create/modify ESRI Ascii raster";
+            createmodifyESRIAsciiRasterToolStripMenuItem.Click += createmodifyESRIAsciiRasterToolStripMenuItem_Click;
+            // 
+            // loadESRIAsciiRasterToolStripMenuItem
+            // 
+            loadESRIAsciiRasterToolStripMenuItem.Name = "loadESRIAsciiRasterToolStripMenuItem";
+            loadESRIAsciiRasterToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            loadESRIAsciiRasterToolStripMenuItem.Text = "Load ESRI Ascii raster";
+            loadESRIAsciiRasterToolStripMenuItem.Click += loadESRIAsciiRasterToolStripMenuItem_Click;
+            // 
+            // saveESRIAsciiRasterToolStripMenuItem
+            // 
+            saveESRIAsciiRasterToolStripMenuItem.Enabled = false;
+            saveESRIAsciiRasterToolStripMenuItem.Name = "saveESRIAsciiRasterToolStripMenuItem";
+            saveESRIAsciiRasterToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            saveESRIAsciiRasterToolStripMenuItem.Text = "Save ESRI Ascii raster";
+            saveESRIAsciiRasterToolStripMenuItem.Click += saveESRIAsciiRasterToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
@@ -2726,5 +2757,9 @@
         private System.Windows.Forms.Button button58;
         private System.Windows.Forms.ToolStripMenuItem buildingsToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem domainAreaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem19;
+        private System.Windows.Forms.ToolStripMenuItem createmodifyESRIAsciiRasterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveESRIAsciiRasterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadESRIAsciiRasterToolStripMenuItem;
     }
 }

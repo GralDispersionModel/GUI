@@ -187,10 +187,10 @@ namespace Gral3DFunctions
                     xc = 0; yc = 0;
                     try
                     {
-                        while (myreader.BaseStream.Position != myreader.BaseStream.Length && xc <= x_anz)
+                        while (myreader.BaseStream.Position != myreader.BaseStream.Length && xc < x_anz)
                         {
                             //MessageBox.Show(dummy[0]);
-                            for (yc = 0; yc <= y_anz; yc++)
+                            for (yc = 0; yc < y_anz; yc++)
                             {
                                 heights[xc, yc] = myreader.ReadDouble();
                             }

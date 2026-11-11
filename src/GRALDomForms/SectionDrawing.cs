@@ -10,7 +10,6 @@
 ///</remarks>
 #endregion
 
-//using System.Windows.Media.Media3D;
 using GralIO;
 using GralStaticFunctions;
 using System;
@@ -1001,23 +1000,11 @@ namespace GralDomForms
 
                                         if (domainUpDown1.SelectedIndex == 0) // u,v projection and w
                                         {
-
                                             double dx = myData.X1 - myData.X0;
                                             double dy = myData.Y1 - myData.Y0;
-                                            double dw = 0;
-#if __MonoCS__
-
 											double sin = dx * Vw[index + k] - Uw[index + k] * dy;
 											double cos = dx * Uw[index + k] + dy * Vw[index + k];
-											dw = Math.Atan2(sin, cos) * 180/Math.PI;
-
-#else
-
-                                            System.Windows.Media.Media3D.Vector3D plane = new System.Windows.Media.Media3D.Vector3D(dx, dy, 0);
-                                            System.Windows.Media.Media3D.Vector3D arrow = new System.Windows.Media.Media3D.Vector3D(Uw[index + k], Vw[index + k], 0);
-                                            dw = System.Windows.Media.Media3D.Vector3D.AngleBetween(plane, arrow);
-
-#endif
+											double dw = Math.Atan2(sin, cos) * 180/Math.PI;
 
                                             windpen.CustomEndCap = new System.Drawing.Drawing2D.CustomLineCap(null, capPath);
                                             double v = Math.Sqrt(Math.Pow(Uw[index + k] * 0.01, 2) + Math.Pow(Vw[index + k] * 0.01, 2));
