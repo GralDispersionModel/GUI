@@ -29,8 +29,15 @@ namespace GralBackgroundworkers
                                            System.ComponentModel.DoWorkEventArgs e)
         {
             //reading emission variations
-            int maxsource = 100; //mydata.MaxSource; allow all source-group numbers!
-            int maxcomputedsourcegroup = mydata.MaxSourceComputed;
+            string[] sg_names = mydata.SelectedSourceGroup.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            string[] computed_sourcegroups = mydata.ComputedSourceGroup.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            int maxcomputedsourcegroup = computed_sourcegroups.Length;
+            int[] sg_numbers = computed_sourcegroups.Select(int.Parse)
+                .Concat(sg_names.Select(name => int.Parse(GetSgNumbers(name)))).Distinct().ToArray();
+            int maxsource = sg_numbers.Length;
+            var groupIndex = new Dictionary<int, int>();
+            for (int i = 0; i < maxsource; i++) groupIndex.Add(sg_numbers[i], i);
+            var selectedGroups = new HashSet<int>(sg_names.Select(name => int.Parse(GetSgNumbers(name))));
             string decsep = mydata.DecSep;
 
             double[,] emifac_day = new double[24, maxsource];
@@ -40,9 +47,6 @@ namespace GralBackgroundworkers
 
             string dummy = string.Empty;
             string newpath = "";
-            int[] sg_numbers = new int[maxsource];
-            string[] sg_names = mydata.SelectedSourceGroup.Split(',');
-            string[] computed_sourcegroups = mydata.ComputedSourceGroup.Split(',');
             double[] sg_mean_modulation_sum = new double[maxsource];
             int[] sg_mean_modulation_count = new int[maxsource];
 
@@ -64,46 +68,31 @@ namespace GralBackgroundworkers
             //get variation for source group
             if (!string.IsNullOrEmpty(mydata.SelectedSourceGroup)) // otherwise just analyze the wind data
             {
-                // Read the emission factors of all selected source-groups
                 for (int itm = 0; itm < maxsource; itm++)
                 {
+                    if (!selectedGroups.Contains(sg_numbers[itm])) continue;
+                    for (int j = 0; j < 24; j++) emifac_day[j, itm] = 1;
+                    for (int j = 0; j < 12; j++) emifac_mon[j, itm] = 1;
+                    if (transient) continue; // Already applied by the core.
+                    newpath = Path.Combine(mydata.PathEmissionModulation,
+                        "emissions" + Gral.SourceGroupFileName.ModulationToken(sg_numbers[itm]) + ".dat");
+                    if (!File.Exists(newpath)) continue;
                     try
                     {
-                        for (int sg = 0; sg < sg_names.Length; sg++) // check all selected source groups
+                        using (var reader = new StreamReader(newpath))
                         {
-                            if ((itm + 1) == Convert.ToInt32(GetSgNumbers(sg_names[sg]))) // sourcegroup selected?
+                            for (int j = 0; j < 24; j++)
                             {
-                                sg_numbers[itm] = Convert.ToInt32(GetSgNumbers(sg_names[sg])); // Get number of the Source-group
-                                // MessageBox.Show(itm.ToString()+"/"+sg_numbers[itm]);
-                                // Read modulation of that source-group
-                                newpath = Path.Combine("emissions" + Convert.ToString(itm + 1).PadLeft(3, '0') + ".dat");
-                                using (StreamReader myreader = new StreamReader(Path.Combine(mydata.PathEmissionModulation, newpath)))
-                                {
-                                    for (int j = 0; j < 24; j++)
-                                    {
-                                        text = myreader.ReadLine().Split(new char[] { ',' });
-                                        emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
-                                        if (j < 12)
-                                            emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
-                                    }
-                                }
-                                sg = sg_names.Length + 1; // break
-                            }
-                            else // source group not selected
-                            {
-                                for (int j = 0; j < 24; j++)
-                                {
-                                    emifac_day[j, itm] = 0;
-                                    if (j < 12)
-                                        emifac_mon[j, itm] = 0;
-                                }
-                                sg_numbers[itm] = -1;
+                                text = reader.ReadLine().Split(',');
+                                emifac_day[j, itm] = Convert.ToDouble(text[1].Replace(".", decsep));
+                                if (j < 12) emifac_mon[j, itm] = Convert.ToDouble(text[2].Replace(".", decsep));
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         BackgroundThreadMessageBox(ex.Message);
+                        return;
                     }
                 }
             }
@@ -208,7 +197,7 @@ namespace GralBackgroundworkers
 
                         for (int n = 0; n < maxsource; n++)
                         {
-                            if (sg_numbers[n] > 0) // does source group exist?
+                            if (selectedGroups.Contains(sg_numbers[n]))
                             {
                                 if (sg_time[n] == 0)
                                 {
@@ -235,7 +224,7 @@ namespace GralBackgroundworkers
                 {
                     for (int sg = 0; sg < sg_names.Length; sg++) // check all selected source groups
                     {
-                        if ((n + 1) == Convert.ToInt32(GetSgNumbers(sg_names[sg]))) // sourcegroup selected?
+                        if (sg_numbers[n] == Convert.ToInt32(GetSgNumbers(sg_names[sg]))) // sourcegroup selected?
                         {
                             int count = 0;
                             double sum = 0;
@@ -380,7 +369,7 @@ namespace GralBackgroundworkers
 
                             if (sg_names.Count() > 0)
                             {
-                                NumberOfReceptors = (int)ConcentrationHeader[0].Count(ch => ch == '\t') / sg_names.Count();
+                                NumberOfReceptors = xrec.Count;
 
                                 //check all source groups within the file ReceptorConcentrations.dat
                                 List<int> containedSourceGroups = new List<int>();
@@ -396,10 +385,14 @@ namespace GralBackgroundworkers
                                         }
                                     }
                                 }
-                                if (containedSourceGroups.Count() != (computed_sourcegroups.Count() - 1))
+                                if (!new HashSet<int>(containedSourceGroups).SetEquals(computed_sourcegroups.Select(int.Parse)))
                                 {
                                     BackgroundThreadMessageBox("The number of source groups of calculation and current project does not match!");
                                 }
+
+                                // Column blocks follow the file header, even if the project selection was reordered.
+                                computed_sourcegroups = containedSourceGroups.Select(id => id.ToString()).ToArray();
+                                maxcomputedsourcegroup = computed_sourcegroups.Length;
 
                                 //if the project has been changed - who knows what user are doing...
                                 if (NumberOfReceptors > xrec.Count)
@@ -420,12 +413,12 @@ namespace GralBackgroundworkers
                             // read all conc data of all computed source-groups
                             for (int numbsource = 0; numbsource < maxcomputedsourcegroup; numbsource++)
                             {
-                                int sg_number = Convert.ToInt32(computed_sourcegroups[numbsource]) - 1; // Source-Group Number of computed sourcegroups
+                                bool keep = groupIndex.TryGetValue(int.Parse(computed_sourcegroups[numbsource]), out int sg_number);
 
                                 for (int numbrec = 0; numbrec < xrec.Count; numbrec++)
                                 {
                                     //check if this situation has been computed, otherwise this line is 0
-                                    if (text5.Length > count)
+                                    if (keep && text5.Length > count)
                                     {
                                         conc[numbrec][sg_number][numbwet] = Convert.ToDouble(text5[count].Replace(".", decsep));
                                     }
@@ -496,8 +489,16 @@ namespace GralBackgroundworkers
 
                                 System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentCulture;
 
+                                string[] headerGroups = ConcentrationHeader[1].Split('\t');
+                                var selectedColumns = new List<int>();
+                                foreach (string name in sg_names)
+                                    for (int column = 0; column < headerGroups.Length; column++)
+                                        if (int.TryParse(headerGroups[column], out int id) && id == int.Parse(GetSgNumbers(name)))
+                                            selectedColumns.Add(column);
                                 for (int ianz = 0; ianz < 6; ianz++)
                                 {
+                                    string[] fields = ConcentrationHeader[ianz].Split('\t');
+                                    ConcentrationHeader[ianz] = string.Join("\t", selectedColumns.Select(column => fields[column])) + "\t";
                                     // use local culture for user files
                                     if (ianz > 0)
                                     {
@@ -594,7 +595,7 @@ namespace GralBackgroundworkers
                                                 foreach (string hy in sg_names)
                                                 {
                                                     {
-                                                        int itm = Convert.ToInt32(GetSgNumbers(hy)) - 1;
+                                                        int itm = groupIndex[int.Parse(GetSgNumbers(hy))];
 
                                                         //compute emission modulation factor
                                                         fmod = emifac_day[std - hourplus, itm] * emifac_mon[mon, itm] * emifac_timeseries[count_ws, itm];

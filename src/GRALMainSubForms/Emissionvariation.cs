@@ -263,7 +263,7 @@ namespace GralMainForms
             {
                 StreamReader _myReader = new StreamReader(newPath);
 
-                for (int i = 0; i < 101; i++)
+                while (!_myReader.EndOfStream)
                 {
                     dummy = _myReader.ReadLine();
                     if (dummy == null)
@@ -558,17 +558,17 @@ namespace GralMainForms
             try
             {
                 sg[1] = sg[1].Trim();
-                name = "00" + sg[1];
+                name = sg[1].Trim();
             }
             catch
             {
-                name = "00" + sg[0];
+                name = sg[0].Trim();
             }
-            name = name.Substring(name.Length - 3);
-            newPath = Path.Combine(Main.ProjectName, @"Computation", "emissions" + name + ".dat");
+            string filenameToken = Gral.SourceGroupFileName.ModulationToken(name);
+            newPath = Path.Combine(Main.ProjectName, @"Computation", "emissions" + filenameToken + ".dat");
             if (Directory.Exists(Main.ProjectSetting.EmissionModulationPath))
             {
-                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissions" + name + ".dat");
+                newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissions" + filenameToken + ".dat");
             }
 
             string[] text1 = new string[25];
@@ -605,58 +605,16 @@ namespace GralMainForms
                 newPath = Path.Combine(Main.ProjectSetting.EmissionModulationPath, "emissionmodulations.txt");
             }
 
-            string[] dummy = new string[101];
-            int ind = 0;
             try
             {
-                using (StreamReader _myReader = new StreamReader(newPath))
-                {
-                    ind = -1;
-                    for (int i = 0; i < 101; i++)
-                    {
-                        dummy[i] = _myReader.ReadLine();
-                        if (dummy[i] == null)
-                        {
-                            if (ind == -1)
-                            {
-                                ind = Math.Max(i, ind);
-                            }
-
-                            break;
-                        }
-                        text2 = dummy[i].Split(new char[] { ',' });
-                        if (text2[0] == (name.Substring(0, 2).Replace("0", "") + name.Substring(2, 1)))
-                        {
-                            ind = i;
-                        }
-                    }
-                }
-
+                SourceGroupCatalog.UpdateModulation(newPath, int.Parse(name),
+                    comboBox2.SelectedItem.ToString(), comboBox1.SelectedItem.ToString());
             }
-            catch
+            catch (Exception ex)
             {
-                ind = 0;
+                MessageBox.Show(this, "Unable to save emission modulation: " + ex.Message,
+                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
-            try
-            {
-                using (StreamWriter myWriter = new StreamWriter(newPath))
-                {
-                    for (int i = 0; i < ind; i++)
-                    {
-                        myWriter.WriteLine(dummy[i]);
-                    }
-                    myWriter.WriteLine(name.Substring(0, 2).Replace("0", "") + name.Substring(2, 1) + "," + comboBox2.SelectedItem + "," + comboBox1.SelectedItem);
-                    for (int i = ind + 1; i < 101; i++)
-                    {
-                        if (dummy[i] != null)
-                        {
-                            myWriter.WriteLine(dummy[i]);
-                        }
-                    }
-                }
-            }
-            catch { }
 
             Application.DoEvents();
 

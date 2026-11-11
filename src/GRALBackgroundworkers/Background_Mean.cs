@@ -179,20 +179,20 @@ namespace GralBackgroundworkers
                     frequency = Convert.ToDouble(text[3].Replace(".", decsep));
 
                     //GRAL filenames
-                    string[] con_files = new string[100];
-                    string[] dep_files = new string[100];
+                    string[] con_files = new string[sg_names.Length];
+                    string[] dep_files = new string[sg_names.Length];
                     itm = 0;
                     foreach (string source_group_name in sg_names)
                     {
                         if (sg_names.Length > 0)
                         {
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".con";
-                            dep_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + sg_numbers[itm].PadLeft(2, '0') + ".dep";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".con";
+                            dep_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".dep";
                         }
                         else
                         {
-                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".con";
-                            dep_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(sg_names[itm]).PadLeft(2, '0') + ".dep";
+                            con_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_names[itm]) + ".con";
+                            dep_files[itm] = Convert.ToString(wl).PadLeft(5, '0') + "-" + Gral.SourceGroupFileName.Encode(sg_names[itm]) + ".dep";
                         }
 
                         if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", dep_files[itm])) == false &&

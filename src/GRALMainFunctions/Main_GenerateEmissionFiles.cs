@@ -1051,7 +1051,7 @@ namespace Gral
         }
 
         //computes total emissions of selected source groups and pollutants
-        private void ComputeTotalEmissions(double[] totalemissions)
+        private void ComputeTotalEmissions(Dictionary<int, double> totalemissions)
         {
             List<PollutantsData> AllPollutants = new List<PollutantsData>();
             List<int> SelectedSourceGroups = new List<int>();
@@ -1073,6 +1073,7 @@ namespace Gral
                     Int32.TryParse(dummy[0], out sg);
                 }
                 SelectedSourceGroups.Add(sg);
+                totalemissions[sg] = 0;
             }
 
             foreach (PollutantsData _poll in AllPollutants)
@@ -1086,14 +1087,7 @@ namespace Gral
                     {
                         if (PollutantList[_poll.Pollutant[i]].Equals(Pollmod[listBox5.SelectedIndex]))
                         {
-                            if (sg <= totalemissions.GetUpperBound(0))
-                            {
-                                totalemissions[sg] += _poll.EmissionRate[i] * 0.365 * 24;
-                            }
-                            else
-                            {
-                                MessageBox.Show(this, "Invalid source group nr: " + sg.ToString(), "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
+                            totalemissions[sg] += _poll.EmissionRate[i] * 0.365 * 24;
                         }
                     }
                 }

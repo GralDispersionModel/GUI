@@ -251,7 +251,7 @@ namespace GralBackgroundworkers
                     {
                         //GRAL filenames
                         bool exist = true;
-                        string[] con_files = new string[100];
+                        string[] con_files = new string[sg_names.Length];
 
                         //get correct weather number in dependence on steady-state or transient simulation
                         int weanumb = n;
@@ -311,11 +311,11 @@ namespace GralBackgroundworkers
                         {
                             if (sg_names.Length > 0) // counts the number of elements in sg_names >0
                             {
-                                con_files[itm] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + sg_numbers[itm].PadLeft(2, '0') + ".con";
+                                con_files[itm] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".con";
                             }
                             else
                             {
-                                con_files[itm] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Convert.ToString(sg_numbers[itm]).PadLeft(2, '0') + ".con";
+                                con_files[itm] = Convert.ToString(weanumb + 1).PadLeft(5, '0') + "-" + Convert.ToString(mydata.Slice) + Gral.SourceGroupFileName.Encode(sg_numbers[itm]) + ".con";
                             }
 
                             if (File.Exists(Path.Combine(mydata.ProjectName, @"Computation", con_files[itm])) == false &&

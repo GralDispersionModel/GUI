@@ -12,210 +12,123 @@
 
 using Gral;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
 namespace GralMainForms
 {
-    /// <summary>
-    /// Dialog to set user defined source group names
-    /// </summary>
     public partial class Sourcegroups : Form
     {
-        private readonly Main form1 = null;
+        private readonly Main form1;
+        private readonly HashSet<int> originalIds = new HashSet<int>();
+        private DataTable sourceGroups;
 
         public Sourcegroups(Main f)
         {
             InitializeComponent();
             form1 = f;
+            dataGridView1.AllowUserToAddRows = true;
+            dataGridView1.AllowUserToDeleteRows = true;
+            dataGridView1.DefaultValuesNeeded += (s, e) => e.Row.Cells[0].Value = NextUnusedId();
+            dataGridView1.DataError += (s, e) =>
+            {
+                MessageBox.Show(this, "Enter a positive whole source group number (up to 2147483647).",
+                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true;
+            };
         }
 
-        //load existing sourcegroup definitions
         private void Sourcegroups_Load(object sender, EventArgs e)
         {
-            string[] _sgname = new string[101];
-            for (int i = 0; i < 101; i++)
-            {
-                _sgname[i] = string.Empty;
-            }
-
+            SortedDictionary<int, string> definitions;
             try
             {
-                string newPath = Path.Combine(Main.ProjectName, @"Settings", "Sourcegroups.txt");
-                if (File.Exists(newPath))
-                {
-                    using (StreamReader myReader = new StreamReader(newPath))
-                    {
-                        string[] text = new string[2];
-                        string text1;
-                        while (myReader.EndOfStream == false)
-                        {
-                            text1 = myReader.ReadLine();
-                            text = text1.Split(new char[] { ',' });
-
-                            if (text.Length > 1)
-                            {
-                                // Plausibility check for source groups
-                                int s = 0;
-                                if (int.TryParse(text[1], out s) == true)
-                                {
-                                    s = Math.Max(1, Math.Min(99, s));
-                                    _sgname[s] = text[0];
-                                }
-                            }
-                        }
-                    }
-                }
+                definitions = SourceGroupCatalog.ReadDefinitions(Path.Combine(Main.ProjectName, "Settings", "Sourcegroups.txt"));
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show(this, "Error when reading file", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                button3.Enabled = false;
+                MessageBox.Show(this, ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-
-            DataTable _data = new DataTable();
-            _data.Columns.Add("Number", typeof(int));
-            _data.Columns.Add("Name", typeof(string));
-            for (int i = 1; i < 100; i++)
+            sourceGroups = new DataTable();
+            sourceGroups.Columns.Add("Number", typeof(int));
+            sourceGroups.Columns.Add("Name", typeof(string));
+            foreach (string choice in SourceGroupCatalog.Choices(definitions))
             {
-                DataRow workrow;
-                workrow = _data.NewRow();
-                workrow[0] = i;
-                workrow[1] = _sgname[i];
-                _data.Rows.Add(workrow);
+                int id = SourceGroupCatalog.GetNumber(choice);
+                sourceGroups.Rows.Add(id, definitions.TryGetValue(id, out string name) ? name : string.Empty);
             }
-
-            DataView datasorted = new DataView();
-            datasorted = new DataView(_data); // create DataView from DataTable
-            dataGridView1.DataSource = datasorted; // connect DataView to GridView
+            originalIds.UnionWith(definitions.Keys);
+            dataGridView1.DataSource = sourceGroups.DefaultView;
             dataGridView1.Columns["Number"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView1.Columns["Number"].ReadOnly = true;
-            dataGridView1.Columns["Name"].ReadOnly = false;
-            dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridView1.Columns["Number"].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns["Name"].SortMode = DataGridViewColumnSortMode.NotSortable;
-
-            for (int i = 1; i < 100; i++)
-            {
-                if (string.IsNullOrEmpty(_sgname[i]))
-                {
-                    dataGridView1.Rows[i - 1].DefaultCellStyle.BackColor = Color.Beige;
-                }
-            }
-            dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView1KeyDown);
+            dataGridView1.Columns["Number"].ReadOnly = false;
+            dataGridView1.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+                if (!row.IsNewRow && string.IsNullOrWhiteSpace(Convert.ToString(row.Cells[1].Value)))
+                    row.DefaultCellStyle.BackColor = Color.Beige;
+            dataGridView1.KeyDown += DataGridView1KeyDown;
         }
 
-        //close the form and save source group definitions
+        private int NextUnusedId()
+        {
+            var used = new HashSet<int>();
+            if (sourceGroups != null)
+                foreach (DataRow row in sourceGroups.Rows)
+                    if (row.RowState != DataRowState.Deleted && row[0] != DBNull.Value) used.Add((int)row[0]);
+            int next = 1;
+            while (next <= SourceGroupFileName.MaximumId && used.Contains(next)) next++;
+            return next;
+        }
+
         private void Button3_Click(object sender, EventArgs e)
         {
-            //check for invalid names
-            for (int i = 0; i < 99; i++)
+            if (!dataGridView1.EndEdit()) return;
+            BindingContext[sourceGroups.DefaultView].EndCurrentEdit();
+            var definitions = new SortedDictionary<int, string>();
+            var names = new HashSet<string>();
+            foreach (DataRow row in sourceGroups.Rows)
             {
-                if (dataGridView1.Rows[i].Cells[1].Value != null)
+                if (row.RowState == DataRowState.Deleted) continue;
+                string name = Convert.ToString(row[1]).Trim();
+                if (string.IsNullOrWhiteSpace(name)) continue;
+                if (row[0] == DBNull.Value || !SourceGroupFileName.IsSupported((int)row[0]) || definitions.ContainsKey((int)row[0]))
                 {
-                    string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
-                    if (a.Contains("_") || a.Contains(",") || a.Contains(":") || a.Contains(@"/") || a.Contains(@"\") || a.Contains("."))
-                    {
-                        a = a.Replace("_", "-");
-                        a = a.Replace(",", "-");
-                        a = a.Replace(":", "-");
-                        a = a.Replace(@"/", "-");
-                        a = a.Replace(@"\", "-");
-                        a = a.Replace(".", " - ");
-                        dataGridView1.Rows[i].Cells[1].Value = a;
-                    }
+                    MessageBox.Show(this, "Each named group needs a unique number in 1..1295.",
+                        "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+                name = name.Replace("_", "-").Replace(",", "-").Replace(":", "-")
+                    .Replace("/", "-").Replace(@"\", "-").Replace(".", " - ");
+                while (!names.Add(name)) name += "-";
+                definitions.Add((int)row[0], name);
             }
-
-            //check for double counting of source group names
-            for (int i = 0; i < 99; i++)
-            {
-                if (dataGridView1.Rows[i].Cells[1].Value != null)
-                {
-                    string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
-                    string _check_if_empty = a.Replace(" ", string.Empty);
-
-                    if (!string.IsNullOrEmpty(_check_if_empty))
-                    {
-                        for (int j = i + 1; j < 99; j++)
-                        {
-                            if (dataGridView1.Rows[j].Cells[1].Value != null)
-                            {
-                                string b = Convert.ToString(dataGridView1.Rows[j].Cells[1].Value);
-                                if (!string.IsNullOrEmpty(b) && a == b) // Change SG Name
-                                {
-                                    dataGridView1.Rows[j].Cells[1].Value = b + "-";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
             try
             {
-                string newPath = Path.Combine(Main.ProjectName, @"Settings", "Sourcegroups.txt");
-                if (File.Exists(newPath))
-                {
-                    File.Delete(newPath);
-                }
-
+                var lines = new List<string>();
+                foreach (var group in definitions)
+                    lines.Add(group.Value + "," + group.Key.ToString(CultureInfo.InvariantCulture));
+                File.WriteAllLines(Path.Combine(Main.ProjectName, "Settings", "Sourcegroups.txt"), lines);
                 Main.DefinedSourceGroups.Clear();
-
-                using (StreamWriter myWriter = new StreamWriter(newPath, false))
+                foreach (var group in definitions)
+                    Main.DefinedSourceGroups.Add(new SG_Class { SG_Name = group.Value, SG_Number = group.Key });
+                for (int i = form1.listBox4.Items.Count - 1; i >= 0; i--)
                 {
-                    for (int i = 0; i < 99; i++)
-                    {
-                        if (dataGridView1.Rows[i].Cells[1].Value != null)
-                        {
-                            string a = Convert.ToString(dataGridView1.Rows[i].Cells[1].Value);
-                            string _check_if_empty = a.Replace(" ", string.Empty);
-
-                            if (!string.IsNullOrEmpty(_check_if_empty))
-                            {
-                                myWriter.WriteLine(Convert.ToString(a) + "," + Convert.ToString(i + 1));
-                                Main.DefinedSourceGroups.Add(new SG_Class() { SG_Name = Convert.ToString(a), SG_Number = i + 1 });
-                            }
-                            else // check if a source group has been deleted
-                            {
-                                if (dataGridView1.Rows[i].DefaultCellStyle.BackColor != Color.Beige) // there was an entry
-                                {
-                                    // Remove item from listbox4 in Main()
-                                    try
-                                    {
-                                        string[] _text;
-                                        for (int j = 0; j < form1.listBox4.Items.Count; j++)
-                                        {
-                                            _text = Convert.ToString(form1.listBox4.Items[j]).Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                                            if (_text.Length > 1)
-                                            {
-                                                int s_numb = 0;
-                                                if (int.TryParse(_text[1], out s_numb))
-                                                {
-                                                    if (s_numb == i + 1) // item to remove
-                                                    {
-                                                        form1.listBox4.Items.RemoveAt(j);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    catch { }
-                                }
-                            }
-                        }
-                    }
+                    int id = SourceGroupCatalog.GetNumber(Convert.ToString(form1.listBox4.Items[i]));
+                    if (originalIds.Contains(id) && !definitions.ContainsKey(id)) form1.listBox4.Items.RemoveAt(i);
                 }
-
-                Main.DefinedSourceGroups.Sort();
-                //St_F.Sort_Source_Group_File(newPath);
-
                 Close();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show(this, "Error when writing file \"Sourcegroups.txt\" in the directory \"Settings\".", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Cannot save Sourcegroups.txt: " + ex.Message,
+                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -224,77 +137,50 @@ namespace GralMainForms
             dataGridView1.Height = Math.Max(1, button1.Top - 10);
         }
 
-        void Button1Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        void Button1Click(object sender, EventArgs e) { Close(); }
 
-        //paste text from the clipboard
         void DataGridView1KeyDown(object sender, KeyEventArgs e)
         {
-            try
+            if (e.Control && e.KeyCode == Keys.V)
             {
-                if (e.Modifiers == Keys.Control)
-                {
-                    switch (e.KeyCode)
-                    {
-                        case Keys.C:
-                            break;
-
-                        case Keys.V:
-                            PasteClipboard();
-                            break;
-                    }
-                }
+                PasteClipboard();
+                e.Handled = true;
             }
-            catch
-            { }
         }
+
         void PasteClipboard()
         {
+            if (dataGridView1.CurrentCell == null || sourceGroups == null) return;
+            int rowIndex = dataGridView1.CurrentCell.RowIndex;
+            int columnIndex = dataGridView1.CurrentCell.ColumnIndex;
+            dataGridView1.EndEdit();
+            BindingContext[sourceGroups.DefaultView].EndCurrentEdit();
             try
             {
-                string s = Clipboard.GetText();
-                string[] lines = s.Split('\n');
-
-                int iRow = dataGridView1.CurrentCell.RowIndex;
-                int iCol = dataGridView1.CurrentCell.ColumnIndex;
-                DataGridViewCell oCell;
-
-                foreach (string line in lines)
+                foreach (string line in Clipboard.GetText().Split('\n'))
                 {
-                    if (iRow < dataGridView1.RowCount && line.Length > 0)
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    if (rowIndex >= sourceGroups.Rows.Count) sourceGroups.Rows.Add(NextUnusedId(), string.Empty);
+                    string[] cells = line.TrimEnd('\r').Split('\t');
+                    for (int column = 0; column < cells.Length && columnIndex + column < 2; column++)
                     {
-                        string[] sCells = line.Split('\t');
-                        for (int i = 0; i < sCells.GetLength(0); ++i)
-                        {
-                            if (iCol + i < dataGridView1.ColumnCount)
-                            {
-                                oCell = dataGridView1[iCol + i, iRow];
-                                oCell.Value = Convert.ChangeType(sCells[i].Replace("\r", ""), oCell.ValueType);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        iRow++;
+                        int targetColumn = columnIndex + column;
+                        sourceGroups.Rows[rowIndex][targetColumn] = targetColumn == 0
+                            ? (object)int.Parse(cells[column], CultureInfo.InvariantCulture) : cells[column];
                     }
-                    else
-                    {
-                        break;
-                    }
+                    rowIndex++;
                 }
             }
-            catch (FormatException)
+            catch (Exception ex) when (ex is FormatException || ex is OverflowException)
             {
-                return;
+                MessageBox.Show(this, "Enter numbers in 1..1295 in the Number column.",
+                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void Sourcegroups_FormClosing(object sender, FormClosingEventArgs e)
         {
-            dataGridView1.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.DataGridView1KeyDown);
+            dataGridView1.KeyDown -= DataGridView1KeyDown;
             dataGridView1.Dispose();
         }
     }

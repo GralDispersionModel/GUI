@@ -24,6 +24,7 @@ namespace GralMainForms
     {
         public List<GralData.DecayRates> DecayRate;
         public bool ProjectLocked;
+        public List<int> SourceGroups = new List<int>();
 
         public DecayRateForm()
         {
@@ -36,7 +37,12 @@ namespace GralMainForms
             _data.Columns.Add("Number", typeof(string));
             _data.Columns.Add("Decay", typeof(double));
 
-            for (int i = 1; i < 100; i++) // all possible source groups
+            var groups = new SortedSet<int>(SourceGroups);
+            for (int id = 1; id <= 99; id++) groups.Add(id);
+            foreach (var group in Gral.Main.DefinedSourceGroups) groups.Add(group.SG_Number);
+            foreach (var rate in DecayRate) groups.Add(rate.SourceGroup);
+            groups.RemoveWhere(id => id <= 0);
+            foreach (int i in groups)
             {
                 DataRow workrow;
                 workrow = _data.NewRow();
@@ -77,14 +83,16 @@ namespace GralMainForms
         {
             if (ProjectLocked == false)
             {
+                if (!dataGridView1.EndEdit()) return;
                 DecayRate.Clear();
-                for (int i = 0; i < 99; i++)
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
                 {
+                    if (dataGridView1.Rows[i].IsNewRow) continue;
                     double decay = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value);
                     if (decay != 0)
                     {
                         GralData.DecayRates dr = new GralData.DecayRates();
-                        dr.SourceGroup = i + 1;
+                        dr.SourceGroup = int.Parse(dataGridView1.Rows[i].Cells[0].Value.ToString().TrimEnd(':'));
                         dr.DecayRate = decay;
                         DecayRate.Add(dr);
                     }
