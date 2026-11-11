@@ -27,9 +27,13 @@ namespace Gral
     partial class Main
     {
         /// <summary>
-        /// True if the GUI has set the GPU variables for GRAL in its own environment
+        /// Environment variables that switch the GPU build of GRAL to the GPU
         /// </summary>
-        private bool gpuEnvironmentSet;
+        private static readonly string[] gpuVariableNames = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR" };
+        /// <summary>
+        /// Values of these variables inherited by the GUI, saved before the GUI changes them
+        /// </summary>
+        private string[] gpuVariablesInherited;
 
         /// <summary>
         /// Set or clear the environment variables that switch the GPU build of GRAL to the GPU.
@@ -39,31 +43,38 @@ namespace Gral
         /// <returns>False if the GPU is selected but its runtime files are missing</returns>
         private bool SetGralGpuEnvironment(string GralExecutable)
         {
-            string[] names = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR" };
+            if (gpuVariablesInherited == null)
+            {
+                gpuVariablesInherited = Array.ConvertAll(gpuVariableNames, Environment.GetEnvironmentVariable);
+            }
             if (!GUISettings.UseGpu)
             {
-                if (gpuEnvironmentSet)
+                // Restore the inherited values, but never start GRAL on the GPU while the option is cleared
+                for (int i = 1; i < gpuVariableNames.Length; i++)
                 {
-                    foreach (string name in names)
-                    {
-                        Environment.SetEnvironmentVariable(name, null);
-                    }
-                    gpuEnvironmentSet = false;
+                    Environment.SetEnvironmentVariable(gpuVariableNames[i], gpuVariablesInherited[i]);
                 }
+                Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", null);
                 return true;
             }
 
+            // The manifest and the kernel source must be in the same folder
             string folder = Path.GetDirectoryName(GralExecutable);
-            string manifest = Path.Combine(folder, "fields_manifest.json");
-            if (!File.Exists(manifest))
+            string manifest = null;
+            foreach (string candidate in new[] { folder, Path.Combine(folder, "gpu", "runtime") })
             {
-                manifest = Path.Combine(folder, "gpu", "runtime", "fields_manifest.json");
+                if (File.Exists(Path.Combine(candidate, "fields_manifest.json")) && File.Exists(Path.Combine(candidate, "generated.cu")))
+                {
+                    manifest = Path.Combine(candidate, "fields_manifest.json");
+                    break;
+                }
             }
-            if (!File.Exists(manifest) || !File.Exists(Path.Combine(Path.GetDirectoryName(manifest), "generated.cu")))
+            if (manifest == null)
             {
-                MessageBox.Show(this, "GPU option: fields_manifest.json and generated.cu were not found next to the GRAL executable or in its gpu/runtime subfolder."
+                MessageBox.Show(this, "GPU option: fields_manifest.json and generated.cu were not found together next to the GRAL executable or in its gpu/runtime subfolder."
                                 + Environment.NewLine
-                                + "Copy them from the gpu/runtime folder of the GPU build of GRAL, or clear the GPU option.",
+                                + "Copy them from the gpu/runtime folder of the GPU build of GRAL, or clear the GPU option. "
+                                + "GRAL looks for NVRTC or hiprtc in an nvrtc or hiprtc folder beside them, then in CUDA_PATH or HIP_PATH.",
                                 "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -73,7 +84,6 @@ namespace Gral
             Environment.SetEnvironmentVariable("INU_GPU_MANIFEST", manifest);
             Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
             Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
-            gpuEnvironmentSet = true;
             return true;
         }
 

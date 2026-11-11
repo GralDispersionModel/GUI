@@ -3402,7 +3402,7 @@
             groupBox31.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             groupBox31.Location = new System.Drawing.Point(212, 303);
             groupBox31.Name = "groupBox31";
-            groupBox31.Size = new System.Drawing.Size(217, 153);
+            groupBox31.Size = new System.Drawing.Size(217, 147);
             groupBox31.TabIndex = 81;
             groupBox31.TabStop = false;
             groupBox31.Text = "Processor cores";
@@ -3424,7 +3424,7 @@
             // 
             checkBoxAVX.AutoSize = true;
             checkBoxAVX.Font = new System.Drawing.Font("Segoe UI", 9F);
-            checkBoxAVX.Location = new System.Drawing.Point(13, 112);
+            checkBoxAVX.Location = new System.Drawing.Point(13, 108);
             checkBoxAVX.Name = "checkBoxAVX";
             checkBoxAVX.Size = new System.Drawing.Size(145, 19);
             checkBoxAVX.TabIndex = 26;
@@ -3433,21 +3433,21 @@
             checkBoxAVX.UseVisualStyleBackColor = true;
             checkBoxAVX.Visible = false;
             checkBoxAVX.Click += CheckBoxAVX_Click;
-            //
+            // 
             // checkBoxGPU
-            //
+            // 
             checkBoxGPU.AutoSize = true;
             checkBoxGPU.Font = new System.Drawing.Font("Segoe UI", 9F);
-            checkBoxGPU.Location = new System.Drawing.Point(13, 131);
+            checkBoxGPU.Location = new System.Drawing.Point(13, 126);
             checkBoxGPU.Name = "checkBoxGPU";
             checkBoxGPU.Size = new System.Drawing.Size(152, 19);
             checkBoxGPU.TabIndex = 27;
             checkBoxGPU.Text = "Use GPU (experimental)";
-            toolTip1.SetToolTip(checkBoxGPU, "Runs the GRAL particle tracking on the graphics card (needs a GRAL build with GPU support).\r\nNVIDIA GPUs: CUDA driver and NVRTC.\r\nAMD Radeon GPUs (Windows only): Adrenalin driver with the HIP 7 runtime and hiprtc;\r\nintegrated Radeon GPUs also need INU_GPU_BACKEND=hip.\r\nRequires fields_manifest.json and generated.cu next to the GRAL executable\r\nor in its gpu/runtime subfolder.");
+            toolTip1.SetToolTip(checkBoxGPU, "Runs the GRAL particle tracking on the graphics card (needs a GRAL build with GPU support).\r\nNVIDIA GPUs: CUDA driver and NVRTC.\r\nAMD Radeon GPUs (Windows only): Adrenalin driver with the HIP 7 runtime, and hiprtc.\r\nNeeds fields_manifest.json and generated.cu next to the GRAL executable or in its gpu/runtime\r\nsubfolder, and NVRTC or hiprtc in an nvrtc or hiprtc folder beside them (or in CUDA_PATH or HIP_PATH).\r\nPCs with only integrated Radeon GPUs: set INU_GPU_BACKEND=hip before starting the GUI.");
             checkBoxGPU.UseVisualStyleBackColor = true;
             checkBoxGPU.Visible = false;
             checkBoxGPU.Click += CheckBoxGPU_Click;
-            //
+            // 
             // numericUpDown33
             // 
             numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
