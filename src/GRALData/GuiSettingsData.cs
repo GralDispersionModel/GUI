@@ -73,6 +73,10 @@ namespace GralData
         /// Use the system wide dark mode
         /// </summary>
         public bool UseDarkMode;
+        /// <summary>
+        /// Run GRAL on the GPU (experimental GPU build of GRAL)
+        /// </summary>
+        public bool UseGpu;
 
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 
@@ -135,6 +139,7 @@ namespace GralData
                     write.WriteLine(DefaultPathForGRAMM);
                     write.WriteLine(AutoCheckForUpdates.ToString(ic));
                     write.WriteLine(UseDefaultColors.ToString(ic));
+                    write.WriteLine(UseGpu.ToString(ic));
                 }
             }
             catch
@@ -230,6 +235,14 @@ namespace GralData
                     else
                     {
                         UseDefaultColors = true;
+                    }
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            UseGpu = Convert.ToBoolean(read.ReadLine(), ic);
+                        }
+                        catch { }
                     }
                 }
             }

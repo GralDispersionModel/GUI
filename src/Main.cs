@@ -2853,6 +2853,8 @@ namespace Gral
                     }
                 }
 #endif
+                checkBoxGPU.Visible = button10.Visible;
+                checkBoxGPU.Checked = GUISettings.UseGpu;
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
@@ -4173,6 +4175,12 @@ namespace Gral
             };
             write_in_dat.WriteInDat();
             write_in_dat = null;
+        }
+
+        private void CheckBoxGPU_Click(object sender, EventArgs e)
+        {
+            GUISettings.UseGpu = checkBoxGPU.Checked;
+            GUISettings.WriteToFile();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

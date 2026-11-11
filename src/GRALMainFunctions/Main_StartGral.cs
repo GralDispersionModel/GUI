@@ -27,6 +27,57 @@ namespace Gral
     partial class Main
     {
         /// <summary>
+        /// True if the GUI has set the GPU variables for GRAL in its own environment
+        /// </summary>
+        private bool gpuEnvironmentSet;
+
+        /// <summary>
+        /// Set or clear the environment variables that switch the GPU build of GRAL to the GPU.
+        /// The GRAL processes started by the GUI inherit them.
+        /// </summary>
+        /// <param name="GralExecutable">Selected GRAL executable</param>
+        /// <returns>False if the GPU is selected but its runtime files are missing</returns>
+        private bool SetGralGpuEnvironment(string GralExecutable)
+        {
+            string[] names = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR" };
+            if (!GUISettings.UseGpu)
+            {
+                if (gpuEnvironmentSet)
+                {
+                    foreach (string name in names)
+                    {
+                        Environment.SetEnvironmentVariable(name, null);
+                    }
+                    gpuEnvironmentSet = false;
+                }
+                return true;
+            }
+
+            string folder = Path.GetDirectoryName(GralExecutable);
+            string manifest = Path.Combine(folder, "fields_manifest.json");
+            if (!File.Exists(manifest))
+            {
+                manifest = Path.Combine(folder, "gpu", "runtime", "fields_manifest.json");
+            }
+            if (!File.Exists(manifest) || !File.Exists(Path.Combine(Path.GetDirectoryName(manifest), "generated.cu")))
+            {
+                MessageBox.Show(this, "GPU option: fields_manifest.json and generated.cu were not found next to the GRAL executable or in its gpu/runtime subfolder."
+                                + Environment.NewLine
+                                + "Copy them from the gpu/runtime folder of the GPU build of GRAL, or clear the GPU option.",
+                                "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            string computation = Path.Combine(ProjectName, "Computation");
+            Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", "1");
+            Environment.SetEnvironmentVariable("INU_GPU_MANIFEST", manifest);
+            Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
+            Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
+            gpuEnvironmentSet = true;
+            return true;
+        }
+
+        /// <summary>
         /// Start GRAL simulation
         /// </summary>
         /// <param name="StartSituation">First situation when starting a chunk of situations</param>
@@ -166,6 +217,11 @@ namespace Gral
                 {
                     string GRAL_Program_Path = dialog.FileName;
                     string GRAL_Project_Path = String.Empty;
+
+                    if (!SetGralGpuEnvironment(dialog.FileName))
+                    {
+                        return;
+                    }
 
                     if (GUISettings.CopyCoresToProject) // Copy the computation core to the project folder?
                     {

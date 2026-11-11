@@ -263,6 +263,7 @@
             groupBox31 = new System.Windows.Forms.GroupBox();
             comboBox1 = new System.Windows.Forms.ComboBox();
             checkBoxAVX = new System.Windows.Forms.CheckBox();
+            checkBoxGPU = new System.Windows.Forms.CheckBox();
             numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             label98 = new System.Windows.Forms.Label();
             numericUpDown32 = new System.Windows.Forms.NumericUpDown();
@@ -3393,6 +3394,7 @@
             // 
             groupBox31.Controls.Add(comboBox1);
             groupBox31.Controls.Add(checkBoxAVX);
+            groupBox31.Controls.Add(checkBoxGPU);
             groupBox31.Controls.Add(numericUpDown33);
             groupBox31.Controls.Add(label98);
             groupBox31.Controls.Add(numericUpDown32);
@@ -3400,7 +3402,7 @@
             groupBox31.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             groupBox31.Location = new System.Drawing.Point(212, 303);
             groupBox31.Name = "groupBox31";
-            groupBox31.Size = new System.Drawing.Size(217, 135);
+            groupBox31.Size = new System.Drawing.Size(217, 153);
             groupBox31.TabIndex = 81;
             groupBox31.TabStop = false;
             groupBox31.Text = "Processor cores";
@@ -3431,7 +3433,21 @@
             checkBoxAVX.UseVisualStyleBackColor = true;
             checkBoxAVX.Visible = false;
             checkBoxAVX.Click += CheckBoxAVX_Click;
-            // 
+            //
+            // checkBoxGPU
+            //
+            checkBoxGPU.AutoSize = true;
+            checkBoxGPU.Font = new System.Drawing.Font("Segoe UI", 9F);
+            checkBoxGPU.Location = new System.Drawing.Point(13, 131);
+            checkBoxGPU.Name = "checkBoxGPU";
+            checkBoxGPU.Size = new System.Drawing.Size(152, 19);
+            checkBoxGPU.TabIndex = 27;
+            checkBoxGPU.Text = "Use GPU (experimental)";
+            toolTip1.SetToolTip(checkBoxGPU, "Runs the GRAL particle tracking on the graphics card (needs a GRAL build with GPU support).\r\nNVIDIA GPUs: CUDA driver and NVRTC.\r\nAMD Radeon GPUs (Windows only): Adrenalin driver with the HIP 7 runtime and hiprtc;\r\nintegrated Radeon GPUs also need INU_GPU_BACKEND=hip.\r\nRequires fields_manifest.json and generated.cu next to the GRAL executable\r\nor in its gpu/runtime subfolder.");
+            checkBoxGPU.UseVisualStyleBackColor = true;
+            checkBoxGPU.Visible = false;
+            checkBoxGPU.Click += CheckBoxGPU_Click;
+            //
             // numericUpDown33
             // 
             numericUpDown33.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -4897,6 +4913,7 @@
         private System.Windows.Forms.Button button60;
         private System.Windows.Forms.Label LabelEmissionPath;
         public System.Windows.Forms.CheckBox checkBoxAVX;
+        public System.Windows.Forms.CheckBox checkBoxGPU;
         private System.Windows.Forms.GroupBox groupBox31;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.CheckBox checkBox55;
