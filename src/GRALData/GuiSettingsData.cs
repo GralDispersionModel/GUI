@@ -74,7 +74,7 @@ namespace GralData
         /// </summary>
         public bool UseDarkMode;
         /// <summary>
-        /// Run GRAL on the GPU (experimental GPU build of GRAL)
+        /// Run GRAL on the GPU (needs a GRAL build with GPU support)
         /// </summary>
         public bool UseGpu;
         /// <summary>

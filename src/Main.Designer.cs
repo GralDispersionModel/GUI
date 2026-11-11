@@ -3440,9 +3440,9 @@
             checkBoxGPU.Font = new System.Drawing.Font("Segoe UI", 9F);
             checkBoxGPU.Location = new System.Drawing.Point(13, 126);
             checkBoxGPU.Name = "checkBoxGPU";
-            checkBoxGPU.Size = new System.Drawing.Size(152, 19);
+            checkBoxGPU.Size = new System.Drawing.Size(119, 19);
             checkBoxGPU.TabIndex = 27;
-            checkBoxGPU.Text = "Use GPU (experimental)";
+            checkBoxGPU.Text = "Use GPU for GRAL";
             toolTip1.SetToolTip(checkBoxGPU, "Runs the GRAL particle tracking on the graphics card (needs a GRAL build with GPU support).\r\nNVIDIA GPUs: NVIDIA driver and NVRTC, the CUDA runtime compiler.\r\nAMD Radeon GPUs (Windows only): Adrenalin driver with the HIP 7 runtime and hiprtc, the HIP runtime compiler.\r\nBefore each start the GUI asks GRAL whether the GPU is ready and offers to install\r\nor link to what is missing. Clear the box to run on the CPU.");
             checkBoxGPU.UseVisualStyleBackColor = true;
             checkBoxGPU.Visible = false;
