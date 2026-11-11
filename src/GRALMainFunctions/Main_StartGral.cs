@@ -58,10 +58,10 @@ namespace Gral
                 return true;
             }
 
-            // The manifest and the kernel source must be in the same folder
+            // The manifest and the kernel source must be in the same folder; the GRAL build writes them to gpu/runtime
             string folder = Path.GetDirectoryName(GralExecutable);
             string manifest = null;
-            foreach (string candidate in new[] { folder, Path.Combine(folder, "gpu", "runtime") })
+            foreach (string candidate in new[] { Path.Combine(folder, "gpu", "runtime"), folder })
             {
                 if (File.Exists(Path.Combine(candidate, "fields_manifest.json")) && File.Exists(Path.Combine(candidate, "generated.cu")))
                 {
