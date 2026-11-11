@@ -215,10 +215,12 @@ namespace Gral
                         return false;
                     }
                 }
-                else if (status == "no_nvrtc" || status == "no_hiprtc" ||
-                         // a compiler was found but cannot serve this GPU: the tested version in the per-user folder may help
-                         ((status == "nvrtc_rejected" || status == "hiprtc_rejected") &&
-                          !Directory.Exists((status == "hiprtc_rejected" ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc).TargetFolder)))
+                else if ((status == "no_nvrtc" || status == "no_hiprtc" ||
+                          // a compiler was found but cannot serve this GPU: the tested version in the per-user folder may help
+                          ((status == "nvrtc_rejected" || status == "hiprtc_rejected") &&
+                           !Directory.Exists((status == "hiprtc_rejected" ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc).TargetFolder))) &&
+                         // GRAL uses only INU_GPU_NVRTC_DIR or INU_GPU_HIPRTC_DIR when it is set, so a download would not help
+                         string.IsNullOrEmpty(Environment.GetEnvironmentVariable(status.Contains("hiprtc") ? "INU_GPU_HIPRTC_DIR" : "INU_GPU_NVRTC_DIR")))
                 {
                     answer = AskForGpuCompiler(status.StartsWith("no_hiprtc") || status.StartsWith("hiprtc"), status.EndsWith("_rejected"));
                     if (answer == DialogResult.Retry)
