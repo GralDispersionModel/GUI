@@ -210,7 +210,10 @@ namespace Gral
                 }
                 else
                 {
-                    answer = MessageBox.Show(this, "GRAL cannot use the GPU (" + status + "): " + message + Environment.NewLine + Environment.NewLine +
+                    // hiprtc's amd_comgr needs the Visual C++ runtime
+                    string runtimeHint = File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140_1.dll")) ? string.Empty :
+                                         Environment.NewLine + "The Microsoft Visual C++ x64 runtime is missing: https://aka.ms/vs/17/release/vc_redist.x64.exe";
+                    answer = MessageBox.Show(this, "GRAL cannot use the GPU (" + status + "): " + message + runtimeHint + Environment.NewLine + Environment.NewLine +
                                              "Run on the CPU this time?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ? DialogResult.No : DialogResult.Cancel;
                 }
                 if (answer == DialogResult.No) // CPU run this time; the next start uses the GPU option again
@@ -230,16 +233,62 @@ namespace Gral
         private DialogResult AskForGpuCompiler(bool Hip)
         {
             string page = Hip ? "https://www.amd.com/en/developer/resources/rocm-hub/hip-sdk.html" : "https://developer.nvidia.com/cuda-downloads";
-            DialogResult answer = MessageBox.Show(this, "GRAL needs " + (Hip ? "hiprtc, the AMD HIP runtime compiler (AMD HIP SDK)," : "NVRTC, the NVIDIA CUDA runtime compiler (CUDA Toolkit),") +
+            GpuToolchainPackage package = Hip ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc;
+            DialogResult answer = MessageBox.Show(this, "GRAL needs " + (Hip ? "hiprtc, the AMD HIP runtime compiler," : "NVRTC, the NVIDIA CUDA runtime compiler,") +
                                                   " which is not installed." + Environment.NewLine + Environment.NewLine +
-                                                  "Yes: open the download page" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
-                                                  "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-            if (answer == DialogResult.Yes)
+                                                  "Yes: download " + package.Title + "," + Environment.NewLine + "about " + (package.DownloadBytes >> 20).ToString() +
+                                                  " MB, into %LOCALAPPDATA%\\GRAL\\GpuToolchain\\" + package.Kind + Environment.NewLine +
+                                                  "(licence: " + package.LicenseUrl + ")" + Environment.NewLine +
+                                                  "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
+                                                  "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (answer != DialogResult.Yes)
+            {
+                return answer;
+            }
+            string error = InstallGpuCompiler(package);
+            if (error == null)
+            {
+                return DialogResult.Retry;
+            }
+            if (error.Length > 0 && MessageBox.Show(this, "The download failed: " + error + Environment.NewLine + Environment.NewLine + "Open the download page of the " +
+                                                    (Hip ? "AMD HIP SDK" : "NVIDIA CUDA Toolkit") + " instead?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 OpenWebPage(page);
-                return DialogResult.Cancel;
             }
-            return answer;
+            return DialogResult.Cancel;
+        }
+
+        /// <summary>
+        /// Download and install a runtime compiler with a progress window
+        /// </summary>
+        /// <returns>null on success, an empty string if cancelled, otherwise the error message</returns>
+        private string InstallGpuCompiler(GpuToolchainPackage Package)
+        {
+            System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
+            GralMessage.WaitProgressbarCancel wait = new GralMessage.WaitProgressbarCancel("Downloading " + Package.Kind + " for GRAL", ref cts);
+            wait.ProgressbarUpdate(this, 100);
+            wait.Show();
+            long received = 0;
+            System.Threading.Tasks.Task install = System.Threading.Tasks.Task.Run(() => Package.Install(bytes => System.Threading.Interlocked.Exchange(ref received, bytes), cts.Token));
+            int shown = 0;
+            while (!install.IsCompleted)
+            {
+                int percent = (int)Math.Min(99, System.Threading.Interlocked.Read(ref received) * 100 / Math.Max(1, Package.DownloadBytes));
+                for (; shown < percent; shown++)
+                {
+                    wait.ProgressbarUpdate(this, 0);
+                }
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+            }
+            wait.Close();
+            bool cancelled = cts.IsCancellationRequested;
+            cts.Dispose();
+            if (install.Exception == null)
+            {
+                return null;
+            }
+            return cancelled ? string.Empty : install.Exception.GetBaseException().Message;
         }
     }
 }
