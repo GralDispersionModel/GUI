@@ -32,6 +32,7 @@ namespace Gral
         public string Url;
         public string LicenseUrl;
         public long DownloadBytes;
+        public long PackageBytes;
         public (string Entry, string Name, string Sha256)[] Files;
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace Gral
             Url = "https://files.pythonhosted.org/packages/52/de/823919be3b9d0ccbf1f784035423c5f18f4267fb0123558d58b813c6ec86/nvidia_cuda_nvrtc_cu12-12.9.86-py3-none-win_amd64.whl",
             LicenseUrl = "https://docs.nvidia.com/cuda/eula/index.html",
             DownloadBytes = 37328080 + 1695815,
+            PackageBytes = 76408187,
             Files = new[]
             {
                 ("nvidia/cuda_nvrtc/bin/nvrtc64_120_0.dll", "nvrtc64_120_0.dll", "0cc63349fedffeec1660b30955e8028b6e4e4c26cf1e41c56dc4569fd5eca82c"),
@@ -61,6 +63,7 @@ namespace Gral
             Url = "https://stable.repo.amd.com/rocm/core/whl-next/rocm-sdk-core/rocm_sdk_core-10.1.0-py3-none-win_amd64.whl",
             LicenseUrl = "https://rocm.docs.amd.com/en/latest/about/license.html",
             DownloadBytes = 43896638 + 325570 + 160765,
+            PackageBytes = 776978384,
             Files = new[]
             {
                 ("_rocm_sdk_core/bin/hiprtc0716.dll", "hiprtc0716.dll", "ee7d306880167ae3c0cec7e27953d14ec14d75576d3ba6fab43497dfa873cde3"),
@@ -77,9 +80,9 @@ namespace Gral
         /// <summary>
         /// Download, check and install the compiler
         /// </summary>
-        /// <param name="Progress">Called with the number of bytes received so far</param>
+        /// <param name="Progress">Called with the bytes received so far and the expected total</param>
         /// <param name="Token">Cancellation</param>
-        public void Install(Action<long> Progress, CancellationToken Token)
+        public void Install(Action<long, long> Progress, CancellationToken Token)
         {
             string target = TargetFolder;
             string part = target + ".part";
@@ -157,7 +160,7 @@ namespace Gral
         /// <summary>
         /// A seekable stream over the package: ranges on demand, or the whole package in a temporary file
         /// </summary>
-        private Stream OpenPackage(HttpClient Client, Action<long> Progress, CancellationToken Token)
+        private Stream OpenPackage(HttpClient Client, Action<long, long> Progress, CancellationToken Token)
         {
             using (HttpRequestMessage probe = new HttpRequestMessage(HttpMethod.Get, Url))
             {
@@ -168,7 +171,7 @@ namespace Gral
                     long? length = response.Content.Headers.ContentRange?.Length;
                     if (response.StatusCode == System.Net.HttpStatusCode.PartialContent && length > 0)
                     {
-                        return new HttpRangeStream(Client, response.RequestMessage.RequestUri, length.Value, Progress, Token);
+                        return new HttpRangeStream(Client, response.RequestMessage.RequestUri, length.Value, DownloadBytes, Progress, Token);
                     }
                 }
             }
@@ -177,20 +180,25 @@ namespace Gral
             try
             {
                 using (HttpResponseMessage response = Client.Send(new HttpRequestMessage(HttpMethod.Get, Url), HttpCompletionOption.ResponseHeadersRead, Token))
+                using (CancellationTokenSource idle = CancellationTokenSource.CreateLinkedTokenSource(Token))
+                using (idle.Token.Register(() => response.Dispose()))
                 {
                     response.EnsureSuccessStatusCode();
+                    long size = response.Content.Headers.ContentLength ?? PackageBytes;
                     using (Stream input = response.Content.ReadAsStream(Token))
                     {
                         byte[] buffer = new byte[1 << 16];
                         long total = 0;
                         int read;
-                        while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                        idle.CancelAfter(IdleTimeout);
+                        while ((read = ReadOrCancel(input, buffer, 0, buffer.Length, idle.Token, Token)) > 0)
                         {
-                            Token.ThrowIfCancellationRequested();
+                            idle.CancelAfter(IdleTimeout);
                             file.Write(buffer, 0, read);
                             total += read;
-                            Progress(total);
+                            Progress(total, size);
                         }
+                        StoppedEarly(idle.Token, Token);
                     }
                 }
                 file.Position = 0;
@@ -204,6 +212,40 @@ namespace Gral
         }
 
         /// <summary>
+        /// A transfer that receives nothing for this long is aborted
+        /// </summary>
+        private static readonly TimeSpan IdleTimeout = TimeSpan.FromSeconds(60);
+
+        /// <summary>
+        /// Read that also ends while the network stalls: cancelling Idle disposes the response, which ends a blocked read.
+        /// A cancelled User token gives OperationCanceledException, an idle timeout a TimeoutException.
+        /// </summary>
+        private static int ReadOrCancel(Stream Input, byte[] Buffer, int Offset, int Count, CancellationToken Idle, CancellationToken User)
+        {
+            try
+            {
+                return Input.Read(Buffer, Offset, Count);
+            }
+            catch (Exception) when (Idle.IsCancellationRequested)
+            {
+                StoppedEarly(Idle, User);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// After a read loop: a disposed response can end the stream early, so a cancelled token is an error here
+        /// </summary>
+        private static void StoppedEarly(CancellationToken Idle, CancellationToken User)
+        {
+            User.ThrowIfCancellationRequested();
+            if (Idle.IsCancellationRequested)
+            {
+                throw new TimeoutException("No data received for " + IdleTimeout.TotalSeconds.ToString() + " s");
+            }
+        }
+
+        /// <summary>
         /// Read-only stream that fetches 1 MiB blocks of a remote file with HTTP range requests
         /// </summary>
         private sealed class HttpRangeStream : Stream
@@ -212,7 +254,8 @@ namespace Gral
             private readonly HttpClient client;
             private readonly Uri uri;
             private readonly long length;
-            private readonly Action<long> progress;
+            private readonly Action<long, long> progress;
+            private readonly long expected;
             private readonly CancellationToken token;
             private readonly byte[] block = new byte[BlockSize];
             private long blockStart = -1;
@@ -220,8 +263,9 @@ namespace Gral
             private long position;
             private long received;
 
-            public HttpRangeStream(HttpClient Client, Uri Uri, long Length, Action<long> Progress, CancellationToken Token)
+            public HttpRangeStream(HttpClient Client, Uri Uri, long Length, long Expected, Action<long, long> Progress, CancellationToken Token)
             {
+                expected = Expected;
                 client = Client;
                 uri = Uri;
                 length = Length;
@@ -259,7 +303,10 @@ namespace Gral
                 {
                     request.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(start, end);
                     using (HttpResponseMessage response = client.Send(request, HttpCompletionOption.ResponseHeadersRead, token))
+                    using (CancellationTokenSource idle = CancellationTokenSource.CreateLinkedTokenSource(token))
+                    using (idle.Token.Register(() => response.Dispose()))
                     {
+                        idle.CancelAfter(IdleTimeout);
                         if (response.StatusCode != System.Net.HttpStatusCode.PartialContent || response.Content.Headers.ContentRange?.From != start)
                         {
                             throw new IOException("The server did not return the requested part of " + uri);
@@ -268,10 +315,12 @@ namespace Gral
                         {
                             int filled = 0, read;
                             int wanted = (int)(end - start + 1);
-                            while (filled < wanted && (read = input.Read(block, filled, wanted - filled)) > 0)
+                            while (filled < wanted && (read = ReadOrCancel(input, block, filled, wanted - filled, idle.Token, token)) > 0)
                             {
                                 filled += read;
+                                idle.CancelAfter(IdleTimeout);
                             }
+                            StoppedEarly(idle.Token, token);
                             if (filled != wanted)
                             {
                                 throw new IOException("Incomplete part of " + uri);
@@ -279,7 +328,7 @@ namespace Gral
                             blockStart = start;
                             blockLength = filled;
                             received += filled;
-                            progress(received);
+                            progress(received, expected);
                         }
                     }
                 }

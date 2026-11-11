@@ -39,7 +39,8 @@ namespace Gral
             string vendor = GpuVendorFromRegistry();
             string page = vendor == "AMD" ? AmdDriverPage : NvidiaDriverPage;
             if (MessageBox.Show(this, "No GPU driver for GRAL was found: neither the NVIDIA driver (nvcuda.dll) nor an AMD Adrenalin driver with the HIP 7 runtime (amdhip64_7.dll)." +
-                                Environment.NewLine + "GRAL runs on the CPU until one is installed." + Environment.NewLine + Environment.NewLine +
+                                Environment.NewLine + "Until one is installed, each GRAL start asks whether to run on the CPU; clear the box to always use the CPU." +
+                                Environment.NewLine + Environment.NewLine +
                                 "Open the " + (vendor ?? "NVIDIA") + " driver download page?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
                 OpenWebPage(page);
@@ -62,17 +63,26 @@ namespace Gral
                     string vendor = null;
                     foreach (string name in display.GetSubKeyNames())
                     {
-                        using (Microsoft.Win32.RegistryKey adapter = display.OpenSubKey(name))
+                        string id;
+                        try
                         {
-                            string id = (adapter?.GetValue("MatchingDeviceId") as string ?? string.Empty).ToUpperInvariant();
-                            if (id.Contains("VEN_10DE"))
+                            // Adapters are 0000, 0001, ...; other subkeys such as "Properties" may deny read access
+                            using (Microsoft.Win32.RegistryKey adapter = display.OpenSubKey(name))
                             {
-                                return "NVIDIA";
+                                id = (adapter?.GetValue("MatchingDeviceId") as string ?? string.Empty).ToUpperInvariant();
                             }
-                            if (id.Contains("VEN_1002"))
-                            {
-                                vendor = "AMD";
-                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                        if (id.Contains("VEN_10DE"))
+                        {
+                            return "NVIDIA";
+                        }
+                        if (id.Contains("VEN_1002"))
+                        {
+                            vendor = "AMD";
                         }
                     }
                     return vendor;
@@ -190,7 +200,12 @@ namespace Gral
                 }
                 else if (status == "no_driver" || status == "driver_error")
                 {
-                    string page = GpuVendorFromRegistry() == "AMD" ? AmdDriverPage : NvidiaDriverPage;
+                    bool amd = GpuVendorFromRegistry() == "AMD";
+                    if (amd && !File.Exists(Path.Combine(Environment.SystemDirectory, "amdhip64_7.dll")))
+                    {
+                        message = "the AMD driver has no HIP 7 runtime (amdhip64_7.dll); a current AMD Adrenalin driver installs it";
+                    }
+                    string page = amd ? AmdDriverPage : NvidiaDriverPage;
                     answer = MessageBox.Show(this, "GRAL cannot use the GPU: " + message + Environment.NewLine + Environment.NewLine +
                                              "Yes: open the driver download page" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
                                              "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -200,9 +215,12 @@ namespace Gral
                         return false;
                     }
                 }
-                else if (status == "no_nvrtc" || status == "no_hiprtc")
+                else if (status == "no_nvrtc" || status == "no_hiprtc" ||
+                         // a compiler was found but cannot serve this GPU: the tested version in the per-user folder may help
+                         ((status == "nvrtc_rejected" || status == "hiprtc_rejected") &&
+                          !Directory.Exists((status == "hiprtc_rejected" ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc).TargetFolder)))
                 {
-                    answer = AskForGpuCompiler(status == "no_hiprtc");
+                    answer = AskForGpuCompiler(status.StartsWith("no_hiprtc") || status.StartsWith("hiprtc"), status.EndsWith("_rejected"));
                     if (answer == DialogResult.Retry)
                     {
                         continue;
@@ -223,22 +241,23 @@ namespace Gral
                 }
                 return false;
             }
-            return true;
+            MessageBox.Show(this, "GRAL still cannot use the GPU. Clear the GPU option to run on the CPU.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
         }
 
         /// <summary>
-        /// The runtime compiler (NVRTC or hiprtc) is missing: offer the installation
+        /// The runtime compiler (NVRTC or hiprtc) is missing or does not serve this GPU: offer the installation
         /// </summary>
         /// <returns>Retry = check again, No = run on the CPU, Cancel or other = do not start</returns>
-        private DialogResult AskForGpuCompiler(bool Hip)
+        private DialogResult AskForGpuCompiler(bool Hip, bool Rejected)
         {
             string page = Hip ? "https://www.amd.com/en/developer/resources/rocm-hub/hip-sdk.html" : "https://developer.nvidia.com/cuda-downloads";
             GpuToolchainPackage package = Hip ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc;
             DialogResult answer = MessageBox.Show(this, "GRAL needs " + (Hip ? "hiprtc, the AMD HIP runtime compiler," : "NVRTC, the NVIDIA CUDA runtime compiler,") +
-                                                  " which is not installed." + Environment.NewLine + Environment.NewLine +
+                                                  (Rejected ? " but the installed one cannot compile for this GPU." : " which is not installed.") + Environment.NewLine + Environment.NewLine +
                                                   "Yes: download " + package.Title + "," + Environment.NewLine + "about " + (package.DownloadBytes >> 20).ToString() +
-                                                  " MB, into %LOCALAPPDATA%\\GRAL\\GpuToolchain\\" + package.Kind + Environment.NewLine +
-                                                  "(licence: " + package.LicenseUrl + ")" + Environment.NewLine +
+                                                  " MB (" + (package.PackageBytes >> 20).ToString() + " MB if the server does not support partial downloads), into %LOCALAPPDATA%\\GRAL\\GpuToolchain\\" +
+                                                  package.Kind + Environment.NewLine + "(licence: " + package.LicenseUrl + ")" + Environment.NewLine +
                                                   "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
                                                   "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (answer != DialogResult.Yes)
@@ -250,12 +269,20 @@ namespace Gral
             {
                 return DialogResult.Retry;
             }
-            if (error.Length > 0 && MessageBox.Show(this, "The download failed: " + error + Environment.NewLine + Environment.NewLine + "Open the download page of the " +
-                                                    (Hip ? "AMD HIP SDK" : "NVIDIA CUDA Toolkit") + " instead?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (error.Length == 0) // download cancelled
+            {
+                return DialogResult.Cancel;
+            }
+            answer = MessageBox.Show(this, "The download failed: " + error + Environment.NewLine + Environment.NewLine +
+                                     "Yes: open the download page of the " + (Hip ? "AMD HIP SDK" : "NVIDIA CUDA Toolkit") + Environment.NewLine +
+                                     "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
+                                     "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            if (answer == DialogResult.Yes)
             {
                 OpenWebPage(page);
+                return DialogResult.Cancel;
             }
-            return DialogResult.Cancel;
+            return answer;
         }
 
         /// <summary>
@@ -267,13 +294,19 @@ namespace Gral
             System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
             GralMessage.WaitProgressbarCancel wait = new GralMessage.WaitProgressbarCancel("Downloading " + Package.Kind + " for GRAL", ref cts);
             wait.ProgressbarUpdate(this, 100);
+            // The main window stays disabled, so no second start can begin while the messages are pumped
+            Enabled = false;
             wait.Show();
-            long received = 0;
-            System.Threading.Tasks.Task install = System.Threading.Tasks.Task.Run(() => Package.Install(bytes => System.Threading.Interlocked.Exchange(ref received, bytes), cts.Token));
+            long received = 0, total = Package.DownloadBytes;
+            System.Threading.Tasks.Task install = System.Threading.Tasks.Task.Run(() => Package.Install((bytes, size) =>
+            {
+                System.Threading.Interlocked.Exchange(ref total, size);
+                System.Threading.Interlocked.Exchange(ref received, bytes);
+            }, cts.Token));
             int shown = 0;
             while (!install.IsCompleted)
             {
-                int percent = (int)Math.Min(99, System.Threading.Interlocked.Read(ref received) * 100 / Math.Max(1, Package.DownloadBytes));
+                int percent = (int)Math.Min(99, System.Threading.Interlocked.Read(ref received) * 100 / Math.Max(1, System.Threading.Interlocked.Read(ref total)));
                 for (; shown < percent; shown++)
                 {
                     wait.ProgressbarUpdate(this, 0);
@@ -282,6 +315,7 @@ namespace Gral
                 System.Threading.Thread.Sleep(50);
             }
             wait.Close();
+            Enabled = true;
             bool cancelled = cts.IsCancellationRequested;
             cts.Dispose();
             if (install.Exception == null)

@@ -4180,6 +4180,10 @@ namespace Gral
         private void CheckBoxGPU_Click(object sender, EventArgs e)
         {
             GUISettings.UseGpu = checkBoxGPU.Checked;
+            if (!checkBoxGPU.Checked)
+            {
+                GUISettings.GpuUseIntegrated = false; // asked again the next time the box is ticked
+            }
             GUISettings.WriteToFile();
             if (checkBoxGPU.Checked)
             {

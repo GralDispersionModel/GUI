@@ -83,7 +83,8 @@ namespace Gral
             Environment.SetEnvironmentVariable("INU_GPU_MANIFEST", manifest);
             Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
             Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
-            Environment.SetEnvironmentVariable("INU_GPU_BACKEND", GUISettings.GpuUseIntegrated ? "hip" : gpuVariablesInherited[4]);
+            // A backend set outside the GUI wins over the integrated-GPU choice
+            Environment.SetEnvironmentVariable("INU_GPU_BACKEND", !string.IsNullOrEmpty(gpuVariablesInherited[4]) ? gpuVariablesInherited[4] : GUISettings.GpuUseIntegrated ? "hip" : null);
             return EnsureGralGpuReady(GralExecutable);
         }
 
