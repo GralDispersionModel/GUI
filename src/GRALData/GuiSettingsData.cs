@@ -77,6 +77,10 @@ namespace GralData
         /// Run GRAL on the GPU (experimental GPU build of GRAL)
         /// </summary>
         public bool UseGpu;
+        /// <summary>
+        /// The user agreed to run GRAL on an integrated AMD GPU (INU_GPU_BACKEND=hip)
+        /// </summary>
+        public bool GpuUseIntegrated;
 
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 
@@ -140,6 +144,7 @@ namespace GralData
                     write.WriteLine(AutoCheckForUpdates.ToString(ic));
                     write.WriteLine(UseDefaultColors.ToString(ic));
                     write.WriteLine(UseGpu.ToString(ic));
+                    write.WriteLine(GpuUseIntegrated.ToString(ic));
                 }
             }
             catch
@@ -241,6 +246,14 @@ namespace GralData
                         try
                         {
                             UseGpu = Convert.ToBoolean(read.ReadLine(), ic);
+                        }
+                        catch { }
+                    }
+                    if (!read.EndOfStream)
+                    {
+                        try
+                        {
+                            GpuUseIntegrated = Convert.ToBoolean(read.ReadLine(), ic);
                         }
                         catch { }
                     }

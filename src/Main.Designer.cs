@@ -3443,7 +3443,7 @@
             checkBoxGPU.Size = new System.Drawing.Size(152, 19);
             checkBoxGPU.TabIndex = 27;
             checkBoxGPU.Text = "Use GPU (experimental)";
-            toolTip1.SetToolTip(checkBoxGPU, "Runs the GRAL particle tracking on the graphics card (needs a GRAL build with GPU support).\r\nNVIDIA GPUs: CUDA driver and NVRTC.\r\nAMD Radeon GPUs (Windows only): Adrenalin driver with the HIP 7 runtime, and hiprtc.\r\nNeeds fields_manifest.json and generated.cu next to the GRAL executable or in its gpu/runtime\r\nsubfolder, and NVRTC or hiprtc in an nvrtc or hiprtc folder beside them (or in CUDA_PATH or HIP_PATH).\r\nPCs with only integrated Radeon GPUs: set INU_GPU_BACKEND=hip before starting the GUI.");
+            toolTip1.SetToolTip(checkBoxGPU, "Runs the GRAL particle tracking on the graphics card (needs a GRAL build with GPU support).\r\nNVIDIA GPUs: NVIDIA driver and NVRTC, the CUDA runtime compiler.\r\nAMD Radeon GPUs (Windows only): Adrenalin driver with the HIP 7 runtime and hiprtc, the HIP runtime compiler.\r\nBefore each start the GUI asks GRAL whether the GPU is ready and offers to install\r\nor link to what is missing. Clear the box to run on the CPU.");
             checkBoxGPU.UseVisualStyleBackColor = true;
             checkBoxGPU.Visible = false;
             checkBoxGPU.Click += CheckBoxGPU_Click;

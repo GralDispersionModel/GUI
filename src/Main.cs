@@ -4181,6 +4181,10 @@ namespace Gral
         {
             GUISettings.UseGpu = checkBoxGPU.Checked;
             GUISettings.WriteToFile();
+            if (checkBoxGPU.Checked)
+            {
+                CheckGpuDriverOnTick();
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

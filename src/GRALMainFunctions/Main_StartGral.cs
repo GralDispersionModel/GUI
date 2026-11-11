@@ -29,7 +29,7 @@ namespace Gral
         /// <summary>
         /// Environment variables that switch the GPU build of GRAL to the GPU
         /// </summary>
-        private static readonly string[] gpuVariableNames = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR" };
+        private static readonly string[] gpuVariableNames = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR", "INU_GPU_BACKEND" };
         /// <summary>
         /// Values of these variables inherited by the GUI, saved before the GUI changes them
         /// </summary>
@@ -40,7 +40,7 @@ namespace Gral
         /// The GRAL processes started by the GUI inherit them.
         /// </summary>
         /// <param name="GralExecutable">Selected GRAL executable</param>
-        /// <returns>False if the GPU is selected but its runtime files are missing</returns>
+        /// <returns>False if the start is cancelled</returns>
         private bool SetGralGpuEnvironment(string GralExecutable)
         {
             if (gpuVariablesInherited == null)
@@ -71,10 +71,9 @@ namespace Gral
             }
             if (manifest == null)
             {
-                MessageBox.Show(this, "GPU option: fields_manifest.json and generated.cu were not found together next to the GRAL executable or in its gpu/runtime subfolder."
+                MessageBox.Show(this, "GPU option: this GRAL has no GPU runtime files (fields_manifest.json and generated.cu next to the executable or in its gpu/runtime subfolder)."
                                 + Environment.NewLine
-                                + "Copy them from the gpu/runtime folder of the GPU build of GRAL, or clear the GPU option. "
-                                + "GRAL looks for NVRTC or hiprtc in an nvrtc or hiprtc folder beside them, then in CUDA_PATH or HIP_PATH.",
+                                + "Select a GRAL build with GPU support, or clear the GPU option.",
                                 "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -84,7 +83,8 @@ namespace Gral
             Environment.SetEnvironmentVariable("INU_GPU_MANIFEST", manifest);
             Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
             Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
-            return true;
+            Environment.SetEnvironmentVariable("INU_GPU_BACKEND", GUISettings.GpuUseIntegrated ? "hip" : gpuVariablesInherited[4]);
+            return EnsureGralGpuReady(GralExecutable);
         }
 
         /// <summary>
