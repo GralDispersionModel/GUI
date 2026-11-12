@@ -79,7 +79,7 @@ namespace Gral
 
                 ReadGpuProjectSettings();
                 bool sumsBefore = gpuReproducibleSums;
-                DialogResult result = options.ShowDialog(this);
+                options.ShowDialog(this);
                 // OK has written the choices to GPU.txt, and "Edit settings file" may have changed any line, the GPU option included, whatever button closed the window
                 ReadGpuProjectSettings();
                 checkBoxGPU.Checked = gpuUseGpu;
