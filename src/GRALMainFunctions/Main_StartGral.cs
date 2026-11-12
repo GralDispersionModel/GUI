@@ -243,16 +243,34 @@ namespace Gral
                         string gpuTarget = gpuSource == null ? null : Path.GetFullPath(Path.Combine(ProjectName, @"Computation", Path.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource)));
                         try
                         {
+                            File.Copy(dialog.FileName, GRAL_Program_Path, true);
+
+                            //only after the core: when the core cannot be replaced (it is running), it keeps the GPU runtime files it was copied with
                             if (gpuTarget != null && !string.Equals(Path.GetFullPath(gpuSource), gpuTarget, StringComparison.OrdinalIgnoreCase))
                             {
-                                Directory.CreateDirectory(gpuTarget);
-                                foreach (string name in new[] { "fields_manifest.json", "generated.cu" })
+                                try
                                 {
-                                    File.Copy(Path.Combine(gpuSource, name), Path.Combine(gpuTarget, name), true);
+                                    Directory.CreateDirectory(gpuTarget);
+                                    foreach (string name in new[] { "fields_manifest.json", "generated.cu" })
+                                    {
+                                        string target = Path.Combine(gpuTarget, name);
+                                        if (File.Exists(target))
+                                        {
+                                            File.SetAttributes(target, FileAttributes.Normal); // a copy of a read-only file is read-only and could not be replaced
+                                        }
+                                        File.Copy(Path.Combine(gpuSource, name), target, true);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (MessageBox.Show(this, "The GPU runtime files of the GRAL core could not be copied to the project folder: " + ex.Message + Environment.NewLine +
+                                                        "This start uses the files of the selected GRAL. The copied core may not find matching files when it is started without the GUI." + Environment.NewLine + Environment.NewLine +
+                                                        "Start anyway?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+                                    {
+                                        return;
+                                    }
                                 }
                             }
-
-                            File.Copy(dialog.FileName, GRAL_Program_Path, true);
 
                             //copy System.Numerics.Vectors.dll for GRAL Version 19.01
                             string numerics_dll = Path.Combine(Path.GetDirectoryName(dialog.FileName), "System.Numerics.Vectors.dll");
