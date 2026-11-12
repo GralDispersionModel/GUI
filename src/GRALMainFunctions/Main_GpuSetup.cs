@@ -48,7 +48,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// GPU options: device and start behaviour (GPU settings file of GRAL), reproducible sums (in.dat line 24), status and log
+        /// GPU options: device, start behaviour and reproducible sums (GPU.txt of the project), status and log
         /// </summary>
         private void ButtonGPUOptions_Click(object sender, EventArgs e)
         {
@@ -63,23 +63,21 @@ namespace Gral
                     options.CheckReport = gpuLastCheck.Value.Report;
                 }
                 options.GRALReproducibleResults = GRALSettings.ReproducibleResults;
-                options.GpuReproducibleSums = GRALSettings.GpuReproducibleSums;
+                options.SettingsFile = GralIO.GpuSettingsFile.FilePath(ProjectName);
                 options.GpuLogFile = Path.Combine(ProjectName, "Computation", "GRAL_GPU_runtime.log");
                 options.Icon = Icon;
                 options.StartPosition = FormStartPosition.Manual;
                 options.Left = Left + 80;
                 options.Top = Top + 40;
 
-                if (options.ShowDialog(this) == DialogResult.OK && options.GpuReproducibleSums != GRALSettings.GpuReproducibleSums && !Project_Locked)
+                bool sumsBefore = gpuReproducibleSums;
+                if (options.ShowDialog(this) == DialogResult.OK)
                 {
-                    // Stored in the project's in.dat (line 24), written at once like the GPU option itself
-                    GRALSettings.GpuReproducibleSums = options.GpuReproducibleSums;
-                    GralIO.InDatFileIO write_in_dat = new GralIO.InDatFileIO
+                    ReadGpuProjectSettings(); // the window has written its choices to GPU.txt
+                    if (gpuReproducibleSums != sumsBefore && !Project_Locked)
                     {
-                        Data = GRALSettings
-                    };
-                    write_in_dat.WriteInDat();
-                    ResetInDat(); // results computed with the other kind of sums are not those of the project any more, as with the reproducible results option
+                        ResetInDat(); // results computed with the other kind of sums are not those of the project any more, as with the reproducible results option
+                    }
                 }
             }
         }
@@ -260,14 +258,14 @@ namespace Gral
                     return true;
                 }
                 DialogResult answer;
-                // The choice for an integrated GPU is kept in the GPU settings file of GRAL (allow_integrated = 1). A GRAL that does not report the file does not read it
+                // The choice for an integrated GPU is kept in the GPU.txt of the project (allow_integrated = 1). A GRAL that does not report the file does not read it
                 // and needs INU_GPU_BACKEND=hip, which is then set for this start only
                 bool readsSettingsFile = false, saved = false;
                 string settingsFile = null;
                 if (status == "only_integrated")
                 {
                     readsSettingsFile = check.Value.Report.ValueKind == JsonValueKind.Object && check.Value.Report.TryGetProperty("settings_file_status", out _);
-                    settingsFile = GralIO.GpuSettingsFile.FilePath();
+                    settingsFile = GralIO.GpuSettingsFile.FilePath(ProjectName);
                     try
                     {
                         saved = GralIO.GpuSettingsFile.Read(settingsFile).TryGetValue("allow_integrated", out string allowed) && allowed == "1";
@@ -355,7 +353,7 @@ namespace Gral
                 }
                 if (answer == DialogResult.No) // CPU run this time; the next start uses the GPU option again
                 {
-                    Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", "0"); // overrides in.dat line 23 for this start; cleared again after the start
+                    Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", "0"); // overrides use_gpu of GPU.txt for this start; cleared again after the start
                     gpuCpuThisStart = true;
                     return true;
                 }
@@ -391,7 +389,7 @@ namespace Gral
             }
             try
             {
-                return GralIO.GpuSettingsFile.Read(GralIO.GpuSettingsFile.FilePath()).ContainsKey(Hip ? "hiprtc_dir" : "nvrtc_dir");
+                return GralIO.GpuSettingsFile.Read(GralIO.GpuSettingsFile.FilePath(ProjectName)).ContainsKey(Hip ? "hiprtc_dir" : "nvrtc_dir");
             }
             catch
             {

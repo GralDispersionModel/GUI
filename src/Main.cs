@@ -2854,7 +2854,8 @@ namespace Gral
                 }
 #endif
                 checkBoxGPU.Visible = button10.Visible;
-                checkBoxGPU.Checked = GRALSettings.UseGpu;
+                ReadGpuProjectSettings();
+                checkBoxGPU.Checked = gpuUseGpu;
                 ShowGpuOptionsButton();
             }
             else  // not the computation tab -> stop FileSystemWatcher
@@ -4180,14 +4181,25 @@ namespace Gral
 
         private void CheckBoxGPU_Click(object sender, EventArgs e)
         {
-            // Stored in the project's in.dat (line 23), like the AVX-512 option, so the project records it
-            GRALSettings.UseGpu = checkBoxGPU.Checked;
-            InDatFileIO write_in_dat = new InDatFileIO
+            // Stored as use_gpu in the project's GPU.txt (Computation folder), which GRAL reads at every start; the first tick creates the file
+            string settingsFile = GpuSettingsFile.FilePath(ProjectName);
+            try
             {
-                Data = GRALSettings
-            };
-            write_in_dat.WriteInDat();
-            write_in_dat = null;
+                if (settingsFile == null && checkBoxGPU.Checked)
+                {
+                    throw new InvalidOperationException(string.IsNullOrEmpty(ProjectName) ? "No project is open." : "INU_GPU_SETTINGS_FILE=off switches the GPU settings file off.");
+                }
+                if (settingsFile != null && (checkBoxGPU.Checked || File.Exists(settingsFile))) // without a file the GPU is off already
+                {
+                    GpuSettingsFile.Update(settingsFile, new Dictionary<string, string> { ["use_gpu"] = checkBoxGPU.Checked ? "1" : "0" });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "The GPU option could not be saved" + (settingsFile != null ? " in " + settingsFile : string.Empty) + ": " + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            ReadGpuProjectSettings();
+            checkBoxGPU.Checked = gpuUseGpu; // what the file holds now
             ShowGpuOptionsButton();
             if (checkBoxGPU.Checked)
             {

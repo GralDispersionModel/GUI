@@ -18,28 +18,28 @@ using System.Text;
 namespace GralIO
 {
     /// <summary>
-    /// The per-user GPU settings file of GRAL (GpuSettings.txt): one "key = value ! comment" per line.
+    /// The GPU settings file of a project (GPU.txt in the Computation folder): one "key = value ! comment" per line.
     /// GRAL reads it at every start; the GUI only reads values and changes single keys, every other line stays byte for byte
     /// </summary>
     public static class GpuSettingsFile
     {
         /// <summary>
-        /// The keys GRAL accepts; any other key stops a GPU run
+        /// The keys GRAL accepts; any other key stops the run
         /// </summary>
-        public static readonly string[] Keys = { "device", "device_name", "backend", "allow_integrated", "fallback_on_startup", "nvrtc_dir", "hiprtc_dir", "chunk", "block",
+        public static readonly string[] Keys = { "use_gpu", "reproducible_sums", "device", "device_name", "backend", "allow_integrated", "fallback_on_startup", "nvrtc_dir", "hiprtc_dir", "chunk", "block",
                                                  "max_kernel_ms", "memory_budget_bytes", "memory_reserve_bytes", "pinned_budget_bytes", "cache_dir" };
 
         /// <summary>
-        /// Path of the settings file GRAL reads: INU_GPU_SETTINGS_FILE or GRAL/GpuSettings.txt in the local application data folder
+        /// Path of the settings file GRAL reads for a project: INU_GPU_SETTINGS_FILE, or GPU.txt in the Computation folder, which is GRAL's working folder
         /// </summary>
-        /// <returns>The path, or null if INU_GPU_SETTINGS_FILE=off switches the file off or there is no local application data folder</returns>
-        public static string FilePath()
+        /// <param name="ProjectFolder">Folder of the project</param>
+        /// <returns>The path, or null if INU_GPU_SETTINGS_FILE=off switches the file off or no project is open</returns>
+        public static string FilePath(string ProjectFolder)
         {
             string file = Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE");
             if (string.IsNullOrWhiteSpace(file))
             {
-                string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                return string.IsNullOrEmpty(local) ? null : Path.Combine(local, "GRAL", "GpuSettings.txt"); // without that folder GRAL reads no file either
+                return string.IsNullOrEmpty(ProjectFolder) ? null : Path.Combine(ProjectFolder, "Computation", "GPU.txt");
             }
             return string.Equals(file.Trim(), "off", StringComparison.OrdinalIgnoreCase) ? null : file.Trim();
         }
@@ -171,7 +171,7 @@ namespace GralIO
         }
 
         /// <summary>
-        /// Create the settings file with the commented template if it does not exist
+        /// Create the settings file from the template if it does not exist
         /// </summary>
         public static void CreateIfMissing(string FileName)
         {
@@ -183,16 +183,17 @@ namespace GralIO
         }
 
         /// <summary>
-        /// A settings file that sets nothing: every key of GRAL as a comment line
+        /// A settings file that leaves the GPU off and sets nothing else: every other key of GRAL as a comment line
         /// </summary>
         public static string Template()
         {
             string[] lines =
             {
-                "! GPU settings of GRAL for this user. GRAL reads this file at every start; an INU_GPU_* environment variable wins over the line here.",
-                "! One \"key = value\" per line, text after \"!\" is a comment. Remove the \"!\" in front of a key to set it; an unknown key stops a GPU run.",
-                "! The GPU itself is switched on in the project (in.dat line 23), reproducible sums in in.dat lines 22 and 24.",
+                "! GPU settings of GRAL for this project (GPU.txt in the Computation folder). GRAL reads this file at every start; an INU_GPU_* environment variable wins over the line here.",
+                "! One \"key = value\" per line, text after \"!\" is a comment. Remove the \"!\" in front of a key to set it; an unknown key or an invalid value stops the run.",
                 "!",
+                "use_gpu = 0                 ! 1 = particle dispersion on the GPU, 0 = on the CPU (INU_GPU_EXPERIMENTAL=1 or 0 overrides it for one run)",
+                "! reproducible_sums = 0     ! with reproducible results (in.dat line 22) and the GPU: 0 = reproducible sums off, 1 or not set = on (INU_GPU_REPRODUCIBLE_SUMS)",
                 "! device = 0                ! INU_GPU_DEVICE: number of the GPU, as listed by \"GRAL --gpu-check\"",
                 "! device_name =             ! name of the GPU with that number; if another GPU has the number, GRAL selects automatically and warns",
                 "! backend = cuda            ! INU_GPU_BACKEND: cuda (NVIDIA) or hip (AMD)",

@@ -219,14 +219,6 @@ namespace GralIO
         ///GRAL reproducible results option
         /// </summary>
         public bool ReproducibleResults { get; set; }
-        /// <summary>
-        ///Run the particle dispersion on the GPU (needs a GRAL build with GPU support)
-        /// </summary>
-        public bool UseGpu { get; set; }
-        /// <summary>
-        ///Use reproducible sums on the GPU when the reproducible results option is on (in.dat line 24)
-        /// </summary>
-        public bool GpuReproducibleSums { get; set; }
 
         public InDatVariables()
         {
@@ -255,8 +247,6 @@ namespace GralIO
             PrognosticSubDomainsSizeSourceRadius = 0;
             AVX512Usage = 0;
             ReproducibleResults = false;
-            UseGpu = false;
-            GpuReproducibleSums = true;
         }
 
         public InDatVariables(InDatVariables other)
@@ -289,8 +279,6 @@ namespace GralIO
             UseGRALOnlineFunctions = other.UseGRALOnlineFunctions;
             AVX512Usage = other.AVX512Usage;
             ReproducibleResults = other.ReproducibleResults;
-            UseGpu = other.UseGpu;
-            GpuReproducibleSums = other.GpuReproducibleSums;
         }
 
     }

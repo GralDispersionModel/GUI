@@ -129,8 +129,6 @@ namespace GralIO
                     myWriter.WriteLine(_data.AVX512Usage.ToString(ic) + "\t ! Use the AVX512 instructions Yes = 1, No = 0");
                     int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;
                     myWriter.WriteLine(reproducibleResults.ToString(ic) + "\t ! Use the GRAL reproducible results option Yes = 1, No = 0");
-                    myWriter.WriteLine((_data.UseGpu ? 1 : 0).ToString(ic) + "\t ! Use the GPU for the particle dispersion Yes = 1, No = 0");
-                    myWriter.WriteLine((_data.GpuReproducibleSums ? 1 : 0).ToString(ic) + "\t ! Use reproducible sums on the GPU with reproducible results Yes = 1, No = 0");
                 }
 
             }
@@ -149,9 +147,6 @@ namespace GralIO
         {
             try
             {
-                // the optional lines 23 and 24: a file without them, or one that cannot be read, must not keep the values of the project read before
-                _data.UseGpu = false;
-                _data.GpuReproducibleSums = true;
                 using (StreamReader myreader = new StreamReader(_data.InDatPath))
                 {
 
@@ -366,24 +361,6 @@ namespace GralIO
                                 reproducibleResults = Convert.ToInt32(_val);
                                 _data.ReproducibleResults = reproducibleResults == 1;
                             }
-                        }
-                    }
-
-                    if (myreader.EndOfStream == false) // read the GPU option
-                    {
-                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries); // as GRAL splits the line
-                        if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
-                        {
-                            _data.UseGpu = _val == 1;
-                        }
-                    }
-
-                    if (myreader.EndOfStream == false) // read the GPU reproducible sums option; an in.dat without line 24 keeps the reproducible sums
-                    {
-                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries); // as GRAL splits the line
-                        if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
-                        {
-                            _data.GpuReproducibleSums = _val != 0;
                         }
                     }
 

@@ -27,10 +27,18 @@ namespace Gral
     partial class Main
     {
         /// <summary>
-        /// Environment variables of the GPU build of GRAL that the GUI owns: it sets or clears them at every start (INU_GPU_EXPERIMENTAL overrides in.dat line 23).
+        /// Environment variables of the GPU build of GRAL that the GUI owns: it sets or clears them at every start (INU_GPU_EXPERIMENTAL overrides use_gpu of GPU.txt).
         /// Every other INU_GPU_* variable inherited by the GUI is passed on unchanged; GRAL writes those to its log file
         /// </summary>
         private static readonly string[] gpuVariableNames = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR" };
+        /// <summary>
+        /// The GPU option of the project (use_gpu of GPU.txt in the Computation folder), read when the Computation tab is shown, when the box is clicked and once at each start
+        /// </summary>
+        private bool gpuUseGpu;
+        /// <summary>
+        /// reproducible_sums of GPU.txt, read together with the GPU option; not set means on
+        /// </summary>
+        private bool gpuReproducibleSums = true;
         /// <summary>
         /// INU_GPU_BACKEND=hip was set for this start only, for a GRAL that does not read the GPU settings file
         /// </summary>
@@ -55,12 +63,13 @@ namespace Gral
         {
             gpuCpuThisStart = false;
             gpuFallbackThisStart = null;
-            // in.dat line 23 switches GRAL to the GPU; values of the owned variables inherited by the GUI must not change that
+            // use_gpu of the project's GPU.txt switches GRAL to the GPU; values of the owned variables inherited by the GUI must not change that
             foreach (string name in gpuVariableNames)
             {
                 Environment.SetEnvironmentVariable(name, null);
             }
-            if (!GRALSettings.UseGpu)
+            ReadGpuProjectSettings(); // once per start: the check, the core copy and the log file of this start use the same answer
+            if (!gpuUseGpu)
             {
                 return true;
             }
@@ -90,6 +99,22 @@ namespace Gral
             Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
             Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
             return EnsureGralGpuReady(GralExecutable);
+        }
+
+        /// <summary>
+        /// Read the GPU option and the reproducible sums of the project from GPU.txt; a missing file or one that cannot be read means GPU off and every default
+        /// </summary>
+        private void ReadGpuProjectSettings()
+        {
+            gpuUseGpu = false;
+            gpuReproducibleSums = true;
+            try
+            {
+                System.Collections.Generic.Dictionary<string, string> settings = GralIO.GpuSettingsFile.Read(GralIO.GpuSettingsFile.FilePath(ProjectName));
+                gpuUseGpu = settings.TryGetValue("use_gpu", out string use) && use == "1";
+                gpuReproducibleSums = !(settings.TryGetValue("reproducible_sums", out string sums) && sums == "0");
+            }
+            catch { }
         }
 
         /// <summary>
@@ -244,7 +269,7 @@ namespace Gral
                         GRAL_Program_Path = Path.Combine(ProjectName, @"Computation", Path.GetFileName(dialog.FileName));
                         //the GPU runtime files (manifest and kernel source) go with the core in the same layout, so that the copied GRAL also finds them when it is started without the GUI
                         string gpuManifest = Environment.GetEnvironmentVariable("INU_GPU_MANIFEST");
-                        string gpuSource = GRALSettings.UseGpu && !string.IsNullOrEmpty(gpuManifest) ? Path.GetDirectoryName(gpuManifest) : null;
+                        string gpuSource = gpuUseGpu && !string.IsNullOrEmpty(gpuManifest) ? Path.GetDirectoryName(gpuManifest) : null;
                         string gpuTarget = gpuSource == null ? null : Path.GetFullPath(Path.Combine(ProjectName, @"Computation", Path.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource)));
                         try
                         {
@@ -313,7 +338,7 @@ namespace Gral
                         {
                             // A copy fails silently, as before, while the core in the project folder is running or is the selected file itself.
                             // With the GPU option a core or GPU runtime files that are missing after the copy must not go unnoticed
-                            if (GRALSettings.UseGpu && (!File.Exists(GRAL_Program_Path) || (gpuTarget != null && (!File.Exists(Path.Combine(gpuTarget, "fields_manifest.json")) || !File.Exists(Path.Combine(gpuTarget, "generated.cu"))))) &&
+                            if (gpuUseGpu && (!File.Exists(GRAL_Program_Path) || (gpuTarget != null && (!File.Exists(Path.Combine(gpuTarget, "fields_manifest.json")) || !File.Exists(Path.Combine(gpuTarget, "generated.cu"))))) &&
                                 MessageBox.Show(this, "The GRAL core or its GPU runtime files could not be copied to the project folder: " + ex.Message + Environment.NewLine + Environment.NewLine +
                                                 "Start anyway?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
                             {

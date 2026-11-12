@@ -59,11 +59,11 @@ namespace Gral
                             mywriter.WriteLine(Convert.ToString(numericUpDown6.Value).PadLeft(10) + "  \t  // Number of particles per second");
                             mywriter.WriteLine(Convert.ToString(numericUpDown5.Value).PadLeft(10) + "  \t  // Start with dispersion situation");
                             mywriter.WriteLine((GRALSettings.ReproducibleResults ? "yes" : "no").PadLeft(10) + "  \t  // GRAL reproducible results");
-                            mywriter.WriteLine((GRALSettings.UseGpu ? "yes" : "no").PadLeft(10) + "  \t  // Use GPU for GRAL" + (GRALSettings.UseGpu && gpuCpuThisStart ? " (this start runs on the CPU, chosen at the GPU check)" :
-                                                 GRALSettings.UseGpu && gpuFallbackThisStart != null ? " (the GPU was not ready at the check: " + gpuFallbackThisStart + "; GRAL continues on the CPU, as set in the GPU options)" : string.Empty));
-                            if (GRALSettings.UseGpu && GRALSettings.ReproducibleResults)
+                            mywriter.WriteLine((gpuUseGpu ? "yes" : "no").PadLeft(10) + "  \t  // Use GPU for GRAL" + (gpuUseGpu && gpuCpuThisStart ? " (this start runs on the CPU, chosen at the GPU check)" :
+                                                 gpuUseGpu && gpuFallbackThisStart != null ? " (the GPU was not ready at the check: " + gpuFallbackThisStart + "; GRAL continues on the CPU, as set in the GPU options)" : string.Empty));
+                            if (gpuUseGpu && GRALSettings.ReproducibleResults)
                             {
-                                mywriter.WriteLine((GRALSettings.GpuReproducibleSums ? "yes" : "no").PadLeft(10) + "  \t  // Reproducible sums on the GPU");
+                                mywriter.WriteLine((gpuReproducibleSums ? "yes" : "no").PadLeft(10) + "  \t  // Reproducible sums on the GPU");
                             }
 
                             if (File.Exists(Landusefile))

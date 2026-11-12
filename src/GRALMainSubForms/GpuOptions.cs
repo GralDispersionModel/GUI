@@ -22,7 +22,7 @@ using System.Windows.Forms;
 namespace GralMainForms
 {
     /// <summary>
-    /// GPU options: the device and the start behaviour are kept in GRAL's per-user GPU settings file, the reproducible sums in the project (in.dat line 24)
+    /// GPU options of a project: the device, the start behaviour and the reproducible sums are kept in GPU.txt of the project's Computation folder
     /// </summary>
     public partial class GpuOptions : Form
     {
@@ -48,9 +48,9 @@ namespace GralMainForms
         /// </summary>
         public bool GRALReproducibleResults = false;
         /// <summary>
-        /// in.dat line 24
+        /// GPU.txt of the project, or the file INU_GPU_SETTINGS_FILE names; null if there is none
         /// </summary>
-        public bool GpuReproducibleSums = true;
+        public string SettingsFile = null;
         /// <summary>
         /// The GPU runtime log of the project
         /// </summary>
@@ -74,6 +74,7 @@ namespace GralMainForms
         private int initialDevice;
         private bool initialIntegrated;
         private bool initialFallback;
+        private bool initialSums;
         private bool integratedTicked; // the permission was ticked by the choice of an integrated GPU, not by the user
 
         public GpuOptions()
@@ -83,7 +84,7 @@ namespace GralMainForms
 
         private void GpuOptions_Load(object sender, EventArgs e)
         {
-            settingsFile = GpuSettingsFile.FilePath();
+            settingsFile = SettingsFile;
             Dictionary<string, string> saved = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             string readError = null;
             try
@@ -171,8 +172,9 @@ namespace GralMainForms
             label1.Text = (listed ? string.Empty : (CheckDone ? "The GRAL of the last start did not list the GPUs." : "The GPUs are listed here after a GRAL start with the GPU option in this session.") + Environment.NewLine) +
                           "All GRAL instances of a start share one GPU.";
 
-            // Project: in.dat line 24 counts only together with the reproducible results option (line 22)
-            checkBox2.Checked = GpuReproducibleSums;
+            // reproducible_sums counts only together with the reproducible results option (in.dat line 22); not set means on
+            initialSums = !(saved.TryGetValue("reproducible_sums", out string sums) && sums == "0");
+            checkBox2.Checked = initialSums;
             checkBox2.Enabled = GRALReproducibleResults && !Gral.Main.Project_Locked;
             label2.Text = "\"GRAL Reproducible Results\" (special GRAL settings) is " + (GRALReproducibleResults ? "on" : "off; this option needs it") + "." +
                           (Gral.Main.Project_Locked ? " The project is locked." : string.Empty);
@@ -181,6 +183,7 @@ namespace GralMainForms
             {
                 groupBox1.Enabled = false;
                 groupBox2.Enabled = false;
+                checkBox2.Enabled = false;
                 button4.Enabled = false;
             }
             button3.Enabled = File.Exists(GpuLogFile);
@@ -295,7 +298,7 @@ namespace GralMainForms
                 foreach (string key in GpuSettingsFile.Keys)
                 {
                     // settings that this form does not show are named, so that the user knows they exist
-                    if (Saved.TryGetValue(key, out string value) && key != "device" && key != "device_name" && key != "backend" && key != "allow_integrated" && key != "fallback_on_startup")
+                    if (Saved.TryGetValue(key, out string value) && key != "use_gpu" && key != "reproducible_sums" && key != "device" && key != "device_name" && key != "backend" && key != "allow_integrated" && key != "fallback_on_startup")
                     {
                         text.AppendLine("  " + key + " = " + value);
                     }
@@ -342,10 +345,6 @@ namespace GralMainForms
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (checkBox2.Enabled)
-            {
-                GpuReproducibleSums = checkBox2.Checked;
-            }
             if (settingsFile == null)
             {
                 return;
@@ -369,6 +368,10 @@ namespace GralMainForms
             if (radioButton2.Checked != initialFallback)
             {
                 changes["fallback_on_startup"] = radioButton2.Checked ? "1" : null;
+            }
+            if (checkBox2.Enabled && checkBox2.Checked != initialSums)
+            {
+                changes["reproducible_sums"] = checkBox2.Checked ? "1" : "0";
             }
             if (changes.Count == 0)
             {
