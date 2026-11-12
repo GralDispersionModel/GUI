@@ -25,6 +25,63 @@ namespace Gral
     {
         private const string NvidiaDriverPage = "https://www.nvidia.com/en-us/drivers/";
         private const string AmdDriverPage = "https://www.amd.com/en/support/download/drivers.html";
+        /// <summary>
+        /// The GRAL executable and the GPU check of the last GRAL start in this session, shown by the GPU options
+        /// </summary>
+        private string gpuLastGralExecutable = string.Empty;
+        private bool gpuCheckDone;
+        private (string Status, string Message, JsonElement Report)? gpuLastCheck;
+        private System.Drawing.Image gpuOptionsImageDisabled;
+
+        /// <summary>
+        /// The GPU options button follows the GPU check box: visible with it, usable when it is ticked
+        /// </summary>
+        private void ShowGpuOptionsButton()
+        {
+            buttonGPUOptions.Visible = checkBoxGPU.Visible;
+            buttonGPUOptions.Enabled = checkBoxGPU.Checked;
+            if (gpuOptionsImageDisabled == null)
+            {
+                gpuOptionsImageDisabled = ToolStripRenderer.CreateDisabledImage(Gral.Properties.Resources.WrenchBlueTransparent);
+            }
+            buttonGPUOptions.BackgroundImage = checkBoxGPU.Checked ? Gral.Properties.Resources.WrenchBlueTransparent : gpuOptionsImageDisabled;
+        }
+
+        /// <summary>
+        /// GPU options: device and start behaviour (GPU settings file of GRAL), reproducible sums (in.dat line 24), status and log
+        /// </summary>
+        private void ButtonGPUOptions_Click(object sender, EventArgs e)
+        {
+            using (global::GralMainForms.GpuOptions options = new global::GralMainForms.GpuOptions())
+            {
+                options.GralExecutable = gpuLastGralExecutable;
+                options.CheckDone = gpuCheckDone;
+                if (gpuLastCheck != null)
+                {
+                    options.CheckStatus = gpuLastCheck.Value.Status;
+                    options.CheckMessage = gpuLastCheck.Value.Message ?? string.Empty;
+                    options.CheckReport = gpuLastCheck.Value.Report;
+                }
+                options.GRALReproducibleResults = GRALSettings.ReproducibleResults;
+                options.GpuReproducibleSums = GRALSettings.GpuReproducibleSums;
+                options.GpuLogFile = Path.Combine(ProjectName, "Computation", "GRAL_GPU_runtime.log");
+                options.Icon = Icon;
+                options.StartPosition = FormStartPosition.Manual;
+                options.Left = Left + 80;
+                options.Top = Top + 40;
+
+                if (options.ShowDialog(this) == DialogResult.OK && options.GpuReproducibleSums != GRALSettings.GpuReproducibleSums && !Project_Locked)
+                {
+                    // Stored in the project's in.dat (line 24), written at once like the GPU option itself
+                    GRALSettings.GpuReproducibleSums = options.GpuReproducibleSums;
+                    GralIO.InDatFileIO write_in_dat = new GralIO.InDatFileIO
+                    {
+                        Data = GRALSettings
+                    };
+                    write_in_dat.WriteInDat();
+                }
+            }
+        }
 
         /// <summary>
         /// When the GPU option is ticked: check that a driver with GPU compute support is installed
@@ -178,6 +235,8 @@ namespace Gral
             for (int attempt = 0; attempt < 3; attempt++)
             {
                 var check = RunGralGpuCheck(GralExecutable);
+                gpuCheckDone = true;
+                gpuLastCheck = check;
                 if (check == null || check.Value.Status == "ok")
                 {
                     return true; // ready, or an older GRAL that reports problems itself at the start

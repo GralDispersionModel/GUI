@@ -264,6 +264,7 @@
             comboBox1 = new System.Windows.Forms.ComboBox();
             checkBoxAVX = new System.Windows.Forms.CheckBox();
             checkBoxGPU = new System.Windows.Forms.CheckBox();
+            buttonGPUOptions = new System.Windows.Forms.Button();
             numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             label98 = new System.Windows.Forms.Label();
             numericUpDown32 = new System.Windows.Forms.NumericUpDown();
@@ -3395,6 +3396,7 @@
             groupBox31.Controls.Add(comboBox1);
             groupBox31.Controls.Add(checkBoxAVX);
             groupBox31.Controls.Add(checkBoxGPU);
+            groupBox31.Controls.Add(buttonGPUOptions);
             groupBox31.Controls.Add(numericUpDown33);
             groupBox31.Controls.Add(label98);
             groupBox31.Controls.Add(numericUpDown32);
@@ -3447,6 +3449,22 @@
             checkBoxGPU.UseVisualStyleBackColor = true;
             checkBoxGPU.Visible = false;
             checkBoxGPU.Click += CheckBoxGPU_Click;
+            // 
+            // buttonGPUOptions
+            // 
+            buttonGPUOptions.AccessibleName = "GPU options";
+            buttonGPUOptions.BackgroundImage = Properties.Resources.WrenchBlueTransparent;
+            buttonGPUOptions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            buttonGPUOptions.FlatAppearance.BorderSize = 0;
+            buttonGPUOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            buttonGPUOptions.Location = new System.Drawing.Point(183, 123);
+            buttonGPUOptions.Name = "buttonGPUOptions";
+            buttonGPUOptions.Size = new System.Drawing.Size(24, 22);
+            buttonGPUOptions.TabIndex = 28;
+            toolTip1.SetToolTip(buttonGPUOptions, "GPU options: device, what to do if the GPU cannot start,\r\nreproducible sums, status of the last check and the GPU log");
+            buttonGPUOptions.UseVisualStyleBackColor = true;
+            buttonGPUOptions.Visible = false;
+            buttonGPUOptions.Click += ButtonGPUOptions_Click;
             // 
             // numericUpDown33
             // 
@@ -4914,6 +4932,7 @@
         private System.Windows.Forms.Label LabelEmissionPath;
         public System.Windows.Forms.CheckBox checkBoxAVX;
         public System.Windows.Forms.CheckBox checkBoxGPU;
+        private System.Windows.Forms.Button buttonGPUOptions;
         private System.Windows.Forms.GroupBox groupBox31;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.CheckBox checkBox55;

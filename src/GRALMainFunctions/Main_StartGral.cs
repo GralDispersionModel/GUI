@@ -44,6 +44,7 @@ namespace Gral
         /// <returns>False if the start is cancelled</returns>
         private bool SetGralGpuEnvironment(string GralExecutable)
         {
+            gpuLastGralExecutable = GralExecutable;
             // in.dat line 23 switches GRAL to the GPU; values of the owned variables inherited by the GUI must not change that
             foreach (string name in gpuVariableNames)
             {

@@ -2855,6 +2855,7 @@ namespace Gral
 #endif
                 checkBoxGPU.Visible = button10.Visible;
                 checkBoxGPU.Checked = GRALSettings.UseGpu;
+                ShowGpuOptionsButton();
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
@@ -4187,6 +4188,7 @@ namespace Gral
             };
             write_in_dat.WriteInDat();
             write_in_dat = null;
+            ShowGpuOptionsButton();
             if (checkBoxGPU.Checked)
             {
                 CheckGpuDriverOnTick();
