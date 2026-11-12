@@ -88,6 +88,10 @@ namespace Gral
         /// </summary>
         private void CheckGpuDriverOnTick()
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                return; // the driver files and the registry are looked up for Windows only; elsewhere GRAL reports a missing driver at the start
+            }
             string system = Environment.SystemDirectory;
             if (File.Exists(Path.Combine(system, "nvcuda.dll")) || File.Exists(Path.Combine(system, "amdhip64_7.dll")))
             {
@@ -109,6 +113,10 @@ namespace Gral
         /// </summary>
         private static string GpuVendorFromRegistry()
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                return null;
+            }
             try
             {
                 using (Microsoft.Win32.RegistryKey display = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}"))
@@ -285,7 +293,7 @@ namespace Gral
                 else if (status == "no_driver" || status == "driver_error")
                 {
                     bool amd = GpuVendorFromRegistry() == "AMD";
-                    if (amd && !File.Exists(Path.Combine(Environment.SystemDirectory, "amdhip64_7.dll")))
+                    if (amd && OperatingSystem.IsWindows() && !File.Exists(Path.Combine(Environment.SystemDirectory, "amdhip64_7.dll")))
                     {
                         message = "the AMD driver has no HIP 7 runtime (amdhip64_7.dll); a current AMD Adrenalin driver installs it";
                     }
@@ -315,7 +323,7 @@ namespace Gral
                 else
                 {
                     // hiprtc's amd_comgr needs the Visual C++ runtime
-                    string runtimeHint = File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140_1.dll")) ? string.Empty :
+                    string runtimeHint = !OperatingSystem.IsWindows() || File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140_1.dll")) ? string.Empty :
                                          Environment.NewLine + "The Microsoft Visual C++ x64 runtime is missing: https://aka.ms/vs/17/release/vc_redist.x64.exe";
                     answer = MessageBox.Show(this, "GRAL cannot use the GPU (" + status + "): " + message + runtimeHint + Environment.NewLine + Environment.NewLine +
                                              "Run on the CPU this time?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ? DialogResult.No : DialogResult.Cancel;
