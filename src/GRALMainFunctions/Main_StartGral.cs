@@ -40,7 +40,7 @@ namespace Gral
         /// </summary>
         private bool gpuReproducibleSums = true;
         /// <summary>
-        /// INU_GPU_BACKEND=hip was set for this start only, for a GRAL that does not read the GPU settings file
+        /// INU_GPU_BACKEND=hip was set for this start only, for a GRAL that does not read GPU.txt
         /// </summary>
         private bool gpuBackendSetForStart;
         private string gpuBackendBeforeStart;

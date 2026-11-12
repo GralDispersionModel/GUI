@@ -63,7 +63,7 @@ namespace GralMainForms
             public int Ordinal = -1;     // -1 = automatic device
             public string Name = string.Empty;
             public bool Integrated;
-            public bool Saved;           // the entry of the settings file, which no listed device matches
+            public bool Saved;           // the entry of GPU.txt, which no listed device matches
             public override string ToString()
             {
                 return Text;
@@ -384,7 +384,7 @@ namespace GralMainForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "The GPU settings file could not be written: " + settingsFile + Environment.NewLine + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "GPU.txt could not be written: " + settingsFile + Environment.NewLine + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None; // keep the form open
             }
         }
@@ -413,7 +413,7 @@ namespace GralMainForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "The GPU settings file could not be created: " + settingsFile + Environment.NewLine + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "GPU.txt could not be created: " + settingsFile + Environment.NewLine + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             OpenFile(settingsFile); // OK writes only the choices changed in this window, so keys edited in the editor stay

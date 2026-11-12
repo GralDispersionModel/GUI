@@ -4187,7 +4187,7 @@ namespace Gral
             {
                 if (settingsFile == null && checkBoxGPU.Checked)
                 {
-                    throw new InvalidOperationException(string.IsNullOrEmpty(ProjectName) ? "No project is open." : "INU_GPU_SETTINGS_FILE=off switches the GPU settings file off.");
+                    throw new InvalidOperationException(string.IsNullOrEmpty(ProjectName) ? "No project is open." : "INU_GPU_SETTINGS_FILE=off switches GPU.txt off.");
                 }
                 if (settingsFile != null && (checkBoxGPU.Checked || File.Exists(settingsFile))) // without a file the GPU is off already
                 {

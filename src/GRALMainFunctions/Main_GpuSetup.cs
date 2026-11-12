@@ -279,12 +279,12 @@ namespace Gral
                     }
                     catch { }
                 }
-                // saved, read by GRAL and still refused: GRAL reads another settings file than the GUI, and asking again would not change that
+                // saved, read by GRAL and still refused: GRAL reads another file than the GUI (a relative INU_GPU_SETTINGS_FILE), and asking again would not change that
                 if (status == "only_integrated" && !(saved && readsSettingsFile))
                 {
                     answer = saved ? DialogResult.Yes :
                              MessageBox.Show(this, "Only an integrated AMD GPU is available. GRAL has been compared with the CPU path on a discrete GPU only." + Environment.NewLine + Environment.NewLine +
-                                             "Yes: use the integrated GPU (" + (settingsFile != null ? "remembered" : "this start only") + ")" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
+                                             "Yes: use the integrated GPU (" + (settingsFile != null ? "saved in the GPU.txt of the project" : "this start only") + ")" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
                                              "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                     if (answer == DialogResult.Yes)
                     {
@@ -330,7 +330,7 @@ namespace Gral
                     }
                 }
                 else if ((status == "no_nvrtc" || status == "no_hiprtc" ||
-                          // a compiler was found but cannot serve this GPU: the tested version in the per-user folder may help
+                          // a compiler was found but cannot serve this GPU: the tested version in the download folder of the GUI may help
                           ((status == "nvrtc_rejected" || status == "hiprtc_rejected") &&
                            !Directory.Exists((status == "hiprtc_rejected" ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc).TargetFolder))) &&
                          // GRAL uses only the compiler folder that is set, so a download would not help
@@ -349,11 +349,11 @@ namespace Gral
                                          Environment.NewLine + "The Microsoft Visual C++ x64 runtime is missing: https://aka.ms/vs/17/release/vc_redist.x64.exe";
                     if (status == "invalid_setting")
                     {
-                        runtimeHint = Environment.NewLine + "Correct the INU_GPU_* environment variable, or the GPU settings file (GPU options, \"Edit settings file\").";
+                        runtimeHint = Environment.NewLine + "Correct the INU_GPU_* environment variable, or GPU.txt in the project's Computation folder (GPU options, \"Edit settings file\").";
                     }
                     if (status == "only_integrated")
                     {
-                        runtimeHint = Environment.NewLine + "The GPU settings file of the GUI allows the integrated GPU, but GRAL did not find that line. Give INU_GPU_SETTINGS_FILE as a full path, or remove it.";
+                        runtimeHint = Environment.NewLine + "The GPU.txt of the project allows the integrated GPU, but GRAL did not find that line. Give INU_GPU_SETTINGS_FILE as a full path, or remove it.";
                     }
                     answer = MessageBox.Show(this, "GRAL cannot use the GPU (" + status + "): " + message + runtimeHint + Environment.NewLine + Environment.NewLine +
                                              "Run on the CPU this time?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ? DialogResult.No : DialogResult.Cancel;
@@ -371,7 +371,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// The check reports fallback_on_startup = 1 (GPU settings file or INU_GPU_FALLBACK_ON_STARTUP): GRAL continues on the CPU if the GPU cannot start
+        /// The check reports fallback_on_startup = 1 (GPU.txt or INU_GPU_FALLBACK_ON_STARTUP): GRAL continues on the CPU if the GPU cannot start
         /// </summary>
         private static bool GpuStartupFallbackIsOn(JsonElement Report)
         {
@@ -381,7 +381,7 @@ namespace Gral
         }
 
         /// <summary>
-        /// A folder for the runtime compiler is set: by INU_GPU_NVRTC_DIR or INU_GPU_HIPRTC_DIR, or by nvrtc_dir or hiprtc_dir of the GPU settings file
+        /// A folder for the runtime compiler is set: by INU_GPU_NVRTC_DIR or INU_GPU_HIPRTC_DIR, or by nvrtc_dir or hiprtc_dir of GPU.txt
         /// when this GRAL reads that file. GRAL then looks nowhere else
         /// </summary>
         private static bool GpuCompilerFolderIsSet(bool Hip, JsonElement Report)
