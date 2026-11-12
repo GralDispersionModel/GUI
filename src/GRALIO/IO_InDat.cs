@@ -130,6 +130,7 @@ namespace GralIO
                     int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;
                     myWriter.WriteLine(reproducibleResults.ToString(ic) + "\t ! Use the GRAL reproducible results option Yes = 1, No = 0");
                     myWriter.WriteLine((_data.UseGpu ? 1 : 0).ToString(ic) + "\t ! Use the GPU for the particle dispersion Yes = 1, No = 0");
+                    myWriter.WriteLine((_data.GpuReproducibleSums ? 1 : 0).ToString(ic) + "\t ! Use reproducible sums on the GPU with reproducible results Yes = 1, No = 0");
                 }
 
             }
@@ -372,6 +373,16 @@ namespace GralIO
                         if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
                         {
                             _data.UseGpu = _val == 1;
+                        }
+                    }
+
+                    _data.GpuReproducibleSums = true; // an in.dat without line 24 keeps the reproducible sums
+                    if (myreader.EndOfStream == false) // read the GPU reproducible sums option
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t' });
+                        if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                        {
+                            _data.GpuReproducibleSums = _val != 0;
                         }
                     }
 

@@ -223,6 +223,10 @@ namespace GralIO
         ///Run the particle dispersion on the GPU (needs a GRAL build with GPU support)
         /// </summary>
         public bool UseGpu { get; set; }
+        /// <summary>
+        ///Use reproducible sums on the GPU when the reproducible results option is on (in.dat line 24)
+        /// </summary>
+        public bool GpuReproducibleSums { get; set; }
 
         public InDatVariables()
         {
@@ -252,6 +256,7 @@ namespace GralIO
             AVX512Usage = 0;
             ReproducibleResults = false;
             UseGpu = false;
+            GpuReproducibleSums = true;
         }
 
         public InDatVariables(InDatVariables other)
@@ -285,6 +290,7 @@ namespace GralIO
             AVX512Usage = other.AVX512Usage;
             ReproducibleResults = other.ReproducibleResults;
             UseGpu = other.UseGpu;
+            GpuReproducibleSums = other.GpuReproducibleSums;
         }
 
     }
