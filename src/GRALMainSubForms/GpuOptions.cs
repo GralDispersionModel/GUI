@@ -74,7 +74,6 @@ namespace GralMainForms
         private int initialDevice;
         private bool initialIntegrated;
         private bool initialFallback;
-        private bool loading = true;
         private bool integratedTicked; // the permission was ticked by the choice of an integrated GPU, not by the user
 
         public GpuOptions()
@@ -166,7 +165,6 @@ namespace GralMainForms
             }
             initialDevice = comboBox1.SelectedIndex;
             initialIntegrated = checkBox1.Checked; // ticked as well when the saved device is an integrated GPU
-            loading = false;
             initialFallback = saved.TryGetValue("fallback_on_startup", out string fallback) && fallback == "1";
             radioButton2.Checked = initialFallback;
             radioButton1.Checked = !initialFallback;
@@ -324,7 +322,7 @@ namespace GralMainForms
                 if (!checkBox1.Checked)
                 {
                     checkBox1.Checked = true;
-                    integratedTicked = !loading;
+                    integratedTicked = true;
                 }
                 checkBox1.Enabled = false; // a chosen integrated GPU is always saved with the permission
             }
