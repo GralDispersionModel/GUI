@@ -171,10 +171,13 @@ namespace Gral
         }
 
         /// <summary>
-        /// Runs "GRAL --gpu-check" with the GUI's environment
+        /// Runs "GRAL --gpu-check" with the GUI's environment. The check runs outside the project folder, so INU_GPU_SETTINGS_FILE points it at the project's GPU.txt;
+        /// a run needs no variable, because GRAL finds the file in its working folder
         /// </summary>
+        /// <param name="GralExecutable">Selected GRAL executable</param>
+        /// <param name="SettingsFile">GPU.txt of the project; not used when the GUI has inherited an INU_GPU_SETTINGS_FILE, which GRAL would see in a run as well</param>
         /// <returns>Status and message, or null if this GRAL build has no check mode</returns>
-        private static (string Status, string Message, JsonElement Report)? RunGralGpuCheck(string GralExecutable)
+        private static (string Status, string Message, JsonElement Report)? RunGralGpuCheck(string GralExecutable, string SettingsFile)
         {
             if (!string.Equals(Path.GetExtension(GralExecutable), ".exe", StringComparison.OrdinalIgnoreCase))
             {
@@ -194,6 +197,10 @@ namespace Gral
                     WorkingDirectory = folder
                 };
                 start.ArgumentList.Add("--gpu-check");
+                if (!string.IsNullOrEmpty(SettingsFile) && string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE")))
+                {
+                    start.Environment["INU_GPU_SETTINGS_FILE"] = Path.GetFullPath(SettingsFile); // for the check process only
+                }
                 using (Process gral = Process.Start(start))
                 {
                     gral.StandardInput.Close();
@@ -241,7 +248,7 @@ namespace Gral
         {
             for (int attempt = 0; attempt < 3; attempt++)
             {
-                var check = RunGralGpuCheck(GralExecutable);
+                var check = RunGralGpuCheck(GralExecutable, string.IsNullOrEmpty(ProjectName) ? null : Path.Combine(ProjectName, "Computation", "GPU.txt"));
                 gpuCheckDone = true;
                 gpuLastCheck = check;
                 gpuLastGralExecutable = GralExecutable; // the GPU options show the check together with the GRAL that made it
