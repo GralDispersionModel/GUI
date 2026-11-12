@@ -35,6 +35,10 @@ namespace Gral
         /// INU_GPU_BACKEND=hip was set for this start only, for a GRAL that does not read the GPU settings file
         /// </summary>
         private bool gpuBackendSetForStart;
+        /// <summary>
+        /// The user chose "run on the CPU this time" at the GPU check of the start that is being prepared
+        /// </summary>
+        private bool gpuCpuThisStart;
 
         /// <summary>
         /// Set or clear the environment variables that switch the GPU build of GRAL to the GPU.
@@ -45,6 +49,7 @@ namespace Gral
         private bool SetGralGpuEnvironment(string GralExecutable)
         {
             gpuLastGralExecutable = GralExecutable;
+            gpuCpuThisStart = false;
             // in.dat line 23 switches GRAL to the GPU; values of the owned variables inherited by the GUI must not change that
             foreach (string name in gpuVariableNames)
             {

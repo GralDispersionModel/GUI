@@ -323,6 +323,7 @@ namespace Gral
                 if (answer == DialogResult.No) // CPU run this time; the next start uses the GPU option again
                 {
                     Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", "0"); // overrides in.dat line 23 for this start; cleared again after the start
+                    gpuCpuThisStart = true;
                     return true;
                 }
                 return false;

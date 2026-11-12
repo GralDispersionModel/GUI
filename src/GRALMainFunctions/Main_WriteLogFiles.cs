@@ -58,6 +58,12 @@ namespace Gral
                             mywriter.WriteLine(Convert.ToString(numericUpDown4.Value).PadLeft(10) + "  \t  // Dispersion time");
                             mywriter.WriteLine(Convert.ToString(numericUpDown6.Value).PadLeft(10) + "  \t  // Number of particles per second");
                             mywriter.WriteLine(Convert.ToString(numericUpDown5.Value).PadLeft(10) + "  \t  // Start with dispersion situation");
+                            mywriter.WriteLine((GRALSettings.ReproducibleResults ? "yes" : "no").PadLeft(10) + "  \t  // GRAL reproducible results");
+                            mywriter.WriteLine((GRALSettings.UseGpu ? "yes" : "no").PadLeft(10) + "  \t  // Use GPU for GRAL" + (GRALSettings.UseGpu && gpuCpuThisStart ? " (this start runs on the CPU, chosen at the GPU check)" : string.Empty));
+                            if (GRALSettings.UseGpu && GRALSettings.ReproducibleResults)
+                            {
+                                mywriter.WriteLine((GRALSettings.GpuReproducibleSums ? "yes" : "no").PadLeft(10) + "  \t  // Reproducible sums on the GPU");
+                            }
 
                             if (File.Exists(Landusefile))
                             {

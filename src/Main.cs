@@ -3686,7 +3686,7 @@ namespace Gral
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.InitialDirectory = Path.Combine(ProjectName, "Computation");
-                dialog.Filter = "(Logfile*.txt)|Logfile*.txt";
+                dialog.Filter = "Log files (Logfile*.txt;GRAL_GPU*.log)|Logfile*.txt;GRAL_GPU*.log";
                 dialog.Title = "Select Logfile";
                 // dialog.ShowHelp = true;
 
