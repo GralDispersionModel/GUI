@@ -84,7 +84,7 @@ namespace Gral
                 ReadGpuProjectSettings();
                 checkBoxGPU.Checked = gpuUseGpu;
                 ShowGpuOptionsButton();
-                if (result == DialogResult.OK && gpuReproducibleSums != sumsBefore && !Project_Locked)
+                if (gpuReproducibleSums != sumsBefore && !Project_Locked)
                 {
                     ResetInDat(); // results computed with the other kind of sums are not those of the project any more, as with the reproducible results option
                 }
