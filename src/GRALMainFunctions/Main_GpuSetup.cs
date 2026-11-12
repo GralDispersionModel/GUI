@@ -38,7 +38,7 @@ namespace Gral
         /// </summary>
         private void ShowGpuOptionsButton()
         {
-            buttonGPUOptions.Visible = checkBoxGPU.Visible;
+            buttonGPUOptions.Visible = button10.Visible; // as the GPU check box
             buttonGPUOptions.Enabled = checkBoxGPU.Checked;
             if (gpuOptionsImageDisabled == null)
             {

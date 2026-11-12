@@ -237,24 +237,22 @@ namespace Gral
                     {
                         //copy the file GRAL*.exe in the directory "Computation"
                         GRAL_Program_Path = Path.Combine(ProjectName, @"Computation", Path.GetFileName(dialog.FileName));
-                        // a core selected in the project folder is the copy itself; copying it onto itself fails, as before
-                        bool coreInProject = string.Equals(Path.GetFullPath(dialog.FileName), Path.GetFullPath(GRAL_Program_Path), StringComparison.OrdinalIgnoreCase);
+                        //the GPU runtime files (manifest and kernel source) go with the core in the same layout, so that the copied GRAL also finds them when it is started without the GUI
+                        string gpuManifest = Environment.GetEnvironmentVariable("INU_GPU_MANIFEST");
+                        string gpuSource = GRALSettings.UseGpu && !string.IsNullOrEmpty(gpuManifest) ? Path.GetDirectoryName(gpuManifest) : null;
+                        string gpuTarget = gpuSource == null ? null : Path.GetFullPath(Path.Combine(ProjectName, @"Computation", Path.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource)));
                         try
                         {
-                            File.Copy(dialog.FileName, GRAL_Program_Path, true);
-
-                            //copy the GPU runtime files (manifest and kernel source), so that the copied GRAL also finds them when it is started without the GUI
-                            string gpuManifest = Environment.GetEnvironmentVariable("INU_GPU_MANIFEST");
-                            if (GRALSettings.UseGpu && !string.IsNullOrEmpty(gpuManifest))
+                            if (gpuTarget != null && !string.Equals(Path.GetFullPath(gpuSource), gpuTarget, StringComparison.OrdinalIgnoreCase))
                             {
-                                string gpuSource = Path.GetDirectoryName(gpuManifest);
-                                string gpuTarget = Path.GetFullPath(Path.Combine(ProjectName, @"Computation", Path.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource)));
                                 Directory.CreateDirectory(gpuTarget);
                                 foreach (string name in new[] { "fields_manifest.json", "generated.cu" })
                                 {
                                     File.Copy(Path.Combine(gpuSource, name), Path.Combine(gpuTarget, name), true);
                                 }
                             }
+
+                            File.Copy(dialog.FileName, GRAL_Program_Path, true);
 
                             //copy System.Numerics.Vectors.dll for GRAL Version 19.01
                             string numerics_dll = Path.Combine(Path.GetDirectoryName(dialog.FileName), "System.Numerics.Vectors.dll");
@@ -290,10 +288,11 @@ namespace Gral
                         }
                         catch (Exception ex)
                         {
-                            // with the GPU option a core that is not the selected one, or has no GPU runtime files, must not start unnoticed
-                            if (GRALSettings.UseGpu && !coreInProject &&
+                            // A copy fails silently, as before, while the core in the project folder is running or is the selected file itself.
+                            // With the GPU option a core or GPU runtime files that are missing after the copy must not go unnoticed
+                            if (GRALSettings.UseGpu && (!File.Exists(GRAL_Program_Path) || (gpuTarget != null && (!File.Exists(Path.Combine(gpuTarget, "fields_manifest.json")) || !File.Exists(Path.Combine(gpuTarget, "generated.cu"))))) &&
                                 MessageBox.Show(this, "The GRAL core or its GPU runtime files could not be copied to the project folder: " + ex.Message + Environment.NewLine + Environment.NewLine +
-                                                "Start the GRAL core that is in the project folder?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+                                                "Start anyway?", "GRAL GUI", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
                             {
                                 return;
                             }
