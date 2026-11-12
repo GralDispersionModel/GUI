@@ -32,13 +32,14 @@ namespace GralIO
         /// <summary>
         /// Path of the settings file GRAL reads: INU_GPU_SETTINGS_FILE or GRAL/GpuSettings.txt in the local application data folder
         /// </summary>
-        /// <returns>The path, or null if INU_GPU_SETTINGS_FILE=off switches the file off</returns>
+        /// <returns>The path, or null if INU_GPU_SETTINGS_FILE=off switches the file off or there is no local application data folder</returns>
         public static string FilePath()
         {
             string file = Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE");
             if (string.IsNullOrWhiteSpace(file))
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GRAL", "GpuSettings.txt");
+                string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                return string.IsNullOrEmpty(local) ? null : Path.Combine(local, "GRAL", "GpuSettings.txt"); // without that folder GRAL reads no file either
             }
             return string.Equals(file.Trim(), "off", StringComparison.OrdinalIgnoreCase) ? null : file.Trim();
         }
@@ -98,6 +99,11 @@ namespace GralIO
                 return; // nothing to remove
             }
             byte[] content = exists ? File.ReadAllBytes(FileName) : Encoding.UTF8.GetBytes(Template());
+            if (content.Length >= 2 && ((content[0] == 0xFF && content[1] == 0xFE) || (content[0] == 0xFE && content[1] == 0xFF)))
+            {
+                // UTF-8 lines added to such a file would give a file that no program reads
+                throw new InvalidDataException("The file is saved as UTF-16; save it as UTF-8.");
+            }
             List<byte[]> lines = SplitLines(content);
             string newLine = Environment.NewLine;
             foreach (byte[] line in lines)
