@@ -187,14 +187,39 @@ namespace Gral
                 DialogResult answer;
                 if (status == "only_integrated")
                 {
-                    answer = MessageBox.Show(this, "Only an integrated AMD GPU is available. GRAL has been compared with the CPU path on a discrete GPU only." + Environment.NewLine + Environment.NewLine +
+                    // The choice is kept in the GPU settings file of GRAL (allow_integrated = 1). A GRAL that does not report the file does not read it
+                    // and needs INU_GPU_BACKEND=hip, which is then set for this start only
+                    bool readsSettingsFile = check.Value.Report.ValueKind == JsonValueKind.Object && check.Value.Report.TryGetProperty("settings_file_status", out _);
+                    string settingsFile = GralIO.GpuSettingsFile.FilePath();
+                    bool saved = false;
+                    try
+                    {
+                        saved = GralIO.GpuSettingsFile.Read(settingsFile).TryGetValue("allow_integrated", out string allowed) && allowed == "1";
+                    }
+                    catch { }
+                    answer = saved && !readsSettingsFile ? DialogResult.Yes :
+                             MessageBox.Show(this, "Only an integrated AMD GPU is available. GRAL has been compared with the CPU path on a discrete GPU only." + Environment.NewLine + Environment.NewLine +
                                              "Yes: use the integrated GPU (remembered)" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
                                              "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                     if (answer == DialogResult.Yes)
                     {
-                        GUISettings.GpuUseIntegrated = true;
-                        GUISettings.WriteToFile();
-                        Environment.SetEnvironmentVariable("INU_GPU_BACKEND", "hip");
+                        if (!saved && settingsFile != null)
+                        {
+                            try
+                            {
+                                GralIO.GpuSettingsFile.Update(settingsFile, new System.Collections.Generic.Dictionary<string, string> { ["allow_integrated"] = "1" });
+                                saved = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(this, "The choice could not be saved in " + settingsFile + ": " + ex.Message + Environment.NewLine + "The integrated GPU is used for this start only.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                        if (!saved || !readsSettingsFile)
+                        {
+                            Environment.SetEnvironmentVariable("INU_GPU_BACKEND", "hip");
+                            gpuBackendSetForStart = true;
+                        }
                         continue;
                     }
                 }

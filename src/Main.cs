@@ -4187,11 +4187,6 @@ namespace Gral
             };
             write_in_dat.WriteInDat();
             write_in_dat = null;
-            if (!checkBoxGPU.Checked && GUISettings.GpuUseIntegrated)
-            {
-                GUISettings.GpuUseIntegrated = false; // asked again the next time the box is ticked
-                GUISettings.WriteToFile();
-            }
             if (checkBoxGPU.Checked)
             {
                 CheckGpuDriverOnTick();

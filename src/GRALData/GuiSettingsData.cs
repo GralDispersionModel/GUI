@@ -73,10 +73,6 @@ namespace GralData
         /// Use the system wide dark mode
         /// </summary>
         public bool UseDarkMode;
-        /// <summary>
-        /// The user agreed to run GRAL on an integrated AMD GPU (INU_GPU_BACKEND=hip)
-        /// </summary>
-        public bool GpuUseIntegrated;
 
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 
@@ -139,7 +135,6 @@ namespace GralData
                     write.WriteLine(DefaultPathForGRAMM);
                     write.WriteLine(AutoCheckForUpdates.ToString(ic));
                     write.WriteLine(UseDefaultColors.ToString(ic));
-                    write.WriteLine(GpuUseIntegrated.ToString(ic));
                 }
             }
             catch
@@ -235,14 +230,6 @@ namespace GralData
                     else
                     {
                         UseDefaultColors = true;
-                    }
-                    if (!read.EndOfStream)
-                    {
-                        try
-                        {
-                            GpuUseIntegrated = Convert.ToBoolean(read.ReadLine(), ic);
-                        }
-                        catch { }
                     }
                 }
             }

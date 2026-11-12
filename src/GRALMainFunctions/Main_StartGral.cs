@@ -32,9 +32,9 @@ namespace Gral
         /// </summary>
         private static readonly string[] gpuVariableNames = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR" };
         /// <summary>
-        /// INU_GPU_BACKEND as inherited by the GUI, saved before the GUI changes it
+        /// INU_GPU_BACKEND=hip was set for this start only, for a GRAL that does not read the GPU settings file
         /// </summary>
-        private string gpuBackendInherited;
+        private bool gpuBackendSetForStart;
 
         /// <summary>
         /// Set or clear the environment variables that switch the GPU build of GRAL to the GPU.
@@ -44,10 +44,6 @@ namespace Gral
         /// <returns>False if the start is cancelled</returns>
         private bool SetGralGpuEnvironment(string GralExecutable)
         {
-            if (gpuBackendInherited == null)
-            {
-                gpuBackendInherited = Environment.GetEnvironmentVariable("INU_GPU_BACKEND") ?? string.Empty;
-            }
             // in.dat line 23 switches GRAL to the GPU; values of the owned variables inherited by the GUI must not change that
             foreach (string name in gpuVariableNames)
             {
@@ -55,7 +51,6 @@ namespace Gral
             }
             if (!GRALSettings.UseGpu)
             {
-                Environment.SetEnvironmentVariable("INU_GPU_BACKEND", gpuBackendInherited.Length > 0 ? gpuBackendInherited : null);
                 return true;
             }
 
@@ -83,8 +78,6 @@ namespace Gral
             Environment.SetEnvironmentVariable("INU_GPU_MANIFEST", manifest);
             Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
             Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
-            // A backend set outside the GUI wins over the integrated-GPU choice
-            Environment.SetEnvironmentVariable("INU_GPU_BACKEND", gpuBackendInherited.Length > 0 ? gpuBackendInherited : GUISettings.GpuUseIntegrated ? "hip" : null);
             return EnsureGralGpuReady(GralExecutable);
         }
 
@@ -472,6 +465,11 @@ namespace Gral
                 {
                     // "run on the CPU this time" sets INU_GPU_EXPERIMENTAL=0 for the GRAL instances of this start only; all of them have been started here
                     Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", null);
+                    if (gpuBackendSetForStart)
+                    {
+                        Environment.SetEnvironmentVariable("INU_GPU_BACKEND", null);
+                        gpuBackendSetForStart = false;
+                    }
                 }
             }
         }
