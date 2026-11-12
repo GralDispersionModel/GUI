@@ -40,6 +40,10 @@ namespace Gral
         /// </summary>
         private bool gpuReproducibleSums = true;
         /// <summary>
+        /// Why the GUI could not read the GPU.txt of the project at the last reading, or null
+        /// </summary>
+        private string gpuSettingsReadError;
+        /// <summary>
         /// INU_GPU_BACKEND=hip was set for this start only, for a GRAL that does not read GPU.txt
         /// </summary>
         private bool gpuBackendSetForStart;
@@ -69,6 +73,13 @@ namespace Gral
                 Environment.SetEnvironmentVariable(name, null);
             }
             ReadGpuProjectSettings(); // once per start: the check, the core copy and the log file of this start use the same answer
+            if (gpuSettingsReadError != null)
+            {
+                // GRAL may read the file all the same (UTF-16) and use the GPU without the files and logs the GUI sets up, or it stops at once (a file in use)
+                MessageBox.Show(this, "The GPU settings of the project cannot be read (GPU.txt in the Computation folder): " + gpuSettingsReadError + Environment.NewLine +
+                                "GRAL is not started until the file can be read.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
             if (!gpuUseGpu)
             {
                 return true;
@@ -102,19 +113,24 @@ namespace Gral
         }
 
         /// <summary>
-        /// Read the GPU option and the reproducible sums of the project from GPU.txt; a missing file or one that cannot be read means GPU off and every default
+        /// Read the GPU option and the reproducible sums of the project from GPU.txt; a missing file means GPU off and every default.
+        /// A file that cannot be read shows the same in the window, and gpuSettingsReadError keeps the reason for the next start
         /// </summary>
         private void ReadGpuProjectSettings()
         {
             gpuUseGpu = false;
             gpuReproducibleSums = true;
+            gpuSettingsReadError = null;
             try
             {
                 System.Collections.Generic.Dictionary<string, string> settings = GralIO.GpuSettingsFile.Read(GralIO.GpuSettingsFile.FilePath(ProjectName));
                 gpuUseGpu = settings.TryGetValue("use_gpu", out string use) && use == "1";
                 gpuReproducibleSums = !(settings.TryGetValue("reproducible_sums", out string sums) && sums == "0");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                gpuSettingsReadError = ex.Message;
+            }
         }
 
         /// <summary>

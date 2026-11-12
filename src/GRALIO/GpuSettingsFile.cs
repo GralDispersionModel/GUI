@@ -45,7 +45,7 @@ namespace GralIO
         }
 
         /// <summary>
-        /// Read the keys that have a value; a missing file or folder gives an empty set
+        /// Read the keys that have a value; a missing file or folder gives an empty set, a file saved as UTF-16 is an error
         /// </summary>
         /// <param name="FileName">Path of the settings file; null gives an empty set</param>
         /// <returns>Lower-case keys and trimmed values; the last line of a key counts</returns>
@@ -56,7 +56,13 @@ namespace GralIO
             {
                 return values;
             }
-            foreach (byte[] line in SplitLines(File.ReadAllBytes(FileName)))
+            byte[] content = File.ReadAllBytes(FileName);
+            if (IsUtf16(content))
+            {
+                // GRAL would read such a file, and this class would read nothing from it: the GUI and GRAL must not see different settings
+                throw new InvalidDataException("The file is saved as UTF-16; save it as UTF-8.");
+            }
+            foreach (byte[] line in SplitLines(content))
             {
                 if (ParseLine(line, out string key, out string value, out _))
                 {
@@ -99,7 +105,7 @@ namespace GralIO
                 return; // nothing to remove
             }
             byte[] content = exists ? File.ReadAllBytes(FileName) : Encoding.UTF8.GetBytes(Template());
-            if (content.Length >= 2 && ((content[0] == 0xFF && content[1] == 0xFE) || (content[0] == 0xFE && content[1] == 0xFF)))
+            if (IsUtf16(content))
             {
                 // UTF-8 lines added to such a file would give a file that no program reads
                 throw new InvalidDataException("The file is saved as UTF-16; save it as UTF-8.");
@@ -210,6 +216,11 @@ namespace GralIO
                 "! cache_dir =               ! INU_GPU_CACHE_DIR: folder of the compiled GPU modules"
             };
             return string.Join(Environment.NewLine, lines) + Environment.NewLine;
+        }
+
+        private static bool IsUtf16(byte[] Content)
+        {
+            return Content.Length >= 2 && ((Content[0] == 0xFF && Content[1] == 0xFE) || (Content[0] == 0xFE && Content[1] == 0xFF));
         }
 
         private static bool HasBom(byte[] Line)
