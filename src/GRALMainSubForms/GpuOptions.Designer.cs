@@ -79,8 +79,8 @@ namespace GralMainForms
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new System.Drawing.Size(318, 19);
             checkBox1.TabIndex = 1;
-            checkBox1.Text = "Use an integrated GPU when no discrete GPU is found";
-            toolTip1.SetToolTip(checkBox1, "GRAL has been compared with the CPU path on discrete GPUs only.\r\nWithout this permission a PC that has only an integrated GPU does not start on the GPU.");
+            checkBox1.Text = "Use an integrated AMD GPU when no discrete GPU is found";
+            toolTip1.SetToolTip(checkBox1, "GRAL has been compared with the CPU path on discrete GPUs only.\r\nWithout this permission a PC that has only an integrated AMD GPU does not start on the GPU.\r\nA chosen integrated GPU always has it.");
             checkBox1.UseVisualStyleBackColor = true;
             //
             // comboBox1
@@ -163,7 +163,7 @@ namespace GralMainForms
             groupBox4.Controls.Add(textBox1);
             groupBox4.Location = new System.Drawing.Point(12, 326);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(420, 134);
+            groupBox4.Size = new System.Drawing.Size(420, 164);
             groupBox4.TabIndex = 3;
             groupBox4.TabStop = false;
             groupBox4.Text = "Status";
@@ -175,13 +175,13 @@ namespace GralMainForms
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
             textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            textBox1.Size = new System.Drawing.Size(396, 100);
+            textBox1.Size = new System.Drawing.Size(396, 130);
             textBox1.TabIndex = 0;
             textBox1.TabStop = false;
             //
             // button3
             //
-            button3.Location = new System.Drawing.Point(12, 470);
+            button3.Location = new System.Drawing.Point(12, 500);
             button3.Name = "button3";
             button3.Size = new System.Drawing.Size(104, 27);
             button3.TabIndex = 4;
@@ -192,7 +192,7 @@ namespace GralMainForms
             //
             // button4
             //
-            button4.Location = new System.Drawing.Point(122, 470);
+            button4.Location = new System.Drawing.Point(122, 500);
             button4.Name = "button4";
             button4.Size = new System.Drawing.Size(124, 27);
             button4.TabIndex = 5;
@@ -204,7 +204,7 @@ namespace GralMainForms
             // button1
             //
             button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            button1.Location = new System.Drawing.Point(264, 470);
+            button1.Location = new System.Drawing.Point(264, 500);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(80, 27);
             button1.TabIndex = 6;
@@ -215,7 +215,7 @@ namespace GralMainForms
             // button2
             //
             button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            button2.Location = new System.Drawing.Point(352, 470);
+            button2.Location = new System.Drawing.Point(352, 500);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(80, 27);
             button2.TabIndex = 7;
@@ -228,7 +228,7 @@ namespace GralMainForms
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new System.Drawing.Size(444, 508);
+            ClientSize = new System.Drawing.Size(444, 538);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(button4);

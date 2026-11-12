@@ -74,6 +74,8 @@ namespace GralMainForms
         private int initialDevice;
         private bool initialIntegrated;
         private bool initialFallback;
+        private bool loading = true;
+        private bool integratedTicked; // the permission was ticked by the choice of an integrated GPU, not by the user
 
         public GpuOptions()
         {
@@ -103,14 +105,14 @@ namespace GralMainForms
                 {
                     foreach (JsonElement device in devices.EnumerateArray())
                     {
-                        if (device.ValueKind != JsonValueKind.Object || !device.TryGetProperty("ordinal", out JsonElement ordinal) || !ordinal.TryGetInt32(out int number))
+                        if (device.ValueKind != JsonValueKind.Object || !device.TryGetProperty("ordinal", out JsonElement ordinal) || ordinal.ValueKind != JsonValueKind.Number || !ordinal.TryGetInt32(out int number))
                         {
                             continue;
                         }
                         DeviceChoice choice = new DeviceChoice() { Ordinal = number, Name = JsonText(device, "name"), Backend = JsonText(device, "backend") };
                         choice.Integrated = device.TryGetProperty("integrated", out JsonElement integrated) && integrated.ValueKind == JsonValueKind.True;
                         choice.Text = (choice.Name.Length > 0 ? choice.Name : "Device " + number.ToString()) + ", " + choice.Backend +
-                                      (device.TryGetProperty("total_memory_bytes", out JsonElement memory) && memory.TryGetInt64(out long bytes) ? ", " + (bytes >> 20).ToString() + " MiB" : string.Empty) +
+                                      (device.TryGetProperty("total_memory_bytes", out JsonElement memory) && memory.ValueKind == JsonValueKind.Number && memory.TryGetInt64(out long bytes) ? ", " + (bytes >> 20).ToString() + " MiB" : string.Empty) +
                                       (choice.Integrated ? ", integrated" : string.Empty);
                         comboBox1.Items.Add(choice);
                         listed = true;
@@ -132,6 +134,7 @@ namespace GralMainForms
             saved.TryGetValue("device", out string savedDevice);
             saved.TryGetValue("device_name", out string savedName);
             saved.TryGetValue("backend", out string savedBackend);
+            checkBox1.Checked = saved.TryGetValue("allow_integrated", out string allowed) && allowed == "1";
             comboBox1.SelectedIndex = 0;
             if (!string.IsNullOrEmpty(savedDevice) || !string.IsNullOrEmpty(savedBackend))
             {
@@ -142,7 +145,7 @@ namespace GralMainForms
                     DeviceChoice choice = (DeviceChoice)comboBox1.Items[i];
                     if (!string.IsNullOrEmpty(savedDevice))
                     {
-                        if (choice.Ordinal == savedOrdinal && (string.IsNullOrEmpty(savedBackend) || string.Equals(choice.Backend, savedBackend, StringComparison.OrdinalIgnoreCase)) &&
+                        if (choice.Ordinal >= 0 && choice.Ordinal == savedOrdinal && (string.IsNullOrEmpty(savedBackend) || string.Equals(choice.Backend, savedBackend, StringComparison.OrdinalIgnoreCase)) &&
                             (string.IsNullOrEmpty(savedName) || choice.Name == savedName))
                         {
                             match = i;
@@ -157,22 +160,23 @@ namespace GralMainForms
                 {
                     string text = string.IsNullOrEmpty(savedDevice) ? savedBackend + " (automatic device)" :
                                   (string.IsNullOrEmpty(savedName) ? "Device " + savedDevice : savedName + " (device " + savedDevice + ")") + (string.IsNullOrEmpty(savedBackend) ? string.Empty : ", " + savedBackend);
-                    match = comboBox1.Items.Add(new DeviceChoice() { Text = "Saved: " + text, Saved = true });
+                    match = comboBox1.Items.Add(new DeviceChoice() { Text = "Saved: " + text + (listed ? " (not found at the last check)" : string.Empty), Saved = true });
                 }
                 comboBox1.SelectedIndex = match;
             }
             initialDevice = comboBox1.SelectedIndex;
-            checkBox1.Checked = initialIntegrated = saved.TryGetValue("allow_integrated", out string allowed) && allowed == "1";
+            initialIntegrated = checkBox1.Checked; // ticked as well when the saved device is an integrated GPU
+            loading = false;
             initialFallback = saved.TryGetValue("fallback_on_startup", out string fallback) && fallback == "1";
             radioButton2.Checked = initialFallback;
             radioButton1.Checked = !initialFallback;
-            label1.Text = (listed ? string.Empty : "The GPUs are listed here after a GRAL start with the GPU option in this session." + Environment.NewLine) +
+            label1.Text = (listed ? string.Empty : (CheckDone ? "The GRAL of the last start did not list the GPUs." : "The GPUs are listed here after a GRAL start with the GPU option in this session.") + Environment.NewLine) +
                           "All GRAL instances of a start share one GPU.";
 
             // Project: in.dat line 24 counts only together with the reproducible results option (line 22)
             checkBox2.Checked = GpuReproducibleSums;
             checkBox2.Enabled = GRALReproducibleResults && !Gral.Main.Project_Locked;
-            label2.Text = "\"GRAL Reproducible Results\" (special GRAL settings) is " + (GRALReproducibleResults ? "on" : "off; the sums are used only when it is on") + "." +
+            label2.Text = "\"GRAL Reproducible Results\" (special GRAL settings) is " + (GRALReproducibleResults ? "on" : "off; this option needs it") + "." +
                           (Gral.Main.Project_Locked ? " The project is locked." : string.Empty);
 
             if (settingsFile == null)
@@ -182,13 +186,33 @@ namespace GralMainForms
                 button4.Enabled = false;
             }
             button3.Enabled = File.Exists(GpuLogFile);
-            textBox1.Text = StatusText(saved, readError);
+            textBox1.Text = DisplayPaths(StatusText(saved, readError));
             textBox1.Select(0, 0);
         }
 
         private static string JsonText(JsonElement Parent, string Name)
         {
             return Parent.ValueKind == JsonValueKind.Object && Parent.TryGetProperty(Name, out JsonElement value) && value.ValueKind == JsonValueKind.String ? value.GetString() : string.Empty;
+        }
+
+        /// <summary>
+        /// Paths below the user's folders are shown with %LOCALAPPDATA% and %USERPROFILE%, so that a picture of the window does not carry the user name
+        /// </summary>
+        private static string DisplayPaths(string Text)
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                return Text;
+            }
+            foreach ((Environment.SpecialFolder folder, string name) in new[] { (Environment.SpecialFolder.LocalApplicationData, "%LOCALAPPDATA%"), (Environment.SpecialFolder.UserProfile, "%USERPROFILE%") })
+            {
+                string path = Environment.GetFolderPath(folder).TrimEnd(Path.DirectorySeparatorChar);
+                if (path.Length > 3)
+                {
+                    Text = Text.Replace(path + Path.DirectorySeparatorChar, name + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            return Text;
         }
 
         /// <summary>
@@ -214,7 +238,7 @@ namespace GralMainForms
                     if (name.Length > 0)
                     {
                         text.AppendLine("Device: " + name + (CheckReport.TryGetProperty("ordinal", out JsonElement ordinal) && ordinal.ValueKind == JsonValueKind.Number ? " (device " + ordinal.ToString() + ")" : string.Empty) +
-                                        (CheckReport.TryGetProperty("total_memory_bytes", out JsonElement memory) && memory.TryGetInt64(out long bytes) ? ", " + (bytes >> 20).ToString() + " MiB" : string.Empty));
+                                        (CheckReport.TryGetProperty("total_memory_bytes", out JsonElement memory) && memory.ValueKind == JsonValueKind.Number && memory.TryGetInt64(out long bytes) ? ", " + (bytes >> 20).ToString() + " MiB" : string.Empty));
                     }
                     string backend = JsonText(CheckReport, "backend");
                     if (backend.Length > 0)
@@ -249,18 +273,23 @@ namespace GralMainForms
                     }
                 }
             }
-            if (GralExecutable.Length > 0)
+            if (CheckDone && (CheckStatus == null || (CheckReport.ValueKind == JsonValueKind.Object && !CheckReport.TryGetProperty("settings_file_status", out _))))
             {
-                text.AppendLine("GRAL: " + GralExecutable);
+                text.AppendLine("This GRAL reads neither the GPU settings file nor in.dat line 24: the device, the start behaviour and the sums chosen here take effect with a newer GRAL.");
             }
             text.AppendLine();
             if (settingsFile == null)
             {
-                text.AppendLine("Settings file: switched off (INU_GPU_SETTINGS_FILE=off). The device and the start behaviour cannot be saved.");
+                text.AppendLine("Settings file: " + (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE")) ? "none (no local application data folder)" : "switched off (INU_GPU_SETTINGS_FILE=off)") +
+                                ". The device and the start behaviour cannot be saved.");
             }
             else
             {
                 text.AppendLine("Settings file: " + settingsFile + (File.Exists(settingsFile) ? string.Empty : " (not created yet)"));
+                if (!Path.IsPathFullyQualified(settingsFile))
+                {
+                    text.AppendLine("INU_GPU_SETTINGS_FILE is a relative path: GRAL looks for it in its own working folder. Give the full path.");
+                }
                 if (ReadError != null)
                 {
                     text.AppendLine("The file could not be read: " + ReadError);
@@ -274,6 +303,10 @@ namespace GralMainForms
                     }
                 }
             }
+            if (GralExecutable.Length > 0)
+            {
+                text.AppendLine("GRAL: " + GralExecutable);
+            }
             return text.ToString();
         }
 
@@ -282,9 +315,27 @@ namespace GralMainForms
         /// </summary>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem is DeviceChoice choice && choice.Integrated)
+            if (!(comboBox1.SelectedItem is DeviceChoice choice))
             {
-                checkBox1.Checked = true;
+                return;
+            }
+            if (choice.Integrated)
+            {
+                if (!checkBox1.Checked)
+                {
+                    checkBox1.Checked = true;
+                    integratedTicked = !loading;
+                }
+                checkBox1.Enabled = false; // a chosen integrated GPU is always saved with the permission
+            }
+            else
+            {
+                checkBox1.Enabled = true;
+                if (integratedTicked)
+                {
+                    checkBox1.Checked = false; // ticked by an integrated GPU that is not chosen any more
+                    integratedTicked = false;
+                }
             }
         }
 
@@ -308,8 +359,12 @@ namespace GralMainForms
                 // a name that the file cannot hold is left out; GRAL then takes the device number as it is
                 changes["device_name"] = choice.Ordinal >= 0 && choice.Name.IndexOfAny(new char[] { '!', '\r', '\n' }) < 0 ? choice.Name : null;
                 changes["backend"] = choice.Backend;
+                if (choice.Integrated)
+                {
+                    changes["allow_integrated"] = "1";
+                }
             }
-            if (checkBox1.Checked != initialIntegrated)
+            if (checkBox1.Checked != initialIntegrated && !changes.ContainsKey("allow_integrated"))
             {
                 changes["allow_integrated"] = checkBox1.Checked ? "1" : null;
             }
