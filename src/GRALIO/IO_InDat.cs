@@ -149,6 +149,9 @@ namespace GralIO
         {
             try
             {
+                // the optional lines 23 and 24: a file without them, or one that cannot be read, must not keep the values of the project read before
+                _data.UseGpu = false;
+                _data.GpuReproducibleSums = true;
                 using (StreamReader myreader = new StreamReader(_data.InDatPath))
                 {
 
@@ -366,20 +369,18 @@ namespace GralIO
                         }
                     }
 
-                    _data.UseGpu = false;
                     if (myreader.EndOfStream == false) // read the GPU option
                     {
-                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t' });
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries); // as GRAL splits the line
                         if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
                         {
                             _data.UseGpu = _val == 1;
                         }
                     }
 
-                    _data.GpuReproducibleSums = true; // an in.dat without line 24 keeps the reproducible sums
-                    if (myreader.EndOfStream == false) // read the GPU reproducible sums option
+                    if (myreader.EndOfStream == false) // read the GPU reproducible sums option; an in.dat without line 24 keeps the reproducible sums
                     {
-                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t' });
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries); // as GRAL splits the line
                         if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
                         {
                             _data.GpuReproducibleSums = _val != 0;
