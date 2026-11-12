@@ -62,7 +62,7 @@ namespace GralMainForms
             groupBox1.Size = new System.Drawing.Size(420, 136);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Device (for this user, all projects)";
+            groupBox1.Text = "Device (this project)";
             //
             // label1
             //
@@ -91,7 +91,7 @@ namespace GralMainForms
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new System.Drawing.Size(396, 23);
             comboBox1.TabIndex = 0;
-            toolTip1.SetToolTip(comboBox1, "Automatic: GRAL selects the GPU.\r\nA chosen GPU is saved with its number and name; if another GPU has the number later,\r\nGRAL selects automatically and warns.");
+            toolTip1.SetToolTip(comboBox1, "Automatic: GRAL selects the GPU.\r\nA chosen GPU is saved with its number and name; if another GPU has the number later,\r\nGRAL selects automatically and warns.\r\nSaved in GPU.txt of the project.");
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             //
             // groupBox2
@@ -103,7 +103,7 @@ namespace GralMainForms
             groupBox2.Size = new System.Drawing.Size(420, 76);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
-            groupBox2.Text = "If the GPU cannot start (for this user, all projects)";
+            groupBox2.Text = "If the GPU cannot start (this project)";
             //
             // radioButton2
             //
@@ -137,7 +137,7 @@ namespace GralMainForms
             groupBox3.Size = new System.Drawing.Size(420, 84);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Project";
+            groupBox3.Text = "Reproducible results (this project)";
             //
             // label2
             //
@@ -155,7 +155,7 @@ namespace GralMainForms
             checkBox2.Size = new System.Drawing.Size(300, 19);
             checkBox2.TabIndex = 0;
             checkBox2.Text = "Reproducible sums on the GPU with reproducible results";
-            toolTip1.SetToolTip(checkBox2, "On: with the reproducible results option, the sums on the GPU are repeatable (slower in some cases).\r\nOff: faster in some cases, less repeatable.\r\nSaved in the project (in.dat line 24).");
+            toolTip1.SetToolTip(checkBox2, "On: with the reproducible results option, the sums on the GPU are repeatable (slower in some cases).\r\nOff: faster in some cases, less repeatable.\r\nSaved as reproducible_sums in GPU.txt of the project.");
             checkBox2.UseVisualStyleBackColor = true;
             //
             // groupBox4
@@ -197,7 +197,7 @@ namespace GralMainForms
             button4.Size = new System.Drawing.Size(124, 27);
             button4.TabIndex = 5;
             button4.Text = "&Edit settings file";
-            toolTip1.SetToolTip(button4, "Opens the GPU settings file of GRAL in the text editor.\r\nA new file lists every key as a comment line.");
+            toolTip1.SetToolTip(button4, "Opens GPU.txt of the project's Computation folder in the text editor.\r\nIt holds all GPU settings of the project; a new file lists every key.");
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             //

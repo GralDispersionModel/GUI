@@ -130,7 +130,7 @@ namespace GralMainForms
                 }
             }
 
-            // Select what the settings file holds, also when no listed device matches it
+            // Select what GPU.txt holds, also when no listed device matches it
             saved.TryGetValue("device", out string savedDevice);
             saved.TryGetValue("device_name", out string savedName);
             saved.TryGetValue("backend", out string savedBackend);
@@ -258,7 +258,7 @@ namespace GralMainForms
                         {
                             if (JsonText(setting.Value, "source") == "env")
                             {
-                                text.AppendLine("An environment variable sets " + setting.Name + " = " + JsonText(setting.Value, "value") + "; it wins over the settings file.");
+                                text.AppendLine("An environment variable sets " + setting.Name + " = " + JsonText(setting.Value, "value") + "; it wins over GPU.txt.");
                             }
                         }
                     }
@@ -276,17 +276,18 @@ namespace GralMainForms
             }
             if (CheckDone && (CheckStatus == null || (CheckReport.ValueKind == JsonValueKind.Object && !CheckReport.TryGetProperty("settings_file_status", out _))))
             {
-                text.AppendLine("This GRAL reads neither the GPU settings file nor in.dat line 24: the device, the start behaviour and the sums chosen here take effect with a newer GRAL.");
+                text.AppendLine("This GRAL does not read GPU.txt: the device, the start behaviour and the sums chosen here take effect with a newer GRAL.");
             }
             text.AppendLine();
+            bool fromVariable = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE"));
             if (settingsFile == null)
             {
-                text.AppendLine("Settings file: " + (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE")) ? "none (no local application data folder)" : "switched off (INU_GPU_SETTINGS_FILE=off)") +
-                                ". The device and the start behaviour cannot be saved.");
+                text.AppendLine("Settings file: " + (fromVariable ? "switched off (INU_GPU_SETTINGS_FILE=off)" : "none (no project is open)") + ". The choices of this window cannot be saved.");
             }
             else
             {
-                text.AppendLine("Settings file: " + settingsFile + (File.Exists(settingsFile) ? string.Empty : " (not created yet)"));
+                // the project's own file is named without its path; a file named by the variable is shown in full
+                text.AppendLine("Settings file: " + (fromVariable ? settingsFile + " (INU_GPU_SETTINGS_FILE)" : "GPU.txt in the project's Computation folder") + (File.Exists(settingsFile) ? string.Empty : " (not created yet)"));
                 if (!Path.IsPathFullyQualified(settingsFile))
                 {
                     text.AppendLine("INU_GPU_SETTINGS_FILE is a relative path: GRAL looks for it in its own working folder. Give the full path.");
@@ -341,7 +342,7 @@ namespace GralMainForms
         }
 
         /// <summary>
-        /// OK Button: write the changed keys to the settings file; every other line of the file stays as it is
+        /// OK Button: write the changed keys to GPU.txt; every other line of the file stays as it is
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
