@@ -540,7 +540,7 @@ namespace Gral
                 }
                 finally
                 {
-                    // "run on the CPU this time" sets INU_GPU_EXPERIMENTAL=0 for the GRAL instances of this start only; all of them have been started here
+                    // "run on the CPU this time" sets INU_GPU_EXPERIMENTAL=0, and an older GRAL gets INU_GPU_EXPERIMENTAL=1, for the GRAL instances of this start only; all of them have been started here
                     Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", null);
                     if (gpuBackendSetForStart)
                     {

@@ -254,6 +254,11 @@ namespace Gral
                 gpuLastGralExecutable = GralExecutable; // the GPU options show the check together with the GRAL that made it
                 if (check == null || check.Value.Status == "ok")
                 {
+                    if (check == null || check.Value.Report.ValueKind != JsonValueKind.Object || !check.Value.Report.TryGetProperty("settings_file_status", out _))
+                    {
+                        // An older GRAL does not read GPU.txt: it takes the GPU option from this variable, which is cleared again after the start
+                        Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", "1");
+                    }
                     return true; // ready, or an older GRAL that reports problems itself at the start
                 }
                 string status = check.Value.Status;
