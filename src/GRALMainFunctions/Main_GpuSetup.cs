@@ -79,6 +79,7 @@ namespace Gral
                         Data = GRALSettings
                     };
                     write_in_dat.WriteInDat();
+                    ResetInDat(); // results computed with the other kind of sums are not those of the project any more, as with the reproducible results option
                 }
             }
         }
@@ -245,28 +246,40 @@ namespace Gral
                 var check = RunGralGpuCheck(GralExecutable);
                 gpuCheckDone = true;
                 gpuLastCheck = check;
+                gpuLastGralExecutable = GralExecutable; // the GPU options show the check together with the GRAL that made it
                 if (check == null || check.Value.Status == "ok")
                 {
                     return true; // ready, or an older GRAL that reports problems itself at the start
                 }
                 string status = check.Value.Status;
                 string message = check.Value.Message;
+                if (status != "invalid_setting" && status != "only_integrated" && GpuStartupFallbackIsOn(check.Value.Report))
+                {
+                    // "Continue on the CPU" of the GPU options: GRAL does that itself and writes the reason to its log, so nothing is asked here
+                    gpuFallbackThisStart = status;
+                    return true;
+                }
                 DialogResult answer;
+                // The choice for an integrated GPU is kept in the GPU settings file of GRAL (allow_integrated = 1). A GRAL that does not report the file does not read it
+                // and needs INU_GPU_BACKEND=hip, which is then set for this start only
+                bool readsSettingsFile = false, saved = false;
+                string settingsFile = null;
                 if (status == "only_integrated")
                 {
-                    // The choice is kept in the GPU settings file of GRAL (allow_integrated = 1). A GRAL that does not report the file does not read it
-                    // and needs INU_GPU_BACKEND=hip, which is then set for this start only
-                    bool readsSettingsFile = check.Value.Report.ValueKind == JsonValueKind.Object && check.Value.Report.TryGetProperty("settings_file_status", out _);
-                    string settingsFile = GralIO.GpuSettingsFile.FilePath();
-                    bool saved = false;
+                    readsSettingsFile = check.Value.Report.ValueKind == JsonValueKind.Object && check.Value.Report.TryGetProperty("settings_file_status", out _);
+                    settingsFile = GralIO.GpuSettingsFile.FilePath();
                     try
                     {
                         saved = GralIO.GpuSettingsFile.Read(settingsFile).TryGetValue("allow_integrated", out string allowed) && allowed == "1";
                     }
                     catch { }
-                    answer = saved && !readsSettingsFile ? DialogResult.Yes :
+                }
+                // saved, read by GRAL and still refused: GRAL reads another settings file than the GUI, and asking again would not change that
+                if (status == "only_integrated" && !(saved && readsSettingsFile))
+                {
+                    answer = saved ? DialogResult.Yes :
                              MessageBox.Show(this, "Only an integrated AMD GPU is available. GRAL has been compared with the CPU path on a discrete GPU only." + Environment.NewLine + Environment.NewLine +
-                                             "Yes: use the integrated GPU (remembered)" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
+                                             "Yes: use the integrated GPU (" + (settingsFile != null ? "remembered" : "this start only") + ")" + Environment.NewLine + "No: run on the CPU this time" + Environment.NewLine + "Cancel: do not start",
                                              "GRAL GUI", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                     if (answer == DialogResult.Yes)
                     {
@@ -284,6 +297,10 @@ namespace Gral
                         }
                         if (!saved || !readsSettingsFile)
                         {
+                            if (!gpuBackendSetForStart)
+                            {
+                                gpuBackendBeforeStart = Environment.GetEnvironmentVariable("INU_GPU_BACKEND");
+                            }
                             Environment.SetEnvironmentVariable("INU_GPU_BACKEND", "hip");
                             gpuBackendSetForStart = true;
                         }
@@ -329,6 +346,10 @@ namespace Gral
                     {
                         runtimeHint = Environment.NewLine + "Correct the INU_GPU_* environment variable, or the GPU settings file (GPU options, \"Edit settings file\").";
                     }
+                    if (status == "only_integrated")
+                    {
+                        runtimeHint = Environment.NewLine + "The GPU settings file of the GUI allows the integrated GPU, but GRAL did not find that line. Give INU_GPU_SETTINGS_FILE as a full path, or remove it.";
+                    }
                     answer = MessageBox.Show(this, "GRAL cannot use the GPU (" + status + "): " + message + runtimeHint + Environment.NewLine + Environment.NewLine +
                                              "Run on the CPU this time?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ? DialogResult.No : DialogResult.Cancel;
                 }
@@ -342,6 +363,16 @@ namespace Gral
             }
             MessageBox.Show(this, "GRAL still cannot use the GPU. Clear the GPU option to run on the CPU.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
+        }
+
+        /// <summary>
+        /// The check reports fallback_on_startup = 1 (GPU settings file or INU_GPU_FALLBACK_ON_STARTUP): GRAL continues on the CPU if the GPU cannot start
+        /// </summary>
+        private static bool GpuStartupFallbackIsOn(JsonElement Report)
+        {
+            return Report.ValueKind == JsonValueKind.Object && Report.TryGetProperty("settings", out JsonElement settings) && settings.ValueKind == JsonValueKind.Object &&
+                   settings.TryGetProperty("fallback_on_startup", out JsonElement fallback) && fallback.ValueKind == JsonValueKind.Object &&
+                   fallback.TryGetProperty("value", out JsonElement value) && value.ValueKind == JsonValueKind.String && value.GetString() == "1";
         }
 
         /// <summary>
