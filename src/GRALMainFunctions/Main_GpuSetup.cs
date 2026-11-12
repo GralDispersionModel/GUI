@@ -34,17 +34,24 @@ namespace Gral
         private System.Drawing.Image gpuOptionsImageDisabled;
 
         /// <summary>
-        /// The GPU options button follows the GPU check box: visible with it, usable when it is ticked
+        /// The GPU options button follows the GPU check box: visible with it, usable when it is ticked.
+        /// It is usable as well while the project has a GPU.txt: GRAL reads that file at every start and stops at a faulty line also with the box unticked,
+        /// and "Edit settings file" of the options is the way to the file
         /// </summary>
         private void ShowGpuOptionsButton()
         {
             buttonGPUOptions.Visible = button10.Visible; // as the GPU check box
-            buttonGPUOptions.Enabled = checkBoxGPU.Checked;
+            buttonGPUOptions.Enabled = GpuOptionsUsable(checkBoxGPU.Checked, GralIO.GpuSettingsFile.FilePath(ProjectName));
             if (gpuOptionsImageDisabled == null)
             {
                 gpuOptionsImageDisabled = ToolStripRenderer.CreateDisabledImage(Gral.Properties.Resources.WrenchBlueTransparent);
             }
-            buttonGPUOptions.BackgroundImage = checkBoxGPU.Checked ? Gral.Properties.Resources.WrenchBlueTransparent : gpuOptionsImageDisabled;
+            buttonGPUOptions.BackgroundImage = buttonGPUOptions.Enabled ? Gral.Properties.Resources.WrenchBlueTransparent : gpuOptionsImageDisabled;
+        }
+
+        private static bool GpuOptionsUsable(bool GpuTicked, string SettingsFile)
+        {
+            return GpuTicked || (SettingsFile != null && File.Exists(SettingsFile));
         }
 
         /// <summary>
