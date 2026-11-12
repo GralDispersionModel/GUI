@@ -2854,7 +2854,7 @@ namespace Gral
                 }
 #endif
                 checkBoxGPU.Visible = button10.Visible;
-                checkBoxGPU.Checked = GUISettings.UseGpu;
+                checkBoxGPU.Checked = GRALSettings.UseGpu;
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
@@ -4179,12 +4179,19 @@ namespace Gral
 
         private void CheckBoxGPU_Click(object sender, EventArgs e)
         {
-            GUISettings.UseGpu = checkBoxGPU.Checked;
-            if (!checkBoxGPU.Checked)
+            // Stored in the project's in.dat (line 23), like the AVX-512 option, so the project records it
+            GRALSettings.UseGpu = checkBoxGPU.Checked;
+            InDatFileIO write_in_dat = new InDatFileIO
+            {
+                Data = GRALSettings
+            };
+            write_in_dat.WriteInDat();
+            write_in_dat = null;
+            if (!checkBoxGPU.Checked && GUISettings.GpuUseIntegrated)
             {
                 GUISettings.GpuUseIntegrated = false; // asked again the next time the box is ticked
+                GUISettings.WriteToFile();
             }
-            GUISettings.WriteToFile();
             if (checkBoxGPU.Checked)
             {
                 CheckGpuDriverOnTick();

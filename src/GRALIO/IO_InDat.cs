@@ -129,6 +129,7 @@ namespace GralIO
                     myWriter.WriteLine(_data.AVX512Usage.ToString(ic) + "\t ! Use the AVX512 instructions Yes = 1, No = 0");
                     int reproducibleResults = _data.ReproducibleResults == true ? 1 : 0;
                     myWriter.WriteLine(reproducibleResults.ToString(ic) + "\t ! Use the GRAL reproducible results option Yes = 1, No = 0");
+                    myWriter.WriteLine((_data.UseGpu ? 1 : 0).ToString(ic) + "\t ! Use the GPU for the particle dispersion Yes = 1, No = 0");
                 }
 
             }
@@ -361,6 +362,16 @@ namespace GralIO
                                 reproducibleResults = Convert.ToInt32(_val);
                                 _data.ReproducibleResults = reproducibleResults == 1;
                             }
+                        }
+                    }
+
+                    _data.UseGpu = false;
+                    if (myreader.EndOfStream == false) // read the GPU option
+                    {
+                        text = myreader.ReadLine().Split(new char[] { ',', '!', ' ', '\t' });
+                        if (text.Length > 0 && int.TryParse(text[0], NumberStyles.Any, ic, out int _val))
+                        {
+                            _data.UseGpu = _val == 1;
                         }
                     }
 

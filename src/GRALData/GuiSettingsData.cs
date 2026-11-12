@@ -74,10 +74,6 @@ namespace GralData
         /// </summary>
         public bool UseDarkMode;
         /// <summary>
-        /// Run GRAL on the GPU (needs a GRAL build with GPU support)
-        /// </summary>
-        public bool UseGpu;
-        /// <summary>
         /// The user agreed to run GRAL on an integrated AMD GPU (INU_GPU_BACKEND=hip)
         /// </summary>
         public bool GpuUseIntegrated;
@@ -143,7 +139,6 @@ namespace GralData
                     write.WriteLine(DefaultPathForGRAMM);
                     write.WriteLine(AutoCheckForUpdates.ToString(ic));
                     write.WriteLine(UseDefaultColors.ToString(ic));
-                    write.WriteLine(UseGpu.ToString(ic));
                     write.WriteLine(GpuUseIntegrated.ToString(ic));
                 }
             }
@@ -240,14 +235,6 @@ namespace GralData
                     else
                     {
                         UseDefaultColors = true;
-                    }
-                    if (!read.EndOfStream)
-                    {
-                        try
-                        {
-                            UseGpu = Convert.ToBoolean(read.ReadLine(), ic);
-                        }
-                        catch { }
                     }
                     if (!read.EndOfStream)
                     {

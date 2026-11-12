@@ -27,7 +27,7 @@ namespace Gral
     partial class Main
     {
         /// <summary>
-        /// Environment variables that switch the GPU build of GRAL to the GPU
+        /// Environment variables read by the GPU build of GRAL (INU_GPU_EXPERIMENTAL overrides in.dat line 23)
         /// </summary>
         private static readonly string[] gpuVariableNames = { "INU_GPU_EXPERIMENTAL", "INU_GPU_MANIFEST", "INU_GPU_METRICS", "INU_GPU_STDERR", "INU_GPU_BACKEND" };
         /// <summary>
@@ -47,9 +47,9 @@ namespace Gral
             {
                 gpuVariablesInherited = Array.ConvertAll(gpuVariableNames, Environment.GetEnvironmentVariable);
             }
-            if (!GUISettings.UseGpu)
+            if (!GRALSettings.UseGpu)
             {
-                // Restore the inherited values, but never start GRAL on the GPU while the option is cleared
+                // Restore the inherited values, but never start GRAL on the GPU while the option is cleared (in.dat line 23 = 0)
                 for (int i = 1; i < gpuVariableNames.Length; i++)
                 {
                     Environment.SetEnvironmentVariable(gpuVariableNames[i], gpuVariablesInherited[i]);
@@ -79,7 +79,8 @@ namespace Gral
             }
 
             string computation = Path.Combine(ProjectName, "Computation");
-            Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", "1");
+            // in.dat line 23 switches GRAL to the GPU; an override inherited by the GUI must not change that
+            Environment.SetEnvironmentVariable("INU_GPU_EXPERIMENTAL", null);
             Environment.SetEnvironmentVariable("INU_GPU_MANIFEST", manifest);
             Environment.SetEnvironmentVariable("INU_GPU_METRICS", Path.Combine(computation, "GRAL_GPU_metrics.jsonl"));
             Environment.SetEnvironmentVariable("INU_GPU_STDERR", Path.Combine(computation, "GRAL_GPU_runtime.log"));
