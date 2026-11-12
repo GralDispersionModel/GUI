@@ -311,8 +311,8 @@ namespace Gral
                           // a compiler was found but cannot serve this GPU: the tested version in the per-user folder may help
                           ((status == "nvrtc_rejected" || status == "hiprtc_rejected") &&
                            !Directory.Exists((status == "hiprtc_rejected" ? GpuToolchainPackage.Hiprtc : GpuToolchainPackage.Nvrtc).TargetFolder))) &&
-                         // GRAL uses only INU_GPU_NVRTC_DIR or INU_GPU_HIPRTC_DIR when it is set, so a download would not help
-                         string.IsNullOrEmpty(Environment.GetEnvironmentVariable(status.Contains("hiprtc") ? "INU_GPU_HIPRTC_DIR" : "INU_GPU_NVRTC_DIR")))
+                         // GRAL uses only the compiler folder that is set, so a download would not help
+                         !GpuCompilerFolderIsSet(status.Contains("hiprtc"), check.Value.Report))
                 {
                     answer = AskForGpuCompiler(status.StartsWith("no_hiprtc") || status.StartsWith("hiprtc"), status.EndsWith("_rejected"));
                     if (answer == DialogResult.Retry)
@@ -325,6 +325,10 @@ namespace Gral
                     // hiprtc's amd_comgr needs the Visual C++ runtime
                     string runtimeHint = !OperatingSystem.IsWindows() || File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140_1.dll")) ? string.Empty :
                                          Environment.NewLine + "The Microsoft Visual C++ x64 runtime is missing: https://aka.ms/vs/17/release/vc_redist.x64.exe";
+                    if (status == "invalid_setting")
+                    {
+                        runtimeHint = Environment.NewLine + "Correct the INU_GPU_* environment variable, or the GPU settings file (GPU options, \"Edit settings file\").";
+                    }
                     answer = MessageBox.Show(this, "GRAL cannot use the GPU (" + status + "): " + message + runtimeHint + Environment.NewLine + Environment.NewLine +
                                              "Run on the CPU this time?", "GRAL GUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ? DialogResult.No : DialogResult.Cancel;
                 }
@@ -338,6 +342,30 @@ namespace Gral
             }
             MessageBox.Show(this, "GRAL still cannot use the GPU. Clear the GPU option to run on the CPU.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
+        }
+
+        /// <summary>
+        /// A folder for the runtime compiler is set: by INU_GPU_NVRTC_DIR or INU_GPU_HIPRTC_DIR, or by nvrtc_dir or hiprtc_dir of the GPU settings file
+        /// when this GRAL reads that file. GRAL then looks nowhere else
+        /// </summary>
+        private static bool GpuCompilerFolderIsSet(bool Hip, JsonElement Report)
+        {
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable(Hip ? "INU_GPU_HIPRTC_DIR" : "INU_GPU_NVRTC_DIR")))
+            {
+                return true;
+            }
+            if (Report.ValueKind != JsonValueKind.Object || !Report.TryGetProperty("settings_file_status", out _))
+            {
+                return false;
+            }
+            try
+            {
+                return GralIO.GpuSettingsFile.Read(GralIO.GpuSettingsFile.FilePath()).ContainsKey(Hip ? "hiprtc_dir" : "nvrtc_dir");
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
