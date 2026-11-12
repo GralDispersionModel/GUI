@@ -70,14 +70,16 @@ namespace Gral
                 options.Left = Left + 80;
                 options.Top = Top + 40;
 
+                ReadGpuProjectSettings();
                 bool sumsBefore = gpuReproducibleSums;
-                if (options.ShowDialog(this) == DialogResult.OK)
+                DialogResult result = options.ShowDialog(this);
+                // OK has written the choices to GPU.txt, and "Edit settings file" may have changed any line, the GPU option included, whatever button closed the window
+                ReadGpuProjectSettings();
+                checkBoxGPU.Checked = gpuUseGpu;
+                ShowGpuOptionsButton();
+                if (result == DialogResult.OK && gpuReproducibleSums != sumsBefore && !Project_Locked)
                 {
-                    ReadGpuProjectSettings(); // the window has written its choices to GPU.txt
-                    if (gpuReproducibleSums != sumsBefore && !Project_Locked)
-                    {
-                        ResetInDat(); // results computed with the other kind of sums are not those of the project any more, as with the reproducible results option
-                    }
+                    ResetInDat(); // results computed with the other kind of sums are not those of the project any more, as with the reproducible results option
                 }
             }
         }
