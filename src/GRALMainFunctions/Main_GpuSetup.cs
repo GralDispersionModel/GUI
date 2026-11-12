@@ -265,6 +265,14 @@ namespace Gral
                 }
                 string status = check.Value.Status;
                 string message = check.Value.Message;
+                if (status == "invalid_setting" && GpuSettingsFileStopsEveryRun(message))
+                {
+                    // GRAL reads GPU.txt before it looks at INU_GPU_EXPERIMENTAL, so a CPU run would stop at once as well: there is nothing to offer but the correction
+                    MessageBox.Show(this, "GRAL cannot start: " + message + Environment.NewLine + Environment.NewLine +
+                                    "GRAL stops at such a file also when it runs on the CPU. Correct GPU.txt in the project's Computation folder (GPU options, \"Edit settings file\"), or INU_GPU_SETTINGS_FILE if that variable is set.",
+                                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
                 if (status != "invalid_setting" && status != "only_integrated" && GpuStartupFallbackIsOn(check.Value.Report))
                 {
                     // "Continue on the CPU" of the GPU options: GRAL does that itself and writes the reason to its log, so nothing is asked here
@@ -375,6 +383,15 @@ namespace Gral
             }
             MessageBox.Show(this, "GRAL still cannot use the GPU. Clear the GPU option to run on the CPU.", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
+        }
+
+        /// <summary>
+        /// The message of an invalid_setting names an error that GRAL found while it read the settings file (a line, a key, a value, the file itself or its path).
+        /// GRAL then stops every run, a CPU run too; an invalid INU_GPU_* variable, or a device or compiler folder that proved unusable, stops only a GPU run
+        /// </summary>
+        private static bool GpuSettingsFileStopsEveryRun(string Message)
+        {
+            return Message != null && (Message.StartsWith("GPU settings file ", StringComparison.Ordinal) || Message.StartsWith("INU_GPU_SETTINGS_FILE is not a usable path", StringComparison.Ordinal));
         }
 
         /// <summary>
