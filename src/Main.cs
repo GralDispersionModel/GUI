@@ -2853,6 +2853,10 @@ namespace Gral
                     }
                 }
 #endif
+                checkBoxGPU.Visible = button10.Visible;
+                ReadGpuProjectSettings();
+                checkBoxGPU.Checked = gpuUseGpu;
+                ShowGpuOptionsButton();
             }
             else  // not the computation tab -> stop FileSystemWatcher
             {
@@ -3683,7 +3687,7 @@ namespace Gral
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.InitialDirectory = Path.Combine(ProjectName, "Computation");
-                dialog.Filter = "(Logfile*.txt)|Logfile*.txt";
+                dialog.Filter = "Log files (Logfile*.txt;GRAL_GPU*.log)|Logfile*.txt;GRAL_GPU*.log";
                 dialog.Title = "Select Logfile";
                 // dialog.ShowHelp = true;
 
@@ -4173,6 +4177,34 @@ namespace Gral
             };
             write_in_dat.WriteInDat();
             write_in_dat = null;
+        }
+
+        private void CheckBoxGPU_Click(object sender, EventArgs e)
+        {
+            // Stored as use_gpu in the project's GPU.txt (Computation folder), which GRAL reads at every start; the first tick creates the file
+            string settingsFile = GpuSettingsFile.FilePath(ProjectName);
+            try
+            {
+                if (settingsFile == null && checkBoxGPU.Checked)
+                {
+                    throw new InvalidOperationException(string.IsNullOrEmpty(ProjectName) ? "No project is open." : "INU_GPU_SETTINGS_FILE=off switches GPU.txt off.");
+                }
+                if (settingsFile != null && (checkBoxGPU.Checked || File.Exists(settingsFile))) // without a file the GPU is off already
+                {
+                    GpuSettingsFile.Update(settingsFile, new Dictionary<string, string> { ["use_gpu"] = checkBoxGPU.Checked ? "1" : "0" });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "The GPU option could not be saved" + (settingsFile != null ? " in " + settingsFile : string.Empty) + ": " + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            ReadGpuProjectSettings();
+            checkBoxGPU.Checked = gpuUseGpu; // what the file holds now
+            ShowGpuOptionsButton();
+            if (checkBoxGPU.Checked)
+            {
+                CheckGpuDriverOnTick();
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
