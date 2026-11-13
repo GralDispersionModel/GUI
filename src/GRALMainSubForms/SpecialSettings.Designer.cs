@@ -251,7 +251,7 @@
             checkBox6.Size = new System.Drawing.Size(195, 20);
             checkBox6.TabIndex = 62;
             checkBox6.Text = "GRAL Reproducible Results";
-            toolTip1.SetToolTip(checkBox6, "This GRAL option gives reproducible results, but the flow field calculation is significantly slower\r\nGRAL V24.09 or higher is required");
+            toolTip1.SetToolTip(checkBox6, "This GRAL option gives reproducible results\r\nGRAL versions with ordered flow field sweeps use all processor cores; with older versions the flow field calculation is significantly slower\r\nGRAL V24.09 or higher is required");
             checkBox6.UseVisualStyleBackColor = true;
             checkBox6.CheckedChanged += checkBox6_CheckedChanged;
             // 
