@@ -15,6 +15,7 @@
         {
             if (disposing && (components != null))
             {
+                ResetGrammProgress();
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -3628,7 +3629,7 @@
             groupBox30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             groupBox30.Location = new System.Drawing.Point(6, 170);
             groupBox30.Name = "groupBox30";
-            groupBox30.Size = new System.Drawing.Size(201, 111);
+            groupBox30.Size = new System.Drawing.Size(201, 48);
             groupBox30.TabIndex = 38;
             groupBox30.TabStop = false;
             groupBox30.Text = "GRAMM file size";
@@ -3636,9 +3637,9 @@
             // label96
             // 
             label96.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            label96.Location = new System.Drawing.Point(14, 48);
+            label96.Location = new System.Drawing.Point(86, 20);
             label96.Name = "label96";
-            label96.Size = new System.Drawing.Size(110, 23);
+            label96.Size = new System.Drawing.Size(76, 23);
             label96.TabIndex = 38;
             label96.Text = "0";
             // 
@@ -3647,9 +3648,9 @@
             button45.BackColor = System.Drawing.SystemColors.Control;
             button45.BackgroundImage = (System.Drawing.Image)resources.GetObject("button45.BackgroundImage");
             button45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            button45.Location = new System.Drawing.Point(158, 18);
+            button45.Location = new System.Drawing.Point(166, 13);
             button45.Name = "button45";
-            button45.Size = new System.Drawing.Size(32, 32);
+            button45.Size = new System.Drawing.Size(28, 28);
             button45.TabIndex = 37;
             toolTip1.SetToolTip(button45, "Delete all GRAMM wind field files\r\n");
             button45.UseVisualStyleBackColor = false;
@@ -3658,9 +3659,9 @@
             // label97
             // 
             label97.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            label97.Location = new System.Drawing.Point(14, 25);
+            label97.Location = new System.Drawing.Point(8, 20);
             label97.Name = "label97";
-            label97.Size = new System.Drawing.Size(138, 23);
+            label97.Size = new System.Drawing.Size(78, 23);
             label97.TabIndex = 16;
             label97.Text = "0 MByte";
             // 

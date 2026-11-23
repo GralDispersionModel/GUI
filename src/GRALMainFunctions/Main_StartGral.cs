@@ -828,7 +828,10 @@ namespace Gral
         static readonly IntPtr PROC_THREAD_ATTRIBUTE_PREFERRED_NODE = (IntPtr)0x00020004;
         const uint EXTENDED_STARTUPINFO_PRESENT = 0x00080000;
 
-        public static int StartProcessOnNumaNode(string commandLine, int numaNode)
+        public static int StartProcessOnNumaNode(string commandLine, int numaNode) =>
+            StartProcessOnNumaNode(commandLine, numaNode, null);
+
+        public static int StartProcessOnNumaNode(string commandLine, int numaNode, string workingDirectory)
         {
             var si = new STARTUPINFOEX();
             si.StartupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFOEX));
@@ -846,7 +849,7 @@ namespace Gral
             UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
 
             var pi = new PROCESS_INFORMATION();
-            bool success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, null, ref si, out pi);
+            bool success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, workingDirectory, ref si, out pi);
 
             if (!success)
             {
@@ -863,7 +866,7 @@ namespace Gral
                 numaNodePtr = Marshal.AllocHGlobal(Marshal.SizeOf(numa));
                 Marshal.WriteInt16(numaNodePtr, numa);
                 UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
-                success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, null, ref si, out pi);
+                success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, workingDirectory, ref si, out pi);
             }
             // Cleanup
             Marshal.FreeHGlobal(si.lpAttributeList);

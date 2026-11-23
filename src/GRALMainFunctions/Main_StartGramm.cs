@@ -12,8 +12,10 @@
 
 using GralIO;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gral
@@ -28,7 +30,7 @@ namespace Gral
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GRAMMStartCalculation(object sender, EventArgs e)
+        private async void GRAMMStartCalculation(object sender, EventArgs e)
         {
             bool continueCalculation = sender == button31;
 
@@ -112,6 +114,7 @@ namespace Gral
             {
                 try
                 {
+                    ResetGrammProgress();
                     string GRAMM_Program_Path = dialog.FileName;
                     string GRAMM_Project_Path = String.Empty;
 
@@ -171,7 +174,13 @@ namespace Gral
 
                     DirectoryInfo di = new DirectoryInfo(Project_Computation_Path);
 
-                    if (numericUpDown33.Value == 1) // one instance -> start GRAMM as usual
+                    int instances = (int)numericUpDown33.Value;
+                    bool single = instances == 1;
+#if !__MonoCS__
+                    // Keep output provenance when one worker starts or continues a tracked project.
+                    if (single && GrammProgressRun.HasCheckpoint(Project_Computation_Path)) { single = false; }
+#endif
+                    if (single)
                     {
                         //start computation routine GRAMM*.exe to compute wind fields
 #if __MonoCS__
@@ -255,6 +264,7 @@ namespace Gral
                             final_sit = OpenProject.GRAMMsunrise;
                         }
 
+                        int sunriseOriginalCount = final_sit;
                         if (final_sit == 0) // try to get final situation from lenght of meteopgt.all
                         {
                             string filename = Path.Combine(ProjectName, "Computation", "meteopgt.all");
@@ -268,22 +278,38 @@ namespace Gral
                         }
 
                         // now loop through the GRAMM instances
-                        int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numericUpDown33.Value));
-                        int instance_start = first_sit;
-                        int instance_end;
-                        int count = 1;
-                        while (instance_start <= final_sit)
+                        var run = new GrammProgressRun(Project_Computation_Path) { Continuing = continueCalculation };
+                        grammProgress = run;
+                        // Keep the wind-field delete dialog out of the pre-launch snapshot.
+                        groupBox30.Enabled = false;
+                        List<(int First, int Last)> assignments;
+                        try
                         {
-                            instance_end = instance_start + offset;
-                            if (count == (int)numericUpDown33.Value) // avoid rounding errors
+                            assignments = await Task.Run(() =>
                             {
-                                instance_end = final_sit;
-                            }
-
+                                run.CaptureBaseline(first_sit, final_sit);
+                                return GrammInstanceRanges.Create(Project_Computation_Path, first_sit, final_sit, instances, sunriseOriginalCount);
+                            });
+                        }
+                        finally
+                        {
+                            if (grammProgress == run && !IsDisposed) { groupBox30.Enabled = true; }
+                        }
+                        if (grammProgress != run || IsDisposed || Disposing) { return; }
+#if !__MonoCS__
+                        run.SavePending(assignments);
+#endif
+                        string launchError = null;
+                        for (int index = 0; index < assignments.Count; index++)
+                        {
+                            int count = index + 1;
+                            var (assignedFirst, instance_end) = assignments[index];
+                            int instance_start = assignedFirst;
+                            bool retained = false;
+                            bool launched = false;
+#if __MonoCS__
                             if (count == 1) // first instance
                             {
-                                //start computation routine GRAMM*.exe to compute wind fields
-#if __MonoCS__
                                 try
                                 {
                                     if (Path.GetFileName(GRAMM_Program_Path).Equals("GRAMM")) // new GRAMM version from .NET5
@@ -295,7 +321,7 @@ namespace Gral
                                         GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
                                         GRAMMProcess.StartInfo.UseShellExecute = false;
                                         GRAMMProcess.StartInfo.RedirectStandardOutput = true;
-                                        GRAMMProcess.Start();
+                                        launched = GRAMMProcess.Start();
                                     }
                                     else
                                     {
@@ -307,40 +333,16 @@ namespace Gral
                                         GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
                                         GRAMMProcess.StartInfo.UseShellExecute = false;
                                         GRAMMProcess.StartInfo.RedirectStandardOutput = true;
-                                        GRAMMProcess.Start();
+                                        launched = GRAMMProcess.Start();
                                     }
                                 }
                                 catch (Exception ex)
                                 {
                                     MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
-#else
-                                string param = GRAMM_Program_Path;
-                                if (continueCalculation)
-                                {
-                                    instance_start = GetNextMissingSituation(instance_start, instance_end, di.GetFiles("*.wnd"));
-                                }
-
-                                if (string.IsNullOrEmpty(GRAMM_Project_Path))
-                                {
-                                    param += " " + instance_start.ToString() + " " + instance_end.ToString();
-                                }
-                                else
-                                {
-                                    param += " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
-                                }
-                                int node = NumaNode(CPUNode);
-                                int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
-                                if (processID > 0) //sucessful start
-                                {
-                                    CoreProcessID.Add(processID);
-                                }
-#endif
                             }
                             else // further instances
                             {
-                                //start computation routine GRAMM*.exe to compute
-#if __MonoCS__
                                 try
                                 {
                                     Process gramm_local;
@@ -353,7 +355,7 @@ namespace Gral
                                         GRAMMProcess.StartInfo.Arguments = "-c \" " + command + " \"";
                                         GRAMMProcess.StartInfo.UseShellExecute = false;
                                         GRAMMProcess.StartInfo.RedirectStandardOutput = true;
-                                        GRAMMProcess.Start();
+                                        launched = GRAMMProcess.Start();
                                     }
                                     else
                                     {
@@ -363,7 +365,7 @@ namespace Gral
                                         gramm_local.StartInfo.Arguments = "-c \" " + command + " \"";
                                         gramm_local.StartInfo.UseShellExecute = false;
                                         gramm_local.StartInfo.RedirectStandardOutput = true;
-                                        gramm_local.Start();
+                                        launched = gramm_local.Start();
                                     }
                                     Thread.Sleep(800);
                                 }
@@ -371,38 +373,40 @@ namespace Gral
                                 {
                                     MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
-#else
-                                string param = GRAMM_Program_Path;
-                                if (continueCalculation)
-                                {
-                                    instance_start = GetNextMissingSituation(instance_start, instance_end, di.GetFiles("*.wnd"));
-                                }
-                                if (GRAMM_Project_Path == String.Empty)
-                                {
-                                    param += " " + instance_start.ToString() + " " + instance_end.ToString();
-                                }
-                                else
-                                {
-                                    param += " " + "\"" + GRAMM_Project_Path + "\"" + " " + instance_start.ToString() + " " + instance_end.ToString();
-                                }
-
-                                int node = NumaNode(CPUNode);
-                                if (CPUNode == 4)
-                                {
-                                    node = count % 2;
-                                }
-                                else if (CPUNode == 5)
-                                {
-                                    node = count % 4;
-                                }
-                                int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
-                                if (processID > 0) //sucessful start
-                                {
-                                    CoreProcessID.Add(processID);
-                                }
-#endif
                             }
+#else
+                            if (continueCalculation)
+                            {
+                                instance_start = run.LegacyResume
+                                    ? GetNextMissingSituation(assignedFirst, instance_end, di.GetFiles("*.wnd"))
+                                    : run.NextSituation(assignedFirst, instance_end);
+                                retained = instance_start > instance_end;
+                            }
+                            // Reversed ranges make GRAMM fall back to its default full run.
+                            if (!retained)
+                            {
+                                string pathArgument = GRAMM_Project_Path.Length == 0 ? "" : $"\"{di.FullName}\" ";
+                                string param = $"\"{GRAMM_Program_Path}\" {pathArgument}{instance_start} {instance_end}";
+                                int node = NumaNode(CPUNode);
+                                if (count > 1 && CPUNode == 4) { node = count % 2; }
+                                else if (count > 1 && CPUNode == 5) { node = count % 4; }
+                                try
+                                {
+                                    int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node, di.FullName);
+                                    if (processID > 0)
+                                    {
+                                        CoreProcessID.Add(processID);
+                                        launched = true;
+                                    }
+                                }
+                                catch (Exception ex) { launchError ??= ex.Message; }
+                            }
+#endif
 
+                            if (launched || retained)
+                            {
+                                run.Ranges.Add((count, assignedFirst, instance_end, instance_start));
+                            }
 
                             // create batch-files
                             string filename_batch = Path.Combine(Project_Computation_Path, "GRAMM_instance_" + count.ToString() + ".bat");
@@ -420,7 +424,11 @@ namespace Gral
 
                                 using (StreamWriter batchfile = new StreamWriter(filename_batch))
                                 {
-                                    if (GUISettings.CopyCoresToProject == true)
+                                    if (retained)
+                                    {
+                                        batchfile.WriteLine("rem No situations to resume in this instance.");
+                                    }
+                                    else if (GUISettings.CopyCoresToProject == true)
                                     {
                                         batchfile.WriteLine(Path.GetFileName(GRAMM_Program_Path) + gramm_start);
                                     }
@@ -459,9 +467,11 @@ namespace Gral
                             catch
                             { }
 #endif
-                            // new start value, new instance
-                            instance_start = instance_end + 1;
-                            count++;
+                        }
+                        if (instances > 1) { ShowGrammProgress(run); }
+                        if (launchError != null)
+                        {
+                            MessageBox.Show(launchError, "GRAMM could not start all instances", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
 
@@ -497,6 +507,7 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMStopCalculation(object sender, EventArgs e)
         {
+            if (grammProgress?.Ranges.Count == 0) { ResetGrammProgress(); }
 #if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
@@ -513,7 +524,7 @@ namespace Gral
             CoreProcessID.Clear();
 
             progressBar2.Value = 0;
-            numericUpDown24.Value = 1;
+            if (grammProgress == null) { numericUpDown24.Value = 1; }
             label67.Text = "Actual flow situation: " + "0" + "%";
             //save GRAMM control file "GRAMMin.dat"
             GRAMMin(EmifileReset);
@@ -529,6 +540,7 @@ namespace Gral
         /// <param name="e"></param>
         private void GRAMMPauseCalculation(object sender, EventArgs e)
         {
+            if (grammProgress?.Ranges.Count == 0) { ResetGrammProgress(); }
 #if __MonoCS__
             MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
@@ -555,7 +567,7 @@ namespace Gral
             }
             catch
             { }
-            numericUpDown24.Value = trackbar;
+            if (grammProgress == null) { numericUpDown24.Value = trackbar; }
             progressBar2.Value = 0;
             label67.Text = "Actual flow situation: " + "0" + "%";
             //save GRAMM control file "GRAMMin.dat"

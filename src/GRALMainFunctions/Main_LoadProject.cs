@@ -67,6 +67,7 @@ namespace Gral
                 }
                 catch { }
 
+                ResetGrammProgress();
                 ProjectName = foldername;
 
                 // Reset old project
