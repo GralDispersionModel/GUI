@@ -32,7 +32,8 @@ namespace Gral
             label66.Visible = label67.Visible = progressBar1.Visible = progressBar2.Visible = false;
             groupBox30.Top = groupBox15.ClientSize.Height - groupBox30.Height - 5;
             grammPanel = new GrammProgressPanel(run, label66.Font);
-            grammPanel.SetBounds(4, 60, groupBox15.ClientSize.Width - 10, groupBox30.Top - 62);
+            int top = label66.Top - 2;
+            grammPanel.SetBounds(groupBox30.Left, top, groupBox30.Width, groupBox30.Top - top - 2);
             groupBox15.Controls.Add(grammPanel);
             grammPanel.Start();
         }
@@ -43,7 +44,9 @@ namespace Gral
         [DllImport("uxtheme.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
         private static extern int SetWindowTheme(IntPtr window, string app, string classes);
 
-        private readonly Label summary = new() { Name = "grammProgressSummary", AutoEllipsis = true };
+        private readonly Label summary = new() { Name = "grammProgressSummary", AutoEllipsis = true, UseMnemonic = false };
+        private readonly Label remaining = new() { Name = "grammProgressRemaining", TextAlign = ContentAlignment.TopRight, AutoEllipsis = true };
+        private readonly Font heading;
         private readonly ProgressBar total = new() { Name = "grammTotalProgress", AccessibleName = "All GRAMM instances" };
         private readonly ListView rows = new()
         {
@@ -53,6 +56,9 @@ namespace Gral
             HeaderStyle = ColumnHeaderStyle.Nonclickable,
             FullRowSelect = true,
             MultiSelect = false,
+            BorderStyle = BorderStyle.None,
+            BackColor = SystemColors.Control,
+            ForeColor = SystemColors.ControlText,
             ShowItemToolTips = true,
             OwnerDraw = true
         };
@@ -61,34 +67,40 @@ namespace Gral
         private readonly CancellationTokenSource closed = new();
         private readonly Dictionary<int, DateTime> verified = new();
         private int[] counts;
+        private int instanceWidth;
         private bool reading;
 
         internal GrammProgressPanel(GrammProgressRun run, Font font)
         {
             this.run = run;
             Font = font;
-            rows.Columns.Add("Instance", 78);
-            rows.Columns.Add("Done", 53, HorizontalAlignment.Right);
-            rows.Columns.Add("Left", 51, HorizontalAlignment.Right);
-            rows.DrawColumnHeader += (_, e) => e.DrawDefault = true;
+            if (SystemInformation.HighContrast)
+            {
+                BackColor = SystemColors.Control;
+                ForeColor = SystemColors.ControlText;
+            }
+            summary.Font = heading = new Font(font, FontStyle.Bold);
+            rows.Columns.Add("Instance", 1);
+            rows.Columns.Add("Done", 1, HorizontalAlignment.Right);
+            rows.Columns.Add("Left", 1, HorizontalAlignment.Right);
+            rows.DrawColumnHeader += DrawHeader;
             rows.DrawSubItem += DrawProgress;
             foreach (var range in run.Ranges)
             {
-                rows.Items.Add(new ListViewItem(new[] { range.Instance.ToString(), "—", "—" })
-                {
-                    ToolTipText = $"Original situations {range.First}–{range.Last}"
-                });
+                rows.Items.Add(new ListViewItem(new[] { range.Instance.ToString(), "", "" }));
+                UpdateRow(rows.Items.Count - 1, null);
             }
-            Controls.AddRange(new Control[] { summary, total, rows });
+            Controls.AddRange(new Control[] { summary, remaining, total, rows });
             summary.Text = run.UnavailableReason ?? "Checking wind fields…";
             summary.AccessibleDescription = "Completed original weather situations across all assigned instances.";
         }
 
         internal void Start()
         {
-            summary.SetBounds(0, 0, Width, 18);
-            total.SetBounds(0, 20, Width, 9);
-            rows.SetBounds(0, 33, Width, Height - 33);
+            summary.SetBounds(0, 0, Width, heading.Height + 2);
+            remaining.SetBounds(Width, 0, 0, summary.Height);
+            total.SetBounds(0, summary.Bottom, Width, LogicalToDeviceUnits(7));
+            rows.SetBounds(0, total.Bottom + 2, Width, Height - total.Bottom - 2);
             // Use the full-width system scrollbar, including both arrow buttons, for overflow.
             if (rows.Items.Count > 6 && OperatingSystem.IsWindows() && !SystemInformation.HighContrast)
             {
@@ -98,7 +110,17 @@ namespace Gral
             {
                 // Size the viewport from the native row metrics so the seventh instance scrolls.
                 Rectangle first = rows.GetItemRect(0);
-                rows.Height = Math.Min(rows.Height, first.Top + 6 * first.Height + rows.Height - rows.ClientSize.Height);
+                rows.Height = Math.Min(rows.Height, first.Top + Math.Min(6, rows.Items.Count) * first.Height + rows.Height - rows.ClientSize.Height);
+                int largest = run.Ranges.Max(range => range.Last - range.First + 1);
+                instanceWidth = TextRenderer.MeasureText(run.Ranges.Max(range => range.Instance).ToString(), Font).Width + 2;
+                int available = rows.ClientSize.Width;
+                int left = Math.Max(TextRenderer.MeasureText("Left", heading).Width, TextRenderer.MeasureText(largest.ToString(), Font).Width) + 6;
+                int done = Math.Max(TextRenderer.MeasureText("Done", heading).Width, TextRenderer.MeasureText($"{largest}/{largest}", Font).Width) + 6;
+                left = Math.Min(left, available / 4);
+                done = Math.Min(done, available / 2);
+                rows.Columns[0].Width = available - done - left;
+                rows.Columns[1].Width = done;
+                rows.Columns[2].Width = left;
             }
             if (run.UnavailableReason != null) { return; }
             timer.Tick += RefreshCounts;
@@ -120,13 +142,21 @@ namespace Gral
                 total.Maximum = run.PlannedSituations;
                 total.Value = done;
                 int unassigned = total.Maximum - run.Ranges.Sum(range => range.Last - range.First + 1);
-                summary.Text = unassigned == 0 ? $"{done} / {total.Maximum} done, {total.Maximum - done} left"
-                    : $"{total.Maximum - done} left, {unassigned} not started";
+                remaining.Text = $"{total.Maximum - done} left";
+                remaining.Width = Math.Min(Width / 2, TextRenderer.MeasureText(remaining.Text, Font).Width + 2);
+                remaining.Left = Width - remaining.Width;
+                summary.Width = remaining.Left - 2;
+                string progress = $"{done}/{total.Maximum}";
+                string notStarted = $"{unassigned} not started";
+                summary.AccessibleDescription = $"{done} of {total.Maximum} planned weather situations completed.";
+                summary.Text = unassigned == 0 ? $"All instances: {progress}" : $"{progress}, {notStarted}";
+                if (TextRenderer.MeasureText(summary.Text, heading).Width > summary.Width)
+                {
+                    summary.Text = unassigned == 0 ? $"All: {progress}" : notStarted;
+                }
                 for (int i = 0; i < counts.Length; i++)
                 {
-                    var range = run.Ranges[i];
-                    rows.Items[i].SubItems[1].Text = counts[i].ToString();
-                    rows.Items[i].SubItems[2].Text = (range.Last - range.First + 1 - counts[i]).ToString();
+                    UpdateRow(i, counts[i]);
                 }
                 rows.Invalidate();
             }
@@ -135,26 +165,66 @@ namespace Gral
                 if (!token.IsCancellationRequested)
                 {
                     counts = null;
+                    remaining.Text = "";
+                    remaining.Width = 0;
+                    summary.Width = Width;
                     summary.Text = "Wind fields unavailable. Retrying…";
+                    summary.AccessibleDescription = summary.Text;
                     total.Value = 0;
-                    foreach (ListViewItem row in rows.Items) { row.SubItems[1].Text = row.SubItems[2].Text = "—"; }
+                    for (int i = 0; i < rows.Items.Count; i++) { UpdateRow(i, null); }
                     rows.Invalidate();
                 }
             }
             finally { reading = false; }
         }
 
+        private void UpdateRow(int index, int? done)
+        {
+            var range = run.Ranges[index];
+            int assigned = range.Last - range.First + 1;
+            ListViewItem row = rows.Items[index];
+            row.SubItems[1].Text = $"{done?.ToString() ?? "—"}/{assigned}";
+            row.SubItems[2].Text = (assigned - done)?.ToString() ?? "—";
+            row.ToolTipText = $"Original situations {range.First}–{range.Last}\n{row.SubItems[1].Text} completed/assigned, {row.SubItems[2].Text} left";
+        }
+
+        private const TextFormatFlags CellText = TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter |
+            TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding;
+
+        private void DrawHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.Graphics.FillRectangle(SystemBrushes.Control, e.Bounds);
+            Rectangle cell = Rectangle.Inflate(e.Bounds, -3, 0);
+            TextRenderer.DrawText(e.Graphics, e.Header.Text, heading, cell, SystemColors.ControlText,
+                CellText | (e.ColumnIndex == 0 ? TextFormatFlags.Left : TextFormatFlags.Right));
+            e.Graphics.DrawLine(SystemPens.ControlLight, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+        }
+
         private void DrawProgress(object sender, DrawListViewSubItemEventArgs e)
         {
-            if (e.ColumnIndex != 0 || counts == null) { e.DrawDefault = true; return; }
-            e.DrawBackground();
-            e.DrawText(TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+            bool selected = e.Item.Selected && rows.Focused;
+            e.Graphics.FillRectangle(selected ? SystemBrushes.Highlight : SystemBrushes.Control, e.Bounds);
+            Rectangle cell = Rectangle.Inflate(e.Bounds, -3, 0);
+            TextRenderer.DrawText(e.Graphics, e.SubItem.Text, Font, cell, selected ? SystemColors.HighlightText : rows.ForeColor,
+                CellText | (e.ColumnIndex == 0 ? TextFormatFlags.Left : TextFormatFlags.Right));
+            if (e.ColumnIndex != 0 || counts == null) { return; }
             var range = run.Ranges[e.ItemIndex];
-            var track = new Rectangle(e.Bounds.Left + 23, e.Bounds.Top + (e.Bounds.Height - 8) / 2, e.Bounds.Width - 29, 8);
-            ControlPaint.DrawBorder(e.Graphics, track, SystemColors.GrayText, ButtonBorderStyle.Solid);
+            int height = Math.Min(LogicalToDeviceUnits(8), cell.Height);
+            var track = new Rectangle(cell.Left + instanceWidth, cell.Top + (cell.Height - height) / 2,
+                cell.Width - instanceWidth, height);
+            if (track.Width < 4) { return; }
+            bool themed = ProgressBarRenderer.IsSupported && !SystemInformation.HighContrast;
+            if (themed) { ProgressBarRenderer.DrawHorizontalBar(e.Graphics, track); }
+            else
+            {
+                e.Graphics.FillRectangle(SystemBrushes.Window, track);
+                ControlPaint.DrawBorder(e.Graphics, track, SystemColors.WindowText, ButtonBorderStyle.Solid);
+            }
             track.Inflate(-1, -1);
             track.Width = (int)((long)track.Width * counts[e.ItemIndex] / (range.Last - range.First + 1));
-            e.Graphics.FillRectangle(SystemBrushes.Highlight, track);
+            if (track.Width == 0) { return; }
+            if (themed) { ProgressBarRenderer.DrawHorizontalChunks(e.Graphics, track); }
+            else { e.Graphics.FillRectangle(SystemBrushes.Highlight, track); }
         }
 
         protected override void Dispose(bool disposing)
@@ -164,6 +234,7 @@ namespace Gral
                 timer.Dispose();
                 closed.Cancel();
                 closed.Dispose();
+                heading.Dispose();
             }
             base.Dispose(disposing);
         }
