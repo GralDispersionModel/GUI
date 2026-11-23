@@ -16,10 +16,13 @@ namespace Gral
         private readonly DirectoryInfo computation;
         private readonly record struct Stamp(long Ticks, long Bytes);
         private readonly record struct Outputs(Stamp Wind, Stamp Scalar);
+        private sealed record EngineCheckpoint(string Engine, Dictionary<int, Outputs> Pending);
         private readonly Dictionary<int, Outputs> baseline = new();
         private Dictionary<int, Outputs> pending = new();
         private readonly HashSet<int> resumeFields = new();
         internal bool Continuing { get; init; }
+        internal string EngineGeneration { get; init; } = GrammEngine.Legacy;
+        private bool generationTracked;
         internal volatile bool Retired;
         internal bool LegacyResume { get; private set; }
         private int nx, ny, nz;
@@ -33,25 +36,36 @@ namespace Gral
             computation = new DirectoryInfo(directory);
         }
 
+        internal void CaptureNativeBaseline() => CaptureFiles(1, int.MaxValue);
+
+        private bool CaptureFiles(int first, int last)
+        {
+            string previous = ReadCheckpoint();
+            bool engineChanged = previous != EngineGeneration || EngineGeneration == GrammEngine.Unknown;
+            foreach (FileInfo file in computation.EnumerateFiles())
+            {
+                if (Retired) { return engineChanged; }
+                bool wind = file.Extension.Equals(".wnd", StringComparison.OrdinalIgnoreCase);
+                if (!wind && !file.Extension.Equals(".scl", StringComparison.OrdinalIgnoreCase)) { continue; }
+                int id = Situation(file);
+                if (id == 0 || (!engineChanged && (id < first || id > last))) { continue; }
+                baseline.TryGetValue(id, out Outputs pair);
+                var stamp = new Stamp(file.LastWriteTimeUtc.Ticks, file.Length);
+                baseline[id] = wind ? pair with { Wind = stamp } : pair with { Scalar = stamp };
+            }
+            // A narrower launch must still invalidate untouched fields from a different engine.
+            if (engineChanged) { pending = new Dictionary<int, Outputs>(baseline); }
+            capturedFiles = true;
+            return engineChanged;
+        }
+
         internal void CaptureBaseline(int first, int last)
         {
             PlannedSituations = last - first + 1;
             try
             {
-                // A narrower Start or Continue must preserve pending outputs outside its assignment.
-                ReadCheckpoint();
-                foreach (FileInfo file in computation.EnumerateFiles())
-                {
-                    if (Retired) { return; }
-                    bool wind = file.Extension.Equals(".wnd", StringComparison.OrdinalIgnoreCase);
-                    if (!wind && !file.Extension.Equals(".scl", StringComparison.OrdinalIgnoreCase)) { continue; }
-                    int id = Situation(file);
-                    if (id < first || id > last) { continue; }
-                    baseline.TryGetValue(id, out Outputs pair);
-                    var stamp = new Stamp(file.LastWriteTimeUtc.Ticks, file.Length);
-                    baseline[id] = wind ? pair with { Wind = stamp } : pair with { Scalar = stamp };
-                }
-                capturedFiles = true;
+                bool engineChanged = CaptureFiles(first, last);
+                if (Retired) { return; }
 
                 // GRAMM reads ISTAT and IOUT by position in IIN.dat.
                 string[] settings = File.ReadLines(Path.Combine(computation.FullName, "IIN.dat")).Take(29).ToArray();
@@ -79,7 +93,7 @@ namespace Gral
                 }
                 fieldLength = checked(20 + 6L * nx * ny * nz);
 
-                if (!Continuing) { return; }
+                if (!Continuing || engineChanged) { return; }
                 foreach (var (id, pair) in baseline)
                 {
                     if (Retired) { return; }
@@ -98,17 +112,30 @@ namespace Gral
             }
         }
 
-        private void ReadCheckpoint()
+        private string ReadCheckpoint()
         {
             try
             {
                 using var file = File.OpenRead(Path.Combine(computation.FullName, Checkpoint));
                 var options = new JsonSerializerOptions { RespectRequiredConstructorParameters = true };
-                pending = JsonSerializer.Deserialize<Dictionary<int, Outputs>>(file, options);
+                using var json = JsonDocument.Parse(file);
+                var root = json.RootElement;
+                if (root.ValueKind != JsonValueKind.Object) { throw new JsonException(); }
+                string generation = GrammEngine.Legacy;
+                if (root.TryGetProperty(nameof(EngineCheckpoint.Engine), out _))
+                {
+                    var saved = root.Deserialize<EngineCheckpoint>(options);
+                    if (saved.Engine != GrammEngine.Legacy && saved.Engine != GrammEngine.Reset && saved.Engine != GrammEngine.Unknown) { throw new JsonException(); }
+                    generationTracked = true;
+                    generation = saved.Engine;
+                    pending = saved.Pending;
+                }
+                else { pending = root.Deserialize<Dictionary<int, Outputs>>(options); }
                 if (pending == null || pending.Any(p => p.Key < 1 || p.Value == default ||
                     !ValidStamp(p.Value.Wind) || !ValidStamp(p.Value.Scalar))) { throw new JsonException(); }
+                return generation;
             }
-            catch (FileNotFoundException) { } // Projects without a previous multi-instance launch.
+            catch (FileNotFoundException) { return GrammEngine.Legacy; } // An untracked folder has no evidence of corrected fields.
             catch (JsonException ex) { throw new IOException("Invalid GRAMM GUI restart checkpoint.", ex); }
         }
 
@@ -117,19 +144,56 @@ namespace Gral
 
         internal static bool HasCheckpoint(string directory) => File.Exists(Path.Combine(directory, Checkpoint));
 
-        internal void SavePending(List<(int First, int Last)> assignments)
+        internal int NativeResumeFrom(int first, int nextMissing)
         {
-            if (LegacyResume) { return; }
-            if (UnavailableReason != null && (Continuing || !capturedFiles)) { throw new IOException(UnavailableReason); }
-            foreach (var range in assignments)
+            if (nextMissing > first) { CheckUnknownResume(); }
+            // Native formats resume by wind filename. Retain that rule only for winds rewritten since the checkpoint.
+            foreach (var (id, old) in pending)
             {
-                int from = NextSituation(range.First, range.Last);
+                if (id >= first && id < nextMissing && old.Wind != default &&
+                    baseline.TryGetValue(id, out var current) && current.Wind == old.Wind) { nextMissing = id; }
+            }
+            return nextMissing;
+        }
+
+        private void CheckUnknownResume()
+        {
+            if (EngineGeneration == GrammEngine.Unknown)
+            {
+                throw new IOException("The selected launcher does not identify the engine that generated the existing wind fields. Use Start to recalculate the selected situations or select the matching GRAMM.exe.");
+            }
+        }
+
+        internal void SaveNativePending(int from)
+        {
+            foreach (var (id, old) in baseline)
+            {
+                if (id >= from) { pending[id] = old; }
+            }
+            WriteCheckpoint();
+        }
+
+        internal void SavePending(List<(int First, int Last)> assignments, int[] starts = null)
+        {
+            if (LegacyResume && EngineGeneration == GrammEngine.Legacy && !generationTracked) { return; }
+            if (!LegacyResume && UnavailableReason != null && (Continuing || !capturedFiles)) { throw new IOException(UnavailableReason); }
+            for (int index = 0; index < assignments.Count; index++)
+            {
+                var range = assignments[index];
+                if (Continuing && !LegacyResume && baseline.TryGetValue(range.First, out var prefix) &&
+                    prefix.Wind.Bytes > 0 && prefix.Scalar.Bytes > 0) { CheckUnknownResume(); }
+                int from = starts == null ? NextSituation(range.First, range.Last) : starts[index];
                 for (int id = range.First; id <= range.Last; id++)
                 {
                     if (id >= from && baseline.TryGetValue(id, out var old)) { pending[id] = old; }
-                    else { pending.Remove(id); }
+                    else if (!LegacyResume) { pending.Remove(id); }
                 }
             }
+            WriteCheckpoint();
+        }
+
+        private void WriteCheckpoint()
+        {
             // An empty checkpoint still identifies a multi-instance run after the project is reopened.
             // Only pre-existing outputs scheduled for replacement need individual entries.
             string target = Path.Combine(computation.FullName, Checkpoint);
@@ -138,7 +202,11 @@ namespace Gral
             {
                 using (var file = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 {
-                    JsonSerializer.Serialize(file, pending);
+                    if (EngineGeneration != GrammEngine.Legacy || generationTracked)
+                    {
+                        JsonSerializer.Serialize(file, new EngineCheckpoint(EngineGeneration, pending));
+                    }
+                    else { JsonSerializer.Serialize(file, pending); }
                     file.Flush(true);
                 }
                 File.Move(temp, target, true);

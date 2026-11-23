@@ -594,6 +594,12 @@ namespace GralIO
 
                             _meteofrequ = 0;
                             double _temp = 0;
+                            int originalSituations = 0;
+                            if (_MeteoClassification)
+                            {
+                                var gramm = new IO_ReadFiles { ProjectName = _projectname };
+                                if (gramm.ReadGrammInFile()) { originalSituations = gramm.GRAMMsunrise; }
+                            }
 
                             for (int n = 0; n < 100000; n++)
                             {
@@ -606,8 +612,12 @@ namespace GralIO
                                         text = text1[n + 2].Split(new char[] { ' ', ',', '\t', ';' }, StringSplitOptions.RemoveEmptyEntries);
                                         _temp = Convert.ToDouble(text[3].Replace(".", decsep));
                                         _meteofrequ += _temp;
-                                        _meteofrequ_max = Math.Max(_meteofrequ_max, _temp);
-                                        _meteofrequ_min = Math.Min(_meteofrequ_min, _temp);
+                                        // Sunrise appends zero-frequency intermediate fields after the original situations.
+                                        if (originalSituations <= 0 || n < originalSituations || _temp != 0)
+                                        {
+                                            _meteofrequ_max = Math.Max(_meteofrequ_max, _temp);
+                                            _meteofrequ_min = Math.Min(_meteofrequ_min, _temp);
+                                        }
                                         if (_dispsituationfrequ != null && n < _dispsituationfrequ.Length)
                                         {
                                             _dispsituationfrequ[n] = _temp;

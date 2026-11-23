@@ -118,12 +118,15 @@ namespace Gral
                     string GRAMM_Program_Path = dialog.FileName;
                     string GRAMM_Project_Path = String.Empty;
 
-                    if (GUISettings.CopyCoresToProject == true)
+                    var engine = GrammEngine.Inspect(dialog.FileName);
+                    // Keep a managed apphost with its DLL, runtime configuration and dependency tree.
+                    bool copyCore = GUISettings.CopyCoresToProject && !engine.UsesAdjacentAssembly;
+                    if (copyCore)
                     {
                         //copy the file GRAMM*.exe in the directory "Computation"
                         GRAMM_Program_Path = Path.Combine(ProjectName, @"Computation", Path.GetFileName(dialog.FileName));
 
-                        try
+                        if (!string.Equals(Path.GetFullPath(dialog.FileName), Path.GetFullPath(GRAMM_Program_Path), StringComparison.OrdinalIgnoreCase))
                         {
                             File.Copy(dialog.FileName, GRAMM_Program_Path, true);
 
@@ -151,13 +154,16 @@ namespace Gral
                                 }
                             }
                         }
-                        catch { }
+                        engine = GrammEngine.Inspect(GRAMM_Program_Path);
                     }
                     else // do not copy the core to the project folder
                     {
                         GRAMM_Project_Path = Path.Combine(ProjectName, @"Computation");
-                        GUISettings.DefaultPathForGRAMM = Path.GetDirectoryName(dialog.FileName);
-                        GUISettings.WriteToFile();
+                        if (!GUISettings.CopyCoresToProject)
+                        {
+                            GUISettings.DefaultPathForGRAMM = Path.GetDirectoryName(dialog.FileName);
+                            GUISettings.WriteToFile();
+                        }
                     }
 
                     // write Log File
@@ -175,10 +181,14 @@ namespace Gral
                     DirectoryInfo di = new DirectoryInfo(Project_Computation_Path);
 
                     int instances = (int)numericUpDown33.Value;
+                    bool steadyCaseReset = engine.Generation == GrammEngine.Reset;
                     bool single = instances == 1;
 #if !__MonoCS__
-                    // Keep output provenance when one worker starts or continues a tracked project.
-                    if (single && GrammProgressRun.HasCheckpoint(Project_Computation_Path)) { single = false; }
+                    bool trackSingle = single && (engine.Generation != GrammEngine.Legacy || GrammProgressRun.HasCheckpoint(Project_Computation_Path));
+                    if (trackSingle && continueCalculation && GrammInstanceRanges.IsSteadyBinaryProject(Project_Computation_Path))
+                    {
+                        single = false;
+                    }
 #endif
                     if (single)
                     {
@@ -224,11 +234,18 @@ namespace Gral
                             MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 #else
-                        string param = GRAMM_Program_Path;
+                        GrammProgressRun nativeRun = null;
+                        if (trackSingle)
+                        {
+                            nativeRun = new GrammProgressRun(Project_Computation_Path) { EngineGeneration = engine.Generation };
+                            nativeRun.CaptureNativeBaseline();
+                        }
+                        int startSituation = (int)numericUpDown24.Value;
+                        string param = $"\"{GRAMM_Program_Path}\"";
                         if (continueCalculation)
                         {
-                            int startSituation = 1;
-                            startSituation = GetNextMissingSituation(startSituation, 10000, di.GetFiles("*.wnd"));
+                            startSituation = GetNextMissingSituation(1, 10000, di.GetFiles("*.wnd"));
+                            if (nativeRun != null) { startSituation = nativeRun.NativeResumeFrom(1, startSituation); }
                             if (GRAMM_Project_Path == String.Empty && startSituation > 0)
                             {
                                 param += " " + startSituation.ToString() + " " + 9999999.ToString();
@@ -240,8 +257,10 @@ namespace Gral
                         }
                         else
                         {
+                            // No explicit range: GRAMM uses its control file and enables receptor output.
                             param += " " + "\"" + GRAMM_Project_Path + "\"";
                         }
+                        nativeRun?.SaveNativePending(startSituation);
                         int node = NumaNode(CPUNode);
                         int processID = NumaProcessStarter.StartProcessOnNumaNode(param, node);
                         if (processID > 0) //sucessful start
@@ -278,7 +297,11 @@ namespace Gral
                         }
 
                         // now loop through the GRAMM instances
-                        var run = new GrammProgressRun(Project_Computation_Path) { Continuing = continueCalculation };
+                        var run = new GrammProgressRun(Project_Computation_Path)
+                        {
+                            Continuing = continueCalculation,
+                            EngineGeneration = engine.Generation
+                        };
                         grammProgress = run;
                         // Keep the wind-field delete dialog out of the pre-launch snapshot.
                         groupBox30.Enabled = false;
@@ -288,7 +311,8 @@ namespace Gral
                             assignments = await Task.Run(() =>
                             {
                                 run.CaptureBaseline(first_sit, final_sit);
-                                return GrammInstanceRanges.Create(Project_Computation_Path, first_sit, final_sit, instances, sunriseOriginalCount);
+                                return GrammInstanceRanges.SelectForEngine(steadyCaseReset, Project_Computation_Path,
+                                    first_sit, final_sit, instances, sunriseOriginalCount);
                             });
                         }
                         finally
@@ -297,7 +321,15 @@ namespace Gral
                         }
                         if (grammProgress != run || IsDisposed || Disposing) { return; }
 #if !__MonoCS__
-                        run.SavePending(assignments);
+                        int[] starts = new int[assignments.Count];
+                        FileInfo[] nativeWinds = continueCalculation && run.LegacyResume ? di.GetFiles("*.wnd") : null;
+                        for (int i = 0; i < assignments.Count; i++)
+                        {
+                            var (first, last) = assignments[i];
+                            starts[i] = !continueCalculation ? first : nativeWinds == null ? run.NextSituation(first, last)
+                                : run.NativeResumeFrom(first, GetNextMissingSituation(first, last, nativeWinds));
+                        }
+                        run.SavePending(assignments, starts);
 #endif
                         string launchError = null;
                         for (int index = 0; index < assignments.Count; index++)
@@ -377,9 +409,7 @@ namespace Gral
 #else
                             if (continueCalculation)
                             {
-                                instance_start = run.LegacyResume
-                                    ? GetNextMissingSituation(assignedFirst, instance_end, di.GetFiles("*.wnd"))
-                                    : run.NextSituation(assignedFirst, instance_end);
+                                instance_start = starts[index];
                                 retained = instance_start > instance_end;
                             }
                             // Reversed ranges make GRAMM fall back to its default full run.
@@ -428,7 +458,7 @@ namespace Gral
                                     {
                                         batchfile.WriteLine("rem No situations to resume in this instance.");
                                     }
-                                    else if (GUISettings.CopyCoresToProject == true)
+                                    else if (copyCore)
                                     {
                                         batchfile.WriteLine(Path.GetFileName(GRAMM_Program_Path) + gramm_start);
                                     }

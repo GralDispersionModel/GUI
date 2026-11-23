@@ -8,14 +8,44 @@ namespace Gral
 {
     internal static class GrammInstanceRanges
     {
+        internal static bool IsSteadyBinaryProject(string directory) => ReadSteadyModelTime(directory) != null;
+
+        internal static List<(int First, int Last)> SelectForEngine(bool steadyCaseReset, string computationDirectory,
+            int first, int last, int requested, int sunriseOriginalCount)
+        {
+            if (steadyCaseReset && ReadSteadyModelTime(computationDirectory, verifyScheduling: true) is string modelTime)
+            {
+                return CreateBalanced(computationDirectory, first, last, requested, sunriseOriginalCount, modelTime);
+            }
+
+            // V2701 added a rounded offset to each inclusive start. Older cores can depend on these starts.
+            int offset = Convert.ToInt32(Math.Max(1, (last - first) / (double)requested));
+            var ranges = new List<(int First, int Last)>();
+            while (true)
+            {
+                int end = ranges.Count + 1 == requested || last - first <= offset ? last : first + offset;
+                ranges.Add((first, end));
+                if (end == last) { return ranges; }
+                first = end + 1;
+            }
+        }
+
         internal static List<(int First, int Last)> Create(string computationDirectory, int first, int last,
             int requested, int sunriseOriginalCount)
+        {
+            return CreateBalanced(computationDirectory, first, last, requested, sunriseOriginalCount,
+                ReadSteadyModelTime(computationDirectory));
+        }
+
+        private static List<(int First, int Last)> CreateBalanced(string computationDirectory, int first, int last,
+            int requested, int sunriseOriginalCount, string modelTime)
         {
             int count = last - first + 1;
             int instances = Math.Min(requested, count);
             var ranges = new List<(int First, int Last)>(instances);
-            long[] weights = sunriseOriginalCount >= last && instances > 1 && instances < count
-                ? ReadSunriseWeights(computationDirectory, first, last) : null;
+            long[] weights = sunriseOriginalCount >= last && instances > 1 && instances < count &&
+                modelTime != null && ReadSetting(modelTime, out int seconds) && seconds > 1
+                ? ReadSunriseWeights(computationDirectory, first, last, seconds) : null;
 
             if (weights == null || weights.All(weight => weight == weights[0]))
             {
@@ -63,20 +93,52 @@ namespace Gral
             return ranges;
         }
 
-        private static long[] ReadSunriseWeights(string directory, int first, int last)
+        private static string ReadSteadyModelTime(string directory, bool verifyScheduling = false)
         {
             try
             {
                 using var input = File.OpenText(Path.Combine(directory, "GRAMMin.dat"));
-                if (input.ReadLine()?.Contains("Version") != true ||
-                    !string.Equals(input.ReadLine(), "y", StringComparison.OrdinalIgnoreCase)) { return null; }
+                string meteo = input.ReadLine();
+                if (meteo?.Contains("Version") == true) { meteo = input.ReadLine(); }
+                if (!string.Equals(meteo, "y", StringComparison.OrdinalIgnoreCase)) { return null; }
 
                 // IIN.dat is positional. Model times <= 1 use the domain-crossing scheme.
                 string[] settings = File.ReadLines(Path.Combine(directory, "IIN.dat")).Take(29).ToArray();
-                if (settings.Length < 29 || !ReadSetting(settings[3], out int seconds) || seconds <= 1 ||
-                    !ReadSetting(settings[25], out int transient) || transient != 0 ||
+                if (settings.Length < 29 || !ReadSetting(settings[25], out int transient) || transient != 0 ||
                     !ReadSetting(settings[28], out int format) || format != 0) { return null; }
+                if (verifyScheduling && !HasVerifiedWorkerSettings(directory, settings[17])) { return null; }
+                return settings[3];
+            }
+            catch (IOException) { return null; }
+            catch (UnauthorizedAccessException) { return null; }
+        }
 
+        private static bool HasVerifiedWorkerSettings(string directory, string scalarFlags)
+        {
+            if (!ReadSetting(scalarFlags, out int flags) || flags < 0 || flags > 1111111 ||
+                flags / 100 % 10 != 0 || flags.ToString(CultureInfo.InvariantCulture).Any(c => c != '0' && c != '1'))
+            {
+                return false; // ICTE is the hundreds digit of IFLAGS2.
+            }
+            string limit = File.ReadLines(Path.Combine(directory, "Max_Proc.txt")).FirstOrDefault();
+            if (!int.TryParse(limit, NumberStyles.Integer, CultureInfo.InvariantCulture, out int threads) || threads != 1) { return false; }
+
+            using var meteo = File.OpenText(Path.Combine(directory, "meteopgt.all"));
+            string[] header = meteo.ReadLine()?.Split(new[] { ' ', ';', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (header == null || header.Length < 3) { return false; }
+            // TEMPINT reads anemometer height, time-series flag and sector width. A zero flag randomizes direction.
+            return FiniteNumber(header[0], out double height) && height > 0 &&
+                FiniteNumber(header[1], out double timeSeries) && timeSeries != 0 &&
+                FiniteNumber(header[2], out double sectorWidth) && sectorWidth >= 0;
+        }
+
+        private static bool FiniteNumber(string text, out double value) =>
+            double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && double.IsFinite(value);
+
+        private static long[] ReadSunriseWeights(string directory, int first, int last, int seconds)
+        {
+            try
+            {
                 using var meteo = File.OpenText(Path.Combine(directory, "meteopgt.all"));
                 meteo.ReadLine();
                 meteo.ReadLine();
