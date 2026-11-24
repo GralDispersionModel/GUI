@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -181,7 +182,6 @@ namespace Gral
                     DirectoryInfo di = new DirectoryInfo(Project_Computation_Path);
 
                     int instances = (int)numericUpDown33.Value;
-                    bool steadyCaseReset = engine.Generation == GrammEngine.Reset;
                     bool single = instances == 1;
 #if !__MonoCS__
                     bool trackSingle = single && (engine.Generation != GrammEngine.Legacy || GrammProgressRun.HasCheckpoint(Project_Computation_Path));
@@ -234,12 +234,8 @@ namespace Gral
                             MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 #else
-                        GrammProgressRun nativeRun = null;
-                        if (trackSingle)
-                        {
-                            nativeRun = new GrammProgressRun(Project_Computation_Path) { EngineGeneration = engine.Generation };
-                            nativeRun.CaptureNativeBaseline();
-                        }
+                        var nativeRun = trackSingle ? new GrammProgressRun(Project_Computation_Path) { EngineGeneration = engine.Generation } : null;
+                        nativeRun?.CaptureNativeBaseline();
                         int startSituation = (int)numericUpDown24.Value;
                         string param = $"\"{GRAMM_Program_Path}\"";
                         if (continueCalculation)
@@ -311,7 +307,7 @@ namespace Gral
                             assignments = await Task.Run(() =>
                             {
                                 run.CaptureBaseline(first_sit, final_sit);
-                                return GrammInstanceRanges.SelectForEngine(steadyCaseReset, Project_Computation_Path,
+                                return GrammInstanceRanges.SelectForEngine(engine.Generation == GrammEngine.Reset, Project_Computation_Path,
                                     first_sit, final_sit, instances, sunriseOriginalCount);
                             });
                         }
@@ -321,15 +317,14 @@ namespace Gral
                         }
                         if (grammProgress != run || IsDisposed || Disposing) { return; }
 #if !__MonoCS__
-                        int[] starts = new int[assignments.Count];
-                        FileInfo[] nativeWinds = continueCalculation && run.LegacyResume ? di.GetFiles("*.wnd") : null;
-                        for (int i = 0; i < assignments.Count; i++)
+                        int[] nativeStarts = null;
+                        if (continueCalculation && run.LegacyResume)
                         {
-                            var (first, last) = assignments[i];
-                            starts[i] = !continueCalculation ? first : nativeWinds == null ? run.NextSituation(first, last)
-                                : run.NativeResumeFrom(first, GetNextMissingSituation(first, last, nativeWinds));
+                            var winds = di.GetFiles("*.wnd");
+                            nativeStarts = assignments.Select(range =>
+                                run.NativeResumeFrom(range.First, GetNextMissingSituation(range.First, range.Last, winds))).ToArray();
                         }
-                        run.SavePending(assignments, starts);
+                        int[] starts = run.SavePending(assignments, nativeStarts);
 #endif
                         string launchError = null;
                         for (int index = 0; index < assignments.Count; index++)
@@ -407,11 +402,8 @@ namespace Gral
                                 }
                             }
 #else
-                            if (continueCalculation)
-                            {
-                                instance_start = starts[index];
-                                retained = instance_start > instance_end;
-                            }
+                            instance_start = starts[index];
+                            retained = instance_start > instance_end;
                             // Reversed ranges make GRAMM fall back to its default full run.
                             if (!retained)
                             {

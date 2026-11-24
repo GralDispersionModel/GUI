@@ -74,16 +74,13 @@ namespace Gral
         {
             this.run = run;
             Font = font;
-            if (SystemInformation.HighContrast)
-            {
-                BackColor = SystemColors.Control;
-                ForeColor = SystemColors.ControlText;
-            }
+            BackColor = SystemColors.Control;
+            ForeColor = SystemColors.ControlText;
             summary.Font = heading = new Font(font, FontStyle.Bold);
             rows.Columns.Add("Instance", 1);
             rows.Columns.Add("Done", 1, HorizontalAlignment.Right);
             rows.Columns.Add("Left", 1, HorizontalAlignment.Right);
-            rows.DrawColumnHeader += DrawHeader;
+            rows.DrawColumnHeader += (_, e) => e.DrawDefault = true;
             rows.DrawSubItem += DrawProgress;
             foreach (var range in run.Ranges)
             {
@@ -133,19 +130,27 @@ namespace Gral
             if (reading || !Visible) { return; }
             reading = true;
             var token = closed.Token;
-            try
+            int[] result = null;
+            try { result = await Task.Run(() => run.CountWindFields(verified, token)); }
+            catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException) { } // Retry on the next tick.
+            finally { reading = false; }
+            if (token.IsCancellationRequested) { return; }
+
+            counts = result;
+            int done = counts?.Sum() ?? 0;
+            total.Maximum = run.PlannedSituations;
+            total.Value = done;
+            remaining.Text = counts == null ? "" : $"{total.Maximum - done} left";
+            remaining.Width = counts == null ? 0 : Math.Min(Width / 2, TextRenderer.MeasureText(remaining.Text, Font).Width + 2);
+            remaining.Left = Width - remaining.Width;
+            summary.Width = Math.Max(0, remaining.Left - 2);
+            if (counts == null)
             {
-                var result = await Task.Run(() => run.CountWindFields(verified, token));
-                if (token.IsCancellationRequested) { return; }
-                counts = result;
-                int done = counts.Sum();
-                total.Maximum = run.PlannedSituations;
-                total.Value = done;
+                summary.Text = summary.AccessibleDescription = "Wind fields unavailable. Retrying…";
+            }
+            else
+            {
                 int unassigned = total.Maximum - run.Ranges.Sum(range => range.Last - range.First + 1);
-                remaining.Text = $"{total.Maximum - done} left";
-                remaining.Width = Math.Min(Width / 2, TextRenderer.MeasureText(remaining.Text, Font).Width + 2);
-                remaining.Left = Width - remaining.Width;
-                summary.Width = remaining.Left - 2;
                 string progress = $"{done}/{total.Maximum}";
                 string notStarted = $"{unassigned} not started";
                 summary.AccessibleDescription = $"{done} of {total.Maximum} planned weather situations completed.";
@@ -154,28 +159,9 @@ namespace Gral
                 {
                     summary.Text = unassigned == 0 ? $"All: {progress}" : notStarted;
                 }
-                for (int i = 0; i < counts.Length; i++)
-                {
-                    UpdateRow(i, counts[i]);
-                }
-                rows.Invalidate();
             }
-            catch (Exception ex) when (ex is System.IO.IOException || ex is UnauthorizedAccessException)
-            {
-                if (!token.IsCancellationRequested)
-                {
-                    counts = null;
-                    remaining.Text = "";
-                    remaining.Width = 0;
-                    summary.Width = Width;
-                    summary.Text = "Wind fields unavailable. Retrying…";
-                    summary.AccessibleDescription = summary.Text;
-                    total.Value = 0;
-                    for (int i = 0; i < rows.Items.Count; i++) { UpdateRow(i, null); }
-                    rows.Invalidate();
-                }
-            }
-            finally { reading = false; }
+            for (int i = 0; i < rows.Items.Count; i++) { UpdateRow(i, counts?[i]); }
+            rows.Invalidate();
         }
 
         private void UpdateRow(int index, int? done)
@@ -188,26 +174,18 @@ namespace Gral
             row.ToolTipText = $"Original situations {range.First}–{range.Last}\n{row.SubItems[1].Text} completed/assigned, {row.SubItems[2].Text} left";
         }
 
-        private const TextFormatFlags CellText = TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter |
-            TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding;
-
-        private void DrawHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            e.Graphics.FillRectangle(SystemBrushes.Control, e.Bounds);
-            Rectangle cell = Rectangle.Inflate(e.Bounds, -3, 0);
-            TextRenderer.DrawText(e.Graphics, e.Header.Text, heading, cell, SystemColors.ControlText,
-                CellText | (e.ColumnIndex == 0 ? TextFormatFlags.Left : TextFormatFlags.Right));
-            e.Graphics.DrawLine(SystemPens.ControlLight, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
-        }
-
         private void DrawProgress(object sender, DrawListViewSubItemEventArgs e)
         {
+            if (e.ColumnIndex != 0 || counts == null)
+            {
+                e.DrawDefault = true;
+                return;
+            }
             bool selected = e.Item.Selected && rows.Focused;
             e.Graphics.FillRectangle(selected ? SystemBrushes.Highlight : SystemBrushes.Control, e.Bounds);
             Rectangle cell = Rectangle.Inflate(e.Bounds, -3, 0);
             TextRenderer.DrawText(e.Graphics, e.SubItem.Text, Font, cell, selected ? SystemColors.HighlightText : rows.ForeColor,
-                CellText | (e.ColumnIndex == 0 ? TextFormatFlags.Left : TextFormatFlags.Right));
-            if (e.ColumnIndex != 0 || counts == null) { return; }
+                TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
             var range = run.Ranges[e.ItemIndex];
             int height = Math.Min(LogicalToDeviceUnits(8), cell.Height);
             var track = new Rectangle(cell.Left + instanceWidth, cell.Top + (cell.Height - height) / 2,

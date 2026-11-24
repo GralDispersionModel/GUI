@@ -37,15 +37,12 @@ namespace Gral
             try { File.GetAttributes(assembly); }
             catch (FileNotFoundException) { adjacent = false; }
             if (layout == HostLayout.Native && !marked) { return new GrammEngine(Unknown, adjacent); }
-            if (adjacent)
-            {
-                var core = FileVersionInfo.GetVersionInfo(assembly);
-                if (core.ProductName != "GRAMM" || core.ProductVersion != version)
-                {
-                    throw new IOException("The selected GRAMM.exe and GRAMM.dll have different product versions. Select a complete GRAMM distribution.");
-                }
-            }
             if (!adjacent) { throw new IOException("The selected GRAMM.exe requires its matching GRAMM.dll. Select a complete GRAMM distribution."); }
+            var core = FileVersionInfo.GetVersionInfo(assembly);
+            if (core.ProductName != "GRAMM" || core.ProductVersion != version)
+            {
+                throw new IOException("The selected GRAMM.exe and GRAMM.dll have different product versions. Select a complete GRAMM distribution.");
+            }
             CheckRuntimeFile(Path.ChangeExtension(executable, ".runtimeconfig.json"), "runtimeOptions");
             CheckRuntimeFile(Path.ChangeExtension(executable, ".deps.json"), "targets");
             return new GrammEngine(layout == HostLayout.AppHost ? generation : Unknown, true);

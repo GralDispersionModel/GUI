@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -449,35 +450,23 @@ namespace Gral
                     }
 
                     //start routine GRAL*.exe to compute concentrations
-                    if (transient == 1 && gpuUseGpu && !gpuCpuThisStart && gpuFallbackThisStart == null)
-                    {
-                        try
-                        {
-                            int situations = (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(di.FullName, "meteopgt.all")) - 2;
-                            if (situations > 0) { knownWeatherSituations = situations; }
-                        }
-                        catch (IOException) { }
-                        catch (UnauthorizedAccessException) { }
-                    }
                     gpuRun = PrepareGralGpuRun(di.FullName, GRAL_Program_Path);
 #if __MonoCS__
                     if (gpuRun != null)
                     {
+                        if (transient == 1 && gpuRun.ShowProgress && StartSituation == 0)
+                        {
+                            int count = CountSteadySituations(di);
+                            if (count > 0) { knownWeatherSituations = count; }
+                        }
                         int first = StartSituation > 0 ? StartSituation : firstInDatSituation;
                         int? last = StartSituation > 0 ? FinalSituation : knownWeatherSituations;
-                        bool explicitRange = StartSituation > 0 && last.HasValue;
-                        var arguments = new List<string> { di.FullName };
-                        if (GRALSettings.Loglevel > 0) { arguments.Add("LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic)); }
-                        if (explicitRange)
+                        if (StartSituation > 0) { first = GetNextMissingSituation(first, FinalSituation, di.GetFiles("*.grz")); }
+                        if (last == null || first <= last)
                         {
-                            first = GetNextMissingSituation(first, last.Value, di.GetFiles("*.grz"));
-                            if (first <= last) { arguments.Add($"SITUATIONS:{first}:{last}"); }
-                        }
-                        if (!last.HasValue || first <= last)
-                        {
-                            var instance = gpuRun.AddInstance(first, last, explicitRange);
-                            try { StartLinuxGralGpuInstance(instance, GRAL_Program_Path, di.FullName, arguments); }
-                            catch (Exception error) { instance.StartFailed(error); throw; }
+                            var instance = gpuRun.AddInstance(first, last, StartSituation > 0);
+                            StartLinuxGralGpuInstance(instance, GRAL_Program_Path, di.FullName, GRALSettings.Loglevel,
+                                StartSituation > 0 ? $"SITUATIONS:{first}:{last}" : null);
                         }
                     }
                     else
@@ -524,16 +513,17 @@ namespace Gral
                     int numberOfInstances = (int)numericUpDown33.Value;
                     try
                     {
-
                         if (transient == 1) // steady state mode, in transient mode, weathersitcount is already available
                         {
-                            weathersit_count = (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(ProjectName, "Computation", "meteopgt.all")) - 2;
+                            weathersit_count = CountSteadySituations(di);
+                            if (gpuRun?.ShowProgress == true && weathersit_count > 0) { knownWeatherSituations = weathersit_count; }
                         }
                         else
                         {
                             //read mettimeseries.dat
                             List<string> data_mettimeseries = new List<string>();
-                            ReadMetTimeSeries(Path.Combine(ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
+                            bool read = ReadMetTimeSeries(Path.Combine(ProjectName, "Computation", "mettimeseries.dat"), ref data_mettimeseries);
+                            knownWeatherSituations = read && data_mettimeseries.Count > 0 ? data_mettimeseries.Count : null;
                             weathersit_count = Math.Max(data_mettimeseries.Count, 1);
                         }
                     }
@@ -542,8 +532,8 @@ namespace Gral
                     int first_sit = Convert.ToInt32(numericUpDown5.Value);
                     int final_sit = weathersit_count;
                     int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
-                    int instance_start = first_sit;
-                    int instance_end = instance_start + offset;
+                    int instance_end = first_sit + offset;
+                    if (gpuRun != null && knownWeatherSituations.HasValue) { instance_end = Math.Min(instance_end, final_sit); }
 
                     string param = gpuRun == null ? GRAL_Program_Path : "\"" + GRAL_Program_Path + "\"";
 
@@ -559,35 +549,17 @@ namespace Gral
                     {
                         param += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
                     }
-                    string consoleArgument = param;
-                    int gpuFirst = firstInDatSituation;
-                    int? gpuLast = knownWeatherSituations;
-                    bool explicitRange = false;
-
-                    if (StartSituation > 0 && FinalSituation >= StartSituation) // start 1 instance with a chunk of situations or when continue a calculation
-                    {
-                        StartSituation = GetNextMissingSituation(StartSituation, FinalSituation, di.GetFiles("*.grz"));
-                        param += " " + "\"" + "SITUATIONS:" + StartSituation.ToString() + ":" + FinalSituation.ToString() + "\"";
-                        (gpuFirst, gpuLast, explicitRange) = (StartSituation, FinalSituation, true);
-                    }
-                    else if (numberOfInstances > 1)
-                    {
-                        if (gpuRun != null && knownWeatherSituations.HasValue) { instance_end = Math.Min(instance_end, final_sit); }
-                        instance_start = GetNextMissingSituation(instance_start, instance_end, di.GetFiles("*.grz"));
-                        param += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
-                        (gpuFirst, gpuLast, explicitRange) = (instance_start, instance_end, true);
-                    }
-                    else if (continueCalculation)
-                    {
-                        instance_start = GetNextMissingSituation(instance_start, final_sit, di.GetFiles("*.grz"));
-                        param += " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + final_sit.ToString() + "\"";
-                        (gpuFirst, gpuLast, explicitRange) = (instance_start, final_sit, true);
-                    }
-                    StartGralInstance(param, NumaNode(CPUNode), di.FullName, gpuRun, gpuFirst, gpuLast, explicitRange);
+                    bool chunk = StartSituation > 0 && FinalSituation >= StartSituation;
+                    bool explicitRange = chunk || numberOfInstances > 1 || continueCalculation;
+                    int first = explicitRange ? first_sit : firstInDatSituation;
+                    int? last = explicitRange ? final_sit : knownWeatherSituations;
+                    if (chunk) { (first, last) = (StartSituation, FinalSituation); }
+                    else if (numberOfInstances > 1) { last = instance_end; }
+                    StartGralInstance(param, NumaNode(CPUNode), di, gpuRun, first, last, explicitRange);
 
                     if (StartSituation == 0) // not a chunk of situations->start multiple instances in an own thread to avoid inresponsible UI
                     {
-                        StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, consoleArgument, di, gpuRun);
+                        StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, param, di, gpuRun);
                     }
 #endif
 
@@ -646,42 +618,33 @@ namespace Gral
 #else
 #if NET6_0_OR_GREATER
 
-            var gpuStops = new List<Task>();
             string computation = Path.Combine(ProjectName, "Computation");
-            bool hasTrackedProcess = false;
-            foreach (var run in activeGpuRuns)
+            var tracked = activeGpuRuns.Where(run => RunMatchesComputation(run, computation) && run.RunningInstances.Any()).ToList();
+            if (tracked.Count > 0)
             {
-                if (!RunMatchesComputation(run, computation)) { continue; }
-                var running = new List<GralGpuRun.Instance>(run.RunningInstances);
-                if (running.Count == 0) { continue; }
-                hasTrackedProcess = true;
-                if (run.RequestStop()) { gpuStops.Add(StopTrackedGralGpuRun(run, running)); }
+                await Task.WhenAll(tracked.Where(run => run.RequestStop()).Select(StopTrackedGralGpuRun));
+                CheckConFiles();
+                return;
             }
-            if (hasTrackedProcess)
+
+            foreach (int processID in CoreProcessID)
             {
-                await Task.WhenAll(gpuStops);
-            }
-            else
-            {
-                foreach (int processID in CoreProcessID)
+                try
                 {
+                    _ = WaitForClientConnect(processID);
+                }
+                catch (System.TimeoutException)
+                {
+                    // Console app might already be busy or closed
                     try
                     {
-                        _ = WaitForClientConnect(processID);
+                        Process localById = Process.GetProcessById(processID);
+                        localById.Kill();
                     }
-                    catch (System.TimeoutException)
-                    {
-                        // Console app might already be busy or closed
-                        try
-                        {
-                            Process localById = Process.GetProcessById(processID);
-                            localById.Kill();
-                        }
-                        catch { }
-                    }
-                }       
-                CoreProcessID.Clear();
+                    catch { }
+                }
             }
+            CoreProcessID.Clear();
 #else
             try
             {
@@ -707,11 +670,10 @@ namespace Gral
             return true;
         }
 
-        private static async Task StopTrackedGralGpuRun(GralGpuRun run, List<GralGpuRun.Instance> instances)
+        private static async Task StopTrackedGralGpuRun(GralGpuRun run)
         {
-            var stops = new List<Task<bool>>();
-            foreach (var instance in instances) { stops.Add(StopTrackedGralGpuInstance(instance)); }
-            if (Array.Exists(await Task.WhenAll(stops), delivered => !delivered)) { run.RetryStopAllowed(); }
+            bool[] delivered = await Task.WhenAll(run.RunningInstances.Select(StopTrackedGralGpuInstance));
+            if (delivered.Contains(false)) { run.RetryStopAllowed(); }
         }
 
         private static async Task<bool> StopTrackedGralGpuInstance(GralGpuRun.Instance instance)
@@ -726,13 +688,13 @@ namespace Gral
                 using var writer = new StreamWriter(server);
                 await writer.WriteLineAsync("StopGRAL".AsMemory(), timeout.Token);
                 await writer.FlushAsync(timeout.Token);
-                instance.RecordStopDelivery("stop message sent to GRAL.");
+                instance.Log("stop message sent to GRAL.");
                 return true;
             }
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException || error is OperationCanceledException)
             {
                 if (!instance.IsRunning) { return true; }
-                instance.RecordStopDelivery("stop message could not be delivered. Press Stop again or stop GRAL in its console. " + error.Message);
+                instance.Log("stop message could not be delivered. Press Stop again or stop GRAL in its console. " + error.Message);
                 return false;
             }
         }
@@ -810,8 +772,6 @@ namespace Gral
                 {
                     instance_end = FinalSit;
                 }
-                instance_start = GetNextMissingSituation(instance_start, instance_end, Di.GetFiles("*.grz"));
-                string param = GRAL_Arguments + " " + "\"" + "SITUATIONS:" + instance_start.ToString() + ":" + instance_end.ToString() + "\"";
                 int node = CPUNode;
                 if (CPUNode == 4)
                 {
@@ -823,15 +783,23 @@ namespace Gral
                     nodeCounter++;
                     node = nodeCounter % 4;
                 }
-                StartGralInstance(param, node, Di.FullName, gpuRun, instance_start, instance_end, true);
+                StartGralInstance(GRAL_Arguments, node, Di, gpuRun, instance_start, instance_end, true);
                 // new start value, new instance
                 instance_start = instance_end + 1;
                 count++;
             }
         }
 
-        private void StartGralInstance(string command, int node, string computation, GralGpuRun gpuRun, int first, int? last, bool explicitRange)
+        private static int CountSteadySituations(DirectoryInfo computation) =>
+            (int)GralStaticFunctions.St_F.CountLinesInFile(Path.Combine(computation.FullName, "meteopgt.all")) - 2;
+
+        private void StartGralInstance(string command, int node, DirectoryInfo computation, GralGpuRun gpuRun, int first, int? last, bool explicitRange)
         {
+            if (explicitRange)
+            {
+                first = GetNextMissingSituation(first, last.Value, computation.GetFiles("*.grz"));
+                command += $" \"SITUATIONS:{first}:{last}\"";
+            }
             if (gpuRun == null)
             {
                 int cpuProcessID = NumaProcessStarter.StartProcessOnNumaNode(command, node);
@@ -846,13 +814,8 @@ namespace Gral
             {
                 Environment.SetEnvironmentVariable("INU_GPU_METRICS", instance.MetricsPath);
                 Environment.SetEnvironmentVariable("INU_GPU_STDERR", instance.RuntimePath);
-                int processID = NumaProcessStarter.StartProcessOnNumaNode(command, node, computation, out var process);
+                int processID = NumaProcessStarter.StartProcessOnNumaNode(command, node, computation.FullName, out var process);
                 instance.Started(processID, process, () => NumaProcessStarter.ReadExitCode(process));
-            }
-            catch (Exception error)
-            {
-                instance.StartFailed(error);
-                throw;
             }
             finally
             {

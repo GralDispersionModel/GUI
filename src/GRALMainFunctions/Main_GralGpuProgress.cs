@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Windows.Forms;
+using GralMainForms;
 
 namespace Gral
 {
@@ -42,7 +43,7 @@ namespace Gral
                     gpuRunsTimer.Tick += UpdateGralGpuRuns;
                     FormClosed += (_, _) =>
                     {
-                        foreach (var active in activeGpuRuns) { active.CloseMonitoring(); }
+                        activeGpuRuns.ForEach(active => active.CloseMonitoring());
                     };
                 }
                 gpuRunsTimer.Start();
@@ -76,11 +77,8 @@ namespace Gral
                 foreach (var field in new[] { ("name", "Device"), ("backend", "Backend"), ("driver_cuda", "Driver runtime"),
                     ("nvrtc_version", "Runtime compiler"), ("target_arch", "Target architecture"), ("settings_file", "GPU settings file"), ("manifest", "GPU manifest") })
                 {
-                    if (report.TryGetProperty(field.Item1, out JsonElement value) && value.ValueKind == JsonValueKind.String &&
-                        !string.IsNullOrWhiteSpace(value.GetString()))
-                    {
-                        summary.Add(field.Item2 + ": " + value.GetString());
-                    }
+                    string value = GpuOptions.JsonText(report, field.Item1);
+                    if (!string.IsNullOrWhiteSpace(value)) { summary.Add(field.Item2 + ": " + value); }
                 }
                 if (report.TryGetProperty("total_memory_bytes", out JsonElement memory) && memory.ValueKind == JsonValueKind.Number && memory.TryGetInt64(out long bytes))
                 {
@@ -100,15 +98,14 @@ namespace Gral
                 gpuRunStatus = new Label { Name = "gralGpuRunStatus", UseMnemonic = false, AutoEllipsis = true };
                 gpuRunElapsed = new Label { Name = "gralGpuRunElapsed", UseMnemonic = false, AutoEllipsis = true };
                 gpuRunProgress = new ProgressBar { Name = "gralGpuRunProgress", AccessibleName = "GRAL GPU weather situation results" };
-                gpuRunLog = new Button { Name = "gralGpuRunLog", Text = "Open GPU run &log", AccessibleName = "Open GPU run log", UseVisualStyleBackColor = true };
+                gpuRunLog = new Button { Name = "gralGpuRunLog", UseVisualStyleBackColor = true };
                 int line = label69.Height;
                 gpuRunStatus.SetBounds(0, 0, gpuRunPanel.Width, line + 1);
                 gpuRunElapsed.SetBounds(0, gpuRunStatus.Bottom, gpuRunPanel.Width, line + 1);
                 gpuRunProgress.SetBounds(0, gpuRunElapsed.Bottom + 3, gpuRunPanel.Width, progressBar4.Height);
                 gpuRunLog.SetBounds(0, gpuRunProgress.Bottom + 5, gpuRunPanel.Width, Math.Max(line + 7, gpuRunPanel.Height - gpuRunProgress.Bottom - 5));
-                gpuRunLog.Click += (_, _) => OpenGralGpuRunLog(displayedGpuRun.LogPath);
+                gpuRunLog.Click += (_, _) => GpuOptions.OpenFile(this, displayedGpuRun.LogPath);
                 toolTip1.SetToolTip(gpuRunProgress, "Completed GPU results by weather situation. Progress within a single situation is unavailable.");
-                toolTip1.SetToolTip(gpuRunLog, "Open the support log for this run. The instance diagnostics are stored beside it.");
                 gpuRunPanel.Controls.AddRange(new Control[] { gpuRunStatus, gpuRunElapsed, gpuRunProgress, gpuRunLog });
                 groupBox16.Controls.Add(gpuRunPanel);
             }
@@ -130,14 +127,10 @@ namespace Gral
         private void RefreshGralGpuProgress()
         {
             var run = displayedGpuRun;
-            var status = run.Status;
-            if (gpuRunStatus.Text != status)
-            {
-                gpuRunStatus.Text = status;
-                toolTip1.SetToolTip(gpuRunStatus, status);
-            }
-            string elapsed = $"Elapsed: {(long)run.Elapsed.TotalHours:00}:{run.Elapsed.Minutes:00}:{run.Elapsed.Seconds:00}";
-            if (gpuRunElapsed.Text != elapsed) { gpuRunElapsed.Text = elapsed; }
+            gpuRunStatus.Text = run.Status;
+            toolTip1.SetToolTip(gpuRunStatus, gpuRunStatus.Text);
+            var elapsed = run.Elapsed;
+            gpuRunElapsed.Text = $"Elapsed: {(long)elapsed.TotalHours:00}:{elapsed.Minutes:00}:{elapsed.Seconds:00}";
             bool measured = run.Completed > 0 && run.Planned > 0;
             gpuRunProgress.Style = measured || run.Finished ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee;
             gpuRunProgress.Maximum = Math.Max(1, run.Planned ?? 1);
@@ -145,18 +138,10 @@ namespace Gral
             gpuRunProgress.AccessibleDescription = measured
                 ? $"{run.Completed} of {run.Planned} weather situations have returned a GPU result."
                 : run.Finished ? "GRAL is no longer running. See the run log for GPU results." : "Waiting for a measurable GPU result.";
-            if (run.LogError != null)
-            {
-                gpuRunLog.Text = "Open partial run &log";
-                gpuRunLog.AccessibleName = "Open partial GPU run log";
-                toolTip1.SetToolTip(gpuRunLog, "The log could not be updated. " + run.LogError);
-            }
-            else if (gpuRunLog.Text != "Open GPU run &log")
-            {
-                gpuRunLog.Text = "Open GPU run &log";
-                gpuRunLog.AccessibleName = "Open GPU run log";
-                toolTip1.SetToolTip(gpuRunLog, "Open the support log for this run. The instance diagnostics are stored beside it.");
-            }
+            gpuRunLog.Text = run.LogError == null ? "Open GPU run &log" : "Open partial run &log";
+            gpuRunLog.AccessibleName = run.LogError == null ? "Open GPU run log" : "Open partial GPU run log";
+            toolTip1.SetToolTip(gpuRunLog, run.LogError == null ? "Open the support log for this run. The instance diagnostics are stored beside it."
+                : "The log could not be updated. " + run.LogError);
         }
 
         private string LatestGralGpuLog(string computation)
@@ -181,17 +166,8 @@ namespace Gral
             string.Equals(run.ComputationPath, Path.GetFullPath(computation).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
                 OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 
-        private void OpenGralGpuRunLog(string fileName)
-        {
-            try { Process.Start(new ProcessStartInfo(fileName) { UseShellExecute = true })?.Dispose(); }
-            catch (Exception error)
-            {
-                MessageBox.Show(this, error.Message + Environment.NewLine + fileName, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
 #if __MonoCS__
-        private static void StartLinuxGralGpuInstance(GralGpuRun.Instance instance, string executable, string computation, List<string> arguments)
+        private static void StartLinuxGralGpuInstance(GralGpuRun.Instance instance, string executable, string computation, int logLevel, string range)
         {
             var start = new ProcessStartInfo("gnome-terminal") { UseShellExecute = false, WorkingDirectory = computation };
             var command = start.ArgumentList;
@@ -201,7 +177,9 @@ namespace Gral
             }
             if (Path.GetExtension(executable).Equals(".dll", StringComparison.OrdinalIgnoreCase)) { command.Add("dotnet"); }
             command.Add(executable);
-            foreach (string argument in arguments) { command.Add(argument); }
+            command.Add(computation);
+            if (logLevel > 0) { command.Add("LOGLEVEL0" + logLevel.ToString(CultureInfo.InvariantCulture)); }
+            if (range != null) { command.Add(range); }
             start.Environment["INU_GPU_METRICS"] = instance.MetricsPath;
             start.Environment["INU_GPU_STDERR"] = instance.RuntimePath;
             var process = Process.Start(start);

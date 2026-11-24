@@ -42,20 +42,15 @@ namespace Gral
         {
             int count = last - first + 1;
             int instances = Math.Min(requested, count);
-            var ranges = new List<(int First, int Last)>(instances);
             long[] weights = sunriseOriginalCount >= last && instances > 1 && instances < count &&
                 modelTime != null && ReadSetting(modelTime, out int seconds) && seconds > 1
                 ? ReadSunriseWeights(computationDirectory, first, last, seconds) : null;
 
             if (weights == null || weights.All(weight => weight == weights[0]))
             {
-                for (int instance = 0; instance < instances; instance++)
-                {
-                    int size = count / instances + (instance < count % instances ? 1 : 0);
-                    ranges.Add((first, first + size - 1));
-                    first += size;
-                }
-                return ranges;
+                // Give one extra situation to each of the first count % instances workers.
+                int Offset(int worker) => worker * (count / instances) + Math.Min(worker, count % instances);
+                return Enumerable.Range(0, instances).Select(i => (first + Offset(i), first - 1 + Offset(i + 1))).ToList();
             }
 
             // Find the smallest maximum integration time feasible with this many contiguous ranges.
@@ -79,6 +74,7 @@ namespace Gral
                 else { low = limit + 1; }
             }
 
+            var ranges = new List<(int First, int Last)>(instances);
             int next = 0;
             for (int remaining = instances - 1; remaining >= 0; remaining--)
             {
@@ -97,20 +93,26 @@ namespace Gral
         {
             try
             {
-                using var input = File.OpenText(Path.Combine(directory, "GRAMMin.dat"));
-                string meteo = input.ReadLine();
-                if (meteo?.Contains("Version") == true) { meteo = input.ReadLine(); }
-                if (!string.Equals(meteo, "y", StringComparison.OrdinalIgnoreCase)) { return null; }
-
-                // IIN.dat is positional. Model times <= 1 use the domain-crossing scheme.
-                string[] settings = File.ReadLines(Path.Combine(directory, "IIN.dat")).Take(29).ToArray();
-                if (settings.Length < 29 || !ReadSetting(settings[25], out int transient) || transient != 0 ||
-                    !ReadSetting(settings[28], out int format) || format != 0) { return null; }
-                if (verifyScheduling && !HasVerifiedWorkerSettings(directory, settings[17])) { return null; }
+                var settings = ReadSteadySettings(directory);
+                if (settings == null || verifyScheduling && !HasVerifiedWorkerSettings(directory, settings[17])) { return null; }
                 return settings[3];
             }
-            catch (IOException) { return null; }
-            catch (UnauthorizedAccessException) { return null; }
+            catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException) { return null; }
+        }
+
+        // GRAMM reads ISTAT and IOUT by position. A supported run uses steady binary meteopgt.all fields.
+        internal static string[] ReadSteadySettings(string directory)
+        {
+            using var input = File.OpenText(Path.Combine(directory, "GRAMMin.dat"));
+            string meteo = input.ReadLine();
+            if (meteo?.Contains("Version") == true) { meteo = input.ReadLine(); }
+            string[] settings = File.ReadLines(Path.Combine(directory, "IIN.dat")).Take(29).ToArray();
+            if (string.IsNullOrWhiteSpace(meteo) || settings.Length < 29 || !ReadSetting(settings[25], out int steady) ||
+                !ReadSetting(settings[28], out int format))
+            {
+                throw new InvalidDataException("The GRAMM output settings could not be read.");
+            }
+            return string.Equals(meteo, "y", StringComparison.OrdinalIgnoreCase) && steady == 0 && format == 0 ? settings : null;
         }
 
         private static bool HasVerifiedWorkerSettings(string directory, string scalarFlags)
@@ -139,22 +141,16 @@ namespace Gral
         {
             try
             {
-                using var meteo = File.OpenText(Path.Combine(directory, "meteopgt.all"));
-                meteo.ReadLine();
-                meteo.ReadLine();
                 var weights = new long[last - first + 1];
                 char[] separators = { ' ', ';', ',', '\t' };
-                for (int id = 1; id <= last; id++)
+                int index = 0;
+                foreach (string line in File.ReadLines(Path.Combine(directory, "meteopgt.all")).Skip(first + 1).Take(weights.Length))
                 {
-                    string line = meteo.ReadLine();
-                    if (line == null) { return null; }
-                    if (id < first) { continue; }
                     string[] fields = line.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                    if (fields.Length < 3 || !double.TryParse(fields[1], NumberStyles.Float,
-                        CultureInfo.InvariantCulture, out double speed) || !double.IsFinite(speed) ||
+                    if (fields.Length < 3 || !FiniteNumber(fields[1], out double speed) ||
                         !int.TryParse(fields[2], out int stability) || stability < 1 || stability > 7) { return null; }
                     // GRAMM Meteopgtall.Integrationtime, dynamic sunrise. Centiseconds retain 0.17 T exactly.
-                    weights[id - first] = stability switch
+                    weights[index++] = stability switch
                     {
                         <= 3 => 21600L * 100,
                         4 => Math.Min(17L * seconds, 600L * 100),
@@ -165,7 +161,7 @@ namespace Gral
                         _ => 100L * seconds
                     };
                 }
-                return weights;
+                return index == weights.Length ? weights : null;
             }
             catch (IOException) { return null; }
             catch (UnauthorizedAccessException) { return null; }

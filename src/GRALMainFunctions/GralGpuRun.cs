@@ -12,10 +12,9 @@ namespace Gral
     {
         private readonly Stopwatch clock = Stopwatch.StartNew();
         private readonly List<Instance> instances = new();
-        private bool stopRequested;
-        private bool stopNotDelivered;
+        private enum StopRequest { None, Requested, Failed }
+        private StopRequest stop;
         private bool startFailed;
-        private TimeSpan? stoppedAt;
         private int lastLoggedMinute;
 
         internal string ComputationPath { get; }
@@ -23,8 +22,8 @@ namespace Gral
         internal string LogPath { get; }
         internal string LogError { get; private set; }
         internal bool ShowProgress { get; set; }
-        internal TimeSpan Elapsed => stoppedAt ?? clock.Elapsed;
-        internal bool Finished => stoppedAt.HasValue;
+        internal TimeSpan Elapsed => clock.Elapsed;
+        internal bool Finished => !clock.IsRunning;
         internal bool HasLaunched => instances.Any(instance => instance.Pid > 0);
         internal IEnumerable<Instance> RunningInstances => instances.Where(instance => instance.IsRunning);
         internal int Completed => instances.Sum(instance => instance.Completed);
@@ -55,6 +54,7 @@ namespace Gral
         internal Instance AddInstance(int first, int? last, bool explicitRange)
         {
             var instance = new Instance(this, instances.Count + 1, first, last);
+            Directory.CreateDirectory(instance.DirectoryPath);
             instances.Add(instance);
             string range = last.HasValue ? $"{first}–{last.Value}" : $"{first} onward (total unknown)";
             string engineLog = explicitRange ? $"Logfile_GRALCore({first}_{last}).txt" : "Logfile_GRALCore.txt";
@@ -66,18 +66,13 @@ namespace Gral
 
         internal bool RequestStop()
         {
-            if (stopRequested || Finished) { return false; }
-            stopRequested = true;
-            stopNotDelivered = false;
+            if (stop == StopRequest.Requested || Finished) { return false; }
+            stop = StopRequest.Requested;
             Write("Stop requested in GUI.");
             return true;
         }
 
-        internal void RetryStopAllowed()
-        {
-            stopRequested = false;
-            stopNotDelivered = true;
-        }
+        internal void RetryStopAllowed() => stop = StopRequest.Failed;
 
         internal void CloseMonitoring()
         {
@@ -88,6 +83,7 @@ namespace Gral
         internal void StartFailed(Exception error)
         {
             startFailed = true;
+            foreach (var instance in instances.Where(instance => instance.Pid == 0)) { instance.StartFailed(error); }
             Write("The requested GRAL launch did not finish. " + error.Message);
         }
 
@@ -96,7 +92,7 @@ namespace Gral
             foreach (var instance in instances) { instance.Poll(); }
             if (!Finished && instances.All(instance => instance.Finished))
             {
-                stoppedAt = clock.Elapsed;
+                clock.Stop();
                 Write(Status);
             }
             int elapsedMinutes = (int)Elapsed.TotalMinutes;
@@ -113,15 +109,12 @@ namespace Gral
             {
                 if (Finished)
                 {
-                    if (startFailed || instances.Any(instance => instance.ExitCode != 0))
-                    {
-                        return $"GRAL stopped · GPU {ResultCount}";
-                    }
-                    if (instances.Count == 0) { return "No GRAL situations started."; }
-                    return (stopRequested ? "GRAL stopped" : "GRAL exited") + $" · GPU {ResultCount}";
+                    if (!startFailed && instances.Count == 0) { return "No GRAL situations started."; }
+                    bool stopped = startFailed || stop == StopRequest.Requested || instances.Any(instance => instance.ExitCode != 0);
+                    return (stopped ? "GRAL stopped" : "GRAL exited") + $" · GPU {ResultCount}";
                 }
-                if (stopRequested) { return "Stop requested…"; }
-                if (stopNotDelivered) { return "Stop not sent. Retry Stop."; }
+                if (stop == StopRequest.Requested) { return "Stop requested…"; }
+                if (stop == StopRequest.Failed) { return "Stop not sent. Retry Stop."; }
                 if (Completed == 0)
                 {
                     return instances.Any(instance => instance.RuntimeSeen)
@@ -137,25 +130,21 @@ namespace Gral
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException) { LogError = error.Message; }
         }
 
-        internal sealed class Instance
+        internal sealed class Instance(GralGpuRun run, int number, int first, int? last)
         {
-            private readonly GralGpuRun run;
-            private readonly int first;
-            private readonly int? last;
             private readonly HashSet<int> situations = new();
             private readonly List<byte> pendingMetric = new();
             private long metricsOffset;
-            private bool discardingMetric;
-            private string metricsReadError;
             private int exitReadRetries;
             private Func<int?> readExitCode;
             private IDisposable process;
 
-            internal int Number { get; }
+            internal int Number => number;
             internal int Pid { get; private set; }
-            internal string MetricsPath { get; }
-            internal string RuntimePath { get; }
-            internal string ExitPath { get; }
+            internal string DirectoryPath { get; } = Path.Combine(run.DirectoryPath, $"Instance {number}");
+            internal string MetricsPath => Path.Combine(DirectoryPath, "GRAL_GPU_metrics.jsonl");
+            internal string RuntimePath => Path.Combine(DirectoryPath, "GRAL_GPU_runtime.log");
+            internal string ExitPath => Path.Combine(DirectoryPath, "exit.txt");
             internal bool RuntimeSeen { get; private set; }
             internal int Completed => situations.Count;
             internal int? Planned => last - first + 1;
@@ -163,45 +152,26 @@ namespace Gral
             internal int? ExitCode { get; private set; }
             internal bool IsRunning => !Finished && readExitCode != null && !readExitCode().HasValue;
 
-            internal Instance(GralGpuRun run, int number, int first, int? last)
-            {
-                this.run = run;
-                this.first = first;
-                this.last = last;
-                Number = number;
-                string directory = Path.Combine(run.DirectoryPath, $"Instance {number}");
-                Directory.CreateDirectory(directory);
-                MetricsPath = Path.Combine(directory, "GRAL_GPU_metrics.jsonl");
-                RuntimePath = Path.Combine(directory, "GRAL_GPU_runtime.log");
-                ExitPath = Path.Combine(directory, "exit.txt");
-            }
-
             internal void Started(int pid, IDisposable process, Func<int?> readExitCode)
             {
                 Pid = pid;
                 this.process = process;
                 this.readExitCode = readExitCode;
-                run.Write($"Instance {Number}: launched (PID {pid}).");
+                Log($"launched (PID {pid}).");
             }
 
-            internal void RecordStopDelivery(string message)
-            {
-                run.Write($"Instance {Number}: {message}");
-            }
+            internal void Log(string message) => run.Write($"Instance {Number}: {message}");
 
             internal void CloseMonitoring()
             {
-                if (!Finished && process != null)
-                {
-                    readExitCode = null;
-                    process.Dispose();
-                }
+                readExitCode = null;
+                process?.Dispose();
             }
 
             internal void StartFailed(Exception error)
             {
                 Finished = true;
-                run.Write($"Instance {Number}: could not start GRAL. {error.Message}");
+                Log($"could not start GRAL. {error.Message}");
             }
 
             internal void Poll()
@@ -210,62 +180,52 @@ namespace Gral
                 if (!RuntimeSeen && File.Exists(RuntimePath))
                 {
                     RuntimeSeen = true;
-                    run.Write($"Instance {Number}: GPU runtime log opened. The GPU reports progress when a situation returns its result.");
+                    Log("GPU runtime log opened. The GPU reports progress when a situation returns its result.");
                 }
                 int? exitCode = readExitCode();
-                if (!ReadMetrics() || !exitCode.HasValue) { return; }
-                if (metricsReadError != null)
+                try
                 {
-                    if (++exitReadRetries < 5) { return; }
-                    run.Write($"Instance {Number}: the final GPU metrics could not be read. The count may be incomplete. {metricsReadError}");
+                    if (!ReadMetrics()) { return; }
                 }
+                catch (FileNotFoundException) { } // Engines without metrics still have a process exit status.
+                catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
+                {
+                    if (!exitCode.HasValue || ++exitReadRetries < 5) { return; }
+                    Log($"the final GPU metrics could not be read. The count may be incomplete. {error.Message}");
+                }
+                if (!exitCode.HasValue) { return; }
 
                 Finished = true;
                 ExitCode = exitCode;
-                process.Dispose();
-                run.Write(exitCode == int.MinValue
-                    ? $"Instance {Number}: the console closed before GRAL reported an exit code."
-                    : $"Instance {Number}: GRAL exited with code {exitCode}; GPU results recorded: {Completed}.");
+                CloseMonitoring();
+                Log(exitCode == int.MinValue
+                    ? "the console closed before GRAL reported an exit code."
+                    : $"GRAL exited with code {exitCode}; GPU results recorded: {Completed}.");
             }
 
             // Read only new, newline-terminated records. An incomplete write is carried into the next poll.
             private bool ReadMetrics()
             {
-                metricsReadError = null;
-                try
+                const int maxRecordBytes = 1024 * 1024;
+                using var stream = new FileStream(MetricsPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                if (metricsOffset >= stream.Length) { return true; }
+                stream.Position = metricsOffset;
+                var buffer = new byte[(int)Math.Min(stream.Length - metricsOffset, 64 * 1024)];
+                int read = stream.Read(buffer);
+                foreach (byte value in buffer.AsSpan(0, read))
                 {
-                    using var stream = new FileStream(MetricsPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-                    if (metricsOffset >= stream.Length) { return true; }
-                    stream.Position = metricsOffset;
-                    var buffer = new byte[(int)Math.Min(stream.Length - metricsOffset, 64 * 1024)];
-                    int length = stream.Read(buffer, 0, buffer.Length);
-                    metricsOffset += length;
-                    for (int i = 0; i < length; i++)
+                    if (value == (byte)'\n')
                     {
-                        if (buffer[i] == (byte)'\n')
-                        {
-                            if (!discardingMetric) { RecordMetric(); }
-                            discardingMetric = false;
-                            pendingMetric.Clear();
-                        }
-                        else if (!discardingMetric)
-                        {
-                            if (pendingMetric.Count == 1024 * 1024)
-                            {
-                                discardingMetric = true;
-                                pendingMetric.Clear();
-                            }
-                            else { pendingMetric.Add(buffer[i]); }
-                        }
+                        if (pendingMetric.Count <= maxRecordBytes) { RecordMetric(); }
+                        pendingMetric.Clear();
                     }
-                    return metricsOffset >= stream.Length;
+                    else if (pendingMetric.Count <= maxRecordBytes)
+                    {
+                        pendingMetric.Add(value); // One extra byte marks an oversized record until its newline.
+                    }
                 }
-                catch (FileNotFoundException) { return true; }
-                catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
-                {
-                    metricsReadError = error.Message;
-                    return true;
-                }
+                metricsOffset += read;
+                return metricsOffset >= stream.Length;
             }
 
             private void RecordMetric()
@@ -277,7 +237,7 @@ namespace Gral
                     if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("situation", out var value) && value.ValueKind == JsonValueKind.Number &&
                         value.TryGetInt32(out int situation) && situation >= first && (!last.HasValue || situation <= last.Value) && situations.Add(situation))
                     {
-                        run.Write($"Instance {Number}: GPU result received for weather situation {situation}.");
+                        Log($"GPU result received for weather situation {situation}.");
                     }
                 }
                 catch (JsonException) { }

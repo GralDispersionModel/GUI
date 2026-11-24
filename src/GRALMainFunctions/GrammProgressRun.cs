@@ -9,12 +9,15 @@ using System.Threading;
 
 namespace Gral
 {
-    internal sealed class GrammProgressRun
+    internal sealed class GrammProgressRun(string directory)
     {
         internal readonly List<(int Instance, int First, int Last, int ResumeFrom)> Ranges = new();
         private const string Checkpoint = ".gramm-gui-pending-windfields.json";
-        private readonly DirectoryInfo computation;
-        private readonly record struct Stamp(long Ticks, long Bytes);
+        private readonly DirectoryInfo computation = new(directory);
+        private readonly record struct Stamp(long Ticks, long Bytes)
+        {
+            internal static Stamp Read(FileInfo file) => new(file.LastWriteTimeUtc.Ticks, file.Length);
+        }
         private readonly record struct Outputs(Stamp Wind, Stamp Scalar);
         private sealed record EngineCheckpoint(string Engine, Dictionary<int, Outputs> Pending);
         private readonly Dictionary<int, Outputs> baseline = new();
@@ -31,11 +34,6 @@ namespace Gral
         internal int PlannedSituations { get; private set; }
         internal string UnavailableReason { get; private set; }
 
-        internal GrammProgressRun(string directory)
-        {
-            computation = new DirectoryInfo(directory);
-        }
-
         internal void CaptureNativeBaseline() => CaptureFiles(1, int.MaxValue);
 
         private bool CaptureFiles(int first, int last)
@@ -50,7 +48,7 @@ namespace Gral
                 int id = Situation(file);
                 if (id == 0 || (!engineChanged && (id < first || id > last))) { continue; }
                 baseline.TryGetValue(id, out Outputs pair);
-                var stamp = new Stamp(file.LastWriteTimeUtc.Ticks, file.Length);
+                var stamp = Stamp.Read(file);
                 baseline[id] = wind ? pair with { Wind = stamp } : pair with { Scalar = stamp };
             }
             // A narrower launch must still invalidate untouched fields from a different engine.
@@ -67,18 +65,7 @@ namespace Gral
                 bool engineChanged = CaptureFiles(first, last);
                 if (Retired) { return; }
 
-                // GRAMM reads ISTAT and IOUT by position in IIN.dat.
-                string[] settings = File.ReadLines(Path.Combine(computation.FullName, "IIN.dat")).Take(29).ToArray();
-                using var input = File.OpenText(Path.Combine(computation.FullName, "GRAMMin.dat"));
-                string meteo = input.ReadLine();
-                if (meteo != null && meteo.Contains("Version")) { meteo = input.ReadLine(); }
-                if (string.IsNullOrWhiteSpace(meteo) || settings.Length < 29 ||
-                    !ReadSetting(settings[25], out int steady) || !ReadSetting(settings[28], out int format))
-                {
-                    UnavailableReason = "Counts unavailable: the GRAMM output settings could not be read.";
-                    return;
-                }
-                if (!string.Equals(meteo, "y", StringComparison.OrdinalIgnoreCase) || steady != 0 || format != 0)
+                if (GrammInstanceRanges.ReadSteadySettings(computation.FullName) == null)
                 {
                     LegacyResume = true;
                     UnavailableReason = "Counts require steady-state meteopgt.all and binary wind fields (format 0).";
@@ -106,7 +93,8 @@ namespace Gral
                     }
                 }
             }
-            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException || ex is OverflowException)
+            catch (InvalidDataException ex) { UnavailableReason = "Counts unavailable: " + ex.Message; }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OverflowException)
             {
                 UnavailableReason = "Counts unavailable: the run inputs or existing wind fields could not be checked. " + ex.Message;
             }
@@ -121,19 +109,14 @@ namespace Gral
                 using var json = JsonDocument.Parse(file);
                 var root = json.RootElement;
                 if (root.ValueKind != JsonValueKind.Object) { throw new JsonException(); }
-                string generation = GrammEngine.Legacy;
-                if (root.TryGetProperty(nameof(EngineCheckpoint.Engine), out _))
-                {
-                    var saved = root.Deserialize<EngineCheckpoint>(options);
-                    if (saved.Engine != GrammEngine.Legacy && saved.Engine != GrammEngine.Reset && saved.Engine != GrammEngine.Unknown) { throw new JsonException(); }
-                    generationTracked = true;
-                    generation = saved.Engine;
-                    pending = saved.Pending;
-                }
-                else { pending = root.Deserialize<Dictionary<int, Outputs>>(options); }
-                if (pending == null || pending.Any(p => p.Key < 1 || p.Value == default ||
-                    !ValidStamp(p.Value.Wind) || !ValidStamp(p.Value.Scalar))) { throw new JsonException(); }
-                return generation;
+                generationTracked = root.TryGetProperty(nameof(EngineCheckpoint.Engine), out _);
+                var saved = generationTracked ? root.Deserialize<EngineCheckpoint>(options) :
+                    new EngineCheckpoint(GrammEngine.Legacy, root.Deserialize<Dictionary<int, Outputs>>(options));
+                if (saved.Engine is not (GrammEngine.Legacy or GrammEngine.Reset or GrammEngine.Unknown) ||
+                    saved.Pending == null || saved.Pending.Any(p => p.Key < 1 || p.Value == default ||
+                        !ValidStamp(p.Value.Wind) || !ValidStamp(p.Value.Scalar))) { throw new JsonException(); }
+                pending = saved.Pending;
+                return saved.Engine;
             }
             catch (FileNotFoundException) { return GrammEngine.Legacy; } // An untracked folder has no evidence of corrected fields.
             catch (JsonException ex) { throw new IOException("Invalid GRAMM GUI restart checkpoint.", ex); }
@@ -148,12 +131,9 @@ namespace Gral
         {
             if (nextMissing > first) { CheckUnknownResume(); }
             // Native formats resume by wind filename. Retain that rule only for winds rewritten since the checkpoint.
-            foreach (var (id, old) in pending)
-            {
-                if (id >= first && id < nextMissing && old.Wind != default &&
-                    baseline.TryGetValue(id, out var current) && current.Wind == old.Wind) { nextMissing = id; }
-            }
-            return nextMissing;
+            return pending.Where(item => item.Key >= first && item.Key < nextMissing && item.Value.Wind != default &&
+                    baseline.TryGetValue(item.Key, out var current) && current.Wind == item.Value.Wind)
+                .Select(item => item.Key).DefaultIfEmpty(nextMissing).Min();
         }
 
         private void CheckUnknownResume()
@@ -173,23 +153,24 @@ namespace Gral
             WriteCheckpoint();
         }
 
-        internal void SavePending(List<(int First, int Last)> assignments, int[] starts = null)
+        internal int[] SavePending(List<(int First, int Last)> assignments, int[] starts = null)
         {
-            if (LegacyResume && EngineGeneration == GrammEngine.Legacy && !generationTracked) { return; }
+            starts ??= assignments.Select(range => NextSituation(range.First, range.Last)).ToArray();
+            if (LegacyResume && EngineGeneration == GrammEngine.Legacy && !generationTracked) { return starts; }
             if (!LegacyResume && UnavailableReason != null && (Continuing || !capturedFiles)) { throw new IOException(UnavailableReason); }
             for (int index = 0; index < assignments.Count; index++)
             {
                 var range = assignments[index];
                 if (Continuing && !LegacyResume && baseline.TryGetValue(range.First, out var prefix) &&
                     prefix.Wind.Bytes > 0 && prefix.Scalar.Bytes > 0) { CheckUnknownResume(); }
-                int from = starts == null ? NextSituation(range.First, range.Last) : starts[index];
-                for (int id = range.First; id <= range.Last; id++)
+                foreach (int id in Enumerable.Range(range.First, range.Last - range.First + 1))
                 {
-                    if (id >= from && baseline.TryGetValue(id, out var old)) { pending[id] = old; }
+                    if (id >= starts[index] && baseline.TryGetValue(id, out var old)) { pending[id] = old; }
                     else if (!LegacyResume) { pending.Remove(id); }
                 }
             }
             WriteCheckpoint();
+            return starts;
         }
 
         private void WriteCheckpoint()
@@ -202,20 +183,15 @@ namespace Gral
             {
                 using (var file = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 {
-                    if (EngineGeneration != GrammEngine.Legacy || generationTracked)
-                    {
-                        JsonSerializer.Serialize(file, new EngineCheckpoint(EngineGeneration, pending));
-                    }
-                    else { JsonSerializer.Serialize(file, pending); }
+                    object checkpoint = EngineGeneration != GrammEngine.Legacy || generationTracked
+                        ? new EngineCheckpoint(EngineGeneration, pending) : pending;
+                    JsonSerializer.Serialize(file, checkpoint);
                     file.Flush(true);
                 }
                 File.Move(temp, target, true);
             }
             finally { File.Delete(temp); }
         }
-
-        private static bool ReadSetting(string line, out int value) =>
-            int.TryParse(line.Split(':', '!').ElementAtOrDefault(1), NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
 
         private static bool ReadDimension(StreamReader grid, out int value) =>
             int.TryParse(grid.ReadLine()?.Split('!')[0], out value) && value > 0;
@@ -241,10 +217,12 @@ namespace Gral
             return dx > 0 && float.IsFinite(dx);
         }
 
-        private bool ClosedWind(FileInfo file, int id, Dictionary<int, DateTime> verified = null)
+        private bool ClosedWind(FileInfo file, int id, Stamp stale = default, Dictionary<int, DateTime> verified = null)
         {
             try
             {
+                var stamp = Stamp.Read(file);
+                if (stamp.Bytes != fieldLength || stamp == stale) { return false; }
                 // The stock writer holds an exclusive handle until the field is closed.
                 if (verified != null && verified.TryGetValue(id, out var written) && written == file.LastWriteTimeUtc) { return true; }
                 using var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 20);
@@ -254,8 +232,7 @@ namespace Gral
                 if (verified != null) { verified[id] = file.LastWriteTimeUtc; }
                 return true;
             }
-            catch (IOException) { return false; }
-            catch (UnauthorizedAccessException) { return false; }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return false; }
         }
 
         private bool ClosedScalar(string name)
@@ -272,9 +249,7 @@ namespace Gral
                 return zip.Entries.Count == 3 && zip.GetEntry(name + ".scl")?.Length == size &&
                     zip.GetEntry(name + ".ust")?.Length == size && zip.GetEntry(name + ".obl")?.Length == size;
             }
-            catch (InvalidDataException) { return false; }
-            catch (IOException) { return false; }
-            catch (UnauthorizedAccessException) { return false; }
+            catch (Exception ex) when (ex is InvalidDataException or IOException or UnauthorizedAccessException) { return false; }
         }
 
         internal int[] CountWindFields(Dictionary<int, DateTime> verified, CancellationToken cancellation)
@@ -286,15 +261,9 @@ namespace Gral
                 int id = Situation(file);
                 int row = Ranges.FindIndex(range => id >= range.First && id <= range.Last);
                 if (row < 0) { continue; }
-                try
-                {
-                    var stamp = new Stamp(file.LastWriteTimeUtc.Ticks, file.Length);
-                    if (stamp.Bytes != fieldLength) { continue; }
-                    if (id >= Ranges[row].ResumeFrom && baseline.TryGetValue(id, out var previous) && previous.Wind == stamp) { continue; }
-                    if (ClosedWind(file, id, verified)) { counts[row]++; }
-                }
-                catch (IOException) { } // Locked or removed during this scan. Retry on the next refresh.
-                catch (UnauthorizedAccessException) { }
+                baseline.TryGetValue(id, out var previous);
+                var stale = id >= Ranges[row].ResumeFrom ? previous.Wind : default;
+                if (ClosedWind(file, id, stale, verified)) { counts[row]++; }
             }
             return counts;
         }
