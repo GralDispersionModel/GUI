@@ -190,10 +190,12 @@ namespace Gral
         /// Path of GRAMM windfield
         /// </summary>
         public static string GRAMMwindfield;
+#if __MonoCS__ || !NET6_0_OR_GREATER
         /// <summary>
         /// GRAL computation
         /// </summary>
         private Process GRALProcess;
+#endif
         /// <summary>
         /// Control changes in the file Percent.txt, which indicates the GRAL simulation status for the actual computed dispersion simulation
         /// </summary>
@@ -206,10 +208,12 @@ namespace Gral
         /// Frequencies of each dispersion situation
         /// </summary>
         private double[] DispSituationfrequ = new double[100000];
+#if __MonoCS__
         /// <summary>
         /// GRAMM computations
         /// </summary>
         private Process GRAMMProcess;
+#endif
         /// <summary>
         /// Control changes in the file PercentGramm.txt, which indicates the GRAMM simulation status for the actual computed dispersion simulation
         /// </summary>
@@ -1463,9 +1467,9 @@ namespace Gral
 
 
         //stop GRAL simulations
-        private void Button34_Click(object sender, EventArgs e)
+        private async void Button34_Click(object sender, EventArgs e)
         {
-            GRALStopCalculation(sender, e);
+            await GRALStopCalculation(sender, e);
         }
         //continue the GRAL simulations
         private void Button35_Click(object sender, EventArgs e)

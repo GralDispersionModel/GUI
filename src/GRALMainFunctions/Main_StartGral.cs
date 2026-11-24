@@ -477,7 +477,6 @@ namespace Gral
                         {
                             command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; ./'" + Path.GetFileName(GRAL_Program_Path) + "'; bash'";
                             GRALProcess = new Process();
-                            GRALProcess.Exited += new System.EventHandler(GralExited);
                             GRALProcess.StartInfo.FileName = "/bin/bash";
                             GRALProcess.StartInfo.Arguments = "-c \" " + command + " \"";
                             GRALProcess.StartInfo.UseShellExecute = false;
@@ -588,21 +587,6 @@ namespace Gral
                     }
                 }
             }
-        }
-
-        //GRAL simulations finished or interrupted
-        private void GralExited(object sender, EventArgs e)
-        {
-#if __MonoCS__
-#else
-            GRALProcess.EnableRaisingEvents = false;
-            GRALProcess.Dispose();
-            System.Threading.Thread.Sleep(1000);
-            //check if *.con files are existing for postprocessing routines
-            Invoke(new showTopo(CheckConFiles));
-            WriteGralLogFile(3, "", "");
-            MessageBox.Show("GRAL simulation stopped or interrupted", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-#endif
         }
 
         /// <summary>
