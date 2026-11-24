@@ -19,6 +19,15 @@ namespace GralIO
 
     public class ReadESRIFile
     {
+        private static bool TryParseGridValue(ReadOnlySpan<char> field, out double value)
+        {
+#if __MonoCS__
+            return double.TryParse(field.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+#else
+            return double.TryParse(field, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+#endif
+        }
+
         private readonly CultureInfo ic = CultureInfo.InvariantCulture;
 
         /// <summary>
@@ -73,7 +82,7 @@ namespace GralIO
                             int x = 0;
                             while ((nextSep = _span.Slice(startSearch).IndexOfAny(seperat)) >= 0)
                             {
-                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                if (TryParseGridValue(_span.Slice(startSearch, nextSep), out value))
                                 {
                                     if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
@@ -97,7 +106,7 @@ namespace GralIO
                             }
                             if (startSearch < nextSep)
                             {
-                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                if (TryParseGridValue(_span.Slice(startSearch, nextSep), out value))
                                 {
                                     if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
@@ -201,7 +210,7 @@ namespace GralIO
                             int x = 0;
                             while ((nextSep = _span.Slice(startSearch).IndexOfAny(seperat)) >= 0)
                             {
-                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                if (TryParseGridValue(_span.Slice(startSearch, nextSep), out value))
                                 {
                                     if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
@@ -225,7 +234,7 @@ namespace GralIO
                             }
                             if (startSearch < nextSep)
                             {
-                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                if (TryParseGridValue(_span.Slice(startSearch, nextSep), out value))
                                 {
                                     if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
@@ -317,7 +326,7 @@ namespace GralIO
                             int x = 0;
                             while ((nextSep = _span.Slice(startSearch).IndexOfAny(seperat)) >= 0)
                             {
-                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                if (TryParseGridValue(_span.Slice(startSearch, nextSep), out value))
                                 {
                                     if (double.IsNaN(value) || double.IsInfinity(value))
                                     {
@@ -336,7 +345,7 @@ namespace GralIO
                             }
                             if (startSearch < nextSep)
                             {
-                                if (Double.TryParse(_span.Slice(startSearch, nextSep), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value))
+                                if (TryParseGridValue(_span.Slice(startSearch, nextSep), out value))
                                 {
                                     if (double.IsNaN(value) || double.IsInfinity(value))
                                     {

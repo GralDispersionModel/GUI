@@ -4614,6 +4614,9 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown13).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown14).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown15).EndInit();
+#if __MonoCS__
+            ConfigureMonoComputationLayout();
+#endif
             ResumeLayout(false);
         }
 

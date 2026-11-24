@@ -602,7 +602,7 @@ namespace MathParserMathos
             // Variables replacement
             for (var i = 0; i < tokens.Count; i++)
             {
-                if (LocalVariables.Keys.Contains(tokens[i]))
+                if (LocalVariables.ContainsKey(tokens[i]))
                 {
                     tokens[i] = LocalVariables[tokens[i]].ToString(CultureInfo);
                 }
@@ -631,7 +631,7 @@ namespace MathParserMathos
                 var functioName = tokens[open == 0 ? 0 : open - 1];
                 var args = new double[0];
 
-                if (LocalFunctions.Keys.Contains(functioName))
+                if (LocalFunctions.ContainsKey(functioName))
                 {
                     if (roughExpr.Contains(";"))
                     {
@@ -681,7 +681,7 @@ namespace MathParserMathos
                 // and removing the rest.
                 tokens[open] = result.ToString(CultureInfo);
                 tokens.RemoveRange(open + 1, close - open);
-                if (LocalFunctions.Keys.Contains(functioName))
+                if (LocalFunctions.ContainsKey(functioName))
                 {
                     // if we also executed a function, removing
                     // the function name as well.

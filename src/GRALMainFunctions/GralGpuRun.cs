@@ -59,8 +59,8 @@ namespace Gral
             string range = last.HasValue ? $"{first}–{last.Value}" : $"{first} onward (total unknown)";
             string engineLog = explicitRange ? $"Logfile_GRALCore({first}_{last}).txt" : "Logfile_GRALCore.txt";
             Write($"Instance {instance.Number}: weather situations {range}. Engine log: {engineLog}.");
-            Write($"Instance {instance.Number} GPU runtime log: {Path.GetRelativePath(DirectoryPath, instance.RuntimePath)}");
-            Write($"Instance {instance.Number} GPU metrics: {Path.GetRelativePath(DirectoryPath, instance.MetricsPath)}");
+            Write($"Instance {instance.Number} GPU runtime log: {Path.Combine(Path.GetFileName(instance.DirectoryPath), Path.GetFileName(instance.RuntimePath))}");
+            Write($"Instance {instance.Number} GPU metrics: {Path.Combine(Path.GetFileName(instance.DirectoryPath), Path.GetFileName(instance.MetricsPath))}");
             return instance;
         }
 
@@ -211,7 +211,7 @@ namespace Gral
                 if (metricsOffset >= stream.Length) { return true; }
                 stream.Position = metricsOffset;
                 var buffer = new byte[(int)Math.Min(stream.Length - metricsOffset, 64 * 1024)];
-                int read = stream.Read(buffer);
+                int read = stream.Read(buffer, 0, buffer.Length);
                 foreach (byte value in buffer.AsSpan(0, read))
                 {
                     if (value == (byte)'\n')

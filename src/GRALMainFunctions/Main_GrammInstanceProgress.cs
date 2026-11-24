@@ -96,10 +96,10 @@ namespace Gral
         {
             summary.SetBounds(0, 0, Width, heading.Height + 2);
             remaining.SetBounds(Width, 0, 0, summary.Height);
-            total.SetBounds(0, summary.Bottom, Width, LogicalToDeviceUnits(7));
+            total.SetBounds(0, summary.Bottom, Width, ScaleBarHeight(7));
             rows.SetBounds(0, total.Bottom + 2, Width, Height - total.Bottom - 2);
             // Use the full-width system scrollbar, including both arrow buttons, for overflow.
-            if (rows.Items.Count > 6 && OperatingSystem.IsWindows() && !SystemInformation.HighContrast)
+            if (rows.Items.Count > 6 && Environment.OSVersion.Platform == PlatformID.Win32NT && !SystemInformation.HighContrast)
             {
                 SetWindowTheme(rows.Handle, "", "");
             }
@@ -160,6 +160,10 @@ namespace Gral
                     summary.Text = unassigned == 0 ? $"All: {progress}" : notStarted;
                 }
             }
+            if (run.FailedWorker is string failure)
+            {
+                summary.Text = summary.AccessibleDescription = failure;
+            }
             for (int i = 0; i < rows.Items.Count; i++) { UpdateRow(i, counts?[i]); }
             rows.Invalidate();
         }
@@ -172,6 +176,22 @@ namespace Gral
             row.SubItems[1].Text = $"{done?.ToString() ?? "—"}/{assigned}";
             row.SubItems[2].Text = (assigned - done)?.ToString() ?? "—";
             row.ToolTipText = $"Original situations {range.First}–{range.Last}\n{row.SubItems[1].Text} completed/assigned, {row.SubItems[2].Text} left";
+        }
+
+        private int ScaleBarHeight(int logicalPixels, Graphics graphics = null)
+        {
+#if __MonoCS__
+            float dpi;
+            if (graphics != null) { dpi = graphics.DpiY; }
+            else
+            {
+                using var surface = CreateGraphics();
+                dpi = surface.DpiY;
+            }
+            return Math.Max(1, (int)Math.Round(logicalPixels * dpi / 96f));
+#else
+            return LogicalToDeviceUnits(logicalPixels);
+#endif
         }
 
         private void DrawProgress(object sender, DrawListViewSubItemEventArgs e)
@@ -187,7 +207,7 @@ namespace Gral
             TextRenderer.DrawText(e.Graphics, e.SubItem.Text, Font, cell, selected ? SystemColors.HighlightText : rows.ForeColor,
                 TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
             var range = run.Ranges[e.ItemIndex];
-            int height = Math.Min(LogicalToDeviceUnits(8), cell.Height);
+            int height = Math.Min(ScaleBarHeight(8, e.Graphics), cell.Height);
             var track = new Rectangle(cell.Left + instanceWidth, cell.Top + (cell.Height - height) / 2,
                 cell.Width - instanceWidth, height);
             if (track.Width < 4) { return; }

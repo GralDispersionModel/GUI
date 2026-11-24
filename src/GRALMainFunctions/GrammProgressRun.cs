@@ -23,6 +23,26 @@ namespace Gral
         private readonly Dictionary<int, Outputs> baseline = new();
         private Dictionary<int, Outputs> pending = new();
         private readonly HashSet<int> resumeFields = new();
+#if __MonoCS__
+        internal readonly Dictionary<int, UnixTerminal.Engine> Workers = new();
+#endif
+        internal string FailedWorker
+        {
+            get
+            {
+#if __MonoCS__
+                foreach (var worker in Workers)
+                {
+                    if (worker.Value.ExitCode is int code && code != 0)
+                    {
+                        return code == int.MinValue ? $"Instance {worker.Key}: terminal closed" : $"Instance {worker.Key} exited ({code})";
+                    }
+                }
+#endif
+                return null;
+            }
+        }
+
         internal bool Continuing { get; init; }
         internal string EngineGeneration { get; init; } = GrammEngine.Legacy;
         private bool generationTracked;
@@ -81,8 +101,10 @@ namespace Gral
                 fieldLength = checked(20 + 6L * nx * ny * nz);
 
                 if (!Continuing || engineChanged) { return; }
-                foreach (var (id, pair) in baseline)
+                foreach (var entry in baseline)
                 {
+                    int id = entry.Key;
+                    var pair = entry.Value;
                     if (Retired) { return; }
                     if (pair.Wind.Bytes != fieldLength || pair.Scalar.Bytes == 0) { continue; }
                     if (pending.TryGetValue(id, out var old) && (old.Wind == pair.Wind || old.Scalar == pair.Scalar)) { continue; }
@@ -140,14 +162,16 @@ namespace Gral
         {
             if (EngineGeneration == GrammEngine.Unknown)
             {
-                throw new IOException("The selected launcher does not identify the engine that generated the existing wind fields. Use Start to recalculate the selected situations or select the matching GRAMM.exe.");
+                throw new IOException("The selected launcher does not identify the engine that generated the existing wind fields. Use Start to recalculate the selected situations or select the matching GRAMM executable.");
             }
         }
 
         internal void SaveNativePending(int from)
         {
-            foreach (var (id, old) in baseline)
+            foreach (var entry in baseline)
             {
+                int id = entry.Key;
+                var old = entry.Value;
                 if (id >= from) { pending[id] = old; }
             }
             WriteCheckpoint();
@@ -188,7 +212,11 @@ namespace Gral
                     JsonSerializer.Serialize(file, checkpoint);
                     file.Flush(true);
                 }
+#if __MonoCS__
+                MonoCompatibility.MoveOverwrite(temp, target);
+#else
                 File.Move(temp, target, true);
+#endif
             }
             finally { File.Delete(temp); }
         }
@@ -203,6 +231,23 @@ namespace Gral
                 name == id.ToString("D5", CultureInfo.InvariantCulture) ? id : 0;
         }
 
+        internal static HashSet<int> ExistingWindNumbers(DirectoryInfo directory)
+        {
+            var ids = new HashSet<int>();
+            foreach (var file in directory.EnumerateFiles("*.wnd"))
+            {
+                int id = Situation(file);
+                if (id > 0) { ids.Add(id); }
+            }
+            return ids;
+        }
+
+        internal static int NextMissingWind(int first, int last, HashSet<int> windNumbers)
+        {
+            while (first <= last && windNumbers.Contains(first)) { first++; }
+            return first;
+        }
+
         internal int NextSituation(int first, int last)
         {
             while (first <= last && resumeFields.Contains(first)) { first++; }
@@ -214,7 +259,7 @@ namespace Gral
             if (reader.ReadInt32() != -1 || reader.ReadInt32() != nx || reader.ReadInt32() != ny ||
                 reader.ReadInt32() != nz) { return false; }
             float dx = reader.ReadSingle();
-            return dx > 0 && float.IsFinite(dx);
+            return dx > 0 && !float.IsPositiveInfinity(dx);
         }
 
         private bool ClosedWind(FileInfo file, int id, Stamp stale = default, Dictionary<int, DateTime> verified = null)

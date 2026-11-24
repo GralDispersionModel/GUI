@@ -135,7 +135,7 @@ namespace Gral
         }
 
         private static bool FiniteNumber(string text, out double value) =>
-            double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && double.IsFinite(value);
+            double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && !double.IsNaN(value) && !double.IsInfinity(value);
 
         private static long[] ReadSunriseWeights(string directory, int first, int last, int seconds)
         {

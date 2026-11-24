@@ -289,14 +289,29 @@ namespace Gral
                         return;
                     }
 
-                    if (GUISettings.CopyCoresToProject) // Copy the computation core to the project folder?
+                    bool copyCore = GUISettings.CopyCoresToProject;
+#if __MonoCS__
+                    // Run Linux apphosts and managed DLLs beside their runtime files and native libraries.
+                    copyCore = copyCore && !gpuUseGpu && Path.GetExtension(dialog.FileName).Equals(".exe", StringComparison.OrdinalIgnoreCase);
+#endif
+                    if (copyCore)
                     {
                         //copy the file GRAL*.exe in the directory "Computation"
                         GRAL_Program_Path = Path.Combine(ProjectName, @"Computation", Path.GetFileName(dialog.FileName));
                         //the GPU runtime files (manifest and kernel source) go with the core in the same layout, so that the copied GRAL also finds them when it is started without the GUI
                         string gpuManifest = Environment.GetEnvironmentVariable("INU_GPU_MANIFEST");
                         string gpuSource = gpuUseGpu && !string.IsNullOrEmpty(gpuManifest) ? Path.GetDirectoryName(gpuManifest) : null;
-                        string gpuTarget = gpuSource == null ? null : Path.GetFullPath(Path.Combine(ProjectName, @"Computation", Path.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource)));
+#if __MonoCS__
+                        string relativeGpu = gpuSource == null ? null : MonoCompatibility.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource);
+#else
+                        string relativeGpu = gpuSource == null ? null : Path.GetRelativePath(Path.GetDirectoryName(dialog.FileName), gpuSource);
+#endif
+                        if (relativeGpu != null && relativeGpu != "." &&
+                            !string.Equals(relativeGpu, Path.Combine("gpu", "runtime"), StringComparison.OrdinalIgnoreCase))
+                        {
+                            throw new IOException("The GPU runtime folder must be beside the selected core or in its gpu/runtime directory.");
+                        }
+                        string gpuTarget = relativeGpu == null ? null : Path.GetFullPath(Path.Combine(ProjectName, "Computation", relativeGpu));
                         try
                         {
                             File.Copy(dialog.FileName, GRAL_Program_Path, true);
@@ -375,12 +390,15 @@ namespace Gral
                     else // do not copy the core to the project folder
                     {
                         GRAL_Project_Path = Path.Combine(ProjectName, @"Computation");
-                        GUISettings.DefaultPathForGRAL = Path.GetDirectoryName(dialog.FileName);
-                        GUISettings.WriteToFile();
+                        if (!GUISettings.CopyCoresToProject)
+                        {
+                            GUISettings.DefaultPathForGRAL = Path.GetDirectoryName(dialog.FileName);
+                            GUISettings.WriteToFile();
+                        }
                     }
 
                     //delete existing concentration fields
-                    DirectoryInfo di = new DirectoryInfo(Path.Combine(ProjectName, "Computation" + Path.DirectorySeparatorChar));
+                    DirectoryInfo di = new DirectoryInfo(Path.Combine(ProjectName, "Computation"));
                     if (StartSituation == 0 && !continueCalculation) // no deletion of exiting files when running a chunk of situations or continue a calculation
                     {
                         FileInfo[] files_conc = di.GetFiles("*.con");
@@ -451,64 +469,7 @@ namespace Gral
 
                     //start routine GRAL*.exe to compute concentrations
                     gpuRun = PrepareGralGpuRun(di.FullName, GRAL_Program_Path);
-#if __MonoCS__
-                    if (gpuRun != null)
-                    {
-                        if (transient == 1 && gpuRun.ShowProgress && StartSituation == 0)
-                        {
-                            int count = CountSteadySituations(di);
-                            if (count > 0) { knownWeatherSituations = count; }
-                        }
-                        int first = StartSituation > 0 ? StartSituation : firstInDatSituation;
-                        int? last = StartSituation > 0 ? FinalSituation : knownWeatherSituations;
-                        if (StartSituation > 0) { first = GetNextMissingSituation(first, FinalSituation, di.GetFiles("*.grz")); }
-                        if (last == null || first <= last)
-                        {
-                            var instance = gpuRun.AddInstance(first, last, StartSituation > 0);
-                            StartLinuxGralGpuInstance(instance, GRAL_Program_Path, di.FullName, GRALSettings.Loglevel,
-                                StartSituation > 0 ? $"SITUATIONS:{first}:{last}" : null);
-                        }
-                    }
-                    else
-                    try
-                    {
-                        string command = String.Empty;
-                        if (Path.GetFileName(GRAL_Program_Path).Equals("GRAL")) // new GRAL version from .NET5
-                        {
-                            command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; ./'" + Path.GetFileName(GRAL_Program_Path) + "'; bash'";
-                            GRALProcess = new Process();
-                            GRALProcess.StartInfo.FileName = "/bin/bash";
-                            GRALProcess.StartInfo.Arguments = "-c \" " + command + " \"";
-                            GRALProcess.StartInfo.UseShellExecute = false;
-                            GRALProcess.StartInfo.RedirectStandardOutput = true;
-                            GRALProcess.Start();
-                        }
-                        else
-                        {
-                            if (Path.GetExtension(GRAL_Program_Path).ToLower() == ".dll") // .sh file -> dotnet version
-                            {
-                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; dotnet " + Path.GetFileName(GRAL_Program_Path) + " " + '"' + GRAL_Project_Path + '"' + " ; bash'";
-                            }
-                            else // .exe file
-                            {
-                                command = "gnome-terminal -x bash -ic 'cd '" + Path.GetDirectoryName(GRAL_Program_Path) + "'; mono '" + Path.GetFileName(GRAL_Program_Path) + "'; bash'";
-                            }
-                            //start routine GRAL*.exe to compute concentrations
-                            GRALProcess = new Process();
-                            GRALProcess.StartInfo.FileName = "/bin/bash";
-                            GRALProcess.StartInfo.Arguments = "-c \" " + command + " \"";
-                            GRALProcess.StartInfo.UseShellExecute = false;
-                            GRALProcess.StartInfo.RedirectStandardOutput = true;
-                            GRALProcess.Start();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-#else
-
-                    // multple instances
+                    // multiple instances
                     int numberOfInstances = (int)numericUpDown33.Value;
                     try
                     {
@@ -532,8 +493,11 @@ namespace Gral
                     int final_sit = weathersit_count;
                     int offset = Convert.ToInt32(Math.Max(1, (final_sit - first_sit) / (double)numberOfInstances));
                     int instance_end = first_sit + offset;
-                    if (gpuRun != null && knownWeatherSituations.HasValue) { instance_end = Math.Min(instance_end, final_sit); }
+                    if (knownWeatherSituations.HasValue) { instance_end = Math.Min(instance_end, final_sit); }
 
+#if __MonoCS__
+                    string param = GRAL_Program_Path;
+#else
                     string param = gpuRun == null ? GRAL_Program_Path : "\"" + GRAL_Program_Path + "\"";
 
                     if (gpuRun != null)
@@ -548,6 +512,7 @@ namespace Gral
                     {
                         param += " " + "\"" + "LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic) + "\"";
                     }
+#endif
                     bool chunk = StartSituation > 0 && FinalSituation >= StartSituation;
                     bool explicitRange = chunk || numberOfInstances > 1 || continueCalculation;
                     int first = explicitRange ? first_sit : firstInDatSituation;
@@ -560,7 +525,6 @@ namespace Gral
                     {
                         StartMultipleInstances(instance_end + 1, final_sit, offset, numberOfInstances, param, di, gpuRun);
                     }
-#endif
 
                     Project_Locked = true;                  // lock project
                     ProjectLockedButtonClick(null, null); // change locked-Button
@@ -572,9 +536,9 @@ namespace Gral
                     {
                         gpuRun.StartFailed(error);
                         if (gpuRun.HasLaunched) { WriteGralLogFile(1, "", GRAL_Program_Path); }
-                        MessageBox.Show(this, "GRAL could not start all requested instances." + Environment.NewLine + error.Message,
-                            "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    MessageBox.Show(this, "GRAL could not start all requested instances." + Environment.NewLine + error.Message,
+                        "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -589,6 +553,8 @@ namespace Gral
             }
         }
 
+        private readonly CancellationTokenSource gralStopClosed = new();
+
         /// <summary>
         /// stop GRAL simulations
         /// </summary>
@@ -596,39 +562,16 @@ namespace Gral
         /// <param name="e"></param>
         private async Task GRALStopCalculation(object sender, EventArgs e)
         {
-#if __MonoCS__
-            MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return;
-#else
-#if NET6_0_OR_GREATER
-
-            string computation = Path.Combine(ProjectName, "Computation");
+#if __MonoCS__ || NET6_0_OR_GREATER
+            string project = ProjectName;
+            string computation = Path.Combine(project, "Computation");
             var tracked = activeGpuRuns.Where(run => RunMatchesComputation(run, computation) && run.RunningInstances.Any()).ToList();
-            if (tracked.Count > 0)
-            {
-                await Task.WhenAll(tracked.Where(run => run.RequestStop()).Select(StopTrackedGralGpuRun));
-                CheckConFiles();
-                return;
-            }
-
-            foreach (int processID in CoreProcessID)
-            {
-                try
-                {
-                    _ = WaitForClientConnect(processID);
-                }
-                catch (System.TimeoutException)
-                {
-                    // Console app might already be busy or closed
-                    try
-                    {
-                        Process localById = Process.GetProcessById(processID);
-                        localById.Kill();
-                    }
-                    catch { }
-                }
-            }
-            CoreProcessID.Clear();
+            var gpuStops = Task.WhenAll(tracked.Where(run => run.RequestStop()).Select(StopTrackedGralGpuRun));
+#endif
+#if __MonoCS__
+            var cpuStops = Task.WhenAll(UnixGralEngines(computation).Select(engine => SendGralStop(engine.Pid, () => !engine.ExitCode.HasValue)));
+#elif NET6_0_OR_GREATER
+            var cpuStops = Task.WhenAll(windowsGralWorkers.InProject(computation).Select(engine => SendGralStop(engine.Id, () => !engine.HasExited)));
 #else
             try
             {
@@ -637,9 +580,17 @@ namespace Gral
             catch
             { }
 #endif
+#if __MonoCS__ || NET6_0_OR_GREATER
+            await Task.WhenAll(gpuStops, cpuStops);
+            if (gralStopClosed.IsCancellationRequested || IsDisposed || Disposing || ProjectName != project) { return; }
+            if (cpuStops.Result.Contains(false))
+            {
+                MessageBox.Show(this, "GRAL did not receive the stop request. Retry Stop or stop the engine in its console.",
+                    "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+#endif
             //check if *.con files are existing for postprocessing routines
             CheckConFiles();
-#endif
         }
         public async Task<bool> WaitForClientConnect(int processID)
         {
@@ -654,85 +605,47 @@ namespace Gral
             return true;
         }
 
-        private static async Task StopTrackedGralGpuRun(GralGpuRun run)
+        private async Task StopTrackedGralGpuRun(GralGpuRun run)
         {
             bool[] delivered = await Task.WhenAll(run.RunningInstances.Select(StopTrackedGralGpuInstance));
             if (delivered.Contains(false)) { run.RetryStopAllowed(); }
         }
 
-        private static async Task<bool> StopTrackedGralGpuInstance(GralGpuRun.Instance instance)
+        private Task<bool> StopTrackedGralGpuInstance(GralGpuRun.Instance instance) =>
+            SendGralStop(instance.Pid, () => instance.IsRunning, instance.Log);
+
+        private async Task<bool> SendGralStop(int pid, Func<bool> running, Action<string> log = null)
         {
-            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            bool StillRunning()
+            {
+                if (gralStopClosed.IsCancellationRequested) { return false; }
+                try { return running(); }
+                catch (InvalidOperationException) { return false; } // Tracking ended while the connection was pending.
+            }
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(gralStopClosed.Token);
+            timeout.CancelAfter(TimeSpan.FromSeconds(5));
             try
             {
-                using var server = new System.IO.Pipes.NamedPipeServerStream("GRALServerStream" + instance.Pid,
+                using var server = new System.IO.Pipes.NamedPipeServerStream("GRALServerStream" + pid,
                     System.IO.Pipes.PipeDirection.Out, 1, System.IO.Pipes.PipeTransmissionMode.Byte, System.IO.Pipes.PipeOptions.Asynchronous);
+#if __MonoCS__
+                using var cancellation = timeout.Token.Register(server.Dispose);
+#endif
                 await server.WaitForConnectionAsync(timeout.Token);
-                if (!instance.IsRunning) { return true; }
-                using var writer = new StreamWriter(server);
-                await writer.WriteLineAsync("StopGRAL".AsMemory(), timeout.Token);
-                await writer.FlushAsync(timeout.Token);
-                instance.Log("stop message sent to GRAL.");
+                if (!StillRunning()) { return true; }
+                byte[] stop = System.Text.Encoding.UTF8.GetBytes("StopGRAL" + Environment.NewLine);
+                await server.WriteAsync(stop, 0, stop.Length, timeout.Token);
+                await server.FlushAsync(timeout.Token);
+                log?.Invoke("stop message sent to GRAL.");
                 return true;
             }
-            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException || error is OperationCanceledException)
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException || error is OperationCanceledException ||
+                                          (timeout.IsCancellationRequested && error is ObjectDisposedException))
             {
-                if (!instance.IsRunning) { return true; }
-                instance.Log("stop message could not be delivered. Press Stop again or stop GRAL in its console. " + error.Message);
+                if (!StillRunning()) { return true; }
+                log?.Invoke("stop message could not be delivered. Press Stop again or stop GRAL in its console. " + error.Message);
                 return false;
             }
-        }
-        
-
-        /// <summary>
-        /// pause for GRAL simulations
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GRALPauseCalculation(object sender, EventArgs e)
-        {
-#if __MonoCS__
-            MessageBox.Show("This function is not available at LINUX", "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return;
-#endif
-#if NET6_0_OR_GREATER
-            foreach (int processID in CoreProcessID)
-            {
-                try
-                {
-                    Process localById = Process.GetProcessById(processID);
-                    localById.Kill();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                }
-            }
-            CoreProcessID.Clear();
-#else
-            try
-            {
-                GRALProcess.Kill();
-            }
-            catch
-            { }
-#endif
-            //check if *.con files are existing for postprocessing routines
-            CheckConFiles();
-
-            //refresh actual computed dispersion situation
-            int trackbar = 1;
-            try
-            {
-                using (StreamReader myreader = new StreamReader(Path.Combine(ProjectName, @"Computation", "DispNr.txt")))
-                {
-                    trackbar = Convert.ToInt32(myreader.ReadLine().Replace(" ", ""));
-                }
-            }
-            catch
-            { }
-            numericUpDown5.Value = Math.Max(numericUpDown5.Minimum, Math.Min(numericUpDown5.Maximum, trackbar));
-            GenerateInDat();
         }
 
         /// <summary>
@@ -782,12 +695,36 @@ namespace Gral
             if (explicitRange)
             {
                 first = GetNextMissingSituation(first, last.Value, computation.GetFiles("*.grz"));
-                command += $" \"SITUATIONS:{first}:{last}\"";
             }
+#if __MonoCS__
+            if (first > last) { return; }
+            var args = new List<string> { computation.FullName };
+            if (GRALSettings.Loglevel > 0) { args.Add("LOGLEVEL0" + GRALSettings.Loglevel.ToString(ic)); }
+            if (explicitRange) { args.Add($"SITUATIONS:{first}:{last}"); }
             if (gpuRun == null)
             {
-                int cpuProcessID = NumaProcessStarter.StartProcessOnNumaNode(command, node);
-                if (cpuProcessID > 0) { CoreProcessID.Add(cpuProcessID); }
+                UnixGralEngines(computation.FullName);
+                unixGralEngines.Add(UnixTerminal.StartEngine(command, computation.FullName, args));
+            }
+            else
+            {
+                var instance = gpuRun.AddInstance(first, last, explicitRange);
+                var environment = new Dictionary<string, string> {
+                    ["INU_GPU_METRICS"] = instance.MetricsPath,
+                    ["INU_GPU_STDERR"] = instance.RuntimePath
+                };
+                var engine = UnixTerminal.StartEngine(command, computation.FullName, args, environment, instance.ExitPath);
+                instance.Started(engine.Pid, engine, () => engine.ExitCode);
+            }
+#else
+            if (explicitRange) { command += $" \"SITUATIONS:{first}:{last}\""; }
+            if (gpuRun == null)
+            {
+                int cpuProcessID = NumaProcessStarter.StartProcessOnNumaNode(command, node, null, out var process);
+                using (process)
+                {
+                    if (cpuProcessID > 0) { windowsGralWorkers.Track(computation.FullName, cpuProcessID); }
+                }
                 return;
             }
             if (first > last) { return; }
@@ -806,7 +743,38 @@ namespace Gral
                 Environment.SetEnvironmentVariable("INU_GPU_METRICS", metrics);
                 Environment.SetEnvironmentVariable("INU_GPU_STDERR", runtime);
             }
+#endif
         }
+
+#if __MonoCS__
+        private readonly List<UnixTerminal.Engine> unixGralEngines = new();
+
+        private List<UnixTerminal.Engine> UnixGralEngines(string computation)
+        {
+            foreach (var engine in unixGralEngines.Where(engine => engine.ExitCode.HasValue).ToArray())
+            {
+                unixGralEngines.Remove(engine);
+                engine.Dispose();
+            }
+            string path = Path.GetFullPath(computation);
+            return unixGralEngines.Where(engine => engine.ComputationPath == path).ToList();
+        }
+#elif NET6_0_OR_GREATER
+        private readonly WindowsRunProcesses windowsGralWorkers = new();
+#endif
+
+        private void CloseGralProcessHandles()
+        {
+            gralStopClosed.Cancel();
+            gralStopClosed.Dispose();
+#if __MonoCS__
+            foreach (var worker in unixGralEngines) { worker.Dispose(); }
+            unixGralEngines.Clear();
+#elif NET6_0_OR_GREATER
+            windowsGralWorkers.Dispose();
+#endif
+        }
+
         private static int NumaNode(int CPUNode)
         {
             Random rnd = new Random();
@@ -860,7 +828,7 @@ namespace Gral
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         static extern bool CreateProcess(
             string lpApplicationName,
-            string lpCommandLine,
+            System.Text.StringBuilder lpCommandLine,
             IntPtr lpProcessAttributes,
             IntPtr lpThreadAttributes,
             bool bInheritHandles,
@@ -885,6 +853,9 @@ namespace Gral
             int dwAttributeCount,
             int dwFlags,
             ref IntPtr lpSize);
+
+        [DllImport("kernel32.dll")]
+        static extern void DeleteProcThreadAttributeList(IntPtr lpAttributeList);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool UpdateProcThreadAttribute(
@@ -930,51 +901,55 @@ namespace Gral
 
         internal static int StartProcessOnNumaNode(string commandLine, int numaNode, string workingDirectory, out SafeProcessHandle process)
         {
+            int error = TryStartOnNode(commandLine, numaNode, workingDirectory, out var pi);
+            if (error != 0 && numaNode != 0)
+            {
+                error = TryStartOnNode(commandLine, 0, workingDirectory, out pi);
+            }
+            if (error != 0) { throw new System.ComponentModel.Win32Exception(error); }
+            try
+            {
+                process = new SafeProcessHandle(pi.hProcess, true);
+                pi.hProcess = IntPtr.Zero; // Ownership transferred to the caller.
+                return pi.dwProcessId;
+            }
+            finally
+            {
+                CloseHandle(pi.hThread);
+                if (pi.hProcess != IntPtr.Zero) { CloseHandle(pi.hProcess); }
+            }
+        }
+
+        private static unsafe int TryStartOnNode(string commandLine, int numaNode, string workingDirectory, out PROCESS_INFORMATION pi)
+        {
+            pi = default;
             var si = new STARTUPINFOEX();
             si.StartupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFOEX));
-            IntPtr lpSize = IntPtr.Zero;
+            IntPtr size = IntPtr.Zero;
+            InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref size);
+            if (size == IntPtr.Zero) { return Marshal.GetLastWin32Error(); }
 
-            // Initialize Attribute List
-            InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref lpSize);
-            si.lpAttributeList = Marshal.AllocHGlobal(lpSize);
-            InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, ref lpSize);
-
-            // Set the NUMA Node
-            Int16 numa = (Int16)numaNode;
-            IntPtr numaNodePtr = Marshal.AllocHGlobal(Marshal.SizeOf(numa));
-            Marshal.WriteInt16(numaNodePtr, numa);
-            UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
-
-            var pi = new PROCESS_INFORMATION();
-            bool success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, workingDirectory, ref si, out pi);
-
-            if (!success)
+            si.lpAttributeList = Marshal.AllocHGlobal(size);
+            bool initialized = false;
+            ushort node = (ushort)numaNode;
+            try
             {
-                //try with numa node 0
-                si = new STARTUPINFOEX();
-                si.StartupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFOEX));
-
-                // Initialize Attribute List
-                InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref lpSize);
-                si.lpAttributeList = Marshal.AllocHGlobal(lpSize);
-                InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, ref lpSize);
-                // use node 0
-                numa = (Int16)0;
-                numaNodePtr = Marshal.AllocHGlobal(Marshal.SizeOf(numa));
-                Marshal.WriteInt16(numaNodePtr, numa);
-                UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE, numaNodePtr, (IntPtr)Marshal.SizeOf(numa), IntPtr.Zero, IntPtr.Zero);
-                success = CreateProcess(null, commandLine, IntPtr.Zero, IntPtr.Zero, false, EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, workingDirectory, ref si, out pi);
+                initialized = InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, ref size);
+                if (!initialized ||
+                    !UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PREFERRED_NODE,
+                        (IntPtr)(&node), (IntPtr)sizeof(ushort), IntPtr.Zero, IntPtr.Zero))
+                {
+                    return Marshal.GetLastWin32Error();
+                }
+                bool started = CreateProcess(null, new System.Text.StringBuilder(commandLine), IntPtr.Zero, IntPtr.Zero, false,
+                    EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, workingDirectory, ref si, out pi);
+                return started ? 0 : Marshal.GetLastWin32Error();
             }
-            // Cleanup
-            Marshal.FreeHGlobal(si.lpAttributeList);
-            Marshal.FreeHGlobal(numaNodePtr);
-            if (!success)
+            finally
             {
-                throw new Exception($"Failed to start process. Error: {Marshal.GetLastWin32Error()}");
+                if (initialized) { DeleteProcThreadAttributeList(si.lpAttributeList); }
+                Marshal.FreeHGlobal(si.lpAttributeList);
             }
-            CloseHandle(pi.hThread);
-            process = new SafeProcessHandle(pi.hProcess, true);
-            return pi.dwProcessId;
         }
     }
 }

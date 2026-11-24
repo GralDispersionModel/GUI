@@ -83,7 +83,9 @@
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(2);
             MaximizeBox = false;
+#if NET6_0_OR_GREATER
             MdiChildrenMinimizedAnchorBottom = false;
+#endif
             MinimizeBox = false;
             MinimumSize = new System.Drawing.Size(184, 273);
             Name = "Selectslice";

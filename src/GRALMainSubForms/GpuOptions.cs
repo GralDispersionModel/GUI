@@ -201,10 +201,7 @@ namespace GralMainForms
         /// </summary>
         private static string DisplayPaths(string Text)
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                return Text;
-            }
+#if !__MonoCS__
             foreach ((Environment.SpecialFolder folder, string name) in new[] { (Environment.SpecialFolder.LocalApplicationData, "%LOCALAPPDATA%"), (Environment.SpecialFolder.UserProfile, "%USERPROFILE%") })
             {
                 string path = Environment.GetFolderPath(folder).TrimEnd(Path.DirectorySeparatorChar);
@@ -213,6 +210,7 @@ namespace GralMainForms
                     Text = Text.Replace(path + Path.DirectorySeparatorChar, name + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
                 }
             }
+#endif
             return Text;
         }
 
@@ -288,7 +286,11 @@ namespace GralMainForms
             {
                 // the project's own file is named without its path; a file named by the variable is shown in full
                 text.AppendLine("Settings file: " + (fromVariable ? settingsFile + " (INU_GPU_SETTINGS_FILE)" : "GPU.txt in the project's Computation folder") + (File.Exists(settingsFile) ? string.Empty : " (not created yet)"));
+#if __MonoCS__
+                if (!Path.IsPathRooted(settingsFile))
+#else
                 if (!Path.IsPathFullyQualified(settingsFile))
+#endif
                 {
                     text.AppendLine("INU_GPU_SETTINGS_FILE is a relative path: GRAL looks for it in its own working folder. Give the full path.");
                 }

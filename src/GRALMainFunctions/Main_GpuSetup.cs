@@ -96,7 +96,7 @@ namespace Gral
         /// </summary>
         private void CheckGpuDriverOnTick()
         {
-            if (!OperatingSystem.IsWindows())
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
             {
                 return; // the driver files and the registry are looked up for Windows only; elsewhere GRAL reports a missing driver at the start
             }
@@ -121,7 +121,7 @@ namespace Gral
         /// </summary>
         private static string GpuVendorFromRegistry()
         {
-            if (!OperatingSystem.IsWindows())
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
             {
                 return null;
             }
@@ -188,12 +188,14 @@ namespace Gral
         /// <returns>Status and message, or null if this GRAL build has no check mode</returns>
         private static (string Status, string Message, JsonElement Report)? RunGralGpuCheck(string GralExecutable, string SettingsFile)
         {
+#if !__MonoCS__
             if (!string.Equals(Path.GetExtension(GralExecutable), ".exe", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
+#endif
             // An older GRAL treats the argument as a project folder: an empty working folder and closed input make it stop at once
-            string folder = Path.Combine(Path.GetTempPath(), "GRAL_GPU_check_" + Environment.ProcessId.ToString());
+            string folder = Path.Combine(Path.GetTempPath(), "GRAL_GPU_check_" + Guid.NewGuid().ToString("N"));
             try
             {
                 Directory.CreateDirectory(folder);
@@ -205,7 +207,16 @@ namespace Gral
                     RedirectStandardInput = true,
                     WorkingDirectory = folder
                 };
+#if __MonoCS__
+                var command = new System.Collections.Generic.List<string>();
+                UnixTerminal.AppendEngineCommand(command, GralExecutable);
+                start.FileName = command[0];
+                command.RemoveAt(0);
+                command.Add("--gpu-check");
+                start.Arguments = MonoCompatibility.QuoteArguments(command);
+#else
                 start.ArgumentList.Add("--gpu-check");
+#endif
                 if (!string.IsNullOrEmpty(SettingsFile) && string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("INU_GPU_SETTINGS_FILE")))
                 {
                     start.Environment["INU_GPU_SETTINGS_FILE"] = Path.GetFullPath(SettingsFile); // for the check process only
@@ -216,7 +227,11 @@ namespace Gral
                     System.Threading.Tasks.Task<string> output = gral.StandardOutput.ReadToEndAsync();
                     if (!gral.WaitForExit(60000))
                     {
+#if __MonoCS__
+                        gral.Kill(); // The check runs the engine directly, without a terminal or shell.
+#else
                         gral.Kill(true);
+#endif
                         return ("timeout", "GRAL --gpu-check did not finish within 60 s", default);
                     }
                     foreach (string line in output.Result.Split('\n'))
@@ -334,6 +349,7 @@ namespace Gral
                         continue;
                     }
                 }
+#if !__MonoCS__
                 else if (status == "no_driver" || status == "driver_error")
                 {
                     bool amd = GpuVendorFromRegistry() == "AMD";
@@ -364,10 +380,11 @@ namespace Gral
                         continue;
                     }
                 }
+#endif
                 else
                 {
                     // hiprtc's amd_comgr needs the Visual C++ runtime
-                    string runtimeHint = !OperatingSystem.IsWindows() || File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140_1.dll")) ? string.Empty :
+                    string runtimeHint = Environment.OSVersion.Platform != PlatformID.Win32NT || File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140_1.dll")) ? string.Empty :
                                          Environment.NewLine + "The Microsoft Visual C++ x64 runtime is missing: https://aka.ms/vs/17/release/vc_redist.x64.exe";
                     if (status == "invalid_setting")
                     {
@@ -439,6 +456,7 @@ namespace Gral
         /// The runtime compiler (NVRTC or hiprtc) is missing or does not serve this GPU: offer the installation
         /// </summary>
         /// <returns>Retry = check again, No = run on the CPU, Cancel or other = do not start</returns>
+#if !__MonoCS__
         private DialogResult AskForGpuCompiler(bool Hip, bool Rejected)
         {
             string page = Hip ? "https://www.amd.com/en/developer/resources/rocm-hub/hip-sdk.html" : "https://developer.nvidia.com/cuda-downloads";
@@ -514,5 +532,6 @@ namespace Gral
             }
             return cancelled ? string.Empty : install.Exception.GetBaseException().Message;
         }
+#endif
     }
 }

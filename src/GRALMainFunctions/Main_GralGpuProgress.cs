@@ -14,6 +14,7 @@ namespace Gral
     {
         private readonly List<GralGpuRun> activeGpuRuns = new();
         private Timer gpuRunsTimer;
+        private readonly Stopwatch gpuFileScanClock = Stopwatch.StartNew();
         private long nextGpuFileScan;
         private GralGpuRun displayedGpuRun;
         private GralGpuRun latestGpuRun;
@@ -125,9 +126,9 @@ namespace Gral
                 run.Poll();
                 bool firstResult = previousResults == 0 && run.Completed > 0;
                 if (run == displayedGpuRun && tabControl1.SelectedTab == Computation &&
-                    (firstResult || run.Finished || Environment.TickCount64 >= nextGpuFileScan))
+                    (firstResult || run.Finished || gpuFileScanClock.ElapsedMilliseconds >= nextGpuFileScan))
                 {
-                    nextGpuFileScan = Environment.TickCount64 + 3000;
+                    nextGpuFileScan = gpuFileScanClock.ElapsedMilliseconds + 3000;
                     RefreshFileSizes(includeWind: false);
                 }
             }
@@ -176,37 +177,7 @@ namespace Gral
 
         private static bool RunMatchesComputation(GralGpuRun run, string computation) => run != null &&
             string.Equals(run.ComputationPath, Path.GetFullPath(computation).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
-                OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
+                Path.DirectorySeparatorChar == '\\' ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 
-#if __MonoCS__
-        private static void StartLinuxGralGpuInstance(GralGpuRun.Instance instance, string executable, string computation, int logLevel, string range)
-        {
-            var start = new ProcessStartInfo("gnome-terminal") { UseShellExecute = false, WorkingDirectory = computation };
-            var command = start.ArgumentList;
-            foreach (string part in new[] { "--wait", "--", "/bin/bash", "-c", "status=$1; shift; \"$@\"; code=$?; printf '%s\\n' \"$code\" > \"$status\"; exec /bin/bash -i", "gral", instance.ExitPath })
-            {
-                command.Add(part);
-            }
-            if (Path.GetExtension(executable).Equals(".dll", StringComparison.OrdinalIgnoreCase)) { command.Add("dotnet"); }
-            command.Add(executable);
-            command.Add(computation);
-            if (logLevel > 0) { command.Add("LOGLEVEL0" + logLevel.ToString(CultureInfo.InvariantCulture)); }
-            if (range != null) { command.Add(range); }
-            start.Environment["INU_GPU_METRICS"] = instance.MetricsPath;
-            start.Environment["INU_GPU_STDERR"] = instance.RuntimePath;
-            var process = Process.Start(start);
-            instance.Started(process.Id, process, () =>
-            {
-                try
-                {
-                    if (File.Exists(instance.ExitPath) &&
-                        int.TryParse(File.ReadAllText(instance.ExitPath), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code)) { return code; }
-                }
-                catch (IOException) { }
-                catch (UnauthorizedAccessException) { }
-                return process.HasExited ? int.MinValue : (int?)null;
-            });
-        }
-#endif
     }
 }

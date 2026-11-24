@@ -190,7 +190,7 @@ namespace Gral
         /// Path of GRAMM windfield
         /// </summary>
         public static string GRAMMwindfield;
-#if __MonoCS__ || !NET6_0_OR_GREATER
+#if !__MonoCS__ && !NET6_0_OR_GREATER
         /// <summary>
         /// GRAL computation
         /// </summary>
@@ -210,9 +210,11 @@ namespace Gral
         private double[] DispSituationfrequ = new double[100000];
 #if __MonoCS__
         /// <summary>
-        /// GRAMM computations
+        /// Linux GRAMM processes started by this GUI.
         /// </summary>
-        private Process GRAMMProcess;
+        private readonly List<UnixTerminal.Engine> unixGrammWorkers = new();
+#else
+        private readonly WindowsRunProcesses windowsGrammWorkers = new();
 #endif
         /// <summary>
         /// Control changes in the file PercentGramm.txt, which indicates the GRAMM simulation status for the actual computed dispersion simulation
@@ -306,10 +308,6 @@ namespace Gral
         /// Project settings and project paths
         /// </summary>
         public static ProjectSettings ProjectSetting = new ProjectSettings("");
-        /// <summary>
-        /// Store the GRAL&GRAMM cores processId's
-        /// </summary>
-        private static List<int> CoreProcessID = new List<int>();
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -1469,7 +1467,9 @@ namespace Gral
         //stop GRAL simulations
         private async void Button34_Click(object sender, EventArgs e)
         {
-            await GRALStopCalculation(sender, e);
+            button34.Enabled = false;
+            try { await GRALStopCalculation(sender, e); }
+            finally { if (!button34.IsDisposed) { button34.Enabled = true; } }
         }
         //continue the GRAL simulations
         private void Button35_Click(object sender, EventArgs e)
@@ -1482,9 +1482,11 @@ namespace Gral
             GRAMMStartCalculation(sender, e);
         }
         //stop GRAMM simulations
-        private void Button30_Click(object sender, EventArgs e)
+        private async void Button30_Click(object sender, EventArgs e)
         {
-            GRAMMStopCalculation(sender, e);
+            groupBox15.Enabled = false;
+            try { await GRAMMStopCalculation(sender, e); }
+            finally { if (!groupBox15.IsDisposed) { groupBox15.Enabled = true; } }
         }
         //continue a GRAMM simulations
         private void Button31_Click(object sender, EventArgs e)
@@ -2225,7 +2227,7 @@ namespace Gral
             if (GRAMM_Locked) // if locked Lock is closed!
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
                     gramm_locked_button.Image = resized;
@@ -2238,7 +2240,7 @@ namespace Gral
             else
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
                     gramm_locked_button.Image = resized;
@@ -2270,7 +2272,7 @@ namespace Gral
             if (Project_Locked) // if locked Lock is closed!
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
                     project_locked_button.Image = resized;
@@ -2284,7 +2286,7 @@ namespace Gral
             else
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
                     project_locked_button.Image = resized;
@@ -3035,6 +3037,15 @@ namespace Gral
         /// </summary>
         void MainLoad(object sender, EventArgs e)
         {
+            FormClosed += (_, _) =>
+            {
+#if __MonoCS__
+                foreach (var worker in unixGrammWorkers) { worker.Dispose(); }
+#else
+                windowsGrammWorkers.Dispose();
+#endif
+                CloseGralProcessHandles();
+            };
             UpdateFileSizes = new System.Windows.Forms.Timer(components) { Interval = 30000 };
             UpdateFileSizes.Tick += UpdateFileSize;
             tabControl1.SelectedIndexChanged += (_, _) =>
@@ -3044,7 +3055,7 @@ namespace Gral
             };
 
             //enable support for high contrast themes
-            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
+            if (SystemInformation.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
             {
                 this.BackColor = System.Drawing.SystemColors.Control;
                 this.button57.BackColor = Color.Gainsboro;
@@ -3149,7 +3160,7 @@ namespace Gral
 
                     if (control is Button btn)
                     {
-                        if (btn.BackgroundImage != null && System.Windows.SystemParameters.HighContrast)
+                        if (btn.BackgroundImage != null && SystemInformation.HighContrast)
                         {
                             Bitmap resized = new Bitmap(btn.BackgroundImage, new Size(btn.Width, btn.Height));
                             btn.Image = resized;
