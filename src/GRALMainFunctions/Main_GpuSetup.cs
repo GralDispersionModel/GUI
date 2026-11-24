@@ -71,7 +71,7 @@ namespace Gral
                 }
                 options.GRALReproducibleResults = GRALSettings.ReproducibleResults;
                 options.SettingsFile = GralIO.GpuSettingsFile.FilePath(ProjectName);
-                options.GpuLogFile = Path.Combine(ProjectName, "Computation", "GRAL_GPU_runtime.log");
+                options.GpuLogFile = LatestGralGpuLog(Path.Combine(ProjectName, "Computation"));
                 options.Icon = Icon;
                 options.StartPosition = FormStartPosition.Manual;
                 options.Left = Left + 80;

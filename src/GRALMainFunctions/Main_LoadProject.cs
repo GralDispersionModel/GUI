@@ -69,6 +69,7 @@ namespace Gral
 
                 ResetGrammProgress();
                 ProjectName = foldername;
+                RestoreGralGpuProgress();
 
                 // Reset old project
                 textBoxGrammTerrain.Text = string.Empty;
