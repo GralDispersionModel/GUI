@@ -14,6 +14,7 @@ namespace Gral
     {
         private readonly List<GralGpuRun> activeGpuRuns = new();
         private Timer gpuRunsTimer;
+        private long nextGpuFileScan;
         private GralGpuRun displayedGpuRun;
         private GralGpuRun latestGpuRun;
         private Panel gpuRunPanel;
@@ -118,7 +119,18 @@ namespace Gral
 
         private void UpdateGralGpuRuns(object sender, EventArgs e)
         {
-            foreach (var run in activeGpuRuns) { run.Poll(); }
+            foreach (var run in activeGpuRuns)
+            {
+                int previousResults = run.Completed;
+                run.Poll();
+                bool firstResult = previousResults == 0 && run.Completed > 0;
+                if (run == displayedGpuRun && tabControl1.SelectedTab == Computation &&
+                    (firstResult || run.Finished || Environment.TickCount64 >= nextGpuFileScan))
+                {
+                    nextGpuFileScan = Environment.TickCount64 + 3000;
+                    RefreshFileSizes(includeWind: false);
+                }
+            }
             activeGpuRuns.RemoveAll(run => run.Finished);
             if (displayedGpuRun != null) { RefreshGralGpuProgress(); }
             if (activeGpuRuns.Count == 0) { gpuRunsTimer.Stop(); }

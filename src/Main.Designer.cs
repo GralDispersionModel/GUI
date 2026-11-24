@@ -4031,7 +4031,7 @@
             label82.Name = "label82";
             label82.Size = new System.Drawing.Size(64, 17);
             label82.TabIndex = 0;
-            label82.Text = "*.con files";
+            label82.Text = ".con / .grz";
             // 
             // groupBox13
             // 
