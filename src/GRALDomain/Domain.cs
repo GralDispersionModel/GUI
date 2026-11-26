@@ -142,7 +142,9 @@ namespace GralDomain
         /// </summary> 
         private int RubberRedrawAllowed = 0;
 
+#if !__MonoCS__
         private PointF FirstPointLenght;				  // Lenght measurement
+#endif
         private readonly ToolTip ToolTipMousePosition;	  // Tooltip for picturebox1
         /// <summary>
         ///  x,y corner points of an area/line source in pixel for intermediate drawing during editing
@@ -4012,8 +4014,7 @@ namespace GralDomain
                 panel1.Left = picturebox1.Width - 150;
             else
                 panel1.Left = 1;
-            return;
-#endif
+#else
             if (panel1.Dock == DockStyle.Right)
             {
                 panel1.Visible = false;
@@ -4026,6 +4027,7 @@ namespace GralDomain
                 panel1.Dock = DockStyle.Right;
                 panel1.Visible = true;
             }
+#endif
         }
 
 

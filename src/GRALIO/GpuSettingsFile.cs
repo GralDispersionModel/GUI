@@ -244,13 +244,13 @@ namespace GralIO
             {
                 if (Content[i] == (byte)'\n')
                 {
-                    lines.Add(Content[start..(i + 1)]);
+                    lines.Add(Content.AsSpan(start, i + 1 - start).ToArray());
                     start = i + 1;
                 }
             }
             if (start < Content.Length)
             {
-                lines.Add(Content[start..]);
+                lines.Add(Content.AsSpan(start).ToArray());
             }
             return lines;
         }
@@ -267,7 +267,7 @@ namespace GralIO
         {
             Key = Value = Comment = string.Empty;
             string text = Encoding.UTF8.GetString(Line, HasBom(Line) ? 3 : 0, Line.Length - (HasBom(Line) ? 3 : 0)).TrimEnd('\r', '\n');
-            if (text.TrimStart().StartsWith('#'))
+            if (text.TrimStart().StartsWith("#", StringComparison.Ordinal))
             {
                 return false;
             }

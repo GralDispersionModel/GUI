@@ -24,7 +24,7 @@ namespace GralDomain
         /// </summary>
         public void Picturebox1_MouseMove(object sender, MouseEventArgs e)
         {
-            double lenght = 0;
+
 
             if ((MouseControl == MouseMode.BaseMapGeoReference1) || (MouseControl == MouseMode.BaseMapGeoReference2))
             {
@@ -402,7 +402,7 @@ namespace GralDomain
                 }
                 else
                 {
-                    lenght = Math.Sqrt(Math.Pow((St_F.TxtToDbl(textBox1.Text, false) - FirstPointLenght.X), 2) +
+                    double lenght = Math.Sqrt(Math.Pow((St_F.TxtToDbl(textBox1.Text, false) - FirstPointLenght.X), 2) +
                                        Math.Pow((St_F.TxtToDbl(textBox2.Text, false) - FirstPointLenght.Y), 2));
                     ToolTipMousePosition.ToolTipTitle = Convert.ToString(Math.Round(lenght, 1));
                 }

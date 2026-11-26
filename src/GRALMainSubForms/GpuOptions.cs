@@ -191,7 +191,7 @@ namespace GralMainForms
             textBox1.Select(0, 0);
         }
 
-        private static string JsonText(JsonElement Parent, string Name)
+        internal static string JsonText(JsonElement Parent, string Name)
         {
             return Parent.ValueKind == JsonValueKind.Object && Parent.TryGetProperty(Name, out JsonElement value) && value.ValueKind == JsonValueKind.String ? value.GetString() : string.Empty;
         }
@@ -201,10 +201,7 @@ namespace GralMainForms
         /// </summary>
         private static string DisplayPaths(string Text)
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                return Text;
-            }
+#if !__MonoCS__
             foreach ((Environment.SpecialFolder folder, string name) in new[] { (Environment.SpecialFolder.LocalApplicationData, "%LOCALAPPDATA%"), (Environment.SpecialFolder.UserProfile, "%USERPROFILE%") })
             {
                 string path = Environment.GetFolderPath(folder).TrimEnd(Path.DirectorySeparatorChar);
@@ -213,6 +210,7 @@ namespace GralMainForms
                     Text = Text.Replace(path + Path.DirectorySeparatorChar, name + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
                 }
             }
+#endif
             return Text;
         }
 
@@ -288,7 +286,11 @@ namespace GralMainForms
             {
                 // the project's own file is named without its path; a file named by the variable is shown in full
                 text.AppendLine("Settings file: " + (fromVariable ? settingsFile + " (INU_GPU_SETTINGS_FILE)" : "GPU.txt in the project's Computation folder") + (File.Exists(settingsFile) ? string.Empty : " (not created yet)"));
+#if __MonoCS__
+                if (!Path.IsPathRooted(settingsFile))
+#else
                 if (!Path.IsPathFullyQualified(settingsFile))
+#endif
                 {
                     text.AppendLine("INU_GPU_SETTINGS_FILE is a relative path: GRAL looks for it in its own working folder. Give the full path.");
                 }
@@ -399,7 +401,7 @@ namespace GralMainForms
                 MessageBox.Show(this, "There is no GPU log yet: " + GpuLogFile, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            OpenFile(GpuLogFile);
+            OpenFile(this, GpuLogFile);
         }
 
         /// <summary>
@@ -416,21 +418,21 @@ namespace GralMainForms
                 MessageBox.Show(this, "GPU.txt could not be created: " + settingsFile + Environment.NewLine + ex.Message, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            OpenFile(settingsFile); // OK writes only the choices changed in this window, so keys edited in the editor stay
+            OpenFile(this, settingsFile); // OK writes only the choices changed in this window, so keys edited in the editor stay
         }
 
         /// <summary>
         /// Open a text file with the program the system uses for it
         /// </summary>
-        private void OpenFile(string FileName)
+        internal static void OpenFile(IWin32Window owner, string FileName)
         {
             try
             {
-                Process.Start(new ProcessStartInfo() { FileName = FileName, UseShellExecute = true });
+                Process.Start(new ProcessStartInfo() { FileName = FileName, UseShellExecute = true })?.Dispose();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + Environment.NewLine + FileName, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(owner, ex.Message + Environment.NewLine + FileName, "GRAL GUI", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

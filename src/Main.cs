@@ -22,13 +22,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading;
-
-
-#if __MonoCS__
-#else
-using System.Timers;
-
-#endif
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gral
@@ -196,10 +190,12 @@ namespace Gral
         /// Path of GRAMM windfield
         /// </summary>
         public static string GRAMMwindfield;
+#if !__MonoCS__ && !NET6_0_OR_GREATER
         /// <summary>
         /// GRAL computation
         /// </summary>
         private Process GRALProcess;
+#endif
         /// <summary>
         /// Control changes in the file Percent.txt, which indicates the GRAL simulation status for the actual computed dispersion simulation
         /// </summary>
@@ -212,10 +208,14 @@ namespace Gral
         /// Frequencies of each dispersion situation
         /// </summary>
         private double[] DispSituationfrequ = new double[100000];
+#if __MonoCS__
         /// <summary>
-        /// GRAMM computations
+        /// Linux GRAMM processes started by this GUI.
         /// </summary>
-        private Process GRAMMProcess;
+        private readonly List<UnixTerminal.Engine> unixGrammWorkers = new();
+#else
+        private readonly WindowsRunProcesses windowsGrammWorkers = new();
+#endif
         /// <summary>
         /// Control changes in the file PercentGramm.txt, which indicates the GRAMM simulation status for the actual computed dispersion simulation
         /// </summary>
@@ -308,10 +308,6 @@ namespace Gral
         /// Project settings and project paths
         /// </summary>
         public static ProjectSettings ProjectSetting = new ProjectSettings("");
-        /// <summary>
-        /// Store the GRAL&GRAMM cores processId's
-        /// </summary>
-        private static List<int> CoreProcessID = new List<int>();
 
         private Bitmap EmissionModulationMap;
         public static readonly string SquareString = "²";
@@ -327,7 +323,9 @@ namespace Gral
         /// <summary>
         /// Timer for updating the file size labels
         /// </summary>
-        private System.Timers.Timer UpdateFileSizes;
+        private System.Windows.Forms.Timer UpdateFileSizes;
+        private bool? activeScanIncludesWind;
+        private bool? queuedScanIncludesWind;
         /// <summary>
         /// CPU Node for GRAL & GRAMM calculation
         /// </summary>
@@ -506,8 +504,6 @@ namespace Gral
                     }
                 }
             }
-            UpdateFileSizes.Stop();
-            UpdateFileSizes.Dispose();
         }
 
         /// <summary>
@@ -1469,9 +1465,11 @@ namespace Gral
 
 
         //stop GRAL simulations
-        private void Button34_Click(object sender, EventArgs e)
+        private async void Button34_Click(object sender, EventArgs e)
         {
-            GRALStopCalculation(sender, e);
+            button34.Enabled = false;
+            try { await GRALStopCalculation(sender, e); }
+            finally { if (!button34.IsDisposed) { button34.Enabled = true; } }
         }
         //continue the GRAL simulations
         private void Button35_Click(object sender, EventArgs e)
@@ -1484,9 +1482,11 @@ namespace Gral
             GRAMMStartCalculation(sender, e);
         }
         //stop GRAMM simulations
-        private void Button30_Click(object sender, EventArgs e)
+        private async void Button30_Click(object sender, EventArgs e)
         {
-            GRAMMStopCalculation(sender, e);
+            groupBox15.Enabled = false;
+            try { await GRAMMStopCalculation(sender, e); }
+            finally { if (!groupBox15.IsDisposed) { groupBox15.Enabled = true; } }
         }
         //continue a GRAMM simulations
         private void Button31_Click(object sender, EventArgs e)
@@ -2227,7 +2227,7 @@ namespace Gral
             if (GRAMM_Locked) // if locked Lock is closed!
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
                     gramm_locked_button.Image = resized;
@@ -2240,7 +2240,7 @@ namespace Gral
             else
             {
                 gramm_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(gramm_locked_button.BackgroundImage, new Size(gramm_locked_button.Width, gramm_locked_button.Height));
                     gramm_locked_button.Image = resized;
@@ -2272,7 +2272,7 @@ namespace Gral
             if (Project_Locked) // if locked Lock is closed!
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_closed));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
                     project_locked_button.Image = resized;
@@ -2286,7 +2286,7 @@ namespace Gral
             else
             {
                 project_locked_button.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.lock_open));
-                if (System.Windows.SystemParameters.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Bitmap resized = new Bitmap(project_locked_button.BackgroundImage, new Size(project_locked_button.Width, project_locked_button.Height));
                     project_locked_button.Image = resized;
@@ -2569,7 +2569,6 @@ namespace Gral
         void TabControl1Click(object sender, EventArgs e)
         {
             double n = 0;
-            UpdateFileSizes.Stop();
             if (tabControl1.SelectedIndex == 0) // Project
             {
                 textBox17.Hide();
@@ -2752,8 +2751,7 @@ namespace Gral
             if (tabControl1.SelectedIndex == 6)
             {
                 CheckConFiles(); // check, if project is locked
-                UpdateFileSize(null, null); // calculate file sizes
-                UpdateFileSizes.Start(); // update the files size periodically
+                if (activeScanIncludesWind != true) { UpdateFileSize(null, null); }
                 // Check, if GRAMM Windfield exists
                 if (Directory.Exists(GRAMMwindfield))
                 {
@@ -3039,16 +3037,25 @@ namespace Gral
         /// </summary>
         void MainLoad(object sender, EventArgs e)
         {
-            // Create the update timer with a 30 seconds interval
-            UpdateFileSizes = new System.Timers.Timer(30000);
-            // Hook up the Elapsed event for the timer running in its own thread
-            UpdateFileSizes.Elapsed += UpdateFileSize;
-            UpdateFileSizes.AutoReset = true;
-            UpdateFileSizes.Enabled = true;
-            UpdateFileSizes.Stop();
+            FormClosed += (_, _) =>
+            {
+#if __MonoCS__
+                foreach (var worker in unixGrammWorkers) { worker.Dispose(); }
+#else
+                windowsGrammWorkers.Dispose();
+#endif
+                CloseGralProcessHandles();
+            };
+            UpdateFileSizes = new System.Windows.Forms.Timer(components) { Interval = 30000 };
+            UpdateFileSizes.Tick += UpdateFileSize;
+            tabControl1.SelectedIndexChanged += (_, _) =>
+            {
+                UpdateFileSizes.Enabled = tabControl1.SelectedTab == Computation;
+                if (UpdateFileSizes.Enabled) { UpdateFileSize(null, null); }
+            };
 
             //enable support for high contrast themes
-            if (System.Windows.SystemParameters.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
+            if (SystemInformation.HighContrast || Gral.Main.GUISettings.UseDefaultColors)
             {
                 this.BackColor = System.Drawing.SystemColors.Control;
                 this.button57.BackColor = Color.Gainsboro;
@@ -3153,7 +3160,7 @@ namespace Gral
 
                     if (control is Button btn)
                     {
-                        if (btn.BackgroundImage != null && System.Windows.SystemParameters.HighContrast)
+                        if (btn.BackgroundImage != null && SystemInformation.HighContrast)
                         {
                             Bitmap resized = new Bitmap(btn.BackgroundImage, new Size(btn.Width, btn.Height));
                             btn.Image = resized;
@@ -3168,105 +3175,79 @@ namespace Gral
         /// <summary>
         /// Update the file size and number of GRAL and GRAMM result files periodically
         /// </summary>
-        private void UpdateFileSize(Object source, ElapsedEventArgs e)
-        {
-            string _projectName = ProjectName;
+        private void UpdateFileSize(object sender, EventArgs e) => RefreshFileSizes(includeWind: true);
 
-            if (string.IsNullOrEmpty(_projectName))
+        private async void RefreshFileSizes(bool includeWind)
+        {
+            if (activeScanIncludesWind.HasValue)
             {
+                queuedScanIncludesWind = includeWind || queuedScanIncludesWind == true;
                 return;
             }
-            try // Kuntner: error if no project exists
-            {
-                string _file = Path.Combine(_projectName, "Computation" + Path.DirectorySeparatorChar);
-                DirectoryInfo _directory = new DirectoryInfo(_file);
-                FileInfo[] files_conc = _directory.GetFiles("*.con");
-                if (files_conc.Length == 0) // compressed files?
-                {
-                    files_conc = _directory.GetFiles("*.grz");
-                }
-
-                long file_size = 0;
-                for (int i = 0; i < files_conc.Length; i++)
-                {
-                    file_size += files_conc[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    SetLabel(label84, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
-                }
-                else
-                {
-                    SetLabel(label84, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
-                }
-                SetLabel(label57, files_conc.Length.ToString() + " files");
-            }
-            catch { }
 
             try
             {
-                //size of GRAL flow field files
-                DirectoryInfo _directory = new DirectoryInfo(St_F.GetGffFilePath(Path.Combine(_projectName, "Computation")) + Path.DirectorySeparatorChar);
-                FileInfo[] files_gff = _directory.GetFiles("*.gff");
-                long file_size = 0;
-                for (int i = 0; i < files_gff.Length; i++)
+                do
                 {
-                    file_size += files_gff[i].Length;
-                }
-                if (file_size < 1000000000)
-                {
-                    SetLabel(label85, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
-                }
-                else
-                {
-                    SetLabel(label85, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
-                }
-                SetLabel(label72, files_gff.Length.ToString() + " files");
-            }
-            catch
-            { }
+                    activeScanIncludesWind = includeWind;
+                    queuedScanIncludesWind = null;
+                    string project = ProjectName;
+                    if (IsDisposed || Disposing || tabControl1.SelectedTab != Computation || string.IsNullOrEmpty(project)) { return; }
 
-            try
-            {
-                // Wnd Files
-                string _GRAMMwindfield = GRAMMwindfield;
-                if (!string.IsNullOrEmpty(_GRAMMwindfield))
-                {
-                    string _file = Path.Combine(_GRAMMwindfield);
-                    DirectoryInfo _directory = new DirectoryInfo(_file);
-                    FileInfo[] files_wnd = _directory.GetFiles("*.wnd");
-                    long file_size = 0;
-                    for (int i = 0; i < files_wnd.Length; i++)
+                    string computation = Path.Combine(project, "Computation");
+                    string wind = GRAMMwindfield;
+                    var totals = await Task.Run(() => (
+                        Concentration: CountResultFiles(computation, "*.con", "*.grz"),
+                        Flow: CountResultFiles(St_F.GetGffFilePath(computation), "*.gff"),
+                        Wind: includeWind ? CountResultFiles(wind, "*.wnd") : null));
+
+                    if (!IsDisposed && !Disposing && project == ProjectName && tabControl1.SelectedTab == Computation)
                     {
-                        file_size += files_wnd[i].Length;
+                        ShowFileTotals(totals.Concentration, label57, label84);
+                        ShowFileTotals(totals.Flow, label72, label85);
+                        if (includeWind && wind == GRAMMwindfield) { ShowFileTotals(totals.Wind, label96, label97); }
                     }
-                    if (file_size < 1000000000)
-                    {
-                        SetLabel(label97, Convert.ToString(Math.Round(file_size * 0.000001, 1)) + "MByte");
-                    }
-                    else
-                    {
-                        SetLabel(label97, Convert.ToString(Math.Round(file_size * 0.000000001, 1)) + "GByte");
-                    }
-                    SetLabel(label96, files_wnd.Length.ToString() + " files");
-                }
+                    includeWind = queuedScanIncludesWind == true;
+                } while (queuedScanIncludesWind.HasValue);
             }
-            catch { }
+            finally { activeScanIncludesWind = null; }
         }
-        /// <summary>
-        /// Invoke label text from other thread
-        /// </summary>
-        private void SetLabel(Label label, string text)
+
+        private static (int Count, long Bytes)? CountResultFiles(string folder, params string[] patterns)
         {
-            if (InvokeRequired)
+            if (string.IsNullOrEmpty(folder)) { return null; }
+            try
             {
-                Invoke(new Action(() =>
-                { label.Text = text; }));
+                var directory = new DirectoryInfo(folder);
+                int count = 0;
+                long bytes = 0;
+                foreach (string pattern in patterns)
+                {
+                    foreach (var file in directory.EnumerateFiles(pattern))
+                    {
+                        bytes += file.Length;
+                        count++;
+                    }
+                }
+                return (count, bytes);
             }
-            else
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException || error is ArgumentException)
             {
-                label.Text = text;
+                return null;
             }
+        }
+
+        private static void ShowFileTotals((int Count, long Bytes)? totals, Label countLabel, Label sizeLabel)
+        {
+            if (totals is not { } files)
+            {
+                countLabel.Text = sizeLabel.Text = "-";
+                return;
+            }
+            countLabel.Text = files.Count + " files";
+            sizeLabel.Text = files.Bytes < 1000000000
+                ? Math.Round(files.Bytes * 0.000001, 1) + "MByte"
+                : Math.Round(files.Bytes * 0.000000001, 1) + "GByte";
         }
 
         /// <summary>

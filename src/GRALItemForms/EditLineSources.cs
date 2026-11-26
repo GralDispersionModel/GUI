@@ -602,9 +602,8 @@ namespace GralItemForms
                     trackBar2.Enabled = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //MessageBox.Show(ex.Message);
                 textBox1.Text = "Line Source";
 
                 SourceGroupEmission.Clear();

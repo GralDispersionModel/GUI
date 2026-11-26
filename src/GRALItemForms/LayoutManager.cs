@@ -769,7 +769,7 @@ namespace GralItemForms
         private void Button10_Click(object sender, EventArgs e)
         {
             ColorDialog ct = new ColorDialog();
-            if (DrawObject.LineColors.Count > 0 && DrawObject.LineColors[0] != null)
+            if (DrawObject.LineColors.Count > 0)
             {
                 ct.Color = DrawObject.LineColors[0];
                 if (ct.ShowDialog() == DialogResult.OK)
@@ -794,11 +794,7 @@ namespace GralItemForms
         /// <param name="e"></param>
         private void Button7_Click(object sender, EventArgs e)
         {
-            ColorDialog ct = new ColorDialog();
-            if (DrawObject.LabelColor != null)
-            {
-                ct.Color = DrawObject.LabelColor;
-            }
+            ColorDialog ct = new ColorDialog { Color = DrawObject.LabelColor };
 
             if (ct.ShowDialog() == DialogResult.OK)
             {

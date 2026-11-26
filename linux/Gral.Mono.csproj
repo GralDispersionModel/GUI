@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>GRAL_GUI</AssemblyName>
+    <RootNamespace>Gral</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <MonoResGen Condition="'$(MonoResGen)' == ''">resgen</MonoResGen>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="WindowsBase" />
+    <PackageReference Include="System.Text.Json" Version="10.0.15" />
+    <Compile Include="../src/**/*.cs" Exclude="../src/obj/**;../src/bin/**;../src/GRAL3DFunctions/**;../src/GRALMainFunctions/GpuToolchainDownload.cs" />
+    <EmbeddedResource Include="../src/**/*.resx" Exclude="../src/obj/**;../src/bin/**;../src/GRALMainFunctions/Main_LoadProject.resx">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <DependentUpon Condition="'%(Filename)' != 'Resources'">%(Filename).cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="../src/Resources/Pointsource.gif;../src/Resources/Portal.gif;../src/Resources/North.gif;../src/Resources/Cross.gif;../src/Resources/Modulation_*.txt;../src/Resources/NEMO_velocities.txt;../src/Resources/abreak*.txt;../src/Resources/Info.jpg">
+      <LogicalName>Gral.Resources.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <!-- These forms contain framework-format bitmap and icon resources that Mono must deserialize. -->
+  <Target Name="CollectMonoFormResources" DependsOnTargets="CreateManifestResourceNames">
+    <ItemGroup>
+      <MonoForm Include="@(EmbeddedResource)" Condition="'%(EmbeddedResource.Extension)' == '.resx'">
+        <LogicalName>%(EmbeddedResource.ManifestResourceName).resources</LogicalName>
+      </MonoForm>
+      <MonoResourceFiles Include="../src/Resources/**/*" />
+    </ItemGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)forms" />
+  </Target>
+  <Target Name="GenerateMonoFormResources" DependsOnTargets="CollectMonoFormResources"
+          Inputs="%(MonoForm.FullPath);@(MonoResourceFiles)" Outputs="$(IntermediateOutputPath)forms/%(MonoForm.ManifestResourceName).resources">
+    <Exec Command="&quot;$(MonoResGen)&quot; /useSourcePath &quot;%(MonoForm.FullPath)&quot; &quot;$(IntermediateOutputPath)forms/%(MonoForm.ManifestResourceName).resources&quot;" />
+  </Target>
+  <Target Name="UseMonoFormResources" BeforeTargets="CoreResGen" DependsOnTargets="GenerateMonoFormResources">
+    <ItemGroup>
+      <EmbeddedResource Remove="@(MonoForm)" />
+      <EmbeddedResource Include="@(MonoForm->'$(IntermediateOutputPath)forms/%(ManifestResourceName).resources')">
+        <Type>Non-Resx</Type>
+        <WithCulture>false</WithCulture>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+</Project>

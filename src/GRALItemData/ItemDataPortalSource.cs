@@ -328,14 +328,7 @@ namespace GralItemData
 
         public double Lenght()
         {
-            if (Pt1 != null && Pt2 != null)
-            {
-                return Math.Sqrt(Math.Pow(Pt1.X - Pt2.X, 2) + Math.Pow(Pt1.Y - Pt2.Y, 2));
-            }
-            else
-            {
-                return 0;
-            }
+            return Math.Sqrt(Math.Pow(Pt1.X - Pt2.X, 2) + Math.Pow(Pt1.Y - Pt2.Y, 2));
         }
 
         public double Area()

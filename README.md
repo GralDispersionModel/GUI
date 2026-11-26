@@ -9,11 +9,24 @@ The application has been migrated from .NETFramework to .NET6 after the release 
 * Improvements due to future developments by Microsoft
 * Native Windows-ARM support<br>
 
-The MonoDevelop branch contains a version of the GUI that is intended to be used with MonoDevelop for Linux (the distribution we use is Debian 11).<br>
+## Build and run on Linux
+
+The Linux GUI requires the .NET 10 SDK to build and Mono to run. On Ubuntu, install `mono-devel` for the runtime and the `resgen` resource compiler. Open the GUI in an X11 session. It launches the engines in GNOME Terminal using Bash.
+
+Run these commands from the repository root.
+
+```sh
+dotnet build linux/Gral.Mono.csproj -c Release
+mono linux/bin/Release/net48/GRAL_GUI.exe
+```
+
+Keep the executable, its configuration file and its DLLs together. When you start a calculation, select the Linux GRAL or GRAMM executable or its matching .NET DLL. The GUI runs a Linux GRAL distribution from its selected directory and passes the project's Computation folder to the engine, including when **Copy cores to project** is selected.
+
+The [platform checks](tests/PlatformChecks.md) cover strict builds, mixed output files, multi-instance GRAMM and engine stop requests.
 
 ## Built With
 Windows [Visual Studio 2022 or higher](https://visualstudio.microsoft.com/de/downloads/) <br>
-Linux [MonoDevelop](https://www.monodevelop.com/)<br>
+Linux [Mono](https://www.mono-project.com/) and the [.NET SDK](https://dotnet.microsoft.com/download)<br>
 
 ## Official Release and Documentation
 The current validated GUI versions for Windows and a comprehensive manual are available at the [GRAL homepage](https://gral.tugraz.at/)
